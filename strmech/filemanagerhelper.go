@@ -1928,8 +1928,12 @@ func (fMgrHlpr *fileMgrHelper) readFileSetup(
 		return err
 	}
 
-	fNewOpenType, err := readAccessCtrl.GetFileOpenType(
-		ePrefix.XCpy("readAccessCtrl"))
+	var fNewOpenType FileOpenType
+
+	fNewOpenType,
+		err = readAccessCtrl.GetFileOpenType(
+		ePrefix.XCpy(
+			"readAccessCtrl"))
 
 	if err != nil {
 		return err

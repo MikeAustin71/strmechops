@@ -9395,21 +9395,114 @@ func (fMgr *FileMgr) OpenThisFileWriteOnlyTruncate(
 		writeOnlyTruncateAccessCfg,
 		true,
 		true,
-		ePrefix)
+		ePrefix.XCpy(
+			"fMgr<-writeOnlyTruncateAccessCfg"))
 }
 
-// OpenThisFileReadWrite - Opens the file identified by the current
-// FileMgr object. If successful, this method will use
-// FileMgr.absolutePathFileName to open an *os.File or File Pointer.
+// OpenThisFileReadWrite
 //
-// As the method's name implies, the 'FileMgr.absolutePathFileName'
-// will be opened for reading and writing. If FileMgr.absolutePathFileName
-// does not exist, it will be created. The FileMode is set to'-rw-rw-rw-' and
-// the permission Mode= '0666'.
+// Opens the file identified by the current FileMgr
+// instance. If successful, this method will use the File
+// Manager's absolute path and file name
+// (FileMgr.absolutePathFileName) to open an os.File
+// pointer (*os.File) to the subject file.
 //
-// Note: If the 'FileMgr' directory path and file do not exist, this
-// method will create them.
-func (fMgr *FileMgr) OpenThisFileReadWrite() error {
+// As the method's name implies, the
+// 'FileMgr.absolutePathFileName' will be opened for
+// reading and writing. If FileMgr.absolutePathFileName
+// does not exist, it will be created.
+//
+// The FileMode is set to'-rw-rw-rw-' and the permission
+// Mode= '0666'.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	If the current FileMgr directory path and file do not
+//	exist, this method will attempt to create them.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgr *FileMgr) OpenThisFileReadWrite(
+	errorPrefix interface{}) error {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -9419,39 +9512,152 @@ func (fMgr *FileMgr) OpenThisFileReadWrite() error {
 
 	defer fMgr.lock.Unlock()
 
+	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	ePrefix := "FileMgr.OpenThisFileReadWrite() "
-
-	readWriteAccessCtrl,
-		err :=
-		new(FileAccessControl).NewReadWriteAccess(
-			ePrefix)
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr."+
+			"OpenThisFileReadWrite()",
+		"")
 
 	if err != nil {
-		return fmt.Errorf(ePrefix+"\n%v\n", err.Error())
+		return err
 	}
 
-	fMgrHlpr := fileMgrHelper{}
+	var readWriteAccessCtrl FileAccessControl
 
-	err = fMgrHlpr.openFile(
+	readWriteAccessCtrl,
+		err = new(FileAccessControl).
+		NewReadWriteAccess(
+			ePrefix.XCpy(
+				"readWriteAccessCtrl<-"))
+
+	if err != nil {
+		return err
+	}
+
+	return new(fileMgrHelper).openFile(
 		fMgr,
 		readWriteAccessCtrl,
 		true,
 		true,
-		ePrefix)
-
-	return err
+		ePrefix.XCpy(
+			"fMgr<-readWriteAccessCtrl"))
 }
 
-// ReadAllFile - Reads the file identified by the current FileMgr
-// and returns the contents in a byte array.
+// ReadAllFile
 //
-// If no errors are encountered the returned 'error' value is
-// nil. This method does not return io.EOF as an error. This is
-// because it reads the entire file and therefor no End Of File
-// flag is required.
-func (fMgr *FileMgr) ReadAllFile() (bytesRead []byte, err error) {
+// Reads the entire contents of the file identified by
+// the current FileMgr and returns said contents in a
+// byte array.
+//
+// This method does not return io.EOF as an error. This
+// is because it reads the entire file and therefor no
+// End Of File flag is required.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will NOT automatically close the os.File
+//	pointer to the file identified by the current
+//	instance of FileMgr.
+//
+//	The user is responsible for closing the file. See
+//	method FileMgr.CloseThisFile().
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bytesRead					[]byte
+//
+//		If this method completes successfully, the entire
+//		contents of the file identified by the current
+//		FileMgr instance will be read and returned
+//		through this byte array.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgr *FileMgr) ReadAllFile(
+	errorPrefix interface{}) (
+	bytesRead []byte,
+	err error) {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -9461,39 +9667,57 @@ func (fMgr *FileMgr) ReadAllFile() (bytesRead []byte, err error) {
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "FileMgr.ReadAllFile() "
 	bytesRead = []byte{}
-	err = nil
-	var err2 error
 
-	readWriteAccessCtrl, err2 :=
-		new(FileAccessControl).NewReadWriteAccess(ePrefix)
+	var ePrefix *ePref.ErrPrefixDto
 
-	if err2 != nil {
-		err = fmt.Errorf(ePrefix+"%v\n", err2.Error())
+	funcName := "FileMgr.ReadAllFile()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return bytesRead, err
+	}
+	var readWriteAccessCtrl FileAccessControl
+
+	readWriteAccessCtrl,
+		err =
+		new(FileAccessControl).
+			NewReadWriteAccess(ePrefix.XCpy(
+				"readWriteAccessCtrl<-"))
+
+	if err != nil {
 		return bytesRead, err
 	}
 
-	fMgrHlpr := fileMgrHelper{}
-
-	err = fMgrHlpr.readFileSetup(
+	err = new(fileMgrHelper).readFileSetup(
 		fMgr,
 		readWriteAccessCtrl,
 		false,
-		ePrefix)
+		ePrefix.XCpy(
+			"fMgr<-readWriteAccessCtrl"))
 
 	if err != nil {
 		return bytesRead, err
 	}
+
+	var err2 error
 
 	bytesRead, err2 = io.ReadAll(fMgr.filePtr)
 
 	if err2 != nil {
 		err =
-			fmt.Errorf(ePrefix+
+			fmt.Errorf("%v\n"+
 				"Error returned by ioutil.ReadAll(fMgr.filePtr).\n"+
-				"fileName='%v'\nErrors='%v'\n",
-				fMgr.absolutePathFileName, err2.Error())
+				"fileName= '%v'\n"+
+				"Errors= \n%v\n",
+				ePrefix.String(),
+				fMgr.absolutePathFileName,
+				err2.Error())
 	}
 
 	return bytesRead, err
@@ -9509,7 +9733,11 @@ func (fMgr *FileMgr) ReadAllFile() (bytesRead []byte, err error) {
 //
 // At End of File (EOF), the byte count will be zero and err will be equal to
 // 'io.EOF'.
-func (fMgr *FileMgr) ReadFileBytes(byteBuff []byte) (bytesRead int, err error) {
+func (fMgr *FileMgr) ReadFileBytes(
+	byteBuff []byte,
+	errorPrefix interface{}) (
+	bytesRead int,
+	err error) {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -9519,24 +9747,34 @@ func (fMgr *FileMgr) ReadFileBytes(byteBuff []byte) (bytesRead int, err error) {
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "FileMgr.ReadFileBytes() "
+	var ePrefix *ePref.ErrPrefixDto
+
 	bytesRead = 0
-	err = nil
-	var err2 error
 
-	readWriteAccessCtrl, err2 :=
-		new(FileAccessControl).NewReadWriteAccess(ePrefix)
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr."+
+			"ReadFileBytes()",
+		"")
 
-	if err2 != nil {
-		err = fmt.Errorf(ePrefix+
-			"Error returned by FileAccessControl{}.NewReadWriteAccess().\n"+
-			"Error='%v'\n", err2.Error())
+	if err != nil {
 		return bytesRead, err
 	}
 
-	fMgrHlpr := fileMgrHelper{}
+	var readWriteAccessCtrl FileAccessControl
 
-	err = fMgrHlpr.readFileSetup(
+	readWriteAccessCtrl,
+		err =
+		new(FileAccessControl).
+			NewReadWriteAccess(ePrefix.XCpy(
+				"readWriteAccessCtrl<-"))
+
+	if err != nil {
+		return bytesRead, err
+	}
+
+	err = new(fileMgrHelper).readFileSetup(
 		fMgr,
 		readWriteAccessCtrl,
 		false,
@@ -9546,7 +9784,10 @@ func (fMgr *FileMgr) ReadFileBytes(byteBuff []byte) (bytesRead int, err error) {
 		return bytesRead, err
 	}
 
-	bytesRead, err2 = fMgr.fileBufRdr.Read(byteBuff)
+	var err2 error
+
+	bytesRead,
+		err2 = fMgr.fileBufRdr.Read(byteBuff)
 
 	if err2 != nil &&
 		err2 == io.EOF {
@@ -9555,8 +9796,13 @@ func (fMgr *FileMgr) ReadFileBytes(byteBuff []byte) (bytesRead int, err error) {
 
 	} else if err2 != nil {
 
-		err = fmt.Errorf("Error returned by fMgr.fileBufRdr.Read(byteBuff). "+
-			"File='%v' Error='%v' ", fMgr.absolutePathFileName, err2.Error())
+		err = fmt.Errorf("%v\n"+
+			"Error returned by fMgr.fileBufRdr.Read(byteBuff)\n"+
+			"File='%v'\n"+
+			"Error= \n%v\n ",
+			ePrefix.String(),
+			fMgr.absolutePathFileName,
+			err2.Error())
 	}
 
 	return bytesRead, err
