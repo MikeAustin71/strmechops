@@ -4450,7 +4450,7 @@ func (fMgr *FileMgr) EqualAbsPaths(
 //
 //	fMgr2						*FileMgr
 //
-//		A pointer to a incoming instance of FileMgr.
+//		A pointer to an incoming instance of FileMgr.
 //
 //		This method will compare the File Name and File
 //		Extension contained in 'fMgr2' to that contained
@@ -7394,9 +7394,9 @@ func (fMgr *FileMgr) MoveFileToFileStr(
 //
 //	dirPath						string
 //
-//		This strings contains the valid path or directory
+//		This string contains the valid path or directory
 //		to which the file identified by the current
-//		FileMgr will moved.
+//		FileMgr will be moved.
 //
 //	errorPrefix					interface{}
 //
@@ -9937,9 +9937,12 @@ func (fMgr *FileMgr) ReadFileBytes(
 //
 // # BE ADVISED
 //
-//	The delimiter character ('delim') is returned as the
-//	last character in the 'bytes read' array returned by
-//	this method.
+//	(1)	The delimiter character ('delim') is returned as
+//		the last character in the 'bytes read' array
+//		returned by this method.
+//
+//	(2)	If the end of file is encountered during the read
+//		operation, the returned error is set to io.EOF.
 //
 // ----------------------------------------------------------------
 //
@@ -10124,13 +10127,150 @@ func (fMgr *FileMgr) ReadFileLine(
 	return bytesRead, err
 }
 
-// ReadFileString - Wrapper for bufio.ReadString. ReadFileString reads until the
-// first occurrence of 'delim' in the input, returning a string containing the
-// data up to and including the delimiter. If ReadFileString encounters an error
-// before finding a delimiter, it returns the data read before the error and
-// the error itself (often io.EOF). ReadFileString returns err != nil if and
-// only if the returned data does not end in 'delim'.
-func (fMgr *FileMgr) ReadFileString(delim byte) (stringRead string, err error) {
+// ReadFileString
+//
+// Wrapper for bufio.ReadString. ReadFileString reads
+// until the first occurrence of a delimiter character
+// 'delim' in the input. The method then returns a string
+// containing the data up to and including the delimiter
+// character ('delim').
+//
+// If this encounters an error before finding a
+// delimiter character, it returns the data read before
+// the error occurred and the error itself
+// (often io.EOF). Method ReadFileString returns
+// err != nil if, and only if, the returned data does not
+// end in a delimiter character ('delim').
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	(1)	The delimiter character ('delim') is returned as
+//		the last character in the string returned by this
+//		method.
+//
+//	(2)	If the end of file is encountered during the read
+//		operation, the returned error is set to io.EOF.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will NOT automatically close the os.File
+//	pointer to the file identified by the current
+//	instance of FileMgr upon completion of the file read
+//	operation.
+//
+//	The user is therefore responsible for closing the
+//	file. See method FileMgr.CloseThisFile().
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	delim						byte
+//
+//		This delimiter byte will be used to delimit or
+//		identify the end of the text string read from
+//		file identified by the current FileMgr instance.
+//		This method will read one text string for each
+//		call made to this method.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	stringRead					string
+//
+//		If this method completes successfully, this
+//		parameter will contain the text string read from
+//		the file specified by the current FileMgr
+//		instance. The end of the string read from this
+//		file is identified by the delimiter byte passed
+//		as input parameter 'delim'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If the end of the file is encountered during the
+//		file read operation, this parameter will be set
+//		to io.EOF (End-Of-File).
+//
+//		For all processing errors encountered during the
+//		file read operation, the returned error Type will
+//		encapsulate an appropriate error message. This
+//	 	returned error message will incorporate the
+//	 	method chain and text passed by input parameter,
+//	 	'errorPrefix'. The 'errorPrefix' text will be
+//	 	prefixed or attached to the beginning of the
+//	 	error message.
+func (fMgr *FileMgr) ReadFileString(
+	delim byte,
+	errorPrefix interface{}) (
+	stringRead string,
+	err error) {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -10140,24 +10280,31 @@ func (fMgr *FileMgr) ReadFileString(delim byte) (stringRead string, err error) {
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "FileMgr.ReadFileString() "
-	stringRead = ""
-	err = nil
-	var err2 error
+	var ePrefix *ePref.ErrPrefixDto
 
-	readWriteAccessCtrl, err2 :=
-		new(FileAccessControl).NewReadWriteAccess(ePrefix)
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr.ReadFileString()",
+		"")
 
-	if err2 != nil {
-		err = fmt.Errorf(ePrefix+
-			"Error returned by FileAccessControl{}.NewReadWriteAccess().\n"+
-			"Error='%v'\n", err2.Error())
+	if err != nil {
 		return stringRead, err
 	}
 
-	fMgrHlpr := fileMgrHelper{}
+	var readWriteAccessCtrl FileAccessControl
 
-	err = fMgrHlpr.readFileSetup(
+	readWriteAccessCtrl,
+		err = new(FileAccessControl).
+		NewReadWriteAccess(ePrefix.XCpy(
+			"readWriteAccessCtrl<-"))
+
+	if err != nil {
+
+		return stringRead, err
+	}
+
+	err = new(fileMgrHelper).readFileSetup(
 		fMgr,
 		readWriteAccessCtrl,
 		false,
@@ -10167,7 +10314,10 @@ func (fMgr *FileMgr) ReadFileString(delim byte) (stringRead string, err error) {
 		return stringRead, err
 	}
 
-	stringRead, err2 = fMgr.fileBufRdr.ReadString(delim)
+	var err2 error
+
+	stringRead,
+		err2 = fMgr.fileBufRdr.ReadString(delim)
 
 	if err2 != nil &&
 		err2 == io.EOF {
@@ -10175,8 +10325,11 @@ func (fMgr *FileMgr) ReadFileString(delim byte) (stringRead string, err error) {
 
 	} else if err2 != nil {
 
-		err = fmt.Errorf("Error returned from fMgr.fileBufRdr.ReadString(delim). "+
-			"Error='%v' ", err2.Error())
+		err = fmt.Errorf("%v\n"+
+			"Error returned from fMgr.fileBufRdr.ReadString(delim).\n"+
+			"Error= \n%v\n ",
+			ePrefix.String(),
+			err2.Error())
 	}
 
 	return stringRead, err
