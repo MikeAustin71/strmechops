@@ -11034,16 +11034,120 @@ func (fMgr *FileMgr) SetFileMgrFromPathFileName(
 	return isEmpty, err
 }
 
-// WriteBytesToFile a string to the File identified by
-// FileMgr.absolutePathFileName. If the file is not open, this
+// WriteBytesToFile
+//
+// Writes a string to the File identified by the current
+// instance of FileMgr. If the file is not open, this
 // method will attempt to open it.
 //
-// If the number of bytes written to the file is less than len(bytes),
-// an error will be returned.
+// If the number of bytes written to the file is less
+// than len(bytes), an error will be returned.
 //
 // This method uses the 'bufio' package.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/golang.org/x/exp/slog/internal/buffer
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	bytes						[]byte
+//
+//		An array of bytes. This byte array contains the
+//		text characters which will be written to the file
+//		identified by the current instance of FileMgr.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numBytesWritten				int
+//
+//		If this method completes successfully, this
+//		integer value will equal the number of bytes
+//		written the file identified by the current
+//		instance of FileMgr. It should match the number
+//		of bytes contained in the input byte array
+//		parameter, 'bytes'.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fMgr *FileMgr) WriteBytesToFile(
-	bytes []byte) (
+	bytes []byte,
+	errorPrefix interface{}) (
 	numBytesWritten int,
 	err error) {
 
@@ -11055,25 +11159,32 @@ func (fMgr *FileMgr) WriteBytesToFile(
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "FileMgr.WriteBytesToFile() "
-	err = nil
-	numBytesWritten = 0
+	var ePrefix *ePref.ErrPrefixDto
 
-	readWriteAccessCtrl, err2 :=
-		new(FileAccessControl).NewReadWriteAccess(ePrefix)
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr."+
+			"WriteBytesToFile()",
+		"")
 
-	if err2 != nil {
-		err = fmt.Errorf(ePrefix+
-			"Error returned by FileAccessControl{}."+
-			"NewReadWriteAccess()\n."+
-			"Error='%v'\n", err2.Error())
-
+	if err != nil {
 		return numBytesWritten, err
 	}
 
-	fMgrHlpr := fileMgrHelper{}
+	var readWriteAccessCtrl FileAccessControl
 
-	err = fMgrHlpr.writeFileSetup(
+	readWriteAccessCtrl,
+		err =
+		new(FileAccessControl).NewReadWriteAccess(
+			ePrefix.XCpy(
+				"readWriteAccessCtrl<-"))
+
+	if err != nil {
+		return numBytesWritten, err
+	}
+
+	err = new(fileMgrHelper).writeFileSetup(
 		fMgr,
 		readWriteAccessCtrl,
 		true,
@@ -11084,15 +11195,22 @@ func (fMgr *FileMgr) WriteBytesToFile(
 		return numBytesWritten, err
 	}
 
-	numBytesWritten, err2 =
+	var err2 error
+
+	numBytesWritten,
+		err2 =
 		fMgr.fileBufWriter.Write(bytes)
 
 	if err2 != nil {
+
 		err =
-			fmt.Errorf(ePrefix+
-				"Error returned from fMgr.fileBufWriter.Write(bytes). Output File='%v'. "+
-				"Error='%v'",
-				fMgr.absolutePathFileName, err2.Error())
+			fmt.Errorf("%v\n"+
+				"Error returned from fMgr.fileBufWriter.Write(bytes).\n"+
+				"Output File='%v'\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				fMgr.absolutePathFileName,
+				err2.Error())
 
 	} else {
 
