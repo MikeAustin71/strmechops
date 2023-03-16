@@ -9737,6 +9737,14 @@ func (fMgr *FileMgr) ReadAllFile(
 // At End of File (EOF), the byte count will be zero and
 // err will be equal to 'io.EOF'.
 //
+// This method uses the 'bufio' package.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/golang.org/x/exp/slog/internal/buffer
+//
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
@@ -9926,11 +9934,17 @@ func (fMgr *FileMgr) ReadFileBytes(
 // delimiter for lines read is specified by input
 // parameter 'delim' of type byte.
 //
-// This method uses the 'bufio' package.
-//
 // If End Of File (EOF) is reached, this method returns
 // the 'bytes Read' and an error which is equal to
 // 'io.EOF'.
+//
+// This method uses the 'bufio' package.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/golang.org/x/exp/slog/internal/buffer
 //
 // ----------------------------------------------------------------
 //
@@ -10140,6 +10154,14 @@ func (fMgr *FileMgr) ReadFileLine(
 // (often io.EOF). Method ReadFileString returns
 // err != nil if, and only if, the returned data does not
 // end in a delimiter character ('delim').
+//
+// This method uses the 'bufio' package.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/golang.org/x/exp/slog/internal/buffer
 //
 // ----------------------------------------------------------------
 //
@@ -11040,9 +11062,6 @@ func (fMgr *FileMgr) SetFileMgrFromPathFileName(
 // instance of FileMgr. If the file is not open, this
 // method will attempt to open it.
 //
-// If the number of bytes written to the file is less
-// than len(bytes), an error will be returned.
-//
 // This method uses the 'bufio' package.
 //
 // ----------------------------------------------------------------
@@ -11050,6 +11069,27 @@ func (fMgr *FileMgr) SetFileMgrFromPathFileName(
 // # Reference:
 //
 //	https://pkg.go.dev/golang.org/x/exp/slog/internal/buffer
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	If the number of bytes written to the file is not
+//	equal to the number of bytes in input parameter
+//	'bytes', an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will not automatically close the file to
+//	which the text contained input parameter 'bytes' was
+//	written.
+//
+//	The user is responsible for closing this file. To
+//	close this file after writing text to it, see method:
+//
+//		FileMgr.CloseThisFile()
 //
 // ----------------------------------------------------------------
 //
@@ -11133,7 +11173,7 @@ func (fMgr *FileMgr) SetFileMgrFromPathFileName(
 //		of bytes contained in the input byte array
 //		parameter, 'bytes'.
 //
-//	error
+//	err							error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -11172,6 +11212,18 @@ func (fMgr *FileMgr) WriteBytesToFile(
 		return numBytesWritten, err
 	}
 
+	lenOfBytes := len(bytes)
+
+	if lenOfBytes == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'bytes' is empty!\n"+
+			"The 'bytes' array has a length of zero\n",
+			ePrefix.String())
+
+		return numBytesWritten, err
+	}
+
 	var readWriteAccessCtrl FileAccessControl
 
 	readWriteAccessCtrl,
@@ -11188,7 +11240,8 @@ func (fMgr *FileMgr) WriteBytesToFile(
 		fMgr,
 		readWriteAccessCtrl,
 		true,
-		ePrefix)
+		ePrefix.XCpy(
+			"fMgr<-readWriteAccessCtrl"))
 
 	if err != nil {
 
@@ -11212,25 +11265,160 @@ func (fMgr *FileMgr) WriteBytesToFile(
 				fMgr.absolutePathFileName,
 				err2.Error())
 
-	} else {
-
-		fMgr.buffBytesWritten += uint64(numBytesWritten)
-
+		return numBytesWritten, err
 	}
+
+	if lenOfBytes != numBytesWritten {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The number of bytes written does NOT EQUAL\n"+
+			"the number of bytes in input parameter 'bytes'\n"+
+			"Bytes written to file = '%v'\n"+
+			"Number of bytes in input parameter 'bytes' = '%v'\n",
+			ePrefix.String(),
+			numBytesWritten,
+			lenOfBytes)
+
+		return numBytesWritten, err
+	}
+
+	fMgr.buffBytesWritten += uint64(numBytesWritten)
 
 	return numBytesWritten, err
 }
 
-// WriteStrToFile - Writes a string to the File identified by
-// FileMgr.absolutePathFileName. If the file is not open, this
-// method will attempt to open it.
+// WriteStrToFile
 //
-// If the number of bytes written to the file is less than len(str),
-// an error will be returned.
+// Writes a string to the File identified by the current
+// instance FileMgr. If the file is not open, this method
+// will attempt to open it.
 //
 // This method uses the 'bufio' package.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/golang.org/x/exp/slog/internal/buffer
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+// If the number of bytes written to the file is not
+// equal to the number of bytes in input parameter 'str',
+// an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will not automatically close the file to
+//	which the text contained in input parameter 'str' was
+//	written.
+//
+//	The user is responsible for closing this file. To
+//	close this file after writing text to it, see method:
+//
+//		FileMgr.CloseThisFile()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	str							string
+//
+//		A string containing the text characters which
+//		will be written to the file identified by the
+//		current instance of FileMgr.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numBytesWritten				int
+//
+//		If this method completes successfully, this
+//		integer value will equal the number of bytes
+//		written the file identified by the current
+//		instance of FileMgr. It should match the number
+//		of bytes contained in the input byte array
+//		parameter, 'bytes'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fMgr *FileMgr) WriteStrToFile(
-	str string) (
+	str string,
+	errorPrefix interface{}) (
 	numBytesWritten int,
 	err error) {
 
@@ -11242,48 +11430,88 @@ func (fMgr *FileMgr) WriteStrToFile(
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "FileMgr.WriteStrToFile() "
+	var ePrefix *ePref.ErrPrefixDto
 
-	numBytesWritten = 0
-	err = nil
-	var err2 error
-	var readWriteAccessCtrl FileAccessControl
-
-	readWriteAccessCtrl, err2 =
-		new(FileAccessControl).NewReadWriteAccess(ePrefix)
-
-	if err2 != nil {
-		err = fmt.Errorf(ePrefix+
-			"Error returned by FileAccessControl{}."+
-			"NewReadWriteAccess()\n."+
-			"Error='%v'\n", err2.Error())
-
-		return numBytesWritten, err
-	}
-
-	fMgrHlpr := fileMgrHelper{}
-
-	err = fMgrHlpr.writeFileSetup(
-		fMgr,
-		readWriteAccessCtrl,
-		true,
-		ePrefix)
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr."+
+			"WriteStrToFile()",
+		"")
 
 	if err != nil {
 		return numBytesWritten, err
 	}
 
-	numBytesWritten, err2 = fMgr.fileBufWriter.WriteString(str)
+	lenOfBytes := len(str)
+
+	if lenOfBytes == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'str' is empty!\n"+
+			"The 'str' string has a length of zero\n",
+			ePrefix.String())
+
+		return numBytesWritten, err
+	}
+
+	var readWriteAccessCtrl FileAccessControl
+
+	readWriteAccessCtrl,
+		err =
+		new(FileAccessControl).
+			NewReadWriteAccess(ePrefix.XCpy(
+				"readWriteAccessCtrl<-"))
+
+	if err != nil {
+		return numBytesWritten, err
+	}
+
+	err = new(fileMgrHelper).writeFileSetup(
+		fMgr,
+		readWriteAccessCtrl,
+		true,
+		ePrefix.XCpy(
+			"fMgr<-readWriteAccessCtrl"))
+
+	if err != nil {
+		return numBytesWritten, err
+	}
+
+	var err2 error
+
+	numBytesWritten,
+		err2 = fMgr.fileBufWriter.WriteString(str)
 
 	if err2 != nil {
-		err =
-			fmt.Errorf(ePrefix+
-				"Error returned from fMgr.filePtr.WriteString(str). Output File='%v'. "+
-				"Error='%v'", fMgr.absolutePathFileName, err2.Error())
 
-	} else {
-		fMgr.buffBytesWritten += uint64(numBytesWritten)
+		err =
+			fmt.Errorf("%v\n"+
+				"Error returned from fMgr.filePtr.WriteString(str).\n"+
+				"Output File='%v'.\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				fMgr.absolutePathFileName,
+				err2.Error())
+
+		return numBytesWritten, err
 	}
+
+	if lenOfBytes != numBytesWritten {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The number of bytes written does NOT EQUAL\n"+
+			"the number of bytes in input parameter 'str'\n"+
+			"Bytes written to file = '%v'\n"+
+			"Number of bytes in input parameter 'str' = '%v'\n",
+			ePrefix.String(),
+			numBytesWritten,
+			lenOfBytes)
+
+		return numBytesWritten, err
+	}
+
+	fMgr.buffBytesWritten += uint64(numBytesWritten)
 
 	return numBytesWritten, err
 }
