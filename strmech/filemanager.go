@@ -10891,23 +10891,111 @@ func (fMgr *FileMgr) SetFileMgrFromDirMgrFileName(
 	return isEmpty, err
 }
 
-// SetFileMgrFromPathFileName - Initializes all the data fields of the
-// current FileMgr object based on the path file name string passed to
-// this method as an input parameter.
+// SetFileMgrFromPathFileName
 //
-// ------------------------------------------------------------------------
+// Resets and initializes all the data fields in the
+// current FileMgr instance based on the path file name
+// string passed to this method as an input parameter.
 //
-// Return Values:
+// ----------------------------------------------------------------
 //
-//	isEmpty       - This value is set to 'false' if, and only if, all internal
-//                  values are set of valid legitimate values.
+// # IMPORTANT
 //
-//	error         - If this method completes successfully, the returned error
-//	                Type is set equal to 'nil'. If an error condition is encountered,
-//	                this method will return an error Type which contains an appropriate
-//	                error message.
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the current instance of
+//	FileMgr.
 //
-
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileNameExt				string
+//
+//		This string contains the directory path, file
+//		name and file extension which will be used to
+//		reconfigure the current instance of FileMgr.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	isEmpty
+//
+//		This value is set to 'false' if, and only if, all
+//		internal member variables are successfully set to
+//		valid legitimate values.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fMgr *FileMgr) SetFileMgrFromPathFileName(
 	pathFileNameExt string,
 	errorPrefix interface{}) (
@@ -10937,9 +11025,8 @@ func (fMgr *FileMgr) SetFileMgrFromPathFileName(
 		return isEmpty, err
 	}
 
-	fMgrHlpr := fileMgrHelper{}
-
-	isEmpty, err = fMgrHlpr.setFileMgrPathFileName(
+	isEmpty,
+		err = new(fileMgrHelper).setFileMgrPathFileName(
 		fMgr,
 		pathFileNameExt,
 		ePrefix)
