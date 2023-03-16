@@ -2,7 +2,6 @@ package strmech
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
@@ -10572,12 +10571,108 @@ func (fMgr *FileMgr) SetWriterBufferSize(
 	return
 }
 
-// SetFileInfo - Used to initialize the os.FileInfo structure maintained as
-// part of the current FileMgr object.
+// SetFileInfo
 //
-// Be careful: Failure of the input parameter to match the current FileMgr file name
-// will trigger an error.
-func (fMgr *FileMgr) SetFileInfo(info os.FileInfo) error {
+// Used to initialize the os.FileInfo structure
+// maintained as part of the current FileMgr instance.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Failure of the input parameter to match the
+//	file name and file extension specified by the current
+//	FileMgr instance will trigger an error.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	info						os.FileInfo
+//
+//		An object which implements the os.FileInfo
+//		interface. This parameter may transmit an
+//		instance of FileInfoPlus which implements
+//		the os.FileInfo interface.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgr *FileMgr) SetFileInfo(
+	errorPrefix interface{},
+	info os.FileInfo) error {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -10587,37 +10682,60 @@ func (fMgr *FileMgr) SetFileInfo(info os.FileInfo) error {
 
 	defer fMgr.lock.Unlock()
 
-	ePrefix := "FileMgr.SetFileInfo() "
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr."+
+			"SetFileInfo()",
+		"")
+
+	if err != nil {
+		return err
+	}
 
 	if info == nil {
-		return errors.New(ePrefix +
-			"Error: Input parameter 'info' is 'nil' and INVALID!\n")
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter 'info' is 'nil' and INVALID!\n",
+			ePrefix.String())
 	}
 
 	if info.Name() == "" {
-		return errors.New(ePrefix +
-			"Error: info.Name() is an EMPTY string!\n")
+		return fmt.Errorf("%v\n"+
+			"Error: info.Name() is an EMPTY string!\n",
+			ePrefix.String())
 	}
 
 	if info.IsDir() {
-		return errors.New(ePrefix +
-			"Input parameter info.IsDir()=='true'. This is a Directory NOT A FILE!\n")
+		return fmt.Errorf("%v\n"+
+			"Input parameter info.IsDir()=='true'.\n"+
+			"'info' is a Directory and NOT A FILE!\n",
+			ePrefix.String())
 	}
 
 	if strings.ToLower(info.Name()) != strings.ToLower(fMgr.fileNameExt) {
-		return fmt.Errorf(ePrefix+
+
+		return fmt.Errorf("%v\n"+
 			"Error: Input parameter 'info' does NOT match current FileMgr file name.\n"+
-			"FileMgr File Name='%v'\ninfo File Name='%v'\n",
-			fMgr.fileNameExt, info.Name())
+			"FileMgr File Name='%v'\n"+
+			"info File Name='%v'\n",
+			ePrefix.String(),
+			fMgr.fileNameExt,
+			info.Name())
 	}
 
 	fMgr.actualFileInfo =
 		new(FileInfoPlus).NewFromFileInfo(info)
 
 	if !fMgr.actualFileInfo.isFInfoInitialized {
-		return fmt.Errorf(ePrefix+
+
+		return fmt.Errorf("%v\n"+
 			"Error: Failed to initialize fMgr.actualFileInfo object.\n"+
-			"info.Name()='%v'", info.Name())
+			"info.Name()='%v'\n",
+			ePrefix.String(),
+			info.Name())
 	}
 
 	return nil
