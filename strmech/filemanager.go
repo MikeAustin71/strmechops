@@ -10492,10 +10492,31 @@ func (fMgr *FileMgr) ResetFileInfo(
 	return nil
 }
 
-// SetReaderBufferSize - Sets the Read Buffer size in bytes.
-// If the value is less than 1, the buffer size will be set
-// to the system default size.
-func (fMgr *FileMgr) SetReaderBufferSize(readBuffSize int) {
+// SetReaderBufferSize
+//
+// Sets the Read Buffer size in bytes. If the value of
+// input parameter 'readBuffSize' is less than 1, the
+// buffer size will be set to the system default size.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	readBuffSize				int
+//
+//		This integer value will be used to set the size
+//		in bytes of the internal read buffer.
+//
+//		If this value is less than one, the read buffer
+//		size will be set to the system default size.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	--- NONE ---
+func (fMgr *FileMgr) SetReaderBufferSize(
+	readBuffSize int) {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -10510,10 +10531,33 @@ func (fMgr *FileMgr) SetReaderBufferSize(readBuffSize int) {
 	return
 }
 
-// SetWriterBufferSize - Sets the Write Buffer size in bytes.
-// If the value is less than 1, the buffer size will be set
-// to the system default size.
-func (fMgr *FileMgr) SetWriterBufferSize(writeBuffSize int) {
+// SetWriterBufferSize
+//
+// Sets the Write Buffer size in bytes.
+//
+// If the value of input parameter 'SetWriterBufferSize'
+// is less than 1, the buffer size will be set to the
+// system default size.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	writeBuffSize				int
+//
+//		This integer value will be used to set the size
+//		in bytes of the internal write buffer.
+//
+//		If this value is less than one, the write buffer
+//		size will be set to the system default size.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	--- NONE ---
+func (fMgr *FileMgr) SetWriterBufferSize(
+	writeBuffSize int) {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
