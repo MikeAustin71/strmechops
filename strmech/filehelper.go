@@ -5313,7 +5313,8 @@ func (fh *FileHelper) GetAbsPathFromFilePath(
 	return new(fileHelperMolecule).
 		getAbsPathFromFilePath(
 			filePath,
-			ePrefix)
+			ePrefix.XCpy(
+				"<-filePath"))
 }
 
 // GetCurrentDir

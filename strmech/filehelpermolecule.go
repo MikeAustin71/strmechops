@@ -600,7 +600,7 @@ func (fHelpMolecule *fileHelperMolecule) getFirstLastNonSeparatorCharIndexInPath
 //		the error message.
 func (fHelpMolecule *fileHelperMolecule) getAbsPathFromFilePath(
 	filePath string,
-	errorPrefix interface{}) (
+	errPrefDto *ePref.ErrPrefixDto) (
 	string,
 	error) {
 
@@ -617,7 +617,7 @@ func (fHelpMolecule *fileHelperMolecule) getAbsPathFromFilePath(
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
+		errPrefDto,
 		"fileHelperMolecule."+
 			"getAbsPathFromFilePath()",
 		"")
