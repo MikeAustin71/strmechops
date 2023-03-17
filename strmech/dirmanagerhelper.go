@@ -29,14 +29,175 @@ type dirMgrHelper struct {
 // directory. The files to be copied are selected according to
 // file selection criteria specified by input parameter,
 // 'fileSelectCriteria'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dMgr						*DirMgr
+//
+//		An instance of DirMgr which identifies the source
+//		from which files will be copied to the directory
+//		identified by input parameter 'targetDMgr'.
+//
+//	targetDMgr					*DirMgr
+//
+//		An instance of DirMgr which identifies the
+//		destination directory to which files from 'dMgr'
+//		will be copied.
+//
+//	fileSelectCriteria			FileSelectionCriteria
+//
+//	  This input parameter should be configured with the
+//	  desired file selection criteria. Files matching
+//	  this criteria will be copied  to the directory
+//	  identified by input parameter, 'targetDir'.
+//
+//	  type FileSelectionCriteria struct {
+//	   FileNamePatterns    []string// An array of strings containing File Name Patterns
+//	   FilesOlderThan      time.Time// Match files with older modification date times
+//	   FilesNewerThan      time.Time// Match files with newer modification date times
+//	   SelectByFileMode    FilePermissionConfig  // Match file mode (os.FileMode).
+//	   SelectCriterionModeFileSelectCriterionMode // Specifies 'AND' or 'OR' selection mode
+//	  }
+//
+//	  The FileSelectionCriteria type allows for configuration of single or multiple file
+//	  selection criterion. The 'SelectCriterionMode' can be used to specify whether the
+//	  file must match all, or any one, of the active file selection criterion.
+//
+//	  Elements of the FileSelectionCriteria are described below:
+//
+//	  FileNamePatterns    []string  - An array of strings which may define one or more
+//	                                  search patterns. If a file name matches any one of the
+//	                                  search pattern strings, it is deemed to be a 'match'
+//	                                  for the search pattern criterion.
+//
+//	                                    Example Patterns:
+//	                                     FileNamePatterns = []string{"*.log"}
+//	                                     FileNamePatterns = []string{"current*.txt"}
+//	                                     FileNamePatterns = []string{"*.txt", "*.log"}
+//
+//	                                  If this string array has zero length or if
+//	                                  all the strings are empty strings, then this
+//	                                  file search criterion is considered 'Inactive'
+//	                                  or 'Not Set'.
+//
+//
+//	  FilesOlderThan      time.Time - This date time type is compared to file
+//	                                  modification date times in order to determine
+//	                                  whether the file is older than the 'FilesOlderThan'
+//	                                  file selection criterion. If the file modification
+//	                                  date time is older than the 'FilesOlderThan' date time,
+//	                                  that file is considered a 'match'	for this file selection
+//	                                  criterion.
+//
+//	                                  If the value of 'FilesOlderThan' is set to time zero,
+//	                                  the default value for type time.Time{}, then this
+//	                                  file selection criterion is considered to be 'Inactive'
+//	                                  or 'Not Set'.
+//
+//	  FilesNewerThan      time.Time - This date time type is compared to the file
+//	                                  modification date time in order to determine
+//	                                  whether the file is newer than the 'FilesNewerThan'
+//	                                  file selection criterion. If the file modification date time
+//	                                  is newer than the 'FilesNewerThan' date time, that file is
+//	                                  considered a 'match' for this file selection criterion.
+//
+//	                                  If the value of 'FilesNewerThan' is set to time zero,
+//	                                  the default value for type time.Time{}, then this
+//	                                  file selection criterion is considered to be 'Inactive'
+//	                                  or 'Not Set'.
+//
+//	  SelectByFileMode  FilePermissionConfig -
+//	                                  Type FilePermissionConfig encapsulates an os.FileMode. The file
+//	                                  selection criterion allows for the selection of files by File Mode.
+//	                                  File modes are compared to the value	of 'SelectByFileMode'. If the
+//	                                  File Mode for a given file is equal to the value of 'SelectByFileMode',
+//	                                  that file is considered to be a 'match' for this file selection
+//	                                  criterion. Examples for setting SelectByFileMode are shown as follows:
+//
+//	                                       fsc := FileSelectionCriteria{}
+//	                                       err = fsc.SelectByFileMode.SetByFileMode(os.FileMode(0666))
+//	                                       err = fsc.SelectByFileMode.SetFileModeByTextCode("-r--r--r--")
+//
+//	  SelectCriterionMode FileSelectCriterionMode -
+//	                                  This parameter selects the manner in which the file selection
+//	                                  criteria above are applied in determining a 'match' for file
+//	                                  selection purposes. 'SelectCriterionMode' may be set to one of
+//	                                  two constant values:
+//
+//	                                  FileSelectMode.ANDSelect() - File selected if all active selection
+//	                                    criteria are satisfied.
+//
+//	                                    If this constant value is specified for the file selection mode,
+//	                                    then a given file will not be judged as 'selected' unless all
+//	                                    the active selection criterion are satisfied. In other words, if
+//	                                    three active search criterion are provided for 'FileNamePatterns',
+//	                                    'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
+//	                                    selected unless it has satisfied all three criterion in this example.
+//
+//	                                  FileSelectMode.ORSelect() - File selected if any active selection
+//	                                    criterion is satisfied.
+//
+//	                                    If this constant value is specified for the file selection mode,
+//	                                    then a given file will be selected if any one of the active file
+//	                                    selection criterion is satisfied. In other words, if three active
+//	                                    search criterion are provided for 'FileNamePatterns', 'FilesOlderThan'
+//	                                    and 'FilesNewerThan', then a file will be selected if it satisfies any
+//	                                    one of the three criterion in this example.
+//
+//	copyEmptyDirectory			bool
+//
+//		If this parameter is set to 'true', directories
+//		containing zero files will be created and no
+//		errors will be returned.
+//
+//	dMgrLabel					string
+//
+//		The name or label associated with input parameter
+//		'dMgr' which will be used in error messages
+//		returned by this method.
+//
+//	targetDMgrLabel				string
+//
+//		The name or label associated with input parameter
+//		'targetDMgr' which will be used in error messages
+//		returned by this method.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	dirCopyStats				DirectoryCopyStats
+//
+//		If this method completes successfully, this
+//		return parameter will be populated with
+//		information and statistics on the copy
+//		operation. This information includes the number
+//		of files copied.
 func (dMgrHlpr *dirMgrHelper) copyDirectory(
 	dMgr *DirMgr,
 	targetDMgr *DirMgr,
 	fileSelectCriteria FileSelectionCriteria,
 	copyEmptyDirectory bool,
-	errPrefDto *ePref.ErrPrefixDto,
 	dMgrLabel string,
-	targetDMgrLabel string) (
+	targetDMgrLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
 	dirCopyStats DirectoryCopyStats,
 	errs []error) {
 
@@ -68,14 +229,16 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 
 	var dirPathDoesExist, targetPathDoesExist, dirCreated bool
 
+	dMgrHlprAtom := dirMgrHelperAtom{}
+
 	dirPathDoesExist,
 		_,
 		err =
-		dMgrHlpr.doesDirectoryExist(
+		dMgrHlprAtom.doesDirectoryExist(
 			dMgr,
 			PreProcPathCode.None(),
-			ePrefix,
-			dMgrLabel)
+			dMgrLabel,
+			ePrefix.XCpy("dMgr"))
 
 	if err != nil {
 
@@ -101,11 +264,12 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 	targetPathDoesExist,
 		_,
 		err =
-		dMgrHlpr.doesDirectoryExist(
+		dMgrHlprAtom.doesDirectoryExist(
 			targetDMgr,
 			PreProcPathCode.None(),
-			ePrefix,
-			targetDMgrLabel)
+			targetDMgrLabel,
+			ePrefix.XCpy(
+				"targetDMgr"))
 
 	if err != nil {
 
@@ -117,10 +281,10 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 	if !targetPathDoesExist && copyEmptyDirectory {
 
 		dirCreated,
-			err = dMgrHlpr.lowLevelMakeDir(
+			err = new(dirMgrHelperMolecule).lowLevelMakeDir(
 			targetDMgr,
-			ePrefix,
-			"targetDMgr")
+			"targetDMgr",
+			ePrefix.XCpy("targetDMgr"))
 
 		if err != nil {
 			errs = append(errs, err)
@@ -239,10 +403,10 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 				if !targetPathDoesExist {
 
 					dirCreated,
-						err = dMgrHlpr.lowLevelMakeDir(
+						err = new(dirMgrHelperMolecule).lowLevelMakeDir(
 						targetDMgr,
-						ePrefix,
-						"targetDMgr")
+						"targetDMgr",
+						ePrefix)
 
 					if err != nil {
 						err2 = fmt.Errorf("%v\n"+
@@ -274,13 +438,13 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 				target = targetDMgr.absolutePath +
 					osPathSeparatorStr + nameFInfo.Name()
 
-				err = dMgrHlpr.lowLevelCopyFile(
+				err = new(dirMgrHelperMolecule).lowLevelCopyFile(
 					src,
 					nameFInfo,
 					target,
-					ePrefix,
 					"srcFile",
-					"destinationFile")
+					"destinationFile",
+					ePrefix)
 
 				if err != nil {
 
@@ -1925,307 +2089,6 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 	}
 
 	return deleteDirStats, errs
-}
-
-// doesDirectoryExist - Helper method used by DirMgr to test for
-// existence of directory path. In addition, this method performs
-// validation on the 'DirMgr' instance.
-func (dMgrHlpr *dirMgrHelper) doesDirectoryExist(
-	dMgr *DirMgr,
-	preProcessCode PreProcessPathCode,
-	errorPrefix string,
-	dMgrLabel string) (dirPathDoesExist bool, fInfo FileInfoPlus, err error) {
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"dirMgrHelper."+
-			"doesDirectoryExist()",
-		"")
-
-	if err != nil {
-		return dirPathDoesExist, fInfo, err
-	}
-
-	dirPathDoesExist = false
-	fInfo = FileInfoPlus{}
-	err = nil
-
-	if dMgr == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: %v pointer is 'nil'!\n",
-			ePrefix.String(),
-			dMgrLabel)
-
-		return dirPathDoesExist, fInfo, err
-	}
-
-	if !dMgr.isInitialized {
-
-		err = fmt.Errorf(
-			"%v\n"+
-				"Error: DirMgr is NOT Initialized.\n",
-			ePrefix.String())
-
-		return dirPathDoesExist, fInfo, err
-	}
-
-	fh := new(FileHelper)
-
-	errCode := 0
-
-	errCode, _, dMgr.absolutePath =
-		fh.IsStringEmptyOrBlank(dMgr.absolutePath)
-
-	if errCode == -1 {
-		dMgr.isInitialized = false
-		dMgr.absolutePath = ""
-		dMgr.path = ""
-		dMgr.doesAbsolutePathExist = false
-		dMgr.doesPathExist = false
-		dMgr.actualDirFileInfo = FileInfoPlus{}
-		dirPathDoesExist = false
-		err = fmt.Errorf(errorPrefix+
-			"\nError: Input parameter '%v'.absolutePath is an empty string!\n\n",
-			dMgrLabel)
-		return dirPathDoesExist, fInfo, err
-	}
-
-	if errCode == -2 {
-		dMgr.isInitialized = false
-		dMgr.absolutePath = ""
-		dMgr.path = ""
-		dMgr.doesAbsolutePathExist = false
-		dMgr.doesPathExist = false
-		dMgr.actualDirFileInfo = FileInfoPlus{}
-		dirPathDoesExist = false
-		err = fmt.Errorf(errorPrefix+
-			"\nError: Input parameter '%v' consists of blank spaces!\n\n",
-			dMgrLabel)
-
-		return dirPathDoesExist, fInfo, err
-	}
-
-	var err2 error
-
-	if preProcessCode == PreProcPathCode.PathSeparator() {
-
-		dMgr.absolutePath = fh.AdjustPathSlash(dMgr.absolutePath)
-
-	} else if preProcessCode == PreProcPathCode.AbsolutePath() {
-
-		dMgr.absolutePath,
-			err2 =
-			fh.MakeAbsolutePath(
-				dMgr.absolutePath,
-				ePrefix.XCpy("dMgr.absolutePath<-"))
-
-		if err2 != nil {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: fh.MakeAbsolutePath(%v.absolutePath) FAILED!\n"+
-				"%v.absolutePath='%v'\n"+
-				"Error='%v'\n\n",
-				ePrefix.String(),
-				dMgrLabel,
-				dMgrLabel,
-				dMgr.absolutePath,
-				err2.Error())
-
-			return dirPathDoesExist, fInfo, err
-		}
-	}
-
-	errCode, _, dMgr.path =
-		fh.IsStringEmptyOrBlank(dMgr.path)
-
-	if errCode < 0 {
-		dMgr.path = dMgr.absolutePath
-	}
-
-	dMgr.isPathPopulated = true
-
-	strAry := strings.Split(dMgr.absolutePath, string(os.PathSeparator))
-	lStr := len(strAry)
-	idxStr := strAry[lStr-1]
-
-	idx := strings.Index(dMgr.absolutePath, idxStr)
-
-	dMgr.parentPath = fh.RemovePathSeparatorFromEndOfPathString(dMgr.absolutePath[0:idx])
-
-	dMgr.isParentPathPopulated = true
-
-	if dMgr.parentPath == "" {
-		dMgr.isParentPathPopulated = false
-	}
-
-	if idxStr != "" {
-		dMgr.directoryName = idxStr
-	} else {
-		dMgr.directoryName = dMgr.absolutePath
-	}
-
-	errCode, _, dMgr.path =
-		fh.IsStringEmptyOrBlank(dMgr.path)
-
-	if dMgr.path != dMgr.absolutePath {
-		dMgr.isAbsolutePathDifferentFromPath = true
-	}
-
-	var vn string
-	if dMgr.isAbsolutePathPopulated {
-		vn = pf.VolumeName(dMgr.absolutePath)
-	} else if dMgr.isPathPopulated {
-		vn = pf.VolumeName(dMgr.path)
-	}
-
-	dMgr.isVolumePopulated = false
-
-	if vn != "" {
-		dMgr.isVolumePopulated = true
-		dMgr.volumeName = vn
-	}
-
-	var absFInfo, pathFInfo FileInfoPlus
-
-	dMgr.doesAbsolutePathExist,
-		absFInfo,
-		err = dMgrHlpr.lowLevelDoesDirectoryExist(
-		dMgr.absolutePath,
-		errorPrefix,
-		dMgrLabel+".absolutePath")
-
-	if err != nil {
-		dMgr.doesAbsolutePathExist = false
-		dMgr.doesPathExist = false
-		dMgr.actualDirFileInfo = FileInfoPlus{}
-		dirPathDoesExist = false
-		return dirPathDoesExist, fInfo, err
-	}
-
-	if !dMgr.doesAbsolutePathExist {
-		dMgr.doesAbsolutePathExist = false
-		dMgr.doesPathExist = false
-		dMgr.actualDirFileInfo = FileInfoPlus{}
-		dirPathDoesExist = false
-		err = nil
-		return dirPathDoesExist, fInfo, err
-	}
-
-	if !absFInfo.Mode().IsDir() {
-		dMgr.doesAbsolutePathExist = false
-		dMgr.doesPathExist = false
-		dMgr.actualDirFileInfo = FileInfoPlus{}
-		err = fmt.Errorf(errorPrefix+
-			"\nError: Directory absolute path exists, but "+
-			"it is a file - NOT A DIRECTORY!\n"+
-			"%v='%v'\n\n",
-			dMgrLabel,
-			dMgr.absolutePath)
-		dirPathDoesExist = false
-		return dirPathDoesExist, fInfo, err
-	}
-
-	if absFInfo.Mode().IsRegular() {
-		dMgr.doesAbsolutePathExist = false
-		dMgr.doesPathExist = false
-		dMgr.actualDirFileInfo = FileInfoPlus{}
-		err = fmt.Errorf(errorPrefix+
-			"\nError: Directory absolute path exists, but "+
-			"it is classified as as a Regular File!\n"+
-			"%v='%v'\n\n",
-			dMgrLabel,
-			dMgr.absolutePath)
-		dirPathDoesExist = false
-		return dirPathDoesExist, fInfo, err
-	}
-
-	dMgr.doesPathExist,
-		pathFInfo,
-		err = dMgrHlpr.lowLevelDoesDirectoryExist(
-		dMgr.path,
-		errorPrefix,
-		dMgrLabel+".path")
-
-	if err != nil {
-		dMgr.doesAbsolutePathExist = false
-		dMgr.doesPathExist = false
-		dMgr.actualDirFileInfo = FileInfoPlus{}
-		dirPathDoesExist = false
-		return dirPathDoesExist, fInfo, err
-	}
-
-	if !dMgr.doesPathExist {
-		err = fmt.Errorf(errorPrefix+
-			"\nError: Directory absolute path exists, "+
-			"but original directory 'path' DOES NOT "+
-			"EXIST!\n"+
-			"%v.absolutePath='%v'\n"+
-			"%v.path='%v'\n\n",
-			dMgrLabel,
-			dMgr.absolutePath,
-			dMgrLabel,
-			dMgr.path)
-
-		dMgr.doesAbsolutePathExist = false
-		dMgr.doesPathExist = false
-		dMgr.actualDirFileInfo = FileInfoPlus{}
-		dirPathDoesExist = false
-
-		return dirPathDoesExist, fInfo, err
-	}
-
-	if !pathFInfo.Mode().IsDir() {
-		err = fmt.Errorf(errorPrefix+
-			"\nError: Directory path absolute path exists, "+
-			"but original directory 'path' is NOT A DIRECTORY!!\n"+
-			"%v.absolutePath='%v'\n"+
-			"%v.path='%v'\n\n",
-			dMgrLabel,
-			dMgr.absolutePath,
-			dMgrLabel,
-			dMgr.path)
-
-		dMgr.doesAbsolutePathExist = false
-		dMgr.doesPathExist = false
-		dMgr.actualDirFileInfo = FileInfoPlus{}
-		dirPathDoesExist = false
-		return dirPathDoesExist, fInfo, err
-	}
-
-	if pathFInfo.Mode().IsRegular() {
-		err = fmt.Errorf(errorPrefix+
-			"\nError: Directory path exists, "+
-			"but original directory 'path' is classified "+
-			"as a Regular File!!\n"+
-			"%v.absolutePath='%v'\n"+
-			"%v.path='%v'\n\n",
-			dMgrLabel,
-			dMgr.absolutePath,
-			dMgrLabel,
-			dMgr.path)
-
-		dMgr.doesAbsolutePathExist = false
-		dMgr.doesPathExist = false
-		dMgr.actualDirFileInfo = FileInfoPlus{}
-		dirPathDoesExist = false
-		return dirPathDoesExist, fInfo, err
-	}
-
-	// both dMgr.path and dMgr.doesAbsolutePathExist
-	// exist. And, there are no errors
-
-	dMgr.actualDirFileInfo = absFInfo.CopyOut()
-	dMgr.doesAbsolutePathExist = true
-	dMgr.doesPathExist = true
-	fInfo = dMgr.actualDirFileInfo.CopyOut()
-	dirPathDoesExist = true
-	err = nil
-
-	return dirPathDoesExist, fInfo, err
 }
 
 func (dMgrHlpr *dirMgrHelper) empty(
@@ -4374,212 +4237,6 @@ func (dMgrHlpr *dirMgrHelper) isPathStringEmptyOrBlank(
 	return pathFileNameExt, strLen, err
 }
 
-// lowLevelCopyFile - This low level helper method is designed
-// to copy files from a source file to a destination file.
-//
-// No validation or error checking is performed on the input
-// parameters.
-func (dMgrHlpr *dirMgrHelper) lowLevelCopyFile(
-	src string,
-	srcFInfo os.FileInfo,
-	dst,
-	ePrefix,
-	srcLabel,
-	dstLabel string) error {
-
-	ePrefixCurrMethod := "dirMgrHelper.lowLevelCopyFile() "
-
-	if len(ePrefix) == 0 {
-		ePrefix = ePrefixCurrMethod
-	} else {
-		ePrefix = ePrefix + "- " + ePrefixCurrMethod
-	}
-
-	if len(src) == 0 {
-		return fmt.Errorf(ePrefix+
-			"\nError: Input parameter %v is an empty string!\n", srcLabel)
-	}
-
-	if len(dst) == 0 {
-		return fmt.Errorf(ePrefix+
-			"\nError: Input parameter %v is an empty string!\n", dstLabel)
-	}
-
-	if !srcFInfo.Mode().IsRegular() {
-		return fmt.Errorf(ePrefix+
-			"Error: %v is a Non-Regular File and cannot be copied!\n"+
-			"%v='%v'\n\n",
-			srcLabel,
-			srcLabel,
-			src)
-	}
-
-	// First, open the source file
-	inSrcPtr, err := os.Open(src)
-
-	if err != nil {
-		return fmt.Errorf(ePrefix+
-			"Error returned from os.Open(src)\n"+
-			"%v='%v'\nError='%v'\n\n",
-			srcLabel,
-			src,
-			err.Error())
-	}
-	// Next, 'Create' the destination file
-	// If the destination file previously exists,
-	// it will be truncated.
-	outDestPtr, err := os.Create(dst)
-
-	if err != nil {
-
-		_ = inSrcPtr.Close()
-
-		return fmt.Errorf(ePrefix+
-			"Error returned from os.Create(destinationFile)\n"+
-			"%='%v'\nError='%v'\n\n",
-			dstLabel,
-			dst,
-			err.Error())
-	}
-
-	bytesCopied, err2 := io.Copy(outDestPtr, inSrcPtr)
-
-	if err2 != nil {
-		_ = inSrcPtr.Close()
-		_ = outDestPtr.Close()
-		err = fmt.Errorf(ePrefix+
-			"Error returned from io.Copy(%v, %v) \n"+
-			"%v='%v'\n"+
-			"%v='%v'\nError='%v'\n\n",
-			dstLabel,
-			srcLabel,
-			dstLabel,
-			dst,
-			srcLabel,
-			src,
-			err2.Error())
-
-		return err
-	}
-
-	errs := make([]error, 0)
-
-	// flush file buffers inSrcPtr memory
-	err = outDestPtr.Sync()
-
-	if err != nil {
-		err2 = fmt.Errorf(ePrefix+
-			"Error returned from outDestPtr.Sync()\n"+
-			"%v='%v'\nError='%v'\n\n",
-			dstLabel,
-			dst,
-			err.Error())
-
-		errs = append(errs, err2)
-	}
-
-	err = inSrcPtr.Close()
-
-	if err != nil {
-		err2 = fmt.Errorf(ePrefix+
-			"Error returned from inSrcPtr.Close()\n"+
-			"inSrcPtr=source='%v'\nError='%v'\n\n",
-			src, err.Error())
-
-		errs = append(errs, err2)
-	}
-
-	inSrcPtr = nil
-
-	err = outDestPtr.Close()
-
-	if err != nil {
-
-		err2 = fmt.Errorf(ePrefix+
-			"Error returned from outDestPtr.Close()\n"+
-			"outDestPtr=destination='%v'\nError='%v'\n\n",
-			dst, err.Error())
-
-		errs = append(errs, err2)
-	}
-
-	outDestPtr = nil
-
-	if len(errs) > 0 {
-
-		return new(StrMech).ConsolidateErrors(errs)
-	}
-
-	var dstFileDoesExist bool
-	var dstFileInfo FileInfoPlus
-
-	dstFileDoesExist,
-		dstFileInfo,
-		err = dMgrHlpr.lowLevelDoesDirectoryExist(
-		dst,
-		ePrefix,
-		dstLabel)
-
-	if err != nil {
-		return fmt.Errorf(ePrefix+
-			"Error: After Copy IO operation, %v "+
-			"generated non-path error!\n"+
-			"%v='%v'\nError='%v'\n\n",
-			dstLabel,
-			dstLabel,
-			dst,
-			err.Error())
-	}
-
-	if !dstFileDoesExist {
-		err = fmt.Errorf(ePrefix+
-			"ERROR: After Copy IO operation, the destination file DOES NOT EXIST!\n"+
-			"Destination File = '%v' = '%v'\n\n",
-			dstLabel,
-			dst)
-
-		return err
-	}
-
-	srcFileSize := srcFInfo.Size()
-
-	if bytesCopied != srcFileSize {
-		err = fmt.Errorf(ePrefix+
-			"Error: Bytes Copied does NOT equal bytes "+
-			"in source file!\n"+
-			"Source File Bytes='%v'   Bytes Coped='%v'\n"+
-			"Source File=%v='%v'\n"+
-			"Destination File=%v='%v'\n\n",
-			srcFileSize,
-			bytesCopied,
-			srcLabel,
-			src,
-			dstLabel,
-			dst)
-
-		return err
-	}
-
-	err = nil
-
-	if dstFileInfo.Size() != srcFileSize {
-		err = fmt.Errorf(ePrefix+
-			"\nError: Bytes is source file do NOT equal bytes "+
-			"in destination file!\n"+
-			"Source File Bytes='%v'   Destination File Bytes='%v'\n"+
-			"Source File=%v='%v'\n"+
-			"Destination File=%v='%v'\n\n",
-			srcFileSize,
-			dstFileInfo.Size(),
-			srcLabel,
-			src,
-			dstLabel,
-			dst)
-	}
-
-	return err
-}
-
 // lowLevelDeleteDirectoryAll - Helper method designed for use by DirMgr.
 // This method will delete the designated directory ('dMgr') and all
 // subsidiary directories and files.
@@ -4629,99 +4286,6 @@ func (dMgrHlpr *dirMgrHelper) lowLevelDeleteDirectoryAll(
 	}
 
 	return err
-}
-
-// lowLevelDoesDirectoryExist
-//
-// This method tests for the existence of directory path.
-func (dMgrHlpr *dirMgrHelper) lowLevelDoesDirectoryExist(
-	dirPath,
-	ePrefix,
-	dirPathLabel string) (dirPathDoesExist bool,
-	fInfo FileInfoPlus,
-	err error) {
-
-	ePrefixCurrMethod := "dirMgrHelper.lowLevelDoesDirectoryExist() "
-
-	dirPathDoesExist = false
-	fInfo = FileInfoPlus{}
-	err = nil
-
-	if len(ePrefix) == 0 {
-		ePrefix = ePrefixCurrMethod
-	} else {
-		ePrefix = ePrefix + "- " + ePrefixCurrMethod
-	}
-
-	if len(dirPathLabel) == 0 {
-		dirPathLabel = "DirMgr"
-	}
-
-	errCode := 0
-
-	errCode,
-		_,
-		dirPath = new(FileHelper).
-		IsStringEmptyOrBlank(dirPath)
-
-	if errCode < 0 {
-		err = fmt.Errorf(ePrefix+
-			"\nError: Input paramter %v is an empty string!\n", dirPathLabel)
-		return dirPathDoesExist, fInfo, err
-	}
-
-	var err2 error
-	var info os.FileInfo
-
-	for i := 0; i < 3; i++ {
-
-		dirPathDoesExist = false
-		fInfo = FileInfoPlus{}
-		err = nil
-
-		info, err2 = os.Stat(dirPath)
-
-		if err2 != nil {
-
-			if os.IsNotExist(err2) {
-
-				dirPathDoesExist = false
-				fInfo = FileInfoPlus{}
-				err = nil
-				return dirPathDoesExist, fInfo, err
-			}
-
-			// err == nil and err != os.IsNotExist(err)
-			// This is a non-path error. The non-path error will be
-			// tested up to 3-times before it is returned.
-			err = fmt.Errorf(ePrefix+"Non-Path error returned by os.Stat(%v)\n"+
-				"%v='%v'\nError='%v'\n\n",
-				dirPathLabel, dirPathLabel, err2.Error())
-			fInfo = FileInfoPlus{}
-			dirPathDoesExist = false
-
-		} else {
-			// err == nil
-			// The path really does exist!
-			dirPathDoesExist = true
-			err = nil
-			fInfo, err2 = new(FileInfoPlus).
-				NewFromPathFileInfo(dirPath, info)
-
-			if err2 != nil {
-				err = fmt.Errorf(ePrefix+
-					"\nError returned by FileInfoPlus{}.NewFromPathFileInfo(dirPath, info)\n"+
-					"Error='%v'\n", err2.Error())
-				fInfo = FileInfoPlus{}
-			}
-
-			return dirPathDoesExist, fInfo, err
-		}
-
-		time.Sleep(30 * time.Millisecond)
-	}
-
-	return dirPathDoesExist, fInfo, err
 }
 
 func (dMgrHlpr *dirMgrHelper) lowLevelDirMgrFieldConfig(
@@ -4964,125 +4528,6 @@ func (dMgrHlpr *dirMgrHelper) lowLevelDirMgrFieldConfig(
 	err = nil
 
 	return isEmpty, err
-}
-
-// lowLevelMakeDir - Helper Method used by 'DirMgr'. This method will create
-// the directory path including parent directories for the path specified by
-// 'dMgr'.
-func (dMgrHlpr *dirMgrHelper) lowLevelMakeDir(
-	dMgr *DirMgr,
-	errorPrefix string,
-	dMgrLabel string) (dirCreated bool, err error) {
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"dirMgrHelper."+
-			"lowLevelMakeDir()",
-		"")
-
-	if err != nil {
-		return false, err
-	}
-
-	dirCreated = false
-	err = nil
-
-	dMgrPathDoesExist,
-		_,
-		err :=
-		dMgrHlpr.doesDirectoryExist(
-			dMgr,
-			PreProcPathCode.None(),
-			ePrefix.String(),
-			dMgrLabel)
-
-	if err != nil {
-		return dirCreated, err
-	}
-
-	if dMgrPathDoesExist {
-		// The directory exists
-		// Nothing to do.
-		return dirCreated, err
-	}
-
-	var fPermCfg FilePermissionConfig
-
-	fPermCfg, err =
-		new(FilePermissionConfig).New(
-			"drwxrwxrwx",
-			ePrefix)
-
-	if err != nil {
-
-		return dirCreated, err
-	}
-
-	var modePerm os.FileMode
-
-	modePerm,
-		err = fPermCfg.GetCompositePermissionMode(
-		ePrefix.XCpy(
-			"modePerm<-fPermCfg"))
-
-	if err != nil {
-
-		return dirCreated, err
-	}
-
-	var err2 error
-
-	err2 = os.MkdirAll(dMgr.absolutePath, modePerm)
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error returned by os.MkdirAll(dMgr.absolutePath, modePerm).\n"+
-			"dMgr.absolutePath='%v'\n"+
-			"modePerm=\"drwxrwxrwx\"\n"+
-			"Error='%v'\n",
-			ePrefix.String(),
-			dMgr.absolutePath,
-			err2.Error())
-
-		return dirCreated, err
-	}
-
-	dMgrPathDoesExist,
-		_,
-		err2 =
-		dMgrHlpr.doesDirectoryExist(
-			dMgr,
-			PreProcPathCode.None(),
-			ePrefix.String(),
-			dMgrLabel)
-
-	if err2 != nil {
-		err = fmt.Errorf("Error: After attempted directory creation, "+
-			"a non-path error was generated!\n"+
-			"%v.absolutePath='%v'\n"+
-			"Error='%v'\n",
-			dMgrLabel,
-			dMgr.absolutePath,
-			err2.Error())
-		return dirCreated, err
-	}
-
-	if !dMgrPathDoesExist {
-		err = fmt.Errorf("Error: After attempted directory creation,\n"+
-			"the directory DOES NOT EXIST!\n"+
-			"%v=%v\n", dMgrLabel, dMgr.absolutePath)
-
-		return dirCreated, err
-	}
-
-	dirCreated = true
-	err = nil
-
-	return dirCreated, err
 }
 
 // lowLevelMakeDirWithPermission - Helper Method used by 'DirMgr'. This method
