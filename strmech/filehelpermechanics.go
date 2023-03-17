@@ -2460,50 +2460,85 @@ func (fileHelpMech *fileHelperMechanics) makeDirAll(
 //	Calling "Close()" multiple times on an os.File
 //	pointer will generate a 'panic' error.
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Input Parameters:
+// # Input Parameters
 //
-//	pathFileName                   string - A string containing the path and file name
-//	                                        of the file which will be opened. If a parent
-//	                                        path component does NOT exist, this method will
-//	                                        trigger an error.
+//	pathFileName				string
 //
-//	fileOpenCfg            FileOpenConfig - This parameter encapsulates the File Open parameters
-//	                                        which will be used to open subject file. For an
-//	                                        explanation of File Open parameters, see method
-//	                                        FileOpenConfig.New().
+//		A string containing the path and file name of the
+//		file which will be opened. If a parent path
+//		component does NOT exist, this method will
+//		trigger an error.
 //
-// filePermissionCfg FilePermissionConfig - This parameter encapsulates the File Permission
+//	fileOpenCfg					FileOpenConfig
 //
-//	parameters which will be used to open the subject
-//	file. For an explanation of File Permission parameters,
-//	see method FilePermissionConfig.New().
+//		This parameter encapsulates the File Open
+//		parameters which will be used to open subject
+//		file. For an explanation of File Open parameters,
+//		see method:
+//			FileOpenConfig.New().
 //
-// ------------------------------------------------------------------------
+//	filePermissionCfg			FilePermissionConfig
 //
-// Return Values:
+//		This parameter encapsulates the File Permission
+//		parameters which will be used to open the subject
+//		file. For an explanation of File Permission
+//		parameters, see method:
+//			FilePermissionConfig.New().
 //
-//	*os.File        - If successful, this method returns an os.File pointer
-//	                  to the file designated by input parameter 'pathFileName'.
-//	                  This file pointer can subsequently be used for reading
-//	                  content from the subject file. It may NOT be used for
-//	                  writing content to the subject file.
+//	errPrefDto					*ePref.ErrPrefixDto
 //
-//	                  If this method fails, the *os.File return value is 'nil'.
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
 //
-//	                  Note: The caller is responsible for calling "Close()" on this
-//	                  os.File pointer.
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
 //
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
 //
-//	error           - If the method completes successfully, this return value
-//	                  is 'nil'. If the method fails, the error type returned
-//	                  is populated with an appropriate error message.
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	*os.File
+//
+//		If successful, this method returns an os.File
+//		pointer to the file designated by input parameter
+//		'pathFileName'. This file pointer can
+//		subsequently be used for reading content from the
+//		subject file. It may NOT be used for writing
+//		content to the subject file.
+//
+//		If this method fails, the *os.File return value
+//		is 'nil'.
+//
+//		Note:
+//		The caller is responsible for calling "Close()"
+//		on this os.File pointer.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fileHelpMech *fileHelperMechanics) openFile(
 	pathFileName string,
 	fileOpenCfg FileOpenConfig,
 	filePermissionCfg FilePermissionConfig,
-	errorPrefix interface{}) (
+	errPrefDto *ePref.ErrPrefixDto) (
 	filePtr *os.File,
 	err error) {
 
@@ -2521,7 +2556,7 @@ func (fileHelpMech *fileHelperMechanics) openFile(
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
+		errPrefDto,
 		"fileHelperMechanics."+
 			"openFile()",
 		"")
