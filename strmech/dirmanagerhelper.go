@@ -9,14 +9,22 @@ import (
 	pf "path/filepath"
 	"runtime"
 	"strings"
+	"sync"
 	"time"
 )
 
+// dirMgrHelper
+//
+// Provides helper methods for type DirMgr
 type dirMgrHelper struct {
 	dMgr DirMgr
+
+	lock *sync.Mutex
 }
 
-// copyDirectory - Helper method used by DirMgr. This method copies
+// copyDirectory
+//
+// Helper method used by DirMgr. This method copies
 // files from the directory identified by DirMgr to a target
 // directory. The files to be copied are selected according to
 // file selection criteria specified by input parameter,
@@ -26,9 +34,19 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 	targetDMgr *DirMgr,
 	fileSelectCriteria FileSelectionCriteria,
 	copyEmptyDirectory bool,
-	errorPrefix string,
+	errPrefDto *ePref.ErrPrefixDto,
 	dMgrLabel string,
-	targetDMgrLabel string) (dirCopyStats DirectoryCopyStats, errs []error) {
+	targetDMgrLabel string) (
+	dirCopyStats DirectoryCopyStats,
+	errs []error) {
+
+	if dMgrHlpr.lock == nil {
+		dMgrHlpr.lock = new(sync.Mutex)
+	}
+
+	dMgrHlpr.lock.Lock()
+
+	defer dMgrHlpr.lock.Unlock()
 
 	var err, err2, err3 error
 
@@ -36,7 +54,7 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		nil,
+		errPrefDto,
 		"dirMgrHelper."+
 			"copyDirectory()",
 		"")
@@ -46,7 +64,7 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 		return dirCopyStats, errs
 	}
 
-	errs = make([]error, 0, 300)
+	errs = make([]error, 0)
 
 	var dirPathDoesExist, targetPathDoesExist, dirCreated bool
 
@@ -56,22 +74,27 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 		dMgrHlpr.doesDirectoryExist(
 			dMgr,
 			PreProcPathCode.None(),
-			errorPrefix,
+			ePrefix,
 			dMgrLabel)
 
 	if err != nil {
 
 		errs = append(errs, err)
+
 		return dirCopyStats, errs
 	}
 
 	if !dirPathDoesExist {
-		err = fmt.Errorf(errorPrefix+
-			"\nThe current DirMgr path DOES NOT EXIST!\n"+
+
+		err = fmt.Errorf("%v\n"+
+			"The current DirMgr path DOES NOT EXIST!\n"+
 			"%v.absolutePath='%v'\n",
-			dMgrLabel, dMgr.absolutePath)
+			ePrefix.String(),
+			dMgrLabel,
+			dMgr.absolutePath)
 
 		errs = append(errs, err)
+
 		return dirCopyStats, errs
 	}
 
@@ -81,12 +104,13 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 		dMgrHlpr.doesDirectoryExist(
 			targetDMgr,
 			PreProcPathCode.None(),
-			errorPrefix,
+			ePrefix,
 			targetDMgrLabel)
 
 	if err != nil {
 
 		errs = append(errs, err)
+
 		return dirCopyStats, errs
 	}
 
@@ -95,7 +119,7 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 		dirCreated,
 			err = dMgrHlpr.lowLevelMakeDir(
 			targetDMgr,
-			errorPrefix,
+			ePrefix,
 			"targetDMgr")
 
 		if err != nil {
@@ -114,11 +138,15 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 
 	if err != nil {
 
-		err2 = fmt.Errorf(errorPrefix+
-			"\nError return by os.Open(%v.absolutePath).\n"+
-			"%v.absolutePath='%v'\nError='%v'\n",
-			dMgrLabel, dMgrLabel,
-			dMgr.absolutePath, err.Error())
+		err2 = fmt.Errorf("%v\n"+
+			"Error return by os.Open(%v.absolutePath).\n"+
+			"%v.absolutePath='%v'\n"+
+			"Error= \n%v\n",
+			ePrefix.String(),
+			dMgrLabel,
+			dMgrLabel,
+			dMgr.absolutePath,
+			err.Error())
 
 		errs = append(errs, err2)
 
@@ -136,17 +164,23 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 
 	for err3 != io.EOF {
 
-		nameFileInfos, err3 = dirPtr.Readdir(1000)
+		nameFileInfos, err3 = dirPtr.Readdir(0)
 
 		if err3 != nil && err3 != io.EOF {
+
 			_ = dirPtr.Close()
-			err2 = fmt.Errorf(errorPrefix+
-				"\nError returned by dirPtr.Readdirnames(1000).\n"+
-				"%v.absolutePath='%v'\nError='%v'\n",
+
+			err2 = fmt.Errorf("%v\n"+
+				"Error returned by dirPtr.Readdirnames(1000).\n"+
+				"%v.absolutePath='%v'\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
 				dMgrLabel,
-				dMgr.absolutePath, err3.Error())
+				dMgr.absolutePath,
+				err3.Error())
 
 			errs = append(errs, err2)
+
 			return dirCopyStats, errs
 		}
 
@@ -173,10 +207,16 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 			if err != nil {
 
 				err2 =
-					fmt.Errorf("\n"+errorPrefix+
-						"\nError returned by fh.FilterFileName(nameFInfo, fileSelectCriteria).\n"+
-						"%v directorySearched='%v'\nfileName='%v'\nError='%v'\n",
-						dMgrLabel, dMgr.absolutePath, nameFInfo.Name(), err.Error())
+					fmt.Errorf("%v\n"+
+						"Error returned by fh.FilterFileName(nameFInfo, fileSelectCriteria).\n"+
+						"%v directorySearched='%v'\n"+
+						"fileName='%v'\n"+
+						"Error= \n%v\n",
+						ePrefix.String(),
+						dMgrLabel,
+						dMgr.absolutePath,
+						nameFInfo.Name(),
+						err.Error())
 
 				errs = append(errs, err2)
 
@@ -184,8 +224,11 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 			}
 
 			if !isMatch {
+
 				dirCopyStats.FilesNotCopied++
+
 				dirCopyStats.FileBytesNotCopied += uint64(nameFInfo.Size())
+
 				continue
 
 			} else {
@@ -198,18 +241,23 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 					dirCreated,
 						err = dMgrHlpr.lowLevelMakeDir(
 						targetDMgr,
-						errorPrefix,
+						ePrefix,
 						"targetDMgr")
 
 					if err != nil {
-						err2 = fmt.Errorf("\n"+errorPrefix+
-							"\nError creating target directory!\n"+
-							"%v Directory='%v'\nError='%v'\n",
+						err2 = fmt.Errorf("%v\n"+
+							"Error creating target directory!\n"+
+							"%v Directory='%v'\n"+
+							"Error= \n%v\n",
+							ePrefix.String(),
 							targetDMgrLabel,
-							targetDMgr.absolutePath, err.Error())
+							targetDMgr.absolutePath,
+							err.Error())
 
 						errs = append(errs, err2)
+
 						err3 = io.EOF
+
 						break
 					}
 
@@ -230,17 +278,22 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 					src,
 					nameFInfo,
 					target,
-					errorPrefix,
+					ePrefix,
 					"srcFile",
 					"destinationFile")
 
 				if err != nil {
+
 					errs = append(errs, err)
+
 					dirCopyStats.FilesNotCopied++
+
 					dirCopyStats.FileBytesNotCopied += uint64(nameFInfo.Size())
 
 				} else {
+
 					dirCopyStats.FilesCopied++
+
 					dirCopyStats.FileBytesCopied += uint64(nameFInfo.Size())
 				}
 			}
@@ -252,11 +305,16 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 		err = dirPtr.Close()
 
 		if err != nil {
-			err2 = fmt.Errorf(errorPrefix+
-				"\nError returned by %v dirPtr.Close().\n"+
-				"%v='%v'\nError='%v'\n",
-				dMgrLabel, dMgrLabel,
-				dMgr.absolutePath, err.Error())
+
+			err2 = fmt.Errorf("%v\n"+
+				"Error returned by %v dirPtr.Close().\n"+
+				"%v='%v'\n"+
+				"Error='%v'\n",
+				ePrefix.String(),
+				dMgrLabel,
+				dMgrLabel,
+				dMgr.absolutePath,
+				err.Error())
 
 			errs = append(errs, err2)
 		}
