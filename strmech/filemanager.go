@@ -9546,6 +9546,159 @@ func (fMgr *FileMgr) OpenThisFileReadWrite(
 			"fMgr<-readWriteAccessCtrl"))
 }
 
+// OpenThisFileReadWriteAppend
+//
+// Opens the file identified by the current FileMgr
+// instance. If successful, this method will use the File
+// Manager's absolute path and file name
+// (FileMgr.absolutePathFileName) to open an os.File
+// pointer (*os.File) to the subject file.
+//
+// As the method's name implies, the
+// 'FileMgr.absolutePathFileName' will be opened for
+// reading and writing. If FileMgr.absolutePathFileName
+// does not exist, it will be created.
+//
+// The FileMode is set to'-rw-rw-rw-' and the permission
+// Mode= '0666'.
+//
+// If the file being opened previously exists, it will be
+// opened for read/write operations. All data written to
+// the file will be appended to any previously existing
+// file contents.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	If the current FileMgr directory path and file do not
+//	exist, this method will attempt to create them.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgr *FileMgr) OpenThisFileReadWriteAppend(
+	errorPrefix interface{}) error {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr."+
+			"OpenThisFileReadWriteAppend()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	var readWriteAppendAccessCtrl FileAccessControl
+
+	readWriteAppendAccessCtrl,
+		err = new(FileAccessControl).
+		NewReadWriteCreateAppendAccess(
+			ePrefix.XCpy(
+				"readWriteAppendAccessCtrl<-"))
+
+	if err != nil {
+		return err
+	}
+
+	return new(fileMgrHelper).openFile(
+		fMgr,
+		readWriteAppendAccessCtrl,
+		true,
+		true,
+		ePrefix.XCpy(
+			"fMgr<-readWriteAppendAccessCtrl"))
+}
+
 // ReadAllFile
 //
 // Reads the entire contents of the file identified by
