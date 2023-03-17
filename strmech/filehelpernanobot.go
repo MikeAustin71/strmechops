@@ -770,63 +770,19 @@ func (fHelperNanobot *fileHelperNanobot) cleanFileNameExtStr(
 //		reset to the time specified by this parameter
 //		('newModTime').
 //
-//	errorPrefix					interface{}
+//	errPrefDto					*ePref.ErrPrefixDto
 //
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
 //
 //		If no error prefix information is needed, set
 //		this parameter to 'nil'.
 //
-//		This empty interface must be convertible to one
-//		of the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
 //			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
@@ -849,7 +805,7 @@ func (fHelperNanobot *fileHelperNanobot) changeFileTimes(
 	pathFileName string,
 	newAccessTime,
 	newModTime time.Time,
-	errorPrefix interface{}) error {
+	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if fHelperNanobot.lock == nil {
 		fHelperNanobot.lock = new(sync.Mutex)
@@ -864,7 +820,7 @@ func (fHelperNanobot *fileHelperNanobot) changeFileTimes(
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
+		errPrefDto,
 		"fileHelperNanobot."+
 			"changeFileTimes()",
 		"")
