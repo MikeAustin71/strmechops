@@ -40,14 +40,104 @@ type fileHelperMolecule struct {
 // To deal with these types of errors, this method will
 // test path existence up to three times before returning
 // a non-path error.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	filePath					string
+//
+//		A string containing directory path, file name and
+//		file extension. This file will be analyzed to
+//		determine if it actually exists on disk.
+//
+//	preProcessCode				PreProcessPathCode
+//
+//		An instance of an enumeration specifying what if
+//		any pre-processing actions should be applied to
+//		input parameter 'filePath'.
+//
+//		Possible values are listed as follows:
+//
+//			PreProcessPathCode(0).None()
+//				Ensures that no pre-processing action
+//				will be applied.
+//
+//			PreProcessPathCode(0).PathSeparator()
+//				Converts path separators to the default
+//				value used by the host operating system.
+//
+//			PreProcessPathCode(0).AbsolutePath()
+//				Converts file path to an absolute path
+//				using the default path separators used by
+//				the host operating system.
+//
+//		Users may also invoke these enumeration values
+//		using the abbreviated syntax:
+//
+//			PreProcPathCode.None()
+//			PreProcPathCode.PathSeparator()
+//			PreProcPathCode.AbsolutePath()
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	absFilePath					string
+//
+//		If the file identified by input parameter
+//		'filePath' exists on disk, this returned string
+//		will be configured with the absolute path and
+//		file name represented by 'filePath'.
+//
+//	filePathDoesExist			bool
+//
+//		If the file identified by input parameter
+//		'filePath' actually exists on disk, this return
+//		parameter will be set to true.
+//
+//	fInfoPlus					FileInfoPlus
+//
+//		If this method completes successfully, this data
+//		structure will be returned populated with
+//		information on the directory path and file which
+//		have been determined to actually exist on disk.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fHelpMolecule *fileHelperMolecule) doesPathFileExist(
 	filePath string,
 	preProcessCode PreProcessPathCode,
-	errorPrefix interface{},
+	errPrefDto *ePref.ErrPrefixDto,
 	filePathTitle string) (
 	absFilePath string,
 	filePathDoesExist bool,
-	fInfo FileInfoPlus,
+	fInfoPlus FileInfoPlus,
 	nonPathError error) {
 
 	if fHelpMolecule.lock == nil {
@@ -61,20 +151,20 @@ func (fHelpMolecule *fileHelperMolecule) doesPathFileExist(
 
 	ePrefix,
 		nonPathError = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
+		errPrefDto,
 		"FileHelper."+
 			"AreSameFile()",
 		"")
 
 	if nonPathError != nil {
-		return absFilePath, filePathDoesExist, fInfo, nonPathError
+		return absFilePath, filePathDoesExist, fInfoPlus, nonPathError
 	}
 
 	absFilePath = ""
 
 	filePathDoesExist = false
 
-	fInfo = FileInfoPlus{}
+	fInfoPlus = FileInfoPlus{}
 
 	nonPathError = nil
 
@@ -94,7 +184,7 @@ func (fHelpMolecule *fileHelperMolecule) doesPathFileExist(
 			ePrefix.String(),
 			filePathTitle)
 
-		return absFilePath, filePathDoesExist, fInfo, nonPathError
+		return absFilePath, filePathDoesExist, fInfoPlus, nonPathError
 	}
 
 	if errCode == -2 {
@@ -104,7 +194,7 @@ func (fHelpMolecule *fileHelperMolecule) doesPathFileExist(
 			ePrefix.String(),
 			filePathTitle)
 
-		return absFilePath, filePathDoesExist, fInfo, nonPathError
+		return absFilePath, filePathDoesExist, fInfoPlus, nonPathError
 	}
 
 	if preProcessCode == PreProcPathCode.PathSeparator() {
@@ -124,7 +214,7 @@ func (fHelpMolecule *fileHelperMolecule) doesPathFileExist(
 
 			absFilePath = ""
 
-			return absFilePath, filePathDoesExist, fInfo, nonPathError
+			return absFilePath, filePathDoesExist, fInfoPlus, nonPathError
 		}
 
 	} else {
@@ -137,7 +227,7 @@ func (fHelpMolecule *fileHelperMolecule) doesPathFileExist(
 	for i := 0; i < 3; i++ {
 
 		filePathDoesExist = false
-		fInfo = FileInfoPlus{}
+		fInfoPlus = FileInfoPlus{}
 		nonPathError = nil
 		var err error
 
@@ -148,9 +238,9 @@ func (fHelpMolecule *fileHelperMolecule) doesPathFileExist(
 			if os.IsNotExist(err) {
 
 				filePathDoesExist = false
-				fInfo = FileInfoPlus{}
+				fInfoPlus = FileInfoPlus{}
 				nonPathError = nil
-				return absFilePath, filePathDoesExist, fInfo, nonPathError
+				return absFilePath, filePathDoesExist, fInfoPlus, nonPathError
 			}
 			// err == nil and err != os.IsNotExist(err)
 			// This is a non-path error. The non-path error will
@@ -166,7 +256,7 @@ func (fHelpMolecule *fileHelperMolecule) doesPathFileExist(
 				filePath,
 				err.Error())
 
-			fInfo = FileInfoPlus{}
+			fInfoPlus = FileInfoPlus{}
 			filePathDoesExist = false
 
 		} else {
@@ -174,14 +264,14 @@ func (fHelpMolecule *fileHelperMolecule) doesPathFileExist(
 			// The path really does exist!
 			filePathDoesExist = true
 			nonPathError = nil
-			fInfo = new(FileInfoPlus).NewFromFileInfo(info)
-			return absFilePath, filePathDoesExist, fInfo, nonPathError
+			fInfoPlus = new(FileInfoPlus).NewFromFileInfo(info)
+			return absFilePath, filePathDoesExist, fInfoPlus, nonPathError
 		}
 
 		time.Sleep(30 * time.Millisecond)
 	}
 
-	return absFilePath, filePathDoesExist, fInfo, nonPathError
+	return absFilePath, filePathDoesExist, fInfoPlus, nonPathError
 }
 
 // getFirstLastNonSeparatorCharIndexInPathStr

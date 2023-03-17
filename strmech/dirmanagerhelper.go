@@ -1342,7 +1342,10 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeInfo(
 							continue
 						}
 
-						err = deleteTreeInfo.DeletedFiles.AddFileMgrByDirFileNameExt(nextDir.CopyOut(), nameFInfo.Name())
+						err = deleteTreeInfo.DeletedFiles.AddFileMgrByDirFileNameExt(
+							nextDir.CopyOut(),
+							nameFInfo.Name(),
+							ePrefix)
 
 						if err != nil {
 							err2 = fmt.Errorf(ePrefix+
@@ -3004,7 +3007,10 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 
 						// We have a match, save file to dTreeInfo
 
-						err = dTreeInfo.FoundFiles.AddFileMgrByDirFileNameExt(nextDir.CopyOut(), nameFInfo.Name())
+						err = dTreeInfo.FoundFiles.AddFileMgrByDirFileNameExt(
+							nextDir.CopyOut(),
+							nameFInfo.Name(),
+							ePrefix)
 
 						if err != nil {
 							err2 = fmt.Errorf(ePrefix+
@@ -3357,7 +3363,10 @@ func (dMgrHlpr *dirMgrHelper) findFilesByNamePattern(
 					continue
 				} else {
 					// This file is a match. Process it.
-					err = fileMgrCol.AddFileMgrByFileInfo(dMgr.absolutePath, nameFInfo)
+					err = fileMgrCol.AddFileMgrByFileInfo(
+						dMgr.absolutePath,
+						nameFInfo,
+						ePrefix)
 
 					if err != nil {
 

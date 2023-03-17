@@ -1602,6 +1602,20 @@ func (fHelperNanobot *fileHelperNanobot) doesFileExist(
 
 	defer fHelperNanobot.lock.Unlock()
 
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"fileHelperNanobot."+
+			"doesFileExist()",
+		"")
+
+	if err != nil {
+		return false
+	}
+
 	_,
 		pathFileDoesExist,
 		_,
@@ -1610,7 +1624,7 @@ func (fHelperNanobot *fileHelperNanobot) doesFileExist(
 			doesPathFileExist(
 				pathFileName,
 				PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
-				"fileHelperNanobot.doesFileExist()",
+				ePrefix,
 				"pathFileName")
 
 	if !pathFileDoesExist || nonPathError != nil {
