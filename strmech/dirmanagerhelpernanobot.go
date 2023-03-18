@@ -283,6 +283,8 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 
 	funcName := "dirMgrHelperNanobot.copyDirectoryTree()"
 
+	errs = make([]error, 0)
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
@@ -295,8 +297,6 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 
 		return dTreeCopyStats, errs
 	}
-
-	errs = make([]error, 0)
 
 	if targetDMgr == nil {
 

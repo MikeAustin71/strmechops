@@ -271,6 +271,8 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 
 	var err, err2, err3 error
 
+	errs = make([]error, 0)
+
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
@@ -286,8 +288,6 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 
 		return dirCopyStats, errs
 	}
-
-	errs = make([]error, 0)
 
 	var dirPathDoesExist, targetPathDoesExist, dirCreated bool
 
@@ -632,34 +632,142 @@ func (dMgrHlpr *dirMgrHelper) copyIn(
 
 }
 
-// deleteAllFilesInDirectory - Helper method used by DirMgr. This
-// method deletes ALL files in the current directory. ONLY files
-// in the current directory are deleted. Files in subdirectories
-// are NOT deleted.
+// deleteAllFilesInDirectory
+//
+// Helper method used by DirMgr. This method deletes ALL
+// files in the directory identified by input parameter
+// 'dMgr'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// ONLY files in the top level directory identified by
+// input parameter 'dMgr' will be deleted. Files residing
+// in subdirectories of the top level directory
+// identified by 'dMgr' will NOT be deleted.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dMgr						*DirMgr
+//
+//		A pointer to an instance of DirMgr. All files
+//		in the top level directory identified by 'dMgr'
+//		will be deleted.
+//
+//		Any files residing subdirectories of the top
+//		level directory identified by 'dMgr' will NOT
+//		be deleted.
+//
+//	dMgrLabel					string
+//
+//		The name or label associated with input parameter
+//		'dMgr', which will be used in error messages
+//		returned by this method.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	deleteDirStats				DeleteDirFilesStats
+//
+//		If this method completes successfully, this
+//		return parameter will be populated with
+//		information and statistics on the file deletion
+//		operation. This information includes the number
+//		of files deleted.
+//
+//			type DeleteDirFilesStats struct {
+//				TotalFilesProcessed        uint64
+//				FilesDeleted               uint64
+//				FilesDeletedBytes          uint64
+//				FilesRemaining             uint64
+//				FilesRemainingBytes        uint64
+//				TotalSubDirectories        uint64
+//				TotalDirsScanned           uint64
+//				NumOfDirsWhereFilesDeleted uint64
+//				DirectoriesDeleted         uint64
+//			}
+//
+//	errs						[]error
+//
+//		An array of error objects.
+//
+//		If this method completes successfully, the
+//		returned error array is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		This error array may contain multiple errors.
 func (dMgrHlpr *dirMgrHelper) deleteAllFilesInDirectory(
 	dMgr *DirMgr,
-	ePrefix string,
-	dMgrLabel string) (deleteDirStats DeleteDirFilesStats, errs []error) {
+	dMgrLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	deleteDirStats DeleteDirFilesStats,
+	errs []error) {
 
-	ePrefixCurrMethod := "dirMgrHelper.deleteAllFilesInDirectory() "
-
-	if len(ePrefix) == 0 {
-		ePrefix = ePrefixCurrMethod
-	} else {
-		ePrefix = ePrefix + "- " + ePrefixCurrMethod
+	if dMgrHlpr.lock == nil {
+		dMgrHlpr.lock = new(sync.Mutex)
 	}
 
+	dMgrHlpr.lock.Lock()
+
+	defer dMgrHlpr.lock.Unlock()
+
+	funcName := "dirMgrHelper.deleteAllFilesInDirectory() "
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
 	errs = make([]error, 0, 300)
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return deleteDirStats, errs
+	}
+
 	var err2 error
 	osPathSepStr := string(os.PathSeparator)
 
 	dirPathDoesExist,
 		_,
-		err := dMgrHlpr.doesDirectoryExist(
+		err := new(dirMgrHelperAtom).doesDirectoryExist(
 		dMgr,
 		PreProcPathCode.None(),
-		ePrefix,
-		"dMgr")
+		"dMgr",
+		ePrefix)
 
 	if err != nil {
 		errs = append(errs, err)
@@ -668,27 +776,35 @@ func (dMgrHlpr *dirMgrHelper) deleteAllFilesInDirectory(
 
 	if !dirPathDoesExist {
 		err =
-			fmt.Errorf(ePrefix+
-				"\nERROR: %v Path DOES NOT EXIST!\n"+
+			fmt.Errorf("%v\n"+
+				"ERROR: %v Path DOES NOT EXIST!\n"+
 				"%v Path='%v'\n",
+				ePrefix.String(),
 				dMgrLabel,
 				dMgrLabel,
 				dMgr.absolutePath)
 
 		errs = append(errs, err)
+
 		return deleteDirStats, errs
 	}
 
 	dirPtr, err := os.Open(dMgr.absolutePath)
 
 	if err != nil {
-		err2 = fmt.Errorf(ePrefix+
-			"\nError return by os.Open(%v.absolutePath).\n"+
-			"%v.absolutePath='%v'\nError='%v'\n",
-			dMgrLabel, dMgrLabel,
-			dMgr.absolutePath, err.Error())
+
+		err2 = fmt.Errorf("%v\n"+
+			"Error return by os.Open(%v.absolutePath).\n"+
+			"%v.absolutePath='%v'\n"+
+			"Error= \n%v\n",
+			ePrefix.String(),
+			dMgrLabel,
+			dMgrLabel,
+			dMgr.absolutePath,
+			err.Error())
 
 		errs = append(errs, err2)
+
 		return deleteDirStats, errs
 	}
 
@@ -702,7 +818,7 @@ func (dMgrHlpr *dirMgrHelper) deleteAllFilesInDirectory(
 
 	for !file2LoopIsDone {
 
-		nameFileInfos, err = dirPtr.Readdir(1000)
+		nameFileInfos, err = dirPtr.Readdir(0)
 
 		if err != nil && err == io.EOF {
 
@@ -715,9 +831,11 @@ func (dMgrHlpr *dirMgrHelper) deleteAllFilesInDirectory(
 
 		} else if err != nil {
 
-			err2 = fmt.Errorf(ePrefix+
-				"\nError returned by dirPtr.Readdirnames(1000).\n"+
-				"%v.absolutePath='%v'\nError='%v'\n",
+			err2 = fmt.Errorf("%v\n"+
+				"Error returned by dirPtr.Readdirnames(0).\n"+
+				"%v.absolutePath='%v'\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
 				dMgrLabel,
 				dMgr.absolutePath,
 				err.Error())
@@ -742,13 +860,19 @@ func (dMgrHlpr *dirMgrHelper) deleteAllFilesInDirectory(
 				deleteDirStats.TotalFilesProcessed++
 
 				if !nameFInfo.Mode().IsRegular() {
-					err2 = fmt.Errorf(ePrefix+
-						"\nError: fileName is NOT classified as a 'Regular' File!\n"+
-						"fileName='%v'",
+
+					err2 = fmt.Errorf("%v\n"+
+						"Error: fileName is NOT classified as a 'Regular' File!\n"+
+						"fileName='%v'\n",
+						ePrefix.String(),
 						dMgr.absolutePath+osPathSepStr+nameFInfo.Name())
+
 					errs = append(errs, err2)
+
 					deleteDirStats.FilesRemaining++
+
 					deleteDirStats.FilesRemainingBytes += uint64(nameFInfo.Size())
+
 					continue
 				}
 
@@ -756,10 +880,14 @@ func (dMgrHlpr *dirMgrHelper) deleteAllFilesInDirectory(
 				err = os.Remove(dMgr.absolutePath + osPathSepStr + nameFInfo.Name())
 
 				if err != nil {
-					err2 = fmt.Errorf(ePrefix+
-						"\nError returned by os.Remove(fileName).\n"+
+
+					err2 = fmt.Errorf("%v\n"+
+						"Error returned by os.Remove(fileName).\n"+
 						"An attempt to delete 'fileName' as Failed!\n"+
-						"%v.absolutePath='%v'\nfileName='%v'\nError='%v'\n\n",
+						"%v.absolutePath='%v'\n"+
+						"fileName='%v'\n"+
+						"Error= \n%v\n",
+						ePrefix.String(),
 						dMgrLabel,
 						dMgr.absolutePath,
 						dMgr.absolutePath+osPathSepStr+nameFInfo.Name(),
@@ -769,6 +897,7 @@ func (dMgrHlpr *dirMgrHelper) deleteAllFilesInDirectory(
 					deleteDirStats.FilesRemainingBytes += uint64(nameFInfo.Size())
 
 					errs = append(errs, err2)
+
 				} else {
 
 					deleteDirStats.FilesDeleted++
@@ -789,13 +918,19 @@ func (dMgrHlpr *dirMgrHelper) deleteAllFilesInDirectory(
 		err = dirPtr.Close()
 
 		if err != nil {
-			err2 = fmt.Errorf(ePrefix+
-				"\nError returned by dirPtr.Close().\n"+
+
+			err2 = fmt.Errorf("%v\n"+
+				"Error returned by dirPtr.Close().\n"+
 				"An attempt to close the os.File pointer to the current\n"+
 				"%v path has FAILED!\n"+
-				"%v.absolutePath='%v'\nError='%v'\n",
-				dMgrLabel, dMgrLabel,
-				dMgr.absolutePath, err.Error())
+				"%v.absolutePath='%v'\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				dMgrLabel,
+				dMgrLabel,
+				dMgr.absolutePath,
+				err.Error())
+
 			errs = append(errs, err2)
 		}
 	}
