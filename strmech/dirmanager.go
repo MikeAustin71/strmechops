@@ -901,7 +901,9 @@ func (dMgr *DirMgr) DeleteDirectoryTreeFiles(
 //	Reference For Matching Details:
 //	  https://golang.org/pkg/path/filepath/#Match
 func (dMgr *DirMgr) DeleteFilesByNamePattern(
-	fileSearchPattern string) (deleteDirStats DeleteDirFilesStats, errs []error) {
+	fileSearchPattern string) (
+	deleteDirStats DeleteDirFilesStats,
+	errs []error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -911,17 +913,31 @@ func (dMgr *DirMgr) DeleteFilesByNamePattern(
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.DeleteFilesByNamePattern() "
+	var err error
 
-	dMgrHlpr := dirMgrHelper{}
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"DirMgr.DeleteFilesByNamePattern()",
+		"")
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return deleteDirStats, errs
+	}
 
 	deleteDirStats,
-		errs = dMgrHlpr.deleteFilesByNamePattern(
-		dMgr,
-		fileSearchPattern,
-		ePrefix,
-		"dMgr",
-		"fileSearchPattern")
+		errs = new(dirMgrHelper).
+		deleteFilesByNamePattern(
+			dMgr,
+			fileSearchPattern,
+			"dMgr",
+			"fileSearchPattern",
+			ePrefix)
 
 	return deleteDirStats, errs
 }
@@ -1484,7 +1500,9 @@ func (dMgr *DirMgr) DeleteSubDirectoryTreeFiles(
 //	        be returned as an 'error' type. Also, see the comment on
 //	        DirectoryDeleteFileInfo.ErrReturns, above.
 func (dMgr *DirMgr) DeleteWalkDirFiles(
-	deleteFileSelectionCriteria FileSelectionCriteria) (DirectoryDeleteFileInfo, error) {
+	deleteFileSelectionCriteria FileSelectionCriteria) (
+	DirectoryDeleteFileInfo,
+	error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -1494,10 +1512,25 @@ func (dMgr *DirMgr) DeleteWalkDirFiles(
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.DeleteWalkDirFiles() "
-	deleteFilesInfo := DirectoryDeleteFileInfo{}
-	dMgrHlpr := dirMgrHelper{}
 	var err error
+
+	var deleteFilesInfo DirectoryDeleteFileInfo
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"DirMgr.DeleteWalkDirFiles()",
+		"")
+
+	if err != nil {
+
+		return deleteFilesInfo, err
+	}
+
+	dMgrHlpr := dirMgrHelper{}
+
 	var errs []error
 
 	deleteFilesInfo,
@@ -1507,9 +1540,9 @@ func (dMgr *DirMgr) DeleteWalkDirFiles(
 			deleteFileSelectionCriteria,
 			false, // skip top level directory
 			true,  // scan sub-directories
-			ePrefix,
 			"dMgr",
-			"deleteFileSelectionCriteria")
+			"deleteFileSelectionCriteria",
+			ePrefix)
 
 	if len(errs) > 0 {
 		err = dMgr.ConsolidateErrors(errs)

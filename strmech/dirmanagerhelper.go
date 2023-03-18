@@ -2375,44 +2375,147 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 	return deleteDirStats, errs
 }
 
-// deleteFilesByNamePattern - Receives a string defining a pattern to
-// use in searching file names for all files in the directory identified
-// by the input parameter 'dMgr'.
+// deleteFilesByNamePattern
 //
-// If a file name matches the pattern specified by input parameter,
-// 'fileSearchPattern', it will be deleted.
+// Receives a string defining a pattern to use in
+// searching file names for all files in the directory
+// identified by the input parameter 'dMgr'.
+//
+// During this search, files are deleted if the file name
+// matches the pattern specified by input parameter,
+// 'fileSearchPattern'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method deletes files in the directory specified
+//	by the current instance of DirMgr. Only files in the
+//	parent or top level directory identified by DirMgr
+//	are eligible for deletion.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dMgr							*DirMgr
+//
+//		A pointer to an instance of DirMgr. This method
+//		will delete files in the directory
+//		identified by this parameter.
+//
+//	fileSearchPattern				string
+//
+//		This string holds the pattern used to identify
+//		files for deletion in the directory specified by
+//		input parameter 'dMgr'.
+//
+//		Example Patterns
+//			"*.*"
+//			"*.txt"
+//			"*My*.txt"
+//
+//	errPrefDto						*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	deleteDirStats					DeleteDirFilesStats
+//
+//		If this method completes successfully, this
+//		return parameter will be populated with
+//		information and statistics on the file deletion
+//		operation. This information includes the number
+//		of files deleted.
+//
+//			type DeleteDirFilesStats struct {
+//				TotalFilesProcessed        uint64
+//				FilesDeleted               uint64
+//				FilesDeletedBytes          uint64
+//				FilesRemaining             uint64
+//				FilesRemainingBytes        uint64
+//				TotalSubDirectories        uint64
+//				TotalDirsScanned           uint64
+//				NumOfDirsWhereFilesDeleted uint64
+//				DirectoriesDeleted         uint64
+//			}
+//
+//	errs							[]error
+//
+//		An array of error objects.
+//
+//		If this method completes successfully, the
+//		returned error array is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		This error array may contain multiple errors.
 func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 	dMgr *DirMgr,
 	fileSearchPattern string,
-	errorPrefix string,
 	dMgrLabel string,
-	fileSearchLabel string) (deleteDirStats DeleteDirFilesStats, errs []error) {
+	fileSearchLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	deleteDirStats DeleteDirFilesStats,
+	errs []error) {
 
-	errs = make([]error, 0, 300)
+	if dMgrHlpr.lock == nil {
+		dMgrHlpr.lock = new(sync.Mutex)
+	}
+
+	dMgrHlpr.lock.Lock()
+
+	defer dMgrHlpr.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
 	var err error
 
+	funcName := "dirMgrHelper.deleteFilesByNamePattern()"
+
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"dirMgrHelper."+
-			"deleteFilesByNamePattern()",
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
 		"")
 
 	if err != nil {
+
 		errs = append(errs, err)
+
 		return deleteDirStats, errs
 	}
 
+	var dirPathDoesExist bool
+
 	dirPathDoesExist,
 		_,
-		err := dMgrHlpr.doesDirectoryExist(
-		dMgr,
-		PreProcPathCode.None(),
-		errorPrefix,
-		dMgrLabel)
+		err = new(dirMgrHelperAtom).
+		doesDirectoryExist(
+			dMgr,
+			PreProcPathCode.None(),
+			dMgrLabel,
+			ePrefix)
 
 	if err != nil {
 		errs = append(errs, err)
@@ -2436,15 +2539,21 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 
 	errCode := 0
 
-	errCode, _, fileSearchPattern =
-		new(fileHelperElectron).isStringEmptyOrBlank(fileSearchPattern)
+	errCode,
+		_,
+		fileSearchPattern =
+		new(fileHelperElectron).
+			isStringEmptyOrBlank(fileSearchPattern)
 
 	if errCode == -1 {
-		err2 = fmt.Errorf(errorPrefix+
-			"\nError: Input parameter '%v' is an empty string!\n",
+
+		err2 = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is an empty string!\n",
+			ePrefix.String(),
 			fileSearchLabel)
 
 		errs = append(errs, err2)
+
 		return deleteDirStats, errs
 	}
 
@@ -2456,6 +2565,7 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 			fileSearchLabel)
 
 		errs = append(errs, err2)
+
 		return deleteDirStats, errs
 	}
 
@@ -2465,10 +2575,13 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 
 		err2 = fmt.Errorf("%v\n"+
 			"Error return by os.Open(%v.absolutePath).\n"+
-			"%v.absolutePath='%v'\nError='%v'\n",
+			"%v.absolutePath='%v'\n"+
+			"Error= \n%v\n",
 			ePrefix.String(),
-			dMgrLabel, dMgrLabel,
-			dMgr.absolutePath, err.Error())
+			dMgrLabel,
+			dMgrLabel,
+			dMgr.absolutePath,
+			err.Error())
 
 		errs = append(errs, err2)
 		return deleteDirStats, errs
@@ -2483,7 +2596,7 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 
 	for err3 != io.EOF {
 
-		nameFileInfos, err3 = dirPtr.Readdir(1000)
+		nameFileInfos, err3 = dirPtr.Readdir(10000)
 
 		if err3 != nil && err3 != io.EOF {
 
@@ -2492,9 +2605,9 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 			}
 
 			err2 = fmt.Errorf("%v\n"+
-				"Error returned by dirPtr.Readdirnames(1000).\n"+
+				"Error returned by dirPtr.Readdirnames(10000).\n"+
 				"%v.absolutePath='%v'\n"+
-				"Error='%v'\n",
+				"Error= \n%v\n",
 				ePrefix.String(),
 				dMgrLabel,
 				dMgr.absolutePath,
@@ -2512,14 +2625,18 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 
 			} else {
 
-				isMatch, err = pf.Match(fileSearchPattern, nameFInfo.Name())
+				isMatch,
+					err = pf.Match(
+					fileSearchPattern,
+					nameFInfo.Name())
 
 				if err != nil {
 
 					err2 = fmt.Errorf("%v\n"+
 						"Error returned by (path/filepath) pf.Match(%v, fileName).\n"+
 						"%v Directory Searched='%v'\n"+
-						"%v='%v' fileName='%v'\n"+
+						"%v='%v'\n"+
+						"fileName='%v'\n"+
 						"Error='%v'\n\n",
 						ePrefix.String(),
 						fileSearchLabel,
@@ -2548,7 +2665,8 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 					if err != nil {
 						err2 = fmt.Errorf("%v\n"+
 							"Error returned by os.Remove(pathFileName).\n"+
-							"pathFileName='%v'\nError='%v'\n\n",
+							"pathFileName='%v'\n"+
+							"Error= \n%v\n",
 							ePrefix.String(),
 							dMgr.absolutePath+osPathSepStr+nameFInfo.Name(),
 							err.Error())
@@ -2574,7 +2692,8 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 		if err != nil {
 			err2 = fmt.Errorf("%v\n"+
 				"Error returned by dirPtr.Close().\n"+
-				"%v='%v'\nError='%v'\n\n",
+				"%v='%v'\n"+
+				"Error= \n%v\n",
 				ePrefix.String(),
 				dMgrLabel,
 				dMgr.absolutePath, err.Error())
