@@ -827,7 +827,9 @@ func (dMgr *DirMgr) DeleteAllSubDirectories() (errs []error) {
 //	                                     If errors are encountered they are stored in
 //	                                     the error array and returned to the caller.
 func (dMgr *DirMgr) DeleteDirectoryTreeFiles(
-	deleteFileSelectionCriteria FileSelectionCriteria) (deleteDirStats DeleteDirFilesStats, errs []error) {
+	deleteFileSelectionCriteria FileSelectionCriteria) (
+	deleteDirStats DeleteDirFilesStats,
+	errs []error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -837,19 +839,34 @@ func (dMgr *DirMgr) DeleteDirectoryTreeFiles(
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.DeleteDirectoryTreeFiles() "
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"DirMgr.DeleteDirectoryTreeFiles()",
+		"")
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return deleteDirStats, errs
+	}
 
 	dMgrHlpr := dirMgrHelper{}
 
 	deleteDirStats,
 		errs = dMgrHlpr.deleteDirectoryTreeStats(
 		dMgr,
+		deleteFileSelectionCriteria,
 		false, // skip top level (parent) directory
 		true,  // scan sub-directories
-		deleteFileSelectionCriteria,
-		ePrefix,
 		"dMgr",
-		"deleteFileSelectionCriteria")
+		"deleteFileSelectionCriteria",
+		ePrefix)
 
 	return deleteDirStats, errs
 }
@@ -1055,7 +1072,9 @@ func (dMgr *DirMgr) DeleteFilesByNamePattern(
 //	                    If errors are encountered they are stored in the error
 //	                    array and returned to the caller.
 func (dMgr *DirMgr) DeleteFilesBySelectionCriteria(
-	deleteFileSelectionCriteria FileSelectionCriteria) (deleteDirStats DeleteDirFilesStats, errs []error) {
+	deleteFileSelectionCriteria FileSelectionCriteria) (
+	deleteDirStats DeleteDirFilesStats,
+	errs []error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -1065,19 +1084,34 @@ func (dMgr *DirMgr) DeleteFilesBySelectionCriteria(
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.DeleteDirectoryTreeFiles() "
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"DirMgr.DeleteDirectoryTreeFiles() ",
+		"")
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return deleteDirStats, errs
+	}
 
 	dMgrHlpr := dirMgrHelper{}
 
 	deleteDirStats,
 		errs = dMgrHlpr.deleteDirectoryTreeStats(
 		dMgr,
+		deleteFileSelectionCriteria,
 		false, // skip top level (parent) directory
 		false, //scan sub-directories
-		deleteFileSelectionCriteria,
-		ePrefix,
 		"dMgr",
-		"deleteFileSelectionCriteria")
+		"deleteFileSelectionCriteria",
+		ePrefix)
 
 	return deleteDirStats, errs
 }
@@ -1240,7 +1274,9 @@ func (dMgr *DirMgr) DeleteFilesBySelectionCriteria(
 //	                                     If errors are encountered they are stored in
 //	                                     the error array and returned to the caller.
 func (dMgr *DirMgr) DeleteSubDirectoryTreeFiles(
-	deleteFileSelectionCriteria FileSelectionCriteria) (deleteDirStats DeleteDirFilesStats, errs []error) {
+	deleteFileSelectionCriteria FileSelectionCriteria) (
+	deleteDirStats DeleteDirFilesStats,
+	errs []error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -1250,19 +1286,34 @@ func (dMgr *DirMgr) DeleteSubDirectoryTreeFiles(
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.DeleteSubDirectoryTreeFiles() "
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"DirMgr.DeleteSubDirectoryTreeFiles()",
+		"")
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return deleteDirStats, errs
+	}
 
 	dMgrHlpr := dirMgrHelper{}
 
 	deleteDirStats,
 		errs = dMgrHlpr.deleteDirectoryTreeStats(
 		dMgr,
+		deleteFileSelectionCriteria,
 		true, // skip top level (parent) directory
 		true, // scan sub-directories
-		deleteFileSelectionCriteria,
-		ePrefix,
 		"dMgr",
-		"deleteFileSelectionCriteria")
+		"deleteFileSelectionCriteria",
+		ePrefix)
 
 	return deleteDirStats, errs
 }

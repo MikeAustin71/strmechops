@@ -2,6 +2,7 @@ package strmech
 
 import (
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -44,6 +45,8 @@ type FileSelectionCriteria struct {
 	//
 	// SEE TYPE 'FileSelectCriterionMode'
 	SelectCriterionMode FileSelectCriterionMode
+
+	lock *sync.Mutex
 }
 
 // ArePatternsActive - surveys the FileNamePatterns string
@@ -53,6 +56,14 @@ type FileSelectionCriteria struct {
 // A search file pattern is considered active if the string
 // length of the pattern string is greater than zero.
 func (fsc *FileSelectionCriteria) ArePatternsActive() bool {
+
+	if fsc.lock == nil {
+		fsc.lock = new(sync.Mutex)
+	}
+
+	fsc.lock.Lock()
+
+	defer fsc.lock.Unlock()
 
 	lPats := len(fsc.FileNamePatterns)
 
@@ -72,21 +83,4 @@ func (fsc *FileSelectionCriteria) ArePatternsActive() bool {
 	}
 
 	return isActive
-}
-
-// DirectoryDeleteFileInfo - structure used
-// to delete files in a directory specified
-// by 'StartPath'. Deleted files will be selected
-// based on 'DeleteFileSelectCriteria' value.
-//
-// 'DeleteFileSelectCriteria' is a 'FileSelectionCriteria'
-// type which contains FileNamePatterns strings and the
-// FilesOlderThan or FilesNewerThan date time parameters
-// which can be used as file selection criteria.
-type DirectoryDeleteFileInfo struct {
-	StartPath                string
-	Directories              DirMgrCollection
-	ErrReturns               []error
-	DeleteFileSelectCriteria FileSelectionCriteria
-	DeletedFiles             FileMgrCollection
 }

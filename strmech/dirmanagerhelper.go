@@ -1,7 +1,6 @@
 package strmech
 
 import (
-	"errors"
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
@@ -1758,48 +1757,369 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeInfo(
 	return deleteTreeInfo, errs
 }
 
-// deleteDirectoryTreeStats - Helper method designed to delete files using
-// file selection criteria. Scope of scans and file deletions is controlled
-// by input parameter 'scanSubDirectories'. If set to 'true' files may be
-// deleted in the entire directory tree. If set to 'false' the file deletions
-// are limited solely to the directory identified by the current 'DirMgr'
-// instance.
+// deleteDirectoryTreeStats
+//
+// Helper method designed to delete files using file
+// selection criteria. Scope of scans and file deletions
+// is controlled by input parameter 'scanSubDirectories'.
+//
+// If 'scanSubDirectories' is set to 'true', files may be
+// deleted in the entire directory tree. If set to 'false'
+// the file deletions are limited solely to the parent or
+// top level directory identified by the current instance
+// of DirMgr.
+//
+// This method differs from
+// dMgrHlpr.deleteDirectoryTreeInfo() in that this method
+// returns a type DeleteDirFilesStats.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete files in the directory
+//	tree specified by the current instance of DirMgr.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dMgr							*DirMgr
+//
+//		A pointer to an instance of DirMgr. This method
+//		will delete files in the directory tree
+//		identified by this parameter.
+//
+//
+//	deleteFileSelectionCriteria		FileSelectionCriteria
+//
+//	  This input parameter should be configured with the
+//	  desired file selection criteria. Files matching
+//	  this criteria will be deleted from the directory
+//	  tree identified by input parameter, 'dMgr'.
+//
+//		type FileSelectionCriteria struct {
+//		 FileNamePatterns    []string
+//			An array of strings containing File Name Patterns
+//
+//		 FilesOlderThan      time.Time
+//		 	Match files with older modification date times
+//
+//		 FilesNewerThan      time.Time
+//		 	Match files with newer modification date times
+//
+//		 SelectByFileMode    FilePermissionConfig
+//		 	Match file mode (os.FileMode).
+//
+//		 SelectCriterionModeFileSelectCriterionMode
+//		 	Specifies 'AND' or 'OR' selection mode
+//		}
+//
+//	  The FileSelectionCriteria type allows for
+//	  configuration of single or multiple file selection
+//	  criterion. The 'SelectCriterionMode' can be used to
+//	  specify whether the file must match all, or any one,
+//	  of the active file selection criterion.
+//
+//	  Elements of the FileSelectionCriteria are described
+//	  below:
+//
+//	  FileNamePatterns		[]string
+//	  	An array of strings which may define one or more
+//	  	search patterns. If a file name matches any one
+//	  	of the search pattern strings, it is deemed to be
+//	  	a 'match' for the search pattern criterion.
+//
+//		Example Patterns:
+//			FileNamePatterns = []string{"*.log"}
+//			FileNamePatterns = []string{"current*.txt"}
+//			FileNamePatterns = []string{"*.txt", "*.log"}
+//
+//		If this string array has zero length or if
+//		all the strings are empty strings, then this
+//		file search criterion is considered 'Inactive'
+//		or 'Not Set'.
+//
+//
+//		FilesOlderThan		time.Time
+//			This date time type is compared to file
+//			modification date times in order to determine
+//			whether the file is older than the
+//			'FilesOlderThan' file selection criterion. If
+//			the file modification date time is older than
+//			the 'FilesOlderThan' date time, that file is
+//			considered a 'match' for this file selection
+//			criterion.
+//
+//			If the value of 'FilesOlderThan' is set to
+//			time zero, the default value for type
+//			time.Time{}, then this file selection
+//			criterion is considered to be 'Inactive' or
+//			'Not Set'.
+//
+//		FilesNewerThan      time.Time
+//			This date time type is compared to the file
+//			modification date time in order to determine
+//			whether the file is newer than the
+//			'FilesNewerThan' file selection criterion. If
+//			the file modification date time is newer than
+//			the 'FilesNewerThan' date time, that file is
+//			considered a 'match' for this file selection
+//			criterion.
+//
+//			If the value of 'FilesNewerThan' is set to
+//			time zero, the default value for type
+//			time.Time{}, then this file selection
+//			criterion is considered to be 'Inactive' or
+//			'Not Set'.
+//
+//		SelectByFileMode	FilePermissionConfig
+//			Type FilePermissionConfig encapsulates an
+//			instance of os.FileMode. The file selection
+//			criterion allows for the selection of files
+//			by File Mode. File modes are compared to the
+//			value of 'SelectByFileMode'. If the File Mode
+//			for a given file is equal to the value of
+//			'SelectByFileMode', that file is considered
+//			to be a 'match' for this file selection
+//			criterion. Examples for setting
+//			SelectByFileMode are shown as follows:
+//
+//				fsc := FileSelectionCriteria{}
+//
+//				err =
+//					fsc.SelectByFileMode.
+//						SetByFileMode(
+//							os.FileMode(0666))
+//
+//				err =
+//					fsc.SelectByFileMode.
+//						SetFileModeByTextCode(
+//							"-r--r--r--")
+//
+//		SelectCriterionMode	FileSelectCriterionMode
+//			This parameter selects the manner in which
+//			the file selection criteria above are applied
+//			in determining a 'match' for file selection
+//			purposes. 'SelectCriterionMode' may be set to
+//			one of two constant values:
+//
+//			FileSelectMode.ANDSelect()
+//				File selected if all active selection
+//				criteria are satisfied.
+//
+//				If this constant value is specified for
+//				the file selection mode, then a given
+//				file will not be judged as 'selected'
+//				unless all the active selection criterion
+//				are satisfied. In other words, if three
+//				active search criterion are provided for
+//				'FileNamePatterns', 'FilesOlderThan' and
+//				'FilesNewerThan', then a file will NOT be
+//				selected unless it has satisfied all three
+//				criterion in this example.
+//
+//			FileSelectMode.ORSelect()
+//				File selected if any active selection
+//				criterion is satisfied.
+//
+//				If this constant value is specified for
+//				the file selection mode, then a given
+//				file will be selected if any one of the
+//				active file selection criterion is
+//				satisfied. In other words, if three
+//				active search criterion are provided for
+//				'FileNamePatterns', 'FilesOlderThan' and
+//				'FilesNewerThan', then a file will be
+//				selected if it satisfies any one of the
+//				three criterion in this example.
+//
+//	skipTopLevelDirectory			bool
+//
+//		If this parameter is set to 'true', the parent or
+//		top level directory identified by input parameter
+//		'dMgr' will be skipped. This means no files will
+//		be deleted from the parent or top level directory.
+//
+//		Be careful to ensure that parameters
+//		'skipTopLevelDirectory' and 'scanSubDirectories'
+//		are not in conflict. If 'skipTopLevelDirectory'
+//		is set to 'true' and 'scanSubDirectories' is set
+//		to 'false', an error will be returned.
+//
+//	scanSubDirectories				bool
+//
+//		If this parameter is set to 'true', it means that
+//		child directories (a.k.a subdirectories) will be
+//		searched and eligible files will be deleted from
+//		subsidiary directories.
+//
+//		Conversely, if this parameter is set to 'false', no
+//		files will be deleted from child directories (a.k.a
+//		subdirectories).
+//
+//		Be careful to ensure that parameters
+//		'skipTopLevelDirectory' and 'scanSubDirectories'
+//		are not in conflict. If 'skipTopLevelDirectory'
+//		is set to 'true' and 'scanSubDirectories' is set
+//		to 'false', an error will be returned.
+//
+//	dMgrLabel						string
+//
+//		The name or label associated with input parameter
+//		'dMgr' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "dMgr" will be
+//		automatically applied.
+//
+//	deleteFileSelectLabel			string
+//
+//		The name or label used to describe the type of
+//		files being deleted. This label will be used in
+//		error messages returned by this method.
+//
+//		Example:
+//			deleteFileSelectLabel = "Outdated files"
+//
+//		If this parameter is submitted as an empty
+//		string, it will be automatically defaulted to a
+//		value of "Target Files for Deletion".
+//
+//	errPrefDto						*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	deleteDirStats					DeleteDirFilesStats
+//
+//		If this method completes successfully, this
+//		return parameter will be populated with
+//		information and statistics on the file deletion
+//		operation. This information includes the number
+//		of files deleted.
+//
+//			type DeleteDirFilesStats struct {
+//				TotalFilesProcessed        uint64
+//				FilesDeleted               uint64
+//				FilesDeletedBytes          uint64
+//				FilesRemaining             uint64
+//				FilesRemainingBytes        uint64
+//				TotalSubDirectories        uint64
+//				TotalDirsScanned           uint64
+//				NumOfDirsWhereFilesDeleted uint64
+//				DirectoriesDeleted         uint64
+//			}
+//
+//	errs							[]error
+//
+//		An array of error objects.
+//
+//		If this method completes successfully, the
+//		returned error array is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		This error array may contain multiple errors.
 func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 	dMgr *DirMgr,
+	deleteFileSelectionCriteria FileSelectionCriteria,
 	skipTopLevelDirectory,
 	scanSubDirectories bool,
-	deleteFileSelectionCriteria FileSelectionCriteria,
-	ePrefix string,
 	dMgrLabel string,
-	deleteSelectionLabel string) (deleteDirStats DeleteDirFilesStats, errs []error) {
-	ePrefixCurrMethod := "dirMgrHelper.deleteDirectoryTreeStats() "
+	deleteSelectionLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	deleteDirStats DeleteDirFilesStats,
+	errs []error) {
 
-	errs = make([]error, 0, 300)
+	if dMgrHlpr.lock == nil {
+		dMgrHlpr.lock = new(sync.Mutex)
+	}
 
-	if len(ePrefix) == 0 {
-		ePrefix = ePrefixCurrMethod
-	} else {
-		ePrefix = ePrefix + "- " + ePrefixCurrMethod
+	dMgrHlpr.lock.Lock()
+
+	defer dMgrHlpr.lock.Unlock()
+
+	funcName := "dirMgrHelper.deleteDirectoryTreeStats()"
+
+	errs = make([]error, 0)
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return deleteDirStats, errs
+	}
+
+	if dMgr == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'dMgr' is a nil pointer!\n",
+			ePrefix.String())
+
+		errs = append(errs, err)
+
+		return deleteDirStats, errs
+	}
+
+	if len(dMgrLabel) == 0 {
+		dMgrLabel = "dMgr"
 	}
 
 	if skipTopLevelDirectory &&
 		!scanSubDirectories {
 
-		err := errors.New(ePrefix +
-			"\nERROR: Conflicted Input parameters! skipTopLevelDirectory=true and scanSubDirectories=false.\n" +
-			"Impossible combination!!\n")
+		err := fmt.Errorf("%v\n"+
+			"ERROR: Conflicted Input parameters!\n"+
+			"skipTopLevelDirectory=true and scanSubDirectories=false.\n"+
+			"Impossible combination!!\n",
+			ePrefix.String())
 
 		errs = append(errs, err)
+
 		return deleteDirStats, errs
 	}
 
+	dMgrHlprAtom := dirMgrHelperAtom{}
+
 	dirPathDoesExist,
 		_,
-		err := dMgrHlpr.doesDirectoryExist(
+		err := dMgrHlprAtom.doesDirectoryExist(
 		dMgr,
 		PreProcPathCode.None(),
-		ePrefix,
-		dMgrLabel)
+		dMgrLabel,
+		ePrefix)
 
 	if err != nil {
 		errs = append(errs, err)
@@ -1807,10 +2127,13 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 	}
 
 	if !dirPathDoesExist {
-		err = fmt.Errorf(ePrefix+
-			"\nERROR: %v Directory Path DOES NOT EXIST!\n"+
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: %v Directory Path DOES NOT EXIST!\n"+
 			"%v='%v'\n",
-			dMgrLabel, dMgrLabel,
+			ePrefix.String(),
+			dMgrLabel,
+			dMgrLabel,
 			dMgr.absolutePath)
 
 		errs = append(errs, err)
@@ -1833,7 +2156,7 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 	isTopLevelDir := true
 	isFirstLoop := true
 
-	dirs.AddDirMgr(dMgrHlpr.copyOut(dMgr))
+	dirs.AddDirMgr(dMgrHlprAtom.copyOut(dMgr))
 
 	for !mainLoopIsDone {
 
@@ -1850,9 +2173,11 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 
 			if err != nil {
 
-				err2 = fmt.Errorf(ePrefix+
-					"\nError returned by dirPtr.Close()\n"+
-					"Error='%v'\n\n", err.Error())
+				err2 = fmt.Errorf("%v\n"+
+					"Error returned by dirPtr.Close()\n"+
+					"Error= \n%v\n",
+					ePrefix.String(),
+					err.Error())
 
 				errs = append(errs, err2)
 			}
@@ -1863,24 +2188,36 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 		nextDir, err = dirs.PopFirstDirMgr()
 
 		if err != nil && err == io.EOF {
+
 			mainLoopIsDone = true
 			break
+
 		} else if err != nil {
-			err2 = fmt.Errorf(ePrefix+
-				"\nError returned by dirs.PopFirstDirMgr().\n"+
-				"Error='%v'\n", err.Error())
+
+			err2 = fmt.Errorf("%v\n"+
+				"Error returned by dirs.PopFirstDirMgr().\n"+
+				"Error='%v'\n",
+				ePrefix.String(),
+				err.Error())
+
 			errs = append(errs, err2)
+
 			return deleteDirStats, errs
 		}
 
 		dirPtr, err = os.Open(nextDir.absolutePath)
 
 		if err != nil {
-			err2 = fmt.Errorf(ePrefix+
-				"\nError return by os.Open(%v.absolutePath). "+
-				"%v.absolutePath='%v'\nError='%v'\n\n",
-				dMgrLabel, dMgrLabel,
-				dMgr.absolutePath, err.Error())
+
+			err2 = fmt.Errorf("%v\n"+
+				"Error return by os.Open(%v.absolutePath). "+
+				"%v.absolutePath='%v'\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				dMgrLabel,
+				dMgrLabel,
+				dMgr.absolutePath,
+				err.Error())
 
 			errs = append(errs, err2)
 			continue
@@ -1893,7 +2230,8 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 
 		for !file2LoopIsDone {
 
-			nameFileInfos, err = dirPtr.Readdir(1000)
+			nameFileInfos,
+				err = dirPtr.Readdir(10000)
 
 			if err != nil && err == io.EOF {
 
@@ -1906,9 +2244,11 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 
 			} else if err != nil {
 
-				err2 = fmt.Errorf(ePrefix+
-					"\nError returned by dirPtr.Readdir(1000).\n"+
-					"Error='%v'\n\n", err.Error())
+				err2 = fmt.Errorf("%v\n"+
+					"Error returned by dirPtr.Readdir(10000).\n"+
+					"Error= \n%v\n",
+					ePrefix.String(),
+					err.Error())
 
 				errs = append(errs, err2)
 
@@ -1927,15 +2267,22 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 						continue
 					}
 
-					err = dirs.AddDirMgrByPathNameStr(nextDir.absolutePath + osPathSepStr + nameFInfo.Name())
+					err = dirs.
+						AddDirMgrByPathNameStr(
+							nextDir.absolutePath +
+								osPathSepStr +
+								nameFInfo.Name())
 
 					if err != nil {
 
 						err2 =
-							fmt.Errorf(ePrefix+
-								"\nError returned by dirs.AddDirMgrByPathNameStr(newDirPathFileName).\n"+
-								"newDirPathFileName='%v'\nError='%v'\n\n",
-								nextDir.absolutePath+osPathSepStr+nameFInfo.Name(), err.Error())
+							fmt.Errorf("%v\n"+
+								"Error returned by dirs.AddDirMgrByPathNameStr(newDirPathFileName).\n"+
+								"newDirPathFileName='%v'\n"+
+								"Error= \n%v\n",
+								ePrefix.String(),
+								nextDir.absolutePath+osPathSepStr+nameFInfo.Name(),
+								err.Error())
 
 						errs = append(errs, err2)
 						continue
@@ -1958,16 +2305,22 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 						fh.FilterFileName(
 							nameFInfo,
 							deleteFileSelectionCriteria,
-							ePrefix)
+							ePrefix.XCpy("nameFInfo"))
 
 					if err != nil {
 
 						err2 =
-							fmt.Errorf(ePrefix+
-								"\nError returned by fh.FilterFileName(nameFInfo, %v).\n"+
-								"%v directory searched='%v'\nfileName='%v'\nError='%v'\n\n",
-								deleteSelectionLabel, dMgrLabel,
-								dMgr.absolutePath, nameFInfo.Name(), err.Error())
+							fmt.Errorf("%v\n"+
+								"Error returned by fh.FilterFileName(nameFInfo, %v).\n"+
+								"%v directory searched='%v'\n"+
+								"fileName='%v'\n"+
+								"Error= \n%v\n",
+								funcName,
+								deleteSelectionLabel,
+								dMgrLabel,
+								dMgr.absolutePath,
+								nameFInfo.Name(),
+								err.Error())
 
 						errs = append(errs, err2)
 
@@ -1988,9 +2341,11 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 						err = os.Remove(nextDir.absolutePath + osPathSepStr + nameFInfo.Name())
 
 						if err != nil {
-							err2 = fmt.Errorf(ePrefix+
-								"\nERROR returned by os.Remove(pathFileName)\n"+
-								"pathFileName='%v'\nError='%v'\n\n",
+							err2 = fmt.Errorf("%v\n"+
+								"ERROR returned by os.Remove(pathFileName)\n"+
+								"pathFileName='%v'\n"+
+								"Error= \n%v\n",
+								ePrefix.String(),
 								nextDir.absolutePath+osPathSepStr+nameFInfo.Name(),
 								err.Error())
 

@@ -45,6 +45,23 @@ type DirectoryCopyStats struct {
 	ComputeError        error
 }
 
+// DirectoryDeleteFileInfo - structure used
+// to delete files in a directory specified
+// by 'StartPath'. Deleted files will be selected
+// based on 'DeleteFileSelectCriteria' value.
+//
+// 'DeleteFileSelectCriteria' is a 'FileSelectionCriteria'
+// type which contains FileNamePatterns strings and the
+// FilesOlderThan or FilesNewerThan date time parameters
+// which can be used as file selection criteria.
+type DirectoryDeleteFileInfo struct {
+	StartPath                string
+	Directories              DirMgrCollection
+	ErrReturns               []error
+	DeleteFileSelectCriteria FileSelectionCriteria
+	DeletedFiles             FileMgrCollection
+}
+
 type DirectoryMoveStats struct {
 	TotalSrcFilesProcessed   uint64
 	SourceFilesMoved         uint64
