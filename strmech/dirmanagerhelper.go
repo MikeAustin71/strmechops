@@ -34,7 +34,7 @@ type dirMgrHelper struct {
 //
 // # Input Parameters
 //
-//	dMgr						*DirMgr
+//	sourceDMgr					*DirMgr
 //
 //		An instance of DirMgr which identifies the source
 //		from which files will be copied to the directory
@@ -43,8 +43,8 @@ type dirMgrHelper struct {
 //	targetDMgr					*DirMgr
 //
 //		An instance of DirMgr which identifies the
-//		destination directory to which files from 'dMgr'
-//		will be copied.
+//		destination directory to which files from
+//		'sourceDMgr' will be copied.
 //
 //	fileSelectCriteria			FileSelectionCriteria
 //
@@ -53,98 +53,141 @@ type dirMgrHelper struct {
 //	  this criteria will be copied  to the directory
 //	  identified by input parameter, 'targetDir'.
 //
-//	  type FileSelectionCriteria struct {
-//	   FileNamePatterns    []string// An array of strings containing File Name Patterns
-//	   FilesOlderThan      time.Time// Match files with older modification date times
-//	   FilesNewerThan      time.Time// Match files with newer modification date times
-//	   SelectByFileMode    FilePermissionConfig  // Match file mode (os.FileMode).
-//	   SelectCriterionModeFileSelectCriterionMode // Specifies 'AND' or 'OR' selection mode
-//	  }
+//		type FileSelectionCriteria struct {
+//		 FileNamePatterns    []string
+//			An array of strings containing File Name Patterns
 //
-//	  The FileSelectionCriteria type allows for configuration of single or multiple file
-//	  selection criterion. The 'SelectCriterionMode' can be used to specify whether the
-//	  file must match all, or any one, of the active file selection criterion.
+//		 FilesOlderThan      time.Time
+//		 	Match files with older modification date times
 //
-//	  Elements of the FileSelectionCriteria are described below:
+//		 FilesNewerThan      time.Time
+//		 	Match files with newer modification date times
 //
-//	  FileNamePatterns    []string  - An array of strings which may define one or more
-//	                                  search patterns. If a file name matches any one of the
-//	                                  search pattern strings, it is deemed to be a 'match'
-//	                                  for the search pattern criterion.
+//		 SelectByFileMode    FilePermissionConfig
+//		 	Match file mode (os.FileMode).
 //
-//	                                    Example Patterns:
-//	                                     FileNamePatterns = []string{"*.log"}
-//	                                     FileNamePatterns = []string{"current*.txt"}
-//	                                     FileNamePatterns = []string{"*.txt", "*.log"}
+//		 SelectCriterionModeFileSelectCriterionMode
+//		 	Specifies 'AND' or 'OR' selection mode
+//		}
 //
-//	                                  If this string array has zero length or if
-//	                                  all the strings are empty strings, then this
-//	                                  file search criterion is considered 'Inactive'
-//	                                  or 'Not Set'.
+//	  The FileSelectionCriteria type allows for
+//	  configuration of single or multiple file selection
+//	  criterion. The 'SelectCriterionMode' can be used to
+//	  specify whether the file must match all, or any one,
+//	  of the active file selection criterion.
+//
+//	  Elements of the FileSelectionCriteria are described
+//	  below:
+//
+//	  FileNamePatterns		[]string
+//	  	An array of strings which may define one or more
+//	  	search patterns. If a file name matches any one
+//	  	of the search pattern strings, it is deemed to be
+//	  	a 'match' for the search pattern criterion.
+//
+//		Example Patterns:
+//			FileNamePatterns = []string{"*.log"}
+//			FileNamePatterns = []string{"current*.txt"}
+//			FileNamePatterns = []string{"*.txt", "*.log"}
+//
+//		If this string array has zero length or if
+//		all the strings are empty strings, then this
+//		file search criterion is considered 'Inactive'
+//		or 'Not Set'.
 //
 //
-//	  FilesOlderThan      time.Time - This date time type is compared to file
-//	                                  modification date times in order to determine
-//	                                  whether the file is older than the 'FilesOlderThan'
-//	                                  file selection criterion. If the file modification
-//	                                  date time is older than the 'FilesOlderThan' date time,
-//	                                  that file is considered a 'match'	for this file selection
-//	                                  criterion.
+//		FilesOlderThan		time.Time
+//			This date time type is compared to file
+//			modification date times in order to determine
+//			whether the file is older than the
+//			'FilesOlderThan' file selection criterion. If
+//			the file modification date time is older than
+//			the 'FilesOlderThan' date time, that file is
+//			considered a 'match' for this file selection
+//			criterion.
 //
-//	                                  If the value of 'FilesOlderThan' is set to time zero,
-//	                                  the default value for type time.Time{}, then this
-//	                                  file selection criterion is considered to be 'Inactive'
-//	                                  or 'Not Set'.
+//			If the value of 'FilesOlderThan' is set to
+//			time zero, the default value for type
+//			time.Time{}, then this file selection
+//			criterion is considered to be 'Inactive' or
+//			'Not Set'.
 //
-//	  FilesNewerThan      time.Time - This date time type is compared to the file
-//	                                  modification date time in order to determine
-//	                                  whether the file is newer than the 'FilesNewerThan'
-//	                                  file selection criterion. If the file modification date time
-//	                                  is newer than the 'FilesNewerThan' date time, that file is
-//	                                  considered a 'match' for this file selection criterion.
+//		FilesNewerThan      time.Time
+//			This date time type is compared to the file
+//			modification date time in order to determine
+//			whether the file is newer than the
+//			'FilesNewerThan' file selection criterion. If
+//			the file modification date time is newer than
+//			the 'FilesNewerThan' date time, that file is
+//			considered a 'match' for this file selection
+//			criterion.
 //
-//	                                  If the value of 'FilesNewerThan' is set to time zero,
-//	                                  the default value for type time.Time{}, then this
-//	                                  file selection criterion is considered to be 'Inactive'
-//	                                  or 'Not Set'.
+//			If the value of 'FilesNewerThan' is set to
+//			time zero, the default value for type
+//			time.Time{}, then this file selection
+//			criterion is considered to be 'Inactive' or
+//			'Not Set'.
 //
-//	  SelectByFileMode  FilePermissionConfig -
-//	                                  Type FilePermissionConfig encapsulates an os.FileMode. The file
-//	                                  selection criterion allows for the selection of files by File Mode.
-//	                                  File modes are compared to the value	of 'SelectByFileMode'. If the
-//	                                  File Mode for a given file is equal to the value of 'SelectByFileMode',
-//	                                  that file is considered to be a 'match' for this file selection
-//	                                  criterion. Examples for setting SelectByFileMode are shown as follows:
+//		SelectByFileMode	FilePermissionConfig
+//			Type FilePermissionConfig encapsulates an
+//			instance of os.FileMode. The file selection
+//			criterion allows for the selection of files
+//			by File Mode. File modes are compared to the
+//			value of 'SelectByFileMode'. If the File Mode
+//			for a given file is equal to the value of
+//			'SelectByFileMode', that file is considered
+//			to be a 'match' for this file selection
+//			criterion. Examples for setting
+//			SelectByFileMode are shown as follows:
 //
-//	                                       fsc := FileSelectionCriteria{}
-//	                                       err = fsc.SelectByFileMode.SetByFileMode(os.FileMode(0666))
-//	                                       err = fsc.SelectByFileMode.SetFileModeByTextCode("-r--r--r--")
+//				fsc := FileSelectionCriteria{}
 //
-//	  SelectCriterionMode FileSelectCriterionMode -
-//	                                  This parameter selects the manner in which the file selection
-//	                                  criteria above are applied in determining a 'match' for file
-//	                                  selection purposes. 'SelectCriterionMode' may be set to one of
-//	                                  two constant values:
+//				err =
+//					fsc.SelectByFileMode.
+//						SetByFileMode(
+//							os.FileMode(0666))
 //
-//	                                  FileSelectMode.ANDSelect() - File selected if all active selection
-//	                                    criteria are satisfied.
+//				err =
+//					fsc.SelectByFileMode.
+//						SetFileModeByTextCode(
+//							"-r--r--r--")
 //
-//	                                    If this constant value is specified for the file selection mode,
-//	                                    then a given file will not be judged as 'selected' unless all
-//	                                    the active selection criterion are satisfied. In other words, if
-//	                                    three active search criterion are provided for 'FileNamePatterns',
-//	                                    'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
-//	                                    selected unless it has satisfied all three criterion in this example.
+//		SelectCriterionMode	FileSelectCriterionMode
+//			This parameter selects the manner in which
+//			the file selection criteria above are applied
+//			in determining a 'match' for file selection
+//			purposes. 'SelectCriterionMode' may be set to
+//			one of two constant values:
 //
-//	                                  FileSelectMode.ORSelect() - File selected if any active selection
-//	                                    criterion is satisfied.
+//			FileSelectMode.ANDSelect()
+//				File selected if all active selection
+//				criteria are satisfied.
 //
-//	                                    If this constant value is specified for the file selection mode,
-//	                                    then a given file will be selected if any one of the active file
-//	                                    selection criterion is satisfied. In other words, if three active
-//	                                    search criterion are provided for 'FileNamePatterns', 'FilesOlderThan'
-//	                                    and 'FilesNewerThan', then a file will be selected if it satisfies any
-//	                                    one of the three criterion in this example.
+//				If this constant value is specified for
+//				the file selection mode, then a given
+//				file will not be judged as 'selected'
+//				unless all the active selection criterion
+//				are satisfied. In other words, if three
+//				active search criterion are provided for
+//				'FileNamePatterns', 'FilesOlderThan' and
+//				'FilesNewerThan', then a file will NOT be
+//				selected unless it has satisfied all three
+//				criterion in this example.
+//
+//			FileSelectMode.ORSelect()
+//				File selected if any active selection
+//				criterion is satisfied.
+//
+//				If this constant value is specified for
+//				the file selection mode, then a given
+//				file will be selected if any one of the
+//				active file selection criterion is
+//				satisfied. In other words, if three
+//				active search criterion are provided for
+//				'FileNamePatterns', 'FilesOlderThan' and
+//				'FilesNewerThan', then a file will be
+//				selected if it satisfies any one of the
+//				three criterion in this example.
 //
 //	copyEmptyDirectory			bool
 //
@@ -152,10 +195,10 @@ type dirMgrHelper struct {
 //		containing zero files will be created and no
 //		errors will be returned.
 //
-//	dMgrLabel					string
+//	sourceDMgrLabel				string
 //
 //		The name or label associated with input parameter
-//		'dMgr' which will be used in error messages
+//		'sourceDMgr' which will be used in error messages
 //		returned by this method.
 //
 //	targetDMgrLabel				string
@@ -190,12 +233,29 @@ type dirMgrHelper struct {
 //		information and statistics on the copy
 //		operation. This information includes the number
 //		of files copied.
+//
+//	errs						[]error
+//
+//		An array of error objects.
+//
+//		If this method completes successfully, the
+//		returned error array is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		This error array may contain multiple errors.
 func (dMgrHlpr *dirMgrHelper) copyDirectory(
-	dMgr *DirMgr,
+	sourceDMgr *DirMgr,
 	targetDMgr *DirMgr,
 	fileSelectCriteria FileSelectionCriteria,
 	copyEmptyDirectory bool,
-	dMgrLabel string,
+	sourceDMgrLabel string,
 	targetDMgrLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
 	dirCopyStats DirectoryCopyStats,
@@ -222,6 +282,8 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 
 	if err != nil {
 
+		errs = append(errs, err)
+
 		return dirCopyStats, errs
 	}
 
@@ -235,10 +297,10 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 		_,
 		err =
 		dMgrHlprAtom.doesDirectoryExist(
-			dMgr,
+			sourceDMgr,
 			PreProcPathCode.None(),
-			dMgrLabel,
-			ePrefix.XCpy("dMgr"))
+			sourceDMgrLabel,
+			ePrefix.XCpy("sourceDMgr"))
 
 	if err != nil {
 
@@ -253,8 +315,8 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 			"The current DirMgr path DOES NOT EXIST!\n"+
 			"%v.absolutePath='%v'\n",
 			ePrefix.String(),
-			dMgrLabel,
-			dMgr.absolutePath)
+			sourceDMgrLabel,
+			sourceDMgr.absolutePath)
 
 		errs = append(errs, err)
 
@@ -298,7 +360,7 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 		targetPathDoesExist = true
 	}
 
-	dirPtr, err := os.Open(dMgr.absolutePath)
+	dirPtr, err := os.Open(sourceDMgr.absolutePath)
 
 	if err != nil {
 
@@ -307,9 +369,9 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 			"%v.absolutePath='%v'\n"+
 			"Error= \n%v\n",
 			ePrefix.String(),
-			dMgrLabel,
-			dMgrLabel,
-			dMgr.absolutePath,
+			sourceDMgrLabel,
+			sourceDMgrLabel,
+			sourceDMgr.absolutePath,
 			err.Error())
 
 		errs = append(errs, err2)
@@ -339,8 +401,8 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 				"%v.absolutePath='%v'\n"+
 				"Error= \n%v\n",
 				ePrefix.String(),
-				dMgrLabel,
-				dMgr.absolutePath,
+				sourceDMgrLabel,
+				sourceDMgr.absolutePath,
 				err3.Error())
 
 			errs = append(errs, err2)
@@ -377,8 +439,8 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 						"fileName='%v'\n"+
 						"Error= \n%v\n",
 						ePrefix.String(),
-						dMgrLabel,
-						dMgr.absolutePath,
+						sourceDMgrLabel,
+						sourceDMgr.absolutePath,
 						nameFInfo.Name(),
 						err.Error())
 
@@ -432,7 +494,7 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 					}
 				}
 
-				src = dMgr.absolutePath +
+				src = sourceDMgr.absolutePath +
 					osPathSeparatorStr + nameFInfo.Name()
 
 				target = targetDMgr.absolutePath +
@@ -475,9 +537,9 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 				"%v='%v'\n"+
 				"Error='%v'\n",
 				ePrefix.String(),
-				dMgrLabel,
-				dMgrLabel,
-				dMgr.absolutePath,
+				sourceDMgrLabel,
+				sourceDMgrLabel,
+				sourceDMgr.absolutePath,
 				err.Error())
 
 			errs = append(errs, err2)
@@ -487,32 +549,298 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 	return dirCopyStats, errs
 }
 
-// copyDirectoryTree - Helper method for 'DirMgr'. This method is
-// designed to copy entire directory trees.
+// copyDirectoryTree
+//
+// Helper method for 'DirMgr'. This method is designed to
+// copy entire directory trees.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	sourceDMgr					*DirMgr
+//
+//		A pointer to an instance of DirMgr which
+//		identifies the source directory tree from which
+//		files will be copied to the directory tree
+//		identified by input parameter 'targetDMgr'.
+//
+//	targetDMgr					*DirMgr
+//
+//		A pointer to an instance of DirMgr which
+//		identifies the destination directory tree to
+//		which files will be copied from the directory
+//		tree identified by input parameter 'sourceDMgr'.
+//
+//	copyEmptyDirectories		bool
+//
+//		If this parameter is set to 'true', directories
+//		containing zero files will be created and no
+//		errors will be returned.
+//
+//	skipTopLevelDirectory		bool
+//
+//		If this parameter is set to 'true', the top level
+//		source directory will be skipped, and it will not
+//		be copied to the directory tree identified by
+//		input parameter 'targetDMgr'.
+//
+//	fileSelectCriteria			FileSelectionCriteria
+//
+//		This input parameter should be configured with the
+//		desired file selection criteria. Files matching
+//		this criteria will be copied  to the directory
+//		identified by input parameter, 'targetDir'.
+//
+//		type FileSelectionCriteria struct {
+//		 FileNamePatterns    []string
+//			An array of strings containing File Name Patterns
+//
+//		 FilesOlderThan      time.Time
+//		 	Match files with older modification date times
+//
+//		 FilesNewerThan      time.Time
+//		 	Match files with newer modification date times
+//
+//		 SelectByFileMode    FilePermissionConfig
+//		 	Match file mode (os.FileMode).
+//
+//		 SelectCriterionModeFileSelectCriterionMode
+//		 	Specifies 'AND' or 'OR' selection mode
+//		}
+//
+//	  The FileSelectionCriteria type allows for
+//	  configuration of single or multiple file selection
+//	  criterion. The 'SelectCriterionMode' can be used to
+//	  specify whether the file must match all, or any one,
+//	  of the active file selection criterion.
+//
+//	  Elements of the FileSelectionCriteria are described
+//	  below:
+//
+//	  FileNamePatterns		[]string
+//	  	An array of strings which may define one or more
+//	  	search patterns. If a file name matches any one
+//	  	of the search pattern strings, it is deemed to be
+//	  	a 'match' for the search pattern criterion.
+//
+//		Example Patterns:
+//			FileNamePatterns = []string{"*.log"}
+//			FileNamePatterns = []string{"current*.txt"}
+//			FileNamePatterns = []string{"*.txt", "*.log"}
+//
+//		If this string array has zero length or if
+//		all the strings are empty strings, then this
+//		file search criterion is considered 'Inactive'
+//		or 'Not Set'.
+//
+//
+//		FilesOlderThan		time.Time
+//			This date time type is compared to file
+//			modification date times in order to determine
+//			whether the file is older than the
+//			'FilesOlderThan' file selection criterion. If
+//			the file modification date time is older than
+//			the 'FilesOlderThan' date time, that file is
+//			considered a 'match' for this file selection
+//			criterion.
+//
+//			If the value of 'FilesOlderThan' is set to
+//			time zero, the default value for type
+//			time.Time{}, then this file selection
+//			criterion is considered to be 'Inactive' or
+//			'Not Set'.
+//
+//		FilesNewerThan      time.Time
+//			This date time type is compared to the file
+//			modification date time in order to determine
+//			whether the file is newer than the
+//			'FilesNewerThan' file selection criterion. If
+//			the file modification date time is newer than
+//			the 'FilesNewerThan' date time, that file is
+//			considered a 'match' for this file selection
+//			criterion.
+//
+//			If the value of 'FilesNewerThan' is set to
+//			time zero, the default value for type
+//			time.Time{}, then this file selection
+//			criterion is considered to be 'Inactive' or
+//			'Not Set'.
+//
+//		SelectByFileMode	FilePermissionConfig
+//			Type FilePermissionConfig encapsulates an
+//			instance of os.FileMode. The file selection
+//			criterion allows for the selection of files
+//			by File Mode. File modes are compared to the
+//			value of 'SelectByFileMode'. If the File Mode
+//			for a given file is equal to the value of
+//			'SelectByFileMode', that file is considered
+//			to be a 'match' for this file selection
+//			criterion. Examples for setting
+//			SelectByFileMode are shown as follows:
+//
+//				fsc := FileSelectionCriteria{}
+//
+//				err =
+//					fsc.SelectByFileMode.
+//						SetByFileMode(
+//							os.FileMode(0666))
+//
+//				err =
+//					fsc.SelectByFileMode.
+//						SetFileModeByTextCode(
+//							"-r--r--r--")
+//
+//		SelectCriterionMode	FileSelectCriterionMode
+//			This parameter selects the manner in which
+//			the file selection criteria above are applied
+//			in determining a 'match' for file selection
+//			purposes. 'SelectCriterionMode' may be set to
+//			one of two constant values:
+//
+//			FileSelectMode.ANDSelect()
+//				File selected if all active selection
+//				criteria are satisfied.
+//
+//				If this constant value is specified for
+//				the file selection mode, then a given
+//				file will not be judged as 'selected'
+//				unless all the active selection criterion
+//				are satisfied. In other words, if three
+//				active search criterion are provided for
+//				'FileNamePatterns', 'FilesOlderThan' and
+//				'FilesNewerThan', then a file will NOT be
+//				selected unless it has satisfied all three
+//				criterion in this example.
+//
+//			FileSelectMode.ORSelect()
+//				File selected if any active selection
+//				criterion is satisfied.
+//
+//				If this constant value is specified for
+//				the file selection mode, then a given
+//				file will be selected if any one of the
+//				active file selection criterion is
+//				satisfied. In other words, if three
+//				active search criterion are provided for
+//				'FileNamePatterns', 'FilesOlderThan' and
+//				'FilesNewerThan', then a file will be
+//				selected if it satisfies any one of the
+//				three criterion in this example.
+//
+//	sourceDMgrLabel				string
+//
+//		The name or label associated with input parameter
+//		'sourceDMgr' which will be used in error messages
+//		returned by this method.
+//
+//	targetDMgrLabel				string
+//
+//		The name or label associated with input parameter
+//		'targetDMgr' which will be used in error messages
+//		returned by this method.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	dTreeCopyStats				DirTreeCopyStats
+//
+//		If this method completes successfully, an
+//		instance of DirTreeCopyStats will be returned
+//		populated with information and statistics related
+//		to the directory tree copy operation.
+//
+//			type DirTreeCopyStats struct {
+//				TotalDirsScanned    uint64
+//				DirsCopied          uint64
+//				DirsCreated         uint64
+//				TotalFilesProcessed uint64
+//				FilesCopied         uint64
+//				FileBytesCopied     uint64
+//				FilesNotCopied      uint64
+//				FileBytesNotCopied  uint64
+//				ComputeError        error
+//			}
+//
+//	errs						[]error
+//
+//		An array of error objects.
+//
+//		If this method completes successfully, the
+//		returned error array is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		This error array may contain multiple errors.
 func (dMgrHlpr *dirMgrHelper) copyDirectoryTree(
-	dMgr *DirMgr,
+	sourceDMgr *DirMgr,
 	targetDMgr *DirMgr,
 	copyEmptyDirectories bool,
 	skipTopLevelDirectory bool,
 	fileSelectCriteria FileSelectionCriteria,
-	ePrefix string,
-	dMgrLabel string,
-	targetDMgrLabel string) (dTreeCopyStats DirTreeCopyStats, errs []error) {
+	sourceDMgrLabel string,
+	targetDMgrLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	dTreeCopyStats DirTreeCopyStats,
+	errs []error) {
 
-	ePrefixCurrMethod := "dirMgrHelper.copyDirectoryTree() "
-
-	errs = make([]error, 0, 300)
-
-	if len(ePrefix) == 0 {
-		ePrefix = ePrefixCurrMethod
-	} else {
-		ePrefix = ePrefix + "- " + ePrefixCurrMethod
+	if dMgrHlpr.lock == nil {
+		dMgrHlpr.lock = new(sync.Mutex)
 	}
+
+	dMgrHlpr.lock.Lock()
+
+	defer dMgrHlpr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	funcName := "dirMgrHelper.copyDirectoryTree()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return dTreeCopyStats, errs
+	}
+
+	errs = make([]error, 0)
 
 	if targetDMgr == nil {
 
-		err := fmt.Errorf(ePrefix+
-			"\nError: Input parameter %v pointer is 'nil'!\n", targetDMgrLabel)
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter %v pointer is 'nil'!\n",
+			ePrefix.String(),
+			targetDMgrLabel)
 
 		errs = append(errs, err)
 
@@ -520,42 +848,50 @@ func (dMgrHlpr *dirMgrHelper) copyDirectoryTree(
 
 	}
 
+	dMgrHlprAtom := dirMgrHelperAtom{}
+
 	dMgrPathDoesExist,
 		_,
 		err :=
-		dMgrHlpr.doesDirectoryExist(
-			dMgr,
+		dMgrHlprAtom.doesDirectoryExist(
+			sourceDMgr,
 			PreProcPathCode.None(),
-			ePrefix,
-			dMgrLabel)
+			sourceDMgrLabel,
+			ePrefix.XCpy(
+				"sourceDMgr"))
 
 	if err != nil {
+
 		errs = append(errs, err)
 
 		return dTreeCopyStats, errs
 	}
 
 	if !dMgrPathDoesExist {
-		err = fmt.Errorf(ePrefix+
-			"\nError: %v directory path DOES NOT EXIST!\n"+
-			"%v='%v'\n\n",
-			dMgrLabel,
-			dMgrLabel,
-			dMgr.absolutePath)
+
+		err = fmt.Errorf("%v\n"+
+			"Error: %v directory path DOES NOT EXIST!\n"+
+			"%v='%v'\n",
+			ePrefix,
+			sourceDMgrLabel,
+			sourceDMgrLabel,
+			sourceDMgr.absolutePath)
 
 		errs = append(errs, err)
 
 		return dTreeCopyStats, errs
 	}
 
+	var err2 error
 	_,
 		_,
-		err2 :=
-		dMgrHlpr.doesDirectoryExist(
+		err2 =
+		dMgrHlprAtom.doesDirectoryExist(
 			targetDMgr,
 			PreProcPathCode.None(),
-			ePrefix,
-			targetDMgrLabel)
+			targetDMgrLabel,
+			ePrefix.XCpy(
+				"targetDMgr"))
 
 	if err2 != nil {
 
@@ -563,18 +899,22 @@ func (dMgrHlpr *dirMgrHelper) copyDirectoryTree(
 		return dTreeCopyStats, errs
 	}
 
-	baseDirLen := len(dMgr.absolutePath)
+	baseDirLen := len(sourceDMgr.absolutePath)
+
 	var nextTargetDMgr DirMgr
 	var nameFileInfos []os.FileInfo
+
 	osPathSepStr := string(os.PathSeparator)
+
 	dirs := DirMgrCollection{}
+
 	var nextDir DirMgr
 	var dirPtr *os.File
 	dirPtr = nil
 	var srcFile, targetFile string
 	fh := FileHelper{}
 
-	dirs.AddDirMgr(dMgrHlpr.copyOut(dMgr))
+	dirs.AddDirMgr(dMgrHlprAtom.copyOut(sourceDMgr))
 
 	if !skipTopLevelDirectory {
 		dTreeCopyStats.TotalDirsScanned++
@@ -587,6 +927,8 @@ func (dMgrHlpr *dirMgrHelper) copyDirectoryTree(
 	isTopLevelDir := true
 	isNewDir := false
 	isFirstLoop := true
+
+	dMgrHlprMolecule := dirMgrHelperMolecule{}
 
 	for !mainLoopIsDone {
 
@@ -603,9 +945,11 @@ func (dMgrHlpr *dirMgrHelper) copyDirectoryTree(
 
 			if err != nil {
 
-				err2 = fmt.Errorf(ePrefix+
-					"\nError returned by dirPtr.Close()\n"+
-					"Error='%v'\n\n", err.Error())
+				err2 = fmt.Errorf("%v"+
+					"Error returned by dirPtr.Close()\n"+
+					"Error= \n%v\n",
+					ePrefix.String(),
+					err.Error())
 
 				errs = append(errs, err2)
 			}
@@ -616,14 +960,23 @@ func (dMgrHlpr *dirMgrHelper) copyDirectoryTree(
 		nextDir, err = dirs.PopFirstDirMgr()
 
 		if err != nil && err == io.EOF {
+
 			mainLoopIsDone = true
+
 			isTopLevelDir = false
+
 			break
+
 		} else if err != nil {
-			err2 = fmt.Errorf(ePrefix+
-				"\nError returned by dirs.PopFirstDirMgr().\n"+
-				"Error='%v'\n", err.Error())
+
+			err2 = fmt.Errorf("%v\n"+
+				"Error returned by dirs.PopFirstDirMgr().\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				err.Error())
+
 			errs = append(errs, err2)
+
 			return dTreeCopyStats, errs
 		}
 
@@ -632,18 +985,22 @@ func (dMgrHlpr *dirMgrHelper) copyDirectoryTree(
 				nextDir.absolutePath[baseDirLen:])
 
 		if err != nil {
-			err2 = fmt.Errorf(ePrefix+
-				"\nError return by DirMgr{}.New(%v.absolutePath + "+
+
+			err2 = fmt.Errorf("%v\n"+
+				"Error return by DirMgr{}.New(%v.absolutePath + "+
 				"nextDir.absolutePath[baseDirLen:])\n"+
 				"%v.absolutePath='%v'\n"+
 				"nextDir.absolutePath[baseDirLen:]='%v'\n"+
-				"Error='%v'\n\n",
-				targetDMgrLabel, targetDMgrLabel,
+				"Error= \n%v\n",
+				ePrefix.String(),
+				targetDMgrLabel,
+				targetDMgrLabel,
 				targetDMgr.absolutePath,
 				nextDir.absolutePath[baseDirLen:],
 				err.Error())
 
 			errs = append(errs, err2)
+
 			continue
 		}
 
@@ -654,18 +1011,22 @@ func (dMgrHlpr *dirMgrHelper) copyDirectoryTree(
 			copyEmptyDirectories {
 
 			dirCreated,
-				err = dMgrHlpr.lowLevelMakeDir(
-				&nextTargetDMgr,
-				ePrefix,
-				"1-nextTargetDMgr")
+				err = dMgrHlprMolecule.
+				lowLevelMakeDir(
+					&nextTargetDMgr,
+					"1-nextTargetDMgr",
+					ePrefix.XCpy(
+						"1-nextTargetDMgr"))
 
 		} else if !isTopLevelDir && copyEmptyDirectories {
 
 			dirCreated,
-				err = dMgrHlpr.lowLevelMakeDir(
-				&nextTargetDMgr,
-				ePrefix,
-				"2-nextTargetDMgr")
+				err = dMgrHlprMolecule.
+				lowLevelMakeDir(
+					&nextTargetDMgr,
+					"2-nextTargetDMgr",
+					ePrefix.XCpy(
+						"2-nextTargetDMgr"))
 
 		} else {
 			err = nil
@@ -673,13 +1034,18 @@ func (dMgrHlpr *dirMgrHelper) copyDirectoryTree(
 
 		if err != nil {
 
-			err2 = fmt.Errorf("\n"+ePrefix+
-				"\nError creating target next directory!\n"+
-				"Target Next Directory='%v'\nError='%v'\n\n",
-				nextTargetDMgr.absolutePath, err.Error())
+			err2 = fmt.Errorf("%v\n"+
+				"Error creating target next directory!\n"+
+				"Target Next Directory='%v'\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				nextTargetDMgr.absolutePath,
+				err.Error())
 
 			errs = append(errs, err2)
+
 			isTopLevelDir = false
+
 			continue
 
 		} else if dirCreated {
@@ -701,12 +1067,16 @@ func (dMgrHlpr *dirMgrHelper) copyDirectoryTree(
 
 		if err != nil {
 
-			err2 = fmt.Errorf(ePrefix+
-				"\nError return by os.Open(nextDir.absolutePath).\n"+
-				"nextDir.absolutePath='%v'\nError='%v'\n\n",
-				nextDir.absolutePath, err.Error())
+			err2 = fmt.Errorf("%v\n"+
+				"Error return by os.Open(nextDir.absolutePath).\n"+
+				"nextDir.absolutePath='%v'\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				nextDir.absolutePath,
+				err.Error())
 
 			errs = append(errs, err2)
+
 			continue
 		}
 
@@ -714,7 +1084,7 @@ func (dMgrHlpr *dirMgrHelper) copyDirectoryTree(
 
 		for !file2LoopIsDone {
 
-			nameFileInfos, err = dirPtr.Readdir(1000)
+			nameFileInfos, err = dirPtr.Readdir(0)
 
 			if err != nil && err == io.EOF {
 
@@ -727,9 +1097,11 @@ func (dMgrHlpr *dirMgrHelper) copyDirectoryTree(
 
 			} else if err != nil {
 
-				err2 = fmt.Errorf(ePrefix+
-					"\nError returned by dirPtr.Readdir(1000).\n"+
-					"Error='%v'\n\n", err.Error())
+				err2 = fmt.Errorf("%v\n"+
+					"Error returned by dirPtr.Readdir(0).\n"+
+					"Error= \n%v\n",
+					ePrefix.String(),
+					err.Error())
 
 				errs = append(errs, err2)
 
@@ -749,9 +1121,11 @@ func (dMgrHlpr *dirMgrHelper) copyDirectoryTree(
 							nameFInfo.Name())
 
 					if err != nil {
-						err2 = fmt.Errorf(ePrefix+
-							"\nError returned by dirs.AddDirMgrByPathNameStr(newDir).\n"+
-							"newDir='%v'\nError='%v'\n\n",
+						err2 = fmt.Errorf("%v\n"+
+							"Error returned by dirs.AddDirMgrByPathNameStr(newDir).\n"+
+							"newDir='%v'\n"+
+							"Error= \n%v\n",
+							ePrefix.String(),
 							nextDir.absolutePath+osPathSepStr+nameFInfo.Name(),
 							err.Error())
 
@@ -785,10 +1159,16 @@ func (dMgrHlpr *dirMgrHelper) copyDirectoryTree(
 						ePrefix)
 
 				if err != nil {
-					err2 = fmt.Errorf(ePrefix+
-						"\nError returned by fh.FilterFileName(nameFInfo, fileSelectCriteria).\n"+
-						"Directory='%v'\nFile Name='%v'\nError='%v'\n\n",
-						nextDir.absolutePath, nameFInfo.Name(), err.Error())
+
+					err2 = fmt.Errorf("%v\n"+
+						"Error returned by fh.FilterFileName(nameFInfo, fileSelectCriteria).\n"+
+						"Directory='%v'\n"+
+						"File Name='%v'\n"+
+						"Error= \n%v\n",
+						ePrefix.String(),
+						nextDir.absolutePath,
+						nameFInfo.Name(),
+						err.Error())
 
 					dTreeCopyStats.TotalFilesProcessed--
 
@@ -804,11 +1184,11 @@ func (dMgrHlpr *dirMgrHelper) copyDirectoryTree(
 					dMgrPathDoesExist,
 						_,
 						err =
-						dMgrHlpr.doesDirectoryExist(
+						dMgrHlprAtom.doesDirectoryExist(
 							&nextTargetDMgr,
 							PreProcPathCode.None(),
-							ePrefix,
-							"nextTargetDMgr")
+							"nextTargetDMgr",
+							ePrefix)
 
 					if err != nil {
 						file2LoopIsDone = true
@@ -820,16 +1200,19 @@ func (dMgrHlpr *dirMgrHelper) copyDirectoryTree(
 					if !dMgrPathDoesExist {
 
 						dirCreated,
-							err = dMgrHlpr.lowLevelMakeDir(
+							err = dMgrHlprMolecule.lowLevelMakeDir(
 							&nextTargetDMgr,
-							ePrefix,
-							"3-nextTargetDMgr")
+							"3-nextTargetDMgr",
+							ePrefix)
 
 						if err != nil {
-							err2 = fmt.Errorf("\n"+ePrefix+
-								"\nError creating targetFile directory!\n"+
-								"Target Directory='%v'\nError='%v'\n\n",
-								nextTargetDMgr.absolutePath, err.Error())
+							err2 = fmt.Errorf("%v\n"+
+								"Error creating targetFile directory!\n"+
+								"Target Directory='%v'\n"+
+								"Error= \n%v\n",
+								funcName,
+								nextTargetDMgr.absolutePath,
+								err.Error())
 
 							errs = append(errs, err2)
 							file2LoopIsDone = true
@@ -853,20 +1236,24 @@ func (dMgrHlpr *dirMgrHelper) copyDirectoryTree(
 					targetFile = nextTargetDMgr.absolutePath +
 						osPathSepStr + nameFInfo.Name()
 
-					err = dMgrHlpr.lowLevelCopyFile(
-						srcFile,
-						nameFInfo,
-						targetFile,
-						ePrefix,
-						"srcFile",
-						"destinationFile")
+					err = dMgrHlprMolecule.
+						lowLevelCopyFile(
+							srcFile,
+							nameFInfo,
+							targetFile,
+							"srcFile",
+							"destinationFile",
+							ePrefix)
 
 					if err != nil {
+
 						errs = append(errs, err)
+
 						dTreeCopyStats.FilesNotCopied++
 						dTreeCopyStats.FileBytesNotCopied += uint64(nameFInfo.Size())
 
 					} else {
+
 						dTreeCopyStats.FilesCopied++
 						dTreeCopyStats.FileBytesCopied += uint64(nameFInfo.Size())
 					}
@@ -887,15 +1274,19 @@ func (dMgrHlpr *dirMgrHelper) copyDirectoryTree(
 	// Final verification of
 	dMgrPathDoesExist,
 		_,
-		err = dMgrHlpr.lowLevelDoesDirectoryExist(
-		targetDMgr.absolutePath,
-		ePrefix,
-		"targetDMgr")
+		err = new(dirMgrHelperElectron).
+		lowLevelDoesDirectoryExist(
+			targetDMgr.absolutePath,
+			"targetDMgr",
+			ePrefix)
 
 	if err != nil {
-		err2 = fmt.Errorf(ePrefix+
-			"\nAfter Copy Operation 'targetDMgr' path returned non-path error!\n"+
-			"Error='%v'\n\n", err.Error())
+
+		err2 = fmt.Errorf("%v\n"+
+			"After Copy Operation 'targetDMgr' path returned non-path error!\n"+
+			"Error= \n%v\n",
+			funcName,
+			err.Error())
 
 		errs = append(errs, err2)
 	}
@@ -903,23 +1294,26 @@ func (dMgrHlpr *dirMgrHelper) copyDirectoryTree(
 	if dTreeCopyStats.FilesCopied > 0 &&
 		!dMgrPathDoesExist {
 
-		err2 = fmt.Errorf(ePrefix+
+		err2 = fmt.Errorf("%v\n"+
 			"\nERROR: The copy operation failed to create\n"+
 			"the 'targetDMgr' path. 'targetDMgr' path DOES NOT EXIST!\n"+
-			"targetDMgr Path='%v'\n\n",
+			"targetDMgr Path='%v'\n",
+			ePrefix.String(),
 			targetDMgr.absolutePath)
+
 		errs = append(errs, err2)
 	}
 
 	if dTreeCopyStats.TotalFilesProcessed !=
 		dTreeCopyStats.FilesCopied+dTreeCopyStats.FilesNotCopied {
 
-		err2 = fmt.Errorf(ePrefix+
-			"\nFile Counting Error: Number of Total Files Processed\n"+
-			"NOT EQUAL to Number of Files Copied Plus Number of Files NOT copied!\n"+
+		err2 = fmt.Errorf("%v\n"+
+			"File Counting Error: Number of Total Files Processed DOES\n"+
+			"NOT EQUAL the Number of Files Copied Plus Number of Files NOT copied!\n"+
 			"Total Number of Files Processed='%v'\n"+
 			"         Number of Files Copied='%v'\n"+
 			"     Number of Files NOT Copied='%v'\n\n",
+			ePrefix.String(),
 			dTreeCopyStats.TotalFilesProcessed,
 			dTreeCopyStats.FilesCopied,
 			dTreeCopyStats.FilesNotCopied)
@@ -966,36 +1360,6 @@ func (dMgrHlpr *dirMgrHelper) copyIn(
 	dMgr.isVolumePopulated = dMgrIn.isVolumePopulated
 	dMgr.actualDirFileInfo = dMgrIn.actualDirFileInfo.CopyOut()
 
-}
-
-// copyOut - Makes a duplicate copy of input parameter
-// 'dMgr' values and returns them as a new DirMgr object.
-func (dMgrHlpr *dirMgrHelper) copyOut(
-	dMgr *DirMgr) DirMgr {
-
-	if dMgr == nil {
-		dMgr = &DirMgr{}
-	}
-
-	dOut := DirMgr{}
-
-	dOut.isInitialized = dMgr.isInitialized
-	dOut.originalPath = dMgr.originalPath
-	dOut.path = dMgr.path
-	dOut.isPathPopulated = dMgr.isPathPopulated
-	dOut.doesPathExist = dMgr.doesPathExist
-	dOut.parentPath = dMgr.parentPath
-	dOut.isParentPathPopulated = dMgr.isParentPathPopulated
-	dOut.absolutePath = dMgr.absolutePath
-	dOut.isAbsolutePathPopulated = dMgr.isAbsolutePathPopulated
-	dOut.doesAbsolutePathExist = dMgr.doesAbsolutePathExist
-	dOut.isAbsolutePathDifferentFromPath = dMgr.isAbsolutePathDifferentFromPath
-	dOut.directoryName = dMgr.directoryName
-	dOut.volumeName = dMgr.volumeName
-	dOut.isVolumePopulated = dMgr.isVolumePopulated
-	dOut.actualDirFileInfo = dMgr.actualDirFileInfo.CopyOut()
-
-	return dOut
 }
 
 // deleteAllFilesInDirectory - Helper method used by DirMgr. This

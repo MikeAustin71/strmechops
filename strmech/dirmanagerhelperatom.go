@@ -13,6 +13,44 @@ type dirMgrHelperAtom struct {
 	lock *sync.Mutex
 }
 
+// copyOut - Makes a duplicate copy of input parameter
+// 'dMgr' values and returns them as a new DirMgr object.
+func (dMgrHlprAtom *dirMgrHelperAtom) copyOut(
+	dMgr *DirMgr) DirMgr {
+
+	if dMgrHlprAtom.lock == nil {
+		dMgrHlprAtom.lock = new(sync.Mutex)
+	}
+
+	dMgrHlprAtom.lock.Lock()
+
+	defer dMgrHlprAtom.lock.Unlock()
+
+	if dMgr == nil {
+		dMgr = &DirMgr{}
+	}
+
+	dOut := DirMgr{}
+
+	dOut.isInitialized = dMgr.isInitialized
+	dOut.originalPath = dMgr.originalPath
+	dOut.path = dMgr.path
+	dOut.isPathPopulated = dMgr.isPathPopulated
+	dOut.doesPathExist = dMgr.doesPathExist
+	dOut.parentPath = dMgr.parentPath
+	dOut.isParentPathPopulated = dMgr.isParentPathPopulated
+	dOut.absolutePath = dMgr.absolutePath
+	dOut.isAbsolutePathPopulated = dMgr.isAbsolutePathPopulated
+	dOut.doesAbsolutePathExist = dMgr.doesAbsolutePathExist
+	dOut.isAbsolutePathDifferentFromPath = dMgr.isAbsolutePathDifferentFromPath
+	dOut.directoryName = dMgr.directoryName
+	dOut.volumeName = dMgr.volumeName
+	dOut.isVolumePopulated = dMgr.isVolumePopulated
+	dOut.actualDirFileInfo = dMgr.actualDirFileInfo.CopyOut()
+
+	return dOut
+}
+
 // doesDirectoryExist
 //
 // Helper method used by DirMgr to test for existence of
