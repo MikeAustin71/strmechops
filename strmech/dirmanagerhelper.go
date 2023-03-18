@@ -10,7 +10,6 @@ import (
 	"runtime"
 	"strings"
 	"sync"
-	"time"
 )
 
 // dirMgrHelper
@@ -950,20 +949,48 @@ func (dMgrHlpr *dirMgrHelper) deleteAllFilesInDirectory(
 	return deleteDirStats, errs
 }
 
-// deleteDirectoryAll - This method will remove the directory identified by the
-// input parameter 'dMgr'. It will also delete all child directories and files
-// in the directory tree.
+// deleteDirectoryAll
+//
+// This method will remove the directory identified by
+// the input parameter 'dMgr'. This means it will delete
+// the parent directory and all files residing therein as
+// well as deleting all child directories and files in
+// the directory tree identified by 'dMgr'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	All files and directories, including the parent
+//	directory, identified by input parameter 'dMgr' will
+//	be deleted.
 func (dMgrHlpr *dirMgrHelper) deleteDirectoryAll(
 	dMgr *DirMgr,
-	ePrefix string,
-	dMgrLabel string) error {
+	dMgrLabel string,
+	errPrefDto *ePref.ErrPrefixDto) error {
 
-	ePrefixCurrMethod := "dirMgrHelper.deleteDirectoryAll() "
+	if dMgrHlpr.lock == nil {
+		dMgrHlpr.lock = new(sync.Mutex)
+	}
 
-	if len(ePrefix) == 0 {
-		ePrefix = ePrefixCurrMethod
-	} else {
-		ePrefix = ePrefix + "- " + ePrefixCurrMethod
+	dMgrHlpr.lock.Lock()
+
+	defer dMgrHlpr.lock.Unlock()
+
+	funcName := "dirMgrHelper.deleteDirectoryAll() "
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
 	}
 
 	dirPathDoesExist,
@@ -3900,57 +3927,6 @@ func (dMgrHlpr *dirMgrHelper) isPathStringEmptyOrBlank(
 	}
 
 	return pathFileNameExt, strLen, err
-}
-
-// lowLevelDeleteDirectoryAll - Helper method designed for use by DirMgr.
-// This method will delete the designated directory ('dMgr') and all
-// subsidiary directories and files.
-//
-// This method will not perform validation services.
-func (dMgrHlpr *dirMgrHelper) lowLevelDeleteDirectoryAll(
-	dMgr *DirMgr,
-	ePrefix string,
-	dMgrLabel string) error {
-
-	ePrefixCurrMethod := "dirMgrHelper.lowLevelDeleteDirectoryAll() "
-
-	if len(ePrefix) == 0 {
-		ePrefix = ePrefixCurrMethod
-	} else {
-		ePrefix = ePrefix + "- " + ePrefixCurrMethod
-	}
-
-	var err, err2 error
-
-	if dMgr == nil {
-		return fmt.Errorf(ePrefix+
-			"\nError: Input parameter %v pointer is 'nil' !", dMgrLabel)
-	}
-
-	for i := 0; i < 3; i++ {
-
-		err2 = os.RemoveAll(dMgr.absolutePath)
-
-		if err2 != nil {
-			err = fmt.Errorf(ePrefix+
-				"Error returned by os.RemoveAll(%v.absolutePath) "+
-				"returned error.\n"+
-				"%v.absolutePath='%v'\nError='%v'\n",
-				dMgrLabel, dMgrLabel,
-				dMgr.absolutePath, err2.Error())
-		} else {
-			// err2 == nil
-			// Deletion was successful
-			dMgr.doesAbsolutePathExist = false
-			dMgr.doesPathExist = false
-			dMgr.actualDirFileInfo = FileInfoPlus{}
-			return nil
-		}
-
-		time.Sleep(50 * time.Millisecond)
-	}
-
-	return err
 }
 
 func (dMgrHlpr *dirMgrHelper) lowLevelDirMgrFieldConfig(

@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"sync"
+	"time"
 )
 
 type dirMgrHelperMolecule struct {
@@ -183,14 +184,14 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) deleteAllSubDirectories(
 
 	for err3 != io.EOF {
 
-		nameFileInfos, err3 = dirMgrPtr.Readdir(0)
+		nameFileInfos, err3 = dirMgrPtr.Readdir(10000)
 
 		if err3 != nil && err3 != io.EOF {
 
 			_ = dirMgrPtr.Close()
 
 			err2 = fmt.Errorf("%v\n"+
-				"Error returned by dirMgrPtr.Readdirnames(0).\n"+
+				"Error returned by dirMgrPtr.Readdirnames(10000).\n"+
 				"dMgr.absolutePath='%v'\n"+
 				"Error='%v'\n",
 				ePrefix.String(),
@@ -510,6 +511,156 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 			srcFile,
 			dstLabel,
 			dstFile)
+	}
+
+	return err
+}
+
+// lowLevelDeleteDirectoryAll
+//
+// Helper method designed for use by DirMgr.
+//
+// This method will delete the designated directory and
+// constituent file specified by input parameter 'dMgr',
+// as well as all subsidiary directories and files. This
+// means that the entire directory tree designated by
+// 'dMgr', along with all the contained files, will be
+// deleted.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This low-level method will not perform validation
+//		services. It assumes that 'dMgr' specifies a
+//		directory path which actually exists on disk.
+//
+//	(2) This method will delete the directory and
+//		constituent files identified by input parameter
+//		'dMgr'. In addition, all the child directories
+//		and files subordinate to the directory designated
+//		by 'dMgr' will likewise be deleted.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dMgr						*DirMgr
+//
+//		A pointer to an instance of DirMgr. The entire
+//		directory tree identified by this parameter will
+//		be deleted along with all the resident files.
+//
+//	dMgrLabel					string
+//
+//		The name or label associated with input parameter
+//		'dMgr' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "dMgr" will be
+//		automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelDeleteDirectoryAll(
+	dMgr *DirMgr,
+	dMgrLabel string,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if dMgrHlprMolecule.lock == nil {
+		dMgrHlprMolecule.lock = new(sync.Mutex)
+	}
+
+	dMgrHlprMolecule.lock.Lock()
+
+	defer dMgrHlprMolecule.lock.Unlock()
+
+	funcName := "dirMgrHelper.lowLevelDeleteDirectoryAll() "
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	var err2 error
+
+	if dMgr == nil {
+
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter %v pointer is 'nil' !\n",
+			ePrefix.String(),
+			dMgrLabel)
+	}
+
+	if len(dMgrLabel) == 0 {
+		dMgrLabel = "dMgr"
+	}
+
+	for i := 0; i < 3; i++ {
+
+		err2 = os.RemoveAll(dMgr.absolutePath)
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error returned by os.RemoveAll(%v.absolutePath)\n"+
+				"%v.absolutePath='%v'\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				dMgrLabel,
+				dMgrLabel,
+				dMgr.absolutePath,
+				err2.Error())
+
+		} else {
+			// err2 == nil
+			// Deletion was successful
+			dMgr.doesAbsolutePathExist = false
+			dMgr.doesPathExist = false
+			dMgr.actualDirFileInfo = FileInfoPlus{}
+			return nil
+		}
+
+		time.Sleep(50 * time.Millisecond)
 	}
 
 	return err
