@@ -549,39 +549,86 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 	return dirCopyStats, errs
 }
 
-// CopyIn - Receives a pointer to an incoming DirMgr object
-// ('dMgrIn') as an input parameter and copies the values from
-// the incoming object to the input parameter, 'dMgr'.
+// copyIn
 //
-// When the copy operation is the 'dMgr' object is a duplicate
-// of the incoming DirMgr object ('dMgrIn').
+// Receives a pointer to an incoming DirMgr object
+// ('sourceDMgrIn') as an input parameter and copies the
+// data values from the incoming object to the input
+// parameter, 'destinationDMgr'.
+//
+// When the copy operation is completed, the
+// 'destinationDMgr' object is configured as a duplicate
+// of the incoming DirMgr object ('sourceDMgrIn').
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	destinationDMgr				*DirMgr
+//
+//		A pointer to an instance of DirMgr. All the data
+//		values contained in input parameter
+//		'sourceDMgrIn' will be copied to the
+//		corresponding member data values contained in
+//		'destinationDMgr'.
+//
+//		When the copy operation is completed, all data
+//		values in 'destinationDMgr' will duplicate
+//		corresponding data values contained in
+//		'sourceDMgrIn'.
+//
+//	sourceDMgrIn				*DirMgr
+//
+//		A pointer to an instance of DirMgr. Data values
+//		contained in this instance will be copied to
+//		corresponding member data values encapsulated
+//		by input parameter 'destinationDMgr'.
+//
+//		When the copy operation is completed, all data
+//		values in 'destinationDMgr' will duplicate
+//		corresponding data values contained in
+//		'sourceDMgrIn'.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	--- NONE ---
 func (dMgrHlpr *dirMgrHelper) copyIn(
-	dMgr *DirMgr,
-	dMgrIn *DirMgr) {
+	destinationDMgr *DirMgr,
+	sourceDMgrIn *DirMgr) {
 
-	if dMgr == nil {
-		dMgr = &DirMgr{}
+	if dMgrHlpr.lock == nil {
+		dMgrHlpr.lock = new(sync.Mutex)
 	}
 
-	if dMgrIn == nil {
-		dMgrIn = &DirMgr{}
+	dMgrHlpr.lock.Lock()
+
+	defer dMgrHlpr.lock.Unlock()
+
+	if destinationDMgr == nil {
+		destinationDMgr = &DirMgr{}
 	}
 
-	dMgr.isInitialized = dMgrIn.isInitialized
-	dMgr.originalPath = dMgrIn.originalPath
-	dMgr.path = dMgrIn.path
-	dMgr.isPathPopulated = dMgrIn.isPathPopulated
-	dMgr.doesPathExist = dMgrIn.doesPathExist
-	dMgr.parentPath = dMgrIn.parentPath
-	dMgr.isParentPathPopulated = dMgrIn.isParentPathPopulated
-	dMgr.absolutePath = dMgrIn.absolutePath
-	dMgr.isAbsolutePathPopulated = dMgrIn.isAbsolutePathPopulated
-	dMgr.doesAbsolutePathExist = dMgrIn.doesAbsolutePathExist
-	dMgr.isAbsolutePathDifferentFromPath = dMgrIn.isAbsolutePathDifferentFromPath
-	dMgr.directoryName = dMgrIn.directoryName
-	dMgr.volumeName = dMgrIn.volumeName
-	dMgr.isVolumePopulated = dMgrIn.isVolumePopulated
-	dMgr.actualDirFileInfo = dMgrIn.actualDirFileInfo.CopyOut()
+	if sourceDMgrIn == nil {
+		sourceDMgrIn = &DirMgr{}
+	}
+
+	destinationDMgr.isInitialized = sourceDMgrIn.isInitialized
+	destinationDMgr.originalPath = sourceDMgrIn.originalPath
+	destinationDMgr.path = sourceDMgrIn.path
+	destinationDMgr.isPathPopulated = sourceDMgrIn.isPathPopulated
+	destinationDMgr.doesPathExist = sourceDMgrIn.doesPathExist
+	destinationDMgr.parentPath = sourceDMgrIn.parentPath
+	destinationDMgr.isParentPathPopulated = sourceDMgrIn.isParentPathPopulated
+	destinationDMgr.absolutePath = sourceDMgrIn.absolutePath
+	destinationDMgr.isAbsolutePathPopulated = sourceDMgrIn.isAbsolutePathPopulated
+	destinationDMgr.doesAbsolutePathExist = sourceDMgrIn.doesAbsolutePathExist
+	destinationDMgr.isAbsolutePathDifferentFromPath = sourceDMgrIn.isAbsolutePathDifferentFromPath
+	destinationDMgr.directoryName = sourceDMgrIn.directoryName
+	destinationDMgr.volumeName = sourceDMgrIn.volumeName
+	destinationDMgr.isVolumePopulated = sourceDMgrIn.isVolumePopulated
+	destinationDMgr.actualDirFileInfo = sourceDMgrIn.actualDirFileInfo.CopyOut()
 
 }
 
