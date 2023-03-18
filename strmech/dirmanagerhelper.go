@@ -201,11 +201,19 @@ type dirMgrHelper struct {
 //		'sourceDMgr' which will be used in error messages
 //		returned by this method.
 //
+//		If this parameter is submitted as an empty
+//		string, a default value of "sourceDMgr" will be
+//		automatically applied.
+//
 //	targetDMgrLabel				string
 //
 //		The name or label associated with input parameter
 //		'targetDMgr' which will be used in error messages
 //		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "targetDMgr" will be
+//		automatically applied.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -635,8 +643,8 @@ func (dMgrHlpr *dirMgrHelper) copyIn(
 // deleteAllFilesInDirectory
 //
 // Helper method used by DirMgr. This method deletes ALL
-// files in the directory identified by input parameter
-// 'dMgr'.
+// files in the top level or parent directory identified
+// by input parameter 'dMgr'.
 //
 // ----------------------------------------------------------------
 //
@@ -666,6 +674,10 @@ func (dMgrHlpr *dirMgrHelper) copyIn(
 //		The name or label associated with input parameter
 //		'dMgr', which will be used in error messages
 //		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "dMgr" will be
+//		automatically applied.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -936,122 +948,6 @@ func (dMgrHlpr *dirMgrHelper) deleteAllFilesInDirectory(
 	}
 
 	return deleteDirStats, errs
-}
-
-// deleteAllSubDirectories - The directory identified by the input
-// parameter 'dMgr' instance is treated as the parent directory.
-// This method will then proceed to delete all directories and files
-// which are subsidiary to this parent directory. Essentially,
-// all subdirectories which are subordinate to the 'dMgr'
-// directory will be deleted along with their constituent files.
-func (dMgrHlpr *dirMgrHelper) deleteAllSubDirectories(
-	dMgr *DirMgr,
-	ePrefix string,
-	dMgrLabel string) (errs []error) {
-
-	ePrefixCurrMethod := "dirMgrHelper.doesDirectoryExist() "
-
-	errs = make([]error, 0, 300)
-
-	if len(ePrefix) == 0 {
-		ePrefix = ePrefixCurrMethod
-	} else {
-		ePrefix = ePrefix + "- " + ePrefixCurrMethod
-	}
-
-	dirPathDoesExist,
-		_,
-		err := dMgrHlpr.doesDirectoryExist(
-		dMgr,
-		PreProcPathCode.None(),
-		ePrefix,
-		dMgrLabel)
-
-	if err != nil {
-		errs = append(errs, err)
-		return errs
-	}
-
-	if !dirPathDoesExist {
-		err = fmt.Errorf(ePrefix+
-			"\nERROR: %v Directory Path DOES NOT EXIST!\n"+
-			"%v='%v'\n",
-			dMgrLabel, dMgrLabel,
-			dMgr.absolutePath)
-		errs = append(errs, err)
-		return errs
-	}
-
-	var err2, err3 error
-
-	dirMgrPtr, err := os.Open(dMgr.absolutePath)
-
-	if err != nil {
-
-		err2 = fmt.Errorf(ePrefix+
-			"Error return by os.Open(dMgr.absolutePath). "+
-			"dMgr.absolutePath='%v' Error='%v' ",
-			dMgr.absolutePath, err.Error())
-
-		errs = append(errs, err2)
-
-		return errs
-	}
-
-	var nameFileInfos []os.FileInfo
-	err3 = nil
-	osPathSeparatorStr := string(os.PathSeparator)
-
-	for err3 != io.EOF {
-
-		nameFileInfos, err3 = dirMgrPtr.Readdir(1000)
-
-		if err3 != nil && err3 != io.EOF {
-			_ = dirMgrPtr.Close()
-			err2 = fmt.Errorf(ePrefix+
-				"\nError returned by dirMgrPtr.Readdirnames(1000).\n"+
-				"dMgr.absolutePath='%v'\nError='%v'\n\n",
-				dMgr.absolutePath, err3.Error())
-
-			errs = append(errs, err2)
-		}
-
-		for _, nameFInfo := range nameFileInfos {
-
-			if nameFInfo.IsDir() {
-
-				err = os.RemoveAll(dMgr.absolutePath + osPathSeparatorStr + nameFInfo.Name())
-
-				if err != nil {
-					err2 = fmt.Errorf(ePrefix+
-						"\nError returned by os.RemoveAll(subDir)\n"+
-						"subDir='%v'\nError='%v'\n\n",
-						dMgr.absolutePath+osPathSeparatorStr+nameFInfo.Name(), err.Error())
-
-					errs = append(errs, err2)
-
-					continue
-				}
-			}
-		}
-	}
-
-	if dirMgrPtr != nil {
-
-		err = dirMgrPtr.Close()
-
-		if err != nil {
-			err2 = fmt.Errorf(ePrefix+
-				"\nError returned by %vPtr.Close().\n"+
-				"%v='%v'\nError='%v'\n",
-				dMgrLabel, dMgrLabel,
-				dMgr.absolutePath, err.Error())
-
-			errs = append(errs, err2)
-		}
-	}
-
-	return errs
 }
 
 // deleteDirectoryAll - This method will remove the directory identified by the

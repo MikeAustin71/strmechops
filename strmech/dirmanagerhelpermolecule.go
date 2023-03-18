@@ -12,6 +12,243 @@ type dirMgrHelperMolecule struct {
 	lock *sync.Mutex
 }
 
+// deleteAllSubDirectories
+//
+// The directory identified by the input parameter 'dMgr'
+// is treated as the parent directory.
+//
+// This method will proceed to delete all directories and
+// files which are subsidiary to the parent directory,
+// or top level directory, identified by 'dMgr'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// All subdirectories and files which are subordinate to
+// the parent or top level directory identified by 'dMgr'
+// will be deleted.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dMgr						*DirMgr
+//
+//		A pointer to an instance of DirMgr. All
+//		subdirectories and files subsidiary to the parent
+//		or top level directory identified by 'dMgr' will
+//		be deleted.
+//
+//	dMgrLabel					string
+//
+//		The name or label associated with input parameter
+//		'dMgr' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "dMgr" will be
+//		automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	errs						[]error
+//
+//		An array of error objects.
+//
+//		If this method completes successfully, the
+//		returned error array is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		This error array may contain multiple errors.
+func (dMgrHlprMolecule *dirMgrHelperMolecule) deleteAllSubDirectories(
+	dMgr *DirMgr,
+	dMgrLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	errs []error) {
+
+	if dMgrHlprMolecule.lock == nil {
+		dMgrHlprMolecule.lock = new(sync.Mutex)
+	}
+
+	dMgrHlprMolecule.lock.Lock()
+
+	defer dMgrHlprMolecule.lock.Unlock()
+
+	funcName := "dirMgrHelper.doesDirectoryExist() "
+
+	errs = make([]error, 0)
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return errs
+	}
+
+	if len(dMgrLabel) == 0 {
+
+		dMgrLabel = "dMgr"
+
+	}
+
+	dirPathDoesExist,
+		_,
+		err := new(dirMgrHelperAtom).doesDirectoryExist(
+		dMgr,
+		PreProcPathCode.None(),
+		dMgrLabel,
+		ePrefix)
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return errs
+	}
+
+	if !dirPathDoesExist {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: %v Directory Path DOES NOT EXIST!\n"+
+			"%v='%v'\n",
+			ePrefix.String(),
+			dMgrLabel,
+			dMgrLabel,
+			dMgr.absolutePath)
+
+		errs = append(errs, err)
+
+		return errs
+	}
+
+	var err2, err3 error
+
+	dirMgrPtr, err := os.Open(dMgr.absolutePath)
+
+	if err != nil {
+
+		err2 = fmt.Errorf("%v\n"+
+			"Error return by os.Open(dMgr.absolutePath)\n"+
+			"dMgr.absolutePath='%v'\n"+
+			"Error= \n%v\n",
+			ePrefix.String(),
+			dMgr.absolutePath,
+			err.Error())
+
+		errs = append(errs, err2)
+
+		return errs
+	}
+
+	var nameFileInfos []os.FileInfo
+
+	err3 = nil
+
+	osPathSeparatorStr := string(os.PathSeparator)
+
+	for err3 != io.EOF {
+
+		nameFileInfos, err3 = dirMgrPtr.Readdir(0)
+
+		if err3 != nil && err3 != io.EOF {
+
+			_ = dirMgrPtr.Close()
+
+			err2 = fmt.Errorf("%v\n"+
+				"Error returned by dirMgrPtr.Readdirnames(0).\n"+
+				"dMgr.absolutePath='%v'\n"+
+				"Error='%v'\n",
+				ePrefix.String(),
+				dMgr.absolutePath,
+				err3.Error())
+
+			errs = append(errs, err2)
+
+			return errs
+		}
+
+		for _, nameFInfo := range nameFileInfos {
+
+			if nameFInfo.IsDir() {
+
+				err = os.RemoveAll(dMgr.absolutePath + osPathSeparatorStr + nameFInfo.Name())
+
+				if err != nil {
+
+					err2 = fmt.Errorf("%v\n"+
+						"Error returned by os.RemoveAll(subDir)\n"+
+						"subDir='%v'\n"+
+						"Error= \n%v\n",
+						ePrefix.String(),
+						dMgr.absolutePath+osPathSeparatorStr+nameFInfo.Name(),
+						err.Error())
+
+					errs = append(errs, err2)
+
+					continue
+				}
+			}
+		}
+	}
+
+	if dirMgrPtr != nil {
+
+		err = dirMgrPtr.Close()
+
+		if err != nil {
+
+			err2 = fmt.Errorf("%v\n"+
+				"Error returned by %vPtr.Close().\n"+
+				"%v='%v'\n"+
+				"Error='%v'\n",
+				ePrefix.String(),
+				dMgrLabel,
+				dMgrLabel,
+				dMgr.absolutePath,
+				err.Error())
+
+			errs = append(errs, err2)
+		}
+	}
+
+	return errs
+}
+
 // lowLevelCopyFile
 //
 // This low level helper method is designed
@@ -20,9 +257,9 @@ type dirMgrHelperMolecule struct {
 // No validation or error checking is performed on the input
 // parameters.
 func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
-	src string,
+	srcFile string,
 	srcFInfo os.FileInfo,
-	dst string,
+	dstFile string,
 	srcLabel string,
 	dstLabel string,
 	errPrefDto *ePref.ErrPrefixDto) error {
@@ -50,7 +287,7 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 		return err
 	}
 
-	if len(src) == 0 {
+	if len(srcFile) == 0 {
 
 		return fmt.Errorf("%v\n"+
 			"Error: Input parameter %v is an empty string!\n",
@@ -58,12 +295,20 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 			srcLabel)
 	}
 
-	if len(dst) == 0 {
+	if len(srcLabel) == 0 {
+		srcLabel = "srcFile"
+	}
+
+	if len(dstFile) == 0 {
 
 		return fmt.Errorf("%v\n"+
 			"Error: Input parameter %v is an empty string!\n",
 			ePrefix.String(),
 			dstLabel)
+	}
+
+	if len(dstLabel) == 0 {
+		dstLabel = "dstFile"
 	}
 
 	if !srcFInfo.Mode().IsRegular() {
@@ -74,27 +319,27 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 			ePrefix.String(),
 			srcLabel,
 			srcLabel,
-			src)
+			srcFile)
 	}
 
 	// First, open the source file
-	inSrcPtr, err := os.Open(src)
+	inSrcPtr, err := os.Open(srcFile)
 
 	if err != nil {
 		return fmt.Errorf("%v\n"+
-			"Error returned from os.Open(src)\n"+
+			"Error returned from os.Open(srcFile)\n"+
 			"%v='%v'\n"+
 			"Error= \n%v\n",
 			ePrefix.String(),
 			srcLabel,
-			src,
+			srcFile,
 			err.Error())
 	}
 
 	// Next, 'Create' the destination file
 	// If the destination file previously exists,
 	// it will be truncated.
-	outDestPtr, err := os.Create(dst)
+	outDestPtr, err := os.Create(dstFile)
 
 	if err != nil {
 
@@ -106,7 +351,7 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 			"Error= \n%v\n",
 			ePrefix.String(),
 			dstLabel,
-			dst,
+			dstFile,
 			err.Error())
 	}
 
@@ -126,9 +371,9 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 			dstLabel,
 			srcLabel,
 			dstLabel,
-			dst,
+			dstFile,
 			srcLabel,
-			src,
+			srcFile,
 			err2.Error())
 
 		return err
@@ -147,7 +392,7 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 			"Error= \n%v\n",
 			ePrefix.String(),
 			dstLabel,
-			dst,
+			dstFile,
 			err.Error())
 
 		errs = append(errs, err2)
@@ -162,7 +407,7 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 			"inSrcPtr=source='%v'\n"+
 			"Error= \n%v\n",
 			ePrefix.String(),
-			src,
+			srcFile,
 			err.Error())
 
 		errs = append(errs, err2)
@@ -179,7 +424,7 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 			"outDestPtr=destination='%v'\n"+
 			"Error= \n%v\n",
 			ePrefix.String(),
-			dst,
+			dstFile,
 			err.Error())
 
 		errs = append(errs, err2)
@@ -199,7 +444,7 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 		dstFileInfo,
 		err = new(dirMgrHelperElectron).
 		lowLevelDoesDirectoryExist(
-			dst,
+			dstFile,
 			dstLabel,
 			ePrefix)
 
@@ -212,7 +457,7 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 			ePrefix.String(),
 			dstLabel,
 			dstLabel,
-			dst,
+			dstFile,
 			err.Error())
 	}
 
@@ -223,7 +468,7 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 			"Destination File = '%v' = '%v'\n",
 			ePrefix.String(),
 			dstLabel,
-			dst)
+			dstFile)
 
 		return err
 	}
@@ -241,9 +486,9 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 			srcFileSize,
 			bytesCopied,
 			srcLabel,
-			src,
+			srcFile,
 			dstLabel,
-			dst)
+			dstFile)
 
 		return err
 	}
@@ -262,9 +507,9 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 			srcFileSize,
 			dstFileInfo.Size(),
 			srcLabel,
-			src,
+			srcFile,
 			dstLabel,
-			dst)
+			dstFile)
 	}
 
 	return err
@@ -278,7 +523,9 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelMakeDir(
 	dMgr *DirMgr,
 	dMgrLabel string,
-	errPrefDto *ePref.ErrPrefixDto) (dirCreated bool, err error) {
+	errPrefDto *ePref.ErrPrefixDto) (
+	dirCreated bool,
+	err error) {
 
 	if dMgrHlprMolecule.lock == nil {
 		dMgrHlprMolecule.lock = new(sync.Mutex)
@@ -290,6 +537,8 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelMakeDir(
 
 	var ePrefix *ePref.ErrPrefixDto
 
+	dirCreated = false
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errPrefDto,
@@ -298,11 +547,21 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelMakeDir(
 		"")
 
 	if err != nil {
-		return false, err
+		return dirCreated, err
 	}
 
-	dirCreated = false
-	err = nil
+	if dMgr == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'dMgr' is a 'nil' pointer!\n",
+			ePrefix)
+
+		return dirCreated, err
+	}
+
+	if len(dMgrLabel) == 0 {
+		dMgrLabel = "dMgr"
+	}
 
 	dMgrHlprAtom := dirMgrHelperAtom{}
 
