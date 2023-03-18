@@ -829,7 +829,7 @@ func (dMgrHlpr *dirMgrHelper) deleteAllFilesInDirectory(
 
 	for !file2LoopIsDone {
 
-		nameFileInfos, err = dirPtr.Readdir(0)
+		nameFileInfos, err = dirPtr.Readdir(10000)
 
 		if err != nil && err == io.EOF {
 
@@ -843,7 +843,7 @@ func (dMgrHlpr *dirMgrHelper) deleteAllFilesInDirectory(
 		} else if err != nil {
 
 			err2 = fmt.Errorf("%v\n"+
-				"Error returned by dirPtr.Readdirnames(0).\n"+
+				"Error returned by dirPtr.Readdirnames(10000).\n"+
 				"%v.absolutePath='%v'\n"+
 				"Error= \n%v\n",
 				ePrefix.String(),
@@ -964,6 +964,58 @@ func (dMgrHlpr *dirMgrHelper) deleteAllFilesInDirectory(
 //	All files and directories, including the parent
 //	directory, identified by input parameter 'dMgr' will
 //	be deleted.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dMgr						*DirMgr
+//
+//		A pointer to an instance of DirMgr. The entire
+//		directory tree identified by this parameter will
+//		be deleted along with all the resident files.
+//
+//	dMgrLabel					string
+//
+//		The name or label associated with input parameter
+//		'dMgr' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "dMgr" will be
+//		automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (dMgrHlpr *dirMgrHelper) deleteDirectoryAll(
 	dMgr *DirMgr,
 	dMgrLabel string,
@@ -993,14 +1045,16 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryAll(
 		return err
 	}
 
+	dMgrHlprAtom := dirMgrHelperAtom{}
+
 	dirPathDoesExist,
 		_,
 		err :=
-		dMgrHlpr.doesDirectoryExist(
+		dMgrHlprAtom.doesDirectoryExist(
 			dMgr,
 			PreProcPathCode.None(),
-			ePrefix,
-			dMgrLabel)
+			dMgrLabel,
+			ePrefix)
 
 	if err != nil {
 		return err
@@ -1010,10 +1064,11 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryAll(
 		return nil
 	}
 
-	err = dMgrHlpr.lowLevelDeleteDirectoryAll(
-		dMgr,
-		ePrefix,
-		dMgrLabel)
+	err = new(dirMgrHelperMolecule).
+		lowLevelDeleteDirectoryAll(
+			dMgr,
+			dMgrLabel,
+			ePrefix)
 
 	if err != nil {
 		return err
@@ -1022,26 +1077,27 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryAll(
 	dirPathDoesExist,
 		_,
 		err =
-		dMgrHlpr.doesDirectoryExist(
+		dMgrHlprAtom.doesDirectoryExist(
 			dMgr,
 			PreProcPathCode.None(),
-			ePrefix,
-			dMgrLabel)
+			dMgrLabel,
+			ePrefix.XCpy("dMgr"))
 
 	if err != nil {
-		return fmt.Errorf(ePrefix+
-			"\nERROR: After attempted directory deletion, a non-path error was returned.\n"+
-			"Error='%v'\n", err.Error())
+		return err
 	}
 
 	if dirPathDoesExist {
-		return fmt.Errorf(ePrefix+
-			"\nError: FAILED TO DELETE DIRECTORY!!\n"+
+
+		err = fmt.Errorf("%v\n"+
+			"Error: FAILED TO DELETE DIRECTORY!!\n"+
 			"Directory Path still exists!\n"+
-			"Directory Path='%v'\n", dMgr.absolutePath)
+			"Directory Path= '%v'\n",
+			ePrefix.String(),
+			dMgr.absolutePath)
 	}
 
-	return nil
+	return err
 }
 
 // deleteDirectoryTreeInfo - Helper method similar to
