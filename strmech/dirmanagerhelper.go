@@ -2705,40 +2705,80 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 	return deleteDirStats, errs
 }
 
-// equal - Compares two DirMgr objects to determine if
-// they are equal.
+// equal
+//
+// Compares two DirMgr objects to determine if they are
+// equal is all respects.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dMgr1						*DirMgr
+//
+//		A pointer to an instance of DirMgr. If the
+//		internal member data values are equal to the
+//		corresponding internal member data values in
+//		input parameter 'dMgr2', this method will
+//		return a boolean value of 'true'.
+//
+//	dMgr2						*DirMgr
+//
+//		A pointer to an instance of DirMgr. If the
+//		internal member data values are equal to the
+//		corresponding internal member data values in
+//		input parameter 'dMgr1', this method will
+//		return a boolean value of 'true'.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If the internal member data values in input
+//		parameters 'dMgr1' and 'dMgr2' are equal in all
+//		respects, this parameter returns a value of
+//		'true'.
 func (dMgrHlpr *dirMgrHelper) equal(
-	dMgr *DirMgr,
+	dMgr1 *DirMgr,
 	dMgr2 *DirMgr) bool {
 
-	if dMgr == nil || dMgr2 == nil {
+	if dMgrHlpr.lock == nil {
+		dMgrHlpr.lock = new(sync.Mutex)
+	}
+
+	dMgrHlpr.lock.Lock()
+
+	defer dMgrHlpr.lock.Unlock()
+
+	if dMgr1 == nil || dMgr2 == nil {
 		return false
 	}
 
-	if dMgr.isInitialized != dMgr2.isInitialized ||
-		dMgr.originalPath != dMgr2.originalPath ||
-		dMgr.path != dMgr2.path ||
-		dMgr.isPathPopulated != dMgr2.isPathPopulated ||
-		dMgr.doesPathExist != dMgr2.doesPathExist ||
-		dMgr.parentPath != dMgr2.parentPath ||
-		dMgr.isParentPathPopulated != dMgr2.isParentPathPopulated ||
-		dMgr.absolutePath != dMgr2.absolutePath ||
-		dMgr.isAbsolutePathPopulated != dMgr2.isAbsolutePathPopulated ||
-		dMgr.doesAbsolutePathExist != dMgr2.doesAbsolutePathExist ||
-		dMgr.isAbsolutePathDifferentFromPath != dMgr2.isAbsolutePathDifferentFromPath ||
-		dMgr.directoryName != dMgr2.directoryName ||
-		dMgr.volumeName != dMgr2.volumeName ||
-		dMgr.isVolumePopulated != dMgr2.isVolumePopulated {
+	if dMgr1.isInitialized != dMgr2.isInitialized ||
+		dMgr1.originalPath != dMgr2.originalPath ||
+		dMgr1.path != dMgr2.path ||
+		dMgr1.isPathPopulated != dMgr2.isPathPopulated ||
+		dMgr1.doesPathExist != dMgr2.doesPathExist ||
+		dMgr1.parentPath != dMgr2.parentPath ||
+		dMgr1.isParentPathPopulated != dMgr2.isParentPathPopulated ||
+		dMgr1.absolutePath != dMgr2.absolutePath ||
+		dMgr1.isAbsolutePathPopulated != dMgr2.isAbsolutePathPopulated ||
+		dMgr1.doesAbsolutePathExist != dMgr2.doesAbsolutePathExist ||
+		dMgr1.isAbsolutePathDifferentFromPath != dMgr2.isAbsolutePathDifferentFromPath ||
+		dMgr1.directoryName != dMgr2.directoryName ||
+		dMgr1.volumeName != dMgr2.volumeName ||
+		dMgr1.isVolumePopulated != dMgr2.isVolumePopulated {
 
 		return false
 	}
 
-	if !dMgr.actualDirFileInfo.Equal(&dMgr2.actualDirFileInfo) {
+	if !dMgr1.actualDirFileInfo.Equal(&dMgr2.actualDirFileInfo) {
 		return false
 	}
 
 	return true
-
 }
 
 // EqualAbsPaths - compares the absolute paths for the input
