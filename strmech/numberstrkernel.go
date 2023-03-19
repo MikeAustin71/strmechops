@@ -1100,8 +1100,11 @@ func (numStrKernel *NumberStrKernel) DeleteLeadingTrailingIntegerChars(
 	return err
 }
 
-// Empty - Resets all internal member variables for the current
-// instance of NumberStrKernel to their initial or zero values.
+// Empty
+//
+// Resets all internal member variables for the current
+// instance of NumberStrKernel to their initial or zero
+// values.
 //
 // ----------------------------------------------------------------
 //

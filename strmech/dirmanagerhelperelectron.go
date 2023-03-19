@@ -12,6 +12,127 @@ type dirMgrHelperElectron struct {
 	lock *sync.Mutex
 }
 
+// empty
+//
+// Resets all internal member variables for the current
+// instance of DirMgr to their initial or zero
+// values.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// This method will delete all pre-existing internal member
+// variable data values in the current instance of DirMgr.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dMgr							*DirMgr
+//
+//		A pointer to an instance of DirMgr. This method
+//		will delete and reset all member variable data
+//		values to their initial or zero states.
+//
+//	dMgrLabel						string
+//
+//		The name or label associated with input parameter
+//		'dMgr' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "dMgr" will be
+//		automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (dMgrHlprElectron *dirMgrHelperElectron) empty(
+	dMgr *DirMgr,
+	dMgrLabel string,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if dMgrHlprElectron.lock == nil {
+		dMgrHlprElectron.lock = new(sync.Mutex)
+	}
+
+	dMgrHlprElectron.lock.Lock()
+
+	defer dMgrHlprElectron.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"dirMgrHelperElectron.empty()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if dMgr == nil {
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' pointer is 'nil'!\n",
+			ePrefix.String(),
+			dMgrLabel)
+	}
+
+	if len(dMgrLabel) == 0 {
+		dMgrLabel = "dMgr"
+	}
+
+	dMgr.isInitialized = false
+	dMgr.originalPath = ""
+	dMgr.path = ""
+	dMgr.isPathPopulated = false
+	dMgr.doesPathExist = false
+	dMgr.parentPath = ""
+	dMgr.isParentPathPopulated = false
+	dMgr.absolutePath = ""
+	dMgr.isAbsolutePathPopulated = false
+	dMgr.doesAbsolutePathExist = false
+	dMgr.isAbsolutePathDifferentFromPath = false
+	dMgr.directoryName = ""
+	dMgr.volumeName = ""
+	dMgr.isVolumePopulated = false
+	dMgr.actualDirFileInfo = FileInfoPlus{}
+
+	return err
+}
+
 // lowLevelDoesDirectoryExist
 //
 // This method tests for the existence of directory path.

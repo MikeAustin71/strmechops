@@ -2705,53 +2705,6 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 	return deleteDirStats, errs
 }
 
-func (dMgrHlpr *dirMgrHelper) empty(
-	dMgr *DirMgr,
-	ePrefix string,
-	dMgrLabel string) error {
-
-	ePrefixCurrMethod := "dirMgrHelper.empty() "
-
-	if len(ePrefix) == 0 {
-		ePrefix = ePrefixCurrMethod
-	} else {
-		ePrefix = ePrefix + "- " + ePrefixCurrMethod
-	}
-
-	if len(dMgrLabel) == 0 {
-		dMgrLabel = "dMgr"
-	}
-
-	if dMgr == nil {
-		return fmt.Errorf("%v\n"+
-			"Error: Input parameter '%v' pointer is 'nil'!\n",
-			ePrefix,
-			dMgrLabel)
-	}
-
-	var err error
-
-	err = nil
-
-	dMgr.isInitialized = false
-	dMgr.originalPath = ""
-	dMgr.path = ""
-	dMgr.isPathPopulated = false
-	dMgr.doesPathExist = false
-	dMgr.parentPath = ""
-	dMgr.isParentPathPopulated = false
-	dMgr.absolutePath = ""
-	dMgr.isAbsolutePathPopulated = false
-	dMgr.doesAbsolutePathExist = false
-	dMgr.isAbsolutePathDifferentFromPath = false
-	dMgr.directoryName = ""
-	dMgr.volumeName = ""
-	dMgr.isVolumePopulated = false
-	dMgr.actualDirFileInfo = FileInfoPlus{}
-
-	return err
-}
-
 // equal - Compares two DirMgr objects to determine if
 // they are equal.
 func (dMgrHlpr *dirMgrHelper) equal(
