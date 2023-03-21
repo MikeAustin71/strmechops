@@ -287,8 +287,6 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 
 	var err, err2, err3 error
 
-	errs = make([]error, 0)
-
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
@@ -2997,37 +2995,344 @@ func (dMgrHlpr *dirMgrHelper) equalPaths(
 	return true
 }
 
-// executeDirectoryFileOps - Performs a file operation on specified 'selected' files
-// in the current directory ONLY. This function does NOT perform operations on the
-// sub directories (a.k.a. the directory tree).
+// executeDirectoryFileOps
+//
+// Performs a one or more file operations on selected
+// files in the parent or top level directory specified
+// by the DirMgr input parameter 'sourceDMgr'.
+//
+// This method does NOT perform operations on
+// subdirectories (a.k.a. the directory tree or child
+// directories) of the 'sourceDMgr' instance.
+//
+// The files selected for this operation are determined
+// by the file selection criteria configured by the
+// user.
+//
+// The type of file operation performed is likewise
+// configured by the user through input parameter,
+// 'fileOps'.
+//
+// This method is designed to perform file operations on
+// two directories; an input or source directory supplied
+// by input parameter 'sourceDMgr', and an output or
+// target directory specified by input parameter
+// 'targetBaseDir'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Depending on the type of File Operation code
+//	submitted as an input parameter, this method may be
+//	used to move, delete or copy files contained in the
+//	top level or parent directory specified by the
+//	DirMgr input parameter 'sourceDMgr'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	sourceDMgr					*DirMgr
+//
+//		A pointer to an instance of DirMgr. This instance
+//		is used as the source for file operations
+//		performed on the 'sourceDMgr' top level or parent
+//		directory path.
+//
+//	fileSelectCriteria			FileSelectionCriteria
+//
+//	  This input parameter should be configured with the
+//	  desired file selection criteria. Files matching
+//	  this criteria will be subject to the file
+//	  operations specified by input parameter, 'fileOps'.
+//
+//		type FileSelectionCriteria struct {
+//		 FileNamePatterns    []string
+//			An array of strings containing File Name Patterns
+//
+//		 FilesOlderThan      time.Time
+//		 	Match files with older modification date times
+//
+//		 FilesNewerThan      time.Time
+//		 	Match files with newer modification date times
+//
+//		 SelectByFileMode    FilePermissionConfig
+//		 	Match file mode (os.FileMode).
+//
+//		 SelectCriterionModeFileSelectCriterionMode
+//		 	Specifies 'AND' or 'OR' selection mode
+//		}
+//
+//	  The FileSelectionCriteria type allows for
+//	  configuration of single or multiple file selection
+//	  criterion. The 'SelectCriterionMode' can be used to
+//	  specify whether the file must match all, or any one,
+//	  of the active file selection criterion.
+//
+//	  Elements of the FileSelectionCriteria are described
+//	  below:
+//
+//	  FileNamePatterns		[]string
+//	  	An array of strings which may define one or more
+//	  	search patterns. If a file name matches any one
+//	  	of the search pattern strings, it is deemed to be
+//	  	a 'match' for the search pattern criterion.
+//
+//		Example Patterns:
+//			FileNamePatterns = []string{"*.log"}
+//			FileNamePatterns = []string{"current*.txt"}
+//			FileNamePatterns = []string{"*.txt", "*.log"}
+//
+//		If this string array has zero length or if
+//		all the strings are empty strings, then this
+//		file search criterion is considered 'Inactive'
+//		or 'Not Set'.
+//
+//
+//		FilesOlderThan		time.Time
+//			This date time type is compared to file
+//			modification date times in order to determine
+//			whether the file is older than the
+//			'FilesOlderThan' file selection criterion. If
+//			the file modification date time is older than
+//			the 'FilesOlderThan' date time, that file is
+//			considered a 'match' for this file selection
+//			criterion.
+//
+//			If the value of 'FilesOlderThan' is set to
+//			time zero, the default value for type
+//			time.Time{}, then this file selection
+//			criterion is considered to be 'Inactive' or
+//			'Not Set'.
+//
+//		FilesNewerThan      time.Time
+//			This date time type is compared to the file
+//			modification date time in order to determine
+//			whether the file is newer than the
+//			'FilesNewerThan' file selection criterion. If
+//			the file modification date time is newer than
+//			the 'FilesNewerThan' date time, that file is
+//			considered a 'match' for this file selection
+//			criterion.
+//
+//			If the value of 'FilesNewerThan' is set to
+//			time zero, the default value for type
+//			time.Time{}, then this file selection
+//			criterion is considered to be 'Inactive' or
+//			'Not Set'.
+//
+//	fileOps						[]FileOperationCode
+//
+//		An array of file operations to be performed on
+//		each selected file. Selected files are identified
+//		by matching the file selection criteria specified
+//		by input parameter, 'fileSelectCriteria'. See above.
+//
+//		The FileOperationCode type consists of the following
+//		constants.
+//
+//		FileOperationCode(0).MoveSourceFileToDestinationFile() FileOperationCode = iota
+//		  Moves the source file to the destination file and
+//		  then deletes the original source file
+//
+//		FileOperationCode(0).DeleteDestinationFile()
+//		  Deletes the Destination file if it exists
+//
+//		FileOperationCode(0).DeleteSourceFile()
+//		  Deletes the Source file if it exists
+//
+//		FileOperationCode(0).DeleteSourceAndDestinationFiles
+//		  Deletes both the Source and Destination files
+//		  if they exist.
+//
+//		FileOperationCode(0).CopySourceToDestinationByHardLinkByIo()
+//		  Copies the Source File to the Destination
+//		  using two copy attempts. The first copy is
+//		  by Hard Link. If the first copy attempt fails,
+//		  a second copy attempt is initiated/ by creating
+//		  a new file and copying the contents by 'io.Copy'.
+//		  An error is returned only if both copy attempts
+//		  fail. The source file is unaffected.
+//
+//		  See: https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
+//
+//		FileOperationCode(0).CopySourceToDestinationByIoByHardLink()
+//		  Copies the Source File to the Destination
+//		  using two copy attempts. The first copy is
+//		  by 'io.Copy' which creates a new file and copies
+//		  the contents to the new file. If the first attempt
+//		  fails, a second copy attempt is initiated using
+//		  'copy by hard link'. An error is returned only
+//		  if both copy attempts fail. The source file is
+//		  unaffected.
+//
+//		  See: https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
+//
+//		FileOperationCode(0).CopySourceToDestinationByHardLink()
+//		  Copies the Source File to the Destination
+//		  using one copy mode. The only copy attempt
+//		  utilizes 'Copy by Hard Link'. If this fails
+//		  an error is returned.  The source file is
+//		  unaffected.
+//
+//		FileOperationCode(0).CopySourceToDestinationByIo()
+//		  Copies the Source File to the Destination
+//		  using only one copy mode. The only copy
+//		  attempt is initiated using 'Copy by IO' or
+//		  'io.Copy'.  If this fails an error is returned.
+//		  The source file is unaffected.
+//
+//		FileOperationCode(0).CreateSourceDir()
+//		  Creates the Source Directory
+//
+//		FileOperationCode(0).CreateSourceDirAndFile()
+//		  Creates the Source Directory and File
+//
+//		FileOperationCode(0).CreateSourceFile()
+//		  Creates the Source File
+//
+//		FileOperationCode(0).CreateDestinationDir()
+//		  Creates the Destination Directory
+//
+//		FileOperationCode(0).CreateDestinationDirAndFile()
+//		  Creates the Destination Directory and File
+//
+//		FileOperationCode(0).CreateDestinationFile()
+//		  Creates the Destination File
+//
+//	targetBaseDir				*DirMgr
+//
+//		A pointer to an instance of DirMgr. The top level
+//		or parent directory of the DirMgr instance serves
+//		as the destination or target for file operations
+//		performed on the parent directory of input
+//		parameter 'sourceDMgr'.
+//
+//		If the parent or top level directory specified by
+//		'targetBaseDir' does not exist on disk, an error
+//		will be returned.
+//
+//	sourceDMgrLabel				string
+//
+//		The name or label associated with input parameter
+//		'sourceDMgr' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "sourceDMgr" will be
+//		automatically applied.
+//
+//	targetDMgrLabel				string
+//
+//		The name or label associated with input parameter
+//		'targetBaseDir' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "targetDMgrLabel" will
+//		be automatically applied.
+//
+//	fileSelectLabel				string
+//
+//		The name or label used to describe the type of
+//		files selected for file operations. This label
+//		will be used in error messages returned by this
+//		method.
+//
+//		Example:
+//			fileSelectLabel = "Files For Deletion"
+//
+//		If this parameter is submitted as an empty
+//		string, it will be automatically defaulted to a
+//		value of "Target Files".
+//
+//	fileOpsLabel				string
+//
+//		The name or label used to describe the file
+//		operations being performed. This label will be
+//		used in error messages returned by this method.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	errs						[]error
+//
+//		An array of error objects.
+//
+//		If this method completes successfully, the
+//		returned error array is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		This error array may contain multiple errors.
 func (dMgrHlpr *dirMgrHelper) executeDirectoryFileOps(
-	dMgr *DirMgr,
+	sourceDMgr *DirMgr,
 	fileSelectCriteria FileSelectionCriteria,
 	fileOps []FileOperationCode,
 	targetBaseDir *DirMgr,
-	ePrefix string,
-	dMgrLabel string,
-	targetDirLabel string,
+	sourceDMgrLabel string,
+	targetDMgrLabel string,
 	fileSelectLabel string,
-	fileOpsLabel string) (errs []error) {
+	fileOpsLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (errs []error) {
 
-	ePrefixCurrMethod := "dirMgrHelper.executeDirectoryFileOps() "
-
-	errs = make([]error, 0, 300)
-
-	if len(ePrefix) == 0 {
-		ePrefix = ePrefixCurrMethod
-	} else {
-		ePrefix = ePrefix + "- " + ePrefixCurrMethod
+	if dMgrHlpr.lock == nil {
+		dMgrHlpr.lock = new(sync.Mutex)
 	}
+
+	dMgrHlpr.lock.Lock()
+
+	defer dMgrHlpr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"dirMgrHelper.executeDirectoryFileOps()",
+		"")
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return errs
+	}
+
+	dMgrHlprAtom := dirMgrHelperAtom{}
 
 	dMgrPathDoesExist,
 		_,
-		err := dMgrHlpr.doesDirectoryExist(
-		dMgr,
+		err := dMgrHlprAtom.doesDirectoryExist(
+		sourceDMgr,
 		PreProcPathCode.None(),
-		ePrefix,
-		dMgrLabel)
+		sourceDMgrLabel,
+		ePrefix)
 
 	if err != nil {
 		errs = append(errs, err)
@@ -3035,11 +3340,13 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryFileOps(
 	}
 
 	if !dMgrPathDoesExist {
-		err = fmt.Errorf(ePrefix+
+		err = fmt.Errorf("%v\n"+
 			"\nERROR: %v Directory Path DOES NOT EXIST!\n"+
 			"%v='%v'\n",
-			dMgrLabel, dMgrLabel,
-			dMgr.absolutePath)
+			ePrefix.String(),
+			sourceDMgrLabel,
+			sourceDMgrLabel,
+			sourceDMgr.absolutePath)
 
 		errs = append(errs, err)
 
@@ -3048,54 +3355,73 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryFileOps(
 
 	_,
 		_,
-		err2 := dMgrHlpr.doesDirectoryExist(
+		err = dMgrHlprAtom.doesDirectoryExist(
 		targetBaseDir,
 		PreProcPathCode.None(),
-		ePrefix,
-		targetDirLabel)
+		targetDMgrLabel,
+		ePrefix)
 
-	if err2 != nil {
-		errs = append(errs, err2)
+	if err != nil {
+		errs = append(errs, err)
 		return errs
 	}
 
 	if len(fileOps) == 0 {
 
-		err2 = fmt.Errorf(ePrefix+
-			"\nError: The input parameter '%v' is a ZERO LENGTH ARRAY!\n",
+		err = fmt.Errorf("%v\n"+
+			"Error: The input parameter '%v' is a ZERO LENGTH ARRAY!\n",
+			ePrefix.String(),
 			fileOpsLabel)
 
-		errs = append(errs, err2)
+		errs = append(errs, err)
 		return errs
 	}
 
-	dirPtr, err := os.Open(dMgr.absolutePath)
+	var dirPtr *os.File
+	var err2 error
 
-	if err != nil {
-		err2 := fmt.Errorf(ePrefix+
-			"\nError return by os.Open(%v.absolutePath).\n"+
-			"%v.absolutePath='%v'\nError='%v'\n",
-			dMgrLabel, dMgrLabel,
-			dMgr.absolutePath, err.Error())
+	dirPtr,
+		err2 = os.Open(sourceDMgr.absolutePath)
 
-		errs = append(errs, err2)
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error return by os.Open(%v.absolutePath).\n"+
+			"%v.absolutePath='%v'\n"+
+			"Error= \n%v\n",
+			ePrefix.String(),
+			sourceDMgrLabel,
+			sourceDMgrLabel,
+			sourceDMgr.absolutePath,
+			err2.Error())
+
+		errs = append(errs, err)
+
 		return errs
 	}
 
-	nameFileInfos, err := dirPtr.Readdir(-1)
+	var nameFileInfos []os.FileInfo
 
-	if err != nil {
+	nameFileInfos,
+		err2 = dirPtr.Readdir(-1)
+
+	if err2 != nil {
+
 		if dirPtr != nil {
 			_ = dirPtr.Close()
 		}
 
-		err2 = fmt.Errorf(ePrefix+
-			"\nError returned by dirPtr.Readdirnames(-1).\n"+
-			"%v.absolutePath='%v'\nError='%v'\n",
-			dMgrLabel,
-			dMgr.absolutePath, err.Error())
+		err = fmt.Errorf("%v\n"+
+			"Error returned by dirPtr.Readdirnames(-1).\n"+
+			"%v.absolutePath='%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			sourceDMgrLabel,
+			sourceDMgr.absolutePath,
+			err2.Error())
 
-		errs = append(errs, err2)
+		errs = append(errs, err)
+
 		return errs
 	}
 
@@ -3115,26 +3441,32 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryFileOps(
 		// This is not a directory. It is a file.
 		// Determine if it matches the find file criteria.
 		isMatch,
-			err,
+			err2,
 			_ = fh.FilterFileName(
 			nameFInfo,
 			fileSelectCriteria,
 			ePrefix)
 
-		if err != nil {
+		if err2 != nil {
 
 			if dirPtr != nil {
 				_ = dirPtr.Close()
 			}
 
-			err2 = fmt.Errorf(ePrefix+
-				"\nError returned by FileHelper{}.FilterFileName(nameFInfo, %v).\n"+
-				"%v Directory Searched='%v'\nfileName='%v'\nError='%v'\n",
+			err = fmt.Errorf("%v\n"+
+				"Error returned by FileHelper{}.FilterFileName(nameFInfo, %v).\n"+
+				"%v Directory Searched='%v'\n"+
+				"fileName='%v'\n"+
+				"Error='%v'\n",
+				ePrefix.String(),
 				fileSelectLabel,
-				dMgrLabel,
-				dMgr.absolutePath, nameFInfo.Name(), err.Error())
+				sourceDMgrLabel,
+				sourceDMgr.absolutePath,
+				nameFInfo.Name(),
+				err2.Error())
 
-			errs = append(errs, err2)
+			errs = append(errs, err)
+
 			return errs
 		}
 
@@ -3147,47 +3479,58 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryFileOps(
 		// Must be a match - this is a 'selected' file!
 		srcFileNameExt = nameFInfo.Name()
 
-		fileOp, err = FileOps{}.NewByDirStrsAndFileNameExtStrs(
-			dMgr.absolutePath,
+		fileOp,
+			err2 = FileOps{}.NewByDirStrsAndFileNameExtStrs(
+			sourceDMgr.absolutePath,
 			srcFileNameExt,
 			targetBaseDir.absolutePath,
 			srcFileNameExt)
 
-		if err != nil {
+		if err2 != nil {
 
 			if dirPtr != nil {
 				_ = dirPtr.Close()
 			}
 
-			err2 = fmt.Errorf(ePrefix+
-				"\nError returned by FileOps{}.NewByDirStrsAndFileNameExtStrs()\n"+
-				"%v Source Path='%v'\nsrcFileNameExt='%v'\n"+
-				"%v Destination Directory='%v'\nDestination File='%v'\nError='%v'\n",
-				dMgrLabel,
-				dMgr.absolutePath,
+			err = fmt.Errorf("%v\n"+
+				"Error returned by FileOps{}.NewByDirStrsAndFileNameExtStrs()\n"+
+				"%v Source Path='%v'\n"+
+				"srcFileNameExt='%v'\n"+
+				"%v Destination Directory='%v'\n"+
+				"Destination File='%v'\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				sourceDMgrLabel,
+				sourceDMgr.absolutePath,
 				srcFileNameExt,
-				targetDirLabel,
+				targetDMgrLabel,
 				targetBaseDir.absolutePath,
 				srcFileNameExt,
-				err.Error())
+				err2.Error())
 
 			errs = append(errs, err2)
+
 			return errs
 		}
 
 		for i := 0; i < len(fileOps); i++ {
 
-			err = fileOp.ExecuteFileOperation(fileOps[i])
+			err2 = fileOp.ExecuteFileOperation(fileOps[i])
 
-			if err != nil {
-				err2 = fmt.Errorf(ePrefix+
-					"\nError returned by fileOp.ExecuteFileOperation(fileOps[%v]). "+
-					"FileOps='%v'\nError='%v'\n\n",
-					i, fileOps[i].String(), err.Error())
+			if err2 != nil {
+
+				err = fmt.Errorf("%v\n"+
+					"Error returned by fileOp.ExecuteFileOperation(fileOps[%v])\n"+
+					"FileOps='%v'\n"+
+					"Error= \n%v\n",
+					ePrefix.String(),
+					i,
+					fileOps[i].String(),
+					err2.Error())
 
 				// Store the error and continue processing
 				// file operations.
-				errs = append(errs, err2)
+				errs = append(errs, err)
 			}
 		}
 
@@ -3197,14 +3540,17 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryFileOps(
 
 	if dirPtr != nil {
 
-		err = dirPtr.Close()
+		err2 = dirPtr.Close()
 
-		if err != nil {
-			err2 = fmt.Errorf(ePrefix+
-				"\nError returned by dirPtr.Close().\n"+
-				"Error='%v'\n", err.Error())
+		if err2 != nil {
 
-			errs = append(errs, err2)
+			err = fmt.Errorf("%v\n"+
+				"Error returned by dirPtr.Close().\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				err.Error())
+
+			errs = append(errs, err)
 		}
 	}
 

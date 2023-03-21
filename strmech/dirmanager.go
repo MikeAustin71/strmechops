@@ -2023,84 +2023,84 @@ func (dMgr *DirMgr) EqualPaths(dMgr2 *DirMgr) bool {
 //	           the search operation will be selected and returned as
 //	           'Found Files'.
 //
+//	fileOps []FileOperationCode
 //
-//	fileOps []FileOperationCode - An array of file operations to be performed
-//	                              on each selected file. Selected files are
-//	                              identified by matching the file selection
-//	                              criteria specified by input parameter,
-//	                              'fileSelectCriteria'. See above.
+//		An array of file operations to be performed on
+//		each selected file. Selected files are identified
+//		by matching the file selection criteria specified
+//		by input parameter, 'fileSelectCriteria'. See above.
 //
-//	        The FileOperationCode type consists of the following
-//	        constants.
+//		The FileOperationCode type consists of the following
+//		constants.
 //
-//	        FileOperationCode(0).MoveSourceFileToDestinationFile() FileOperationCode = iota
-//	          Moves the source file to the destination file and
-//	          then deletes the original source file
+//		FileOperationCode(0).MoveSourceFileToDestinationFile() FileOperationCode = iota
+//		  Moves the source file to the destination file and
+//		  then deletes the original source file
 //
-//	        FileOperationCode(0).DeleteDestinationFile()
-//	          Deletes the Destination file if it exists
+//		FileOperationCode(0).DeleteDestinationFile()
+//		  Deletes the Destination file if it exists
 //
-//	        FileOperationCode(0).DeleteSourceFile()
-//	          Deletes the Source file if it exists
+//		FileOperationCode(0).DeleteSourceFile()
+//		  Deletes the Source file if it exists
 //
-//	        FileOperationCode(0).DeleteSourceAndDestinationFiles
-//	          Deletes both the Source and Destination files
-//	          if they exist.
+//		FileOperationCode(0).DeleteSourceAndDestinationFiles
+//		  Deletes both the Source and Destination files
+//		  if they exist.
 //
-//	        FileOperationCode(0).CopySourceToDestinationByHardLinkByIo()
-//	          Copies the Source File to the Destination
-//	          using two copy attempts. The first copy is
-//	          by Hard Link. If the first copy attempt fails,
-//	          a second copy attempt is initiated/ by creating
-//	          a new file and copying the contents by 'io.Copy'.
-//	          An error is returned only if both copy attempts
-//	          fail. The source file is unaffected.
+//		FileOperationCode(0).CopySourceToDestinationByHardLinkByIo()
+//		  Copies the Source File to the Destination
+//		  using two copy attempts. The first copy is
+//		  by Hard Link. If the first copy attempt fails,
+//		  a second copy attempt is initiated/ by creating
+//		  a new file and copying the contents by 'io.Copy'.
+//		  An error is returned only if both copy attempts
+//		  fail. The source file is unaffected.
 //
-//	          See: https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
+//		  See: https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
 //
-//	        FileOperationCode(0).CopySourceToDestinationByIoByHardLink()
-//	          Copies the Source File to the Destination
-//	          using two copy attempts. The first copy is
-//	          by 'io.Copy' which creates a new file and copies
-//	          the contents to the new file. If the first attempt
-//	          fails, a second copy attempt is initiated using
-//	          'copy by hard link'. An error is returned only
-//	          if both copy attempts fail. The source file is
-//	          unaffected.
+//		FileOperationCode(0).CopySourceToDestinationByIoByHardLink()
+//		  Copies the Source File to the Destination
+//		  using two copy attempts. The first copy is
+//		  by 'io.Copy' which creates a new file and copies
+//		  the contents to the new file. If the first attempt
+//		  fails, a second copy attempt is initiated using
+//		  'copy by hard link'. An error is returned only
+//		  if both copy attempts fail. The source file is
+//		  unaffected.
 //
-//	          See: https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
+//		  See: https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
 //
-//	        FileOperationCode(0).CopySourceToDestinationByHardLink()
-//	          Copies the Source File to the Destination
-//	          using one copy mode. The only copy attempt
-//	          utilizes 'Copy by Hard Link'. If this fails
-//	          an error is returned.  The source file is
-//	          unaffected.
+//		FileOperationCode(0).CopySourceToDestinationByHardLink()
+//		  Copies the Source File to the Destination
+//		  using one copy mode. The only copy attempt
+//		  utilizes 'Copy by Hard Link'. If this fails
+//		  an error is returned.  The source file is
+//		  unaffected.
 //
-//	        FileOperationCode(0).CopySourceToDestinationByIo()
-//	          Copies the Source File to the Destination
-//	          using only one copy mode. The only copy
-//	          attempt is initiated using 'Copy by IO' or
-//	          'io.Copy'.  If this fails an error is returned.
-//	          The source file is unaffected.
+//		FileOperationCode(0).CopySourceToDestinationByIo()
+//		  Copies the Source File to the Destination
+//		  using only one copy mode. The only copy
+//		  attempt is initiated using 'Copy by IO' or
+//		  'io.Copy'.  If this fails an error is returned.
+//		  The source file is unaffected.
 //
-//	        FileOperationCode(0).CreateSourceDir()
-//	          Creates the Source Directory
+//		FileOperationCode(0).CreateSourceDir()
+//		  Creates the Source Directory
 //
-//	        FileOperationCode(0).CreateSourceDirAndFile()
-//	          Creates the Source Directory and File
+//		FileOperationCode(0).CreateSourceDirAndFile()
+//		  Creates the Source Directory and File
 //
-//	        FileOperationCode(0).CreateSourceFile()
-//	          Creates the Source File
+//		FileOperationCode(0).CreateSourceFile()
+//		  Creates the Source File
 //
-//	        FileOperationCode(0).CreateDestinationDir()
-//	          Creates the Destination Directory
+//		FileOperationCode(0).CreateDestinationDir()
+//		  Creates the Destination Directory
 //
-//	        FileOperationCode(0).CreateDestinationDirAndFile()
-//	          Creates the Destination Directory and File
+//		FileOperationCode(0).CreateDestinationDirAndFile()
+//		  Creates the Destination Directory and File
 //
-//	        FileOperationCode(0).CreateDestinationFile()
-//	          Creates the Destination File
+//		FileOperationCode(0).CreateDestinationFile()
+//		  Creates the Destination File
 //
 // ------------------------------------------------------------------------
 //
@@ -2133,7 +2133,22 @@ func (dMgr *DirMgr) ExecuteDirectoryFileOps(
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.ExecuteDirectoryFileOps() "
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"DirMgr.ExecuteDirectoryFileOps()",
+		"")
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return errs
+	}
 
 	dMgrHlpr := dirMgrHelper{}
 
@@ -2142,11 +2157,11 @@ func (dMgr *DirMgr) ExecuteDirectoryFileOps(
 		fileSelectCriteria,
 		fileOps,
 		&targetBaseDir,
-		ePrefix,
 		"dMgr",
 		"targetBaseDir",
 		"fileSelectCriteria",
-		"fileOps")
+		"fileOps",
+		ePrefix)
 
 	return errs
 }
