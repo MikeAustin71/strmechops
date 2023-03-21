@@ -2781,45 +2781,105 @@ func (dMgrHlpr *dirMgrHelper) equal(
 	return true
 }
 
-// EqualAbsPaths - compares the absolute paths for the input
-// parameter 'dMgr' and the input parameter ('dMgr2').
+// equalAbsolutePaths
 //
-// If the two absolute paths are equal, the method returns 'true'.
-// If the two absolute paths are NOT equal, the method returns 'false'.
-// The comparison is NOT case-sensitive. In other words, both paths
-// are converted to lower case before making the comparison.
+// Compares the absolute paths for the input parameters
+// 'dMgr1' and 'dMgr2'.
 //
-// If either the input parameter ('dMgr') or the input parameter
-// 'dMgr2' are uninitialized, a value of 'false' is returned.
+// If the two absolute paths are equal, the method
+// returns 'true'.
+//
+// If the two absolute paths are NOT equal, this method
+// returns 'false'.
+//
+// The comparison is NOT case-sensitive. In other words,
+// both paths are first converted to lower case before
+// making the comparison.
+//
+// If either the input parameter ('dMgr1') or the input
+// parameter 'dMgr2' are uninitialized, a value of
+// 'false' is returned.
+//
+// An absolute path is defined as follows:
+//
+//	"An absolute or full path points to the same location
+//	in a file system, regardless of the current working
+//	directory. To do that, it must include the root directory."
+//
+//			Wikipedia
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dMgr1						*DirMgr
+//
+//		A pointer to an instance of DirMgr. The absolute
+//		path contained in this instance is compared to
+//		the absolute path encapsulated in the DirMgr
+//		instance passed as 'dMgr2'. If the two absolute
+//		paths are equal, this method returns 'true'.
+//
+//	dMgr2						*DirMgr
+//
+//		A pointer to an instance of DirMgr. The absolute
+//		path contained in this instance is compared to
+//		the absolute path encapsulated in the DirMgr
+//		instance passed as 'dMgr1'. If the two absolute
+//		paths are equal, this method returns 'true'.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If the absolute paths contained in input
+//		parameters 'dMgr1' and 'dMgr2' are equal, this
+//		return parameter is set to 'true'.
+//
+//		If the absolute paths are not equal or, if one of
+//		the DirMgr instances is uninitialized, a boolean
+//		value of 'false' is returned.
 func (dMgrHlpr *dirMgrHelper) equalAbsolutePaths(
-	dMgr *DirMgr,
+	dMgr1 *DirMgr,
 	dMgr2 *DirMgr) bool {
 
-	if !dMgr.isInitialized || !dMgr2.isInitialized {
+	if dMgrHlpr.lock == nil {
+		dMgrHlpr.lock = new(sync.Mutex)
+	}
+
+	dMgrHlpr.lock.Lock()
+
+	defer dMgrHlpr.lock.Unlock()
+
+	dMgrHlprAtom := dirMgrHelperAtom{}
+
+	if !dMgr1.isInitialized || !dMgr2.isInitialized {
 		return false
 	}
 
 	_,
 		_,
-		_ = dMgrHlpr.doesDirectoryExist(
-		dMgr,
+		_ = dMgrHlprAtom.doesDirectoryExist(
+		dMgr1,
 		PreProcPathCode.None(),
-		"",
-		"")
+		"dMgr1",
+		nil)
 
-	lcDMgrPath := strings.ToLower(dMgr.absolutePath)
+	lcDMgr1Path := strings.ToLower(dMgr1.absolutePath)
 
 	_,
 		_,
-		_ = dMgrHlpr.doesDirectoryExist(
+		_ = dMgrHlprAtom.doesDirectoryExist(
 		dMgr2,
 		PreProcPathCode.None(),
-		"",
-		"")
+		"dMgr2",
+		nil)
 
 	lcDMgr2Path := strings.ToLower(dMgr2.absolutePath)
 
-	if lcDMgrPath != lcDMgr2Path {
+	if lcDMgr1Path != lcDMgr2Path {
 		return false
 	}
 
