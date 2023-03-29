@@ -352,7 +352,7 @@ func (fops FileOps) NewByDirMgrFileName(
 //
 // If the input parameter, 'destinationFileNameExtStr' is an empty string, it
 // will be defaulted to a string value equal to 'sourceFileNameExtStr'.
-func (fops FileOps) NewByDirStrsAndFileNameExtStrs(
+func (fops *FileOps) NewByDirStrsAndFileNameExtStrs(
 	sourceDirStr string,
 	sourceFileNameExtStr string,
 	destinationDirStr string,

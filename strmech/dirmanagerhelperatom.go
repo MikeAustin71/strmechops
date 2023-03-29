@@ -390,3 +390,172 @@ func (dMgrHlprAtom *dirMgrHelperAtom) doesDirectoryExist(
 
 	return dirPathDoesExist, fInfo, err
 }
+
+// executeFileOpsOnFoundFiles
+//
+// This function is designed to work in conjunction with
+// a walk directory function like FindWalkDirFiles. It
+// will process files extracted from a 'Directory Walk'
+// operation initiated by the 'filepath.Walk' method.
+//
+// Thereafter, file operations will be performed on files
+// in the directory tree as specified by the 'dirOp'
+// parameter.
+func (dMgrHlprAtom *dirMgrHelperAtom) executeFileOpsOnFoundFiles(
+	dirOp *DirTreeOp,
+	errPrefDto *ePref.ErrPrefixDto) func(string, os.FileInfo, error) error {
+
+	if dMgrHlprAtom.lock == nil {
+		dMgrHlprAtom.lock = new(sync.Mutex)
+	}
+
+	dMgrHlprAtom.lock.Lock()
+
+	defer dMgrHlprAtom.lock.Unlock()
+
+	return func(pathFile string, info os.FileInfo, erIn error) error {
+
+		var ePrefix *ePref.ErrPrefixDto
+
+		var err error
+
+		ePrefix,
+			err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+			errPrefDto,
+			"dirMgrHelper.executeFileOpsOnFoundFiles()",
+			"")
+
+		if err != nil {
+			return err
+		}
+
+		if dirOp == nil {
+
+			err = fmt.Errorf("%v \n"+
+				"ERROR: Input paramter 'dirOp' is a nil pointer!\n",
+				ePrefix.String())
+
+			return err
+		}
+
+		var err2 error
+
+		if erIn != nil {
+
+			err2 = fmt.Errorf("%v\n"+
+				"Error returned from directory walk function.\n"+
+				"pathFile='%v'\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				pathFile,
+				erIn.Error())
+
+			dirOp.ErrReturns = append(dirOp.ErrReturns, err2)
+
+			return nil
+		}
+
+		if info.IsDir() {
+			return nil
+		}
+
+		fh := FileHelper{}
+
+		// This is not a directory. It is a file.
+		// Determine if it matches the find file criteria.
+		isFoundFile,
+			err,
+			_ := fh.FilterFileName(
+			info,
+			dirOp.FileSelectCriteria,
+			ePrefix)
+
+		if err != nil {
+
+			err2 = fmt.Errorf("%v\n"+
+				"Error returned from dMgr.FilterFileName(info, dInfo.FileSelectCriteria)\n"+
+				"pathFile='%v'\n"+
+				"info.Name()='%v'\n"+
+				"Error='%v'\n",
+				ePrefix.String(),
+				pathFile, info.Name(),
+				err.Error())
+
+			dirOp.ErrReturns = append(dirOp.ErrReturns, err2)
+			return nil
+		}
+
+		if !isFoundFile {
+			return nil
+		}
+
+		srcFileNameExt := info.Name()
+
+		destDir, err := fh.SwapBasePath(
+			dirOp.SourceBaseDir.absolutePath,
+			dirOp.TargetBaseDir.absolutePath,
+			pathFile,
+			ePrefix)
+
+		if err != nil {
+
+			err2 = fmt.Errorf("%v\n"+
+				"Error returned by fh.SwapBasePath(dirOp.SourceBaseDir, "+
+				"dirOp.TargetBaseDir, pathFile).\n"+
+				"dirOp.SourceBaseDir='%v'\n"+
+				"dirOp.TargetBaseDir='%v'\n"+
+				"pathFile='%v'\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				dirOp.SourceBaseDir.absolutePath,
+				dirOp.TargetBaseDir.absolutePath,
+				pathFile,
+				err.Error())
+
+			dirOp.ErrReturns = append(dirOp.ErrReturns, err2)
+			return nil
+		}
+
+		fileOp, err := new(FileOps).NewByDirStrsAndFileNameExtStrs(
+			pathFile, srcFileNameExt, destDir, srcFileNameExt)
+
+		if err != nil {
+			err2 = fmt.Errorf("%v\n"+
+				"Error returned by FileOps{}.NewByDirStrsAndFileNameExtStrs(pathFile, "+
+				"srcFileNameExt, destDir, srcFileNameExt)\n"+
+				"pathFile='%v'\n"+
+				"srcFileNameExt='%v'\n"+
+				"destDir='%v'\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				pathFile,
+				srcFileNameExt,
+				destDir,
+				err.Error())
+
+			dirOp.ErrReturns = append(dirOp.ErrReturns, err2)
+			return nil
+		}
+
+		for i := 0; i < len(dirOp.FileOps); i++ {
+
+			err = fileOp.ExecuteFileOperation(dirOp.FileOps[i])
+
+			if err != nil {
+				err2 = fmt.Errorf("%v\n"+
+					"Error returned by fileOp.ExecuteFileOperation(dirOp.FileOps[i]).\n"+
+					"i='%v'\n"+
+					"FileOps='%v'\n"+
+					"Error= \n%v\n",
+					ePrefix.String(),
+					i, dirOp.FileOps[i].String(),
+					err.Error())
+
+				dirOp.ErrReturns = append(dirOp.ErrReturns, err2)
+
+			}
+		}
+
+		return nil
+	}
+}

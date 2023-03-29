@@ -303,6 +303,38 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 		return dirCopyStats, errs
 	}
 
+	if sourceDMgr == nil {
+
+		err = fmt.Errorf("%v \n"+
+			"ERROR: Input paramter 'sourceDMgr' is a nil pointer!\n",
+			ePrefix.String())
+
+		errs = append(errs, err)
+
+		return dirCopyStats, errs
+	}
+
+	if len(sourceDMgrLabel) == 0 {
+
+		sourceDMgrLabel = "sourceDMgr"
+	}
+
+	if targetDMgr == nil {
+
+		err = fmt.Errorf("%v \n"+
+			"ERROR: Input paramter 'targetDMgr' is a nil pointer!\n",
+			ePrefix.String())
+
+		errs = append(errs, err)
+
+		return dirCopyStats, errs
+	}
+
+	if len(targetDMgrLabel) == 0 {
+
+		targetDMgrLabel = "targetDMgr"
+	}
+
 	var dirPathDoesExist, targetPathDoesExist, dirCreated bool
 
 	dMgrHlprAtom := dirMgrHelperAtom{}
@@ -3204,7 +3236,7 @@ func (dMgrHlpr *dirMgrHelper) equalPaths(
 //	targetBaseDir				*DirMgr
 //
 //		A pointer to an instance of DirMgr. The top level
-//		or parent directory of the DirMgr instance serves
+//		or parent directory of this DirMgr instance serves
 //		as the destination or target for file operations
 //		performed on the parent directory of input
 //		parameter 'sourceDMgr'.
@@ -3480,7 +3512,7 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryFileOps(
 		srcFileNameExt = nameFInfo.Name()
 
 		fileOp,
-			err2 = FileOps{}.NewByDirStrsAndFileNameExtStrs(
+			err2 = new(FileOps).NewByDirStrsAndFileNameExtStrs(
 			sourceDMgr.absolutePath,
 			srcFileNameExt,
 			targetBaseDir.absolutePath,
@@ -3557,41 +3589,345 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryFileOps(
 	return errs
 }
 
-// executeDirectoryTreeOps - Performs File Operations on 'selected'
-// files in the directory tree identified by the input parameter,
-// 'dMgr'.
+// executeDirectoryTreeOps
 //
-// The 'dMgr' path therefore serves as the parent directory for
-// file operations performed on the directory tree. Designated
-// file operations will therefore be performed on all files in
-// the parent directory as well as all files in all subdirectories.
+// Performs File Operations on 'selected' files in the
+// directory tree identified by the input parameter,
+// 'sourceDMgr'.
+//
+// The 'sourceDMgr' path therefore serves as the source
+// parent directory for file operations performed on the
+// directory tree. Designated file operations will
+// therefore be performed on all files in the parent
+// directory as well as all files in all subdirectories.
+//
+// The destination for these file operations is specified
+// by input parameter 'targetBaseDir'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	sourceDMgr					*DirMgr
+//
+//		A pointer to an instance of DirMgr. This instance
+//		defines the parent directory for file operations
+//		performed on the parent directory and all
+//		subdirectories in the directory tree specified by
+//		'sourceDMgr'.
+//
+//	fileSelectCriteria			FileSelectionCriteria
+//
+//	  This input parameter should be configured with the
+//	  desired file selection criteria. Files matching
+//	  this criteria will be subject to the file
+//	  operations specified by input parameter, 'fileOps'.
+//
+//		type FileSelectionCriteria struct {
+//		 FileNamePatterns    []string
+//			An array of strings containing File Name Patterns
+//
+//		 FilesOlderThan      time.Time
+//		 	Match files with older modification date times
+//
+//		 FilesNewerThan      time.Time
+//		 	Match files with newer modification date times
+//
+//		 SelectByFileMode    FilePermissionConfig
+//		 	Match file mode (os.FileMode).
+//
+//		 SelectCriterionModeFileSelectCriterionMode
+//		 	Specifies 'AND' or 'OR' selection mode
+//		}
+//
+//	  The FileSelectionCriteria type allows for
+//	  configuration of single or multiple file selection
+//	  criterion. The 'SelectCriterionMode' can be used to
+//	  specify whether the file must match all, or any one,
+//	  of the active file selection criterion.
+//
+//	  Elements of the FileSelectionCriteria are described
+//	  below:
+//
+//	  FileNamePatterns		[]string
+//	  	An array of strings which may define one or more
+//	  	search patterns. If a file name matches any one
+//	  	of the search pattern strings, it is deemed to be
+//	  	a 'match' for the search pattern criterion.
+//
+//		Example Patterns:
+//			FileNamePatterns = []string{"*.log"}
+//			FileNamePatterns = []string{"current*.txt"}
+//			FileNamePatterns = []string{"*.txt", "*.log"}
+//
+//		If this string array has zero length or if
+//		all the strings are empty strings, then this
+//		file search criterion is considered 'Inactive'
+//		or 'Not Set'.
+//
+//
+//		FilesOlderThan		time.Time
+//			This date time type is compared to file
+//			modification date times in order to determine
+//			whether the file is older than the
+//			'FilesOlderThan' file selection criterion. If
+//			the file modification date time is older than
+//			the 'FilesOlderThan' date time, that file is
+//			considered a 'match' for this file selection
+//			criterion.
+//
+//			If the value of 'FilesOlderThan' is set to
+//			time zero, the default value for type
+//			time.Time{}, then this file selection
+//			criterion is considered to be 'Inactive' or
+//			'Not Set'.
+//
+//		FilesNewerThan      time.Time
+//			This date time type is compared to the file
+//			modification date time in order to determine
+//			whether the file is newer than the
+//			'FilesNewerThan' file selection criterion. If
+//			the file modification date time is newer than
+//			the 'FilesNewerThan' date time, that file is
+//			considered a 'match' for this file selection
+//			criterion.
+//
+//			If the value of 'FilesNewerThan' is set to
+//			time zero, the default value for type
+//			time.Time{}, then this file selection
+//			criterion is considered to be 'Inactive' or
+//			'Not Set'.
+//
+//	fileOps						[]FileOperationCode
+//
+//		An array of file operations to be performed on
+//		each selected file. Selected files are identified
+//		by matching the file selection criteria specified
+//		by input parameter, 'fileSelectCriteria'. See above.
+//
+//		The FileOperationCode type consists of the following
+//		constants.
+//
+//		FileOperationCode(0).MoveSourceFileToDestinationFile() FileOperationCode = iota
+//		  Moves the source file to the destination file and
+//		  then deletes the original source file
+//
+//		FileOperationCode(0).DeleteDestinationFile()
+//		  Deletes the Destination file if it exists
+//
+//		FileOperationCode(0).DeleteSourceFile()
+//		  Deletes the Source file if it exists
+//
+//		FileOperationCode(0).DeleteSourceAndDestinationFiles
+//		  Deletes both the Source and Destination files
+//		  if they exist.
+//
+//		FileOperationCode(0).CopySourceToDestinationByHardLinkByIo()
+//		  Copies the Source File to the Destination
+//		  using two copy attempts. The first copy is
+//		  by Hard Link. If the first copy attempt fails,
+//		  a second copy attempt is initiated/ by creating
+//		  a new file and copying the contents by 'io.Copy'.
+//		  An error is returned only if both copy attempts
+//		  fail. The source file is unaffected.
+//
+//		  See: https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
+//
+//		FileOperationCode(0).CopySourceToDestinationByIoByHardLink()
+//		  Copies the Source File to the Destination
+//		  using two copy attempts. The first copy is
+//		  by 'io.Copy' which creates a new file and copies
+//		  the contents to the new file. If the first attempt
+//		  fails, a second copy attempt is initiated using
+//		  'copy by hard link'. An error is returned only
+//		  if both copy attempts fail. The source file is
+//		  unaffected.
+//
+//		  See: https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
+//
+//		FileOperationCode(0).CopySourceToDestinationByHardLink()
+//		  Copies the Source File to the Destination
+//		  using one copy mode. The only copy attempt
+//		  utilizes 'Copy by Hard Link'. If this fails
+//		  an error is returned.  The source file is
+//		  unaffected.
+//
+//		FileOperationCode(0).CopySourceToDestinationByIo()
+//		  Copies the Source File to the Destination
+//		  using only one copy mode. The only copy
+//		  attempt is initiated using 'Copy by IO' or
+//		  'io.Copy'.  If this fails an error is returned.
+//		  The source file is unaffected.
+//
+//		FileOperationCode(0).CreateSourceDir()
+//		  Creates the Source Directory
+//
+//		FileOperationCode(0).CreateSourceDirAndFile()
+//		  Creates the Source Directory and File
+//
+//		FileOperationCode(0).CreateSourceFile()
+//		  Creates the Source File
+//
+//		FileOperationCode(0).CreateDestinationDir()
+//		  Creates the Destination Directory
+//
+//		FileOperationCode(0).CreateDestinationDirAndFile()
+//		  Creates the Destination Directory and File
+//
+//		FileOperationCode(0).CreateDestinationFile()
+//		  Creates the Destination File
+//
+//	targetBaseDir				*DirMgr
+//
+//		A pointer to an instance of DirMgr. The top level
+//		or parent directory of this DirMgr instance serves
+//		as the destination or target for file operations
+//		performed on the parent directory of input
+//		parameter 'sourceDMgr'.
+//
+//		If the parent or top level directory specified by
+//		'targetBaseDir' does not exist on disk, an error
+//		will be returned.
+//
+//	sourceDMgrLabel				string
+//
+//		The name or label associated with input parameter
+//		'sourceDMgr' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "sourceDMgr" will be
+//		automatically applied.
+//
+//	targetDirLabel				string
+//
+//		The name or label associated with input parameter
+//		'targetBaseDir' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "targetDMgrLabel" will
+//		be automatically applied.
+//
+//	fileOpsLabel				string
+//
+//		The name or label used to describe the file
+//		operations being performed. This label will be
+//		used in error messages returned by this method.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	errs						[]error
+//
+//		An array of error objects.
+//
+//		If this method completes successfully, the
+//		returned error array is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		This error array may contain multiple errors.
 func (dMgrHlpr *dirMgrHelper) executeDirectoryTreeOps(
-	dMgr *DirMgr,
+	sourceDMgr *DirMgr,
 	fileSelectCriteria FileSelectionCriteria,
 	fileOps []FileOperationCode,
 	targetBaseDir *DirMgr,
-	ePrefix string,
-	dMgrLabel string,
+	sourceDMgrLabel string,
 	targetDirLabel string,
-	fileOpsLabel string) (errs []error) {
+	fileOpsLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (errs []error) {
 
-	ePrefixCurrMethod := "dirMgrHelper.executeDirectoryTreeOps() "
-
-	errs = make([]error, 0, 300)
-
-	if len(ePrefix) == 0 {
-		ePrefix = ePrefixCurrMethod
-	} else {
-		ePrefix = ePrefix + "- " + ePrefixCurrMethod
+	if dMgrHlpr.lock == nil {
+		dMgrHlpr.lock = new(sync.Mutex)
 	}
+
+	dMgrHlpr.lock.Lock()
+
+	defer dMgrHlpr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	funcName := "dirMgrHelper.executeDirectoryTreeOps()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return errs
+	}
+
+	if sourceDMgr == nil {
+
+		err = fmt.Errorf("%v \n"+
+			"ERROR: Input paramter 'sourceDMgr' is a nil pointer!\n",
+			ePrefix.String())
+
+		errs = append(errs, err)
+
+		return errs
+	}
+
+	if len(sourceDMgrLabel) == 0 {
+
+		sourceDMgrLabel = "sourceDMgrLabel"
+	}
+
+	if targetBaseDir == nil {
+
+		err = fmt.Errorf("%v \n"+
+			"ERROR: Input paramter 'targetBaseDir' is a nil pointer!\n",
+			ePrefix.String())
+
+		errs = append(errs, err)
+
+		return errs
+	}
+
+	if len(targetDirLabel) == 0 {
+
+		targetDirLabel = "targetBaseDir"
+	}
+
+	dMgrHlprAtom := dirMgrHelperAtom{}
 
 	dMgrPathDoesExist,
 		_,
-		err := dMgrHlpr.doesDirectoryExist(
-		dMgr,
+		err := dMgrHlprAtom.doesDirectoryExist(
+		sourceDMgr,
 		PreProcPathCode.None(),
-		ePrefix,
-		dMgrLabel)
+		sourceDMgrLabel,
+		ePrefix.XCpy("sourceDMgr"))
 
 	if err != nil {
 		errs = append(errs, err)
@@ -3599,11 +3935,14 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryTreeOps(
 	}
 
 	if !dMgrPathDoesExist {
-		err = fmt.Errorf(ePrefix+
-			"\nERROR: %v Directory Path DOES NOT EXIST!\n"+
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: %v Directory Path DOES NOT EXIST!\n"+
 			"%v='%v'\n",
-			dMgrLabel, dMgrLabel,
-			dMgr.absolutePath)
+			ePrefix.String(),
+			sourceDMgrLabel,
+			sourceDMgrLabel,
+			sourceDMgr.absolutePath)
 
 		errs = append(errs, err)
 
@@ -3612,11 +3951,12 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryTreeOps(
 
 	_,
 		_,
-		err2 := dMgrHlpr.doesDirectoryExist(
+		err2 := dMgrHlprAtom.doesDirectoryExist(
 		targetBaseDir,
 		PreProcPathCode.None(),
-		ePrefix,
-		targetDirLabel)
+		targetDirLabel,
+		ePrefix.XCpy(
+			"targetBaseDir"))
 
 	if err2 != nil {
 		errs = append(errs, err2)
@@ -3625,25 +3965,29 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryTreeOps(
 
 	if len(fileOps) == 0 {
 
-		err2 = fmt.Errorf(ePrefix+
-			"\nError: The input parameter '%v' is a ZERO LENGTH ARRAY!\n",
+		err2 = fmt.Errorf("%v\n"+
+			"Error: The input parameter '%v' is a ZERO LENGTH ARRAY!\n",
+			ePrefix.String(),
 			fileOpsLabel)
 
 		errs = append(errs, err2)
 		return errs
 	}
 
-	dirOp := DirTreeOp{}.New()
-	dirOp.CallingFunc = ePrefix + "\n"
+	dirOp := new(DirTreeOp).New()
+	dirOp.CallingFunc = funcName + "\n"
 	dirOp.FileOps = append(dirOp.FileOps, fileOps...)
 
 	dirOp.TargetBaseDir, err = new(DirMgr).
 		New(targetBaseDir.absolutePath)
 
 	if err != nil {
-		err2 = fmt.Errorf(ePrefix+
-			"\nError returned by dirOp.TargetBaseDir = DirMgr{}.New(%v.absolutePath)\n"+
-			"%v.absolutePath='%v'\nError='%v'\n",
+
+		err2 = fmt.Errorf("%v\n"+
+			"Error returned by dirOp.TargetBaseDir = DirMgr{}.New(%v.absolutePath)\n"+
+			"%v.absolutePath='%v'\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
 			targetDirLabel,
 			targetDirLabel,
 			targetBaseDir.absolutePath,
@@ -3655,15 +3999,17 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryTreeOps(
 
 	dirOp.SourceBaseDir, err = new(DirMgr).
 		New(
-			dMgr.absolutePath)
+			sourceDMgr.absolutePath)
 
 	if err != nil {
-		err2 = fmt.Errorf(ePrefix+
-			"\nError returned by dirOp.SourceBaseDir = DirMgr{}.New(%v.absolutePath)\n"+
-			"%v.absolutePath='%v'\nError='%v'\n",
-			dMgrLabel,
-			dMgrLabel,
-			dMgr.absolutePath,
+		err2 = fmt.Errorf("%v\n"+
+			"Error returned by dirOp.SourceBaseDir = DirMgr{}.New(%v.absolutePath)\n"+
+			"%v.absolutePath='%v'\n"+
+			"Error= \n%v\n",
+			ePrefix.String(),
+			sourceDMgrLabel,
+			sourceDMgrLabel,
+			sourceDMgr.absolutePath,
 			err.Error())
 
 		errs = append(errs, err2)
@@ -3672,15 +4018,22 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryTreeOps(
 
 	dirOp.FileSelectCriteria = fileSelectCriteria
 
-	err = pf.Walk(dMgr.absolutePath, dMgrHlpr.executeFileOpsOnFoundFiles(&dirOp))
+	err = pf.Walk(
+		sourceDMgr.absolutePath,
+		new(dirMgrHelperAtom).executeFileOpsOnFoundFiles(
+			&dirOp,
+			ePrefix.XCpy("dirOp")))
 
 	if err != nil {
-		err2 = fmt.Errorf("\n"+ePrefix+
-			"\nError returned by (path/filepath) pf.Walk("+
-			"%v.absolutePath, dMgrHlpr.executeFileOpsOnFoundFiles(&dirOp)).\n"+
-			"%v.absolutePath='%v'\nError='%v'\n\n",
-			dMgrLabel,
-			dMgr.absolutePath,
+		err2 = fmt.Errorf("%v\n"+
+			"Error returned by (path/filepath) pf.Walk("+
+			"%v.absolutePath, dMgrHlpr.executeFileOpsOnFoundFiles(dirOp)).\n"+
+			"%v.absolutePath='%v'\n"+
+			"Error= \n%v\n",
+			ePrefix.String(),
+			sourceDMgrLabel,
+			sourceDMgrLabel,
+			sourceDMgr.absolutePath,
 			err.Error())
 
 		errs = append(errs, dirOp.ErrReturns...)
@@ -3691,125 +4044,11 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryTreeOps(
 	return dirOp.ErrReturns
 }
 
-// executeFileOpsOnFoundFiles - This function is designed to work in conjunction
-// with a walk directory function like FindWalkDirFiles. It will process
-// files extracted from a 'Directory Walk' operation initiated by the
-// 'filepath.Walk' method.
+// findDirectoryTreeFiles
 //
-// Thereafter, file operations will be performed on files in the directory
-// tree as specified by the 'dirOp' parameter.
-func (dMgrHlpr *dirMgrHelper) executeFileOpsOnFoundFiles(dirOp *DirTreeOp) func(string, os.FileInfo, error) error {
-	return func(pathFile string, info os.FileInfo, erIn error) error {
-
-		ePrefix := "\ndirMgrHelper.executeFileOpsOnFoundFiles() "
-		var err2 error
-
-		if erIn != nil {
-			err2 = fmt.Errorf(ePrefix+
-				"\nError returned from directory walk function.\n"+
-				"pathFile='%v'\nError='%v'\n",
-				pathFile, erIn.Error())
-			dirOp.ErrReturns = append(dirOp.ErrReturns, err2)
-			return nil
-		}
-
-		if info.IsDir() {
-			return nil
-		}
-
-		fh := FileHelper{}
-
-		// This is not a directory. It is a file.
-		// Determine if it matches the find file criteria.
-		isFoundFile,
-			err,
-			_ := fh.FilterFileName(
-			info,
-			dirOp.FileSelectCriteria,
-			ePrefix)
-
-		if err != nil {
-
-			err2 = fmt.Errorf(ePrefix+
-				"\nError returned from dMgr.FilterFileName(info, dInfo.FileSelectCriteria)\n"+
-				"\npathFile='%v'\ninfo.Name()='%v'\nError='%v'\n",
-				pathFile, info.Name(), err.Error())
-
-			dirOp.ErrReturns = append(dirOp.ErrReturns, err2)
-			return nil
-		}
-
-		if !isFoundFile {
-			return nil
-		}
-
-		srcFileNameExt := info.Name()
-
-		destDir, err := fh.SwapBasePath(
-			dirOp.SourceBaseDir.absolutePath,
-			dirOp.TargetBaseDir.absolutePath,
-			pathFile,
-			ePrefix)
-
-		if err != nil {
-			err2 = fmt.Errorf(ePrefix+
-				"\nError returned by fh.SwapBasePath(dirOp.SourceBaseDir, "+
-				"dirOp.TargetBaseDir, pathFile).\n"+
-				"dirOp.SourceBaseDir='%v'\n"+
-				"dirOp.TargetBaseDir='%v'\n"+
-				"pathFile='%v'\n"+
-				"Error='%v'\n",
-				dirOp.SourceBaseDir.absolutePath,
-				dirOp.TargetBaseDir.absolutePath,
-				pathFile,
-				err.Error())
-
-			dirOp.ErrReturns = append(dirOp.ErrReturns, err2)
-			return nil
-		}
-
-		fileOp, err := FileOps{}.NewByDirStrsAndFileNameExtStrs(
-			pathFile, srcFileNameExt, destDir, srcFileNameExt)
-
-		if err != nil {
-			err2 = fmt.Errorf(ePrefix+
-				"\nError returned by FileOps{}.NewByDirStrsAndFileNameExtStrs(pathFile, "+
-				"srcFileNameExt, destDir, srcFileNameExt)\n"+
-				"pathFile='%v'\n"+
-				"srcFileNameExt='%v'\n"+
-				"destDir='%v'\n"+
-				"Error='%v'\n",
-				pathFile,
-				srcFileNameExt,
-				destDir,
-				err.Error())
-
-			dirOp.ErrReturns = append(dirOp.ErrReturns, err2)
-			return nil
-		}
-
-		for i := 0; i < len(dirOp.FileOps); i++ {
-
-			err = fileOp.ExecuteFileOperation(dirOp.FileOps[i])
-
-			if err != nil {
-				err2 = fmt.Errorf(ePrefix+
-					"\nError returned by fileOp.ExecuteFileOperation(dirOp.FileOps[i]).\n"+
-					"i='%v'\nFileOps='%v'\nError='%v'\n",
-					i, dirOp.FileOps[i].String(), err.Error())
-
-				dirOp.ErrReturns = append(dirOp.ErrReturns, err2)
-
-			}
-		}
-
-		return nil
-	}
-}
-
-// findDirectoryTreeFiles - A multifunctional helper method which
-// can be used to scan a parent directory or an entire directory
-// tree to locate files which match the file selection criteria.
+// A multifunctional helper method which can be used to
+// scan a parent directory or an entire directory tree to
+// locate files which match the file selection criteria.
 func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 	dMgr *DirMgr,
 	fileSelectionCriteria FileSelectionCriteria,

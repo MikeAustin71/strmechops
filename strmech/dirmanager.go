@@ -2448,7 +2448,22 @@ func (dMgr *DirMgr) ExecuteDirectoryTreeOps(
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.ExecuteDirectoryTreeOps() "
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"DirMgr.ExecuteDirectoryTreeOps()",
+		"")
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return errs
+	}
 
 	dMgrHlpr := dirMgrHelper{}
 
@@ -2457,10 +2472,10 @@ func (dMgr *DirMgr) ExecuteDirectoryTreeOps(
 		fileSelectCriteria,
 		fileOps,
 		&targetBaseDir,
-		ePrefix,
 		"dMgr",
 		"targetBaseDir",
-		"fileOps")
+		"fileOps",
+		ePrefix)
 
 	return errs
 }
