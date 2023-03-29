@@ -3872,8 +3872,7 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryTreeOps(
 
 	var err error
 
-	funcName := "dirMgrHelper." +
-		"executeDirectoryTreeOps()"
+	funcName := "dirMgrHelper.executeDirectoryTreeOps()"
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
