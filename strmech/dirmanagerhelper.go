@@ -4059,6 +4059,15 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryTreeOps(
 // scan a parent directory or an entire directory tree to
 // locate files which match the file selection criteria.
 //
+// Files matching the selection criteria defined by input
+// parameter 'fileSelectCriteria', will be identified in
+// the returned instance of type DirectoryTreeInfo
+// ('dTreeInfo').
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
 //	targetBaseDir				*DirMgr
 //
 //		A pointer to an instance of DirMgr. This DirMgr
@@ -4072,85 +4081,85 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryTreeOps(
 //
 //	fileSelectCriteria			FileSelectionCriteria
 //
-//	  This input parameter should be configured with the
-//	  desired file selection criteria. Files matching
-//	  this criteria will be subject to the file
-//	  operations specified by input parameter, 'fileOps'.
+//		This input parameter should be configured with the
+//		desired file selection criteria. Files matching
+//		this criteria will be subject to the file
+//		operations specified by input parameter, 'fileOps'.
 //
-//		type FileSelectionCriteria struct {
-//		 FileNamePatterns    []string
-//			An array of strings containing File Name Patterns
+//			type FileSelectionCriteria struct {
+//			 FileNamePatterns    []string
+//				An array of strings containing File Name Patterns
 //
-//		 FilesOlderThan      time.Time
-//		 	Match files with older modification date times
+//			 FilesOlderThan      time.Time
+//			 	Match files with older modification date times
 //
-//		 FilesNewerThan      time.Time
-//		 	Match files with newer modification date times
+//			 FilesNewerThan      time.Time
+//			 	Match files with newer modification date times
 //
-//		 SelectByFileMode    FilePermissionConfig
-//		 	Match file mode (os.FileMode).
+//			 SelectByFileMode    FilePermissionConfig
+//			 	Match file mode (os.FileMode).
 //
-//		 SelectCriterionModeFileSelectCriterionMode
-//		 	Specifies 'AND' or 'OR' selection mode
-//		}
+//			 SelectCriterionModeFileSelectCriterionMode
+//			 	Specifies 'AND' or 'OR' selection mode
+//			}
 //
-//	  The FileSelectionCriteria type allows for
-//	  configuration of single or multiple file selection
-//	  criterion. The 'SelectCriterionMode' can be used to
-//	  specify whether the file must match all, or any one,
-//	  of the active file selection criterion.
+//		The FileSelectionCriteria type allows for
+//		configuration of single or multiple file selection
+//		criterion. The 'SelectCriterionMode' can be used to
+//		specify whether the file must match all, or any one,
+//		of the active file selection criterion.
 //
-//	  Elements of the FileSelectionCriteria are described
-//	  below:
+//		Elements of the FileSelectionCriteria are described
+//		below:
 //
-//	  FileNamePatterns		[]string
-//	  	An array of strings which may define one or more
-//	  	search patterns. If a file name matches any one
-//	  	of the search pattern strings, it is deemed to be
-//	  	a 'match' for the search pattern criterion.
+//		FileNamePatterns		[]string
+//			An array of strings which may define one or more
+//			search patterns. If a file name matches any one
+//			of the search pattern strings, it is deemed to be
+//			a 'match' for the search pattern criterion.
 //
-//		Example Patterns:
-//			FileNamePatterns = []string{"*.log"}
-//			FileNamePatterns = []string{"current*.txt"}
-//			FileNamePatterns = []string{"*.txt", "*.log"}
+//			Example Patterns:
+//				FileNamePatterns = []string{"*.log"}
+//				FileNamePatterns = []string{"current*.txt"}
+//				FileNamePatterns = []string{"*.txt", "*.log"}
 //
-//		If this string array has zero length or if
-//		all the strings are empty strings, then this
-//		file search criterion is considered 'Inactive'
-//		or 'Not Set'.
+//			If this string array has zero length or if
+//			all the strings are empty strings, then this
+//			file search criterion is considered 'Inactive'
+//			or 'Not Set'.
 //
 //
-//		FilesOlderThan		time.Time
-//			This date time type is compared to file
-//			modification date times in order to determine
-//			whether the file is older than the
-//			'FilesOlderThan' file selection criterion. If
-//			the file modification date time is older than
-//			the 'FilesOlderThan' date time, that file is
-//			considered a 'match' for this file selection
-//			criterion.
+//			FilesOlderThan		time.Time
+//				This date time type is compared to file
+//				modification date times in order to determine
+//				whether the file is older than the
+//				'FilesOlderThan' file selection criterion. If
+//				the file modification date time is older than
+//				the 'FilesOlderThan' date time, that file is
+//				considered a 'match' for this file selection
+//				criterion.
 //
-//			If the value of 'FilesOlderThan' is set to
-//			time zero, the default value for type
-//			time.Time{}, then this file selection
-//			criterion is considered to be 'Inactive' or
-//			'Not Set'.
+//				If the value of 'FilesOlderThan' is set to
+//				time zero, the default value for type
+//				time.Time{}, then this file selection
+//				criterion is considered to be 'Inactive' or
+//				'Not Set'.
 //
-//		FilesNewerThan      time.Time
-//			This date time type is compared to the file
-//			modification date time in order to determine
-//			whether the file is newer than the
-//			'FilesNewerThan' file selection criterion. If
-//			the file modification date time is newer than
-//			the 'FilesNewerThan' date time, that file is
-//			considered a 'match' for this file selection
-//			criterion.
+//			FilesNewerThan      time.Time
+//				This date time type is compared to the file
+//				modification date time in order to determine
+//				whether the file is newer than the
+//				'FilesNewerThan' file selection criterion. If
+//				the file modification date time is newer than
+//				the 'FilesNewerThan' date time, that file is
+//				considered a 'match' for this file selection
+//				criterion.
 //
-//			If the value of 'FilesNewerThan' is set to
-//			time zero, the default value for type
-//			time.Time{}, then this file selection
-//			criterion is considered to be 'Inactive' or
-//			'Not Set'.
+//				If the value of 'FilesNewerThan' is set to
+//				time zero, the default value for type
+//				time.Time{}, then this file selection
+//				criterion is considered to be 'Inactive' or
+//				'Not Set'.
 //
 //	skipTopLevelDirectory		bool
 //
@@ -4211,6 +4220,32 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryTreeOps(
 // ----------------------------------------------------------------
 //
 // # Return Values
+//
+//	dTreeInfo					DirectoryTreeInfo
+//
+//		If this method completes successfully, this
+//		return parameter will be populated with
+//		information and statistics on the file search
+//		operation.
+//
+//		DirectoryTreeInfo - A structure used
+//		to 'Find' files in a directory specified
+//		by 'StartPath'. The file search will be
+//		filtered by a 'FileSelectCriteria' object.
+//
+//		'FileSelectCriteria' is a FileSelectionCriteria
+//		type which contains FileNamePatterns strings and
+//		'FilesOlderThan' or 'FilesNewerThan' date time
+//		parameters which can be used as a selection
+//		criteria.
+//
+//		type DirectoryTreeInfo struct {
+//			StartPath          string
+//			Directories        DirMgrCollection
+//			FoundFiles         FileMgrCollection
+//			ErrReturns         []error
+//			FileSelectCriteria FileSelectionCriteria
+//		}
 //
 //	errs						[]error
 //
