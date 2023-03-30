@@ -3799,14 +3799,14 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryFileOps(
 //		string, a default value of "sourceDMgr" will be
 //		automatically applied.
 //
-//	targetDirLabel				string
+//	targetBaseDirLabel			string
 //
 //		The name or label associated with input parameter
 //		'targetBaseDir' which will be used in error
 //		messages returned by this method.
 //
 //		If this parameter is submitted as an empty
-//		string, a default value of "targetDMgrLabel" will
+//		string, a default value of "targetBaseDir" will
 //		be automatically applied.
 //
 //	fileOpsLabel				string
@@ -3814,6 +3814,10 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryFileOps(
 //		The name or label used to describe the file
 //		operations being performed. This label will be
 //		used in error messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "File Operations"
+//		will be automatically applied.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -3856,7 +3860,7 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryTreeOps(
 	fileOps []FileOperationCode,
 	targetBaseDir *DirMgr,
 	sourceDMgrLabel string,
-	targetDirLabel string,
+	targetBaseDirLabel string,
 	fileOpsLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (errs []error) {
 
@@ -3914,9 +3918,14 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryTreeOps(
 		return errs
 	}
 
-	if len(targetDirLabel) == 0 {
+	if len(targetBaseDirLabel) == 0 {
 
-		targetDirLabel = "targetBaseDir"
+		targetBaseDirLabel = "targetBaseDir"
+	}
+
+	if len(fileOpsLabel) == 0 {
+
+		targetBaseDirLabel = "File Operations"
 	}
 
 	dMgrHlprAtom := dirMgrHelperAtom{}
@@ -3954,7 +3963,7 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryTreeOps(
 		err2 := dMgrHlprAtom.doesDirectoryExist(
 		targetBaseDir,
 		PreProcPathCode.None(),
-		targetDirLabel,
+		targetBaseDirLabel,
 		ePrefix.XCpy(
 			"targetBaseDir"))
 
@@ -3988,8 +3997,8 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryTreeOps(
 			"%v.absolutePath='%v'\n"+
 			"Error=\n%v\n",
 			ePrefix.String(),
-			targetDirLabel,
-			targetDirLabel,
+			targetBaseDirLabel,
+			targetBaseDirLabel,
 			targetBaseDir.absolutePath,
 			err.Error())
 
@@ -4049,32 +4058,222 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryTreeOps(
 // A multifunctional helper method which can be used to
 // scan a parent directory or an entire directory tree to
 // locate files which match the file selection criteria.
+//
+//	targetBaseDir				*DirMgr
+//
+//		A pointer to an instance of DirMgr. This DirMgr
+//		instance identifies the parent directory and
+//		directory tree where the search for files matching
+//		the file selection criteria will be conducted.
+//
+//		If the parent or top level directory specified by
+//		'targetBaseDir' does not exist on disk, an error
+//		will be returned.
+//
+//	fileSelectCriteria			FileSelectionCriteria
+//
+//	  This input parameter should be configured with the
+//	  desired file selection criteria. Files matching
+//	  this criteria will be subject to the file
+//	  operations specified by input parameter, 'fileOps'.
+//
+//		type FileSelectionCriteria struct {
+//		 FileNamePatterns    []string
+//			An array of strings containing File Name Patterns
+//
+//		 FilesOlderThan      time.Time
+//		 	Match files with older modification date times
+//
+//		 FilesNewerThan      time.Time
+//		 	Match files with newer modification date times
+//
+//		 SelectByFileMode    FilePermissionConfig
+//		 	Match file mode (os.FileMode).
+//
+//		 SelectCriterionModeFileSelectCriterionMode
+//		 	Specifies 'AND' or 'OR' selection mode
+//		}
+//
+//	  The FileSelectionCriteria type allows for
+//	  configuration of single or multiple file selection
+//	  criterion. The 'SelectCriterionMode' can be used to
+//	  specify whether the file must match all, or any one,
+//	  of the active file selection criterion.
+//
+//	  Elements of the FileSelectionCriteria are described
+//	  below:
+//
+//	  FileNamePatterns		[]string
+//	  	An array of strings which may define one or more
+//	  	search patterns. If a file name matches any one
+//	  	of the search pattern strings, it is deemed to be
+//	  	a 'match' for the search pattern criterion.
+//
+//		Example Patterns:
+//			FileNamePatterns = []string{"*.log"}
+//			FileNamePatterns = []string{"current*.txt"}
+//			FileNamePatterns = []string{"*.txt", "*.log"}
+//
+//		If this string array has zero length or if
+//		all the strings are empty strings, then this
+//		file search criterion is considered 'Inactive'
+//		or 'Not Set'.
+//
+//
+//		FilesOlderThan		time.Time
+//			This date time type is compared to file
+//			modification date times in order to determine
+//			whether the file is older than the
+//			'FilesOlderThan' file selection criterion. If
+//			the file modification date time is older than
+//			the 'FilesOlderThan' date time, that file is
+//			considered a 'match' for this file selection
+//			criterion.
+//
+//			If the value of 'FilesOlderThan' is set to
+//			time zero, the default value for type
+//			time.Time{}, then this file selection
+//			criterion is considered to be 'Inactive' or
+//			'Not Set'.
+//
+//		FilesNewerThan      time.Time
+//			This date time type is compared to the file
+//			modification date time in order to determine
+//			whether the file is newer than the
+//			'FilesNewerThan' file selection criterion. If
+//			the file modification date time is newer than
+//			the 'FilesNewerThan' date time, that file is
+//			considered a 'match' for this file selection
+//			criterion.
+//
+//			If the value of 'FilesNewerThan' is set to
+//			time zero, the default value for type
+//			time.Time{}, then this file selection
+//			criterion is considered to be 'Inactive' or
+//			'Not Set'.
+//
+//	skipTopLevelDirectory		bool
+//
+//		When this parameter is set to 'true', the search
+//		for matching files will NOT be conducted in the
+//		top level or parent directory.
+//
+//		If this parameter is set to 'false' and parameter
+//		'scanSubDirectories' is also set to 'false', an
+//		error will be returned.
+//
+//	scanSubDirectories			bool
+//
+//		When this parameter is to 'true', the search for
+//		matching files will include the subdirectories
+//		below the parent directory in the specified
+//		directory tree.
+//
+//		If this parameter is set to 'false' and parameter
+//		'skipTopLevelDirectory' is also set to 'false',
+//		an error will be returned.
+//
+//	targetBaseDirLabel			string
+//
+//		The name or label associated with input parameter
+//		'targetBaseDir' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "targetBaseDir" will
+//		be automatically applied.
+//
+//	fileSelectLabel				string
+//
+//		The name or label used to describe the file
+//		operations being performed. This label will be
+//		used in error messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "File Selection Criteria"
+//		will be automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	errs						[]error
+//
+//		An array of error objects.
+//
+//		If this method completes successfully, the
+//		returned error array is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		This error array may contain multiple errors.
 func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
-	dMgr *DirMgr,
-	fileSelectionCriteria FileSelectionCriteria,
+	targetBaseDir *DirMgr,
+	fileSelectCriteria FileSelectionCriteria,
 	skipTopLevelDirectory bool,
 	scanSubDirectories bool,
-	ePrefix string,
-	dMgrLabel string,
-	fileSelectLabel string) (dTreeInfo DirectoryTreeInfo, errs []error) {
+	targetBaseDirLabel string,
+	fileSelectLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	dTreeInfo DirectoryTreeInfo,
+	errs []error) {
 
-	dTreeInfo = DirectoryTreeInfo{}
-	errs = make([]error, 0, 300)
+	if dMgrHlpr.lock == nil {
+		dMgrHlpr.lock = new(sync.Mutex)
+	}
 
-	ePrefixCurrMethod := "dirMgrHelper.findDirectoryTreeFiles() "
+	dMgrHlpr.lock.Lock()
 
-	if len(ePrefix) == 0 {
-		ePrefix = ePrefixCurrMethod
-	} else {
-		ePrefix = ePrefix + "- " + ePrefixCurrMethod
+	defer dMgrHlpr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	funcName := "dirMgrHelper.findDirectoryTreeFiles()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return dTreeInfo, errs
 	}
 
 	if skipTopLevelDirectory &&
 		!scanSubDirectories {
 
-		err := fmt.Errorf(ePrefix +
-			"\nERROR: Conflicted Input parameters! skipTopLevelDirectory=true and scanSubDirectories=false.\n" +
-			"Impossible combination!!\n")
+		err := fmt.Errorf("%v\n"+
+			"ERROR: Conflicted Input parameters!\n"+
+			"skipTopLevelDirectory=true and scanSubDirectories=false.\n"+
+			"Impossible combination!!\n",
+			ePrefix.String())
 
 		errs = append(errs, err)
 		return dTreeInfo, errs
@@ -4082,11 +4281,11 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 
 	dirPathDoesExist,
 		_,
-		err := dMgrHlpr.doesDirectoryExist(
-		dMgr,
+		err := new(dirMgrHelperAtom).doesDirectoryExist(
+		targetBaseDir,
 		PreProcPathCode.None(),
-		ePrefix,
-		dMgrLabel)
+		targetBaseDirLabel,
+		ePrefix.XCpy("targetBaseDir"))
 
 	if err != nil {
 		errs = append(errs, err)
@@ -4094,11 +4293,14 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 	}
 
 	if !dirPathDoesExist {
-		err = fmt.Errorf(ePrefix+
-			"\nERROR: %v Directory Path DOES NOT EXIST!\n"+
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: %v Directory Path DOES NOT EXIST!\n"+
 			"%v='%v'\n",
-			dMgrLabel, dMgrLabel,
-			dMgr.absolutePath)
+			ePrefix.String(),
+			targetBaseDirLabel,
+			targetBaseDirLabel,
+			targetBaseDir.absolutePath)
 
 		errs = append(errs, err)
 
@@ -4116,7 +4318,9 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 	isMatch := false
 	isTopLevelDir := true
 
-	dTreeInfo.Directories.AddDirMgr(dMgrHlpr.copyOut(dMgr))
+	dTreeInfo.Directories.AddDirMgr(
+		new(dirMgrHelperAtom).copyOut(targetBaseDir))
+
 	dTreeCnt := 1
 
 	for i := 0; i < dTreeCnt; i++ {
@@ -4137,11 +4341,16 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 		dirPtr, err = os.Open(nextDir.absolutePath)
 
 		if err != nil {
-			err2 = fmt.Errorf(ePrefix+
-				"\nError return by os.Open(%v.absolutePath). "+
-				"%v.absolutePath='%v'\nError='%v'\n\n",
-				dMgrLabel, dMgrLabel,
-				dMgr.absolutePath, err.Error())
+
+			err2 = fmt.Errorf("%v\n"+
+				"Error return by os.Open(%v.absolutePath).\n"+
+				"%v.absolutePath='%v'\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				targetBaseDirLabel,
+				targetBaseDirLabel,
+				targetBaseDir.absolutePath,
+				err.Error())
 
 			errs = append(errs, err2)
 			dirPtr = nil
@@ -4152,7 +4361,7 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 
 		for !file2LoopIsDone {
 
-			nameFileInfos, err = dirPtr.Readdir(1000)
+			nameFileInfos, err = dirPtr.Readdir(2000)
 
 			lNameFileInfos := len(nameFileInfos)
 
@@ -4166,9 +4375,11 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 
 			} else if err != nil {
 
-				err2 = fmt.Errorf(ePrefix+
-					"\nError returned by dirPtr.Readdir(1000).\n"+
-					"Error='%v'\n\n", err.Error())
+				err2 = fmt.Errorf("%v\n"+
+					"Error returned by dirPtr.Readdir(2000).\n"+
+					"Error= \n%v\n",
+					ePrefix.String(),
+					err.Error())
 
 				errs = append(errs, err2)
 
@@ -4184,14 +4395,21 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 						continue
 					}
 
-					err = dTreeInfo.Directories.AddDirMgrByKnownPathDirName(nextDir.absolutePath, nameFInfo.Name())
+					err = dTreeInfo.Directories.
+						AddDirMgrByKnownPathDirName(
+							nextDir.absolutePath,
+							nameFInfo.Name())
 
 					if err != nil {
+
 						err2 =
-							fmt.Errorf(ePrefix+
-								"\nError returned by dirs.AddDirMgrByKnownPathDirName(newDirPathFileName).\n"+
-								"newDirPathFileName='%v'\nError='%v'\n\n",
-								nextDir.absolutePath+osPathSepStr+nameFInfo.Name(), err.Error())
+							fmt.Errorf("%v\n"+
+								"Error returned by dirs.AddDirMgrByKnownPathDirName(newDirPathFileName).\n"+
+								"newDirPathFileName='%v'\n"+
+								"Error=\n%v\n",
+								ePrefix.String(),
+								nextDir.absolutePath+osPathSepStr+nameFInfo.Name(),
+								err.Error())
 
 						errs = append(errs, err2)
 						continue
@@ -4213,17 +4431,20 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 						_ =
 						fh.FilterFileName(
 							nameFInfo,
-							fileSelectionCriteria,
-							ePrefix)
+							fileSelectCriteria,
+							ePrefix.XCpy("nameFInfo"))
 
 					if err != nil {
 
 						err2 =
-							fmt.Errorf(ePrefix+
-								"\nError returned by fh.FilterFileName(nameFInfo, %v).\n"+
-								"%v directory searched='%v'\nfileName='%v'\nError='%v'\n\n",
-								fileSelectLabel, dMgrLabel,
-								dMgr.absolutePath, nameFInfo.Name(), err.Error())
+							fmt.Errorf("%v\n"+
+								"Error returned by fh.FilterFileName(nameFInfo, %v).\n"+
+								"%v directory searched='%v'\n"+
+								"fileName='%v'\n"+
+								"Error= \n%v\n",
+								funcName,
+								fileSelectLabel, targetBaseDirLabel,
+								targetBaseDir.absolutePath, nameFInfo.Name(), err.Error())
 
 						errs = append(errs, err2)
 
@@ -4241,14 +4462,17 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 						err = dTreeInfo.FoundFiles.AddFileMgrByDirFileNameExt(
 							nextDir.CopyOut(),
 							nameFInfo.Name(),
-							ePrefix)
+							ePrefix.XCpy("nameFInfo"))
 
 						if err != nil {
-							err2 = fmt.Errorf(ePrefix+
-								"\nERROR returned by dTreeInfo.FoundFiles.AddFileMgrByDirFileNameExt(nextDir, fileNameExt)\n"+
-								"nextDir='%v'\n"+
-								"fileNameExt='%v'"+
-								"Error='%v'\n\n",
+
+							err2 = fmt.Errorf("%v\n"+
+								"ERROR returned by dTreeInfo.FoundFiles."+
+								"AddFileMgrByDirFileNameExt(nextDir, fileNameExt)\n"+
+								"nextDir= '%v'\n"+
+								"fileNameExt= '%v'\n"+
+								"Error= \n%v\n",
+								funcName,
 								nextDir.absolutePath,
 								nameFInfo.Name(),
 								err.Error())
@@ -4268,9 +4492,11 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 
 			if err != nil {
 
-				err2 = fmt.Errorf(ePrefix+
-					"\nError returned by dirPtr.Close()\n"+
-					"Error='%v'\n\n", err.Error())
+				err2 = fmt.Errorf("%v\n"+
+					"Error returned by dirPtr.Close()\n"+
+					"Error= \n%v\n",
+					ePrefix.String(),
+					err.Error())
 
 				errs = append(errs, err2)
 			}
@@ -4280,8 +4506,11 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 
 	} // End of for !mainLoopIsDone
 
-	if len(dTreeInfo.Directories.dirMgrs) > 0 && skipTopLevelDirectory {
+	if len(dTreeInfo.Directories.dirMgrs) > 0 &&
+		skipTopLevelDirectory {
+
 		_, _ = dTreeInfo.Directories.PopFirstDirMgr()
+
 	}
 
 	return dTreeInfo, errs
