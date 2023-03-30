@@ -2682,18 +2682,30 @@ func (dMgr *DirMgr) FindDirectoryTreeFiles(
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.FindDirectoryTreeFiles() "
-	dMgrHlpr := dirMgrHelper{}
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"DirMgr."+
+			"FindDirectoryTreeFiles()",
+		"")
+
+	if err != nil {
+		return dTreeInfo, err
+	}
 
 	dTreeInfo,
-		errs = dMgrHlpr.findDirectoryTreeFiles(
+		errs = new(dirMgrHelper).findDirectoryTreeFiles(
 		dMgr,
 		fileSelectionCriteria,
 		false,
 		true,
-		ePrefix,
 		"dMgr",
-		"fileSelectionCriteria")
+		"fileSelectionCriteria",
+		ePrefix)
 
 	return dTreeInfo, errs
 }
@@ -2925,12 +2937,24 @@ func (dMgr *DirMgr) FindFilesBySelectCriteria(
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.FindFilesBySelectCriteria() "
+	dTreeInfo := DirectoryTreeInfo{}
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"DirMgr."+
+			"FindFilesBySelectCriteria()",
+		"")
+
+	if err != nil {
+		return dTreeInfo.FoundFiles, err
+	}
 
 	dMgrHlpr := dirMgrHelper{}
-
-	dTreeInfo := DirectoryTreeInfo{}
-	var err error
 
 	dTreeInfo,
 		errs := dMgrHlpr.findDirectoryTreeFiles(
@@ -2938,9 +2962,9 @@ func (dMgr *DirMgr) FindFilesBySelectCriteria(
 		fileSelectCriteria,
 		false, // skip top level directory
 		false, // scan sub-directories
-		ePrefix,
 		"dMgr",
-		"fileSelectCriteria")
+		"fileSelectCriteria",
+		ePrefix)
 
 	if len(errs) > 0 {
 		err = dMgr.ConsolidateErrors(errs)
@@ -3149,10 +3173,24 @@ func (dMgr *DirMgr) FindWalkDirFiles(
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.FindWalkDirFiles() "
 	dTreeInfo := DirectoryTreeInfo{}
-	var err error
 	var errs []error
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"DirMgr."+
+			"FindWalkDirFiles()",
+		"")
+
+	if err != nil {
+		return dTreeInfo, err
+	}
+
 	dMgrHlpr := dirMgrHelper{}
 
 	dTreeInfo,
@@ -3161,9 +3199,9 @@ func (dMgr *DirMgr) FindWalkDirFiles(
 		fileSelectCriteria,
 		false, // skip top level directory
 		true,  // scan sub-directories
-		ePrefix,
 		"dMgr",
-		"fileSelectCriteria")
+		"fileSelectCriteria",
+		ePrefix)
 
 	if len(errs) > 0 {
 		err = dMgr.ConsolidateErrors(errs)
@@ -3352,7 +3390,9 @@ func (dMgr *DirMgr) FindWalkDirFiles(
 //	        be returned as an 'error' type. Also, see the comment on
 //	        'DirectoryTreeInfo.ErrReturns', above.
 func (dMgr *DirMgr) FindWalkSubDirFiles(
-	fileSelectCriteria FileSelectionCriteria) (dTreeInfo DirectoryTreeInfo, err error) {
+	fileSelectCriteria FileSelectionCriteria) (
+	dTreeInfo DirectoryTreeInfo,
+	err error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -3362,7 +3402,19 @@ func (dMgr *DirMgr) FindWalkSubDirFiles(
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.FindWalkSubDirFiles() "
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"DirMgr."+
+			"FindWalkSubDirFiles()",
+		"")
+
+	if err != nil {
+		return dTreeInfo, err
+	}
+
 	dMgrHlpr := dirMgrHelper{}
 	var errs []error
 
@@ -3372,9 +3424,9 @@ func (dMgr *DirMgr) FindWalkSubDirFiles(
 		fileSelectCriteria,
 		true, // skip top level directory
 		true, // scan sub-directories
-		ePrefix,
 		"dMgr",
-		"fileSelectCriteria")
+		"fileSelectCriteria",
+		ePrefix)
 
 	if len(errs) > 0 {
 		err = dMgr.ConsolidateErrors(errs)
@@ -3602,7 +3654,9 @@ func (dMgr *DirMgr) GetAbsolutePathWithSeparatorLc() string {
 
 // GetDirectoryStats - Returns the number of bytes in the current directory identified
 // by the 'DirMgr' instance. This method only returns bytes in the current directory
-func (dMgr *DirMgr) GetDirectoryStats() (dirStats DirectoryStatsDto, errs []error) {
+func (dMgr *DirMgr) GetDirectoryStats() (
+	dirStats DirectoryStatsDto,
+	errs []error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -3612,16 +3666,31 @@ func (dMgr *DirMgr) GetDirectoryStats() (dirStats DirectoryStatsDto, errs []erro
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.GetDirectoryStats() "
-	dMgrHlpr := dirMgrHelper{}
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"DirMgr."+
+			"GetDirectoryStats()",
+		"")
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return dirStats, errs
+	}
 
 	dirStats,
-		errs = dMgrHlpr.findDirectoryTreeStats(
+		errs = new(dirMgrHelper).findDirectoryTreeStats(
 		dMgr,
 		false,
 		true,
-		ePrefix,
-		"dMgr")
+		"dMgr",
+		ePrefix)
 
 	return dirStats, errs
 }
@@ -3629,7 +3698,9 @@ func (dMgr *DirMgr) GetDirectoryStats() (dirStats DirectoryStatsDto, errs []erro
 // GetDirectoryTreeStats - Returns all the bytes in a directory tree.
 // The parent directory for the search is identified by the current
 // DirMgr instance.
-func (dMgr *DirMgr) GetDirectoryTreeStats() (dirStats DirectoryStatsDto, errs []error) {
+func (dMgr *DirMgr) GetDirectoryTreeStats() (
+	dirStats DirectoryStatsDto,
+	errs []error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -3639,16 +3710,31 @@ func (dMgr *DirMgr) GetDirectoryTreeStats() (dirStats DirectoryStatsDto, errs []
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.GetDirectoryTreeStats() "
-	dMgrHlpr := dirMgrHelper{}
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"DirMgr."+
+			"GetDirectoryTreeStats()",
+		"")
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return dirStats, errs
+	}
 
 	dirStats,
-		errs = dMgrHlpr.findDirectoryTreeStats(
+		errs = new(dirMgrHelper).findDirectoryTreeStats(
 		dMgr,
 		false,
 		true,
-		ePrefix,
-		"dMgr")
+		"dMgr",
+		ePrefix)
 
 	return dirStats, errs
 }

@@ -1,5 +1,9 @@
 package strmech
 
+// DirectoryStatsDto
+//
+// This type is used to accumulate and disseminate
+// information and statistics on a directory tree.
 type DirectoryStatsDto struct {
 	numOfFiles    uint64
 	numOfSubDirs  uint64
