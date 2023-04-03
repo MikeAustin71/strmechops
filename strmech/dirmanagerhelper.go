@@ -4992,10 +4992,13 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeStats(
 //		files for deletion in the directory specified by
 //		input parameter 'dMgr'.
 //
-//		Example Patterns
-//			"*.*"
-//			"*.txt"
-//			"*My*.txt"
+//		Example 'fileSearchPattern' strings
+//
+//		*.*             will match all files in directory.
+//		*.html          will match  anyfilename.html
+//		a*              will match  appleJack.txt
+//		j????row.txt    will match  j1x34row.txt
+//		data[0-9]*      will match 	data123.csv
 //
 //	targetBaseDirLabel			string
 //
@@ -5007,7 +5010,7 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeStats(
 //		string, a default value of "targetBaseDir" will
 //		be automatically applied.
 //
-//	fileSearchLabel				string
+//	fileSearchPatternLabel		string
 //
 //		The name or label used to describe the file
 //		search criteria used to select matching files.
@@ -5015,7 +5018,7 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeStats(
 //		returned by this method.
 //
 //		If this parameter is submitted as an empty
-//		string, a default value of "File Search Criteria"
+//		string, a default value of "File Search Pattern"
 //		will be automatically applied.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
@@ -5073,7 +5076,7 @@ func (dMgrHlpr *dirMgrHelper) findFilesByNamePattern(
 	targetBaseDir *DirMgr,
 	fileSearchPattern string,
 	targetBaseDirLabel string,
-	fileSearchLabel string,
+	fileSearchPatternLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
 	FileMgrCollection,
 	error) {
@@ -5119,9 +5122,9 @@ func (dMgrHlpr *dirMgrHelper) findFilesByNamePattern(
 		targetBaseDirLabel = "targetBaseDir"
 	}
 
-	if len(fileSearchLabel) == 0 {
+	if len(fileSearchPatternLabel) == 0 {
 
-		fileSearchLabel = "File Search Criteria"
+		fileSearchPatternLabel = "File Search Pattern"
 	}
 
 	var dMgrPathDoesExist bool
@@ -5164,8 +5167,8 @@ func (dMgrHlpr *dirMgrHelper) findFilesByNamePattern(
 				"Input parameter '%v' is INVALID!\n"+
 				"'%v' is an EMPTY STRING!\n",
 				ePrefix.String(),
-				fileSearchLabel,
-				fileSearchLabel)
+				fileSearchPatternLabel,
+				fileSearchPatternLabel)
 	}
 
 	dirPtr, err := os.Open(targetBaseDir.absolutePath)
@@ -5226,9 +5229,9 @@ func (dMgrHlpr *dirMgrHelper) findFilesByNamePattern(
 						"fileName='%v'\n"+
 						"Error= \n%v\n ",
 						ePrefix.String(),
-						fileSearchLabel,
+						fileSearchPatternLabel,
 						targetBaseDir.absolutePath,
-						fileSearchLabel,
+						fileSearchPatternLabel,
 						fileSearchPattern,
 						nameFInfo.Name(),
 						err.Error())
@@ -5288,43 +5291,159 @@ func (dMgrHlpr *dirMgrHelper) findFilesByNamePattern(
 	return fileMgrCol, new(StrMech).ConsolidateErrors(errs)
 }
 
-// getAbsolutePathElements - Returns all the directories and drive
-// specifications as an array of strings.
+// getAbsolutePathElements
 //
-// # Example
+// Receives an instance of DirMgr and returns all the
+// directories and drive specifications as an array of
+// strings.
 //
-// Path = "D:\ADir\BDir\CDir\EDir"
+// Example:
 //
-// Returned pathElements string array:
+//	DirMgr Path = "D:\ADir\BDir\CDir\EDir"
 //
-//	pathElements[0] = "D:"
-//	pathElements[1] = "ADir"
-//	pathElements[2] = "BDir"
-//	pathElements[3] = "CDir"
-//	pathElements[4] = "DDir"
-//	pathElements[4] = "EDir"
+//	Returned pathElements string array:
+//
+//		pathElements[0] = "D:"
+//		pathElements[1] = "ADir"
+//		pathElements[2] = "BDir"
+//		pathElements[3] = "CDir"
+//		pathElements[4] = "DDir"
+//		pathElements[4] = "EDir"
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dMgr						*DirMgr
+//
+//		A pointer to an instance of DirMgr. All files
+//		in the top level directory identified by 'dMgr'
+//		will be deleted.
+//
+//		Any files residing subdirectories of the top
+//		level directory identified by 'dMgr' will NOT
+//		be deleted.
+//
+//	dMgrLabel					string
+//
+//		The name or label associated with input parameter
+//		'dMgr', which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "dMgr" will be
+//		automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	pathElements				[]string
+//
+//		If this method completes successfully, this
+//		return parameter will be populated with an array
+//		of strings containing the elements of the
+//		directory specified by input parameter 'dMgr'.
+//
+//		Example:
+//
+//			dMgr Path = "D:\ADir\BDir\CDir\EDir"
+//
+//			Returned pathElements string array:
+//
+//				pathElements[0] = "D:"
+//				pathElements[1] = "ADir"
+//				pathElements[2] = "BDir"
+//				pathElements[3] = "CDir"
+//				pathElements[4] = "DDir"
+//				pathElements[4] = "EDir"
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (dMgrHlpr *dirMgrHelper) getAbsolutePathElements(
 	dMgr *DirMgr,
-	ePrefix string,
-	dMgrLabel string) (pathElements []string, err error) {
+	dMgrLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	pathElements []string,
+	err error) {
+
+	if dMgrHlpr.lock == nil {
+		dMgrHlpr.lock = new(sync.Mutex)
+	}
+
+	dMgrHlpr.lock.Lock()
+
+	defer dMgrHlpr.lock.Unlock()
 
 	pathElements = make([]string, 0, 50)
-	err = nil
-	absolutePath := ""
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"dirMgrHelper.getAbsolutePathElements()",
+		"")
+
+	if err != nil {
+
+		return pathElements, err
+	}
+
+	if dMgr == nil {
+
+		err = fmt.Errorf("%v \n"+
+			"ERROR: Input paramter 'dMgr' is a nil pointer!\n",
+			ePrefix.String())
+
+		return pathElements, err
+	}
+
+	if len(dMgrLabel) == 0 {
+
+		dMgrLabel = "dMgr"
+	}
 
 	_,
 		_,
-		err = dMgrHlpr.doesDirectoryExist(
+		err = new(dirMgrHelperAtom).doesDirectoryExist(
 		dMgr,
 		PreProcPathCode.None(),
-		ePrefix,
-		dMgrLabel)
+		dMgrLabel,
+		ePrefix)
 
 	if err != nil {
 
 		return pathElements, err
 
 	}
+
+	var absolutePath string
 
 	absolutePath = dMgr.absolutePath
 

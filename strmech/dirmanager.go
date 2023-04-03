@@ -2753,7 +2753,9 @@ func (dMgr *DirMgr) FindDirectoryTreeFiles(
 //	error             - If this method completes successfully, this return value
 //	                    will be set to 'nil'. Otherwise, a valid error message will
 //	                    be encapsulated in the returned type 'error'.
-func (dMgr *DirMgr) FindFilesByNamePattern(fileSearchPattern string) (FileMgrCollection, error) {
+func (dMgr *DirMgr) FindFilesByNamePattern(
+	fileSearchPattern string) (
+	FileMgrCollection, error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -2763,19 +2765,32 @@ func (dMgr *DirMgr) FindFilesByNamePattern(fileSearchPattern string) (FileMgrCol
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.FindFilesByNamePattern() "
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	fileMgrCol := FileMgrCollection{}.New()
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"DirMgr."+
+			"FindFilesByNamePattern()",
+		"")
+
+	if err != nil {
+		return fileMgrCol, err
+	}
 
 	dMgrHlpr := dirMgrHelper{}
-	fileMgrCol := FileMgrCollection{}.New()
-	var err error
 
 	fileMgrCol,
 		err = dMgrHlpr.findFilesByNamePattern(
 		dMgr,
 		fileSearchPattern,
-		ePrefix,
 		"dMgr",
-		"fileSearchPattern")
+		"fileSearchPattern",
+		ePrefix)
 
 	return fileMgrCol, err
 }
@@ -3536,7 +3551,9 @@ func (dMgr *DirMgr) GetAbsolutePathLc() string {
 //	pathElements[3] = "CDir"
 //	pathElements[4] = "DDir"
 //	pathElements[4] = "EDir"
-func (dMgr *DirMgr) GetAbsolutePathElements() (pathElements []string) {
+func (dMgr *DirMgr) GetAbsolutePathElements() (
+	pathElements []string,
+	err error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -3546,12 +3563,31 @@ func (dMgr *DirMgr) GetAbsolutePathElements() (pathElements []string) {
 
 	defer dMgr.lock.Unlock()
 
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"DirMgr."+
+			"GetAbsolutePathElements()",
+		"")
+
+	if err != nil {
+
+		return pathElements, err
+	}
+
 	pathElements = make([]string, 0, 50)
 	dMgrHlpr := dirMgrHelper{}
 
-	pathElements, _ = dMgrHlpr.getAbsolutePathElements(dMgr, "", "")
+	pathElements,
+		err = dMgrHlpr.
+		getAbsolutePathElements(
+			dMgr,
+			"",
+			ePrefix.XCpy("dMgr"))
 
-	return pathElements
+	return pathElements, err
 }
 
 // GetAbsolutePathWithSeparator - Returns the current
@@ -3908,7 +3944,9 @@ func (dMgr *DirMgr) GetDirPermissionCodes() (
 // GetNumberOfAbsPathElements - Returns the number of elements
 // or path components in the absolute path of the current
 // Directory Manager instance.
-func (dMgr *DirMgr) GetNumberOfAbsPathElements() int {
+func (dMgr *DirMgr) GetNumberOfAbsPathElements() (
+	int,
+	error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -3918,12 +3956,30 @@ func (dMgr *DirMgr) GetNumberOfAbsPathElements() int {
 
 	defer dMgr.lock.Unlock()
 
-	pathElements := make([]string, 0, 50)
-	dMgrHlpr := dirMgrHelper{}
+	var err error
 
-	pathElements, _ = dMgrHlpr.getAbsolutePathElements(dMgr, "", "")
+	var ePrefix *ePref.ErrPrefixDto
 
-	return len(pathElements)
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"DirMgr."+
+			"GetNumberOfAbsPathElements()",
+		"")
+
+	if err != nil {
+		return -1, err
+	}
+
+	var pathElements []string
+
+	pathElements,
+		err = new(dirMgrHelper).
+		getAbsolutePathElements(dMgr, "",
+			ePrefix.XCpy(
+				"dMgr"))
+
+	return len(pathElements), err
 }
 
 // GetOriginalPath - Returns the original path used to initialize
