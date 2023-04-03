@@ -3242,8 +3242,8 @@ func (dMgrHlpr *dirMgrHelper) equalPaths(
 //		parameter 'sourceDMgr'.
 //
 //		If the parent or top level directory specified by
-//		'targetBaseDir' does not exist on disk, an error
-//		will be returned.
+//		'targetBaseDir' does not exist, an error will be
+//		returned.
 //
 //	sourceDMgrLabel				string
 //
@@ -4958,48 +4958,194 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeStats(
 	return dTreeStats, errs
 }
 
-// findFilesByNamePattern - Searches files in the current directory ONLY. An attempt
-// will be made to match the file name with the specified search pattern string.
-// All matched files will be returned in a FileMgrCollection.
+// findFilesByNamePattern
+//
+// Searches for matching files in the top level or parent
+// directory specified by input parameter 'targetBaseDir'.
+//
+// Only the parent directory specified by 'targetBaseDir'
+// will be searched for matching files - NOT the
+// subdirectories in the directory tree.
+//
+// Files matching the search pattern specified by input
+// parameter 'fileSearchPattern' will be selected, stored
+// and returned as a type FileMgrCollection.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	targetBaseDir				*DirMgr
+//
+//		A pointer to an instance of DirMgr. The top level
+//		or parent directory of this DirMgr instance will
+//		be searched for files matching the search criteria
+//		specified by input parameter 'fileSearchPattern'.
+//
+//		If the parent or top level directory specified by
+//		'targetBaseDir' does not exist, an error will be
+//		returned.
+//
+//	fileSearchPattern				string
+//
+//		This string holds the pattern used to identify
+//		files for deletion in the directory specified by
+//		input parameter 'dMgr'.
+//
+//		Example Patterns
+//			"*.*"
+//			"*.txt"
+//			"*My*.txt"
+//
+//	targetBaseDirLabel			string
+//
+//		The name or label associated with input parameter
+//		'targetBaseDir' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "targetBaseDir" will
+//		be automatically applied.
+//
+//	fileSearchLabel				string
+//
+//		The name or label used to describe the file
+//		search criteria used to select matching files.
+//		This label will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "File Search Criteria"
+//		will be automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	FileMgrCollection
+//
+//		If this method completes successfully, the
+//		returned error Type will be populated with the
+//		files matching the search criteria specified by
+//		input parameter 'fileSearchPattern'.
+//
+//		FileMgrCollection - Manages a collection of
+//		FileMgr instances. These file manager instances
+//		will be populated with information on the
+//		matching files identified by the file search
+//		operation. Information on files contained in the
+//		FileMgrCollection can be retrieved through
+//		methods on the FileMgrCollection type.
+//
+//			type FileMgrCollection struct {
+//				fileMgrs []FileMgr
+//			}
+//
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (dMgrHlpr *dirMgrHelper) findFilesByNamePattern(
-	dMgr *DirMgr,
+	targetBaseDir *DirMgr,
 	fileSearchPattern string,
-	ePrefix string,
-	dMgrLabel string,
-	fileSearchLabel string) (FileMgrCollection,
+	targetBaseDirLabel string,
+	fileSearchLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	FileMgrCollection,
 	error) {
 
+	if dMgrHlpr.lock == nil {
+		dMgrHlpr.lock = new(sync.Mutex)
+	}
+
+	dMgrHlpr.lock.Lock()
+
+	defer dMgrHlpr.lock.Unlock()
+
 	fileMgrCol := FileMgrCollection{}.New()
+
 	var err, err2, err3 error
 
-	ePrefixCurrMethod := "dirMgrHelper.findFilesByNamePattern() "
+	var ePrefix *ePref.ErrPrefixDto
 
-	if len(ePrefix) == 0 {
-		ePrefix = ePrefixCurrMethod
-	} else {
-		ePrefix = ePrefix + "- " + ePrefixCurrMethod
+	funcName := "dirMgrHelper.findFilesByNamePattern() "
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return fileMgrCol, err
+	}
+
+	if targetBaseDir == nil {
+
+		err = fmt.Errorf("%v \n"+
+			"ERROR: Input paramter 'targetBaseDir' is a nil pointer!\n",
+			ePrefix.String())
+
+		return fileMgrCol, err
+	}
+
+	if len(targetBaseDirLabel) == 0 {
+
+		targetBaseDirLabel = "targetBaseDir"
+	}
+
+	if len(fileSearchLabel) == 0 {
+
+		fileSearchLabel = "File Search Criteria"
 	}
 
 	var dMgrPathDoesExist bool
 
 	dMgrPathDoesExist,
 		_,
-		err = dMgrHlpr.doesDirectoryExist(
-		dMgr,
+		err = new(dirMgrHelperAtom).doesDirectoryExist(
+		targetBaseDir,
 		PreProcPathCode.None(),
-		ePrefix,
-		dMgrLabel)
+		targetBaseDirLabel,
+		ePrefix)
 
 	if err != nil {
 		return fileMgrCol, err
 	}
 
 	if !dMgrPathDoesExist {
-		err = fmt.Errorf(ePrefix+
-			"\nERROR: %v Directory Path DOES NOT EXIST!\n"+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: %v Directory Path DOES NOT EXIST!\n"+
 			"%v='%v'\n",
-			dMgrLabel, dMgrLabel,
-			dMgr.absolutePath)
+			ePrefix.String(),
+			targetBaseDirLabel,
+			targetBaseDirLabel,
+			targetBaseDir.absolutePath)
 
 		return fileMgrCol, err
 	}
@@ -5008,27 +5154,33 @@ func (dMgrHlpr *dirMgrHelper) findFilesByNamePattern(
 
 	errCode := 0
 
-	errCode, _, fileSearchPattern = fh.IsStringEmptyOrBlank(fileSearchPattern)
+	errCode, _, fileSearchPattern =
+		fh.IsStringEmptyOrBlank(fileSearchPattern)
 
 	if errCode < 0 {
+
 		return fileMgrCol,
-			fmt.Errorf(ePrefix+
-				"\nInput parameter '%v' is INVALID!\n"+
+			fmt.Errorf("%v\n"+
+				"Input parameter '%v' is INVALID!\n"+
 				"'%v' is an EMPTY STRING!\n",
+				ePrefix.String(),
 				fileSearchLabel,
 				fileSearchLabel)
 	}
 
-	dirPtr, err := os.Open(dMgr.absolutePath)
+	dirPtr, err := os.Open(targetBaseDir.absolutePath)
 
 	if err != nil {
+
 		return fileMgrCol,
-			fmt.Errorf(ePrefix+
-				"\nError return by os.Open(%v.absolutePath).\n"+
-				"%v.absolutePath='%v'\nError='%v'\n",
-				dMgrLabel,
-				dMgrLabel,
-				dMgr.absolutePath,
+			fmt.Errorf("%v\n"+
+				"Error return by os.Open(%v.absolutePath).\n"+
+				"%v.absolutePath='%v'\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				targetBaseDirLabel,
+				targetBaseDirLabel,
+				targetBaseDir.absolutePath,
 				err.Error())
 	}
 
@@ -5039,15 +5191,17 @@ func (dMgrHlpr *dirMgrHelper) findFilesByNamePattern(
 
 	for err3 != io.EOF {
 
-		nameFileInfos, err3 = dirPtr.Readdir(1000)
+		nameFileInfos, err3 = dirPtr.Readdir(2000)
 
 		if err3 != nil && err3 != io.EOF {
 
-			err2 = fmt.Errorf(ePrefix+
-				"\nError returned by dirPtr.Readdirnames(1000).\n"+
-				"%v.absolutePath='%v'\nError='%v'\n",
-				dMgrLabel,
-				dMgr.absolutePath,
+			err2 = fmt.Errorf("%v\n"+
+				"Error returned by dirPtr.Readdirnames(2000).\n"+
+				"%v.absolutePath='%v'\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				targetBaseDirLabel,
+				targetBaseDir.absolutePath,
 				err3.Error())
 
 			errs = append(errs, err2)
@@ -5065,11 +5219,15 @@ func (dMgrHlpr *dirMgrHelper) findFilesByNamePattern(
 
 				if err != nil {
 
-					err2 = fmt.Errorf(ePrefix+
-						"\nError returned by fp.Match(%v, fileName).\n"+
-						"directorySearched='%v' %v='%v' fileName='%v' Error='%v' ",
+					err2 = fmt.Errorf("%v\n"+
+						"Error returned by fp.Match(%v, fileName).\n"+
+						"directorySearched='%v'\n"+
+						"%v='%v'\n"+
+						"fileName='%v'\n"+
+						"Error= \n%v\n ",
+						ePrefix.String(),
 						fileSearchLabel,
-						dMgr.absolutePath,
+						targetBaseDir.absolutePath,
 						fileSearchLabel,
 						fileSearchPattern,
 						nameFInfo.Name(),
@@ -5084,17 +5242,20 @@ func (dMgrHlpr *dirMgrHelper) findFilesByNamePattern(
 				} else {
 					// This file is a match. Process it.
 					err = fileMgrCol.AddFileMgrByFileInfo(
-						dMgr.absolutePath,
+						targetBaseDir.absolutePath,
 						nameFInfo,
 						ePrefix)
 
 					if err != nil {
 
-						err2 = fmt.Errorf(ePrefix+
-							"\nError returned by fileMgrCol.AddFileMgrByFileInfo(%v.absolutePath, nameFInfo).\n"+
-							"Directory='%v'\nFileName='%v'\nError='%v'\n",
-							dMgrLabel,
-							dMgr.absolutePath,
+						err2 = fmt.Errorf("%v\n"+
+							"Error returned by fileMgrCol.AddFileMgrByFileInfo(%v.absolutePath, nameFInfo).\n"+
+							"Directory='%v'\n"+
+							"FileName='%v'\n"+
+							"Error= \n%v\n",
+							funcName,
+							targetBaseDirLabel,
+							targetBaseDir.absolutePath,
 							nameFInfo.Name(),
 							err.Error())
 
@@ -5112,10 +5273,14 @@ func (dMgrHlpr *dirMgrHelper) findFilesByNamePattern(
 		err = dirPtr.Close()
 
 		if err != nil {
-			err2 = fmt.Errorf(ePrefix+
-				"\nError returned by dirPtr.Close().\n"+
-				"dirPtr Path='%v'\nError='%v'\n",
-				dMgr.absolutePath, err.Error())
+
+			err2 = fmt.Errorf("%v\n"+
+				"Error returned by dirPtr.Close().\n"+
+				"dirPtr Path='%v'\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				targetBaseDir.absolutePath, err.Error())
+
 			errs = append(errs, err2)
 		}
 	}
