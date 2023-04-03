@@ -5454,8 +5454,9 @@ func (dMgrHlpr *dirMgrHelper) getAbsolutePathElements(
 	return pathElements, err
 }
 
-// getDirectoryTree - Returns a DirMgrCollection containing all
-// the subdirectories in the path of the parent directory identified
+// getDirectoryTree
+//
+// Returns a DirMgrCollection containing all the subdirectories in the path of the parent directory identified
 // by the input parameter 'dMgr'.
 //
 // The returned DirMgrCollection will always contain the parent directory
