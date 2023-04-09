@@ -793,8 +793,6 @@ func (dMgrHlpr *dirMgrHelper) deleteAllFilesInDirectory(
 
 	var err error
 
-	errs = make([]error, 0, 300)
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
@@ -806,6 +804,20 @@ func (dMgrHlpr *dirMgrHelper) deleteAllFilesInDirectory(
 		errs = append(errs, err)
 
 		return deleteDirStats, errs
+	}
+
+	if dMgr == nil {
+
+		err = fmt.Errorf("%v \n"+
+			"ERROR: Input paramter 'dMgr' is a nil pointer!\n",
+			ePrefix.String())
+
+		return deleteDirStats, errs
+	}
+
+	if len(dMgrLabel) == 0 {
+
+		dMgrLabel = "dMgr"
 	}
 
 	var err2 error
@@ -5456,42 +5468,151 @@ func (dMgrHlpr *dirMgrHelper) getAbsolutePathElements(
 
 // getDirectoryTree
 //
-// Returns a DirMgrCollection containing all the subdirectories in the path of the parent directory identified
-// by the input parameter 'dMgr'.
+// Returns a DirMgrCollection containing all the
+// subdirectories in the directory tree identified by the
+// input parameter 'dMgr'.
 //
-// The returned DirMgrCollection will always contain the parent directory
-// at the top of the array (index=0). Therefore, if no errors are encountered,
-// the returned DirMgrCollection will always consist of at least one directory.
-// If subdirectories are found, then the returned DirMgrCollection will
-// contain more than one directory.
+// The returned DirMgrCollection will always contain the
+// parent directory at the top of the array (index=0).
+// Therefore, if no errors are encountered, the returned
+// DirMgrCollection will always consist of at least one
+// directory.
+//
+// If subdirectories are found, then the returned
+// DirMgrCollection will contain more than one directory.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dMgr						*DirMgr
+//
+//		A pointer to an instance of DirMgr specifying a
+//		directory. This method will identify the 'dMgr'
+//		parent directory and all existing subdirectories
+//		through a returned instance of DirMgrCollection.
+//
+//	dMgrLabel					string
+//
+//		The name or label associated with input parameter
+//		'dMgr', which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "dMgr" will be
+//		automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	dirMgrs DirMgrCollection
+//
+//		If this method completes successfully, this
+//		method will return an instance of DirMgrCollection
+//		populated with an array of 'DirMgr' objects
+//		identifying the parent directory and all
+//		subdirectories specified by input parameter
+//		'dMgr'.
+//
+//			type DirMgrCollection struct {
+//				dirMgrs []DirMgr
+//			}
+//
+//	errs						[]error
+//
+//		An array of error objects.
+//
+//		If this method completes successfully, the
+//		returned error array is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		This error array may contain multiple errors.
 func (dMgrHlpr *dirMgrHelper) getDirectoryTree(
 	dMgr *DirMgr,
-	ePrefix string,
-	dMgrLabel string) (dirMgrs DirMgrCollection, errs []error) {
+	dMgrLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	dirMgrs DirMgrCollection,
+	errs []error) {
 
-	ePrefixCurrMethod := "dirMgrHelper.getDirectoryTree() "
+	if dMgrHlpr.lock == nil {
+		dMgrHlpr.lock = new(sync.Mutex)
+	}
+
+	dMgrHlpr.lock.Lock()
+
+	defer dMgrHlpr.lock.Unlock()
+
+	funcName := "dirMgrHelper.getDirectoryTree() "
 
 	dirMgrs = DirMgrCollection{}.New()
 
-	errs = make([]error, 0, 100)
-
 	var err, err2, err3 error
 
-	if len(ePrefix) == 0 {
-		ePrefix = ePrefixCurrMethod
-	} else {
-		ePrefix = ePrefix + "- " + ePrefixCurrMethod
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return dirMgrs, errs
 	}
+
+	if dMgr == nil {
+
+		err = fmt.Errorf("%v \n"+
+			"ERROR: Input paramter 'dMgr' is a nil pointer!\n",
+			ePrefix.String())
+
+		errs = append(errs, err)
+
+		return dirMgrs, errs
+	}
+
+	if len(dMgrLabel) == 0 {
+
+		dMgrLabel = "dMgr"
+	}
+
+	dMgrHlprAtom := dirMgrHelperAtom{}
 
 	var dMgrPathDoesExist bool
 
 	dMgrPathDoesExist,
 		_,
-		err = dMgrHlpr.doesDirectoryExist(
+		err = dMgrHlprAtom.doesDirectoryExist(
 		dMgr,
 		PreProcPathCode.None(),
-		ePrefix,
-		dMgrLabel)
+		dMgrLabel,
+		ePrefix)
 
 	if err != nil {
 
@@ -5501,10 +5622,12 @@ func (dMgrHlpr *dirMgrHelper) getDirectoryTree(
 	}
 
 	if !dMgrPathDoesExist {
-		err = fmt.Errorf(ePrefix+
-			"\nERROR: %v Directory Path DOES NOT EXIST!\n"+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: %v Directory Path DOES NOT EXIST!\n"+
 			"%v='%v'\n",
-			dMgrLabel, dMgrLabel,
+			ePrefix.String(),
+			dMgrLabel,
+			dMgrLabel,
 			dMgr.absolutePath)
 
 		errs = append(errs, err)
@@ -5512,7 +5635,8 @@ func (dMgrHlpr *dirMgrHelper) getDirectoryTree(
 		return dirMgrs, errs
 	}
 
-	dirMgrs.AddDirMgr(dMgrHlpr.copyOut(dMgr))
+	dirMgrs.AddDirMgr(
+		dMgrHlprAtom.copyOut(dMgr))
 
 	fh := FileHelper{}
 
@@ -5526,10 +5650,15 @@ func (dMgrHlpr *dirMgrHelper) getDirectoryTree(
 		dirPtr, err = os.Open(dirMgrs.dirMgrs[i].absolutePath)
 
 		if err != nil {
-			err2 = fmt.Errorf(ePrefix+
-				"\nError return by os.Open(dirMgrs.dirMgrs[%v].absolutePath). "+
-				"dMgr.absolutePath='%v'\nError='%v'\n\n",
-				i, dirMgrs.dirMgrs[i].absolutePath, err.Error())
+
+			err2 = fmt.Errorf("%v\n"+
+				"Error return by os.Open(dirMgrs.dirMgrs[%v].absolutePath).\n"+
+				"dMgr.absolutePath='%v'\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				i,
+				dirMgrs.dirMgrs[i].absolutePath,
+				err.Error())
 
 			errs = append(errs, err2)
 			continue
@@ -5539,14 +5668,17 @@ func (dMgrHlpr *dirMgrHelper) getDirectoryTree(
 
 		for err3 != io.EOF {
 
-			nameFileInfos, err3 = dirPtr.Readdir(1000)
+			nameFileInfos, err3 = dirPtr.Readdir(2000)
 
 			if err3 != nil && err3 != io.EOF {
 
-				err2 = fmt.Errorf("\n"+ePrefix+
+				err2 = fmt.Errorf("%v\n"+
 					"Error returned by dirPtr.Readdirnames(-1).\n"+
-					"dMgr.absolutePath='%v'\nError='%v'\n",
-					dMgr.absolutePath, err3.Error())
+					"dMgr.absolutePath='%v'\n"+
+					"Error= \n%v\n",
+					ePrefix.String(),
+					dMgr.absolutePath,
+					err3.Error())
 
 				errs = append(errs, err2)
 				break
@@ -5564,10 +5696,13 @@ func (dMgrHlpr *dirMgrHelper) getDirectoryTree(
 					if err != nil {
 
 						err2 =
-							fmt.Errorf("\n"+ePrefix+
-								"Error returned by dirMgrs.AddDirMgrByPathNameStr(newDirPathFileName). "+
-								"dirPtr='%v' Error='%v' ",
-								newDirPathFileName, err.Error())
+							fmt.Errorf("%v\n"+
+								"Error returned by dirMgrs.AddDirMgrByPathNameStr(newDirPathFileName).\n"+
+								"dirPtr='%v'\n"+
+								"Error='%v'\n",
+								ePrefix.String(),
+								newDirPathFileName,
+								err.Error())
 
 						errs = append(errs, err2)
 						continue
@@ -5584,10 +5719,13 @@ func (dMgrHlpr *dirMgrHelper) getDirectoryTree(
 
 			if err != nil {
 
-				err2 = fmt.Errorf("\n"+ePrefix+
+				err2 = fmt.Errorf("%v\n"+
 					"Error returned by dirPtr.Close().\n"+
-					"dirPtr='%v'\nError='%v'\n",
-					dMgr.absolutePath, err.Error())
+					"dirPtr='%v'\n"+
+					"Error= \n%v\n",
+					ePrefix.String(),
+					dMgr.absolutePath,
+					err.Error())
 
 				errs = append(errs, err2)
 			}

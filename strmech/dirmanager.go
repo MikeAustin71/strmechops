@@ -3775,16 +3775,121 @@ func (dMgr *DirMgr) GetDirectoryTreeStats() (
 	return dirStats, errs
 }
 
-// GetDirectoryTree - Returns a DirMgrCollection containing all
-// the subdirectories in the path of the parent directory identified
-// by the current DirMgr instance.
+// GetDirectoryTree
 //
-// The returned DirMgrCollection will always contain the parent directory
-// at the top of the array (index=0). Therefore, if no errors are encountered,
-// the returned DirMgrCollection will always consist of at least one directory.
-// If subdirectories are found, then the returned DirMgrCollection will
-// contain more than one directory.
-func (dMgr *DirMgr) GetDirectoryTree() (dirMgrs DirMgrCollection, errs []error) {
+// Returns a DirMgrCollection containing all the
+// subdirectories in the path of the parent directory
+// identified by the current DirMgr instance.
+//
+// The returned DirMgrCollection will always contain the
+// parent directory at the top of the array (index=0).
+// Therefore, if no errors are encountered, the returned
+// DirMgrCollection will always consist of at least one
+// directory.
+//
+// If subdirectories are found, then the returned
+// DirMgrCollection will contain more than one directory.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	dirMgrs DirMgrCollection
+//
+//		If this method completes successfully, this
+//		method will return an instance of DirMgrCollection
+//		populated with an array of 'DirMgr' objects
+//		identifying the parent directory and all
+//		subdirectories specified by current instance of
+//		'DirMgr'.
+//
+//			type DirMgrCollection struct {
+//				dirMgrs []DirMgr
+//			}
+//
+//	errs						[]error
+//
+//		An array of error objects.
+//
+//		If this method completes successfully, the
+//		returned error array is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		This error array may contain multiple errors.
+func (dMgr *DirMgr) GetDirectoryTree(
+	errorPrefix interface{}) (
+	dirMgrs DirMgrCollection,
+	errs []error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -3794,12 +3899,29 @@ func (dMgr *DirMgr) GetDirectoryTree() (dirMgrs DirMgrCollection, errs []error) 
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.GetDirectoryTree() "
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgr.GetDirectoryTree()",
+		"")
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return dirMgrs, errs
+	}
 
 	dMgrHlpr := dirMgrHelper{}
 
 	dirMgrs, errs =
-		dMgrHlpr.getDirectoryTree(dMgr, ePrefix, "dMgr")
+		dMgrHlpr.getDirectoryTree(
+			dMgr,
+			"dMgr",
+			ePrefix)
 
 	return dirMgrs, errs
 }
@@ -3817,15 +3939,14 @@ func (dMgr *DirMgr) GetDirectoryName() string {
 	defer dMgr.lock.Unlock()
 
 	directoryName := ""
-	dMgrHlpr := dirMgrHelper{}
 
 	_,
 		_,
-		_ = dMgrHlpr.doesDirectoryExist(
+		_ = new(dirMgrHelperAtom).doesDirectoryExist(
 		dMgr,
 		PreProcPathCode.None(),
-		"",
-		"dMgr")
+		"dMgr",
+		nil)
 
 	if !dMgr.isInitialized {
 
