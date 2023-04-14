@@ -5565,8 +5565,6 @@ func (dMgrHlpr *dirMgrHelper) getDirectoryTree(
 
 	defer dMgrHlpr.lock.Unlock()
 
-	funcName := "dirMgrHelper.getDirectoryTree() "
-
 	dirMgrs = DirMgrCollection{}.New()
 
 	var err, err2, err3 error
@@ -5576,7 +5574,7 @@ func (dMgrHlpr *dirMgrHelper) getDirectoryTree(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		funcName,
+		"dirMgrHelper.getDirectoryTree()",
 		"")
 
 	if err != nil {
@@ -5735,74 +5733,185 @@ func (dMgrHlpr *dirMgrHelper) getDirectoryTree(
 	return dirMgrs, errs
 }
 
-// getParentDirMgr - Returns a new Directory Manager instance
-// which represents the parent path for the input Directory
-// Manager, 'dMgr'. The 'dMgr' absolute path is used in extracting
-// the parent Directory Manager.
+// getParentDirMgr
+//
+// Returns a new Directory Manager instance which
+// represents the parent path for the input Directory
+// Manager, 'dMgr'. The 'dMgr' absolute path is used
+// in extracting the parent path in the form of a
+// new Directory Manager instance.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dMgr						*DirMgr
+//
+//		A pointer to an instance of DirMgr. The absolute
+//		path specified by this instance will be analyzed
+//		to extract and return the parent path.
+//
+//	dMgrLabel					string
+//
+//		The name or label associated with input parameter
+//		'dMgr', which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "dMgr" will be
+//		automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	dirMgrParent				DirMgr
+//
+//		If this method completes successfully, this
+//		returned instance of DirMgr will contain the
+//		absolute parent path extracted from input
+//		parameter 'dMgr'.
+//
+//	hasParent					bool
+//
+//		If input parameter 'dMgr' has a parent path, this
+//		returned boolean value will be set to 'true'.
+//
+//		Otherwise, this value is set to 'false' signaling
+//		that 'dMgr' does not have a parent path and that
+//		absolute path specified by 'dMgr' is a parent path.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (dMgrHlpr *dirMgrHelper) getParentDirMgr(
 	dMgr *DirMgr,
-	ePrefix string,
-	dMgrLabel string) (dirMgrOut DirMgr, hasParent bool, err error) {
+	dMgrLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	dirMgrParent DirMgr,
+	hasParent bool,
+	err error) {
 
-	dirMgrOut = DirMgr{}
-	hasParent = false
-	err = nil
-	var err2 error
-	ePrefixCurrMethod := "dirMgrHelper.lowLevelDeleteDirectoryAll() "
-
-	if len(ePrefix) == 0 {
-		ePrefix = ePrefixCurrMethod
-	} else {
-		ePrefix = ePrefix + "- " + ePrefixCurrMethod
+	if dMgrHlpr.lock == nil {
+		dMgrHlpr.lock = new(sync.Mutex)
 	}
+
+	dMgrHlpr.lock.Lock()
+
+	defer dMgrHlpr.lock.Unlock()
+
+	funcName := "dirMgrHelper.lowLevelDeleteDirectoryAll()"
+
+	hasParent = false
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"dirMgrHelper.getDirectoryTree()",
+		"")
+
+	if err != nil {
+
+		return dirMgrParent, hasParent, err
+	}
+
+	if dMgr == nil {
+
+		err = fmt.Errorf("%v \n"+
+			"ERROR: Input paramter 'dMgr' is a nil pointer!\n",
+			ePrefix.String())
+
+		return dirMgrParent, hasParent, err
+	}
+
+	if len(dMgrLabel) == 0 {
+
+		dMgrLabel = "dMgr"
+	}
+
+	dMgrHlprAtom := dirMgrHelperAtom{}
 
 	_,
 		_,
-		err = dMgrHlpr.doesDirectoryExist(
+		err = dMgrHlprAtom.doesDirectoryExist(
 		dMgr,
 		PreProcPathCode.None(),
-		ePrefix,
-		dMgrLabel)
+		dMgrLabel,
+		ePrefix)
 
 	if err != nil && !dMgr.isInitialized {
 
-		dirMgrOut = DirMgr{}
+		dirMgrParent = DirMgr{}
 		hasParent = false
-		return dirMgrOut, hasParent, err
+		return dirMgrParent, hasParent, err
 	}
 
 	err = nil
 
 	if len(dMgr.parentPath) == 0 {
 
-		dirMgrOut = dMgrHlpr.copyOut(dMgr)
+		dirMgrParent = dMgrHlprAtom.copyOut(dMgr)
 		hasParent = false
 		err = nil
 
-		return dirMgrOut, hasParent, err
+		return dirMgrParent, hasParent, err
 
 	} else {
 		hasParent = true
 	}
 
-	dirMgrOut, err2 = new(DirMgr).New(dMgr.parentPath)
+	var err2 error
+
+	dirMgrParent, err2 = new(DirMgr).New(dMgr.parentPath)
 
 	if err2 != nil {
-		err = fmt.Errorf(ePrefix+
-			"\nError returned by DirMgr{}.New(%v.parentPath).\n"+
-			"%v.parentPath=%v\nError='%v'\n",
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by DirMgr{}.New(%v.parentPath).\n"+
+			"%v.parentPath=%v\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
 			dMgrLabel,
 			dMgrLabel,
 			dMgr.parentPath,
 			err2.Error())
+
 		hasParent = true
-		dirMgrOut = DirMgr{}
-		return dirMgrOut, hasParent, err
+
+		dirMgrParent = DirMgr{}
+
+		return dirMgrParent, hasParent, err
 	}
 
 	err = nil
 
-	return dirMgrOut, hasParent, err
+	return dirMgrParent, hasParent, err
 }
 
 // getValidPathStr - Performs validation on a path string.

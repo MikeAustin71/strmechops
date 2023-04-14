@@ -253,9 +253,9 @@ func (srcCodeComments *SourceCodeComments) testSubsidiaryComments(
 
 	defer srcCodeComments.lock.Unlock()
 
-	var ePrefix *ePref.ErrPrefixDto
-
 	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(

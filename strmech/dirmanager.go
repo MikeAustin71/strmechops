@@ -4151,7 +4151,11 @@ func (dMgr *DirMgr) GetOriginalPath() string {
 //	                  will be returned.
 //
 //	                  If 'hasParent' is 'false', no error will be returned.
-func (dMgr *DirMgr) GetParentDirMgr() (dirMgrOut DirMgr, hasParent bool, err error) {
+func (dMgr *DirMgr) GetParentDirMgr(
+	errPrefDto *ePref.ErrPrefixDto) (
+	dirMgrParent DirMgr,
+	hasParent bool,
+	err error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -4161,17 +4165,28 @@ func (dMgr *DirMgr) GetParentDirMgr() (dirMgrOut DirMgr, hasParent bool, err err
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.GetParentDirMgr() "
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"DirMgr.GetParentDirMgr()",
+		"")
+
+	if err != nil {
+		return dirMgrParent, hasParent, err
+	}
+
 	dMgrHlpr := dirMgrHelper{}
 
-	dirMgrOut,
+	dirMgrParent,
 		hasParent,
 		err = dMgrHlpr.getParentDirMgr(
 		dMgr,
-		ePrefix,
-		"dMgr")
+		"dMgr",
+		ePrefix)
 
-	return dirMgrOut, hasParent, err
+	return dirMgrParent, hasParent, err
 }
 
 // GetParentPath - Returns a string containing the
