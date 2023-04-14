@@ -4152,7 +4152,7 @@ func (dMgr *DirMgr) GetOriginalPath() string {
 //
 //	                  If 'hasParent' is 'false', no error will be returned.
 func (dMgr *DirMgr) GetParentDirMgr(
-	errPrefDto *ePref.ErrPrefixDto) (
+	errorPrefix interface{}) (
 	dirMgrParent DirMgr,
 	hasParent bool,
 	err error) {
@@ -4168,8 +4168,8 @@ func (dMgr *DirMgr) GetParentDirMgr(
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
 		"DirMgr.GetParentDirMgr()",
 		"")
 
@@ -4189,11 +4189,106 @@ func (dMgr *DirMgr) GetParentDirMgr(
 	return dirMgrParent, hasParent, err
 }
 
-// GetParentPath - Returns a string containing the
-// parent path for the current Directory Manager
-// instance. The Parent Path string will NOT contain
-// a trailing path separator.
-func (dMgr *DirMgr) GetParentPath() string {
+// GetParentPath
+//
+// Returns a string containing the parent path for the
+// current Directory Manager instance. The Parent Path
+// string will NOT contain a trailing path separator.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If this method completes successfully, this
+//		method will return a string containing the
+//	 	absolute value of the parent path for the
+//	 	directory specified by the current instance of
+//		Directory Manager (DirMgr).
+//
+//		Be advised that the returned path will NOT
+//		contain a trailing path separator.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (dMgr *DirMgr) GetParentPath(
+	errorPrefix interface{}) (
+	string,
+	error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -4203,27 +4298,45 @@ func (dMgr *DirMgr) GetParentPath() string {
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.GetParentDirMgr() "
 	dMgrHlpr := dirMgrHelper{}
 	dirMgrOut := DirMgr{}
 	parentPath := ""
+
+	var ePrefix *ePref.ErrPrefixDto
 	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgr.GetParentPath()",
+		"")
+
+	if err != nil {
+		return parentPath, err
+	}
+
+	if !dMgr.isInitialized {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The current 'dMgr' instance is NOT initialized!\n",
+			ePrefix)
+
+		return parentPath, err
+	}
 
 	dirMgrOut,
 		_,
 		err = dMgrHlpr.getParentDirMgr(
 		dMgr,
-		ePrefix,
-		"dMgr")
+		"dMgr",
+		ePrefix)
 
-	if err != nil ||
-		!dMgr.isInitialized {
-		parentPath = ""
-	} else {
+	if err == nil {
+
 		parentPath = dirMgrOut.absolutePath
 	}
 
-	return parentPath
+	return parentPath, err
 }
 
 // GetPath - Returns the path used to configure this
@@ -4413,9 +4526,11 @@ func (dMgr *DirMgr) IsInitialized() bool {
 	return isInitialized
 }
 
-// IsParentPathPopulated - Returns a boolean value
-// indicating whether the parent path for this Directory
-// Manager instance is populated.
+// IsParentPathPopulated
+//
+// Returns a boolean value indicating whether the parent
+// path for the current Directory Manager instance is
+// populated.
 func (dMgr *DirMgr) IsParentPathPopulated() bool {
 
 	if dMgr.lock == nil {
@@ -4433,8 +4548,8 @@ func (dMgr *DirMgr) IsParentPathPopulated() bool {
 		_,
 		_ = dMgrHlpr.getParentDirMgr(
 		dMgr,
-		"",
-		"dMgr")
+		"dMgr",
+		nil)
 
 	if len(dMgr.parentPath) == 0 ||
 		!dMgr.isInitialized {
@@ -4446,9 +4561,10 @@ func (dMgr *DirMgr) IsParentPathPopulated() bool {
 	return isParentPathPopulated
 }
 
-// IsPathPopulated - Returns a boolean value indicating
-// whether the current Directory Manager path string is
-// populated.
+// IsPathPopulated
+//
+// Returns a boolean value indicating whether the current
+// Directory Manager path string is populated.
 func (dMgr *DirMgr) IsPathPopulated() bool {
 
 	if dMgr.lock == nil {
@@ -4461,18 +4577,22 @@ func (dMgr *DirMgr) IsPathPopulated() bool {
 
 	dMgrHlpr := dirMgrHelper{}
 	isDMgrPathPopulated := false
-
+	var err error
 	_,
 		_,
-		_ = dMgrHlpr.getParentDirMgr(
+		err = dMgrHlpr.getParentDirMgr(
 		dMgr,
 		"",
-		"dMgr")
+		nil)
 
 	if len(dMgr.path) == 0 ||
-		!dMgr.isInitialized {
+		!dMgr.isInitialized ||
+		err != nil {
+
 		isDMgrPathPopulated = false
+
 	} else {
+
 		isDMgrPathPopulated = true
 	}
 

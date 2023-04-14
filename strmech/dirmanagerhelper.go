@@ -5824,8 +5824,6 @@ func (dMgrHlpr *dirMgrHelper) getParentDirMgr(
 
 	defer dMgrHlpr.lock.Unlock()
 
-	funcName := "dirMgrHelper.lowLevelDeleteDirectoryAll()"
-
 	hasParent = false
 
 	var ePrefix *ePref.ErrPrefixDto
@@ -5833,7 +5831,7 @@ func (dMgrHlpr *dirMgrHelper) getParentDirMgr(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"dirMgrHelper.getDirectoryTree()",
+		"dirMgrHelper.getParentDirMgr()",
 		"")
 
 	if err != nil {
