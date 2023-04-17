@@ -559,3 +559,87 @@ func (dMgrHlprAtom *dirMgrHelperAtom) executeFileOpsOnFoundFiles(
 		return nil
 	}
 }
+
+// lowLevelScreenPathStrForInvalidChars - Examines input parameter 'pathStr'
+// to determine if it contains invalid characters.
+func (dMgrHlprAtom *dirMgrHelperAtom) lowLevelScreenPathStrForInvalidChars(
+	pathStr string,
+	pathStrLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	validPathStr string,
+	validPathStrLength int,
+	err error) {
+
+	if dMgrHlprAtom.lock == nil {
+		dMgrHlprAtom.lock = new(sync.Mutex)
+	}
+
+	dMgrHlprAtom.lock.Lock()
+
+	defer dMgrHlprAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"dirMgrHelperAtom."+
+			"lowLevelScreenPathStrForInvalidChars()",
+		"")
+
+	if err != nil {
+
+		return validPathStr, validPathStrLength, err
+	}
+
+	strLen := 0
+
+	pathStr,
+		strLen,
+		err = dMgrHlpr.isPathStringEmptyOrBlank(
+		pathStr,
+		true, // trim trailing path separator
+		ePrefix,
+		pathStrLabel)
+
+	if err != nil {
+
+		return validPathStr, validPathStrLength, err
+	}
+
+	tripleDotSeparator := "..."
+	doublePathSeparator := string(os.PathSeparator) + string(os.PathSeparator)
+
+	if strings.Contains(pathStr, tripleDotSeparator) {
+
+		err = fmt.Errorf("%v"+
+			"ERROR: Input parameter '%v' contains invalid dot characters!\n"+
+			"%v = %v\n",
+			ePrefix.String(),
+			pathStrLabel,
+			pathStrLabel,
+			pathStr)
+
+		return validPathStr, validPathStrLength, err
+
+	}
+
+	if strings.Contains(pathStr, doublePathSeparator) {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: Input parameter '%v' contains invalid path separator characters!\n"+
+			"%v = %v\n",
+			ePrefix.String(),
+			pathStrLabel,
+			pathStrLabel,
+			pathStr)
+
+		return validPathStr, validPathStrLength, err
+	}
+
+	validPathStr = pathStr
+	validPathStrLength = strLen
+	err = nil
+
+	return validPathStr, validPathStrLength, err
+}

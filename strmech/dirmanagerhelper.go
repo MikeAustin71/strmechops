@@ -5912,29 +5912,50 @@ func (dMgrHlpr *dirMgrHelper) getParentDirMgr(
 	return dirMgrParent, hasParent, err
 }
 
-// getValidPathStr - Performs validation on a path string.
-// If the string contains a filename and file extension,
-// this method will declare an error.
+// getValidPathStr
+//
+// Performs validation on a path string. If the string
+// contains a filename and file extension, this method
+// will declare an error.
 func (dMgrHlpr *dirMgrHelper) getValidPathStr(
 	pathStr string,
-	errorPrefix string,
-	pathStrLabel string) (validPathDto ValidPathStrDto, err error) {
+	pathStrLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	validPathDto ValidPathStrDto,
+	err error) {
+
+	if dMgrHlpr.lock == nil {
+		dMgrHlpr.lock = new(sync.Mutex)
+	}
+
+	dMgrHlpr.lock.Lock()
+
+	defer dMgrHlpr.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	validPathDto = ValidPathStrDto{}.New()
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"dirMgrHelper."+
-			"getValidPathStr()",
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"dirMgrHelper.getValidPathStr()",
 		"")
 
 	if err != nil {
 		return validPathDto, err
 	}
 
+	if len(pathStr) == 0 {
+
+		err = fmt.Errorf("%v \n"+
+			"ERROR: Input paramter 'pathStr' is invalid!\n"+
+			"'pathStr' has a length of zero.\n",
+			ePrefix.String())
+
+		return validPathDto, err
+	}
+
 	fh := new(FileHelper)
-	validPathDto = ValidPathStrDto{}.New()
 	pathSepStr := string(os.PathSeparator)
 	dotSeparator := "." + pathSepStr
 	doubleDotSeparator := "." + dotSeparator

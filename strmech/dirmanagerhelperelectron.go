@@ -4,6 +4,7 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"os"
+	"strings"
 	"sync"
 	"time"
 )
@@ -131,6 +132,160 @@ func (dMgrHlprElectron *dirMgrHelperElectron) empty(
 	dMgr.actualDirFileInfo = FileInfoPlus{}
 
 	return err
+}
+
+// isPathStringEmptyOrBlank
+//
+// Determines whether a path string is blank.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathStr						string
+//
+//		Contains the path string to be validated.
+//
+//	trimTrailingPathSeparator	bool
+//
+//		If this parameter is set to 'true', the returned
+//		path string will be trimmed. This means leading
+//		and trailing spaces will be deleted from the
+//		returned path string.
+//
+//	pathStrLabel				string
+//
+//		The name or label associated with input parameter
+//		'pathStr', which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "pathStr" will be
+//		automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	pathFileNameExt				string
+//
+//		This parameter returns the path, file name and
+//		file extension (if present). If input parameter
+//		'trimTrailingPathSeparator' is set to 'true',
+//		leading and trailing spaces will be deleted.
+//
+//	strLen						int
+//
+//		Returns the length of the path, file name and
+//		file extension string, 'pathFileNameExt'.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (dMgrHlprElectron *dirMgrHelperElectron) isPathStringEmptyOrBlank(
+	pathStr string,
+	trimTrailingPathSeparator bool,
+	pathStrLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	pathFileNameExt string,
+	strLen int,
+	err error) {
+
+	if dMgrHlprElectron.lock == nil {
+		dMgrHlprElectron.lock = new(sync.Mutex)
+	}
+
+	dMgrHlprElectron.lock.Lock()
+
+	defer dMgrHlprElectron.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"dirMgrHelperElectron.isPathStringEmptyOrBlank()",
+		"")
+
+	if err != nil {
+		return pathFileNameExt, strLen, err
+	}
+
+	if len(pathStrLabel) == 0 {
+		pathStrLabel = "pathStr"
+	}
+
+	strLen = len(pathStr)
+
+	if strLen == 0 {
+		err = fmt.Errorf("%v\n"+
+			"ERROR: %v is an empty string!\n",
+			ePrefix.String(),
+			pathStrLabel)
+
+		return pathFileNameExt, strLen, err
+	}
+
+	pathFileNameExt = strings.TrimLeft(pathStr, " ")
+
+	pathFileNameExt = strings.TrimRight(pathFileNameExt, " ")
+
+	strLen = len(pathFileNameExt)
+
+	if strLen == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: %v consists entirely of blank spaces!\n",
+			ePrefix.String(),
+			pathStrLabel)
+
+		return pathFileNameExt, strLen, err
+	}
+
+	pathFileNameExt =
+		new(FileHelper).AdjustPathSlash(pathFileNameExt)
+
+	dotPathSeparator := "." + string(os.PathSeparator)
+
+	if strings.HasSuffix(pathFileNameExt, dotPathSeparator) {
+		trimTrailingPathSeparator = false
+	}
+
+	strLen = len(pathFileNameExt)
+
+	if trimTrailingPathSeparator &&
+		pathFileNameExt[strLen-1] == os.PathSeparator {
+
+		pathFileNameExt = pathFileNameExt[0 : strLen-1]
+		strLen = len(pathFileNameExt)
+
+	}
+
+	return pathFileNameExt, strLen, err
 }
 
 // lowLevelDoesDirectoryExist
