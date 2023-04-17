@@ -560,8 +560,79 @@ func (dMgrHlprAtom *dirMgrHelperAtom) executeFileOpsOnFoundFiles(
 	}
 }
 
-// lowLevelScreenPathStrForInvalidChars - Examines input parameter 'pathStr'
-// to determine if it contains invalid characters.
+// lowLevelScreenPathStrForInvalidChars
+//
+// Examines input parameter 'pathStr' to determine if it
+// contains invalid characters.
+//
+// If 'pathStr' evaluates as 'valid', lead and trailing
+// spaces are deleted and the valid path string is
+// returned through parameter 'validPathStr'.
+//
+// If 'pathStr' is determined to contain invalid
+// characters, an error is returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathStr						string
+//
+//		This string contains the path to be validated.
+//
+//	pathStrLabel				string
+//
+//		The name or label associated with input parameter
+//		'pathStr', which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "pathStr" will be
+//		automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	validPathStr				string
+//
+//		If input parameter 'pathStr' is determined to be
+//		a valid path, leading and trailing spaces in
+//		'pathStr' will be deleted and returned through
+//		'validPathStr'.
+//
+//	validPathStrLength			int
+//
+//		This returned integer value specifies the length of
+//		'validPathStr'
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (dMgrHlprAtom *dirMgrHelperAtom) lowLevelScreenPathStrForInvalidChars(
 	pathStr string,
 	pathStrLabel string,
@@ -596,15 +667,20 @@ func (dMgrHlprAtom *dirMgrHelperAtom) lowLevelScreenPathStrForInvalidChars(
 
 	pathStr,
 		strLen,
-		err = dMgrHlpr.isPathStringEmptyOrBlank(
-		pathStr,
-		true, // trim trailing path separator
-		ePrefix,
-		pathStrLabel)
+		err = new(dirMgrHelperElectron).
+		isPathStringEmptyOrBlank(
+			pathStr,
+			true, // trim trailing path separator
+			pathStrLabel,
+			ePrefix)
 
 	if err != nil {
 
 		return validPathStr, validPathStrLength, err
+	}
+
+	if len(pathStrLabel) == 0 {
+		pathStrLabel = "pathStr"
 	}
 
 	tripleDotSeparator := "..."

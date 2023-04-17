@@ -194,7 +194,7 @@ func (dMgrHlprElectron *dirMgrHelperElectron) empty(
 //		Returns the length of the path, file name and
 //		file extension string, 'pathFileNameExt'.
 //
-//	error
+//	err							error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -235,10 +235,6 @@ func (dMgrHlprElectron *dirMgrHelperElectron) isPathStringEmptyOrBlank(
 		return pathFileNameExt, strLen, err
 	}
 
-	if len(pathStrLabel) == 0 {
-		pathStrLabel = "pathStr"
-	}
-
 	strLen = len(pathStr)
 
 	if strLen == 0 {
@@ -248,6 +244,10 @@ func (dMgrHlprElectron *dirMgrHelperElectron) isPathStringEmptyOrBlank(
 			pathStrLabel)
 
 		return pathFileNameExt, strLen, err
+	}
+
+	if len(pathStrLabel) == 0 {
+		pathStrLabel = "pathStr"
 	}
 
 	pathFileNameExt = strings.TrimLeft(pathStr, " ")

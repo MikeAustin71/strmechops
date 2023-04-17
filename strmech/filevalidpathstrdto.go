@@ -1,8 +1,9 @@
 package strmech
 
 import (
-	"errors"
 	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
+	"sync"
 )
 
 // ValidPathStrDto - Used to transfer file/path string attributes and
@@ -50,6 +51,8 @@ type ValidPathStrDto struct {
 
 	err error // If no error is encountered
 	// this value is nil
+
+	lock *sync.Mutex
 }
 
 func (vpDto ValidPathStrDto) New() ValidPathStrDto {
@@ -172,54 +175,79 @@ func (vpDto *ValidPathStrDto) GetError() error {
 //
 // If the current ValidPathStrDto is invalid, this method will return
 // an error. If the instance is valid, this method will return 'nil'.
-func (vpDto *ValidPathStrDto) IsDtoValid(ePrefix string) error {
+func (vpDto *ValidPathStrDto) IsDtoValid(
+	errorPrefix interface{}) error {
 
-	if len(ePrefix) == 0 {
-		ePrefix = "ValidPathStrDto.IsDtoValid() "
-	} else {
-		ePrefix = ePrefix + "- ValidPathStrDto.IsDtoValid()\n"
+	if vpDto.lock == nil {
+		vpDto.lock = new(sync.Mutex)
+	}
+
+	vpDto.lock.Lock()
+
+	defer vpDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"ValidPathStrDto.IsDtoValid()",
+		"")
+
+	if err != nil {
+		return err
 	}
 
 	if !vpDto.isInitialized {
-		return errors.New(ePrefix +
-			"ERROR: This ValidPathStrDto is INVALID!\n" +
-			"This ValidPathStrDto instance is NOT initialized!\n" +
-			"vpDto.isInitialized='false'\n")
+		return fmt.Errorf("%v\n"+
+			"ERROR: This ValidPathStrDto is INVALID!\n"+
+			"This ValidPathStrDto instance is NOT initialized!\n"+
+			"vpDto.isInitialized='false'\n",
+			ePrefix.String())
 	}
 
 	if vpDto.pathIsValid != PathValidStatus.Valid() {
-		return fmt.Errorf(ePrefix+
+		return fmt.Errorf("%v\n"+
 			"ERROR: This ValidPathStrDto is INVALID!\n"+
 			"The ValidPathStrDto 'Path Is Valid flag' is Invalid!\n"+
-			"vpDto.pathIsValid=%v'\n", vpDto.pathIsValid.String())
+			"vpDto.pathIsValid=%v'\n",
+			ePrefix.String(),
+			vpDto.pathIsValid.String())
 	}
 
 	if len(vpDto.pathStr) == 0 {
-		return errors.New(ePrefix +
-			"ERROR: This ValidPathStrDto is INVALID!\n" +
-			"The ValidPathStrDto 'pathStr' is EMPTY!\n")
+		return fmt.Errorf("%v\n"+
+			"ERROR: This ValidPathStrDto is INVALID!\n"+
+			"The ValidPathStrDto 'pathStr' is EMPTY!\n",
+			ePrefix.String())
 	}
 
 	if len(vpDto.absPathStr) == 0 {
-		return errors.New(ePrefix +
-			"ERROR: This ValidPathStrDto is INVALID!\n" +
-			"The ValidPathStrDto absolute path string is EMPTY!\n")
+		return fmt.Errorf("%v\n"+
+			"ERROR: This ValidPathStrDto is INVALID!\n"+
+			"The ValidPathStrDto absolute path string is EMPTY!\n",
+			ePrefix.String())
 	}
 
 	if vpDto.pathDoesExist < PathExistsStatus.Unknown() ||
 		vpDto.pathDoesExist > PathExistsStatus.Exists() {
-		return fmt.Errorf(ePrefix+
+		return fmt.Errorf("%v\n"+
 			"ERROR: This ValidPathStrDto is INVALID!\n"+
 			"ValidPathStrDto.pathDoesExist holds an invalid value.\n"+
-			"ValidPathStrDto.pathDoesExist='%v'\n", vpDto.pathDoesExist)
+			"ValidPathStrDto.pathDoesExist='%v'\n",
+			ePrefix.String(),
+			vpDto.pathDoesExist)
 	}
 
 	if vpDto.absPathDoesExist < PathExistsStatus.Unknown() ||
 		vpDto.absPathDoesExist > PathExistsStatus.Exists() {
-		return fmt.Errorf(ePrefix+
+		return fmt.Errorf("%v\n"+
 			"ERROR: This ValidPathStrDto is INVALID!\n"+
 			"ValidPathStrDto.absPathDoesExist holds an invalid value.\n"+
-			"ValidPathStrDto.absPathDoesExist='%v'\n", vpDto.absPathDoesExist)
+			"ValidPathStrDto.absPathDoesExist='%v'\n",
+			ePrefix.String(),
+			vpDto.absPathDoesExist)
 	}
 
 	return nil
