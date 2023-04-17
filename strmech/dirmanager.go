@@ -4605,7 +4605,8 @@ func (dMgr *DirMgr) IsPathPopulated() bool {
 // into is basic elements. Those elements are returned
 // in a type ValidPathStrDto
 func (dMgr *DirMgr) ParseValidPathStr(
-	pathStr string) (
+	pathStr string,
+	errorPrefix interface{}) (
 	ValidPathStrDto,
 	error) {
 
@@ -4616,14 +4617,27 @@ func (dMgr *DirMgr) ParseValidPathStr(
 	dMgr.lock.Lock()
 
 	defer dMgr.lock.Unlock()
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	validPathDto := ValidPathStrDto{}.New()
 
-	dMgrHlpr := dirMgrHelper{}
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FilePermissionConfig."+
+			"GetEntryTypeComponent()",
+		"")
+
+	if err != nil {
+		return validPathDto, err
+	}
 
 	validPathDto,
-		err := dMgrHlpr.getValidPathStr(
-		pathStr,
-		"DirMgr.ParseValidPathStr() ",
-		"pathStr")
+		err = new(dirMgrHelperMolecule).
+		getValidPathStr(
+			pathStr,
+			"pathStr",
+			ePrefix)
 
 	return validPathDto, err
 }

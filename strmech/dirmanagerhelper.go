@@ -6,7 +6,6 @@ import (
 	"io"
 	"os"
 	pf "path/filepath"
-	"runtime"
 	"strings"
 	"sync"
 )
@@ -5521,7 +5520,7 @@ func (dMgrHlpr *dirMgrHelper) getAbsolutePathElements(
 //
 // # Return Values
 //
-//	dirMgrs DirMgrCollection
+//	dirMgrs 					DirMgrCollection
 //
 //		If this method completes successfully, this
 //		method will return an instance of DirMgrCollection
@@ -5886,7 +5885,8 @@ func (dMgrHlpr *dirMgrHelper) getParentDirMgr(
 
 	var err2 error
 
-	dirMgrParent, err2 = new(DirMgr).New(dMgr.parentPath)
+	dirMgrParent,
+		err2 = new(DirMgr).New(dMgr.parentPath)
 
 	if err2 != nil {
 
@@ -5910,629 +5910,6 @@ func (dMgrHlpr *dirMgrHelper) getParentDirMgr(
 	err = nil
 
 	return dirMgrParent, hasParent, err
-}
-
-// getValidPathStr
-//
-// Performs validation on a path string. If the string
-// contains a filename and file extension, this method
-// will declare an error.
-func (dMgrHlpr *dirMgrHelper) getValidPathStr(
-	pathStr string,
-	pathStrLabel string,
-	errPrefDto *ePref.ErrPrefixDto) (
-	validPathDto ValidPathStrDto,
-	err error) {
-
-	if dMgrHlpr.lock == nil {
-		dMgrHlpr.lock = new(sync.Mutex)
-	}
-
-	dMgrHlpr.lock.Lock()
-
-	defer dMgrHlpr.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	validPathDto = ValidPathStrDto{}.New()
-
-	funcName := "dirMgrHelper.getValidPathStr()"
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		funcName,
-		"")
-
-	if err != nil {
-		return validPathDto, err
-	}
-
-	if len(pathStr) == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input paramter 'pathStr' is invalid!\n"+
-			"'pathStr' has a length of zero.\n",
-			ePrefix.String())
-
-		return validPathDto, err
-	}
-
-	fh := new(FileHelper)
-
-	dMgrHlprElectron := dirMgrHelperElectron{}
-
-	pathSepStr := string(os.PathSeparator)
-	dotSeparator := "." + pathSepStr
-	doubleDotSeparator := "." + dotSeparator
-	doesPathExist := false
-	fInfo := FileInfoPlus{}
-	var volNameIndex, lSlashIdxs, lDotIdxs,
-		strLen, firstCharIdx, lastCharIdx int
-	var slashIdxs, dotIdxs []int
-	var err2 error
-	var volNameStr string
-
-	pathStr,
-		strLen,
-		err =
-		new(dirMgrHelperAtom).
-			lowLevelScreenPathStrForInvalidChars(
-				pathStr,
-				pathStrLabel,
-				ePrefix)
-
-	if err != nil {
-		goto errorExit
-	}
-
-	validPathDto.originalPathStr = pathStr
-
-	if strLen > 2 &&
-		// Remove trailing slash
-		pathStr[strLen-1] == os.PathSeparator &&
-		pathStr[strLen-2] != '.' &&
-		pathStr[strLen-2] != os.PathSeparator {
-		pathStr = pathStr[0 : strLen-1]
-		strLen--
-	}
-
-	volNameIndex,
-		_,
-		volNameStr = fh.GetVolumeNameIndex(pathStr)
-
-	slashIdxs, err2 = fh.GetPathSeparatorIndexesInPathStr(
-		pathStr,
-		ePrefix)
-
-	if err2 != nil {
-		err = fmt.Errorf("%v\n"+
-			"Error returned by fh.GetPathSeparatorIndexesInPathStr(%v).\n"+
-			"%v='%v'\n"+
-			"Error= \n%v\n",
-			funcName,
-			pathStrLabel,
-			pathStrLabel,
-			pathStr,
-			err2.Error())
-
-		goto errorExit
-	}
-
-	lSlashIdxs = len(slashIdxs)
-
-	firstCharIdx,
-		lastCharIdx,
-		err2 =
-		fh.GetFirstLastNonSeparatorCharIndexInPathStr(
-			pathStr,
-			ePrefix)
-
-	if err2 != nil {
-		err = fmt.Errorf("%v\n"+
-			"Error returned by fh.GetFirstLastNonSeparatorCharIndexInPathStr("+
-			"%v).\n"+
-			"%v='%v'\n"+
-			"Error= \n%v\n",
-			funcName,
-			pathStrLabel,
-			pathStrLabel,
-			pathStr,
-			err2.Error())
-
-		goto errorExit
-	}
-
-	dotIdxs,
-		err2 = fh.GetDotSeparatorIndexesInPathStr(
-		pathStr,
-		ePrefix)
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error returned by fh.GetDotSeparatorIndexesInPathStr(%v).\n"+
-			"%v='%v'\n"+
-			"Error= \n%v\n",
-			funcName,
-			pathStrLabel,
-			pathStrLabel,
-			pathStr,
-			err2.Error())
-
-		goto errorExit
-	}
-
-	lDotIdxs = len(dotIdxs)
-
-	// identify obvious valid path strings
-
-	if pathStr == "." {
-
-		validPathDto.pathStr = dotSeparator
-		validPathDto.pathIsValid = PathValidStatus.Valid()
-		goto successExit
-
-	} else if pathStr == ".." {
-
-		validPathDto.pathStr = doubleDotSeparator
-		validPathDto.pathIsValid = PathValidStatus.Valid()
-		goto successExit
-
-	} else if pathStr == dotSeparator {
-
-		validPathDto.pathStr = dotSeparator
-		validPathDto.pathIsValid = PathValidStatus.Valid()
-		goto successExit
-
-	} else if pathStr == doubleDotSeparator {
-
-		validPathDto.pathStr = doubleDotSeparator
-		validPathDto.pathIsValid = PathValidStatus.Valid()
-		goto successExit
-
-	}
-
-	if volNameIndex == 0 &&
-		strings.ToLower(volNameStr) == strings.ToLower(pathStr) {
-
-		if strings.Contains(strings.ToLower(runtime.GOOS), "windows") {
-			pathStr += pathSepStr
-		}
-
-		validPathDto.pathStr = pathStr
-		validPathDto.pathIsValid = PathValidStatus.Valid()
-		goto successExit
-	}
-
-	// Check conversion to absolute path
-	validPathDto.absPathStr,
-		err2 =
-		fh.MakeAbsolutePath(pathStr, ePrefix)
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error returned by fh.MakeAbsolutePath("+
-			"validPathDto.pathStr)\n"+
-			"validPathDto.pathStr='%v'\n"+
-			"Error= \n%v\n",
-			funcName,
-			validPathDto.pathStr,
-			err2.Error())
-
-		goto errorExit
-	}
-
-	if lastCharIdx == -1 &&
-		lDotIdxs == 0 &&
-		lSlashIdxs == 0 {
-		// No characters, no dots and no slashes
-
-		err = fmt.Errorf("%v\n"+
-			"Error: %v is INVALID!\n"+
-			"%v contains no valid characters in the string!\n"+
-			"%v='%v'\n\n",
-			ePrefix.String(),
-			pathStrLabel,
-			pathStrLabel,
-			pathStrLabel,
-			pathStr)
-
-		goto errorExit
-
-	} else if lastCharIdx == -1 &&
-		lDotIdxs > 0 &&
-		lSlashIdxs == 0 {
-		// No characters, no slashes, but Has Dots
-		// Note: good dots have already been processed
-
-		err = fmt.Errorf("%v\n"+
-			"Error: %v contains improperly formatted dot characters!\n"+
-			"%v='%v'\n",
-			ePrefix.String(),
-			pathStrLabel,
-			pathStrLabel,
-			pathStr)
-
-		goto errorExit
-
-	} else if lastCharIdx == -1 &&
-		lDotIdxs > 0 &&
-		lSlashIdxs > 0 {
-		// No characters but Has slashes and
-		// has dots.
-		validPathDto.pathStr = pathStr
-		validPathDto.pathIsValid = PathValidStatus.Valid()
-
-	} else if lastCharIdx == -1 &&
-		lDotIdxs == 0 &&
-		lSlashIdxs > 0 {
-
-		// No characters, No dots, but Has slashes
-		err = fmt.Errorf("%v\n"+
-			"Error: '%v' contains improperly formatted path separator characters!\n"+
-			"%v='%v'\n\n",
-			ePrefix.String(),
-			pathStrLabel,
-			pathStrLabel,
-			pathStr)
-
-		goto errorExit
-
-	} else if lastCharIdx > -1 &&
-		lDotIdxs == 0 &&
-		lSlashIdxs == 0 {
-		// Has characters, but No dots and No slashes
-		validPathDto.pathStr = pathStr
-		validPathDto.pathIsValid = PathValidStatus.Valid()
-
-	} else if lastCharIdx > -1 &&
-		lDotIdxs > 0 &&
-		lSlashIdxs == 0 {
-		// Has characters, Has Dots, but No slashes
-		// Example  someFileName.txt
-
-		if lDotIdxs > 1 {
-
-			// To many dots
-			err = fmt.Errorf("%v\n"+
-				"Error: %v contains improperly formatted path separator characters!\n"+
-				"%v='%v'\n\n",
-				ePrefix.String(),
-				pathStrLabel,
-				pathStrLabel,
-				pathStr)
-
-			goto errorExit
-
-		} else {
-			// lDotIdx must equal '1'
-			if dotIdxs[0] < firstCharIdx {
-
-				// Example .git = directory
-				validPathDto.pathStr = pathStr
-				validPathDto.pathIsValid = PathValidStatus.Valid()
-
-			} else {
-
-				err = fmt.Errorf("%v\n"+
-					"Error: %v contains improperly formatted dot characters!\n"+
-					"%v='%v'\n\n",
-					ePrefix.String(),
-					pathStrLabel,
-					pathStrLabel,
-					pathStr)
-
-				goto errorExit
-			}
-		}
-
-	} else if lastCharIdx > -1 &&
-		lDotIdxs > 0 &&
-		lSlashIdxs > 0 {
-		// Has characters, Has slashes, Has dots
-
-		if firstCharIdx < slashIdxs[0] {
-
-			// Example somefile/
-			err = fmt.Errorf("%v\n"+
-				"Error: %v contains improperly "+
-				"formatted characters and path separators!\n"+
-				"%v='%v'\n\n",
-				ePrefix.String(),
-				pathStrLabel,
-				pathStrLabel,
-				pathStr)
-
-			goto errorExit
-
-		} else if dotIdxs[lDotIdxs-1] >
-			lastCharIdx {
-
-			// Example somedir.
-			err = fmt.Errorf("%v\n"+
-				"Error: %v contains improperly "+
-				"formatted dot characters!\n"+
-				"%v='%v'\n",
-				ePrefix.String(),
-				pathStrLabel,
-				pathStrLabel,
-				pathStr)
-
-			goto errorExit
-
-		} else if dotIdxs[lDotIdxs-1]-slashIdxs[lSlashIdxs-1] == 1 &&
-			lastCharIdx > dotIdxs[lDotIdxs-1] {
-
-			// ../dir1/dir2/.git
-			validPathDto.pathStr = pathStr
-			validPathDto.pathIsValid = PathValidStatus.Valid()
-
-		} else if lastCharIdx > dotIdxs[lDotIdxs-1] &&
-			dotIdxs[lDotIdxs-1] > slashIdxs[lSlashIdxs-1] &&
-			dotIdxs[lDotIdxs-1]-slashIdxs[lSlashIdxs-1] != 1 {
-			// ./dir1/dir2/fileName.ext
-
-			// Trim off trailing file name
-			validPathDto.pathStr = pathStr[0:slashIdxs[lSlashIdxs-1]]
-
-			if len(validPathDto.pathStr) == 0 {
-				err = fmt.Errorf("%v\n"+
-					"Error: %v contains a "+
-					"file name!\n"+
-					"Attemp to trim trailing file name failed!\n"+
-					"%v='%v'\n",
-					ePrefix.String(),
-					pathStrLabel,
-					pathStrLabel,
-					pathStr)
-
-				goto errorExit
-
-			} else {
-				validPathDto.pathIsValid = PathValidStatus.Valid()
-			}
-
-		} else if lastCharIdx > slashIdxs[lSlashIdxs-1] &&
-			slashIdxs[lSlashIdxs-1] > dotIdxs[lDotIdxs-1] {
-
-			// ../dir1/dir2/git
-			validPathDto.pathStr = pathStr
-			validPathDto.pathIsValid = PathValidStatus.Valid()
-
-		} else {
-
-			// unknown error
-			err = fmt.Errorf("%v\n"+
-				"Error: '%v' contains a "+
-				"file name!\n"+
-				"%v='%v'\n\n",
-				ePrefix.String(),
-				pathStrLabel,
-				pathStrLabel,
-				pathStr)
-
-			goto errorExit
-		}
-
-	} else if lastCharIdx > -1 &&
-		lDotIdxs == 0 &&
-		lSlashIdxs > 0 {
-		// Has characters, No Dots, Has slashes
-
-		if slashIdxs[lSlashIdxs-1] > lastCharIdx {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: %v contains improperly "+
-				"formatted path separators!\n"+
-				"%v='%v'\n\n",
-				ePrefix.String(),
-				pathStrLabel,
-				pathStrLabel,
-				pathStr)
-
-			goto errorExit
-
-		} else {
-			validPathDto.pathStr = pathStr
-			validPathDto.pathIsValid = PathValidStatus.Valid()
-		}
-
-	} else {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: %v is Invalid!\n"+
-			"%v='%v'\n\n",
-			ePrefix.String(),
-			pathStrLabel,
-			pathStrLabel,
-			pathStr)
-
-		goto errorExit
-	}
-
-successExit:
-
-	// Check conversion to absolute path
-	validPathDto.absPathStr,
-		err2 =
-		fh.MakeAbsolutePath(
-			validPathDto.pathStr,
-			ePrefix)
-
-	if err2 != nil {
-		err = fmt.Errorf("%v\n"+
-			"Error returned by fh.MakeAbsolutePath("+
-			"validPathDto.pathStr)\n"+
-			"validPathDto.pathStr='%v'\n"+
-			"Error= \n%v\n",
-			funcName,
-			validPathDto.pathStr,
-			err2.Error())
-
-		goto errorExit
-	}
-
-	validPathDto.pathVolumeIndex,
-		validPathDto.pathVolumeStrLength,
-		validPathDto.pathVolumeName =
-		fh.GetVolumeNameIndex(validPathDto.absPathStr)
-
-	doesPathExist,
-		fInfo,
-		err = dMgrHlprElectron.
-		lowLevelDoesDirectoryExist(
-			validPathDto.pathStr,
-			pathStrLabel,
-			ePrefix)
-
-	if err != nil {
-		goto errorExit
-	}
-
-	if doesPathExist {
-		validPathDto.pathDoesExist = PathExistsStatus.Exists()
-		validPathDto.pathFInfoPlus = fInfo.CopyOut()
-
-	} else {
-		// doesPathExist = false
-		validPathDto.pathDoesExist = PathExistsStatus.DoesNotExist()
-	}
-
-	doesPathExist,
-		fInfo,
-		err = dMgrHlprElectron.
-		lowLevelDoesDirectoryExist(
-			validPathDto.absPathStr,
-			pathStrLabel+".absolutePath",
-			ePrefix)
-
-	if err != nil {
-		goto errorExit
-	}
-
-	if doesPathExist {
-		validPathDto.absPathDoesExist = PathExistsStatus.Exists()
-		validPathDto.absPathFInfoPlus = fInfo.CopyOut()
-	} else {
-		// doesPathExist = false
-		validPathDto.absPathDoesExist = PathExistsStatus.DoesNotExist()
-	}
-
-	if validPathDto.pathDoesExist != validPathDto.absPathDoesExist {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: The path and absolute path show different values for "+
-			"existence on disk.\n"+
-			"validPathDto.pathDoesExist='%v'\n"+
-			"validPathDto.absPathDoesExist='%v'\n",
-			ePrefix.String(),
-			validPathDto.pathDoesExist.String(),
-			validPathDto.absPathDoesExist.String())
-
-		goto errorExit
-	}
-
-	if validPathDto.pathDoesExist == PathExistsStatus.Exists() &&
-		validPathDto.absPathDoesExist == PathExistsStatus.Exists() {
-
-		if !validPathDto.absPathFInfoPlus.IsDir() {
-			err = fmt.Errorf("%v\n"+
-				"ERROR: The '%v' absolute path exists but it is classified "+
-				"as a File, NOT a directory!\n"+
-				"%v base path='%v'\n"+
-				"%v absolute path='%v'\n",
-				ePrefix.String(),
-				pathStrLabel,
-				pathStrLabel,
-				validPathDto.pathStr,
-				pathStrLabel,
-				validPathDto.absPathStr)
-
-			goto errorExit
-		}
-
-		if validPathDto.absPathFInfoPlus.Mode().IsRegular() {
-			err = fmt.Errorf("%v\n"+
-				"ERROR: The '%v' absolute path exists but it is classified\n"+
-				"as a 'Regular' File, NOT a directory!\n"+
-				"%v base path ='%v'\n"+
-				"%v absolute path='%v'\n",
-				ePrefix.String(),
-				pathStrLabel,
-				pathStrLabel,
-				validPathDto.pathStr,
-				pathStrLabel,
-				validPathDto.absPathStr)
-
-			goto errorExit
-
-		}
-
-		if !validPathDto.pathFInfoPlus.IsDir() {
-			err = fmt.Errorf("%v\n"+
-				"ERROR: The '%v' base path exists but it is classified\n"+
-				"as a File, NOT a directory!\n"+
-				"%v base path='%v'\n"+
-				"%v absolute path='%v'\n",
-				ePrefix.String(),
-				pathStrLabel,
-				pathStrLabel,
-				validPathDto.pathStr,
-				pathStrLabel,
-				validPathDto.absPathStr)
-
-			goto errorExit
-		}
-
-		if validPathDto.pathFInfoPlus.Mode().IsRegular() {
-			err = fmt.Errorf("%v\n"+
-				"ERROR: The '%v' base path exists but it is classified\n"+
-				"as a 'Regular' File, NOT a directory!\n"+
-				"%v base path='%v'\n"+
-				"%v absolute path='%v'\n",
-				ePrefix.String(),
-				pathStrLabel,
-				pathStrLabel,
-				validPathDto.pathStr,
-				pathStrLabel,
-				validPathDto.absPathStr)
-
-			goto errorExit
-
-		}
-
-		err = nil
-	}
-
-errorExit:
-	if err != nil {
-
-		validPathDto.pathStr = pathStr
-		validPathDto.absPathStr = ""
-		validPathDto.pathStrLength =
-			len(pathStr)
-		validPathDto.pathIsValid = PathValidStatus.Invalid()
-		validPathDto.isInitialized = true
-		validPathDto.pathIsValid = PathValidStatus.Invalid()
-		validPathDto.err = fmt.Errorf("%v", err.Error())
-		return validPathDto, err
-	}
-
-	validPathDto.pathStrLength =
-		len(validPathDto.pathStr)
-
-	validPathDto.absPathStrLength =
-		len(validPathDto.absPathStr)
-
-	validPathDto.pathType = PathFileType.Path()
-	validPathDto.pathIsValid = PathValidStatus.Valid()
-	validPathDto.isInitialized = true
-
-	err = validPathDto.IsDtoValid(
-		ePrefix)
-
-	return validPathDto, err
 }
 
 func (dMgrHlpr *dirMgrHelper) lowLevelDirMgrFieldConfig(
@@ -7444,25 +6821,41 @@ func (dMgrHlpr *dirMgrHelper) moveSubDirectoryTree(
 func (dMgrHlpr *dirMgrHelper) setDirMgr(
 	dMgr *DirMgr,
 	pathStr string,
-	ePrefix string,
 	dMgrLabel string,
-	pathStrLabel string) (isEmpty bool, err error) {
+	pathStrLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	isEmpty bool,
+	err error) {
 
-	err = nil
+	if dMgrHlpr.lock == nil {
+		dMgrHlpr.lock = new(sync.Mutex)
+	}
+
+	dMgrHlpr.lock.Lock()
+
+	defer dMgrHlpr.lock.Unlock()
+
 	isEmpty = true
 
-	ePrefixCurrMethod := "dirMgrHelper.setDirMgr() "
+	var ePrefix *ePref.ErrPrefixDto
 
-	if len(ePrefix) == 0 {
-		ePrefix = ePrefixCurrMethod
-	} else {
-		ePrefix = ePrefix + "- " + ePrefixCurrMethod
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"dirMgrHelper."+
+			"setDirMgr()",
+		"")
+
+	if err != nil {
+		return isEmpty, err
 	}
 
 	if dMgr == nil {
 
-		err = fmt.Errorf(ePrefix+
-			"\nInput parameter %v pointer is 'nil'!\n", dMgrLabel)
+		err = fmt.Errorf("%v\n"+
+			"Input parameter %v pointer is 'nil'!\n",
+			ePrefix.String(),
+			dMgrLabel)
 
 		return isEmpty, err
 	}
@@ -7479,20 +6872,21 @@ func (dMgrHlpr *dirMgrHelper) setDirMgr(
 
 	validPathDto,
 		err =
-		dMgrHlpr.getValidPathStr(
-			pathStr,
-			ePrefix,
-			pathStrLabel)
+		new(dirMgrHelperMolecule).
+			getValidPathStr(
+				pathStr,
+				pathStrLabel,
+				ePrefix)
 
 	if err != nil {
 		isEmpty = true
 		return isEmpty, err
 	}
 
-	err = dMgrHlpr.empty(
+	err = new(dirMgrHelperElectron).empty(
 		dMgr,
-		ePrefix,
-		dMgrLabel)
+		dMgrLabel,
+		ePrefix)
 
 	if err != nil {
 
@@ -7781,20 +7175,22 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrWithPathDirectoryName(
 
 	validPathDto,
 		err =
-		dMgrHlpr.getValidPathStr(
-			finalPathStr,
-			ePrefix,
-			"pathStr")
+		new(dirMgrHelperMolecule).
+			getValidPathStr(
+				finalPathStr,
+				"pathStr",
+				ePrefix)
 
 	if err != nil {
 		isEmpty = true
 		return isEmpty, err
 	}
 
-	err = dMgrHlpr.empty(
-		dMgr,
-		ePrefix,
-		dMgrLabel)
+	err = new(dirMgrHelperElectron).
+		empty(
+			dMgr,
+			dMgrLabel,
+			ePrefix)
 
 	if err != nil {
 
