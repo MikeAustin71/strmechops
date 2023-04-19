@@ -5912,8 +5912,9 @@ func (dMgrHlpr *dirMgrHelper) getParentDirMgr(
 	return dirMgrParent, hasParent, err
 }
 
-// lowLevelMakeDirWithPermission - Helper Method used by 'DirMgr'. This method
-// will create the directory path including parent directories for the path
+// lowLevelMakeDirWithPermission
+//
+// Helper Method used by 'DirMgr'. This method will create the directory path including parent directories for the path
 // specified by 'dMgr'. The permission used to create the directory path is
 // specified by input parameter
 func (dMgrHlpr *dirMgrHelper) lowLevelMakeDirWithPermission(
