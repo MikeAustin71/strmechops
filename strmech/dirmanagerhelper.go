@@ -5912,248 +5912,6 @@ func (dMgrHlpr *dirMgrHelper) getParentDirMgr(
 	return dirMgrParent, hasParent, err
 }
 
-func (dMgrHlpr *dirMgrHelper) lowLevelDirMgrFieldConfig(
-	dMgr *DirMgr,
-	validPathDto ValidPathStrDto,
-	errorPrefix string,
-	dMgrLabel string) (isEmpty bool, err error) {
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"dirMgrHelper."+
-			"lowLevelDirMgrFieldConfig()",
-		"")
-
-	if err != nil {
-		return false, err
-	}
-
-	isEmpty = false
-	err = nil
-
-	if dMgr == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter %v pointer is 'nil'!\n",
-			ePrefix.String(),
-			dMgrLabel)
-
-		return isEmpty, err
-	}
-
-	err = validPathDto.IsDtoValid(ePrefix.String())
-
-	if err != nil {
-		return isEmpty, err
-	}
-
-	dMgr.originalPath = validPathDto.originalPathStr
-
-	dMgr.path = validPathDto.pathStr
-	dMgr.isPathPopulated = true
-
-	dMgr.absolutePath = validPathDto.absPathStr
-	dMgr.isAbsolutePathPopulated = true
-
-	fh := FileHelper{}
-	var dirPathDoesExist, dirAbsPathDoesExist bool
-	var pathFInfoPlus, absPathFInfoPlus FileInfoPlus
-
-	if validPathDto.pathDoesExist != PathExistsStatus.Unknown() &&
-		validPathDto.absPathDoesExist != PathExistsStatus.Unknown() {
-
-		if validPathDto.pathDoesExist == PathExistsStatus.DoesNotExist() {
-			dirPathDoesExist = false
-		} else {
-			dirPathDoesExist = true
-			pathFInfoPlus = validPathDto.pathFInfoPlus.CopyOut()
-		}
-
-		if validPathDto.absPathDoesExist == PathExistsStatus.DoesNotExist() {
-			dirAbsPathDoesExist = false
-		} else {
-			dirAbsPathDoesExist = true
-			absPathFInfoPlus = validPathDto.absPathFInfoPlus.CopyOut()
-		}
-
-	} else {
-		_,
-			dirPathDoesExist,
-			pathFInfoPlus,
-			err =
-			new(fileHelperMolecule).doesPathFileExist(
-				dMgr.path,
-				PreProcPathCode.None(),
-				ePrefix,
-				dMgrLabel+".path")
-
-		if err != nil {
-			_ = dMgrHlpr.empty(
-				dMgr,
-				ePrefix.String(),
-				dMgrLabel)
-
-			isEmpty = true
-			return isEmpty, err
-		}
-
-		_,
-			dirAbsPathDoesExist,
-			absPathFInfoPlus,
-			err =
-			new(fileHelperMolecule).doesPathFileExist(
-				dMgr.absolutePath,
-				PreProcPathCode.None(),
-				ePrefix.XCpy(
-					"dirAbsPathDoesExist<-dMgr.absolutePath"),
-				dMgrLabel+".absolutePath")
-
-		if err != nil {
-
-			_ = dMgrHlpr.empty(
-				dMgr,
-				ePrefix.String(),
-				dMgrLabel)
-
-			isEmpty = true
-			return isEmpty, err
-		}
-	}
-
-	if !dirPathDoesExist {
-		dMgr.doesPathExist = false
-
-	} else {
-
-		if !pathFInfoPlus.IsDir() {
-			_ = dMgrHlpr.empty(
-				dMgr,
-				ePrefix.String(),
-				dMgrLabel)
-
-			err = fmt.Errorf("%v\n"+
-				"ERROR: Directory path exists, but it is a File - NOT a directory!\n"+
-				"%v='%v'\n",
-				ePrefix.String(),
-				dMgrLabel,
-				dMgr.path)
-
-			isEmpty = true
-			return isEmpty, err
-		}
-
-		if pathFInfoPlus.Mode().IsRegular() {
-
-			_ = dMgrHlpr.empty(
-				dMgr,
-				ePrefix.String(),
-				dMgrLabel)
-
-			err = fmt.Errorf("%v\n"+
-				"Error: Directory path exists, but\n"+
-				"it is classified as as a Regular File!\n"+
-				"%v='%v'\n",
-				ePrefix.String(),
-				dMgrLabel,
-				dMgr.path)
-
-			isEmpty = true
-			return isEmpty, err
-		}
-
-		dMgr.doesPathExist = true
-	}
-
-	if dirAbsPathDoesExist {
-
-		if !absPathFInfoPlus.IsDir() {
-			_ = dMgrHlpr.empty(
-				dMgr,
-				ePrefix.String(),
-				dMgrLabel)
-
-			err = fmt.Errorf("%v\n"+
-				"The Directory Manager absolute path exists and IS NOT A DIRECTORY!.\n"+
-				"%v Path='%v'\n",
-				ePrefix.String(),
-				dMgrLabel,
-				dMgr.absolutePath)
-
-			isEmpty = true
-			return isEmpty, err
-		}
-
-		if absPathFInfoPlus.Mode().IsRegular() {
-
-			_ = dMgrHlpr.empty(
-				dMgr,
-				ePrefix.String(),
-				dMgrLabel)
-
-			err = fmt.Errorf("%v\n"+
-				"Error: Directory absolute path exists, but\n"+
-				"it is classified as as a Regular File!\n"+
-				"%v='%v'\n",
-				ePrefix.String(),
-				dMgrLabel,
-				dMgr.absolutePath)
-
-			isEmpty = true
-			return isEmpty, err
-		}
-
-		dMgr.doesAbsolutePathExist = true
-		dMgr.actualDirFileInfo = absPathFInfoPlus.CopyOut()
-
-	} else {
-		dMgr.doesAbsolutePathExist = false
-		dMgr.actualDirFileInfo = FileInfoPlus{}
-	}
-
-	strAry := strings.Split(dMgr.absolutePath, string(os.PathSeparator))
-	lStr := len(strAry)
-	idxStr := strAry[lStr-1]
-
-	idx := strings.Index(dMgr.absolutePath, idxStr)
-
-	dMgr.parentPath = fh.RemovePathSeparatorFromEndOfPathString(dMgr.absolutePath[0:idx])
-
-	dMgr.isParentPathPopulated = true
-
-	if dMgr.parentPath == "" {
-		dMgr.isParentPathPopulated = false
-	}
-
-	if idxStr != "" {
-		dMgr.directoryName = idxStr
-	} else {
-		dMgr.directoryName = dMgr.absolutePath
-	}
-
-	if dMgr.path != dMgr.absolutePath {
-		dMgr.isAbsolutePathDifferentFromPath = true
-	}
-
-	if validPathDto.pathVolumeName != "" {
-		dMgr.isVolumePopulated = true
-		dMgr.volumeName = validPathDto.pathVolumeName
-	}
-
-	if dMgr.isAbsolutePathPopulated && dMgr.isPathPopulated {
-		dMgr.isInitialized = true
-		isEmpty = false
-	} else {
-		isEmpty = true
-	}
-
-	err = nil
-
-	return isEmpty, err
-}
-
 // lowLevelMakeDirWithPermission - Helper Method used by 'DirMgr'. This method
 // will create the directory path including parent directories for the path
 // specified by 'dMgr'. The permission used to create the directory path is
@@ -6893,11 +6651,12 @@ func (dMgrHlpr *dirMgrHelper) setDirMgr(
 		return isEmpty, err
 	}
 
-	return dMgrHlpr.lowLevelDirMgrFieldConfig(
-		dMgr,
-		validPathDto,
-		ePrefix,
-		dMgrLabel)
+	return new(dirMgrHelperNanobot).
+		lowLevelDirMgrFieldConfig(
+			dMgr,
+			validPathDto,
+			dMgrLabel,
+			ePrefix)
 }
 
 // setDirMgrFromKnownPathDirName - Configures the internal
@@ -6918,21 +6677,32 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrFromKnownPathDirName(
 	dMgr *DirMgr,
 	pathStr string,
 	dirName string,
-	errorPrefix string,
 	dMgrLabel string,
 	pathStrLabel string,
-	dirNameLabel string) (isEmpty bool, err error) {
+	dirNameLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	isEmpty bool,
+	err error) {
 
-	err = nil
+	if dMgrHlpr.lock == nil {
+		dMgrHlpr.lock = new(sync.Mutex)
+	}
+
+	dMgrHlpr.lock.Lock()
+
+	defer dMgrHlpr.lock.Unlock()
+
 	isEmpty = true
 
 	var ePrefix *ePref.ErrPrefixDto
 
+	funcName := "dirMgrHelper." +
+		"setDirMgrFromKnownPathDirName()"
+
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"dirMgrHelper."+
-			"setDirMgrFromKnownPathDirName()",
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
 		"")
 
 	if err != nil {
@@ -7029,9 +6799,11 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrFromKnownPathDirName(
 			ePrefix.XCpy("validPathDto.absPathStr<-"))
 
 	if err2 != nil {
-		err = fmt.Errorf(errorPrefix+
+		err = fmt.Errorf("%v\n"+
 			"Error returned by fh.MakeAbsolutePath(pathStr).\n"+
-			"Directory Path='%v'\nError='%v'\n",
+			"Directory Path='%v'\n"+
+			"Error='%v'\n",
+			funcName,
 			validPathDto.pathStr,
 			err2.Error())
 
@@ -7051,7 +6823,7 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrFromKnownPathDirName(
 	validPathDto.isInitialized = true
 	validPathDto.pathIsValid = PathValidStatus.Valid()
 
-	err = validPathDto.IsDtoValid(errorPrefix)
+	err = validPathDto.IsDtoValid(ePrefix)
 
 	if err != nil {
 
@@ -7059,10 +6831,11 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrFromKnownPathDirName(
 		return isEmpty, err
 	}
 
-	err = dMgrHlpr.empty(
-		dMgr,
-		errorPrefix,
-		dMgrLabel)
+	err = new(dirMgrHelperElectron).
+		empty(
+			dMgr,
+			dMgrLabel,
+			ePrefix)
 
 	if err != nil {
 
@@ -7070,11 +6843,12 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrFromKnownPathDirName(
 	}
 
 	isEmpty,
-		err = dMgrHlpr.lowLevelDirMgrFieldConfig(
-		dMgr,
-		validPathDto,
-		errorPrefix,
-		dMgrLabel)
+		err = new(dirMgrHelperNanobot).
+		lowLevelDirMgrFieldConfig(
+			dMgr,
+			validPathDto,
+			dMgrLabel,
+			ePrefix)
 
 	return isEmpty, err
 }
@@ -7125,7 +6899,11 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrWithPathDirectoryName(
 		return isEmpty, err
 	}
 
-	strLen := 0
+	if len(dMgrLabel) == 0 {
+		dMgrLabel = "dMgr"
+	}
+
+	var strLen int
 
 	dMgrHlprElectron := dirMgrHelperElectron{}
 
@@ -7198,11 +6976,12 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrWithPathDirectoryName(
 	}
 
 	isEmpty,
-		err = dMgrHlpr.lowLevelDirMgrFieldConfig(
-		dMgr,
-		validPathDto,
-		ePrefix,
-		dMgrLabel)
+		err = new(dirMgrHelperNanobot).
+		lowLevelDirMgrFieldConfig(
+			dMgr,
+			validPathDto,
+			dMgrLabel,
+			ePrefix)
 
 	return isEmpty, err
 }
