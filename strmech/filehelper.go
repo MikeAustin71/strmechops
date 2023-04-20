@@ -2904,7 +2904,7 @@ func (fh *FileHelper) DeleteDirPathAll(
 //		'Found Files'.
 //
 //		If file 'fileSelectCriteria' is uninitialized
-//		(FileSelectionCriteria{}), all directories the
+//		(FileSelectionCriteria{}), all directories in the
 //		'startPath' will be searched, and all files
 //		within those directories WILL BE DELETED.
 //

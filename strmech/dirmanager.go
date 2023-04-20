@@ -4988,192 +4988,324 @@ func (dMgr *DirMgr) MakeDir() error {
 	return err
 }
 
-// MoveDirectory - Moves files from the source directory identified
-// by DirMgr to a target directory. The 'move' operation is accomplished
-// in three steps. First, the files to be copied are selected according
-// to file selection criteria specified by input parameter,'fileSelectCriteria'.
-// Second, the selected files are copied to target directory identified
-// by the input parameter, 'targetDir'. Finally, after verifying the copy,
-// the files are deleted from the source directory (DirMgr).
+// MoveDirectory
 //
-// If, at the conclusion of the 'move' operation, there are no files or
-// subdirectories remaining in the source directory (DirMgr), the source
-// directory will be deleted.
+// Moves files from the source directory identified by
+// DirMgr to a target directory. The 'move' operation is
+// accomplished in three steps. First, the files to be
+// copied are selected according to file selection
+// criteria specified by input parameter,
+// 'fileSelectCriteria'.
 //
-// The selected files are copied using Copy IO operation. For information
-// on the Copy IO procedure see FileHelper{}.CopyFileByIo() method and
-// reference:
+// Second, the selected files are copied to target
+// directory identified by the input parameter,
+// 'targetDir'. Finally, after verifying the copy, the
+// files are deleted from the source directory (DirMgr).
 //
+// If, at the conclusion of the 'move' operation, there
+// are no files or subdirectories remaining in the source
+// directory (DirMgr), the source directory will be
+// deleted.
+//
+// The selected files are copied using Copy IO operation.
+// For information on the Copy IO procedure reference:
+//
+//	FileHelper{}.CopyFileByIo() method
 //	https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
 //
-// If the target directory does not previously exist, this method will attempt
-// to create the target directory, provided, that files are selected for movement
-// to that directory. If no files match the file selection criteria, the target
-// directory will NOT be created.
+// If the target directory does not previously exist,
+// this method will attempt to create the target
+// directory, provided, that files are selected for
+// movement to that directory. If no files match the file
+// selection criteria, the target directory will NOT be
+// created.
 //
-// NOTE: This method ONLY moves files from the current directory identified
-// by 'DirMgr'. It does NOT move files from subdirectories.
+// NOTE: This method ONLY moves files from the current
+// directory identified by 'DirMgr'. It does NOT move
+// files from subdirectories.
 //
-// This method is optimized to support the movement of large numbers of files.
+// This method is optimized to support the movement of
+// large numbers of files.
 //
-// ------------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// IMPORTANT!!!!
-// This method will delete files in the current DirMgr path!  If all files have
-// been moved out of the directory and there are no sub-Directories remaining,
+// # IMPORTANT
+//
+// This method will delete files in the current DirMgr
+// path.  If all files have been moved out of the
+// directory and there are no sub-Directories remaining,
 // the DirMgr directory will likewise be deleted.
 //
-// ------------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Input Parameters:
+// # Input Parameters
 //
-//	targetDMgr   DirMgr - An instance of 'DirMgr' initialized with the directory
-//	                      path of the target directory to which selected files
-//	                      will be moved. If the target directory does not exist,
-//	                      this method will attempt to create it.
+//	targetDMgr					DirMgr
+//
+//		An instance of 'DirMgr' initialized with the
+//		directory path of the target directory to which
+//		selected files will be moved. If the target
+//		directory does not exist, this method will
+//		attempt to create it.
+//
+//	fileSelectCriteria			FileSelectionCriteria
+//
+//		This input parameter should be configured with
+//		the desired file selection criteria. Files
+//		matching this criteria will be moved from the
+//		current DirMgr path to the directory identified
+//		by input parameter, 'targetDir'.
+//
+//			type FileSelectionCriteria struct {
+//			 FileNamePatterns    []string
+//				An array of strings containing File Name Patterns
+//
+//			 FilesOlderThan      time.Time
+//			 	Match files with older modification date times
+//
+//			 FilesNewerThan      time.Time
+//			 	Match files with newer modification date times
+//
+//			 SelectByFileMode    FilePermissionConfig
+//			 	Match file mode (os.FileMode).
+//
+//			 SelectCriterionModeFileSelectCriterionMode
+//			 	Specifies 'AND' or 'OR' selection mode
+//			}
+//
+//		The FileSelectionCriteria type allows for
+//		configuration of single or multiple file selection
+//		criterion. The 'SelectCriterionMode' can be used to
+//		specify whether the file must match all, or any one,
+//		of the active file selection criterion.
+//
+//		Elements of the FileSelectionCriteria are described
+//		below:
+//
+//			FileNamePatterns	[]string
+//
+//				An array of strings which may define one or more
+//				search patterns. If a file name matches any one
+//				of the search pattern strings, it is deemed to be
+//				a 'match' for the search pattern criterion.
+//
+//				Example Patterns:
+//					FileNamePatterns = []string{"*.log"}
+//					FileNamePatterns = []string{"current*.txt"}
+//					FileNamePatterns = []string{"*.txt", "*.log"}
+//
+//				If this string array has zero length or if
+//				all the strings are empty strings, then this
+//				file search criterion is considered 'Inactive'
+//				or 'Not Set'.
 //
 //
-//	fileSelectCriteria FileSelectionCriteria -
-//	  This input parameter should be configured with the desired file
-//	  selection criteria. Files matching this criteria will be moved
-//	  from the current DirMgr path to the directory identified by input
-//	  parameter, 'targetDir'.
+//			FilesOlderThan		time.Time
 //
-//	  type FileSelectionCriteria struct {
-//	   FileNamePatterns    []string// An array of strings containing File Name Patterns
-//	   FilesOlderThan      time.Time// Match files with older modification date times
-//	   FilesNewerThan      time.Time// Match files with newer modification date times
-//	   SelectByFileMode    FilePermissionConfig  // Match file mode (os.FileMode).
-//	   SelectCriterionModeFileSelectCriterionMode // Specifies 'AND' or 'OR' selection mode
-//	  }
+//				This date time type is compared to file
+//				modification date times in order to determine
+//				whether the file is older than the
+//				'FilesOlderThan' file selection criterion. If
+//				the file modification date time is older than
+//				the 'FilesOlderThan' date time, that file is
+//				considered a 'match' for this file selection
+//				criterion.
 //
-//	  The FileSelectionCriteria type allows for configuration of single or multiple file
-//	  selection criterion. The 'SelectCriterionMode' can be used to specify whether the
-//	  file must match all, or any one, of the active file selection criterion.
+//				If the value of 'FilesOlderThan' is set to
+//				time zero, the default value for type
+//				time.Time{}, then this file selection
+//				criterion is considered to be 'Inactive' or
+//				'Not Set'.
 //
-//	  Elements of the FileSelectionCriteria are described below:
+//			FilesNewerThan      time.Time
 //
-//	  FileNamePatterns    []string  - An array of strings which may define one or more
-//	                                  search patterns. If a file name matches any one of the
-//	                                  search pattern strings, it is deemed to be a 'match'
-//	                                  for the search pattern criterion.
+//				This date time type is compared to the file
+//				modification date time in order to determine
+//				whether the file is newer than the
+//				'FilesNewerThan' file selection criterion. If
+//				the file modification date time is newer than
+//				the 'FilesNewerThan' date time, that file is
+//				considered a 'match' for this file selection
+//				criterion.
 //
-//	                                    Example Patterns:
-//	                                     FileNamePatterns = []string{"*.log"}
-//	                                     FileNamePatterns = []string{"current*.txt"}
-//	                                     FileNamePatterns = []string{"*.txt", "*.log"}
+//				If the value of 'FilesNewerThan' is set to
+//				time zero, the default value for type
+//				time.Time{}, then this file selection
+//				criterion is considered to be 'Inactive' or
+//				'Not Set'.
 //
-//	                                  If this string array has zero length or if
-//	                                  all the strings are empty strings, then this
-//	                                  file search criterion is considered 'Inactive'
-//	                                  or 'Not Set'.
+//			SelectByFileMode	FilePermissionConfig
 //
+//				Type FilePermissionConfig encapsulates an os.FileMode. The
+//				file selection criterion allows for the selection of files
+//				by File Mode.
 //
-//	  FilesOlderThan      time.Time - This date time type is compared to file
-//	                                  modification date times in order to determine
-//	                                  whether the file is older than the 'FilesOlderThan'
-//	                                  file selection criterion. If the file modification
-//	                                  date time is older than the 'FilesOlderThan' date time,
-//	                                  that file is considered a 'match'	for this file selection
-//	                                  criterion.
+//				File modes are compared to the value of 'SelectByFileMode'.
+//				If the File Mode for a given file is equal to the value of
+//				'SelectByFileMode', that file is considered to be a 'match'
+//				for this file selection criterion. Examples for setting
+//				SelectByFileMode are shown as follows:
 //
-//	                                  If the value of 'FilesOlderThan' is set to time zero,
-//	                                  the default value for type time.Time{}, then this
-//	                                  file selection criterion is considered to be 'Inactive'
-//	                                  or 'Not Set'.
+//				fsc := FileSelectionCriteria{}
 //
-//	  FilesNewerThan      time.Time - This date time type is compared to the file
-//	                                  modification date time in order to determine
-//	                                  whether the file is newer than the 'FilesNewerThan'
-//	                                  file selection criterion. If the file modification date time
-//	                                  is newer than the 'FilesNewerThan' date time, that file is
-//	                                  considered a 'match' for this file selection criterion.
+//				err = fsc.SelectByFileMode.SetByFileMode(os.FileMode(0666))
 //
-//	                                  If the value of 'FilesNewerThan' is set to time zero,
-//	                                  the default value for type time.Time{}, then this
-//	                                  file selection criterion is considered to be 'Inactive'
-//	                                  or 'Not Set'.
+//				err = fsc.SelectByFileMode.SetFileModeByTextCode("-r--r--r--")
 //
-//	  SelectByFileMode  FilePermissionConfig -
-//	                                  Type FilePermissionConfig encapsulates an os.FileMode. The file
-//	                                  selection criterion allows for the selection of files by File Mode.
-//	                                  File modes are compared to the value	of 'SelectByFileMode'. If the
-//	                                  File Mode for a given file is equal to the value of 'SelectByFileMode',
-//	                                  that file is considered to be a 'match' for this file selection
-//	                                  criterion. Examples for setting SelectByFileMode are shown as follows:
+//			SelectCriterionMode FileSelectCriterionMode
 //
-//	                                       fsc := FileSelectionCriteria{}
-//	                                       err = fsc.SelectByFileMode.SetByFileMode(os.FileMode(0666))
-//	                                       err = fsc.SelectByFileMode.SetFileModeByTextCode("-r--r--r--")
+//			This parameter selects the manner in which the file selection
+//			criteria above are applied in determining a 'match' for file
+//			selection purposes. 'SelectCriterionMode' may be set to one of
+//			two constant values:
 //
-//	  SelectCriterionMode FileSelectCriterionMode -
-//	                                  This parameter selects the manner in which the file selection
-//	                                  criteria above are applied in determining a 'match' for file
-//	                                  selection purposes. 'SelectCriterionMode' may be set to one of
-//	                                  two constant values:
+//			(1) FileSelectCriterionMode(0).ANDSelect()
 //
-//	                              FileSelectMode.ANDSelect() - File selected if all active selection
-//	                                    criteria are satisfied.
+//				File selected if all active selection criteria
+//				are satisfied.
 //
-//	                                    If this constant value is specified for the file selection mode,
-//	                                    then a given file will not be judged as 'selected' unless all
-//	                                    the active selection criterion are satisfied. In other words, if
-//	                                    three active search criterion are provided for 'FileNamePatterns',
-//	                                    'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
-//	                                    selected unless it has satisfied all three criterion in this example.
+//				If this constant value is specified for the file selection mode,
+//				then a given file will not be judged as 'selected' unless all
+//				the active selection criterion are satisfied. In other words, if
+//				three active search criterion are provided for 'FileNamePatterns',
+//				'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
+//				selected unless it has satisfied all three criterion in this example.
 //
-//	                              FileSelectMode.ORSelect() - File selected if any active selection
-//	                                    criterion is satisfied.
+//			(2) FileSelectCriterionMode(0).ORSelect()
 //
-//	                                    If this constant value is specified for the file selection mode,
-//	                                    then a given file will be selected if any one of the active file
-//	                                    selection criterion is satisfied. In other words, if three active
-//	                                    search criterion are provided for 'FileNamePatterns', 'FilesOlderThan'
-//	                                    and 'FilesNewerThan', then a file will be selected if it satisfies any
-//	                                    one of the three criterion in this example.
+//				File selected if any active selection criterion is satisfied.
 //
-// ------------------------------------------------------------------------
+//				If this constant value is specified for the file selection mode,
+//				then a given file will be selected if any one of the active file
+//				selection criterion is satisfied. In other words, if three active
+//				search criterion are provided for 'FileNamePatterns', 'FilesOlderThan'
+//				and 'FilesNewerThan', then a file will be selected if it satisfies any
+//				one of the three criterion in this example.
 //
-// IMPORTANT:
+//		------------------------------------------------------------------------
 //
-// If all of the file selection criterion in the FileSelectionCriteria object are
-// 'Inactive' or 'Not Set' (set to their zero or default values), then all the
-// files processed in the directory tree will be selected and moved
-// to the target directory.
+//		IMPORTANT:
 //
-//	Example:
-//	  fsc := FileSelectCriterionMode{}
+//		If all of the file selection criterion in the FileSelectionCriteria object are
+//		'Inactive' or 'Not Set' (set to their zero or default values), then all the
+//		files processed in the directory tree will be selected and moved
+//		to the target directory.
 //
-//	  In this example, 'fsc' is NOT initialized. Therefore,
-//	  all the selection criterion are 'Inactive'. Consequently,
-//	  all the files encountered in the target directory during
-//	  the search operation will be selected and moved
-//	  to the target directory.
+//			Example:
+//			  fsc := FileSelectCriterionMode{}
 //
-// ---------------------------------------------------------------------------
+//			  In this example, 'fsc' is NOT initialized. Therefore,
+//			  all the selection criterion are 'Inactive'. Consequently,
+//			  all the files encountered in the target directory during
+//			  the search operation will be selected and moved
+//			  to the target directory.
 //
-// Return Value:
+//		------------------------------------------------------------------------
 //
-//	numOfSrcFilesMoved     int - Contains the number of files actually moved to the target
-//	                             directory.
+//	errorPrefix					interface{}
 //
-//	numOfSrcFilesRemaining int - Returns the number of source files remaining in the current
-//	                             directory after the move operation was completed.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
-//	numOfSubDirectories    int - Returns the number of subdirectories which exist in the
-//	                             DirMgr parent directory.
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
 //
-//	dMgrDirWasDeleted     bool - Returns 'true' if the current directory ('DirMgr') was deleted.
+//		This empty interface must be convertible to one
+//		of the following types:
 //
-//	errs              []error  - An array of errors is returned. If the method completes
-//	                             successfully with no errors, a ZERO-length array is
-//	                             returned.
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
 //
-//	                             If errors are encountered they are stored in the error
-//	                             array and returned to the caller.
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	dirMoveStats				DirectoryMoveStats
+//
+//		If this method completes successfully, this
+//		structure will contain information and statistics
+//		describing the outcome of the file 'move'
+//		operation.
+//
+//		type DirectoryMoveStats struct {
+//			TotalSrcFilesProcessed   uint64
+//			SourceFilesMoved         uint64
+//			SourceFileBytesMoved     uint64
+//			SourceFilesRemaining     uint64
+//			SourceFileBytesRemaining uint64
+//			TotalDirsProcessed       uint64
+//			DirsCreated              uint64
+//			NumOfSubDirectories      uint64
+//			SourceDirWasDeleted      bool
+//			ComputeError             error
+//		}
+//
+//	errs						[]error
+//
+//		An array of error objects.
+//
+//		If this method completes successfully, the
+//		returned error array is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		This error array may contain multiple errors.
 func (dMgr *DirMgr) MoveDirectory(
 	targetDMgr DirMgr,
-	fileSelectCriteria FileSelectionCriteria) (dirMoveStats DirectoryMoveStats,
+	fileSelectCriteria FileSelectionCriteria,
+	errorPrefix interface{}) (
+	dirMoveStats DirectoryMoveStats,
 	errs []error) {
 
 	if dMgr.lock == nil {
@@ -5184,7 +5316,22 @@ func (dMgr *DirMgr) MoveDirectory(
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.MoveDirectory() "
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgr.MoveDirectory()",
+		"")
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return dirMoveStats, errs
+	}
+
 	dMgrHlpr := dirMgrHelper{}
 
 	dirMoveStats,
@@ -5192,10 +5339,10 @@ func (dMgr *DirMgr) MoveDirectory(
 		dMgr,
 		&targetDMgr,
 		fileSelectCriteria,
-		ePrefix,
 		"dMgr",
 		"targetDMgr",
-		"fileSelectCriteria")
+		"fileSelectCriteria",
+		ePrefix)
 
 	return dirMoveStats, errs
 }
