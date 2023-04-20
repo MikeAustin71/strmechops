@@ -18,6 +18,9 @@ type dirMgrHelperNanobot struct {
 // Helper method for 'DirMgr'. This method is designed to
 // copy entire directory trees.
 //
+// If the target directory does not exist, this method
+// will attempt to create it.
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -35,6 +38,9 @@ type dirMgrHelperNanobot struct {
 //		identifies the destination directory tree to
 //		which files will be copied from the directory
 //		tree identified by input parameter 'sourceDMgr'.
+//
+//		If this target directory does not exist, this
+//		method will attempt to create it.
 //
 //	copyEmptyDirectories		bool
 //
@@ -79,118 +85,126 @@ type dirMgrHelperNanobot struct {
 //	  specify whether the file must match all, or any one,
 //	  of the active file selection criterion.
 //
-//	  Elements of the FileSelectionCriteria are described
-//	  below:
+//		Elements of the FileSelectionCriteria are described
+//		below:
 //
-//	  FileNamePatterns		[]string
-//	  	An array of strings which may define one or more
-//	  	search patterns. If a file name matches any one
-//	  	of the search pattern strings, it is deemed to be
-//	  	a 'match' for the search pattern criterion.
+//			FileNamePatterns		[]string
 //
-//		Example Patterns:
-//			FileNamePatterns = []string{"*.log"}
-//			FileNamePatterns = []string{"current*.txt"}
-//			FileNamePatterns = []string{"*.txt", "*.log"}
+//				An array of strings which may define one or more
+//				search patterns. If a file name matches any one
+//				of the search pattern strings, it is deemed to be
+//				a 'match' for the search pattern criterion.
 //
-//		If this string array has zero length or if
-//		all the strings are empty strings, then this
-//		file search criterion is considered 'Inactive'
-//		or 'Not Set'.
+//				Example Patterns:
+//					FileNamePatterns = []string{"*.log"}
+//					FileNamePatterns = []string{"current*.txt"}
+//					FileNamePatterns = []string{"*.txt", "*.log"}
+//
+//				If this string array has zero length or if
+//				all the strings are empty strings, then this
+//				file search criterion is considered 'Inactive'
+//				or 'Not Set'.
 //
 //
-//		FilesOlderThan		time.Time
-//			This date time type is compared to file
-//			modification date times in order to determine
-//			whether the file is older than the
-//			'FilesOlderThan' file selection criterion. If
-//			the file modification date time is older than
-//			the 'FilesOlderThan' date time, that file is
-//			considered a 'match' for this file selection
-//			criterion.
+//			FilesOlderThan		time.Time
 //
-//			If the value of 'FilesOlderThan' is set to
-//			time zero, the default value for type
-//			time.Time{}, then this file selection
-//			criterion is considered to be 'Inactive' or
-//			'Not Set'.
+//				This date time type is compared to file
+//				modification date times in order to determine
+//				whether the file is older than the
+//				'FilesOlderThan' file selection criterion. If
+//				the file modification date time is older than
+//				the 'FilesOlderThan' date time, that file is
+//				considered a 'match' for this file selection
+//				criterion.
 //
-//		FilesNewerThan      time.Time
-//			This date time type is compared to the file
-//			modification date time in order to determine
-//			whether the file is newer than the
-//			'FilesNewerThan' file selection criterion. If
-//			the file modification date time is newer than
-//			the 'FilesNewerThan' date time, that file is
-//			considered a 'match' for this file selection
-//			criterion.
+//				If the value of 'FilesOlderThan' is set to
+//				time zero, the default value for type
+//				time.Time{}, then this file selection
+//				criterion is considered to be 'Inactive' or
+//				'Not Set'.
 //
-//			If the value of 'FilesNewerThan' is set to
-//			time zero, the default value for type
-//			time.Time{}, then this file selection
-//			criterion is considered to be 'Inactive' or
-//			'Not Set'.
+//			FilesNewerThan      time.Time
 //
-//		SelectByFileMode	FilePermissionConfig
-//			Type FilePermissionConfig encapsulates an
-//			instance of os.FileMode. The file selection
-//			criterion allows for the selection of files
-//			by File Mode. File modes are compared to the
-//			value of 'SelectByFileMode'. If the File Mode
-//			for a given file is equal to the value of
-//			'SelectByFileMode', that file is considered
-//			to be a 'match' for this file selection
-//			criterion. Examples for setting
-//			SelectByFileMode are shown as follows:
+//				This date time type is compared to the file
+//				modification date time in order to determine
+//				whether the file is newer than the
+//				'FilesNewerThan' file selection criterion. If
+//				the file modification date time is newer than
+//				the 'FilesNewerThan' date time, that file is
+//				considered a 'match' for this file selection
+//				criterion.
+//
+//				If the value of 'FilesNewerThan' is set to
+//				time zero, the default value for type
+//				time.Time{}, then this file selection
+//				criterion is considered to be 'Inactive' or
+//				'Not Set'.
+//
+//			SelectByFileMode  FilePermissionConfig
+//
+//				Type FilePermissionConfig encapsulates an os.FileMode. The
+//				file selection criterion allows for the selection of files
+//				by File Mode.
+//
+//				File modes are compared to the value of 'SelectByFileMode'.
+//				If the File Mode for a given file is equal to the value of
+//				'SelectByFileMode', that file is considered to be a 'match'
+//				for this file selection criterion. Examples for setting
+//				SelectByFileMode are shown as follows:
 //
 //				fsc := FileSelectionCriteria{}
 //
-//				err =
-//					fsc.SelectByFileMode.
-//						SetByFileMode(
-//							os.FileMode(0666))
+//				err = fsc.SelectByFileMode.SetByFileMode(os.FileMode(0666))
 //
-//				err =
-//					fsc.SelectByFileMode.
-//						SetFileModeByTextCode(
-//							"-r--r--r--")
+//				err = fsc.SelectByFileMode.SetFileModeByTextCode("-r--r--r--")
 //
-//		SelectCriterionMode	FileSelectCriterionMode
-//			This parameter selects the manner in which
-//			the file selection criteria above are applied
-//			in determining a 'match' for file selection
-//			purposes. 'SelectCriterionMode' may be set to
-//			one of two constant values:
+//			SelectCriterionMode FileSelectCriterionMode
 //
-//			FileSelectMode.ANDSelect()
-//				File selected if all active selection
-//				criteria are satisfied.
+//			This parameter selects the manner in which the file selection
+//			criteria above are applied in determining a 'match' for file
+//			selection purposes. 'SelectCriterionMode' may be set to one of
+//			two constant values:
 //
-//				If this constant value is specified for
-//				the file selection mode, then a given
-//				file will not be judged as 'selected'
-//				unless all the active selection criterion
-//				are satisfied. In other words, if three
-//				active search criterion are provided for
-//				'FileNamePatterns', 'FilesOlderThan' and
-//				'FilesNewerThan', then a file will NOT be
-//				selected unless it has satisfied all three
-//				criterion in this example.
+//			(1) FileSelectCriterionMode(0).ANDSelect()
 //
-//			FileSelectMode.ORSelect()
-//				File selected if any active selection
-//				criterion is satisfied.
+//				File selected if all active selection criteria
+//				are satisfied.
 //
-//				If this constant value is specified for
-//				the file selection mode, then a given
-//				file will be selected if any one of the
-//				active file selection criterion is
-//				satisfied. In other words, if three
-//				active search criterion are provided for
-//				'FileNamePatterns', 'FilesOlderThan' and
-//				'FilesNewerThan', then a file will be
-//				selected if it satisfies any one of the
-//				three criterion in this example.
+//				If this constant value is specified for the file selection mode,
+//				then a given file will not be judged as 'selected' unless all
+//				the active selection criterion are satisfied. In other words, if
+//				three active search criterion are provided for 'FileNamePatterns',
+//				'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
+//				selected unless it has satisfied all three criterion in this example.
+//
+//			(2) FileSelectCriterionMode(0).ORSelect()
+//
+//				File selected if any active selection criterion is satisfied.
+//
+//				If this constant value is specified for the file selection mode,
+//				then a given file will be selected if any one of the active file
+//				selection criterion is satisfied. In other words, if three active
+//				search criterion are provided for 'FileNamePatterns', 'FilesOlderThan'
+//				and 'FilesNewerThan', then a file will be selected if it satisfies any
+//				one of the three criterion in this example.
+//
+//		------------------------------------------------------------------------
+//
+//		IMPORTANT:
+//
+//		If all of the file selection criterion in the FileSelectionCriteria object are
+//		'Inactive' or 'Not Set' (set to their zero or default values), then all the
+//		files processed in the directory tree will be selected.
+//
+//			Example:
+//			  fsc := FileSelectCriterionMode{}
+//
+//			  In this example, 'fsc' is NOT initialized. Therefore,
+//			  all the selection criterion are 'Inactive'. Consequently,
+//			  all the files encountered in the target directory during
+//			  the search operation will be selected.
+//
+//		------------------------------------------------------------------------
 //
 //	sourceDMgrLabel				string
 //
@@ -347,21 +361,6 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 	}
 
 	var err2 error
-	_,
-		_,
-		err2 =
-		dMgrHlprAtom.doesDirectoryExist(
-			targetDMgr,
-			PreProcPathCode.None(),
-			targetDMgrLabel,
-			ePrefix.XCpy(
-				"targetDMgr"))
-
-	if err2 != nil {
-
-		errs = append(errs, err2)
-		return dTreeCopyStats, errs
-	}
 
 	baseDirLen := len(sourceDMgr.absolutePath)
 
