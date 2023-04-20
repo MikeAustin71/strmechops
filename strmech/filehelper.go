@@ -431,6 +431,71 @@ func (fh *FileHelper) AreSameFile(
 //		will be applied to the file identified by input
 //		paramter 'pathFileName'.
 //
+//		The easiest way to configure permissions is
+//		to call FilePermissionConfig.New() with
+//		a mode string ('modeStr').
+//
+//		The first character of the 'modeStr' designates the
+//		'Entry Type'. Currently, only two 'Entry Type'
+//		characters are supported. Therefore, the first
+//		character in the 10-character input parameter
+//		'modeStr' MUST be either a "-" indicating a file, or
+//		a "d" indicating a directory.
+//
+//		The remaining nine characters in the 'modeStr'
+//		represent unix permission bits and consist of three
+//		group fields each containing 3-characters. Each
+//		character in the three group fields may consist of
+//		'r' (Read-Permission), 'w' (Write-Permission), 'x'
+//		(Execute-Permission) or '-' signaling no permission or
+//		no access allowed. A typical 'modeStr' authorizing
+//		permission for full access to a file would be styled
+//		as:
+//
+//		Directory Example: "drwxrwxrwx"
+//
+//		Groups: - Owner/User, Group, Other
+//		From left to right
+//		First Characters is Entry Type index 0 ("-")
+//
+//		First Char index 0 =     "-"   Designates a file
+//
+//		First Char index 0 =     "d"   Designates a directory
+//
+//		Char indexes 1-3 = Owner "rwx" Authorizing 'Read',
+//	                                  Write' & Execute Permissions for 'Owner'
+//
+//		Char indexes 4-6 = Group "rwx" Authorizing 'Read', 'Write' & Execute
+//	                                  Permissions for 'Group'
+//
+//		Char indexes 7-9 = Other "rwx" Authorizing 'Read', 'Write' & Execute
+//	                                  Permissions for 'Other'
+//
+//	    -----------------------------------------------------
+//	           Directory Mode String Permission Codes
+//	    -----------------------------------------------------
+//	      Directory
+//			10-Character
+//			 'modeStr'
+//			 Symbolic		  Directory Access
+//			  Format	   Permission Descriptions
+//			----------------------------------------------------
+//
+//			d---------		no permissions
+//			drwx------		read, write, & execute only for owner
+//			drwxrwx---		read, write, & execute for owner and group
+//			drwxrwxrwx		read, write, & execute for owner, group and others
+//			d--x--x--x		execute
+//			d-w--w--w-		write
+//			d-wx-wx-wx		write & execute
+//			dr--r--r--		read
+//			dr-xr-xr-x		read & execute
+//			drw-rw-rw-		read & write
+//			drwxr-----		Owner can read, write, & execute. Group can only read;
+//			                others have no permissions
+//
+//			Note: drwxrwxrwx - identifies permissions for directory
+//
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
@@ -3759,7 +3824,7 @@ func (fh *FileHelper) DoesFileInfoPlusExist(
 //
 //			This code specifies the file name and file
 //			path ('filePath') will first be converted to
-//			an absolute path and file name. Afterwards,
+//			an absolute path and file name. Afterward,
 //			the converted path and file name ('filePath')
 //			will be tested to determine if it actually
 //			exists on disk.
@@ -4128,7 +4193,7 @@ func (fh *FileHelper) DoesThisFileExist(
 // whether a file  'matches' the specified selection
 // criteria.
 //
-// If a given criterion is set to a non-zero value, then
+// If a given criterion specifies a non-zero value, then
 // that criterion is defined as 'set' and the file
 // information must comply with that criterion in order
 // to be judged as a match ('isMatchedFile=true').
@@ -8922,7 +8987,6 @@ func (fh *FileHelper) MakeDir(
 //			                others have no permissions
 //
 //			Note: drwxrwxrwx - identifies permissions for directory
-//
 //
 //	errorPrefix					interface{}
 //

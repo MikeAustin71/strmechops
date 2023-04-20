@@ -198,21 +198,21 @@ func (dMgr *DirMgr) ConsolidateErrors(errs []error) error {
 //
 // ------------------------------------------------------------------------
 //
-// IMPORTANT:
+//	IMPORTANT:
 //
-// If all of the file selection criterion in the FileSelectionCriteria object are
-// 'Inactive' or 'Not Set' (set to their zero or default values), then all
-// the files processed in the directory tree will be selected and copied
-// to the target directory.
+//		If all of the file selection criterion in the FileSelectionCriteria object are
+//		'Inactive' or 'Not Set' (set to their zero or default values), then all
+//		the files processed in the directory tree will be selected and copied
+//		to the target directory.
 //
-//	Example:
-//	  fsc := FileSelectCriterionMode{}
+//			Example:
+//			  fsc := FileSelectCriterionMode{}
 //
-//	  In this example, 'fsc' is NOT initialized. Therefore,
-//	  all the selection criterion are 'Inactive'. Consequently,
-//	  all the files encountered in the target directory during
-//	  the search operation will be selected and copied to the
-//	  target directory.
+//			  In this example, 'fsc' is NOT initialized. Therefore,
+//			  all the selection criterion are 'Inactive'. Consequently,
+//			  all the files encountered in the target directory during
+//			  the search operation will be selected and copied to the
+//			  target directory.
 //
 // ---------------------------------------------------------------------------
 //
@@ -224,6 +224,65 @@ func (dMgr *DirMgr) ConsolidateErrors(errs []error) error {
 //	                          are only copied to the target directory if
 //	                          they meet file selection criteria specified
 //	                          by input parameter 'fileSelectCriteria'.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ---------------------------------------------------------------------------
 //
@@ -241,7 +300,10 @@ func (dMgr *DirMgr) ConsolidateErrors(errs []error) error {
 func (dMgr *DirMgr) CopyDirectory(
 	targetDMgr DirMgr,
 	fileSelectCriteria FileSelectionCriteria,
-	copyEmptyDirectory bool) (dirCopyStats DirectoryCopyStats, errs []error) {
+	copyEmptyDirectory bool,
+	errorPrefix interface{}) (
+	dirCopyStats DirectoryCopyStats,
+	errs []error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -251,8 +313,23 @@ func (dMgr *DirMgr) CopyDirectory(
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.CopyDirectory() "
 	dMgrHlpr := dirMgrHelper{}
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgr.CopyDirectory()",
+		"")
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return dirCopyStats, errs
+	}
 
 	dirCopyStats,
 		errs = dMgrHlpr.copyDirectory(
@@ -260,9 +337,9 @@ func (dMgr *DirMgr) CopyDirectory(
 		&targetDMgr,
 		fileSelectCriteria,
 		copyEmptyDirectory,
-		ePrefix,
 		"dMgr",
-		"targetDMgr")
+		"targetDMgr",
+		ePrefix)
 
 	return dirCopyStats, errs
 }
@@ -4689,7 +4766,161 @@ func (dMgr *DirMgr) IsVolumeNamePopulated() bool {
 // The path will be created using permission
 // specifications passed through input parameter
 // 'fPermCfg'.
-func (dMgr *DirMgr) MakeDirWithPermission(fPermCfg FilePermissionConfig) error {
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fPermCfg					FilePermissionConfig
+//
+//		An instance of FilePermissionConfig containing
+//		the permission specifications for the new
+//		directory to be created from the directory path
+//		specified by the current instance of DirMgr.
+//
+//		The easiest way to configure permissions is
+//		to call FilePermissionConfig.New() with
+//		a mode string ('modeStr').
+//
+//		The first character of the 'modeStr' designates the
+//		'Entry Type'. Currently, only two 'Entry Type'
+//		characters are supported. Therefore, the first
+//		character in the 10-character input parameter
+//		'modeStr' MUST be either a "-" indicating a file, or
+//		a "d" indicating a directory.
+//
+//		The remaining nine characters in the 'modeStr'
+//		represent unix permission bits and consist of three
+//		group fields each containing 3-characters. Each
+//		character in the three group fields may consist of
+//		'r' (Read-Permission), 'w' (Write-Permission), 'x'
+//		(Execute-Permission) or '-' signaling no permission or
+//		no access allowed. A typical 'modeStr' authorizing
+//		permission for full access to a file would be styled
+//		as:
+//
+//		Directory Example: "drwxrwxrwx"
+//
+//		Groups: - Owner/User, Group, Other
+//		From left to right
+//		First Characters is Entry Type index 0 ("-")
+//
+//		First Char index 0 =     "-"   Designates a file
+//
+//		First Char index 0 =     "d"   Designates a directory
+//
+//		Char indexes 1-3 = Owner "rwx" Authorizing 'Read',
+//	                                  Write' & Execute Permissions for 'Owner'
+//
+//		Char indexes 4-6 = Group "rwx" Authorizing 'Read', 'Write' & Execute
+//	                                  Permissions for 'Group'
+//
+//		Char indexes 7-9 = Other "rwx" Authorizing 'Read', 'Write' & Execute
+//	                                  Permissions for 'Other'
+//
+//	    -----------------------------------------------------
+//	           Directory Mode String Permission Codes
+//	    -----------------------------------------------------
+//	      Directory
+//			10-Character
+//			 'modeStr'
+//			 Symbolic		  Directory Access
+//			  Format	   Permission Descriptions
+//			----------------------------------------------------
+//
+//			d---------		no permissions
+//			drwx------		read, write, & execute only for owner
+//			drwxrwx---		read, write, & execute for owner and group
+//			drwxrwxrwx		read, write, & execute for owner, group and others
+//			d--x--x--x		execute
+//			d-w--w--w-		write
+//			d-wx-wx-wx		write & execute
+//			dr--r--r--		read
+//			dr-xr-xr-x		read & execute
+//			drw-rw-rw-		read & write
+//			drwxr-----		Owner can read, write, & execute. Group can only read;
+//			                others have no permissions
+//
+//			Note: drwxrwxrwx - identifies permissions for directory
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (dMgr *DirMgr) MakeDirWithPermission(
+	fPermCfg FilePermissionConfig,
+	errorPrefix interface{}) error {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -4699,16 +4930,27 @@ func (dMgr *DirMgr) MakeDirWithPermission(fPermCfg FilePermissionConfig) error {
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.MakeDirWithPermission() "
+	var ePrefix *ePref.ErrPrefixDto
 	var err error
-	dMgrHlpr := dirMgrHelper{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgr."+
+			"MakeDirWithPermission()",
+		"")
+
+	if err != nil {
+		return err
+	}
 
 	_,
-		err = dMgrHlpr.lowLevelMakeDirWithPermission(
-		dMgr,
-		fPermCfg,
-		ePrefix,
-		"dMgr")
+		err = new(dirMgrHelperMolecule).
+		lowLevelMakeDirWithPermission(
+			dMgr,
+			fPermCfg,
+			"dMgr",
+			ePrefix)
 
 	return err
 }

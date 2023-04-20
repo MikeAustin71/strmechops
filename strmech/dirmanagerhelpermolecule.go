@@ -1361,6 +1361,68 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelDeleteDirectoryAll(
 // Helper Method used by 'DirMgr'. This method will
 // create the directory path including parent directories
 // for the path specified by 'dMgr'.
+//
+// The permissions used to create the new directory are
+// automatic, fixed and specified as "drwxrwxrwx".
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dMgr						*DirMgr
+//
+//		A pointer to an instance of DirMgr. This method
+//		will create the directory path including parent
+//		directories path specified by this parameter.
+//
+//
+//	dMgrLabel					string
+//
+//		The name or label associated with input parameter
+//		'dMgr', which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "dMgr" will be
+//		automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	dirCreated					bool
+//
+//		If this returned boolean value is set to 'true',
+//		it signals that the directory as been created
+//		with the default permissions.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelMakeDir(
 	dMgr *DirMgr,
 	dMgrLabel string,
@@ -1413,8 +1475,7 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelMakeDir(
 			dMgr,
 			PreProcPathCode.None(),
 			dMgrLabel,
-			ePrefix.XCpy(
-				"dMgr"))
+			ePrefix)
 
 	if err != nil {
 		return dirCreated, err
@@ -1499,6 +1560,278 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelMakeDir(
 
 	dirCreated = true
 	err = nil
+
+	return dirCreated, err
+}
+
+// lowLevelMakeDirWithPermission
+//
+// Helper Method used by 'DirMgr'. This method will
+// create the directory path including parent directories
+// for the path specified by 'dMgr'. The permissions used
+// to create the directory path are specified by input
+// parameter 'fPermCfg'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dMgr						*DirMgr
+//
+//		A pointer to an instance of DirMgr. This method
+//		will create the directory path including parent
+//		directories path specified by this parameter.
+//
+//	fPermCfg					FilePermissionConfig
+//
+//		An instance of FilePermissionConfig containing
+//		the permission specifications for the new
+//		directory to be created from input paramter,
+//		'dMgr'.
+//
+//		The easiest way to configure permissions is
+//		to call FilePermissionConfig.New() with
+//		a mode string ('modeStr').
+//
+//		The first character of the 'modeStr' designates the
+//		'Entry Type'. Currently, only two 'Entry Type'
+//		characters are supported. Therefore, the first
+//		character in the 10-character input parameter
+//		'modeStr' MUST be either a "-" indicating a file, or
+//		a "d" indicating a directory.
+//
+//		The remaining nine characters in the 'modeStr'
+//		represent unix permission bits and consist of three
+//		group fields each containing 3-characters. Each
+//		character in the three group fields may consist of
+//		'r' (Read-Permission), 'w' (Write-Permission), 'x'
+//		(Execute-Permission) or '-' signaling no permission or
+//		no access allowed. A typical 'modeStr' authorizing
+//		permission for full access to a file would be styled
+//		as:
+//
+//		Directory Example: "drwxrwxrwx"
+//
+//		Groups: - Owner/User, Group, Other
+//		From left to right
+//		First Characters is Entry Type index 0 ("-")
+//
+//		First Char index 0 =     "-"   Designates a file
+//
+//		First Char index 0 =     "d"   Designates a directory
+//
+//		Char indexes 1-3 = Owner "rwx" Authorizing 'Read',
+//	                                  Write' & Execute Permissions for 'Owner'
+//
+//		Char indexes 4-6 = Group "rwx" Authorizing 'Read', 'Write' & Execute
+//	                                  Permissions for 'Group'
+//
+//		Char indexes 7-9 = Other "rwx" Authorizing 'Read', 'Write' & Execute
+//	                                  Permissions for 'Other'
+//
+//	    -----------------------------------------------------
+//	           Directory Mode String Permission Codes
+//	    -----------------------------------------------------
+//	      Directory
+//			10-Character
+//			 'modeStr'
+//			 Symbolic		  Directory Access
+//			  Format	   Permission Descriptions
+//			----------------------------------------------------
+//
+//			d---------		no permissions
+//			drwx------		read, write, & execute only for owner
+//			drwxrwx---		read, write, & execute for owner and group
+//			drwxrwxrwx		read, write, & execute for owner, group and others
+//			d--x--x--x		execute
+//			d-w--w--w-		write
+//			d-wx-wx-wx		write & execute
+//			dr--r--r--		read
+//			dr-xr-xr-x		read & execute
+//			drw-rw-rw-		read & write
+//			drwxr-----		Owner can read, write, & execute. Group can only read;
+//			                others have no permissions
+//
+//			Note: drwxrwxrwx - identifies permissions for directory
+//
+//	dMgrLabel					string
+//
+//		The name or label associated with input parameter
+//		'dMgr', which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "dMgr" will be
+//		automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	dirCreated					bool
+//
+//		If this returned boolean value is set to 'true',
+//		it signals that the directory as been created
+//		with the default permissions.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelMakeDirWithPermission(
+	dMgr *DirMgr,
+	fPermCfg FilePermissionConfig,
+	dMgrLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	dirCreated bool,
+	err error) {
+
+	if dMgrHlprMolecule.lock == nil {
+		dMgrHlprMolecule.lock = new(sync.Mutex)
+	}
+
+	dMgrHlprMolecule.lock.Lock()
+
+	defer dMgrHlprMolecule.lock.Unlock()
+
+	dirCreated = false
+
+	funcName := "dirMgrHelper.lowLevelMakeDirWithPermission() "
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return false, err
+	}
+
+	dMgrHlprAtom := dirMgrHelperAtom{}
+
+	dMgrPathDoesExist,
+		_,
+		err :=
+		dMgrHlprAtom.doesDirectoryExist(
+			dMgr,
+			PreProcPathCode.None(),
+			dMgrLabel,
+			ePrefix)
+
+	if err != nil {
+		return dirCreated, err
+	}
+
+	if dMgrPathDoesExist {
+		// The directory exists
+		// Nothing to do.
+		return dirCreated, err
+	}
+
+	err2 := fPermCfg.IsValidInstanceError(
+		ePrefix.XCpy(
+			"fPermCfg"))
+
+	if err2 != nil {
+		err = fmt.Errorf("%v\n"+
+			"Input Parameter 'fPermCfg' is INVALID!\n"+
+			"Error returned by fPermCfg.IsValidInstanceError().\n"+
+			"Error= \n%v\n",
+			funcName,
+			err2.Error())
+
+		return dirCreated, err
+	}
+
+	modePerm, err2 := fPermCfg.GetCompositePermissionMode(
+		ePrefix.XCpy(
+			"fPermCfg"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by fPermCfg.GetCompositePermissionMode().\n"+
+			"Error= \n%v\n",
+			funcName,
+			err2.Error())
+
+		return dirCreated, err
+	}
+
+	err2 = os.MkdirAll(dMgr.absolutePath, modePerm)
+
+	if err2 != nil {
+		err = fmt.Errorf("%v\n"+
+			"Error returned by os.MkdirAll(%v.absolutePath, modePerm).\n"+
+			"%v.absolutePath='%v'\n"+
+			"modePerm=\"drwxrwxrwx\"\n"+
+			"Error= \n%v\n",
+			ePrefix.String(),
+			dMgrLabel,
+			dMgrLabel,
+			dMgr.absolutePath,
+			err2.Error())
+
+		return dirCreated, err
+	}
+
+	dMgrPathDoesExist,
+		_,
+		err2 =
+		dMgrHlprAtom.doesDirectoryExist(
+			dMgr,
+			PreProcPathCode.None(),
+			dMgrLabel,
+			ePrefix)
+
+	if err2 != nil {
+		err = fmt.Errorf("%v"+
+			"Error: After attempted directory creation, "+
+			"a non-path error was generated!\n"+
+			"%v.absolutePath='%v'\n"+
+			"Error= \n%v\n",
+			funcName,
+			dMgrLabel,
+			dMgr.absolutePath,
+			err2.Error())
+
+		return dirCreated, err
+	}
+
+	if !dMgrPathDoesExist {
+		err = fmt.Errorf("Error: After attempted directory creation,\n"+
+			"the directory DOES NOT EXIST!\n"+
+			"%v=%v\n", dMgrLabel, dMgr.absolutePath)
+		return dirCreated, err
+	}
+
+	dirCreated = true
 
 	return dirCreated, err
 }
