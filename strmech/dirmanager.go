@@ -5534,33 +5534,130 @@ func (dMgr *DirMgr) MoveDirectoryTree(
 //
 // ----------------------------------------------------------------
 //
-// # BE CAREFUL
+// # IMPORTANT
 //
-// This method will delete the entire subdirectory tree.
-// The source or parent directory 'DirMgr' and its
-// constituent files will NOT be deleted.
+// This method will delete the entire subdirectory tree in
+// the parent directory identified by the current instance
+// of DirMgr. However, the source or parent directory for
+// the current instance of DirMgr, and its constituent
+// files, will NOT be deleted.
 //
-// --------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Input Parameters:
+// # Input Parameters
 //
-//	targetDMgr   DirMgr - An instance of 'DirMgr' initialized with the directory
-//	                      path of the target directory to which all source files
-//	                      will be moved. If the target directory does not exist,
-//	                      this method will attempt to create it.
+//	targetDMgr   DirMgr
 //
-// ---------------------------------------------------------------------------
+//		An instance of 'DirMgr' initialized with the
+//		directory path of the target directory to which
+//		all source files will be moved.
 //
-// Return Value:
+//		If the target directory does not exist, this
+//		method will attempt to create it.
 //
-//	errs     []error  - An array of errors is returned. If the method completes
-//	                    successfully with no errors, a ZERO-length array is
-//	                    returned.
+//	errorPrefix					interface{}
 //
-//	                    If errors are encountered they are stored in the error
-//	                    array and returned to the caller.
-func (dMgr *DirMgr) MoveSubDirectoryTree(targetDMgr DirMgr) (
-	dirMoveStats DirectoryMoveStats, errs []error) {
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	dirMoveStats				DirectoryMoveStats
+//
+//		If this method completes successfully, this
+//		structure will contain information and statistics
+//		describing the outcome of the 'move' operation.
+//
+//		type DirectoryMoveStats struct {
+//			TotalSrcFilesProcessed   uint64
+//			SourceFilesMoved         uint64
+//			SourceFileBytesMoved     uint64
+//			SourceFilesRemaining     uint64
+//			SourceFileBytesRemaining uint64
+//			TotalDirsProcessed       uint64
+//			DirsCreated              uint64
+//			NumOfSubDirectories      uint64
+//			SourceDirWasDeleted      bool
+//			ComputeError             error
+//		}
+//
+//	errs						[]error
+//
+//		An array of error objects.
+//
+//		If this method completes successfully, the
+//		returned error array is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		This error array may contain multiple errors.
+func (dMgr *DirMgr) MoveSubDirectoryTree(
+	targetDMgr DirMgr,
+	errorPrefix interface{}) (
+	dirMoveStats DirectoryMoveStats,
+	errs []error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -5570,7 +5667,23 @@ func (dMgr *DirMgr) MoveSubDirectoryTree(targetDMgr DirMgr) (
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.MoveSubDirectoryTree() "
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgr."+
+			"MoveSubDirectoryTree()",
+		"")
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return dirMoveStats, errs
+	}
+
 	dMgrHlpr := dirMgrHelper{}
 
 	dirMoveStats,
@@ -5578,9 +5691,9 @@ func (dMgr *DirMgr) MoveSubDirectoryTree(targetDMgr DirMgr) (
 		dMgrHlpr.moveSubDirectoryTree(
 			dMgr,
 			&targetDMgr,
-			ePrefix,
 			"dMgr",
-			"destinationDMgr")
+			"destinationDMgr",
+			ePrefix)
 
 	return dirMoveStats, errs
 }

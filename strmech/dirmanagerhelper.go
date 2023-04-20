@@ -7113,24 +7113,212 @@ func (dMgrHlpr *dirMgrHelper) moveDirectoryTree(
 	return dirMoveStats, errs
 }
 
-// moveSubDirectoryTree - Moves all subdirectories in the 'dMgr'
-// tree to the 'targetDMgr' subdirectory tree.
+// moveSubDirectoryTree
+//
+// Moves all subdirectories in the 'dMgr' tree to the
+// 'targetDMgr' subdirectory tree.
+//
+// Moves all subdirectories and their constituent files
+// from the source or parent directory 'DirMgr' to a
+// target directory tree specified by input parameter
+// 'targetDMgr'.
+//
+// If this method completes successfully, all
+// subdirectories and files in the source directory tree
+// will be deleted.
+//
+// The source or parent directory identified by 'DirMgr'
+// and the files within 'DirMgr' will NOT be deleted.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// This method will delete the entire subdirectory tree in
+// the parent directory identified by the current instance
+// of DirMgr. However, the source or parent directory for
+// the current instance of DirMgr, and its constituent
+// files, will NOT be deleted.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dMgr						*DirMgr
+//
+//		A pointer to an instance of DirMgr. This instance
+//		identifies the source parent directory from which
+//		all subdirectories and files will be moved to the
+//		target directory tree identified by input
+//		parameter 'targetDMgr'. After source
+//		subdirectories and files are copied to this
+//		target directory tree, the entire source
+//		subdirectory tree identified by the 'dMgr' parent
+//		directory along with ALL the files in that
+//		subdirectory tree will be deleted.
+//
+//		Be advised that the parent directory and
+//		constituent files in that parent directory will
+//		NOT be deleted.
+//
+//		ALL the files in the subdirectory tree specified
+//		by the 'dMgr' parent directory will be moved to
+//		the target directory tree specified by input
+//		parameter 'targetDMgr'.
+//
+//		If the directory specified by 'dMgr' does not
+//		exist, an error will be returned.
+//
+//	targetDMgr					*DirMgr
+//
+//		A pointer to an instance of DirMgr. Source files
+//		selected in the source subdirectory tree identified
+//		by the 'dMgr' parent directory will be copied to a
+//		corresponding directory in the target subdirectory
+//		tree specified by this input parameter
+//		('targetDMgr').
+//
+//		If a target directory does not exist, this
+//		method will attempt to create it.
+//
+//	dMgrLabel					string
+//
+//		The name or label associated with input parameter
+//		'dMgr', which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "dMgr" will be
+//		automatically applied.
+//
+//	targetDMgrLabel				string
+//
+//		The name or label associated with input parameter
+//		'targetDMgr' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "targetDMgr" will
+//		be automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	dirMoveStats				DirectoryMoveStats
+//
+//		If this method completes successfully, this
+//		structure will contain information and statistics
+//		describing the outcome of the
+//		'move directory tree' operation.
+//
+//		type DirectoryMoveStats struct {
+//			TotalSrcFilesProcessed   uint64
+//			SourceFilesMoved         uint64
+//			SourceFileBytesMoved     uint64
+//			SourceFilesRemaining     uint64
+//			SourceFileBytesRemaining uint64
+//			TotalDirsProcessed       uint64
+//			DirsCreated              uint64
+//			NumOfSubDirectories      uint64
+//			SourceDirWasDeleted      bool
+//			ComputeError             error
+//		}
+//
+//	errs						[]error
+//
+//		An array of error objects.
+//
+//		If this method completes successfully, the
+//		returned error array is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		This error array may contain multiple errors.
 func (dMgrHlpr *dirMgrHelper) moveSubDirectoryTree(
 	dMgr *DirMgr,
 	targetDMgr *DirMgr,
-	ePrefix string,
 	dMgrLabel string,
-	targetDMgrLabel string) (
+	targetDMgrLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
 	dirMoveStats DirectoryMoveStats, errs []error) {
 
-	ePrefixCurrMethod := "dirMgrHelper.moveSubDirectoryTree() "
+	dMgrHlpr.lock.Lock()
 
-	errs = make([]error, 0, 300)
+	defer dMgrHlpr.lock.Unlock()
 
-	if len(ePrefix) == 0 {
-		ePrefix = ePrefixCurrMethod
-	} else {
-		ePrefix = ePrefix + "- " + ePrefixCurrMethod
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "dirMgrHelper.moveSubDirectoryTree()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return dirMoveStats, errs
+	}
+
+	if len(dMgrLabel) == 0 {
+		dMgrLabel = "dMgr"
+	}
+
+	if dMgr == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter %v pointer is 'nil'!\n",
+			ePrefix.String(),
+			dMgrLabel)
+
+		errs = append(errs, err)
+
+		return dirMoveStats, errs
+	}
+
+	if len(targetDMgrLabel) == 0 {
+
+		targetDMgrLabel = "targetDMgr"
+	}
+
+	if targetDMgr == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter %v pointer is 'nil'!\n",
+			ePrefix.String(),
+			targetDMgrLabel)
+
+		errs = append(errs, err)
+
+		return dirMoveStats, errs
+
 	}
 
 	var err2 error
@@ -7139,26 +7327,32 @@ func (dMgrHlpr *dirMgrHelper) moveSubDirectoryTree(
 
 	dTreeCopyStats,
 		errs2 :=
-		dMgrHlpr.copyDirectoryTree(
-			dMgr,
-			targetDMgr,
-			true, // copy empty directories
-			true, // skip top level directory
-			fileSelectCriteria,
-			ePrefix,
-			"dMgr",
-			"targetDMgr")
+		new(dirMgrHelperNanobot).
+			copyDirectoryTree(
+				dMgr,
+				targetDMgr,
+				true, // copy empty directories
+				true, // skip top level directory
+				fileSelectCriteria,
+				"dMgr",
+				"targetDMgr",
+				ePrefix)
 
 	if len(errs2) > 0 {
-		err2 = fmt.Errorf(ePrefix+
-			"\nErrors occurred while copying directory tree to target directory.\n"+
+
+		err = fmt.Errorf("%v\n"+
+			"Errors occurred while copying directory tree to target directory.\n"+
 			"The source directory WAS NOT DELETED!\n"+
-			"%v Source Directory='%v'\n%v Target Directory='%v'\nErrors Follow:\n\n",
+			"%v Source Directory='%v'\n"+
+			"%v Target Directory='%v'\n"+
+			"Errors Follow:\n",
+			ePrefix.String(),
 			dMgrLabel,
 			dMgr.absolutePath,
 			targetDMgrLabel,
 			targetDMgr.absolutePath)
-		errs = append(errs, err2)
+
+		errs = append(errs, err)
 		errs = append(errs, errs2...)
 
 		return dirMoveStats, errs
@@ -7180,11 +7374,14 @@ func (dMgrHlpr *dirMgrHelper) moveSubDirectoryTree(
 		dTreeCopyStats.FileBytesNotCopied
 
 	if dirMoveStats.SourceFilesRemaining > 0 {
-		err2 = fmt.Errorf(ePrefix+
-			"\nError: Some of the files designated to be moved to the target directory, were NOT copied!\n"+
+
+		err2 = fmt.Errorf("%v\n"+
+			"Error: Some of the files designated to be moved to the target directory, were NOT copied!\n"+
 			"Therefore the source directory WILL NOT BE DELETED!\n"+
-			"Number of Files NOT Copied='%v'\n",
-			"%v Source Directory='%v'\n%v Target Directory='%v'\n\n",
+			"Number of Files NOT Copied='%v'\n"+
+			"%v Source Directory='%v'\n"+
+			"%v Target Directory='%v'\n",
+			ePrefix.String(),
 			dTreeCopyStats.FilesNotCopied,
 			dMgrLabel, dMgr.absolutePath,
 			targetDMgrLabel, targetDMgr.absolutePath)
@@ -7197,13 +7394,16 @@ func (dMgrHlpr *dirMgrHelper) moveSubDirectoryTree(
 	dirMoveStats.TotalSrcFilesProcessed =
 		dTreeCopyStats.TotalFilesProcessed
 
-	errs2 = dMgrHlpr.deleteAllSubDirectories(
-		dMgr,
-		ePrefix,
-		"dMgr")
+	errs2 = new(dirMgrHelperMolecule).
+		deleteAllSubDirectories(
+			dMgr,
+			"dMgr",
+			ePrefix)
 
 	if len(errs2) > 0 {
+
 		errs = append(errs, errs2...)
+
 		return dirMoveStats, errs
 	}
 
