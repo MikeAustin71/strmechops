@@ -546,15 +546,15 @@ func (fMgrs *FileMgrCollection) AddFileMgrByDirStrFileNameStr(
 		fMgrs.fileMgrs = make([]FileMgr, 0, 50)
 	}
 
-	dMgrHlpr := dirMgrHelper{}
 	dMgr := DirMgr{}
 
-	isEmpty, err := dMgrHlpr.setDirMgr(
-		&dMgr,
-		pathName,
-		ePrefix.String(),
-		"dMgr",
-		"pathName")
+	isEmpty, err := new(dirMgrHelperNanobot).
+		setDirMgr(
+			&dMgr,
+			pathName,
+			"dMgr",
+			"pathName",
+			ePrefix)
 
 	if err != nil {
 		return err
@@ -727,15 +727,18 @@ func (fMgrs *FileMgrCollection) AddFileMgrByFileInfo(
 		fMgrs.fileMgrs = make([]FileMgr, 0, 50)
 	}
 
-	dMgrHlpr := dirMgrHelper{}
 	dMgr := DirMgr{}
 
-	isEmpty, err := dMgrHlpr.setDirMgr(
-		&dMgr,
-		pathName,
-		ePrefix.String(),
-		"dMgr",
-		"pathName")
+	var isEmpty bool
+
+	isEmpty,
+		err = new(dirMgrHelperNanobot).
+		setDirMgr(
+			&dMgr,
+			pathName,
+			"dMgr",
+			"pathName",
+			ePrefix)
 
 	if err != nil {
 		return err

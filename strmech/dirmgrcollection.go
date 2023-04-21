@@ -3,8 +3,10 @@ package strmech
 import (
 	"errors"
 	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
 	"io"
 	"os"
+	"sync"
 )
 
 /*
@@ -33,6 +35,7 @@ import (
 // and 'filemanager.go' located in this directory.
 type DirMgrCollection struct {
 	dirMgrs []DirMgr
+	lock    *sync.Mutex
 }
 
 // AddDirMgr - Adds a DirMgr object to the collection.
@@ -93,43 +96,77 @@ func (dMgrs *DirMgrCollection) AddDirMgrByKnownPathDirName(parentPathName, dirNa
 	return nil
 }
 
-// AddDirMgrByPathNameStr - Adds a Directory Manager (DirMgr) to the
-// collections based on a string input parameter, 'pathName'.
-func (dMgrs *DirMgrCollection) AddDirMgrByPathNameStr(pathName string) error {
-	ePrefix := "DirMgrCollection.AddDirMgrByPathNameStr() "
+// AddDirMgrByPathNameStr
+//
+// Adds a Directory Manager (DirMgr) to the collections
+// based on a string input parameter, 'pathName'.
+func (dMgrs *DirMgrCollection) AddDirMgrByPathNameStr(
+	pathName string,
+	errorPrefix interface{}) error {
+
+	if dMgrs.lock == nil {
+		dMgrs.lock = new(sync.Mutex)
+	}
+
+	dMgrs.lock.Lock()
+
+	defer dMgrs.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	funcName := "DirMgrCollection.AddDirMgrByPathNameStr()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
 
 	if dMgrs.dirMgrs == nil {
 		dMgrs.dirMgrs = make([]DirMgr, 0, 100)
 	}
 
-	dMgrHlpr := dirMgrHelper{}
 	newDirMgr := DirMgr{}
 
-	isEmpty, err := dMgrHlpr.setDirMgr(
+	var isEmpty bool
+
+	isEmpty,
+		err = new(dirMgrHelperNanobot).setDirMgr(
 		&newDirMgr,
 		pathName,
-		ePrefix,
 		"newDirMgr",
-		"pathName")
+		"pathName",
+		ePrefix)
 
 	if err != nil {
-		s := ePrefix +
-			"Error returned from dMgrHlpr.setDirMgr(pathName).\n" +
-			"pathName='%v' Error='%v'"
-		return fmt.Errorf(s, pathName, err.Error())
+
+		return fmt.Errorf("%v\n"+
+			"Error returned from dMgrHlpr.setDirMgr(pathName).\n"+
+			"pathName='%v'\n"+
+			"Error='%v'",
+			funcName,
+			pathName,
+			err.Error())
+
 	}
 
 	if isEmpty {
-		return fmt.Errorf(ePrefix+
+
+		return fmt.Errorf("%v\n"+
 			"Returned 'DirMgr' is Empty!\n"+
 			"dMgrHlpr.setDirMgrFromKnownPathDirName()\n"+
 			"parentPathName='%v'\n",
+			ePrefix.String(),
 			pathName)
 	}
 
 	dMgrs.dirMgrs = append(dMgrs.dirMgrs, newDirMgr)
 
-	return nil
+	return err
 }
 
 // AddFileInfo - Adds a Directory Manager object to the

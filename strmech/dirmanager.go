@@ -5701,19 +5701,111 @@ func (dMgr *DirMgr) MoveSubDirectoryTree(
 // New - Returns a new DirMgr object and populates the
 // the data fields.
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Input Parameters:
+// # Input Parameters
 //
-//		pathStr string - A path string designating a path or directory.
-//		                 To reduce errors, the 'pathStr' should be terminated
-//		                 with an appropriate path separator ('/' or '\')
-//		                 Example 'pathStr': "C:\dirA\dirB\dirC\"
+//	pathStr						string
+//
+//		A path string designating a path or directory.
+//
+//		To reduce errors, the 'pathStr' should be
+//		terminated with an appropriate path separator
+//		('/' or '\').
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	DirMgr
+//
+//		If this method completes successfully, a fully
+//		populated instance of DirMgr will be returned
+//		configured using the path or path/filename
+//		specified by input parameter 'pathStr'.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//		Example 'pathStr': "C:\dirA\dirB\dirC\"
 //
 //		Example Output After DirMgr Configuration:
 //
 //	    ----------------------------
-//	    DirMgr Fields
+//	    	DirMgr Fields
 //	    ----------------------------
 //
 //	                     isInitialized:  true
@@ -5741,7 +5833,11 @@ func (dMgr *DirMgr) MoveSubDirectoryTree(
 //	                           File Info Mode():  drwxrwxrwx
 //	                            File Info Sys():  &{16 {617269082 30594119} {2388100752 30639796} {2388100752 30639796} 0 0}
 //	                                   Dir path:  D:\go\work\src\MikeAustin71\pathfilego\003_filehelper\logTest\testoverwrite
-func (dMgr *DirMgr) New(pathStr string) (DirMgr, error) {
+func (dMgr *DirMgr) New(
+	pathStr string,
+	errorPrefix interface{}) (
+	DirMgr,
+	error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -5751,31 +5847,44 @@ func (dMgr *DirMgr) New(pathStr string) (DirMgr, error) {
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.New() "
-	dMgrHlpr := dirMgrHelper{}
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
-	newDirMgr := DirMgr{}
+	var newDirMgr DirMgr
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgr.New()",
+		"")
+
+	if err != nil {
+		return newDirMgr, err
+	}
 
 	isEmpty,
-		err := dMgrHlpr.setDirMgr(
-		&newDirMgr,
-		pathStr,
-		ePrefix,
-		"newDirMgr",
-		"pathStr")
+		err := new(dirMgrHelperNanobot).
+		setDirMgr(
+			&newDirMgr,
+			pathStr,
+			"newDirMgr",
+			"pathStr",
+			ePrefix)
 
 	if err != nil {
 		return DirMgr{}, err
 	}
 
 	if isEmpty {
-		return DirMgr{}, fmt.Errorf(ePrefix+
-			"\nERROR: dMgrHlpr.SetDirMgr(pathStr) returned an EMPTY DirMgr\n"+
+
+		return DirMgr{}, fmt.Errorf("%v"+
+			"ERROR: dMgrHlpr.SetDirMgr(pathStr) returned an EMPTY DirMgr\n"+
 			"pathStr='%v'\n",
+			ePrefix.String(),
 			pathStr)
 	}
 
-	return newDirMgr, nil
+	return newDirMgr, err
 }
 
 // NewFromFileInfo - Returns a new DirMgr object based on two input parameters:
@@ -5983,22 +6092,114 @@ func (dMgr *DirMgr) NewFromKnownPathDirectoryName(
 	return newDirMgr, nil
 }
 
-// SetDirMgr - Sets the DirMgr fields and path strings for the current DirMgr
-// instance.
+// SetDirMgr
 //
-// ------------------------------------------------------------------------
+// Sets the DirMgr fields and path strings for the
+// current DirMgr instance.
 //
-// Input Parameters:
+// ----------------------------------------------------------------
 //
-//	pathStr string - A path string designating a path or directory.
-//	                 To reduce errors, the 'pathStr' should be terminated
-//	                 with an appropriate path separator ('/' or '\')
-//	                 Example 'pathStr': "C:\dirA\dirB\dirC\"
+// # Input Parameters
 //
-// Example Output After DirMgr Configuration:
+//	pathStr string
+//
+//		A path string designating a path or directory.
+//		To reduce errors, the 'pathStr' should be
+//		terminated with an appropriate path separator
+//		('/' or '\').
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	isEmpty						bool
+//
+//		If the outcome of setting new values for DirMgr
+//		is an 'empty' DirMgr instance, this value will be
+//		set to 'true'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	Example 'pathStr': "C:\dirA\dirB\dirC\"
+//
+//	Example Output After DirMgr Configuration:
 //
 //	 ----------------------------
-//	 DirMgr Fields
+//	 	DirMgr Fields
 //	 ----------------------------
 //
 //	                  isInitialized:  true
@@ -6026,17 +6227,11 @@ func (dMgr *DirMgr) NewFromKnownPathDirectoryName(
 //	                        File Info Mode():  drwxrwxrwx
 //	                         File Info Sys():  &{16 {617269082 30594119} {2388100752 30639796} {2388100752 30639796} 0 0}
 //	                                Dir path:  D:\go\work\src\MikeAustin71\pathfilego\003_filehelper\logTest\testoverwrite
-//
-// ---------------------------------------------------------------------------
-//
-// Return Value:
-//
-//	isEmpty     bool - If the outcome of setting new values for DirMgr is an
-//	                   'empty' DirMgr instance, this value will be set to 'true'.
-//
-//	err        error - If a program execution error is encountered during
-//	                   processing, it will be returned as an 'error' type.
-func (dMgr *DirMgr) SetDirMgr(pathStr string) (isEmpty bool, err error) {
+func (dMgr *DirMgr) SetDirMgr(
+	pathStr string,
+	errorPrefix interface{}) (
+	isEmpty bool,
+	err error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -6046,16 +6241,28 @@ func (dMgr *DirMgr) SetDirMgr(pathStr string) (isEmpty bool, err error) {
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.SetDirMgr() "
-	dMgrHlpr := dirMgrHelper{}
+	var ePrefix *ePref.ErrPrefixDto
+
+	isEmpty = true
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgr.SetDirMgr()",
+		"")
+
+	if err != nil {
+		return isEmpty, err
+	}
 
 	isEmpty,
-		err = dMgrHlpr.setDirMgr(
-		dMgr,
-		pathStr,
-		ePrefix,
-		"dMgr",
-		"pathStr")
+		err = new(dirMgrHelperNanobot).
+		setDirMgr(
+			dMgr,
+			pathStr,
+			"dMgr",
+			"pathStr",
+			ePrefix)
 
 	return isEmpty, err
 }

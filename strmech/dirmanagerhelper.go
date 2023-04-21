@@ -7418,91 +7418,6 @@ func (dMgrHlpr *dirMgrHelper) moveSubDirectoryTree(
 	return dirMoveStats, errs
 }
 
-// setDirMgr - Sets internal values for DirMgr instance based on
-// a path or path/file name string passed as an input parameter
-func (dMgrHlpr *dirMgrHelper) setDirMgr(
-	dMgr *DirMgr,
-	pathStr string,
-	dMgrLabel string,
-	pathStrLabel string,
-	errPrefDto *ePref.ErrPrefixDto) (
-	isEmpty bool,
-	err error) {
-
-	if dMgrHlpr.lock == nil {
-		dMgrHlpr.lock = new(sync.Mutex)
-	}
-
-	dMgrHlpr.lock.Lock()
-
-	defer dMgrHlpr.lock.Unlock()
-
-	isEmpty = true
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		"dirMgrHelper."+
-			"setDirMgr()",
-		"")
-
-	if err != nil {
-		return isEmpty, err
-	}
-
-	if dMgr == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Input parameter %v pointer is 'nil'!\n",
-			ePrefix.String(),
-			dMgrLabel)
-
-		return isEmpty, err
-	}
-
-	if len(pathStrLabel) == 0 {
-		pathStrLabel = "pathStr"
-	}
-
-	if len(dMgrLabel) == 0 {
-		dMgrLabel = "dMgr"
-	}
-
-	validPathDto := ValidPathStrDto{}.New()
-
-	validPathDto,
-		err =
-		new(dirMgrHelperMolecule).
-			getValidPathStr(
-				pathStr,
-				pathStrLabel,
-				ePrefix)
-
-	if err != nil {
-		isEmpty = true
-		return isEmpty, err
-	}
-
-	err = new(dirMgrHelperElectron).empty(
-		dMgr,
-		dMgrLabel,
-		ePrefix)
-
-	if err != nil {
-
-		return isEmpty, err
-	}
-
-	return new(dirMgrHelperNanobot).
-		lowLevelDirMgrFieldConfig(
-			dMgr,
-			validPathDto,
-			dMgrLabel,
-			ePrefix)
-}
-
 // setDirMgrFromKnownPathDirName - Configures the internal
 // field values for the 'dMgr' instance using a parent path
 // name and a directory name. The parent path and directory
@@ -7921,36 +7836,57 @@ func (dMgrHlpr *dirMgrHelper) setPermissions(
 	return nil
 }
 
-// substituteBaseDir - Substitute 'baseDir' segment of the current DirMgr with a new
-// parent directory identified by input parameter 'substituteBaseDir'. This is useful
-// in copying files to new directory trees.
+// substituteBaseDir
+//
+// Substitute 'baseDir' segment of the current DirMgr
+// with a new parent directory identified by input
+// parameter 'substituteBaseDir'. This is useful in
+// copying files to new directory trees.
 func (dMgrHlpr *dirMgrHelper) substituteBaseDir(
 	dMgr *DirMgr,
 	baseDir *DirMgr,
 	substituteBaseDir *DirMgr,
-	ePrefix string,
 	dMgrLabel string,
 	baseDirLabel string,
-	substituteBaseDirLabel string) (newDMgr DirMgr, err error) {
+	substituteBaseDirLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	newDMgr DirMgr,
+	err error) {
 
-	ePrefixCurrMethod := "dirMgrHelper.substituteBaseDir() "
-
-	if len(ePrefix) == 0 {
-		ePrefix = ePrefixCurrMethod
-	} else {
-		ePrefix = ePrefix + "- " + ePrefixCurrMethod
+	if dMgrHlpr.lock == nil {
+		dMgrHlpr.lock = new(sync.Mutex)
 	}
 
-	newDMgr = DirMgr{}
-	err = nil
+	dMgrHlpr.lock.Lock()
+
+	defer dMgrHlpr.lock.Unlock()
+
+	funcName := "dirMgrHelper.substituteBaseDir()"
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return newDMgr, err
+	}
+
+	dMgrHlprAtom := dirMgrHelperAtom{}
+
+	dMgrHlprElectron := dirMgrHelperElectron{}
 
 	_,
 		_,
-		err = dMgrHlpr.doesDirectoryExist(
-		dMgr,
-		PreProcPathCode.None(),
-		ePrefix,
-		dMgrLabel)
+		err = dMgrHlprAtom.
+		doesDirectoryExist(
+			dMgr,
+			PreProcPathCode.None(),
+			dMgrLabel,
+			ePrefix)
 
 	if err != nil {
 		return newDMgr, err
@@ -7958,11 +7894,12 @@ func (dMgrHlpr *dirMgrHelper) substituteBaseDir(
 
 	_,
 		_,
-		err = dMgrHlpr.doesDirectoryExist(
-		baseDir,
-		PreProcPathCode.None(),
-		ePrefix,
-		baseDirLabel)
+		err = dMgrHlprAtom.
+		doesDirectoryExist(
+			baseDir,
+			PreProcPathCode.None(),
+			baseDirLabel,
+			ePrefix)
 
 	if err != nil {
 		return newDMgr, err
@@ -7970,11 +7907,12 @@ func (dMgrHlpr *dirMgrHelper) substituteBaseDir(
 
 	_,
 		_,
-		err = dMgrHlpr.doesDirectoryExist(
-		substituteBaseDir,
-		PreProcPathCode.None(),
-		ePrefix,
-		substituteBaseDirLabel)
+		err = dMgrHlprAtom.
+		doesDirectoryExist(
+			substituteBaseDir,
+			PreProcPathCode.None(),
+			substituteBaseDirLabel,
+			ePrefix)
 
 	if err != nil {
 		return newDMgr, err
@@ -7989,9 +7927,12 @@ func (dMgrHlpr *dirMgrHelper) substituteBaseDir(
 	idx := strings.Index(thisDirAbsPath, oldBaseAbsPath)
 
 	if idx < 0 {
-		err = fmt.Errorf(ePrefix+
-			"\nThe base directory was NOT found in the current %v path!\n"+
-			"%v Path='%v'\n%v Path='%v'\n\n",
+
+		err = fmt.Errorf("%v\n"+
+			"The base directory was NOT found in the current %v path!\n"+
+			"%v Path='%v'\n"+
+			"%v Path='%v'\n",
+			ePrefix.String(),
 			dMgrLabel,
 			dMgrLabel,
 			thisDirAbsPath,
@@ -8002,9 +7943,11 @@ func (dMgrHlpr *dirMgrHelper) substituteBaseDir(
 	}
 
 	if idx != 0 {
-		err = fmt.Errorf(ePrefix+
-			"\nThe %v directory was NOT found at the beginning of the %v path!\n"+
-			"%v Path='%v'\n%v Path='%v'\n\n",
+		err = fmt.Errorf("%v\n"+
+			"The %v directory was NOT found at the beginning of the %v path!\n"+
+			"%v Path='%v'\n"+
+			"%v Path='%v'\n",
+			ePrefix.String(),
 			baseDirLabel,
 			dMgrLabel,
 			dMgrLabel,
@@ -8021,34 +7964,40 @@ func (dMgrHlpr *dirMgrHelper) substituteBaseDir(
 
 	isEmpty := false
 
-	isEmpty, err = dMgrHlpr.setDirMgr(
-		&newDMgr,
-		newAbsPath,
-		ePrefix,
-		dMgrLabel,
-		"newAbsPath")
+	isEmpty, err = new(dirMgrHelperNanobot).
+		setDirMgr(
+			&newDMgr,
+			newAbsPath,
+			dMgrLabel,
+			"newAbsPath",
+			ePrefix)
 
 	if err != nil {
 
-		_ = dMgrHlpr.empty(
-			&newDMgr,
-			ePrefix,
-			dMgrLabel)
+		_ = dMgrHlprElectron.
+			empty(
+				&newDMgr,
+				dMgrLabel,
+				ePrefix.XCpy(
+					"newDMgr"))
 
 		return newDMgr, err
 	}
 
 	if isEmpty {
 
-		_ = dMgrHlpr.empty(
-			&newDMgr,
-			ePrefix,
-			dMgrLabel)
+		_ = dMgrHlprElectron.
+			empty(
+				&newDMgr,
+				dMgrLabel,
+				ePrefix)
 
-		err = fmt.Errorf(ePrefix+
-			"\nERROR: New generated Directory Path Is Invalid!\n"+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: New generated Directory Path Is Invalid!\n"+
 			"isEmpty='true'\n"+
-			"newAbsPath='%v'\n\n", newAbsPath)
+			"newAbsPath='%v'\n",
+			ePrefix,
+			newAbsPath)
 
 		return newDMgr, err
 	}

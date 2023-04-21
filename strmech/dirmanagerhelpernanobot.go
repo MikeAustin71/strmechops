@@ -444,8 +444,9 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 		}
 
 		nextTargetDMgr, err = new(DirMgr).New(
-			targetDMgr.absolutePath +
-				nextDir.absolutePath[baseDirLen:])
+			targetDMgr.absolutePath+
+				nextDir.absolutePath[baseDirLen:],
+			ePrefix)
 
 		if err != nil {
 
@@ -579,9 +580,10 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 					// This is a directory
 
 					err = dirs.AddDirMgrByPathNameStr(
-						nextDir.absolutePath +
-							osPathSepStr +
-							nameFInfo.Name())
+						nextDir.absolutePath+
+							osPathSepStr+
+							nameFInfo.Name(),
+						ePrefix)
 
 					if err != nil {
 						err2 = fmt.Errorf("%v\n"+
@@ -903,7 +905,6 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 //		If the directory path is empty or blank, this
 //		returned boolean value is set to 'true'.
 //
-//
 //	err							error
 //
 //		If this method completes successfully, the
@@ -1179,4 +1180,177 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) lowLevelDirMgrFieldConfig(
 	err = nil
 
 	return isEmpty, err
+}
+
+// setDirMgr
+//
+// Sets internal values for a DirMgr instance based on a
+// path or path/file name string passed as an input
+// parameter.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dMgr						*DirMgr
+//
+//		A pointer to an instance of DirMgr. This instance
+//		will be reconfigured using the path supplied by
+//		input parameter 'pathStr'.
+//
+//	pathStr						string
+//
+//		This string contains the path or path/filename
+//		used to configure the DirMgr instance supplied by
+//		input parameter 'dMgr'.
+//
+//	dMgrLabel					string
+//
+//		The name or label associated with input parameter
+//		'dMgr', which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "dMgr" will be
+//		automatically applied.
+//
+//	pathStrLabel				string
+//
+//		The name or label associated with input parameter
+//		'pathStr', which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "pathStr" will be
+//		automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	isEmpty						bool
+//
+//		If the directory path is empty or blank, this
+//		returned boolean value is set to 'true'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (dMgrHlprNanobot *dirMgrHelperNanobot) setDirMgr(
+	dMgr *DirMgr,
+	pathStr string,
+	dMgrLabel string,
+	pathStrLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	isEmpty bool,
+	err error) {
+
+	if dMgrHlprNanobot.lock == nil {
+		dMgrHlprNanobot.lock = new(sync.Mutex)
+	}
+
+	dMgrHlprNanobot.lock.Lock()
+
+	defer dMgrHlprNanobot.lock.Unlock()
+
+	isEmpty = true
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"dirMgrHelperNanobot."+
+			"setDirMgr()",
+		"")
+
+	if err != nil {
+		return isEmpty, err
+	}
+
+	if len(dMgrLabel) == 0 {
+		dMgrLabel = "dMgr"
+	}
+
+	if dMgr == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Input parameter %v pointer is 'nil'!\n",
+			ePrefix.String(),
+			dMgrLabel)
+
+		return isEmpty, err
+	}
+
+	if len(pathStrLabel) == 0 {
+		pathStrLabel = "pathStr"
+	}
+
+	if len(pathStr) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter %v pointer is an\n"+
+			"empty or zero length string\n",
+			ePrefix.String(),
+			pathStrLabel)
+
+		return isEmpty, err
+
+	}
+
+	validPathDto := ValidPathStrDto{}.New()
+
+	validPathDto,
+		err =
+		new(dirMgrHelperMolecule).
+			getValidPathStr(
+				pathStr,
+				pathStrLabel,
+				ePrefix)
+
+	if err != nil {
+		isEmpty = true
+		return isEmpty, err
+	}
+
+	err = new(dirMgrHelperElectron).empty(
+		dMgr,
+		dMgrLabel,
+		ePrefix)
+
+	if err != nil {
+
+		return isEmpty, err
+	}
+
+	return new(dirMgrHelperNanobot).
+		lowLevelDirMgrFieldConfig(
+			dMgr,
+			validPathDto,
+			dMgrLabel,
+			ePrefix)
 }
