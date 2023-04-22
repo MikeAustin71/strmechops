@@ -665,6 +665,10 @@ func (dMgrHlprAtom *dirMgrHelperAtom) lowLevelScreenPathStrForInvalidChars(
 
 	strLen := 0
 
+	if len(pathStrLabel) == 0 {
+		pathStrLabel = "pathStr"
+	}
+
 	pathStr,
 		strLen,
 		err = new(dirMgrHelperElectron).
@@ -677,10 +681,6 @@ func (dMgrHlprAtom *dirMgrHelperAtom) lowLevelScreenPathStrForInvalidChars(
 	if err != nil {
 
 		return validPathStr, validPathStrLength, err
-	}
-
-	if len(pathStrLabel) == 0 {
-		pathStrLabel = "pathStr"
 	}
 
 	tripleDotSeparator := "..."

@@ -1663,9 +1663,12 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeInfo(
 					}
 
 					err =
-						deleteTreeInfo.Directories.AddDirMgrByKnownPathDirName(
-							nextDir.absolutePath,
-							nameFInfo.Name())
+						deleteTreeInfo.Directories.
+							AddDirMgrByKnownPathDirName(
+								nextDir.absolutePath,
+								nameFInfo.Name(),
+								ePrefix.XCpy(
+									"nextDir.absolutePath"))
 
 					if err != nil {
 						err2 =
@@ -2318,9 +2321,10 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 
 					err = dirs.
 						AddDirMgrByPathNameStr(
-							nextDir.absolutePath +
-								osPathSepStr +
-								nameFInfo.Name())
+							nextDir.absolutePath+
+								osPathSepStr+
+								nameFInfo.Name(),
+							ePrefix)
 
 					if err != nil {
 
@@ -4187,7 +4191,7 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryTreeOps(
 	dirOp.FileOps = append(dirOp.FileOps, fileOps...)
 
 	dirOp.TargetBaseDir, err = new(DirMgr).
-		New(targetBaseDir.absolutePath)
+		New(targetBaseDir.absolutePath, ePrefix)
 
 	if err != nil {
 
@@ -4207,7 +4211,8 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryTreeOps(
 
 	dirOp.SourceBaseDir, err = new(DirMgr).
 		New(
-			sourceDMgr.absolutePath)
+			sourceDMgr.absolutePath,
+			ePrefix)
 
 	if err != nil {
 		err2 = fmt.Errorf("%v\n"+
@@ -4724,7 +4729,9 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 					err = dTreeInfo.Directories.
 						AddDirMgrByKnownPathDirName(
 							nextDir.absolutePath,
-							nameFInfo.Name())
+							nameFInfo.Name(),
+							ePrefix.XCpy(
+								"nextDir.absolutePath"))
 
 					if err != nil {
 
@@ -5129,9 +5136,12 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeStats(
 
 				if nameFInfo.IsDir() {
 					// This is a directory
-					err = dirs.AddDirMgrByKnownPathDirName(
-						nextDir.absolutePath,
-						nameFInfo.Name())
+					err = dirs.
+						AddDirMgrByKnownPathDirName(
+							nextDir.absolutePath,
+							nameFInfo.Name(),
+							ePrefix.XCpy(
+								"nextDir.absolutePath"))
 
 					if err != nil {
 						errs = append(errs, err2)
@@ -5903,7 +5913,9 @@ func (dMgrHlpr *dirMgrHelper) getDirectoryTree(
 					newDirPathFileName :=
 						fh.JoinPathsAdjustSeparators(dirMgrs.dirMgrs[i].absolutePath, nameFInfo.Name())
 
-					err = dirMgrs.AddDirMgrByPathNameStr(newDirPathFileName)
+					err = dirMgrs.AddDirMgrByPathNameStr(
+						newDirPathFileName,
+						ePrefix)
 
 					if err != nil {
 
@@ -6101,7 +6113,10 @@ func (dMgrHlpr *dirMgrHelper) getParentDirMgr(
 	var err2 error
 
 	dirMgrParent,
-		err2 = new(DirMgr).New(dMgr.parentPath)
+		err2 = new(DirMgr).New(
+		dMgr.parentPath,
+		ePrefix.XCpy(
+			"dMgr.parentPath"))
 
 	if err2 != nil {
 
@@ -6125,6 +6140,51 @@ func (dMgrHlpr *dirMgrHelper) getParentDirMgr(
 	err = nil
 
 	return dirMgrParent, hasParent, err
+}
+
+// isDirMgrValid
+//
+// This method examines the current DirMgr object to
+// determine whether it has been properly configured. If
+// the current DirMgr object is valid, the method returns
+// 'nil' for no errors.
+//
+// Otherwise, if the DirMgr object is INVALID, an error
+// is returned.
+func (dMgrHlpr *dirMgrHelper) isDirMgrValid(
+	dMgr *DirMgr,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if dMgr.lock == nil {
+		dMgr.lock = new(sync.Mutex)
+	}
+
+	dMgr.lock.Lock()
+
+	defer dMgr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"DirMgr.IsDirMgrValid()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	_,
+		_,
+		err = new(dirMgrHelperAtom).doesDirectoryExist(
+		dMgr,
+		PreProcPathCode.None(),
+		"dMgr",
+		ePrefix.XCpy("dMgr"))
+
+	return err
 }
 
 // moveDirectory
@@ -7418,26 +7478,121 @@ func (dMgrHlpr *dirMgrHelper) moveSubDirectoryTree(
 	return dirMoveStats, errs
 }
 
-// setDirMgrFromKnownPathDirName - Configures the internal
-// field values for the 'dMgr' instance using a parent path
-// name and a directory name. The parent path and directory
-// name are combined to form the full path for the 'dMgr'
-// instance.
+// setDirMgrFromKnownPathDirName
 //
-// This method will replace all previous field values with new
-// values based on input parameters 'parentPathName' and
-// 'directoryName'.
+// Configures the internal field values for the 'dMgr'
+// instance using a parent path name and a directory
+// name. The parent path and directory name are combined
+// to form the full path for the 'dMgr' instance.
 //
-// This method differs from other "Set" methods in that it
-// assumes the input parameters are known values and do not
-// require the usual analysis and validation screening applied
-// by similar methods.
+// This method will replace all previous field values
+// with new values based on input parameters
+// 'parentPathName' and 'directoryName'.
+//
+// This method differs from other "Set" methods in that
+// it assumes the input parameters are known values and
+// do not require the usual analysis and validation
+// screening applied by similar methods.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dMgr						*DirMgr
+//
+//		A pointer to an instance of DirMgr. This instance
+//		will be reconfigured using the path supplied by
+//		input parameter 'pathStr' and the directory name
+//		specified by input parameter 'dirName'.
+//
+//	parentPath					string
+//
+//		This string contains the parent path which will
+//		be combined with input parameter 'dirName' to
+//		create the final path used to configure the DirMgr
+//		instance supplied by input parameter 'dMgr'.
+//
+//	dirName						string
+//
+//		This string contains the directory which will be
+//		combined with the parent directory supplied by
+//		input parameter 'parentPath' to create the final
+//		directory path which will be used to configure
+//		the instance of DirMgr identified by input
+//		parameter 'dMgr'.
+//
+//	dMgrLabel					string
+//
+//		The name or label associated with input parameter
+//		'dMgr', which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "dMgr" will be
+//		automatically applied.
+//
+//	parentPathLabel				string
+//
+//		The name or label associated with input parameter
+//		'parentPath', which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "parentPath" will be
+//		automatically applied.
+//
+//	dirNameLabel				string
+//
+//		The name or label associated with input parameter
+//		'dirName', which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "dirName" will be
+//		automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	isEmpty						bool
+//
+//		If the directory path is empty or blank, this
+//		returned boolean value is set to 'true'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (dMgrHlpr *dirMgrHelper) setDirMgrFromKnownPathDirName(
 	dMgr *DirMgr,
-	pathStr string,
+	parentPath string,
 	dirName string,
 	dMgrLabel string,
-	pathStrLabel string,
+	parentPathLabel string,
 	dirNameLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
 	isEmpty bool,
@@ -7468,26 +7623,38 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrFromKnownPathDirName(
 		return false, err
 	}
 
+	if len(dMgrLabel) == 0 {
+		dMgrLabel = "dMgr"
+	}
+
 	if dMgr == nil {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter %v pointer is 'nil' !\n",
 			ePrefix.String(),
-			dirNameLabel)
+			dMgrLabel)
 
 		return isEmpty, err
+	}
+
+	if len(parentPathLabel) == 0 {
+		parentPathLabel = "parentPath"
+	}
+
+	if len(dirNameLabel) == 0 {
+		dirNameLabel = "dirName"
 	}
 
 	strLen := 0
 
 	dMgrHlprAtom := dirMgrHelperAtom{}
 
-	pathStr,
+	parentPath,
 		strLen,
 		err = dMgrHlprAtom.
 		lowLevelScreenPathStrForInvalidChars(
-			pathStr,
-			pathStrLabel,
+			parentPath,
+			parentPathLabel,
 			ePrefix)
 
 	if err != nil {
@@ -7538,10 +7705,10 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrFromKnownPathDirName(
 
 	finalPathStr := ""
 
-	if pathStr[strLen-1] != os.PathSeparator {
-		finalPathStr = pathStr + string(os.PathSeparator) + dirName
+	if parentPath[strLen-1] != os.PathSeparator {
+		finalPathStr = parentPath + string(os.PathSeparator) + dirName
 	} else {
-		finalPathStr = pathStr + dirName
+		finalPathStr = parentPath + dirName
 	}
 
 	var err2 error
@@ -7559,7 +7726,7 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrFromKnownPathDirName(
 
 	if err2 != nil {
 		err = fmt.Errorf("%v\n"+
-			"Error returned by fh.MakeAbsolutePath(pathStr).\n"+
+			"Error returned by fh.MakeAbsolutePath(parentPath).\n"+
 			"Directory Path='%v'\n"+
 			"Error='%v'\n",
 			funcName,
@@ -7575,7 +7742,7 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrFromKnownPathDirName(
 		validPathDto.pathVolumeName =
 		fh.GetVolumeNameIndex(validPathDto.absPathStr)
 
-	validPathDto.pathStrLength = len(pathStr)
+	validPathDto.pathStrLength = len(parentPath)
 	validPathDto.absPathStrLength = len(validPathDto.absPathStr)
 	validPathDto.pathDoesExist = PathExistsStatus.Unknown()
 	validPathDto.absPathDoesExist = PathExistsStatus.Unknown()

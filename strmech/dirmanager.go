@@ -4543,7 +4543,8 @@ func (dMgr *DirMgr) GetVolumeName() string {
 //
 // Otherwise, if the DirMgr object is INVALID, an error is
 // returned.
-func (dMgr *DirMgr) IsDirMgrValid(errPrefixStr string) error {
+func (dMgr *DirMgr) IsDirMgrValid(
+	errorPrefix interface{}) error {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -4553,25 +4554,22 @@ func (dMgr *DirMgr) IsDirMgrValid(errPrefixStr string) error {
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := strings.TrimLeft(strings.TrimRight(errPrefixStr, " "), " ")
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
-	if len(ePrefix) == 0 {
-		ePrefix = "DirMgr.IsDirMgrValid() "
-	} else {
-		ePrefix = ePrefix + "- DirMgr.IsDirMgrValid() "
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgr.IsDirMgrValid()",
+		"")
+
+	if err != nil {
+		return err
 	}
 
-	dMgrHlpr := dirMgrHelper{}
-
-	_,
-		_,
-		err := dMgrHlpr.doesDirectoryExist(
+	return new(dirMgrHelper).isDirMgrValid(
 		dMgr,
-		PreProcPathCode.None(),
-		ePrefix,
-		"dMgr")
-
-	return err
+		ePrefix.XCpy("dMgr"))
 }
 
 // IsInitialized - Returns a boolean value indicating
@@ -5938,14 +5936,21 @@ func (dMgr *DirMgr) NewFromFileInfo(
 	return newDirMgr, nil
 }
 
-// NewFromDirMgrFileInfo - Configures and returns a new 'DirMgr' instance based on
-// two input parameters, 'directory' and 'fileNameExt'.
+// NewFromDirMgrFileInfo
 //
-// Input parameter 'directory' is of type 'DirMgr' and is treated as the parent directory.
-// The final directory name is provided by the input parameter 'fileInfo' of type
-// 'os.FileInfo'.
+// Configures and returns a new 'DirMgr' instance based
+// on two input parameters, 'directory' and 'fileNameExt'.
+//
+// Input parameter 'directory' is of type 'DirMgr' and is
+// treated as the parent directory. The final directory
+// name is provided by the input parameter 'fileInfo' of
+// type 'os.FileInfo'.
 func (dMgr *DirMgr) NewFromDirMgrFileInfo(
-	parentDirectory DirMgr, directoryFileInfo os.FileInfo) (DirMgr, error) {
+	parentDirectory DirMgr,
+	directoryFileInfo os.FileInfo,
+	errorPrefix interface{}) (
+	DirMgr,
+	error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -5955,28 +5960,46 @@ func (dMgr *DirMgr) NewFromDirMgrFileInfo(
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.NewFromDirMgrFileInfo() "
+	var ePrefix *ePref.ErrPrefixDto
 
-	if directoryFileInfo == nil {
-		return DirMgr{},
-			errors.New(ePrefix +
-				"\nERROR: Input parameter 'directoryFileInfo' is 'nil' and therefore invalid!\n")
-	}
+	newDirMgr := DirMgr{}
 
 	var err error
 
-	err = parentDirectory.IsDirMgrValid("")
+	funcName := "DirMgr.NewFromDirMgrFileInfo()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
 
 	if err != nil {
-		return DirMgr{},
-			fmt.Errorf(ePrefix+
-				"\nInput parameter 'parentDirectory' is invalid!\n"+
-				"%v", err.Error())
+		return newDirMgr, err
+	}
+
+	if directoryFileInfo == nil {
+		return newDirMgr,
+			fmt.Errorf("%v\n"+
+				"ERROR: Input parameter 'directoryFileInfo' is 'nil' and therefore invalid!\n",
+				ePrefix.String())
 	}
 
 	dMgrHlpr := dirMgrHelper{}
 
-	newDirMgr := DirMgr{}
+	err = dMgrHlpr.isDirMgrValid(
+		&parentDirectory,
+		ePrefix.XCpy(
+			"parentDirectory"))
+
+	if err != nil {
+		return DirMgr{},
+			fmt.Errorf("%v\n"+
+				"Input parameter 'parentDirectory' is invalid!\n"+
+				"Error= \n%v\n",
+				funcName,
+				err.Error())
+	}
 
 	isEmpty := false
 
@@ -5985,16 +6008,20 @@ func (dMgr *DirMgr) NewFromDirMgrFileInfo(
 		&newDirMgr,
 		parentDirectory.GetAbsolutePath(),
 		directoryFileInfo.Name(),
-		ePrefix,
 		"newDirMgr",
 		"parentDirectory",
-		"directoryFileInfo.Name()")
+		"directoryFileInfo.Name()",
+		ePrefix)
 
 	if err == nil && isEmpty {
-		err = fmt.Errorf(ePrefix+
-			"\nERROR: The DirMgr instance generated is empty and contains no data!\n"+
-			"parentDirectory='%v'\n"+
-			"directory='%v'\n", parentDirectory.GetAbsolutePath(), directoryFileInfo.Name())
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: The DirMgr instance generated is empty and contains no data!\n"+
+			"parentDirectory= '%v'\n"+
+			"directory= '%v'\n",
+			ePrefix.String(),
+			parentDirectory.GetAbsolutePath(),
+			directoryFileInfo.Name())
 	}
 
 	if err != nil {
@@ -6045,7 +6072,11 @@ func (dMgr *DirMgr) NewFromFileMgr(fileMgr FileMgr) (DirMgr, error) {
 // the usual analysis and validation screening applied by
 // other methods.
 func (dMgr *DirMgr) NewFromKnownPathDirectoryName(
-	parentPathName string, directoryName string) (DirMgr, error) {
+	parentPathName string,
+	directoryName string,
+	errorPrefix interface{}) (
+	DirMgr,
+	error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -6055,36 +6086,48 @@ func (dMgr *DirMgr) NewFromKnownPathDirectoryName(
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.NewFromKnownPathDirectoryName() "
-
 	newDirMgr := DirMgr{}
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgr.NewFromKnownPathDirectoryName()",
+		"")
+
+	if err != nil {
+		return newDirMgr, err
+	}
 
 	dMgrHlpr := dirMgrHelper{}
 
 	var isEmpty bool
-	var err error
 
 	isEmpty,
 		err = dMgrHlpr.setDirMgrFromKnownPathDirName(
 		&newDirMgr,
 		parentPathName,
 		directoryName,
-		ePrefix,
 		"newDirMgr",
 		"parentPathName",
-		"directoryName")
+		"directoryName",
+		ePrefix)
 
 	if err != nil {
 		return DirMgr{}, err
 	}
 
 	if isEmpty {
+
 		return DirMgr{},
-			fmt.Errorf(ePrefix+
+			fmt.Errorf("%v\n"+
 				"Newly generated 'DirMgr' is Empty!\n"+
 				"dMgrHlpr.setDirMgrFromKnownPathDirName() returned an empty 'DirMgr'\n"+
 				"parentPathName='%v'\n"+
 				"directoryName='%v'\n",
+				ePrefix.String(),
 				parentPathName,
 				directoryName)
 	}
@@ -6285,7 +6328,11 @@ func (dMgr *DirMgr) SetDirMgr(
 // If more rigours input parameter validation is required,
 // consider using method, DirMgr.SetDirMgr().
 func (dMgr *DirMgr) SetDirMgrFromKnownPathDirName(
-	parentPathName, directoryName string) (isEmpty bool, err error) {
+	parentPathName,
+	directoryName string,
+	errorPrefix interface{}) (
+	isEmpty bool,
+	err error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -6295,18 +6342,31 @@ func (dMgr *DirMgr) SetDirMgrFromKnownPathDirName(
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.setDirMgrFromKnownPathDirName() "
-	dMgrHlpr := dirMgrHelper{}
+	var ePrefix *ePref.ErrPrefixDto
+
+	isEmpty = true
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgr."+
+			"setDirMgrFromKnownPathDirName()",
+		"")
+
+	if err != nil {
+		return isEmpty, err
+	}
 
 	isEmpty,
-		err = dMgrHlpr.setDirMgrFromKnownPathDirName(
-		dMgr,
-		parentPathName,
-		directoryName,
-		ePrefix,
-		"dMgr",
-		"parentPathName",
-		"directoryName")
+		err = new(dirMgrHelper).
+		setDirMgrFromKnownPathDirName(
+			dMgr,
+			parentPathName,
+			directoryName,
+			"dMgr",
+			"parentPathName",
+			"directoryName",
+			ePrefix)
 
 	return isEmpty, err
 }
