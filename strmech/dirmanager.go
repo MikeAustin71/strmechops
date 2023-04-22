@@ -1,7 +1,6 @@
 package strmech
 
 import (
-	"errors"
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"os"
@@ -508,7 +507,10 @@ func (dMgr *DirMgr) CopyDirectory(
 func (dMgr *DirMgr) CopyDirectoryTree(
 	targetDMgr DirMgr,
 	copyEmptyDirectories bool,
-	fileSelectCriteria FileSelectionCriteria) (dTreeCopyStats DirTreeCopyStats, errs []error) {
+	fileSelectCriteria FileSelectionCriteria,
+	errorPrefix interface{}) (
+	dTreeCopyStats DirTreeCopyStats,
+	errs []error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -518,21 +520,33 @@ func (dMgr *DirMgr) CopyDirectoryTree(
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.CopyDirectoryTree() "
-	errs = nil
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
-	dMgrHlpr := dirMgrHelper{}
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgr.CopyDirectoryTree()",
+		"")
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return dTreeCopyStats, errs
+	}
 
 	dTreeCopyStats,
-		errs = dMgrHlpr.copyDirectoryTree(
-		dMgr,
-		&targetDMgr,
-		copyEmptyDirectories,
-		false, // skipTopLevelDirectory
-		fileSelectCriteria,
-		ePrefix,
-		"dMgr",
-		"targetDMgr")
+		errs = new(dirMgrHelperNanobot).
+		copyDirectoryTree(
+			dMgr,
+			&targetDMgr,
+			copyEmptyDirectories,
+			false, // skipTopLevelDirectory
+			fileSelectCriteria,
+			"dMgr",
+			"targetDMgr",
+			ePrefix)
 
 	return dTreeCopyStats,
 		errs
@@ -571,12 +585,7 @@ func (dMgr *DirMgr) CopyOut() DirMgr {
 
 	defer dMgr.lock.Unlock()
 
-	dOut := DirMgr{}
-	dMgrHlpr := dirMgrHelper{}
-
-	dOut = dMgrHlpr.copyOut(dMgr)
-
-	return dOut
+	return new(dirMgrHelperAtom).copyOut(dMgr)
 }
 
 // CopySubDirectoryTree - Treating the directory identified by the current 'DirMgr'
@@ -595,7 +604,10 @@ func (dMgr *DirMgr) CopyOut() DirMgr {
 func (dMgr *DirMgr) CopySubDirectoryTree(
 	targetDMgr DirMgr,
 	copyEmptyDirectories bool,
-	fileSelectCriteria FileSelectionCriteria) (dTreeCopyStats DirTreeCopyStats, errs []error) {
+	fileSelectCriteria FileSelectionCriteria,
+	errorPrefix interface{}) (
+	dTreeCopyStats DirTreeCopyStats,
+	errs []error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -605,20 +617,34 @@ func (dMgr *DirMgr) CopySubDirectoryTree(
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.CopySubDirectoryTree() "
-	errs = nil
-	dMgrHlpr := dirMgrHelper{}
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgr."+
+			"CopySubDirectoryTree()",
+		"")
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return dTreeCopyStats, errs
+	}
 
 	dTreeCopyStats,
-		errs = dMgrHlpr.copyDirectoryTree(
-		dMgr,
-		&targetDMgr,
-		copyEmptyDirectories,
-		true, // skipTopLevelDirectory
-		fileSelectCriteria,
-		ePrefix,
-		"dMgr",
-		"targetDMgr")
+		errs = new(dirMgrHelperNanobot).
+		copyDirectoryTree(
+			dMgr,
+			&targetDMgr,
+			copyEmptyDirectories,
+			true, // skipTopLevelDirectory
+			fileSelectCriteria,
+			"dMgr",
+			"targetDMgr",
+			ePrefix)
 
 	return dTreeCopyStats, errs
 }
@@ -634,7 +660,8 @@ func (dMgr *DirMgr) CopySubDirectoryTree(
 //	All files and all subdirectories will be deleted.
 //
 //	Only the parent path will remain: "../pathfilego/003_filehelper/testdestdir"
-func (dMgr *DirMgr) DeleteAll() error {
+func (dMgr *DirMgr) DeleteAll(
+	errorPrefix interface{}) error {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -644,16 +671,24 @@ func (dMgr *DirMgr) DeleteAll() error {
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.DeleteAll() "
-
-	dMgrHlpr := dirMgrHelper{}
-
+	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	err = dMgrHlpr.deleteDirectoryAll(
-		dMgr,
-		ePrefix,
-		"dMgr")
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgr.DeleteAll()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	err = new(dirMgrHelper).
+		deleteDirectoryAll(
+			dMgr,
+			"dMgr",
+			ePrefix)
 
 	return err
 }
@@ -675,7 +710,10 @@ func (dMgr *DirMgr) DeleteAll() error {
 //
 //	                    If errors are encountered they are stored in the error
 //	                    array and returned to the caller.
-func (dMgr *DirMgr) DeleteAllFilesInDir() (deleteDirStats DeleteDirFilesStats, errs []error) {
+func (dMgr *DirMgr) DeleteAllFilesInDir(
+	errorPrefix interface{}) (
+	deleteDirStats DeleteDirFilesStats,
+	errs []error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -685,15 +723,29 @@ func (dMgr *DirMgr) DeleteAllFilesInDir() (deleteDirStats DeleteDirFilesStats, e
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.DeleteAllFilesInDir() "
-	dMgrHlpr := dirMgrHelper{}
-	errs = nil
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FilePermissionConfig."+
+			"GetEntryTypeComponent()",
+		"")
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return deleteDirStats, errs
+	}
 
 	deleteDirStats,
-		errs = dMgrHlpr.deleteAllFilesInDirectory(
-		dMgr,
-		ePrefix,
-		"dMgr")
+		errs = new(dirMgrHelper).
+		deleteAllFilesInDirectory(
+			dMgr,
+			"dMgr",
+			ePrefix)
 
 	return deleteDirStats, errs
 }
@@ -723,7 +775,8 @@ func (dMgr *DirMgr) DeleteAllFilesInDir() (deleteDirStats DeleteDirFilesStats, e
 //	  DirMgr = d:\parentdirectory
 //	  files    d:\parentdirectory\file1.txt
 //	           d:\parentdirectory\file2.txt
-func (dMgr *DirMgr) DeleteAllSubDirectories() (errs []error) {
+func (dMgr *DirMgr) DeleteAllSubDirectories(
+	errorPrefix interface{}) (errs []error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -733,16 +786,27 @@ func (dMgr *DirMgr) DeleteAllSubDirectories() (errs []error) {
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.CopyDirectory() "
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
-	errs = make([]error, 0, 300)
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgr.CopyDirectory()",
+		"")
 
-	dMgrHlpr := dirMgrHelper{}
+	if err != nil {
 
-	errs = dMgrHlpr.deleteAllSubDirectories(
-		dMgr,
-		ePrefix,
-		"dMgr")
+		errs = append(errs, err)
+
+		return errs
+	}
+
+	errs = new(dirMgrHelperMolecule).
+		deleteAllSubDirectories(
+			dMgr,
+			"dMgr",
+			ePrefix)
 
 	return errs
 }
@@ -1704,18 +1768,28 @@ func (dMgr *DirMgr) DoesAbsolutePathExist() bool {
 
 	defer dMgr.lock.Unlock()
 
-	dMgrHlpr := dirMgrHelper{}
-	dirPathDoesExist := false
 	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"DirMgr."+
+			"DoesAbsolutePathExist()",
+		"")
+
+	var dirPathDoesExist bool
 
 	dirPathDoesExist,
 		_,
 		err =
-		dMgrHlpr.doesDirectoryExist(
-			dMgr,
-			PreProcPathCode.None(),
-			"",
-			"dMgr")
+		new(dirMgrHelperAtom).
+			doesDirectoryExist(
+				dMgr,
+				PreProcPathCode.None(),
+				"dMgr",
+				ePrefix)
 
 	if err != nil {
 		dirPathDoesExist = false
@@ -1724,9 +1798,14 @@ func (dMgr *DirMgr) DoesAbsolutePathExist() bool {
 	return dirPathDoesExist
 }
 
-// DoesDirectoryExist - Returns two boolean values indicating whether the
-// Directory path exists and if the Directory absolute path exists.
-func (dMgr *DirMgr) DoesDirectoryExist() (doesPathExist, doesAbsolutePathExist bool) {
+// DoesDirectoryExist
+//
+// Returns two boolean values indicating whether the
+// Directory path exists and if the Directory absolute
+// path exists.
+func (dMgr *DirMgr) DoesDirectoryExist() (
+	doesPathExist,
+	doesAbsolutePathExist bool) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -1736,18 +1815,28 @@ func (dMgr *DirMgr) DoesDirectoryExist() (doesPathExist, doesAbsolutePathExist b
 
 	defer dMgr.lock.Unlock()
 
-	dMgrHlpr := dirMgrHelper{}
-	dirPathDoesExist := false
 	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"DirMgr."+
+			"DoesDirectoryExist()",
+		"")
+
+	dirPathDoesExist := false
 
 	dirPathDoesExist,
 		_,
 		err =
-		dMgrHlpr.doesDirectoryExist(
-			dMgr,
-			PreProcPathCode.None(),
-			"",
-			"dMgr")
+		new(dirMgrHelperAtom).
+			doesDirectoryExist(
+				dMgr,
+				PreProcPathCode.None(),
+				"dMgr",
+				ePrefix)
 
 	if err != nil {
 		dirPathDoesExist = false
@@ -1772,18 +1861,28 @@ func (dMgr *DirMgr) DoesPathExist() bool {
 
 	defer dMgr.lock.Unlock()
 
-	dMgrHlpr := dirMgrHelper{}
 	dirPathDoesExist := false
+
 	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"DirMgr."+
+			"DoesPathExist()",
+		"")
 
 	dirPathDoesExist,
 		_,
 		err =
-		dMgrHlpr.doesDirectoryExist(
-			dMgr,
-			PreProcPathCode.None(),
-			"",
-			"dMgr")
+		new(dirMgrHelperAtom).
+			doesDirectoryExist(
+				dMgr,
+				PreProcPathCode.None(),
+				"dMgr",
+				ePrefix)
 
 	if err != nil {
 		dirPathDoesExist = false
@@ -1802,7 +1901,10 @@ func (dMgr *DirMgr) DoesPathExist() bool {
 //
 // If a Non-Path error is encountered, an appropriate error message is returned along with
 // a boolean value of 'false'.
-func (dMgr *DirMgr) DoesThisDirectoryExist() (directoryDoesExist bool, nonPathError error) {
+func (dMgr *DirMgr) DoesThisDirectoryExist(
+	errorPrefix interface{}) (
+	directoryDoesExist bool,
+	nonPathError error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -1812,21 +1914,30 @@ func (dMgr *DirMgr) DoesThisDirectoryExist() (directoryDoesExist bool, nonPathEr
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.DoesThisDirectoryExist() "
+	var ePrefix *ePref.ErrPrefixDto
 
 	directoryDoesExist = false
-	nonPathError = nil
 
-	dMgrHlpr := dirMgrHelper{}
+	ePrefix,
+		nonPathError = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgr."+
+			"DoesThisDirectoryExist()",
+		"")
+
+	if nonPathError != nil {
+		return directoryDoesExist, nonPathError
+	}
 
 	directoryDoesExist,
 		_,
 		nonPathError =
-		dMgrHlpr.doesDirectoryExist(
-			dMgr,
-			PreProcPathCode.None(),
-			ePrefix,
-			"dMgr")
+		new(dirMgrHelperAtom).
+			doesDirectoryExist(
+				dMgr,
+				PreProcPathCode.None(),
+				"dMgr",
+				ePrefix)
 
 	return directoryDoesExist, nonPathError
 }
@@ -1843,9 +1954,8 @@ func (dMgr *DirMgr) Empty() {
 
 	defer dMgr.lock.Unlock()
 
-	dMgrHlpr := dirMgrHelper{}
-
-	_ = dMgrHlpr.empty(dMgr, "DirMgr.Empty() ", "dMgr")
+	_ = new(dirMgrHelperElectron).
+		empty(dMgr, "DirMgr.Empty() ", nil)
 
 }
 
@@ -1861,12 +1971,8 @@ func (dMgr *DirMgr) Equal(dMgr2 *DirMgr) bool {
 
 	defer dMgr.lock.Unlock()
 
-	dMgrHlpr := dirMgrHelper{}
-	isEqual := false
-
-	isEqual = dMgrHlpr.equal(dMgr, dMgr2)
-
-	return isEqual
+	return new(dirMgrHelper).
+		equal(dMgr, dMgr2)
 }
 
 // EqualAbsPaths - compares the absolute paths for the current
@@ -2749,7 +2855,10 @@ func (dMgr *DirMgr) ExecuteDirectoryTreeOps(
 //	        be returned as an 'error' type. Also, see the comment on
 //	        'DirectoryTreeInfo.ErrReturns', above.
 func (dMgr *DirMgr) FindDirectoryTreeFiles(
-	fileSelectionCriteria FileSelectionCriteria) (dTreeInfo DirectoryTreeInfo, errs []error) {
+	fileSelectionCriteria FileSelectionCriteria,
+	errorPrefix interface{}) (
+	dTreeInfo DirectoryTreeInfo,
+	errs []error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -2765,13 +2874,16 @@ func (dMgr *DirMgr) FindDirectoryTreeFiles(
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		nil,
+		errorPrefix,
 		"DirMgr."+
 			"FindDirectoryTreeFiles()",
 		"")
 
 	if err != nil {
-		return dTreeInfo, err
+
+		errs = append(errs, err)
+
+		return dTreeInfo, errs
 	}
 
 	dTreeInfo,
@@ -3553,16 +3665,16 @@ func (dMgr *DirMgr) GetAbsolutePath() string {
 
 	defer dMgr.lock.Unlock()
 
-	dMgrHlpr := dirMgrHelper{}
 	absolutePath := ""
 
 	_,
 		_,
-		err := dMgrHlpr.doesDirectoryExist(
-		dMgr,
-		PreProcPathCode.None(),
-		"",
-		"")
+		err := new(dirMgrHelperAtom).
+		doesDirectoryExist(
+			dMgr,
+			PreProcPathCode.None(),
+			"",
+			nil)
 
 	if err != nil {
 		absolutePath = ""
@@ -3585,8 +3697,6 @@ func (dMgr *DirMgr) GetAbsolutePath() string {
 // an absolute path string with upper and lower case
 // characters.
 func (dMgr *DirMgr) GetAbsolutePathLc() string {
-	dMgrHlpr := dirMgrHelper{}
-	absolutePath := ""
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -3596,13 +3706,16 @@ func (dMgr *DirMgr) GetAbsolutePathLc() string {
 
 	defer dMgr.lock.Unlock()
 
+	absolutePath := ""
+
 	_,
 		_,
-		err := dMgrHlpr.doesDirectoryExist(
-		dMgr,
-		PreProcPathCode.None(),
-		"",
-		"")
+		err := new(dirMgrHelperAtom).
+		doesDirectoryExist(
+			dMgr,
+			PreProcPathCode.None(),
+			"",
+			nil)
 
 	if err != nil {
 		absolutePath = ""
@@ -3685,17 +3798,16 @@ func (dMgr *DirMgr) GetAbsolutePathWithSeparator() string {
 
 	defer dMgr.lock.Unlock()
 
-	dMgrHlpr := dirMgrHelper{}
-
 	absolutePath := ""
 
 	_,
 		_,
-		err := dMgrHlpr.doesDirectoryExist(
-		dMgr,
-		PreProcPathCode.None(),
-		"",
-		"")
+		err := new(dirMgrHelperAtom).
+		doesDirectoryExist(
+			dMgr,
+			PreProcPathCode.None(),
+			"",
+			nil)
 
 	if err != nil {
 		absolutePath = ""
@@ -3734,17 +3846,16 @@ func (dMgr *DirMgr) GetAbsolutePathWithSeparatorLc() string {
 
 	defer dMgr.lock.Unlock()
 
-	dMgrHlpr := dirMgrHelper{}
-
 	absolutePath := ""
 
 	_,
 		_,
-		err := dMgrHlpr.doesDirectoryExist(
-		dMgr,
-		PreProcPathCode.None(),
-		"",
-		"")
+		err := new(dirMgrHelperAtom).
+		doesDirectoryExist(
+			dMgr,
+			PreProcPathCode.None(),
+			"",
+			nil)
 
 	if err != nil {
 		absolutePath = ""
@@ -3767,7 +3878,8 @@ func (dMgr *DirMgr) GetAbsolutePathWithSeparatorLc() string {
 
 // GetDirectoryStats - Returns the number of bytes in the current directory identified
 // by the 'DirMgr' instance. This method only returns bytes in the current directory
-func (dMgr *DirMgr) GetDirectoryStats() (
+func (dMgr *DirMgr) GetDirectoryStats(
+	errorPrefix interface{}) (
 	dirStats DirectoryStatsDto,
 	errs []error) {
 
@@ -3785,7 +3897,7 @@ func (dMgr *DirMgr) GetDirectoryStats() (
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		nil,
+		errorPrefix,
 		"DirMgr."+
 			"GetDirectoryStats()",
 		"")
@@ -4041,7 +4153,10 @@ func (dMgr *DirMgr) GetDirectoryName() string {
 // GetFileInfoPlus - Returns a FileInfoPlus instance detailing file
 // system information on the directory identified by the current
 // Directory Manager instance.
-func (dMgr *DirMgr) GetFileInfoPlus() (FileInfoPlus, error) {
+func (dMgr *DirMgr) GetFileInfoPlus(
+	errorPrefix interface{}) (
+	FileInfoPlus,
+	error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -4051,24 +4166,41 @@ func (dMgr *DirMgr) GetFileInfoPlus() (FileInfoPlus, error) {
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.GetFileInfoPlus() "
-	fileInfoPlus := FileInfoPlus{}
+	var ePrefix *ePref.ErrPrefixDto
 	var err error
+
+	fileInfoPlus := FileInfoPlus{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgr.GetFileInfoPlus()",
+		"")
+
+	if err != nil {
+		return fileInfoPlus, err
+	}
+
 	var dirDoesExist bool
-	dMgrHlpr := dirMgrHelper{}
 
 	dirDoesExist,
 		fileInfoPlus,
-		err = dMgrHlpr.doesDirectoryExist(
-		dMgr,
-		PreProcPathCode.None(),
-		ePrefix,
-		"dMgr")
+		err = new(dirMgrHelperAtom).
+		doesDirectoryExist(
+			dMgr,
+			PreProcPathCode.None(),
+			"dMgr",
+			ePrefix)
 
 	if err == nil && !dirDoesExist {
+
 		fileInfoPlus = FileInfoPlus{}
-		err = fmt.Errorf(ePrefix+"DirMgr Path DOES NOT EXIST!\n"+
-			"DirMgr Path='%v'\n", dMgr.absolutePath)
+
+		err = fmt.Errorf("%v\n"+
+			"DirMgr Path DOES NOT EXIST!\n"+
+			"DirMgr Path= '%v'\n",
+			ePrefix.String(),
+			dMgr.absolutePath)
 	}
 
 	return fileInfoPlus, err
@@ -4080,7 +4212,8 @@ func (dMgr *DirMgr) GetFileInfoPlus() (FileInfoPlus, error) {
 //
 // If the current Directory does NOT exist, this method will return an
 // error.
-func (dMgr *DirMgr) GetDirPermissionCodes() (
+func (dMgr *DirMgr) GetDirPermissionCodes(
+	errorPrefix interface{}) (
 	FilePermissionConfig,
 	error) {
 
@@ -4095,14 +4228,14 @@ func (dMgr *DirMgr) GetDirPermissionCodes() (
 	fileInfoPlus := FileInfoPlus{}
 	var err error
 	var dirDoesExist bool
-	dMgrHlpr := dirMgrHelper{}
+
 	fPermCfg := FilePermissionConfig{}
 
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		nil,
+		errorPrefix,
 		"DirMgr."+
 			"GetDirPermissionCodes()",
 		"")
@@ -4113,11 +4246,12 @@ func (dMgr *DirMgr) GetDirPermissionCodes() (
 
 	dirDoesExist,
 		fileInfoPlus,
-		err = dMgrHlpr.doesDirectoryExist(
-		dMgr,
-		PreProcPathCode.None(),
-		ePrefix.String(),
-		"dMgr")
+		err = new(dirMgrHelperAtom).
+		doesDirectoryExist(
+			dMgr,
+			PreProcPathCode.None(),
+			"dMgr",
+			ePrefix)
 
 	if err == nil && !dirDoesExist {
 
@@ -4142,7 +4276,8 @@ func (dMgr *DirMgr) GetDirPermissionCodes() (
 // GetNumberOfAbsPathElements - Returns the number of elements
 // or path components in the absolute path of the current
 // Directory Manager instance.
-func (dMgr *DirMgr) GetNumberOfAbsPathElements() (
+func (dMgr *DirMgr) GetNumberOfAbsPathElements(
+	errorPrefix interface{}) (
 	int,
 	error) {
 
@@ -4160,7 +4295,7 @@ func (dMgr *DirMgr) GetNumberOfAbsPathElements() (
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		nil,
+		errorPrefix,
 		"DirMgr."+
 			"GetNumberOfAbsPathElements()",
 		"")
@@ -4173,7 +4308,9 @@ func (dMgr *DirMgr) GetNumberOfAbsPathElements() (
 
 	pathElements,
 		err = new(dirMgrHelper).
-		getAbsolutePathElements(dMgr, "",
+		getAbsolutePathElements(
+			dMgr,
+			"",
 			ePrefix.XCpy(
 				"dMgr"))
 
@@ -4430,16 +4567,16 @@ func (dMgr *DirMgr) GetPath() string {
 
 	defer dMgr.lock.Unlock()
 
-	dMgrHlpr := dirMgrHelper{}
 	dPath := ""
 
 	_,
 		_,
-		_ = dMgrHlpr.doesDirectoryExist(
-		dMgr,
-		PreProcPathCode.None(),
-		"",
-		"dMgr")
+		_ = new(dirMgrHelperAtom).
+		doesDirectoryExist(
+			dMgr,
+			PreProcPathCode.None(),
+			"dMgr",
+			nil)
 
 	if len(dMgr.path) == 0 ||
 		!dMgr.isInitialized {
@@ -4464,16 +4601,16 @@ func (dMgr *DirMgr) GetPathWithSeparator() string {
 
 	defer dMgr.lock.Unlock()
 
-	dMgrHlpr := dirMgrHelper{}
 	dPath := ""
 
 	_,
 		_,
-		_ = dMgrHlpr.doesDirectoryExist(
-		dMgr,
-		PreProcPathCode.None(),
-		"",
-		"dMgr")
+		_ = new(dirMgrHelperAtom).
+		doesDirectoryExist(
+			dMgr,
+			PreProcPathCode.None(),
+			"dMgr",
+			nil)
 
 	if len(dMgr.path) == 0 ||
 		!dMgr.isInitialized {
@@ -4512,15 +4649,15 @@ func (dMgr *DirMgr) GetVolumeName() string {
 	defer dMgr.lock.Unlock()
 
 	volumeName := ""
-	dMgrHlpr := dirMgrHelper{}
 
 	_,
 		_,
-		_ = dMgrHlpr.doesDirectoryExist(
-		dMgr,
-		PreProcPathCode.None(),
-		"",
-		"dMgr")
+		_ = new(dirMgrHelperAtom).
+		doesDirectoryExist(
+			dMgr,
+			PreProcPathCode.None(),
+			"dMgr",
+			nil)
 
 	if len(dMgr.volumeName) == 0 ||
 		!dMgr.isInitialized {
@@ -4586,15 +4723,14 @@ func (dMgr *DirMgr) IsInitialized() bool {
 
 	isInitialized := false
 
-	dMgrHlpr := dirMgrHelper{}
-
 	_,
 		_,
-		_ = dMgrHlpr.doesDirectoryExist(
-		dMgr,
-		PreProcPathCode.None(),
-		"",
-		"dMgr")
+		_ = new(dirMgrHelperAtom).
+		doesDirectoryExist(
+			dMgr,
+			PreProcPathCode.None(),
+			"dMgr",
+			nil)
 
 	isInitialized = dMgr.isInitialized
 
@@ -4730,16 +4866,16 @@ func (dMgr *DirMgr) IsVolumeNamePopulated() bool {
 
 	defer dMgr.lock.Unlock()
 
-	dMgrHlpr := dirMgrHelper{}
 	isDMgrVolumePopulated := false
 
 	_,
 		_,
-		_ = dMgrHlpr.doesDirectoryExist(
-		dMgr,
-		PreProcPathCode.None(),
-		"",
-		"dMgr")
+		_ = new(dirMgrHelperAtom).
+		doesDirectoryExist(
+			dMgr,
+			PreProcPathCode.None(),
+			"dMgr",
+			nil)
 
 	if len(dMgr.volumeName) == 0 ||
 		!dMgr.isInitialized {
@@ -4962,7 +5098,8 @@ func (dMgr *DirMgr) MakeDirWithPermission(
 // parent directories.
 //
 // If the directory creation fails, an error is returned.
-func (dMgr *DirMgr) MakeDir() error {
+func (dMgr *DirMgr) MakeDir(
+	errorPrefix interface{}) error {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -4972,17 +5109,27 @@ func (dMgr *DirMgr) MakeDir() error {
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.MakeDir() "
+	var ePrefix *ePref.ErrPrefixDto
 	var err error
-	dMgrHlpr := dirMgrHelper{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgr.MakeDir()",
+		"")
+
+	if err != nil {
+		return err
+	}
 
 	_,
-		err = dMgrHlpr.lowLevelMakeDir(
-		dMgr,
-		ePrefix,
-		"dMgr")
+		err = new(dirMgrHelperMolecule).
+		lowLevelMakeDir(
+			dMgr,
+			"dMgr",
+			ePrefix)
 
-	// No errors - directory created.
+	// No errors = directory created.
 	return err
 }
 
@@ -5889,7 +6036,11 @@ func (dMgr *DirMgr) New(
 //   - A parent directory path string
 //   - An os.FileInfo object containing the directory name.
 func (dMgr *DirMgr) NewFromFileInfo(
-	parentDirectoryPath string, info os.FileInfo) (DirMgr, error) {
+	parentDirectoryPath string,
+	info os.FileInfo,
+	errorPrefix interface{}) (
+	DirMgr,
+	error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -5899,24 +6050,40 @@ func (dMgr *DirMgr) NewFromFileInfo(
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.NewFromFileInfo() "
-	dMgrHlpr := dirMgrHelper{}
 	newDirMgr := DirMgr{}
 
-	if info == nil {
-		return DirMgr{},
-			errors.New(ePrefix +
-				"ERROR: Input parameter 'info' is 'nil' and INVALID!\n")
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgr.NewFromFileInfo()",
+		"")
+
+	if err != nil {
+		return newDirMgr, err
 	}
 
-	isEmpty, err := dMgrHlpr.setDirMgrWithPathDirectoryName(
-		&newDirMgr,
-		parentDirectoryPath,
-		info.Name(),
-		ePrefix,
-		"newDirMgr",
-		"parentDirectoryPath",
-		"FileInfo.Name()")
+	if info == nil {
+		return newDirMgr,
+			fmt.Errorf("%v\n"+
+				"ERROR: Input parameter 'info' is 'nil' and INVALID!\n",
+				ePrefix.String())
+	}
+
+	var isEmpty bool
+
+	isEmpty,
+		err = new(dirMgrHelper).
+		setDirMgrWithPathDirectoryName(
+			&newDirMgr,
+			parentDirectoryPath,
+			info.Name(),
+			"newDirMgr",
+			"parentDirectoryPath",
+			"FileInfo.Name()",
+			ePrefix)
 
 	if err != nil {
 		return DirMgr{}, err
@@ -5924,16 +6091,17 @@ func (dMgr *DirMgr) NewFromFileInfo(
 
 	if isEmpty {
 		return DirMgr{},
-			fmt.Errorf(ePrefix+
+			fmt.Errorf("%v\n"+
 				"Newly generated 'DirMgr' is Empty!\n"+
 				"dMgrHlpr.setDirMgrFromKnownPathDirName() returned an empty 'DirMgr'\n"+
-				"parentDirectoryPath='%v'\n"+
-				"FileInfo.Name()='%v'\n",
+				"parentDirectoryPath= '%v'\n"+
+				"FileInfo.Name()= '%v'\n",
+				ePrefix.String(),
 				parentDirectoryPath,
 				info.Name())
 	}
 
-	return newDirMgr, nil
+	return newDirMgr, err
 }
 
 // NewFromDirMgrFileInfo
@@ -6391,7 +6559,9 @@ func (dMgr *DirMgr) SetDirMgrFromKnownPathDirName(
 //	                   processing, it will be returned as an 'error' type.
 func (dMgr *DirMgr) SetDirMgrWithFileInfo(
 	parentDirectoryPath string,
-	info os.FileInfo) (err error) {
+	info os.FileInfo,
+	errorPrefix interface{}) (
+	err error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -6401,32 +6571,47 @@ func (dMgr *DirMgr) SetDirMgrWithFileInfo(
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.SetDirMgrWithFileInfo() "
+	var ePrefix *ePref.ErrPrefixDto
 
-	dMgrHlpr := dirMgrHelper{}
-	isEmpty := true
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgr."+
+			"SetDirMgrWithFileInfo()",
+		"")
 
-	if info == nil {
-		return errors.New(ePrefix +
-			"ERROR: Input parameter 'info' is 'nil' and INVALID!\n")
+	if err != nil {
+		return err
 	}
 
+	if info == nil {
+
+		return fmt.Errorf("%v\n"+
+			"ERROR: Input parameter 'info' is 'nil' and INVALID!\n",
+			ePrefix.String())
+	}
+
+	isEmpty := true
+
 	isEmpty,
-		err = dMgrHlpr.setDirMgrWithPathDirectoryName(
-		dMgr,
-		parentDirectoryPath,
-		info.Name(),
-		ePrefix,
-		"dMgr",
-		"parentDirectoryPath",
-		"FileInfo.Name()")
+		err = new(dirMgrHelper).
+		setDirMgrWithPathDirectoryName(
+			dMgr,
+			parentDirectoryPath,
+			info.Name(),
+			"dMgr",
+			"parentDirectoryPath",
+			"FileInfo.Name()",
+			ePrefix)
 
 	if err == nil && isEmpty {
-		err = fmt.Errorf(ePrefix+
+
+		err = fmt.Errorf("%v\n"+
 			"Newly generated 'DirMgr' is Empty!\n"+
 			"dMgrHlpr.setDirMgrFromKnownPathDirName() returned an empty 'DirMgr'\n"+
-			"parentDirectoryPath='%v'\n"+
-			"FileInfo.Name()='%v'\n",
+			"parentDirectoryPath= '%v'\n"+
+			"FileInfo.Name()= '%v'\n",
+			ePrefix.String(),
 			parentDirectoryPath,
 			info.Name())
 	}
@@ -6444,7 +6629,10 @@ func (dMgr *DirMgr) SetDirMgrWithFileInfo(
 //
 // If the directory identified by the current DirMgr instance does not exist, an
 // error will be returned.
-func (dMgr *DirMgr) SetPermissions(permissionConfig FilePermissionConfig) (err error) {
+func (dMgr *DirMgr) SetPermissions(
+	permissionConfig FilePermissionConfig,
+	errorPrefix interface{}) (
+	err error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -6454,16 +6642,26 @@ func (dMgr *DirMgr) SetPermissions(permissionConfig FilePermissionConfig) (err e
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.SetPermissions() "
-	err = nil
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgr.SetPermissions()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
 	dMgrHlpr := dirMgrHelper{}
 
 	err = dMgrHlpr.setPermissions(
 		dMgr,
 		permissionConfig,
-		ePrefix,
 		"dMgr",
-		"permissionConfig")
+		"permissionConfig",
+		ePrefix)
 
 	return err
 }
@@ -6473,7 +6671,10 @@ func (dMgr *DirMgr) SetPermissions(permissionConfig FilePermissionConfig) (err e
 // in copying files to new directory trees.
 func (dMgr *DirMgr) SubstituteBaseDir(
 	baseDir DirMgr,
-	substituteBaseDir DirMgr) (newDMgr DirMgr, err error) {
+	substituteBaseDir DirMgr,
+	errorPrefix interface{}) (
+	newDMgr DirMgr,
+	err error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -6483,18 +6684,29 @@ func (dMgr *DirMgr) SubstituteBaseDir(
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.SubstituteBaseDir() "
-	dMgrHlpr := dirMgrHelper{}
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgr."+
+			"SubstituteBaseDir()",
+		"")
+
+	if err != nil {
+		return newDMgr, err
+	}
 
 	newDMgr,
-		err = dMgrHlpr.substituteBaseDir(
-		dMgr,
-		&baseDir,
-		&substituteBaseDir,
-		ePrefix,
-		"DirMgr",
-		"baseDir",
-		"substituteBaseDir")
+		err = new(dirMgrHelper).
+		substituteBaseDir(
+			dMgr,
+			&baseDir,
+			&substituteBaseDir,
+			"DirMgr",
+			"baseDir",
+			"substituteBaseDir",
+			ePrefix)
 
 	return newDMgr, err
 }

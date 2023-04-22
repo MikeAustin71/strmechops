@@ -7779,8 +7779,10 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrFromKnownPathDirName(
 	return isEmpty, err
 }
 
-// setDirMgrWithPathDirectoryName - Configures a Directory Manager
-// instance based on 'path' and 'directory name' parameters.
+// setDirMgrWithPathDirectoryName
+//
+// Configures a Directory Manager instance based on
+// 'path' and 'directory name' parameters.
 func (dMgrHlpr *dirMgrHelper) setDirMgrWithPathDirectoryName(
 	dMgr *DirMgr,
 	pathStr string,
@@ -7800,9 +7802,9 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrWithPathDirectoryName(
 
 	defer dMgrHlpr.lock.Unlock()
 
-	var ePrefix *ePref.ErrPrefixDto
-
 	funcName := "dirMgrHelper.setDirMgrWithPathDirectoryName()"
+
+	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -7815,6 +7817,10 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrWithPathDirectoryName(
 		return isEmpty, err
 	}
 
+	if len(dMgrLabel) == 0 {
+		dMgrLabel = "dMgr"
+	}
+
 	if dMgr == nil {
 
 		err = fmt.Errorf("%v\n"+
@@ -7825,8 +7831,12 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrWithPathDirectoryName(
 		return isEmpty, err
 	}
 
-	if len(dMgrLabel) == 0 {
-		dMgrLabel = "dMgr"
+	if len(pathStrLabel) == 0 {
+		pathStrLabel = "pathStr"
+	}
+
+	if len(directoryNameLabel) == 0 {
+		directoryNameLabel = "directoryName"
 	}
 
 	var strLen int
@@ -7883,7 +7893,8 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrWithPathDirectoryName(
 			getValidPathStr(
 				finalPathStr,
 				"pathStr",
-				ePrefix)
+				ePrefix.XCpy(
+					"finalPathStr"))
 
 	if err != nil {
 		isEmpty = true
@@ -7919,19 +7930,32 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrWithPathDirectoryName(
 func (dMgrHlpr *dirMgrHelper) setPermissions(
 	dMgr *DirMgr,
 	permissionConfig FilePermissionConfig,
-	errorPrefix string,
 	dMgrLabel string,
-	permissionConfigLabel string) error {
+	permissionConfigLabel string,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if dMgrHlpr.lock == nil {
+		dMgrHlpr.lock = new(sync.Mutex)
+	}
+
+	dMgrHlpr.lock.Lock()
+
+	defer dMgrHlpr.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+
 	var err error
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		nil,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
 		"dirMgrHelper."+
 			"setPermissions()",
 		"")
+
+	if err != nil {
+		return err
+	}
 
 	if err != nil {
 		return err
@@ -7956,11 +7980,12 @@ func (dMgrHlpr *dirMgrHelper) setPermissions(
 
 	dirPathDoesExist,
 		_,
-		err := dMgrHlpr.doesDirectoryExist(
-		dMgr,
-		PreProcPathCode.None(),
-		errorPrefix,
-		dMgrLabel)
+		err := new(dirMgrHelperAtom).
+		doesDirectoryExist(
+			dMgr,
+			PreProcPathCode.None(),
+			dMgrLabel,
+			ePrefix)
 
 	if err != nil {
 		return err
