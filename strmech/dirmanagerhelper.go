@@ -7783,12 +7783,106 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrFromKnownPathDirName(
 //
 // Configures a Directory Manager instance based on
 // 'path' and 'directory name' parameters.
+//
+// 'path' is treated as the parent directory. The
+// directory name ('directoryName') will be added to the
+// parent directory to construct the new directory path.
+//
+// The newly constructed directory path will be used to
+// reconfigure the instance of DirMgr passed as input
+// parameter 'dMgr'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	dMgr						*DirMgr
+//
+//		A pointer to an instance of DirMgr. This instance
+//		will be reconfigured using a new directory path
+//		constructed from input parameters 'pathStr' and
+//		'directoryName'.
+//
+//	parentDirectoryPath			string
+//
+//		The directory specified by input parameter
+//		'directoryName' will be added to this parent
+//		directory to create the new directory path used
+//		to reconfigure 'dMgr'.
+//
+//	directoryName				string
+//
+//		A directory name which will be added to the
+//		parent directory to construct a new directory
+//		path used to reconfigure 'dMgr'.
+//
+//	dMgrLabel string
+//
+//		The name or label associated with input parameter
+//		'dMgr', which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "dMgr" will be
+//		automatically applied.
+//
+//	parentDirectoryLabel string
+//
+//		The name or label associated with input parameter
+//		'parentDirectoryPath' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "parentDirectoryPath"
+//		will be automatically applied.
+//
+//	directoryNameLabel string
+//
+//		The name or label associated with input parameter
+//		'directoryName' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "directoryName" will
+//		be automatically applied.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (dMgrHlpr *dirMgrHelper) setDirMgrWithPathDirectoryName(
 	dMgr *DirMgr,
-	pathStr string,
+	parentDirectoryPath string,
 	directoryName string,
 	dMgrLabel string,
-	pathStrLabel string,
+	parentDirectoryLabel string,
 	directoryNameLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
 	isEmpty bool,
@@ -7831,8 +7925,8 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrWithPathDirectoryName(
 		return isEmpty, err
 	}
 
-	if len(pathStrLabel) == 0 {
-		pathStrLabel = "pathStr"
+	if len(parentDirectoryLabel) == 0 {
+		parentDirectoryLabel = "parentDirectoryPath"
 	}
 
 	if len(directoryNameLabel) == 0 {
@@ -7843,13 +7937,13 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrWithPathDirectoryName(
 
 	dMgrHlprElectron := dirMgrHelperElectron{}
 
-	pathStr,
+	parentDirectoryPath,
 		strLen,
 		err = dMgrHlprElectron.
 		isPathStringEmptyOrBlank(
-			pathStr,
+			parentDirectoryPath,
 			true,
-			pathStrLabel,
+			parentDirectoryLabel,
 			ePrefix)
 
 	if err != nil {
@@ -7877,12 +7971,12 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrWithPathDirectoryName(
 
 	finalPathStr := ""
 
-	if pathStr[strLen-1] != os.PathSeparator {
+	if parentDirectoryPath[strLen-1] != os.PathSeparator {
 		finalPathStr =
-			pathStr + string(os.PathSeparator) + directoryName
+			parentDirectoryPath + string(os.PathSeparator) + directoryName
 
 	} else {
-		finalPathStr = pathStr + directoryName
+		finalPathStr = parentDirectoryPath + directoryName
 	}
 
 	validPathDto := ValidPathStrDto{}.New()
@@ -7892,7 +7986,7 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrWithPathDirectoryName(
 		new(dirMgrHelperMolecule).
 			getValidPathStr(
 				finalPathStr,
-				"pathStr",
+				"parentDirectoryPath",
 				ePrefix.XCpy(
 					"finalPathStr"))
 

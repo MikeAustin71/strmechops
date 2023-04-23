@@ -6555,8 +6555,8 @@ func (fMgr *FileMgr) IsAbsolutePathFileNamePopulated() bool {
 //
 //				AND/OR
 //
-//		(2) The File Extension is populated but the path
-//			and file do NOT exist on disk.
+//		(2) This is a populated File Extension; however,
+//			the path and file do NOT exist on disk.
 func (fMgr *FileMgr) IsFileExtPopulated() bool {
 
 	if fMgr.lock == nil {
@@ -7509,7 +7509,10 @@ func (fMgr *FileMgr) MoveFileToNewDir(
 		return FileMgr{}, err
 	}
 
-	dirMgr, err := new(DirMgr).New(dirPath)
+	dirMgr, err := new(DirMgr).New(
+		dirPath,
+		ePrefix.XCpy(
+			"dirPath"))
 
 	if err != nil {
 		return FileMgr{},
@@ -8303,7 +8306,10 @@ func (fMgr *FileMgr) NewFromDirStrFileNameStr(
 
 	var dirMgr DirMgr
 
-	dirMgr, err = new(DirMgr).New(dirStr)
+	dirMgr, err = new(DirMgr).New(
+		dirStr,
+		ePrefix.XCpy(
+			"dirStr"))
 
 	if err != nil {
 		return FileMgr{},
@@ -8440,7 +8446,9 @@ func (fMgr *FileMgr) NewFromFileInfo(
 
 	var dirMgr DirMgr
 
-	dirMgr, err = new(DirMgr).New(dirPathStr)
+	dirMgr, err = new(DirMgr).New(
+		dirPathStr,
+		ePrefix)
 
 	if err != nil {
 		return FileMgr{},
