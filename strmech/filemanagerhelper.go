@@ -362,7 +362,9 @@ func (fMgrHlpr *fileMgrHelper) copyFileSetup(
 
 	} else {
 
-		targetFMgrFileDoesExist, err = destFMgr.dMgr.DoesThisDirectoryExist()
+		targetFMgrFileDoesExist, err = destFMgr.dMgr.
+			DoesThisDirectoryExist(ePrefix.XCpy(
+				"destFMgr.dMgr"))
 
 		if err != nil {
 
@@ -379,7 +381,9 @@ func (fMgrHlpr *fileMgrHelper) copyFileSetup(
 
 		if !targetFMgrFileDoesExist && createDestinationDir {
 
-			err = destFMgr.dMgr.MakeDir()
+			err = destFMgr.dMgr.MakeDir(
+				ePrefix.XCpy(
+					"destFMgr.dMgr"))
 
 			if err != nil {
 
@@ -456,7 +460,9 @@ func (fMgrHlpr *fileMgrHelper) createDirectory(
 		return err
 	}
 
-	err = fMgr.dMgr.MakeDir()
+	err = fMgr.dMgr.MakeDir(
+		ePrefix.XCpy(
+			"fMgr.dMgr"))
 
 	if err != nil {
 		return fmt.Errorf("%v\n"+
@@ -540,7 +546,9 @@ func (fMgrHlpr *fileMgrHelper) createFile(
 	}
 
 	directoryPathDoesExist, err =
-		fMgr.dMgr.DoesThisDirectoryExist()
+		fMgr.dMgr.DoesThisDirectoryExist(
+			ePrefix.XCpy(
+				"fMgr.dMgr"))
 
 	if err != nil {
 		return fmt.Errorf("%v\n"+
@@ -554,7 +562,9 @@ func (fMgrHlpr *fileMgrHelper) createFile(
 
 	if !directoryPathDoesExist && createTheDirectory {
 
-		err = fMgr.dMgr.MakeDir()
+		err = fMgr.dMgr.MakeDir(
+			ePrefix.XCpy(
+				"fMgr.dMgr"))
 
 		if err != nil {
 
@@ -1519,7 +1529,9 @@ func (fMgrHlpr *fileMgrHelper) moveFile(
 
 	if !targetFilePathDoesExist {
 
-		err = targetFMgr.dMgr.MakeDir()
+		err = targetFMgr.dMgr.MakeDir(
+			ePrefix.XCpy(
+				"targetFMgr.dMgr"))
 
 		if err != nil {
 
@@ -1791,7 +1803,9 @@ func (fMgrHlpr *fileMgrHelper) openFile(
 	}
 
 	directoryPathDoesExist, err =
-		fMgr.dMgr.DoesThisDirectoryExist()
+		fMgr.dMgr.DoesThisDirectoryExist(
+			ePrefix.XCpy(
+				"fMgr.dMgr"))
 
 	if err != nil {
 		return fmt.Errorf("%v\n"+
@@ -1807,7 +1821,9 @@ func (fMgrHlpr *fileMgrHelper) openFile(
 
 	if !directoryPathDoesExist && createTheDirectory {
 
-		err = fMgr.dMgr.MakeDir()
+		err = fMgr.dMgr.MakeDir(
+			ePrefix.XCpy(
+				"fMgr.dMgr"))
 
 		if err != nil {
 			return fmt.Errorf("%v\n"+
@@ -1963,7 +1979,9 @@ func (fMgrHlpr *fileMgrHelper) readFileSetup(
 	}
 
 	dirPathDoesExist, err =
-		fMgr.dMgr.DoesThisDirectoryExist()
+		fMgr.dMgr.DoesThisDirectoryExist(
+			ePrefix.XCpy(
+				"fMgr.dMgr"))
 
 	if err != nil {
 		return fmt.Errorf("%v\n"+
@@ -1977,7 +1995,9 @@ func (fMgrHlpr *fileMgrHelper) readFileSetup(
 
 	if !dirPathDoesExist && createTheDirectory {
 
-		err = fMgr.dMgr.MakeDir()
+		err = fMgr.dMgr.MakeDir(
+			ePrefix.XCpy(
+				"fMgr.dMgr"))
 
 		if err != nil {
 			return fmt.Errorf("%v\n"+
@@ -2263,7 +2283,10 @@ func (fMgrHlpr *fileMgrHelper) setFileMgrPathFileName(
 
 	} else {
 
-		dMgr, err2 = new(DirMgr).New(remainingPathStr)
+		dMgr, err2 = new(DirMgr).New(
+			remainingPathStr,
+			ePrefix.XCpy(
+				"remainingPathStr"))
 
 		if err2 != nil {
 
@@ -2378,7 +2401,9 @@ func (fMgrHlpr *fileMgrHelper) writeFileSetup(
 	}
 
 	dirPathDoesExist, err =
-		fMgr.dMgr.DoesThisDirectoryExist()
+		fMgr.dMgr.DoesThisDirectoryExist(
+			ePrefix.XCpy(
+				"fMgr.dMgr"))
 
 	if err != nil {
 		return fmt.Errorf("%v\n"+
@@ -2392,7 +2417,9 @@ func (fMgrHlpr *fileMgrHelper) writeFileSetup(
 
 	if !dirPathDoesExist && createTheDirectory {
 
-		err = fMgr.dMgr.MakeDir()
+		err = fMgr.dMgr.MakeDir(
+			ePrefix.XCpy(
+				"fMgr.dMgr"))
 
 		if err != nil {
 			return fmt.Errorf("%v\n"+
