@@ -7796,25 +7796,6 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrFromKnownPathDirName(
 //
 // # Input Parameters
 //
-//	errPrefDto					*ePref.ErrPrefixDto
-//
-//		This object encapsulates an error prefix string
-//		which is included in all returned error
-//		messages. Usually, it contains the name of the
-//		calling method or methods listed as a function
-//		chain.
-//
-//		If no error prefix information is needed, set
-//		this parameter to 'nil'.
-//
-//		Type ErrPrefixDto is included in the 'errpref'
-//		software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
 //	dMgr						*DirMgr
 //
 //		A pointer to an instance of DirMgr. This instance
@@ -7835,7 +7816,7 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrFromKnownPathDirName(
 //		parent directory to construct a new directory
 //		path used to reconfigure 'dMgr'.
 //
-//	dMgrLabel string
+//	dMgrLabel					string
 //
 //		The name or label associated with input parameter
 //		'dMgr', which will be used in error messages
@@ -7845,7 +7826,7 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrFromKnownPathDirName(
 //		string, a default value of "dMgr" will be
 //		automatically applied.
 //
-//	parentDirectoryLabel string
+//	parentDirectoryLabel		string
 //
 //		The name or label associated with input parameter
 //		'parentDirectoryPath' which will be used in error
@@ -7855,7 +7836,7 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrFromKnownPathDirName(
 //		string, a default value of "parentDirectoryPath"
 //		will be automatically applied.
 //
-//	directoryNameLabel string
+//	directoryNameLabel			string
 //
 //		The name or label associated with input parameter
 //		'directoryName' which will be used in error
@@ -7865,7 +7846,33 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrFromKnownPathDirName(
 //		string, a default value of "directoryName" will
 //		be automatically applied.
 //
-//	error
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	isEmpty						bool
+//
+//		If the directory path, constructed from
+//		'parentDirectoryPath' and 'directoryName' is
+//		empty or blank, this returned boolean value is
+//		set to 'true'.
+//
+//	err							error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -8017,10 +8024,134 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrWithPathDirectoryName(
 	return isEmpty, err
 }
 
-// setPermissions - Sets the read/write and execute
-// permissions for the directory identified by the
-// 'dMgr' instance. Note the treatment of 'execute'
-// permissions may vary by operating system.
+// setPermissions
+//
+// Sets the read/write and execute permissions for the
+// directory identified by input parameter 'dMgr'.
+//
+// Remember that the treatment of 'execute' permissions
+// may vary according to the host operating system.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dMgr						*DirMgr
+//
+//		A pointer to an instance of DirMgr. This method
+//		will set the read/write and execute permissions
+//		for the directory identified by this DirMgr
+//		instance.
+//
+//	permissionConfig			FilePermissionConfig
+//
+//		Use FilePermissionConfig 'New' methods to create
+//		directory permissions for the directory
+//		identified by input parameter 'dMgr'.
+//
+//		Type FilePermissionConfig provides methods to
+//		support the creation and management of File
+//		Permissions for use in controlling file access
+//		operations. The Go Programming Language uses
+//		os.FileMode and unix permission bits to configure
+//		file permissions.
+//
+//		Reference:
+//		https://golang.org/pkg/os/#FileMode
+//		https://www.cyberciti.biz/faq/explain-the-nine-permissions-bits-on-files/
+//		https://en.wikipedia.org/wiki/File_system_permissions
+//
+//		The FilePermissionConfig methods will allow for
+//		configuration of valid file permissions which are
+//		subsequently stored as an os.FileMode in a
+//		private member variable,
+//		'FilePermissionConfig.fileMode'.
+//
+//		When evaluated as a string, file permission is
+//		defined by a 10-character string. The first
+//		character is an 'Entry Type' and the remaining
+//		9-characters are unix permission bits.
+//
+//		Symbolic and Numeric Notation
+//
+//		Permission codes may be designated with Symbolic
+//		Notation or Numeric Octal Notation.
+//
+//				   Numeric
+//		Symbolic	Octal
+//		Notation   Notation
+//		----------	0000	no permissions
+//		-rwx------	0700	read, write, & execute only for owner
+//		-rwxrwx---	0770	read, write, & execute for owner and group
+//		-rwxrwxrwx	0777	read, write, & execute for owner, group and others
+//		---x--x--x	0111	execute
+//		--w--w--w-	0222	write
+//		--wx-wx-wx	0333	write & execute
+//		-r--r--r--	0444	read
+//		-r-xr-xr-x	0555	read & execute
+//		-rw-rw-rw-	0666	read & write
+//		-rwxr-----	0740	owner can read, write, & execute; group can only read;
+//		                   others have no permissions
+//
+//		The permissions used by this method are designed
+//		to be used for directories, not files.
+//
+//		Example:
+//
+//		drwxrwxrwx - Identifies permissions for directory
+//						value = 020000000777
+//
+//	dMgrLabel					string
+//
+//		The name or label associated with input parameter
+//		'dMgr', which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "dMgr" will be
+//		automatically applied.
+//
+//	permissionConfigLabel		string
+//
+//		The name or label associated with input parameter
+//		'permissionConfig', which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "permissionConfig"
+//		will be automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (dMgrHlpr *dirMgrHelper) setPermissions(
 	dMgr *DirMgr,
 	permissionConfig FilePermissionConfig,
@@ -8040,23 +8171,38 @@ func (dMgrHlpr *dirMgrHelper) setPermissions(
 
 	var err error
 
+	funcName := "dirMgrHelper.setPermissions()"
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"dirMgrHelper."+
-			"setPermissions()",
+		funcName,
 		"")
 
 	if err != nil {
 		return err
 	}
 
-	if err != nil {
+	if len(dMgrLabel) == 0 {
+		dMgrLabel = "dMgr"
+	}
+
+	if dMgr == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter %v pointer is 'nil' !\n",
+			ePrefix.String(),
+			dMgrLabel)
+
 		return err
 	}
 
+	if len(permissionConfigLabel) == 0 {
+		dMgrLabel = "permissionConfig"
+	}
+
 	err = permissionConfig.IsValidInstanceError(ePrefix.XCpy(
-		"permissionConfig"))
+		permissionConfigLabel))
 
 	if err != nil {
 		return fmt.Errorf("%v\n"+
@@ -8100,7 +8246,9 @@ func (dMgrHlpr *dirMgrHelper) setPermissions(
 	err = new(FileHelper).ChangeFileMode(
 		dMgr.absolutePath,
 		permissionConfig,
-		ePrefix)
+		ePrefix.XCpy(
+			fmt.Sprintf("%v.absolutePath",
+				dMgrLabel)))
 
 	if err != nil {
 		return fmt.Errorf("%v\n"+
@@ -8108,8 +8256,8 @@ func (dMgrHlpr *dirMgrHelper) setPermissions(
 			"%v.absolutePath, %v)\n"+
 			"%v.absolutePath=%v\n"+
 			"%v='%v'"+
-			"Error='%v'\n\n",
-			ePrefix.String(),
+			"Error= \n%v\n",
+			funcName,
 			dMgrLabel,
 			permissionConfigLabel,
 			dMgrLabel,
@@ -8119,7 +8267,7 @@ func (dMgrHlpr *dirMgrHelper) setPermissions(
 			err.Error())
 	}
 
-	return nil
+	return err
 }
 
 // substituteBaseDir

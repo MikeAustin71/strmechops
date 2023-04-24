@@ -36,9 +36,9 @@ import (
 // Permission codes may be designated with Symbolic
 // Notation or Numeric Octal Notation.
 //
-//	            Numeric
-//		Symbolic   English
-//		notation   notation
+//				   Numeric
+//		Symbolic	Octal
+//		Notation   Notation
 //		----------	0000	no permissions
 //		-rwx------	0700	read, write, & execute only for owner
 //		-rwxrwx---	0770	read, write, & execute for owner and group
@@ -1758,9 +1758,8 @@ func (fPerm *FilePermissionConfig) GetPermissionTextCode(
 //		the error message.
 //
 //		If the current instance of FilePermissionConfig
-//		is found to be valid and no errors are
-//		encountered during processing, this returned
-//		error parameter is set to 'nil'.
+//		is found to be valid and no errors present during
+//		processing, the returned error parameter is 'nil'.
 func (fPerm *FilePermissionConfig) IsValidInstanceError(
 	errorPrefix interface{}) error {
 
