@@ -3493,7 +3493,9 @@ func (fMgr *FileMgr) CopyFromStrings(
 // into the current FileMgr object.
 //
 // Note: Internal file pointer will not be copied.
-func (fMgr *FileMgr) CopyIn(fmgr2 *FileMgr) {
+func (fMgr *FileMgr) CopyIn(
+	fmgr2 *FileMgr,
+	errorPrefix interface{}) error {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -3503,13 +3505,40 @@ func (fMgr *FileMgr) CopyIn(fmgr2 *FileMgr) {
 
 	defer fMgr.lock.Unlock()
 
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr."+
+			"CopyIn()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
 	if fmgr2 == nil {
 
-		fmgr2 = &FileMgr{}
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fmgr2' pointer is 'nil'!\n",
+			ePrefix.String())
+
+		return err
 	}
 
 	fMgr.isInitialized = fmgr2.isInitialized
-	fMgr.dMgr.CopyIn(&fmgr2.dMgr)
+
+	err = fMgr.dMgr.CopyIn(
+		&fmgr2.dMgr,
+		ePrefix.XCpy(
+			"fmgr2.dMgr"))
+
+	if err != nil {
+		return err
+	}
+
 	fMgr.originalPathFileName = fmgr2.originalPathFileName
 	fMgr.absolutePathFileName = fmgr2.absolutePathFileName
 	fMgr.isAbsolutePathFileNamePopulated = fmgr2.isAbsolutePathFileNamePopulated
@@ -3529,7 +3558,7 @@ func (fMgr *FileMgr) CopyIn(fmgr2 *FileMgr) {
 	fMgr.fileRdrBufSize = fmgr2.fileRdrBufSize
 	fMgr.fileWriterBufSize = fmgr2.fileWriterBufSize
 
-	return
+	return err
 }
 
 // CopyOut

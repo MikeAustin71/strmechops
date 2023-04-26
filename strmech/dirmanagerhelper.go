@@ -652,7 +652,8 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 //	--- NONE ---
 func (dMgrHlpr *dirMgrHelper) copyIn(
 	destinationDMgr *DirMgr,
-	sourceDMgrIn *DirMgr) {
+	sourceDMgrIn *DirMgr,
+	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if dMgrHlpr.lock == nil {
 		dMgrHlpr.lock = new(sync.Mutex)
@@ -662,12 +663,37 @@ func (dMgrHlpr *dirMgrHelper) copyIn(
 
 	defer dMgrHlpr.lock.Unlock()
 
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"dirMgrHelper."+
+			"copyIn()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
 	if destinationDMgr == nil {
-		destinationDMgr = &DirMgr{}
+
+		err = fmt.Errorf("%v \n"+
+			"ERROR: Input paramter 'destinationDMgr' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
 	}
 
 	if sourceDMgrIn == nil {
-		sourceDMgrIn = &DirMgr{}
+
+		err = fmt.Errorf("%v \n"+
+			"ERROR: Input paramter 'sourceDMgrIn' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
 	}
 
 	destinationDMgr.isInitialized = sourceDMgrIn.isInitialized
@@ -686,6 +712,7 @@ func (dMgrHlpr *dirMgrHelper) copyIn(
 	destinationDMgr.isVolumePopulated = sourceDMgrIn.isVolumePopulated
 	destinationDMgr.actualDirFileInfo = sourceDMgrIn.actualDirFileInfo.CopyOut()
 
+	return err
 }
 
 // deleteAllFilesInDirectory
