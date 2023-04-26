@@ -273,6 +273,9 @@ type dirMgrHelper struct {
 //	 	attached to the	beginning of the error message.
 //
 //		This error array may contain multiple errors.
+//
+//		An error array may be consolidated into a single
+//		error using method StrMech.ConsolidateErrors()
 func (dMgrHlpr *dirMgrHelper) copyDirectory(
 	sourceDMgr *DirMgr,
 	targetDMgr *DirMgr,
@@ -779,6 +782,9 @@ func (dMgrHlpr *dirMgrHelper) copyIn(
 //	 	attached to the	beginning of the error message.
 //
 //		This error array may contain multiple errors.
+//
+//		An error array may be consolidated into a single
+//		error using method StrMech.ConsolidateErrors()
 func (dMgrHlpr *dirMgrHelper) deleteAllFilesInDirectory(
 	dMgr *DirMgr,
 	dMgrLabel string,
@@ -1451,6 +1457,9 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryAll(
 //	 	attached to the	beginning of the error message.
 //
 //		This error array may contain multiple errors.
+//
+//		An error array may be consolidated into a single
+//		error using method StrMech.ConsolidateErrors()
 func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeInfo(
 	dMgr *DirMgr,
 	deleteFileSelectionCriteria FileSelectionCriteria,
@@ -2094,6 +2103,9 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeInfo(
 //	 	attached to the	beginning of the error message.
 //
 //		This error array may contain multiple errors.
+//
+//		An error array may be consolidated into a single
+//		error using method StrMech.ConsolidateErrors()
 func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 	dMgr *DirMgr,
 	deleteFileSelectionCriteria FileSelectionCriteria,
@@ -2523,6 +2535,9 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 //	 	attached to the	beginning of the error message.
 //
 //		This error array may contain multiple errors.
+//
+//		An error array may be consolidated into a single
+//		error using method StrMech.ConsolidateErrors()
 func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 	dMgr *DirMgr,
 	fileSearchPattern string,
@@ -3412,6 +3427,9 @@ func (dMgrHlpr *dirMgrHelper) equalPaths(
 //	 	attached to the	beginning of the error message.
 //
 //		This error array may contain multiple errors.
+//
+//		An error array may be consolidated into a single
+//		error using method StrMech.ConsolidateErrors()
 func (dMgrHlpr *dirMgrHelper) executeDirectoryFileOps(
 	sourceDMgr *DirMgr,
 	fileSelectCriteria FileSelectionCriteria,
@@ -4057,6 +4075,9 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryFileOps(
 //	 	attached to the	beginning of the error message.
 //
 //		This error array may contain multiple errors.
+//
+//		An error array may be consolidated into a single
+//		error using method StrMech.ConsolidateErrors()
 func (dMgrHlpr *dirMgrHelper) executeDirectoryTreeOps(
 	sourceDMgr *DirMgr,
 	fileSelectCriteria FileSelectionCriteria,
@@ -4538,6 +4559,9 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryTreeOps(
 //	 	attached to the	beginning of the error message.
 //
 //		This error array may contain multiple errors.
+//
+//		An error array may be consolidated into a single
+//		error using method StrMech.ConsolidateErrors()
 func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 	targetBaseDir *DirMgr,
 	fileSelectCriteria FileSelectionCriteria,
@@ -4961,6 +4985,9 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 //	 	attached to the	beginning of the error message.
 //
 //		This error array may contain multiple errors.
+//
+//		An error array may be consolidated into a single
+//		error using method StrMech.ConsolidateErrors()
 func (dMgrHlpr *dirMgrHelper) findDirectoryTreeStats(
 	targetBaseDir *DirMgr,
 	skipTopLevelDirectory bool,
@@ -5774,6 +5801,9 @@ func (dMgrHlpr *dirMgrHelper) getAbsolutePathElements(
 //	 	attached to the	beginning of the error message.
 //
 //		This error array may contain multiple errors.
+//
+//		An error array may be consolidated into a single
+//		error using method StrMech.ConsolidateErrors()
 func (dMgrHlpr *dirMgrHelper) getDirectoryTree(
 	dMgr *DirMgr,
 	dMgrLabel string,
@@ -6509,6 +6539,9 @@ func (dMgrHlpr *dirMgrHelper) isDirMgrValid(
 //	 	attached to the	beginning of the error message.
 //
 //		This error array may contain multiple errors.
+//
+//		An error array may be consolidated into a single
+//		error using method StrMech.ConsolidateErrors()
 func (dMgrHlpr *dirMgrHelper) moveDirectory(
 	dMgr *DirMgr,
 	targetDMgr *DirMgr,
@@ -7001,6 +7034,9 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 //	 	attached to the	beginning of the error message.
 //
 //		This error array may contain multiple errors.
+//
+//		An error array may be consolidated into a single
+//		error using method StrMech.ConsolidateErrors()
 func (dMgrHlpr *dirMgrHelper) moveDirectoryTree(
 	dMgr *DirMgr,
 	targetDMgr *DirMgr,
@@ -7316,6 +7352,9 @@ func (dMgrHlpr *dirMgrHelper) moveDirectoryTree(
 //	 	attached to the	beginning of the error message.
 //
 //		This error array may contain multiple errors.
+//
+//		An error array may be consolidated into a single
+//		error using method StrMech.ConsolidateErrors()
 func (dMgrHlpr *dirMgrHelper) moveSubDirectoryTree(
 	dMgr *DirMgr,
 	targetDMgr *DirMgr,
