@@ -8365,7 +8365,7 @@ func (dMgrHlpr *dirMgrHelper) setPermissions(
 //		of 'dMgr' with a new parent directory identified
 //		by input parameter 'substituteBaseDir'. The newly
 //		configured directory path will be returned by
-//		parameter 'newDMgr'.
+//		this parameter, 'newDMgr'.
 //
 //	err							error
 //
