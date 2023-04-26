@@ -50,21 +50,6 @@ type DirMgr struct {
 	lock                            *sync.Mutex // Used internally to ensure thread safe operations
 }
 
-// ConsolidateErrors - Consolidates an array of errors into a
-// single error.
-func (dMgr *DirMgr) ConsolidateErrors(errs []error) error {
-
-	if dMgr.lock == nil {
-		dMgr.lock = new(sync.Mutex)
-	}
-
-	dMgr.lock.Lock()
-
-	defer dMgr.lock.Unlock()
-
-	return new(StrMech).ConsolidateErrors(errs)
-}
-
 // CopyDirectory - Copies files from the directory identified by
 // DirMgr to a target directory. The files to be copied are selected
 // according to file selection criteria specified by input parameter,
@@ -1686,7 +1671,7 @@ func (dMgr *DirMgr) DeleteWalkDirFiles(
 			ePrefix)
 
 	if len(errs) > 0 {
-		err = dMgr.ConsolidateErrors(errs)
+		err = new(StrMech).ConsolidateErrors(errs)
 	}
 
 	return deleteFilesInfo, err
@@ -3171,7 +3156,7 @@ func (dMgr *DirMgr) FindFilesBySelectCriteria(
 		ePrefix)
 
 	if len(errs) > 0 {
-		err = dMgr.ConsolidateErrors(errs)
+		err = new(StrMech).ConsolidateErrors(errs)
 	}
 
 	if err != nil {
@@ -3408,7 +3393,7 @@ func (dMgr *DirMgr) FindWalkDirFiles(
 		ePrefix)
 
 	if len(errs) > 0 {
-		err = dMgr.ConsolidateErrors(errs)
+		err = new(StrMech).ConsolidateErrors(errs)
 	}
 
 	return dTreeInfo, err
@@ -3633,7 +3618,7 @@ func (dMgr *DirMgr) FindWalkSubDirFiles(
 		ePrefix)
 
 	if len(errs) > 0 {
-		err = dMgr.ConsolidateErrors(errs)
+		err = new(StrMech).ConsolidateErrors(errs)
 	}
 
 	/*
