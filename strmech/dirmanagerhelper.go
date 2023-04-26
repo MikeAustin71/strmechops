@@ -8276,6 +8276,109 @@ func (dMgrHlpr *dirMgrHelper) setPermissions(
 // with a new parent directory identified by input
 // parameter 'substituteBaseDir'. This is useful in
 // copying files to new directory trees.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dMgr						*DirMgr
+//
+//		A pointer to an instance of DirMgr. This method
+//		will substitute 'baseDir' segment of 'dMgr' with
+//		a new parent directory identified by input
+//		parameter 'substituteBaseDir'. This operation is
+//		useful when copying files to new directory trees.
+//
+//	baseDir						*DirMgr
+//
+//		A pointer to an instance of DirMgr. This method
+//		will substitute the 'baseDir' segment of 'dMgr'
+//		with a new parent directory identified by input
+//		parameter 'substituteBaseDir'. This operation is
+//		useful when copying files to new directory trees.
+//
+//	substituteBaseDir			*DirMgr
+//
+//		A pointer to an instance of DirMgr. This method
+//		will substitute the 'baseDir' segment of 'dMgr'
+//		with a new parent directory identified by input
+//		parameter 'substituteBaseDir'. This operation is
+//		useful when copying files to new directory trees.
+//
+//	dMgrLabel					string
+//
+//		The name or label associated with input parameter
+//		'dMgr', which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "dMgr" will be
+//		automatically applied.
+//
+//	baseDirLabel				string
+//
+//		The name or label associated with input parameter
+//		'baseDir', which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "baseDir" will be
+//		automatically applied.
+//
+//	substituteBaseDirLabel		string
+//
+//		The name or label associated with input parameter
+//		'substituteBaseDir', which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "substituteBaseDir"
+//		will be automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	newDMgr						DirMgr
+//
+//		If this method completes successfully, an
+//		instance of DirMgr populated with a directory
+//		path constructed from input parameters 'dMgr'
+//		and 'substituteBaseDir'.
+//
+//		This method will substitute the 'baseDir' segment
+//		of 'dMgr' with a new parent directory identified
+//		by input parameter 'substituteBaseDir'. The newly
+//		configured directory path will be returned by
+//		parameter 'newDMgr'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (dMgrHlpr *dirMgrHelper) substituteBaseDir(
 	dMgr *DirMgr,
 	baseDir *DirMgr,
@@ -8306,6 +8409,48 @@ func (dMgrHlpr *dirMgrHelper) substituteBaseDir(
 		"")
 
 	if err != nil {
+		return newDMgr, err
+	}
+
+	if len(dMgrLabel) == 0 {
+		dMgrLabel = "dMgr"
+	}
+
+	if dMgr == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter %v pointer is 'nil' !\n",
+			ePrefix.String(),
+			dMgrLabel)
+
+		return newDMgr, err
+	}
+
+	if len(baseDirLabel) == 0 {
+		baseDirLabel = "baseDir"
+	}
+
+	if baseDir == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter %v pointer is 'nil' !\n",
+			ePrefix.String(),
+			baseDirLabel)
+
+		return newDMgr, err
+	}
+
+	if len(substituteBaseDirLabel) == 0 {
+		substituteBaseDirLabel = "substituteBaseDir"
+	}
+
+	if substituteBaseDir == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter %v pointer is 'nil' !\n",
+			ePrefix.String(),
+			substituteBaseDirLabel)
+
 		return newDMgr, err
 	}
 
@@ -8398,7 +8543,8 @@ func (dMgrHlpr *dirMgrHelper) substituteBaseDir(
 
 	isEmpty := false
 
-	isEmpty, err = new(dirMgrHelperNanobot).
+	isEmpty,
+		err = new(dirMgrHelperNanobot).
 		setDirMgr(
 			&newDMgr,
 			newAbsPath,
@@ -8432,10 +8578,7 @@ func (dMgrHlpr *dirMgrHelper) substituteBaseDir(
 			"newAbsPath='%v'\n",
 			ePrefix,
 			newAbsPath)
-
-		return newDMgr, err
 	}
 
-	err = nil
 	return newDMgr, err
 }
