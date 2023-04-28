@@ -797,9 +797,14 @@ func (dMgr *DirMgr) CopyIn(
 			"dMgr<-dMgrIn"))
 }
 
-// CopyOut - Makes a duplicate copy of the current DirMgr values and
-// returns them in a new DirMgr object.
-func (dMgr *DirMgr) CopyOut() DirMgr {
+// CopyOut
+//
+// Makes a duplicate copy of the current DirMgr values
+// and returns them in a new DirMgr object.
+func (dMgr *DirMgr) CopyOut(
+	errorPrefix interface{}) (
+	DirMgr,
+	error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -809,7 +814,23 @@ func (dMgr *DirMgr) CopyOut() DirMgr {
 
 	defer dMgr.lock.Unlock()
 
-	return new(dirMgrHelperAtom).copyOut(dMgr)
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgr."+
+			"CopyOut()",
+		"")
+
+	if err != nil {
+		return DirMgr{}, err
+	}
+
+	return new(dirMgrHelperAtom).copyOut(
+		dMgr,
+		ePrefix.XCpy("dMgr->"))
 }
 
 // CopySubDirectoryTree - Treating the directory identified by the current 'DirMgr'

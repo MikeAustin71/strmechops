@@ -3,7 +3,9 @@ package strmech
 import (
 	"errors"
 	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
 	"os"
+	"sync"
 	"time"
 )
 
@@ -34,6 +36,7 @@ type FileInfoPlus struct {
 	isDir        bool        // FileInfo.IsDir() 'true'= this is a directory not a file
 	dataSrc      interface{} // FileInfo.Sys() underlying data source (can return nil)
 	origFileInfo os.FileInfo
+	lock         *sync.Mutex
 }
 
 //////////////////////////////////////////////////////////
@@ -135,12 +138,129 @@ func (fip *FileInfoPlus) SysAsString() string {
 // END OF os.FileInfo Interface Methods
 //////////////////////////////////////////////////////////
 
-// CopyOut - Creates a deep copy of the current FileInfoPlus
+// CopyOut
+//
+// Creates a deep copy of the current FileInfoPlus
 // instance and returns it.
 //
 // This method is NOT part of the FileInfo interface.
-func (fip *FileInfoPlus) CopyOut() FileInfoPlus {
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	FileInfoPlus
+//
+//		If this method completes successfully, a
+//		new, fully populated instance of FileInfoPlus.
+//		This new instance will contain an exact copy
+//		of all data values contained in the current
+//		instance of FileInfoPlus.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fip *FileInfoPlus) CopyOut(
+	errorPrefix interface{}) (
+	FileInfoPlus,
+	error) {
+
+	if fip.lock == nil {
+		fip.lock = new(sync.Mutex)
+	}
+
+	fip.lock.Lock()
+
+	defer fip.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
 	newInfo := FileInfoPlus{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileInfoPlus."+
+			"CopyOut()",
+		"")
+
+	if err != nil {
+		return newInfo, err
+	}
 
 	newInfo.SetName(fip.Name())
 	newInfo.SetSize(fip.Size())
@@ -148,12 +268,22 @@ func (fip *FileInfoPlus) CopyOut() FileInfoPlus {
 	newInfo.SetModTime(fip.ModTime())
 	newInfo.SetIsDir(fip.IsDir())
 	newInfo.SetSysDataSrc(fip.Sys())
-	_ = newInfo.SetDirectoryPath(fip.DirPath())
+
+	err = newInfo.
+		SetDirectoryPath(
+			fip.DirPath(),
+			ePrefix.XCpy(
+				"newInfo"))
+
+	if err != nil {
+		return FileInfoPlus{}, err
+	}
+
 	newInfo.isFInfoInitialized = fip.isFInfoInitialized
 	newInfo.CreateTimeStamp = fip.CreateTimeStamp
 	newInfo.origFileInfo = fip.origFileInfo
 
-	return newInfo
+	return newInfo, err
 }
 
 // DirPath - Returns the directory path. This field, FileInfoPlus.dirPath,
@@ -386,9 +516,117 @@ func (fip *FileInfoPlus) NewFromPathFileInfo(
 	return newInfo, nil
 }
 
-// SetDirectoryPath - Sets the dirPath field. This
-// field is not part of the standard FileInfo data structure.
-func (fip *FileInfoPlus) SetDirectoryPath(dirPath string) error {
+// SetDirectoryPath
+//
+// Sets the directory path (dirPath) member data field.
+//
+// This field is not part of the standard FileInfo data
+// structure.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fip *FileInfoPlus) SetDirectoryPath(
+	dirPath string,
+	errorPrefix interface{}) error {
+
+	if fip.lock == nil {
+		fip.lock = new(sync.Mutex)
+	}
+
+	fip.lock.Lock()
+
+	defer fip.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileInfoPlus."+
+			"SetDirectoryPath()",
+		"")
+
+	if err != nil {
+		return err
+	}
 
 	fh := FileHelper{}
 	errCode := 0
@@ -398,8 +636,9 @@ func (fip *FileInfoPlus) SetDirectoryPath(dirPath string) error {
 		dirPath = fh.IsStringEmptyOrBlank(dirPath)
 
 	if errCode < 0 {
-		return fmt.Errorf("FileInfoPlus.SetDirectoryPath()\n" +
-			"Error: Input parameter 'dirPath' is an EMPTY String!\n")
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter 'dirPath' is an EMPTY String!\n",
+			ePrefix.String())
 	}
 
 	dirPath = fh.RemovePathSeparatorFromEndOfPathString(dirPath)
@@ -408,7 +647,7 @@ func (fip *FileInfoPlus) SetDirectoryPath(dirPath string) error {
 
 	fip.isDirPathInitialized = true
 
-	return nil
+	return err
 }
 
 // SetName - Sets the file name field.

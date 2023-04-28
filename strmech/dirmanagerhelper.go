@@ -710,7 +710,10 @@ func (dMgrHlpr *dirMgrHelper) copyIn(
 	destinationDMgr.directoryName = sourceDMgrIn.directoryName
 	destinationDMgr.volumeName = sourceDMgrIn.volumeName
 	destinationDMgr.isVolumePopulated = sourceDMgrIn.isVolumePopulated
-	destinationDMgr.actualDirFileInfo = sourceDMgrIn.actualDirFileInfo.CopyOut()
+	destinationDMgr.actualDirFileInfo,
+		err =
+		sourceDMgrIn.actualDirFileInfo.CopyOut(ePrefix.XCpy(
+			"sourceDMgrIn.actualDirFileInfo"))
 
 	return err
 }
@@ -1231,10 +1234,10 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryAll(
 //
 //	deleteFileSelectionCriteria		FileSelectionCriteria
 //
-//	  This input parameter should be configured with the
-//	  desired file selection criteria. Files matching
-//	  this criteria will be deleted from the directory
-//	  tree identified by input parameter, 'dMgr'.
+//		This input parameter should be configured with the
+//		desired file selection criteria. Files matching
+//		this criteria will be deleted from the directory
+//		tree identified by input parameter, 'dMgr'.
 //
 //		type FileSelectionCriteria struct {
 //		 FileNamePatterns    []string
@@ -1615,8 +1618,29 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeInfo(
 
 	deleteTreeInfo.DeleteFileSelectCriteria = deleteFileSelectionCriteria
 
+	var newDirMgr DirMgr
+
+	newDirMgr,
+		err = dMgrHlprAtom.copyOut(
+		dMgr,
+		ePrefix.XCpy("dMgr"))
+
+	if err != nil {
+
+		err2 = fmt.Errorf("%v\n"+
+			"Input parameter 'dMgr' Copy Errors."+
+			"Error return by dMgrHlprAtom.copyOut(dMgr). "+
+			"Error= \n%v\n",
+			funcName,
+			err.Error())
+
+		errs = append(errs, err)
+
+		return deleteTreeInfo, errs
+	}
+
 	deleteTreeInfo.Directories.AddDirMgr(
-		dMgrHlprAtom.copyOut(dMgr))
+		newDirMgr)
 
 	dTreeCnt := 1
 
@@ -1784,9 +1808,31 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeInfo(
 							continue
 						}
 
+						var dirMgrCopy DirMgr
+
+						dirMgrCopy,
+							err = nextDir.CopyOut(ePrefix.XCpy(
+							"nextDir->"))
+
+						if err != nil {
+
+							err2 = fmt.Errorf("%v\n"+
+								"DirMgr Copy Errors"+
+								"ERROR returned by nextDir.CopyOut()\n"+
+								"nextDir='%v'\n"+
+								"Error= \n%v\n",
+								funcName,
+								nextDir.absolutePath,
+								err.Error())
+
+							errs = append(errs, err2)
+
+							return deleteTreeInfo, errs
+						}
+
 						err = deleteTreeInfo.DeletedFiles.
 							AddFileMgrByDirFileNameExt(
-								nextDir.CopyOut(),
+								dirMgrCopy,
 								nameFInfo.Name(),
 								ePrefix)
 
@@ -2247,7 +2293,31 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 	isTopLevelDir := true
 	isFirstLoop := true
 
-	dirs.AddDirMgr(dMgrHlprAtom.copyOut(dMgr))
+	var dirMgrCopy DirMgr
+
+	dirMgrCopy,
+		err = dMgrHlprAtom.copyOut(
+		dMgr,
+		ePrefix.XCpy(
+			"dMgr->"))
+
+	if err != nil {
+
+		err2 = fmt.Errorf("%v\n"+
+			"'dMgr' Copy Errors."+
+			"Error returned by dMgrHlprAtom.copyOut(dMgr)\n"+
+			"Error= \n%v\n",
+			funcName,
+			err.Error())
+
+		errs = append(errs, err2)
+
+		errs = append(errs, err)
+
+		return deleteDirStats, errs
+	}
+
+	dirs.AddDirMgr(dirMgrCopy)
 
 	for !mainLoopIsDone {
 
@@ -4700,8 +4770,23 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 	isMatch := false
 	isTopLevelDir := true
 
+	var targetBaseDirCopy DirMgr
+
+	targetBaseDirCopy,
+		err = new(dirMgrHelperAtom).copyOut(
+		targetBaseDir,
+		ePrefix.XCpy(
+			"targetBaseDir->"))
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return dTreeInfo, errs
+	}
+
 	dTreeInfo.Directories.AddDirMgr(
-		new(dirMgrHelperAtom).copyOut(targetBaseDir))
+		targetBaseDirCopy)
 
 	dTreeCnt := 1
 
@@ -4843,8 +4928,31 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 
 						// We have a match, save file to dTreeInfo
 
+						var nextDirCopy DirMgr
+
+						nextDirCopy,
+							err = nextDir.CopyOut(
+							ePrefix.XCpy(
+								"nextDir->"))
+
+						if err != nil {
+
+							err2 = fmt.Errorf("%v\n"+
+								"nextDir Copy Errors."+
+								"ERROR returned by nextDir.CopyOut()\n"+
+								"nextDir= '%v'\n"+
+								"Error= \n%v\n",
+								funcName,
+								nextDir.absolutePath,
+								err.Error())
+
+							errs = append(errs, err2)
+
+							continue
+						}
+
 						err = dTreeInfo.FoundFiles.AddFileMgrByDirFileNameExt(
-							nextDir.CopyOut(),
+							nextDirCopy,
 							nameFInfo.Name(),
 							ePrefix.XCpy("nameFInfo"))
 
@@ -6157,9 +6265,12 @@ func (dMgrHlpr *dirMgrHelper) getParentDirMgr(
 
 	if len(dMgr.parentPath) == 0 {
 
-		dirMgrParent = dMgrHlprAtom.copyOut(dMgr)
+		dirMgrParent,
+			err = dMgrHlprAtom.copyOut(
+			dMgr,
+			ePrefix.XCpy("dMgr Copy Errors"))
+
 		hasParent = false
-		err = nil
 
 		return dirMgrParent, hasParent, err
 

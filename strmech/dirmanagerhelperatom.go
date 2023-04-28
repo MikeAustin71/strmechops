@@ -16,7 +16,10 @@ type dirMgrHelperAtom struct {
 // copyOut - Makes a duplicate copy of input parameter
 // 'dMgr' values and returns them as a new DirMgr object.
 func (dMgrHlprAtom *dirMgrHelperAtom) copyOut(
-	dMgr *DirMgr) DirMgr {
+	dMgr *DirMgr,
+	errPrefDto *ePref.ErrPrefixDto) (
+	DirMgr,
+	error) {
 
 	if dMgrHlprAtom.lock == nil {
 		dMgrHlprAtom.lock = new(sync.Mutex)
@@ -26,11 +29,31 @@ func (dMgrHlprAtom *dirMgrHelperAtom) copyOut(
 
 	defer dMgrHlprAtom.lock.Unlock()
 
-	if dMgr == nil {
-		dMgr = &DirMgr{}
-	}
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
 
 	dOut := DirMgr{}
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"dirMgrHelperAtom."+
+			"copyOut()",
+		"")
+
+	if err != nil {
+		return dOut, err
+	}
+
+	if dMgr == nil {
+
+		err = fmt.Errorf("%v \n"+
+			"ERROR: Input paramter 'dMgr' is a nil pointer!\n",
+			ePrefix.String())
+
+		return dOut, err
+	}
 
 	dOut.isInitialized = dMgr.isInitialized
 	dOut.originalPath = dMgr.originalPath
@@ -46,9 +69,11 @@ func (dMgrHlprAtom *dirMgrHelperAtom) copyOut(
 	dOut.directoryName = dMgr.directoryName
 	dOut.volumeName = dMgr.volumeName
 	dOut.isVolumePopulated = dMgr.isVolumePopulated
-	dOut.actualDirFileInfo = dMgr.actualDirFileInfo.CopyOut()
+	dOut.actualDirFileInfo,
+		err = dMgr.actualDirFileInfo.CopyOut(ePrefix.XCpy(
+		"dMgr.actualDirFileInfo"))
 
-	return dOut
+	return dOut, err
 }
 
 // doesDirectoryExist
@@ -381,12 +406,26 @@ func (dMgrHlprAtom *dirMgrHelperAtom) doesDirectoryExist(
 	// both dMgr.path and dMgr.doesAbsolutePathExist
 	// exist. And, there are no errors
 
-	dMgr.actualDirFileInfo = absFInfo.CopyOut()
+	dMgr.actualDirFileInfo,
+		err = absFInfo.CopyOut(ePrefix.XCpy(
+		"absFInfo"))
+
+	if err != nil {
+		return dirPathDoesExist, fInfo, err
+	}
+
 	dMgr.doesAbsolutePathExist = true
 	dMgr.doesPathExist = true
-	fInfo = dMgr.actualDirFileInfo.CopyOut()
+
+	fInfo,
+		err = dMgr.actualDirFileInfo.CopyOut(ePrefix.XCpy(
+		"dMgr.actualDirFileInfo"))
+
+	if err != nil {
+		return dirPathDoesExist, fInfo, err
+	}
+
 	dirPathDoesExist = true
-	err = nil
 
 	return dirPathDoesExist, fInfo, err
 }
