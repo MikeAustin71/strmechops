@@ -1648,33 +1648,165 @@ func (dMgrs *DirMgrCollection) PopDirMgrAtIndex(
 	return dirMgrCopy, err
 }
 
-// PopFirstDirMgr  - Returns a deep copy of the first Directory Manager
-// ('DirMgr') object in the Directory Manager Collection array. As a
-// 'Pop' method, the original Directory Manager ('DirMgr') object is
-// deleted from the top of the Directory Manager Collection ('DirMgrCollection')
-// array (dMgrs.dirMgrs array index = 0).
+// PopFirstDirMgr
 //
-// If this method is called on an empty Director Manager Collection
-// (i.e. length of array dMgrs.dirMgrs = 0), an io.EOF error is
-// returned.
+// Returns a deep copy of the first Directory Manager
+// ('DirMgr') object in the Directory Manager Collection
+// array for the current DirMgrCollection instance. As a
+// 'Pop' method, the original Directory Manager
+// ('DirMgr') object is deleted from the first array
+// index of the Directory Manager Collection
+// (dMgrs.dirMgrs array index = 0).
 //
-// Therefore, at the completion of this method, the Directory Manager
-// Collection array has a length which is one less than the starting
-// array length.
-func (dMgrs *DirMgrCollection) PopFirstDirMgr() (DirMgr, error) {
+// If this method is called on an empty Director Manager
+// Collection (i.e. length of array dMgrs.dirMgrs = 0),
+// an error will be returned.
+//
+// After the successful completion of this method, the
+// Directory Manager Collection array has a length which
+// is one less than the starting array length.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	DirMgr
+//
+//		If this method completes successfully, a deep
+//		copy of the DirMgr object 'popped' or deleted
+//		from the first array element position in the
+//		Directory Managers Collection (dMgrs.dirMgrs
+//		array index = 0) will be returned through this
+//		parameter
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (dMgrs *DirMgrCollection) PopFirstDirMgr(
+	errorPrefix interface{}) (
+	DirMgr,
+	error) {
+
+	if dMgrs.lock == nil {
+		dMgrs.lock = new(sync.Mutex)
+	}
+
+	dMgrs.lock.Lock()
+
+	defer dMgrs.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgrCollection."+
+			"PopFirstDirMgr()",
+		"")
+
+	if err != nil {
+		return DirMgr{}, err
+	}
 
 	if dMgrs.dirMgrs == nil {
-		dMgrs.dirMgrs = make([]DirMgr, 0, 100)
+		dMgrs.dirMgrs = make([]DirMgr, 0, 5)
 	}
 
 	arrayLen := len(dMgrs.dirMgrs)
 
 	if arrayLen == 0 {
+
 		return DirMgr{},
-			io.EOF
+			fmt.Errorf("%v\n"+
+				"Error: The Director Managers Collection\n"+
+				"for the current DirMgrCollection instance\n"+
+				"is EMPTY. The Collection array has an array\n"+
+				"length of Zero.\n",
+				ePrefix.String())
 	}
 
-	dMgr := dMgrs.dirMgrs[0].CopyOut()
+	var dMgrCopy DirMgr
+
+	dMgrCopy,
+		err = dMgrs.dirMgrs[0].CopyOut(ePrefix.XCpy(
+		"dMgrs.dirMgrs[0]"))
+
+	if err != nil {
+		return DirMgr{}, err
+	}
 
 	if arrayLen == 1 {
 		dMgrs.dirMgrs = make([]DirMgr, 0, 100)
@@ -1684,7 +1816,7 @@ func (dMgrs *DirMgrCollection) PopFirstDirMgr() (DirMgr, error) {
 		dMgrs.dirMgrs = dMgrs.dirMgrs[1:]
 	}
 
-	return dMgr, nil
+	return dMgrCopy, err
 }
 
 // PopLastDirMgr - Returns a deep copy of the last Directory Manager
