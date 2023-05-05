@@ -451,7 +451,12 @@ func (fMgrHlprAtom *fileMgrHelperAtom) setFileMgrDirMgrFileName(
 		return isEmpty, err
 	}
 
-	fMgr.dMgr = dMgr.CopyOut()
+	fMgr.dMgr,
+		err = dMgr.CopyOut(ePrefix.XCpy("dMgr"))
+
+	if err != nil {
+		return isEmpty, err
+	}
 
 	s, fNameIsEmpty, err2 := fh.GetFileNameWithoutExt(
 		adjustedFileNameExt,
@@ -570,7 +575,10 @@ func (fMgrHlprAtom *fileMgrHelperAtom) setFileMgrDirMgrFileName(
 		fMgr.doesAbsolutePathFileNameExist = true
 		fMgr.actualFileInfo = fInfoPlus.CopyOut()
 
-		err2 = fMgr.actualFileInfo.SetDirectoryPath(dMgr.absolutePath)
+		err2 = fMgr.actualFileInfo.SetDirectoryPath(
+			dMgr.absolutePath,
+			ePrefix.XCpy(
+				"dMgr.absolutePath"))
 
 		if err2 != nil {
 			isEmpty = true

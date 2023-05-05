@@ -377,7 +377,30 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 	var srcFile, targetFile string
 	fh := FileHelper{}
 
-	dirs.AddDirMgr(dMgrHlprAtom.copyOut(sourceDMgr))
+	var dMgrCopy DirMgr
+
+	dMgrCopy,
+		err = dMgrHlprAtom.copyOut(
+		sourceDMgr,
+		ePrefix.XCpy("sourceDMgr"))
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return dTreeCopyStats, errs
+	}
+
+	err = dirs.AddDirMgr(
+		dMgrCopy,
+		ePrefix.XCpy("dMgrCopy"))
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return dTreeCopyStats, errs
+	}
 
 	if !skipTopLevelDirectory {
 		dTreeCopyStats.TotalDirsScanned++
@@ -420,7 +443,8 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 			dirPtr = nil
 		}
 
-		nextDir, err = dirs.PopFirstDirMgr()
+		nextDir, err = dirs.PopFirstDirMgr(
+			ePrefix.XCpy("dirs"))
 
 		if err != nil && err == io.EOF {
 

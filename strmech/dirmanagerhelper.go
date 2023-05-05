@@ -710,10 +710,8 @@ func (dMgrHlpr *dirMgrHelper) copyIn(
 	destinationDMgr.directoryName = sourceDMgrIn.directoryName
 	destinationDMgr.volumeName = sourceDMgrIn.volumeName
 	destinationDMgr.isVolumePopulated = sourceDMgrIn.isVolumePopulated
-	destinationDMgr.actualDirFileInfo,
-		err =
-		sourceDMgrIn.actualDirFileInfo.CopyOut(ePrefix.XCpy(
-			"sourceDMgrIn.actualDirFileInfo"))
+	destinationDMgr.actualDirFileInfo =
+		sourceDMgrIn.actualDirFileInfo.CopyOut()
 
 	return err
 }
@@ -1639,8 +1637,16 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeInfo(
 		return deleteTreeInfo, errs
 	}
 
-	deleteTreeInfo.Directories.AddDirMgr(
-		newDirMgr)
+	err = deleteTreeInfo.Directories.AddDirMgr(
+		newDirMgr,
+		ePrefix.XCpy("newDirMgr"))
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return deleteTreeInfo, errs
+	}
 
 	dTreeCnt := 1
 
@@ -1877,7 +1883,10 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeInfo(
 	} // End of for i:=0; i < dTreeCnt; i ++
 
 	if len(deleteTreeInfo.Directories.dirMgrs) > 0 && skipTopLevelDirectory {
-		_, _ = deleteTreeInfo.Directories.PopFirstDirMgr()
+
+		_,
+			_ = deleteTreeInfo.Directories.PopFirstDirMgr(
+			ePrefix)
 	}
 
 	for i := 0; i < len(errs); i++ {
@@ -2304,7 +2313,7 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 	if err != nil {
 
 		err2 = fmt.Errorf("%v\n"+
-			"'dMgr' Copy Errors."+
+			"'dMgr' Copy Error.\n"+
 			"Error returned by dMgrHlprAtom.copyOut(dMgr)\n"+
 			"Error= \n%v\n",
 			funcName,
@@ -2312,12 +2321,25 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 
 		errs = append(errs, err2)
 
-		errs = append(errs, err)
-
 		return deleteDirStats, errs
 	}
 
-	dirs.AddDirMgr(dirMgrCopy)
+	err = dirs.AddDirMgr(
+		dirMgrCopy,
+		ePrefix.XCpy("dirs"))
+
+	if err != nil {
+
+		err2 = fmt.Errorf("%v\n"+
+			"Error returned when adding 'dirMgrCopy' to 'dirs' collection.\n"+
+			"Error= \n%v\n",
+			funcName,
+			err.Error())
+
+		errs = append(errs, err2)
+
+		return deleteDirStats, errs
+	}
 
 	for !mainLoopIsDone {
 
@@ -2346,7 +2368,9 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 			dirPtr = nil
 		}
 
-		nextDir, err = dirs.PopFirstDirMgr()
+		nextDir,
+			err = dirs.PopFirstDirMgr(ePrefix.XCpy(
+			"dirs"))
 
 		if err != nil && err == io.EOF {
 
@@ -4785,8 +4809,16 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 		return dTreeInfo, errs
 	}
 
-	dTreeInfo.Directories.AddDirMgr(
-		targetBaseDirCopy)
+	err = dTreeInfo.Directories.AddDirMgr(
+		targetBaseDirCopy,
+		ePrefix.XCpy("targetBaseDirCopy"))
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return dTreeInfo, errs
+	}
 
 	dTreeCnt := 1
 
@@ -5001,7 +5033,8 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 	if len(dTreeInfo.Directories.dirMgrs) > 0 &&
 		skipTopLevelDirectory {
 
-		_, _ = dTreeInfo.Directories.PopFirstDirMgr()
+		_, _ = dTreeInfo.Directories.PopFirstDirMgr(
+			ePrefix)
 
 	}
 
@@ -5217,7 +5250,30 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeStats(
 	isTopLevelDir := true
 	file2LoopIsDone := false
 
-	dirs.AddDirMgr(dMgrHlprAtom.copyOut(targetBaseDir))
+	var dirMgrCopy DirMgr
+
+	dirMgrCopy,
+		err = dMgrHlprAtom.copyOut(
+		targetBaseDir,
+		ePrefix.XCpy("targetBaseDir"))
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return dTreeStats, errs
+	}
+
+	err = dirs.AddDirMgr(
+		dirMgrCopy,
+		ePrefix.XCpy("dirMgrCopy"))
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return dTreeStats, errs
+	}
 
 	for !mainLoopIsDone {
 
@@ -5228,9 +5284,11 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeStats(
 			isTopLevelDir = false
 		}
 
-		nextDir, err = dirs.PopFirstDirMgr()
+		nextDir,
+			err = dirs.PopFirstDirMgr(ePrefix.XCpy(
+			"dirs"))
 
-		if err != nil && err == io.EOF {
+		if err != nil {
 			mainLoopIsDone = true
 			break
 
@@ -6022,8 +6080,30 @@ func (dMgrHlpr *dirMgrHelper) getDirectoryTree(
 		return dirMgrs, errs
 	}
 
-	dirMgrs.AddDirMgr(
-		dMgrHlprAtom.copyOut(dMgr))
+	var dirMgrCopy DirMgr
+
+	dirMgrCopy,
+		err = dMgrHlprAtom.copyOut(
+		dMgr,
+		ePrefix.XCpy("dMgr"))
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return dirMgrs, errs
+	}
+
+	err = dirMgrs.AddDirMgr(
+		dirMgrCopy,
+		ePrefix.XCpy("dirMgrCopy"))
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return dirMgrs, errs
+	}
 
 	fh := FileHelper{}
 

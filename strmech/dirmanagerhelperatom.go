@@ -69,9 +69,7 @@ func (dMgrHlprAtom *dirMgrHelperAtom) copyOut(
 	dOut.directoryName = dMgr.directoryName
 	dOut.volumeName = dMgr.volumeName
 	dOut.isVolumePopulated = dMgr.isVolumePopulated
-	dOut.actualDirFileInfo,
-		err = dMgr.actualDirFileInfo.CopyOut(ePrefix.XCpy(
-		"dMgr.actualDirFileInfo"))
+	dOut.actualDirFileInfo = dMgr.actualDirFileInfo.CopyOut()
 
 	return dOut, err
 }
@@ -406,9 +404,7 @@ func (dMgrHlprAtom *dirMgrHelperAtom) doesDirectoryExist(
 	// both dMgr.path and dMgr.doesAbsolutePathExist
 	// exist. And, there are no errors
 
-	dMgr.actualDirFileInfo,
-		err = absFInfo.CopyOut(ePrefix.XCpy(
-		"absFInfo"))
+	dMgr.actualDirFileInfo = absFInfo.CopyOut()
 
 	if err != nil {
 		return dirPathDoesExist, fInfo, err
@@ -417,9 +413,7 @@ func (dMgrHlprAtom *dirMgrHelperAtom) doesDirectoryExist(
 	dMgr.doesAbsolutePathExist = true
 	dMgr.doesPathExist = true
 
-	fInfo,
-		err = dMgr.actualDirFileInfo.CopyOut(ePrefix.XCpy(
-		"dMgr.actualDirFileInfo"))
+	fInfo = dMgr.actualDirFileInfo.CopyOut()
 
 	if err != nil {
 		return dirPathDoesExist, fInfo, err
