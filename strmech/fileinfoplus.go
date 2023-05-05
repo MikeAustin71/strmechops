@@ -174,7 +174,7 @@ func (fip *FileInfoPlus) IsDir() bool {
 // This method returns the underlying data source for
 // the current instance of FileInfoPlus.
 //
-// For more information on Sys, reference:
+// For more information on Sys(), reference:
 //
 //	https://pkg.go.dev/io/fs#FileInfo
 //
@@ -196,14 +196,30 @@ func (fip *FileInfoPlus) Sys() interface{} {
 	return fip.dataSrc
 }
 
-// SysAsString - underlying data source. If Sys is
-// 'nil', this method will return an empty string.
+// SysAsString
+//
+// Returns the underlying data source. If Sys is 'nil',
+// this method will return an empty string.
 //
 // Technically, this method is NOT part of the
-// os.FileInfo interface. However, it is often
-// useful in interpreting the results of Sys().
+// os.FileInfo interface. However, it is often useful in
+// interpreting the results of Sys().
+//
 // Sys() is part of the os.FileInfo interface.
+//
+// For more information on Sys(), reference:
+//
+//	https://pkg.go.dev/io/fs#FileInfo
 func (fip *FileInfoPlus) SysAsString() string {
+
+	if fip.lock == nil {
+		fip.lock = new(sync.Mutex)
+	}
+
+	fip.lock.Lock()
+
+	defer fip.lock.Unlock()
+
 	if fip.dataSrc == nil {
 		return ""
 	}
