@@ -135,8 +135,19 @@ func (fip *FileInfoPlus) Mode() os.FileMode {
 	return fip.fMode
 }
 
-// ModTime - file modification time
+// ModTime
+//
+// Returns the last file modification time.
 func (fip *FileInfoPlus) ModTime() time.Time {
+
+	if fip.lock == nil {
+		fip.lock = new(sync.Mutex)
+	}
+
+	fip.lock.Lock()
+
+	defer fip.lock.Unlock()
+
 	return fip.fModTime
 }
 
