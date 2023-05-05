@@ -433,11 +433,13 @@ func (fip *FileInfoPlus) GetOriginalFileInfo() os.FileInfo {
 	return fip.origFileInfo
 }
 
-// IsFileInfoInitialized - Returns a boolean value signaling whether
-// this instance of FileInfoPlus has been initialized.
+// IsFileInfoInitialized
 //
-// A FileInfoPlus instance is properly initialized only if one of the
-// following three methods is called:
+// Returns a boolean value signaling whether this
+// instance of FileInfoPlus has been initialized.
+//
+// A FileInfoPlus instance is properly initialized only
+// if one of the following three methods is called:
 //
 // 1. FileInfoPlus.NewFromFileInfo()
 // 2. FileInfoPlus.NewFromPathFileInfo()
@@ -445,6 +447,15 @@ func (fip *FileInfoPlus) GetOriginalFileInfo() os.FileInfo {
 //
 // This method is NOT part of the FileInfo interface.
 func (fip *FileInfoPlus) IsFileInfoInitialized() bool {
+
+	if fip.lock == nil {
+		fip.lock = new(sync.Mutex)
+	}
+
+	fip.lock.Lock()
+
+	defer fip.lock.Unlock()
+
 	return fip.isFInfoInitialized
 }
 
