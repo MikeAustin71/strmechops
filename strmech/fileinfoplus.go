@@ -151,11 +151,21 @@ func (fip *FileInfoPlus) ModTime() time.Time {
 	return fip.fModTime
 }
 
-// IsDir - 'true' = this is a directory,
-// not a file.
+// IsDir
 //
-// abbreviation for Mode().IsDir()
+// This method returns a boolean value of 'true'
+// if the current instance of FileInfoPlus specifies
+// a directory and not a file.
 func (fip *FileInfoPlus) IsDir() bool {
+
+	if fip.lock == nil {
+		fip.lock = new(sync.Mutex)
+	}
+
+	fip.lock.Lock()
+
+	defer fip.lock.Unlock()
+
 	return fip.isDir
 }
 
