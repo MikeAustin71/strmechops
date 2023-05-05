@@ -44,18 +44,40 @@ type FileInfoPlus struct {
 // os.FileInfo Interface Methods
 //////////////////////////////////////////////////////////
 
-// Name - base name of the file.
+// Name
+//
+// Returns the Base name of the file.
 //
 //	Example:
 //	            Complete File Name: "newerFileForTest_01.txt"
 //	  Base Name returned by Name(): "newerFileForTest_01.txt"
 func (fip *FileInfoPlus) Name() string {
 
+	if fip.lock == nil {
+		fip.lock = new(sync.Mutex)
+	}
+
+	fip.lock.Lock()
+
+	defer fip.lock.Unlock()
+
 	return fip.fName
 }
 
-// Size - file length in bytes for regular files; system-dependent for others
+// Size
+//
+// Returns the file length in bytes for regular files;
+// system-dependent for others.
 func (fip *FileInfoPlus) Size() int64 {
+
+	if fip.lock == nil {
+		fip.lock = new(sync.Mutex)
+	}
+
+	fip.lock.Lock()
+
+	defer fip.lock.Unlock()
+
 	return fip.fSize
 }
 
