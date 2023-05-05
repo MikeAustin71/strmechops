@@ -2136,8 +2136,8 @@ func (dMgrs *DirMgrCollection) PeekDirMgrAtIndex(
 		return DirMgr{},
 			fmt.Errorf("%v\n"+
 				"Error: The current DirMgrCollection is Empty!\n"+
-				"The are zero Directory Managers ('DirMgr') in\n"+
-				"the collection.\n",
+				"The are zero Directory Manager objects ('DirMgr')\n"+
+				"in the collection.\n",
 				ePrefix.String())
 
 	}
@@ -2166,31 +2166,152 @@ func (dMgrs *DirMgrCollection) PeekDirMgrAtIndex(
 
 	}
 
-	return dMgrs.dirMgrs[idx].CopyOut(ePrefix)
+	return dMgrs.dirMgrs[idx].CopyOut(ePrefix.XCpy(
+		fmt.Sprintf("dMgrs.dirMgrs[%v]",
+			idx)))
 }
 
-// PeekFirstDirMgr - Returns a deep copy of the first Directory
-// Manager ('DirMgr') object in the Directory Manager Collection
-// ('DirMgrCollection'). This is a 'Peek' method and therefore
-// the original Directory Manager ('DirMgr') object is NOT
-// deleted from the Directory Manager Collection
-// ('DirMgrCollection') array.
+// PeekFirstDirMgr
 //
-// At the completion of this method, the length of the Directory
-// Manager Collection ('DirMgrCollection') array will remain
-// unchanged.
-func (dMgrs *DirMgrCollection) PeekFirstDirMgr() (DirMgr, error) {
+// Returns a deep copy of the first Directory Manager
+// ('DirMgr') object in the current Directory Manager
+// Collection ('DirMgrCollection').
+//
+// This is a 'Peek' method and therefore the original
+// Directory Manager ('DirMgr') object is NOT deleted
+// from the current Directory Manager Collection array
+// ('DirMgrCollection').
+//
+// At the completion of this method, the length of the
+// Directory Manager Collection array
+// ('DirMgrCollection') array will remain unchanged.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	DirMgr
+//
+//		If this method completes successfully, a deep
+//		copy of the first Directory Manager object in
+//		the current Directory Manager Collection will be
+//		returned through this parameter.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (dMgrs *DirMgrCollection) PeekFirstDirMgr(
+	errorPrefix interface{}) (
+	DirMgr,
+	error) {
 
-	if dMgrs.dirMgrs == nil {
-		dMgrs.dirMgrs = make([]DirMgr, 0, 100)
+	if dMgrs.lock == nil {
+		dMgrs.lock = new(sync.Mutex)
+	}
+
+	dMgrs.lock.Lock()
+
+	defer dMgrs.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgrCollection."+
+			"PeekFirstDirMgr()",
+		"")
+
+	if err != nil {
+		return DirMgr{}, err
 	}
 
 	if len(dMgrs.dirMgrs) == 0 {
-		return DirMgr{}, io.EOF
+
+		return DirMgr{},
+			fmt.Errorf("%v\n"+
+				"Error: The current DirMgrCollection is Empty!\n"+
+				"The are zero Directory Manager objects ('DirMgr')\n"+
+				"in the collection.\n",
+				ePrefix.String())
 
 	}
 
-	return dMgrs.dirMgrs[0].CopyOut(), nil
+	return dMgrs.dirMgrs[0].CopyOut(ePrefix.XCpy(
+		"dMgrs.dirMgrs[0]"))
 }
 
 // PeekLastDirMgr - Returns a deep copy of the last Directory
