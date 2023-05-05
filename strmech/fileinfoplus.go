@@ -459,19 +459,33 @@ func (fip *FileInfoPlus) IsFileInfoInitialized() bool {
 	return fip.isFInfoInitialized
 }
 
-// IsDirectoryPathInitialized - Returns a boolean value signaling whether
-// the directory path has been initialized for this instance of the
-// FileInfoPlus instance. FYI, the fields FileInfoPlus.isDirPathInitialized
-// and FileInfoPlus.dirPath do NOT exist in a standard os.FileInfo object.
+// IsDirectoryPathInitialized
 //
-// A FileInfoPlus directory path is properly initialized only if one of
-// the following two methods is called:
+// Returns a boolean value signaling whether the
+// directory path has been initialized for the current
+// instance of FileInfoPlus.
+//
+// FYI, the fields FileInfoPlus.isDirPathInitialized
+// and FileInfoPlus.dirPath do NOT exist in a standard
+// os.FileInfo object.
+//
+// A FileInfoPlus directory path is properly initialized
+// only if one of the following two methods is called:
 //
 // 1. FileInfoPlus.NewFromPathFileInfo()
 // 2. FileInfoPlus.SetDirectoryPath
 //
 // This method is NOT part of the FileInfo interface.
 func (fip *FileInfoPlus) IsDirectoryPathInitialized() bool {
+
+	if fip.lock == nil {
+		fip.lock = new(sync.Mutex)
+	}
+
+	fip.lock.Lock()
+
+	defer fip.lock.Unlock()
+
 	return fip.isDirPathInitialized
 }
 
