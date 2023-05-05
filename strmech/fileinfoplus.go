@@ -81,14 +81,18 @@ func (fip *FileInfoPlus) Size() int64 {
 	return fip.fSize
 }
 
-// Mode - file mode bits. See os.FileMode
-// A FileMode represents a file's mode and permission bits.
-// The bits have the same definition on all systems, so that
-// information about files can be moved from one system
-// to another as a portable. Not all bits apply to all systems.
-// The only required bit is ModeDir for directories.
+// Mode
 //
-// type FileMode uint32
+// Returns the file mode bits. See os.FileMode.
+//
+// A FileMode represents a file's mode and permission
+// bits. The bits have the same definition on all
+// systems, so that information about files can be moved
+// from one system to another as a portable. Not all bits
+// apply to all systems. The only required bit is ModeDir
+// for directories.
+//
+// The FileMode is of type uint32.
 //
 // The defined file mode bits are the most significant bits of the FileMode.
 // The nine least-significant bits are the standard Unix rwxrwxrwx permissions.
@@ -119,6 +123,15 @@ func (fip *FileInfoPlus) Size() int64 {
 //
 // )
 func (fip *FileInfoPlus) Mode() os.FileMode {
+
+	if fip.lock == nil {
+		fip.lock = new(sync.Mutex)
+	}
+
+	fip.lock.Lock()
+
+	defer fip.lock.Unlock()
+
 	return fip.fMode
 }
 
