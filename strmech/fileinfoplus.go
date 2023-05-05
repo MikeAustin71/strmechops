@@ -411,13 +411,25 @@ func (fip *FileInfoPlus) Empty() {
 	fip.origFileInfo = nil
 }
 
-// GetOriginalFileInfo - If the FileInfoPlus instance was initialized
-// with an os.FileInfo value, this method will return that original
-// os.FileInfo value. This is useful for passing parameters to some
-// low level go routines such as os.SameFile().
+// GetOriginalFileInfo
+//
+// If the FileInfoPlus instance was initialized with an
+// os.FileInfo value, this method will return that
+// original os.FileInfo value. This is useful for passing
+// parameters to some low level go routines such as
+// os.SameFile().
 //
 // This method is NOT part of the FileInfo interface.
 func (fip *FileInfoPlus) GetOriginalFileInfo() os.FileInfo {
+
+	if fip.lock == nil {
+		fip.lock = new(sync.Mutex)
+	}
+
+	fip.lock.Lock()
+
+	defer fip.lock.Unlock()
+
 	return fip.origFileInfo
 }
 
