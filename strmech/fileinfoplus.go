@@ -5,6 +5,7 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"os"
+	"strings"
 	"sync"
 	"time"
 )
@@ -286,47 +287,83 @@ func (fip *FileInfoPlus) CopyOut(
 	return newInfo, err
 }
 
-// DirPath - Returns the directory path. This field, FileInfoPlus.dirPath,
-// is not part of the standard FileInfo interface.
+// DirPath
+//
+// Returns the directory path. This field,
+// FileInfoPlus.dirPath, is not part of the standard
+// FileInfo interface.
 //
 // This method is NOT part of the FileInfo interface.
 func (fip *FileInfoPlus) DirPath() string {
+
+	if fip.lock == nil {
+		fip.lock = new(sync.Mutex)
+	}
+
+	fip.lock.Lock()
+
+	defer fip.lock.Unlock()
+
 	return fip.dirPath
 }
 
-// Equal - Compares two FileInfoPlus objects to determine
+// Equal
+//
+// Compares two FileInfoPlus objects to determine
 // if they are equal.
+//
+// If all data fields in the current FileInfoPlus
+// instance are equivalent to the corresponding data
+// fields in the incoming FileInfo instance, this method
+// returns 'true'.
 //
 // This method is NOT part of the FileInfo interface.
 func (fip *FileInfoPlus) Equal(fip2 *FileInfoPlus) bool {
 
-	if fip.Name() != fip2.Name() ||
-		fip.Size() != fip2.Size() ||
-		fip.Mode() != fip2.Mode() ||
-		fip.ModTime() != fip2.ModTime() ||
-		fip.IsDir() != fip2.IsDir() {
+	if fip.lock == nil {
+		fip.lock = new(sync.Mutex)
+	}
+
+	fip.lock.Lock()
+
+	defer fip.lock.Unlock()
+
+	if fip2 == nil {
+		return false
+	}
+
+	if fip.fName != fip2.fName ||
+		fip.fSize != fip2.fSize ||
+		fip.fMode != fip2.fMode ||
+		fip.isDir != fip2.isDir {
 
 		return false
 	}
 
-	if fip.DirPath() != fip2.DirPath() {
+	if !fip.fModTime.Equal(fip2.fModTime) {
 		return false
 	}
 
-	if fip.Sys() == nil && fip2.Sys() == nil {
+	if strings.ToLower(fip.dirPath) !=
+		strings.ToLower(fip2.dirPath) {
+
+		return false
+	}
+
+	if fip.dataSrc == nil && fip2.dataSrc == nil {
 		return true
 	}
 
-	if fip.Sys() == nil && fip2.Sys() != nil {
+	if fip.dataSrc == nil && fip2.dataSrc != nil {
 		return false
 	}
 
-	if fip.Sys() != nil && fip2.Sys() == nil {
+	if fip.dataSrc != nil && fip2.dataSrc == nil {
 		return false
 	}
 
-	strFipSys := fmt.Sprintf("%v", fip.Sys())
-	strFip2Sys := fmt.Sprintf("%v", fip2.Sys())
+	strFipSys := fmt.Sprintf("%v", fip.dataSrc)
+	strFip2Sys := fmt.Sprintf("%v", fip2.dataSrc)
 
 	if strFipSys != strFip2Sys {
 
@@ -334,7 +371,6 @@ func (fip *FileInfoPlus) Equal(fip2 *FileInfoPlus) bool {
 	}
 
 	return true
-
 }
 
 // Empty - Sets the internal data fields of the current
