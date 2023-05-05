@@ -169,8 +169,30 @@ func (fip *FileInfoPlus) IsDir() bool {
 	return fip.isDir
 }
 
-// Sys - underlying data source (can return nil)
+// Sys
+//
+// This method returns the underlying data source for
+// the current instance of FileInfoPlus.
+//
+// For more information on Sys, reference:
+//
+//	https://pkg.go.dev/io/fs#FileInfo
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+// This method can return nil.
 func (fip *FileInfoPlus) Sys() interface{} {
+
+	if fip.lock == nil {
+		fip.lock = new(sync.Mutex)
+	}
+
+	fip.lock.Lock()
+
+	defer fip.lock.Unlock()
+
 	return fip.dataSrc
 }
 
