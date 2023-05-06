@@ -80,7 +80,7 @@ func (fMgrHlprAtom *fileMgrHelperAtom) copyOutFileMgr(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"fileMgrHelper.doesFileMgrPathFileExist()",
+		"fileMgrHelperAtom.copyOutFileMgr()",
 		"")
 
 	if err != nil {
@@ -98,10 +98,14 @@ func (fMgrHlprAtom *fileMgrHelperAtom) copyOutFileMgr(
 
 	deepCopyOfFileMgr.isInitialized = fileMgr.isInitialized
 
-	err = deepCopyOfFileMgr.dMgr.CopyIn(
+	dMgrHlpr := dirMgrHelper{}
+
+	err = dMgrHlpr.copyIn(
+		&deepCopyOfFileMgr.dMgr,
 		&fileMgr.dMgr,
 		ePrefix.XCpy(
-			"fileMgr.dMgr"))
+			"deepCopyOfFileMgr.dMgr<-"+
+				"fileMgr.dMgr"))
 
 	if err != nil {
 		return deepCopyOfFileMgr, err
@@ -177,7 +181,7 @@ func (fMgrHlprAtom *fileMgrHelperAtom) doesFileMgrPathFileExist(
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	funcName := "fileMgrHelper.doesFileMgrPathFileExist()"
+	funcName := "fileMgrHelperAtom.doesFileMgrPathFileExist()"
 
 	ePrefix,
 		nonPathError = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
