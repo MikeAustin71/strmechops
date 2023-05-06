@@ -1055,31 +1055,85 @@ func (fip *FileInfoPlus) SetDirectoryPath(
 
 // SetName - Sets the file name field.
 func (fip *FileInfoPlus) SetName(name string) {
+
+	if fip.lock == nil {
+		fip.lock = new(sync.Mutex)
+	}
+
+	fip.lock.Lock()
+
+	defer fip.lock.Unlock()
+
 	fip.fName = name
 }
 
 // SetSize - Sets the file size field
 func (fip *FileInfoPlus) SetSize(fileSize int64) {
+
+	if fip.lock == nil {
+		fip.lock = new(sync.Mutex)
+	}
+
+	fip.lock.Lock()
+
+	defer fip.lock.Unlock()
+
 	fip.fSize = fileSize
 }
 
 // SetMode - Sets the file Mode
 func (fip *FileInfoPlus) SetMode(fileMode os.FileMode) {
+
+	if fip.lock == nil {
+		fip.lock = new(sync.Mutex)
+	}
+
+	fip.lock.Lock()
+
+	defer fip.lock.Unlock()
+
 	fip.fMode = fileMode
 }
 
 // SetModTime - Sets the file modification time
 func (fip *FileInfoPlus) SetModTime(fileModTime time.Time) {
+
+	if fip.lock == nil {
+		fip.lock = new(sync.Mutex)
+	}
+
+	fip.lock.Lock()
+
+	defer fip.lock.Unlock()
+
 	fip.fModTime = fileModTime
 }
 
 // SetIsDir - Sets is directory field.
 func (fip *FileInfoPlus) SetIsDir(isDir bool) {
+
+	if fip.lock == nil {
+		fip.lock = new(sync.Mutex)
+	}
+
+	fip.lock.Lock()
+
+	defer fip.lock.Unlock()
+
 	fip.isDir = isDir
 }
 
 // SetSysDataSrc - Sets the dataSrc field
 func (fip *FileInfoPlus) SetSysDataSrc(sysDataSrc interface{}) {
+
+	if fip.lock == nil {
+		fip.lock = new(sync.Mutex)
+	}
+
+	fip.lock.Lock()
+
+	defer fip.lock.Unlock()
+
 	fip.dataSrc = sysDataSrc
 }
 
@@ -1087,6 +1141,15 @@ func (fip *FileInfoPlus) SetSysDataSrc(sysDataSrc interface{}) {
 // If set to 'true' it means that all the File Info fields have
 // been initialized.
 func (fip *FileInfoPlus) SetIsFInfoInitialized(isInitialized bool) {
+
+	if fip.lock == nil {
+		fip.lock = new(sync.Mutex)
+	}
+
+	fip.lock.Lock()
+
+	defer fip.lock.Unlock()
+
 	if !isInitialized {
 		fip.isFInfoInitialized = false
 		fip.CreateTimeStamp = time.Time{}
