@@ -185,7 +185,9 @@ func (fMgrHlprAtom *fileMgrHelperAtom) doesFileMgrPathFileExist(
 		new(FileInfoPlus).
 			NewFromPathFileInfo(
 				fileMgr.dMgr.absolutePath,
-				&info)
+				&info,
+				ePrefix.XCpy(
+					"fileMgr.dMgr.absolutePath"))
 
 	if err2 != nil {
 

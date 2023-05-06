@@ -924,6 +924,12 @@ func (fip *FileInfoPlus) NewFromPathFileInfo(
 //
 // # Input Parameters
 //
+//	dirPath						string
+//
+//		This string contains the directory path which
+//		will be stored in the 'dirPath' member variable
+//		for the current instances of FileInfoPlus.
+//
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
