@@ -3567,7 +3567,10 @@ func (fMgr *FileMgr) CopyIn(
 // object and returns it as a new FileMgr object.
 //
 // Note: Internal File Pointer will not be copied.
-func (fMgr *FileMgr) CopyOut() FileMgr {
+func (fMgr *FileMgr) CopyOut(
+	errorPrefix interface{}) (
+	FileMgr,
+	error) {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -3577,10 +3580,27 @@ func (fMgr *FileMgr) CopyOut() FileMgr {
 
 	defer fMgr.lock.Unlock()
 
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
 	fmgr2 := FileMgr{}
 
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FilePermissionConfig."+
+			"GetEntryTypeComponent()",
+		"")
+
+	if err != nil {
+		return fmgr2, err
+	}
+
 	fmgr2.isInitialized = fMgr.isInitialized
-	fmgr2.dMgr = fMgr.dMgr.CopyOut()
+
+	err = fmgr2.dMgr.CopyIn(
+		&fMgr.dMgr,
+		ePrefix)
 	fmgr2.originalPathFileName = fMgr.originalPathFileName
 	fmgr2.absolutePathFileName = fMgr.absolutePathFileName
 	fmgr2.isAbsolutePathFileNamePopulated = fMgr.isAbsolutePathFileNamePopulated

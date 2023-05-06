@@ -15,6 +15,143 @@ type fileMgrHelperAtom struct {
 	lock *sync.Mutex
 }
 
+// copyOutFileMgr
+//
+// This method receives an instance of FileMgr and returns
+// a deep copy of that instance.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fileMgr						*FileMgr
+//
+//		A pointer to an instance of FileMgr. This method
+//		will construct and return a deep copy of this
+//		instance.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgrHlprAtom *fileMgrHelperAtom) copyOutFileMgr(
+	fileMgr *FileMgr,
+	errPrefDto *ePref.ErrPrefixDto) (
+	deepCopyOfFileMgr FileMgr,
+	err error) {
+
+	if fMgrHlprAtom.lock == nil {
+		fMgrHlprAtom.lock = new(sync.Mutex)
+	}
+
+	fMgrHlprAtom.lock.Lock()
+
+	defer fMgrHlprAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileMgrHelper.doesFileMgrPathFileExist()",
+		"")
+
+	if err != nil {
+		return deepCopyOfFileMgr, err
+	}
+
+	if fileMgr == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fMgr' is a nil pointer!\n",
+			ePrefix.String())
+
+		return deepCopyOfFileMgr, err
+	}
+
+	deepCopyOfFileMgr.isInitialized = fileMgr.isInitialized
+
+	err = deepCopyOfFileMgr.dMgr.CopyIn(
+		&fileMgr.dMgr,
+		ePrefix.XCpy(
+			"fileMgr.dMgr"))
+
+	if err != nil {
+		return deepCopyOfFileMgr, err
+	}
+
+	deepCopyOfFileMgr.originalPathFileName =
+		fileMgr.originalPathFileName
+
+	deepCopyOfFileMgr.absolutePathFileName =
+		fileMgr.absolutePathFileName
+
+	deepCopyOfFileMgr.isAbsolutePathFileNamePopulated =
+		fileMgr.isAbsolutePathFileNamePopulated
+
+	deepCopyOfFileMgr.doesAbsolutePathFileNameExist =
+		fileMgr.doesAbsolutePathFileNameExist
+
+	deepCopyOfFileMgr.fileName = fileMgr.fileName
+
+	deepCopyOfFileMgr.isFileNamePopulated =
+		fileMgr.isFileNamePopulated
+
+	deepCopyOfFileMgr.fileExt = fileMgr.fileExt
+
+	deepCopyOfFileMgr.isFileExtPopulated =
+		fileMgr.isFileExtPopulated
+
+	deepCopyOfFileMgr.fileNameExt = fileMgr.fileNameExt
+
+	deepCopyOfFileMgr.isFileNameExtPopulated =
+		fileMgr.isFileNameExtPopulated
+
+	deepCopyOfFileMgr.filePtr = nil
+
+	deepCopyOfFileMgr.isFilePtrOpen = false
+
+	deepCopyOfFileMgr.fileAccessStatus =
+		fileMgr.fileAccessStatus.CopyOut()
+
+	deepCopyOfFileMgr.actualFileInfo =
+		fileMgr.actualFileInfo.CopyOut()
+
+	deepCopyOfFileMgr.fileBytesWritten = 0
+	deepCopyOfFileMgr.buffBytesWritten = 0
+	deepCopyOfFileMgr.fileRdrBufSize = fileMgr.fileRdrBufSize
+	deepCopyOfFileMgr.fileWriterBufSize = fileMgr.fileWriterBufSize
+
+	return deepCopyOfFileMgr, err
+}
+
 // doesFileMgrPathFileExist
 //
 // Used by FileMgr type to test for the existence of a
