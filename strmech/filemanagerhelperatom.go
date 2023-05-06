@@ -15,10 +15,192 @@ type fileMgrHelperAtom struct {
 	lock *sync.Mutex
 }
 
+// copyInFileMgr
+//
+// This method receives two instances of FileMgr,
+// 'destinationFMgr' and 'sourceFMgr'. With the sole
+// exception of the os.File pointer, all internal
+// member data values will be copied from 'sourceFMgr' to
+// 'destinationFMgr'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// The internal File Pointer (filePtr *os.File) for the
+// 'sourceFMgr' instance of FileMgr will not be copied to
+// 'destinationFMgr'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	destinationFMgr				*FileMgr
+//
+//		A pointer to an instance of FileMgr. With the
+//		sole exception of the internal File Pointer
+//		(filePtr *os.File), all internal member data
+//		elements in 'sourceFMgr' will be copied to the
+//		corresponding member data elements in
+//		'destinationFMgr'.
+//
+//	sourceFMgr					*FileMgr
+//
+//		A pointer to an instance of FileMgr. With the
+//		sole exception of the internal File Pointer
+//		(filePtr *os.File), all internal member data
+//		elements in 'sourceFMgr' will be copied to the
+//		corresponding member data elements in
+//		'destinationFMgr'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgrHlprAtom *fileMgrHelperAtom) copyInFileMgr(
+	destinationFMgr *FileMgr,
+	sourceFMgr *FileMgr,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fMgrHlprAtom.lock == nil {
+		fMgrHlprAtom.lock = new(sync.Mutex)
+	}
+
+	fMgrHlprAtom.lock.Lock()
+
+	defer fMgrHlprAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileMgrHelperAtom.copyInFileMgr()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if destinationFMgr == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'destinationFMgr' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if sourceFMgr == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'destinationFMgr' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	destinationFMgr.isInitialized = sourceFMgr.isInitialized
+
+	err = new(dirMgrHelper).copyIn(
+		&destinationFMgr.dMgr,
+		&sourceFMgr.dMgr,
+		ePrefix.XCpy(
+			"destinationFMgr.dMg<-"+
+				"sourceFMgr.dMgr"))
+
+	if err != nil {
+		return err
+	}
+
+	destinationFMgr.originalPathFileName =
+		sourceFMgr.originalPathFileName
+
+	destinationFMgr.absolutePathFileName =
+		sourceFMgr.absolutePathFileName
+
+	destinationFMgr.isAbsolutePathFileNamePopulated =
+		sourceFMgr.isAbsolutePathFileNamePopulated
+
+	destinationFMgr.doesAbsolutePathFileNameExist =
+		sourceFMgr.doesAbsolutePathFileNameExist
+
+	destinationFMgr.fileName = sourceFMgr.fileName
+
+	destinationFMgr.isFileNamePopulated =
+		sourceFMgr.isFileNamePopulated
+
+	destinationFMgr.fileExt = sourceFMgr.fileExt
+
+	destinationFMgr.isFileExtPopulated =
+		sourceFMgr.isFileExtPopulated
+
+	destinationFMgr.fileNameExt = sourceFMgr.fileNameExt
+
+	destinationFMgr.isFileNameExtPopulated =
+		sourceFMgr.isFileNameExtPopulated
+
+	destinationFMgr.filePtr = nil
+
+	destinationFMgr.isFilePtrOpen = false
+
+	destinationFMgr.fileAccessStatus =
+		sourceFMgr.fileAccessStatus.CopyOut()
+
+	destinationFMgr.actualFileInfo =
+		sourceFMgr.actualFileInfo.CopyOut()
+
+	destinationFMgr.fileBytesWritten = 0
+
+	destinationFMgr.buffBytesWritten = 0
+
+	destinationFMgr.fileRdrBufSize = sourceFMgr.fileRdrBufSize
+
+	destinationFMgr.fileWriterBufSize = sourceFMgr.fileWriterBufSize
+
+	return err
+}
+
 // copyOutFileMgr
 //
 // This method receives an instance of FileMgr and returns
 // a deep copy of that instance.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// The internal File Pointer (filePtr *os.File) for the
+// fileMgr instance of FileMgr will not be copied.
 //
 // ----------------------------------------------------------------
 //
@@ -48,6 +230,12 @@ type fileMgrHelperAtom struct {
 // ----------------------------------------------------------------
 //
 // # Return Values
+//
+//	deepCopyOfFileMgr			FileMgr
+//
+//		If this method completes successfully, a deep
+//		copy of FileMgr input parameter 'fileMgr' will
+//		be returned through this parameter.
 //
 //	err							error
 //
@@ -98,9 +286,7 @@ func (fMgrHlprAtom *fileMgrHelperAtom) copyOutFileMgr(
 
 	deepCopyOfFileMgr.isInitialized = fileMgr.isInitialized
 
-	dMgrHlpr := dirMgrHelper{}
-
-	err = dMgrHlpr.copyIn(
+	err = new(dirMgrHelper).copyIn(
 		&deepCopyOfFileMgr.dMgr,
 		&fileMgr.dMgr,
 		ePrefix.XCpy(
