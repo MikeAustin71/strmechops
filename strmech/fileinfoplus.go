@@ -588,8 +588,8 @@ func (fip *FileInfoPlus) IsDirectoryPathInitialized() bool {
 //
 //	FileInfoPlus
 //
-//		If this method completes successfully, a new
-//		fully populated instance of FileInfoPlus will
+//		If this method completes successfully, a new,
+//		fully populated, instance of FileInfoPlus will
 //		be returned.
 //
 //	error
@@ -651,7 +651,17 @@ func (fip *FileInfoPlus) NewFromDirMgrFileInfo(
 				ePrefix.String())
 	}
 
-	newInfo := new(FileInfoPlus).NewFromFileInfo(info)
+	newInfo := FileInfoPlus{}
+	newInfo.lock = new(sync.Mutex)
+
+	newInfo.fName = info.Name()
+	newInfo.fSize = info.Size()
+	newInfo.fMode = info.Mode()
+	newInfo.fModTime = info.ModTime()
+	newInfo.isDir = info.IsDir()
+	newInfo.dataSrc = info.Sys()
+	newInfo.isFInfoInitialized = true
+	newInfo.origFileInfo = info
 
 	newInfo.dirPath = dMgr.GetAbsolutePath()
 
@@ -660,35 +670,78 @@ func (fip *FileInfoPlus) NewFromDirMgrFileInfo(
 	return newInfo, err
 }
 
-// NewFromFileInfo - Creates and returns a new FileInfoPlus object
-// populated with FileInfo data received from the input parameter.
-// Notice that this version of the 'NewFromPathFileNameExtStr' method does NOT set the
-// Directory path.
+// NewFromFileInfo
+//
+// Creates and returns a new FileInfoPlus object
+// populated with FileInfo data received from the input
+// parameter.
 //
 // This method is NOT part of the FileInfo interface.
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Example Usage:
+// # IMPORTANT
+//
+//	This method does NOT set the Directory path member
+//	variable in the returned instance of FileInfoPlus.
+//
+// ----------------------------------------------------------------
+//
+// # Usage Example
 //
 //	fip := FileInfoPlus{}.NewFromFileInfo(info)
 //	fip is now a newly populated FileInfoPlus instance.
-func (fip *FileInfoPlus) NewFromFileInfo(info os.FileInfo) FileInfoPlus {
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	info						os.FileInfo
+//
+//		An object implementing the FileInfo interface.
+//		File information contained in this object will be
+//		used to construct the returned instance of
+//		FileInfoPlus.
+//
+//		For more information on the os.FileInfo interface
+//		reference:
+//			https://pkg.go.dev/io/fs#FileInfo
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	FileInfoPlus
+//
+//		This method will return a new, fully populated
+//		instance of FileInfoPlus will be returned.
+func (fip *FileInfoPlus) NewFromFileInfo(
+	info os.FileInfo) FileInfoPlus {
+
+	if fip.lock == nil {
+		fip.lock = new(sync.Mutex)
+	}
+
+	fip.lock.Lock()
+
+	defer fip.lock.Unlock()
 
 	if info == nil {
 		return FileInfoPlus{}
 	}
 
 	newInfo := FileInfoPlus{}
+	newInfo.lock = new(sync.Mutex)
 
-	newInfo.SetName(info.Name())
-	newInfo.SetSize(info.Size())
-	newInfo.SetMode(info.Mode())
-	newInfo.SetModTime(info.ModTime())
-	newInfo.SetIsDir(info.IsDir())
-	newInfo.SetSysDataSrc(info.Sys())
-	newInfo.SetIsFInfoInitialized(true)
+	newInfo.fName = info.Name()
+	newInfo.fSize = info.Size()
+	newInfo.fMode = info.Mode()
+	newInfo.fModTime = info.ModTime()
+	newInfo.isDir = info.IsDir()
+	newInfo.dataSrc = info.Sys()
+	newInfo.isFInfoInitialized = true
 	newInfo.origFileInfo = info
+
 	return newInfo
 }
 
