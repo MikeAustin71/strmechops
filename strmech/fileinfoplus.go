@@ -489,35 +489,166 @@ func (fip *FileInfoPlus) IsDirectoryPathInitialized() bool {
 	return fip.isDirPathInitialized
 }
 
-// NewFromDirMgrFileInfo - Creates and returns a new FileInfoPlus object
-// populated with a Directory Manager (DirMgr) and File Info data (os.FileInfo)
-// received from the input parameters 'dMgr' and 'info'.
+// NewFromDirMgrFileInfo
+//
+// Creates and returns a new FileInfoPlus object
+// populated with a Directory Manager (DirMgr) and
+// File Info data (os.FileInfo) received from the input
+// parameters 'dMgr' and 'info'.
 //
 // This method is NOT part of the FileInfo interface.
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Example Usage:
+// # Usage Example
 //
 //	fip, err := FileInfoPlus{}.NewFromDirMgrFileInfo(dMgr, info)
 //	fip is now configured as a newly populated FileInfoPlus instance.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dMgr						DirMgr
+//
+//		A concrete instance of Directory Manager
+//		(DirMgr). Directory information provided by this
+//		object will be used to populate the returned
+//		instance of FileInfoPlus.
+//
+//	info os.FileInfo
+//
+//		An object implementing the FileInfo interface.
+//		File information contained in this object will be
+//		used to construct the returned instance of
+//		FileInfoPlus.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	FileInfoPlus
+//
+//		If this method completes successfully, a new
+//		fully populated instance of FileInfoPlus will
+//		be returned.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fip *FileInfoPlus) NewFromDirMgrFileInfo(
 	dMgr DirMgr,
-	info os.FileInfo) (FileInfoPlus, error) {
+	info os.FileInfo,
+	errorPrefix interface{}) (
+	FileInfoPlus,
+	error) {
 
-	ePrefix := "FileInfoPlus.NewFromDirMgrFileInfo() "
+	if fip.lock == nil {
+		fip.lock = new(sync.Mutex)
+	}
+
+	fip.lock.Lock()
+
+	defer fip.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
 	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileInfoPlus."+
+			"NewFromDirMgrFileInfo()",
+		"")
+
+	if err != nil {
+		return FileInfoPlus{}, err
+	}
+
 	err = dMgr.IsDirMgrValid("")
 
 	if err != nil {
 		return FileInfoPlus{},
-			fmt.Errorf(ePrefix+"ERROR: Input Parameter 'dMgr' is INVALID!\n"+
-				"%v", err.Error())
+			fmt.Errorf("%v\n"+
+				"ERROR: Input Parameter 'dMgr' is INVALID!\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				err.Error())
 	}
 
 	if info == nil {
 		return FileInfoPlus{},
-			errors.New(ePrefix + "ERROR: Input Parameter 'info' is nil !\n")
+			fmt.Errorf("%v\n"+
+				"ERROR: Input Parameter 'info' is nil !\n",
+				ePrefix.String())
 	}
 
 	newInfo := new(FileInfoPlus).NewFromFileInfo(info)
@@ -526,7 +657,7 @@ func (fip *FileInfoPlus) NewFromDirMgrFileInfo(
 
 	newInfo.isDirPathInitialized = true
 
-	return newInfo, nil
+	return newInfo, err
 }
 
 // NewFromFileInfo - Creates and returns a new FileInfoPlus object
