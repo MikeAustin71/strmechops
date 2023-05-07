@@ -3489,12 +3489,109 @@ func (fMgr *FileMgr) CopyFromStrings(
 	return fMgrSrc, fMgrDest, err
 }
 
-// CopyIn - Copies data from an incoming FileMgr object
-// into the current FileMgr object.
+// CopyIn
 //
-// Note: Internal file pointer will not be copied.
+// Copies all data from an incoming FileMgr object into
+// the current instance of FileMgr.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// The internal File Pointer (filePtr *os.File) will NOT
+// be copied from 'incomingFileMgr' to the current
+// instance of FileMgr.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	incomingFileMgr				*FileMgr
+//
+//		A pointer to an instance of FileMgr. With the
+//		sole exception of the internal File Pointer
+//		(filePtr *os.File), all internal member data
+//		elements in 'incomingFileMgr' will be copied to
+//		the corresponding member data elements in the
+//		current instance of FileMgr.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fMgr *FileMgr) CopyIn(
-	fmgr2 *FileMgr,
+	incomingFileMgr *FileMgr,
 	errorPrefix interface{}) error {
 
 	if fMgr.lock == nil {
@@ -3519,46 +3616,20 @@ func (fMgr *FileMgr) CopyIn(
 		return err
 	}
 
-	if fmgr2 == nil {
+	if incomingFileMgr == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'fmgr2' pointer is 'nil'!\n",
+			"Error: Input parameter 'incomingFileMgr' pointer is 'nil'!\n",
 			ePrefix.String())
 
 		return err
 	}
 
-	fMgr.isInitialized = fmgr2.isInitialized
-
-	err = fMgr.dMgr.CopyIn(
-		&fmgr2.dMgr,
+	return new(fileMgrHelperAtom).copyInFileMgr(
+		fMgr,
+		incomingFileMgr,
 		ePrefix.XCpy(
-			"fmgr2.dMgr"))
-
-	if err != nil {
-		return err
-	}
-
-	fMgr.originalPathFileName = fmgr2.originalPathFileName
-	fMgr.absolutePathFileName = fmgr2.absolutePathFileName
-	fMgr.isAbsolutePathFileNamePopulated = fmgr2.isAbsolutePathFileNamePopulated
-	fMgr.doesAbsolutePathFileNameExist = fmgr2.doesAbsolutePathFileNameExist
-	fMgr.fileName = fmgr2.fileName
-	fMgr.isFileNamePopulated = fmgr2.isFileNamePopulated
-	fMgr.fileExt = fmgr2.fileExt
-	fMgr.isFileExtPopulated = fmgr2.isFileExtPopulated
-	fMgr.fileNameExt = fmgr2.fileNameExt
-	fMgr.isFileNameExtPopulated = fmgr2.isFileNameExtPopulated
-	fMgr.filePtr = nil
-	fMgr.isFilePtrOpen = false
-	fMgr.fileAccessStatus = fmgr2.fileAccessStatus.CopyOut()
-	fMgr.actualFileInfo = fmgr2.actualFileInfo.CopyOut()
-	fMgr.fileBytesWritten = 0
-	fMgr.buffBytesWritten = 0
-	fMgr.fileRdrBufSize = fmgr2.fileRdrBufSize
-	fMgr.fileWriterBufSize = fmgr2.fileWriterBufSize
-
-	return err
+			"fMgr<-incomingFileMgr"))
 }
 
 // CopyOut
@@ -3566,7 +3637,101 @@ func (fMgr *FileMgr) CopyIn(
 // Duplicates the file information in the current FileMgr
 // object and returns it as a new FileMgr object.
 //
-// Note: Internal File Pointer will not be copied.
+// Effectively, this method returns a deep copy of the
+// current FileMgr instance.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// The internal File Pointer (filePtr *os.File) for the
+// current instance of FileMgr will not be copied.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	FileMgr
+//
+//		If this method completes successfully, a deep
+//		copy of the current FileMgr instance will be
+//		returned.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fMgr *FileMgr) CopyOut(
 	errorPrefix interface{}) (
 	FileMgr,
@@ -3583,46 +3748,20 @@ func (fMgr *FileMgr) CopyOut(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
-	fmgr2 := FileMgr{}
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"FilePermissionConfig."+
-			"GetEntryTypeComponent()",
+		"FileMgr."+
+			"CopyOut()",
 		"")
 
 	if err != nil {
-		return fmgr2, err
+		return FileMgr{}, err
 	}
 
-	fmgr2.isInitialized = fMgr.isInitialized
-
-	err = fmgr2.dMgr.CopyIn(
-		&fMgr.dMgr,
-		ePrefix)
-	fmgr2.originalPathFileName = fMgr.originalPathFileName
-	fmgr2.absolutePathFileName = fMgr.absolutePathFileName
-	fmgr2.isAbsolutePathFileNamePopulated = fMgr.isAbsolutePathFileNamePopulated
-	fmgr2.doesAbsolutePathFileNameExist = fMgr.doesAbsolutePathFileNameExist
-	fmgr2.fileName = fMgr.fileName
-	fmgr2.isFileNamePopulated = fMgr.isFileNamePopulated
-	fmgr2.fileExt = fMgr.fileExt
-	fmgr2.isFileExtPopulated = fMgr.isFileExtPopulated
-	fmgr2.fileNameExt = fMgr.fileNameExt
-	fmgr2.isFileNameExtPopulated = fMgr.isFileNameExtPopulated
-	fmgr2.filePtr = nil
-	fmgr2.isFilePtrOpen = false
-	fmgr2.fileAccessStatus = fMgr.fileAccessStatus.CopyOut()
-
-	fmgr2.actualFileInfo = fMgr.actualFileInfo.CopyOut()
-
-	fmgr2.fileBytesWritten = 0
-	fmgr2.buffBytesWritten = 0
-	fmgr2.fileRdrBufSize = fMgr.fileRdrBufSize
-	fmgr2.fileWriterBufSize = fMgr.fileWriterBufSize
-
-	return fmgr2
+	return new(fileMgrHelperAtom).copyOutFileMgr(
+		fMgr,
+		ePrefix.XCpy("fMgr"))
 }
 
 // CreateDir
