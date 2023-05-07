@@ -7030,7 +7030,7 @@ func (fMgr *FileMgr) IsFileExtPopulated() bool {
 //		'errorPrefix' text will be attached to the
 //		beginning of the error message.
 func (fMgr *FileMgr) IsFileMgrValid(
-	errorPrefix interface{}) (err error) {
+	errorPrefix interface{}) error {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -7042,67 +7042,21 @@ func (fMgr *FileMgr) IsFileMgrValid(
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	funcName := "FileMgr." +
-		"IsFileMgrValid()"
+	var err error
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		funcName,
+		"FileMgr.IsFileMgrValid()",
 		"")
 
 	if err != nil {
 		return err
 	}
 
-	if !fMgr.isInitialized {
-
-		err = fmt.Errorf("%v\n"+
-			" Error: The current FileMgr data structure is NOT initialized.\n",
-			ePrefix.String())
-
-		return err
-	}
-
-	if fMgr.absolutePathFileName == "" {
-
-		fMgr.isAbsolutePathFileNamePopulated = false
-
-		err = fmt.Errorf("%v\n"+
-			" Error: FileMgr absolutePathFileName is EMPTY!\n",
-			ePrefix.String())
-
-		return err
-
-	}
-
-	var err2 error
-
-	err2 = fMgr.dMgr.IsDirMgrValid(ePrefix.String())
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"FileMgr Directory Manager INVALID\n"+
-			"Error= \n%v\n",
-			funcName,
-			err2.Error())
-
-		return err
-	}
-
-	_,
-		err = new(fileMgrHelperAtom).
-		doesFileMgrPathFileExist(
-			fMgr,
-			PreProcPathCode.None(),
-			ePrefix,
-			"fMgr.absolutePathFileName")
-
-	_ = fMgr.dMgr.DoesPathExist()
-	_ = fMgr.dMgr.DoesAbsolutePathExist()
-
-	return err
+	return new(fileMgrHelperAtom).isFileMgrValid(
+		fMgr,
+		ePrefix.XCpy("fMgr"))
 }
 
 // IsFileNameExtPopulated
