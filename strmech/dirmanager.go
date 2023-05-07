@@ -2220,16 +2220,51 @@ func (dMgr *DirMgr) Equal(dMgr2 *DirMgr) bool {
 		equal(dMgr, dMgr2)
 }
 
-// EqualAbsPaths - compares the absolute paths for the current
-// directory manager and the input directory manager ('dMgr2').
-// If the two absolute paths are equal, the method returns 'true'.
-// If the two absolute paths are NOT equal, the method returns 'false'.
-// The comparison is NOT case-sensitive. In other words, both paths
-// are converted to lower case before making the comparison.
+// EqualAbsPaths
 //
-// If either the current DirMgr ('dMgr') or the input parameter
-// 'dMgr2' are uninitialized, a value of 'false' is returned.
-func (dMgr *DirMgr) EqualAbsPaths(dMgr2 *DirMgr) bool {
+// This method compares the absolute paths for the
+// current directory manager and the input directory
+// manager ('incomingDirMgr').
+//
+// If the two absolute paths are equal, this method
+// returns 'true'.
+//
+// If the two absolute paths are NOT equal, this method
+// returns 'false'.
+//
+// The comparison is NOT case-sensitive. In other words,
+// both paths are converted to lower case before making
+// the comparison.
+//
+// If either the current DirMgr ('dMgr') or the input
+// parameter 'incomingDirMgr' are uninitialized, a value
+// of 'false' is returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	incomingDirMgr				*DirMgr
+//
+//		A pointer to an incoming instance of DirMgr. This
+//		instance will be compared to the current instance
+//		of DirMgr to determine if the absolute paths are
+//		equivalent.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		This method compares the absolute paths contained
+//		in the current instance of DirMgr and a second
+//		instance of DirMgr passed as input parameter
+//		'incomingDirMgr'. If the absolute paths for both
+//		instances are equivalent, a boolean value of
+//		'true' will be returned.
+func (dMgr *DirMgr) EqualAbsPaths(
+	incomingDirMgr *DirMgr) bool {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -2239,12 +2274,11 @@ func (dMgr *DirMgr) EqualAbsPaths(dMgr2 *DirMgr) bool {
 
 	defer dMgr.lock.Unlock()
 
-	dMgrHlpr := dirMgrHelper{}
 	isEqual := false
 
-	isEqual = dMgrHlpr.equalAbsolutePaths(
+	isEqual = new(dirMgrHelper).equalAbsolutePaths(
 		dMgr,
-		dMgr2)
+		incomingDirMgr)
 
 	return isEqual
 }
@@ -6444,9 +6478,103 @@ func (dMgr *DirMgr) NewFromDirMgrFileInfo(
 	return newDirMgr, nil
 }
 
-// NewFromFileMgr - Configures and returns a new 'DirMgr' instance based
-// on input parameter 'fileMgr' which is of type 'FileMgr'.
-func (dMgr *DirMgr) NewFromFileMgr(fileMgr FileMgr) (DirMgr, error) {
+// NewFromFileMgr
+//
+// Configures and returns a new 'DirMgr' instance based
+// on input parameter 'fileMgr' which is of type
+// 'FileMgr'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fMgr						FileMgr
+//
+//		A valid, concrete instance of FileMgr. The data
+//		elements in this instance will be used to
+//		construct and a return a new, full populated
+//		instance of DirMgr.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (dMgr *DirMgr) NewFromFileMgr(
+	fMgr FileMgr,
+	errorPrefix interface{}) (
+	DirMgr,
+	error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -6456,18 +6584,29 @@ func (dMgr *DirMgr) NewFromFileMgr(fileMgr FileMgr) (DirMgr, error) {
 
 	defer dMgr.lock.Unlock()
 
-	ePrefix := "DirMgr.NewFromFileMgr() "
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
-	err := fileMgr.IsFileMgrValid(ePrefix)
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgr.NewFromFileMgr()",
+		"")
 
 	if err != nil {
-		return DirMgr{},
-			fmt.Errorf(ePrefix+
-				"\nERROR: Input parameter 'fileMgr' is invalid!\n"+
-				"%v", err.Error())
+		return DirMgr{}, err
 	}
 
-	return fileMgr.GetDirMgr(), nil
+	err = fMgr.IsFileMgrValid(
+		ePrefix.XCpy("fMgr"))
+
+	if err != nil {
+		return DirMgr{}, err
+	}
+
+	return new(dirMgrHelperAtom).copyOut(
+		&fMgr.dMgr,
+		ePrefix.XCpy("fMgr.dMgr->"))
 }
 
 // NewFromKnownPathDirectoryName - Configures and returns

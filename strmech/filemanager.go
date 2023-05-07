@@ -4565,6 +4565,65 @@ func (fMgr *FileMgr) Equal(
 //
 // # Input Parameters
 //
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
 //	fMgr2						*FileMgr
 //
 //		A pointer to an incoming instance of FileMgr.
@@ -4587,8 +4646,24 @@ func (fMgr *FileMgr) Equal(
 //
 //		If they are NOT equivalent, a value of 'false' is
 //		returned.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fMgr *FileMgr) EqualAbsPaths(
-	fMgr2 *FileMgr) bool {
+	fMgr2 *FileMgr,
+	errorPrefix interface{}) (
+	bool,
+	error) {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -4598,15 +4673,60 @@ func (fMgr *FileMgr) EqualAbsPaths(
 
 	defer fMgr.lock.Unlock()
 
-	if fMgr2 == nil {
-		fMgr2 = &FileMgr{}
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr."+
+			"EqualAbsPaths()",
+		"")
+
+	if err != nil {
+		return false, err
 	}
 
-	fDirMgr := fMgr.GetDirMgr()
+	if fMgr2 == nil {
 
-	fDirMgr2 := fMgr2.GetDirMgr()
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fMgr2' is a nil pointer!\n",
+			ePrefix.String())
 
-	return fDirMgr.EqualAbsPaths(&fDirMgr2)
+		return false, err
+	}
+
+	var dirMgr1, dirMgr2 DirMgr
+
+	dMgrHelperAtom := dirMgrHelperAtom{}
+
+	dirMgr1,
+		err = dMgrHelperAtom.copyOut(
+		&fMgr.dMgr,
+		ePrefix.XCpy("<-fMgr.dMgr"))
+
+	if err != nil {
+
+		return false, err
+	}
+
+	dirMgr2,
+		err = dMgrHelperAtom.copyOut(
+		&fMgr2.dMgr,
+		ePrefix.XCpy("<-fMgr2.dMgr"))
+
+	if err != nil {
+
+		return false, err
+	}
+
+	isEqual := false
+
+	isEqual = new(dirMgrHelper).equalAbsolutePaths(
+		&dirMgr1,
+		&dirMgr2)
+
+	return isEqual, err
 }
 
 // EqualFileNameExt
@@ -5184,7 +5304,10 @@ func (fMgr *FileMgr) GetBufioWriter() *bufio.Writer {
 //		Returns a deep copy of the Directory Manager
 //		(DirMgr) for the current instance of File Manager
 //		(FileMgr).
-func (fMgr *FileMgr) GetDirMgr() DirMgr {
+func (fMgr *FileMgr) GetDirMgr(
+	errorPrefix interface{}) (
+	DirMgr,
+	error) {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -5194,7 +5317,23 @@ func (fMgr *FileMgr) GetDirMgr() DirMgr {
 
 	defer fMgr.lock.Unlock()
 
-	return fMgr.dMgr.CopyOut()
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr."+
+			"GetDirMgr()",
+		"")
+
+	if err != nil {
+		return DirMgr{}, err
+	}
+
+	return new(dirMgrHelperAtom).copyOut(
+		&fMgr.dMgr,
+		ePrefix.XCpy("dMgr->"))
 }
 
 // GetFileBytesWritten
