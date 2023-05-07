@@ -348,7 +348,7 @@ func (fMgrHlprAtom *fileMgrHelperAtom) copyOutFileMgr(
 // FileMgr (fMgr) which will be analyzed to determine if
 // all the member variables contain valid values.
 //
-// If input parameter ” is determined to be invalid,
+// If input parameter 'fMgr' is determined to be invalid,
 // this method returns an error.
 //
 // ----------------------------------------------------------------
