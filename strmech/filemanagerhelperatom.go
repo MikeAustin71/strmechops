@@ -342,6 +342,132 @@ func (fMgrHlprAtom *fileMgrHelperAtom) copyOutFileMgr(
 	return deepCopyOfFileMgr, err
 }
 
+// isFileMgrValid
+//
+// This method receives a pointer to an instance of
+// FileMgr (fMgr) which will be analyzed to determine if
+// all the member variables contain valid values.
+//
+// If input parameter ” is determined to be invalid,
+// this method returns an error.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fMgr						*FileMgr
+//
+//		A pointer to an instance of FileMgr which will be
+//		analyzed to determine if all internal member
+//		variables contain valid values. If this instance
+//		of FileMgr evaluates as invalid, this method will
+//		return an error.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If any of the internal member data variables
+//		contained in 'fMgr' are found to be invalid, this
+//		method will return an error configured with an
+//		appropriate message identifying the invalid
+//		member data variable.
+//
+//		If all internal member data variables evaluate
+//		as valid, this returned error value will be set
+//		to 'nil'.
+//
+//		If errors are encountered during processing or if
+//		any internal member data values are found to be
+//		invalid, the returned error Type will encapsulate
+//		an appropriate error message. This returned error
+//		message will incorporate the method chain and text
+//		passed by input parameter, 'errorPrefix'. The
+//		'errorPrefix' text will be attached to the
+//		beginning of the error message.
+func (fMgrHlprAtom *fileMgrHelperAtom) isFileMgrValid(
+	fMgr *FileMgr,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fMgrHlprAtom.lock == nil {
+		fMgrHlprAtom.lock = new(sync.Mutex)
+	}
+
+	fMgrHlprAtom.lock.Lock()
+
+	defer fMgrHlprAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	funcName := "fileMgrHelperAtom.isFileMgrValid()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if fMgr == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fMgr' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if fMgr.absolutePathFileName == "" {
+
+		fMgr.isAbsolutePathFileNamePopulated = false
+
+		err = fmt.Errorf("%v\n"+
+			" Error: FileMgr absolutePathFileName is EMPTY!\n",
+			ePrefix.String())
+
+		return err
+
+	}
+
+	var err2 error
+
+	err2 = new(dirMgrHelper).isDirMgrValid(
+		&fMgr.dMgr,
+		ePrefix.XCpy("fMgr.dMgr"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"FileMgr Directory Manager INVALID\n"+
+			"Error= \n%v\n",
+			funcName,
+			err2.Error())
+
+		return err
+	}
+
+	_,
+		err = new(fileMgrHelperAtom).
+		doesFileMgrPathFileExist(
+			fMgr,
+			PreProcPathCode.None(),
+			ePrefix,
+			"fMgr.absolutePathFileName")
+
+	_ = fMgr.dMgr.DoesPathExist()
+
+	_ = fMgr.dMgr.DoesAbsolutePathExist()
+
+	return err
+}
+
 // doesFileMgrPathFileExist
 //
 // Used by FileMgr type to test for the existence of a

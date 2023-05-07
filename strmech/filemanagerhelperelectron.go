@@ -311,7 +311,11 @@ func (fMgrHlprElectron *fileMgrHelperElectron) lowLevelDoesFileExist(
 				// record the os.FileInfo data AND the path.
 				fInfoPlus,
 					err2 = new(FileInfoPlus).
-					NewFromPathFileInfo(directoryPath, info)
+					NewFromPathFileInfo(
+						directoryPath,
+						info,
+						ePrefix.XCpy(
+							"directoryPath"))
 
 				if err2 != nil {
 
