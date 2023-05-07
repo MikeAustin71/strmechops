@@ -85,14 +85,137 @@ type FileMgrCollection struct {
 	lock *sync.Mutex
 }
 
-// AddFileMgr - Adds a FileMgr object to the collection
-func (fMgrs *FileMgrCollection) AddFileMgr(fMgr FileMgr) {
+// AddFileMgr
+//
+// Adds a FileMgr object to the File Manager Collection
+// maintained by the current instance of
+// FileMgrCollection.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	No validation is performed on input parameter 'fMgr'
+//	before a deep copy of 'fMgr' is added to the File
+//	Manager Collection.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fMgr						FileMgr
+//
+//		A concrete instance of FileMgr. A deep copy of
+//		this FileMgr object will be added to the File
+//		Manager Collection maintained by the current
+//		instance of FileMgrCollection.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgrs *FileMgrCollection) AddFileMgr(
+	fMgr FileMgr,
+	errorPrefix interface{}) error {
 
-	if fMgrs.fileMgrs == nil {
-		fMgrs.fileMgrs = make([]FileMgr, 0, 50)
+	if fMgrs.lock == nil {
+		fMgrs.lock = new(sync.Mutex)
 	}
 
-	fMgrs.fileMgrs = append(fMgrs.fileMgrs, fMgr.CopyOut())
+	fMgrs.lock.Lock()
+
+	defer fMgrs.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgrCollection."+
+			"AddFileMgr()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(FileMgrCollectionMechanics).addFileMgr(
+		fMgrs,
+		&fMgr,
+		ePrefix.XCpy(
+			"fMgrs<-fMgr"))
 }
 
 // AddFileMgrByDirFileNameExt
@@ -871,9 +994,32 @@ func (fMgrs *FileMgrCollection) CopyFilesToDir(
 
 // CopyOut - Returns an FileMgrCollection which is an
 // exact duplicate of the current FileMgrCollection
-func (fMgrs *FileMgrCollection) CopyOut() (FileMgrCollection, error) {
+func (fMgrs *FileMgrCollection) CopyOut(
+	errorPrefix interface{}) (
+	FileMgrCollection,
+	error) {
 
-	ePrefix := "FileMgrCollection.CopyOut() "
+	if fMgrs.lock == nil {
+		fMgrs.lock = new(sync.Mutex)
+	}
+
+	fMgrs.lock.Lock()
+
+	defer fMgrs.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgrCollection."+
+			"CopyOut()",
+		"")
+
+	if err != nil {
+		return FileMgrCollection{}, err
+	}
 
 	fMgrs2 := FileMgrCollection{}
 
@@ -887,15 +1033,28 @@ func (fMgrs *FileMgrCollection) CopyOut() (FileMgrCollection, error) {
 
 	if lOmc == 0 {
 		return FileMgrCollection{},
-			errors.New(ePrefix +
-				"Error: This File Manager Collection ('FileMgrCollection') is EMPTY! ")
+			fmt.Errorf("%v\n"+
+				"Error: This File Manager Collection ('FileMgrCollection') is EMPTY!\n",
+				ePrefix.String())
 	}
+
+	fMgrColMech := FileMgrCollectionMechanics{}
 
 	for i := 0; i < lOmc; i++ {
-		fMgrs2.AddFileMgr(fMgrs.fileMgrs[i].CopyOut())
+
+		err = fMgrColMech.addFileMgr(
+			&fMgrs2,
+			&fMgrs.fileMgrs[i],
+			ePrefix.XCpy(
+				fmt.Sprintf("fMgrs.fileMgrs[%v]",
+					i)))
+
+		if err != nil {
+			return fMgrs2, err
+		}
 	}
 
-	return fMgrs2, nil
+	return fMgrs2, err
 }
 
 // DeleteAtIndex - Deletes a member File Manager from the

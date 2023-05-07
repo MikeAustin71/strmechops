@@ -3,6 +3,7 @@ package strmech
 import (
 	"errors"
 	"fmt"
+	"sync"
 )
 
 // FileOps - This type is used to manage and coordinate various
@@ -12,6 +13,8 @@ type FileOps struct {
 	source        FileMgr
 	destination   FileMgr
 	opToExecute   FileOperationCode
+
+	lock *sync.Mutex
 }
 
 // CopyOut - Returns a deep copy of the current
