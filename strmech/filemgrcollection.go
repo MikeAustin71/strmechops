@@ -211,7 +211,7 @@ func (fMgrs *FileMgrCollection) AddFileMgr(
 		return err
 	}
 
-	return new(FileMgrCollectionMechanics).addFileMgr(
+	return new(FileMgrCollectionElectron).addFileMgr(
 		fMgrs,
 		&fMgr,
 		ePrefix.XCpy(
@@ -925,6 +925,7 @@ func (fMgrs *FileMgrCollection) AddFileMgrCollection(fMgrs2 *FileMgrCollection) 
 	}
 
 	for i := 0; i < lOmc2; i++ {
+
 		fMgrs.AddFileMgr(fMgrs2.fileMgrs[i].CopyOut())
 	}
 
@@ -1038,11 +1039,11 @@ func (fMgrs *FileMgrCollection) CopyOut(
 				ePrefix.String())
 	}
 
-	fMgrColMech := FileMgrCollectionMechanics{}
+	fMgrColElectron := FileMgrCollectionElectron{}
 
 	for i := 0; i < lOmc; i++ {
 
-		err = fMgrColMech.addFileMgr(
+		err = fMgrColElectron.addFileMgr(
 			&fMgrs2,
 			&fMgrs.fileMgrs[i],
 			ePrefix.XCpy(

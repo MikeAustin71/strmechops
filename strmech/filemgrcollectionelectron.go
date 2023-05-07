@@ -6,7 +6,7 @@ import (
 	"sync"
 )
 
-type FileMgrCollectionMechanics struct {
+type FileMgrCollectionElectron struct {
 	lock *sync.Mutex
 }
 
@@ -121,18 +121,18 @@ type FileMgrCollectionMechanics struct {
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fMgrColMech *FileMgrCollectionMechanics) addFileMgr(
+func (fMgrColElectron *FileMgrCollectionElectron) addFileMgr(
 	fMgrCollection *FileMgrCollection,
 	fMgr *FileMgr,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
-	if fMgrColMech.lock == nil {
-		fMgrColMech.lock = new(sync.Mutex)
+	if fMgrColElectron.lock == nil {
+		fMgrColElectron.lock = new(sync.Mutex)
 	}
 
-	fMgrColMech.lock.Lock()
+	fMgrColElectron.lock.Lock()
 
-	defer fMgrColMech.lock.Unlock()
+	defer fMgrColElectron.lock.Unlock()
 
 	var err error
 
@@ -141,7 +141,7 @@ func (fMgrColMech *FileMgrCollectionMechanics) addFileMgr(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"FileMgrCollectionMechanics."+
+		"FileMgrCollectionElectron."+
 			"addFileMgr()",
 		"")
 
