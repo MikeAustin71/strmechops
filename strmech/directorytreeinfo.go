@@ -1,6 +1,10 @@
 package strmech
 
-import "fmt"
+import (
+	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
+	"sync"
+)
 
 // DirectoryTreeInfo - structure used
 // to 'Find' files in a directory specified
@@ -18,119 +22,238 @@ type DirectoryTreeInfo struct {
 	FoundFiles         FileMgrCollection
 	ErrReturns         []error
 	FileSelectCriteria FileSelectionCriteria
+	lock               *sync.Mutex
 }
 
-// CopyToDirectoryTree - Copies an entire directory tree to an alternate location.
+// CopyToDirectoryTree
+//
+// Copies an entire directory tree to an alternate location.
+//
 // The copy operation includes all files and all directories in the designated directory
 // tree.
 func (dirTree *DirectoryTreeInfo) CopyToDirectoryTree(
-	baseDir, newBaseDir DirMgr) (DirectoryTreeInfo, error) {
+	baseDir DirMgr,
+	newBaseDir DirMgr,
+	errorPrefix interface{}) (
+	DirectoryTreeInfo,
+	error) {
 
-	ePrefix := "DirectoryTreeInfo.CopyToDirectoryTree() "
+	if dirTree.lock == nil {
+		dirTree.lock = new(sync.Mutex)
+	}
+
+	dirTree.lock.Lock()
+
+	defer dirTree.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
 	newDirTree := DirectoryTreeInfo{}
 
-	err2 := baseDir.IsDirMgrValid("")
+	funcName := "DirectoryTreeInfo.CopyToDirectoryTree()"
 
-	if err2 != nil {
-		return newDirTree, fmt.Errorf(ePrefix+
-			"Error: Input Parameter 'baseDir' is INVALID!\nError='%v'\n", err2.Error())
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return newDirTree, err
 	}
 
-	err2 = newBaseDir.IsDirMgrValid("")
+	err = baseDir.IsDirMgrValid(
+		ePrefix.XCpy("baseDir"))
 
-	if err2 != nil {
-		return newDirTree, fmt.Errorf(ePrefix+
-			"Error: Input Parameter 'newBaseDir' is INVALID!\nError='%v'\n", err2.Error())
+	if err != nil {
+		return newDirTree, fmt.Errorf("%v\n"+
+			"Error: Input Parameter 'baseDir' is INVALID!\n"+
+			"Error= \n%v\n",
+			funcName,
+			err.Error())
 	}
 
-	err2 = newBaseDir.MakeDir()
+	err = newBaseDir.IsDirMgrValid(ePrefix.XCpy(
+		"newBaseDir"))
 
-	if err2 != nil {
-		return newDirTree, fmt.Errorf(ePrefix+
-			"Error returned from newBaseDir.MakeDir().\n"+
-			"newBaseDir.absolutePath='%v'\nError='%v'\n",
-			newBaseDir.absolutePath, err2.Error())
+	if err != nil {
+		return newDirTree, fmt.Errorf("%v\n"+
+			"Error: Input Parameter 'newBaseDir' is INVALID!\n"+
+			"Error= \n%v\n",
+			funcName,
+			err.Error())
+	}
+
+	err = newBaseDir.MakeDir(ePrefix.XCpy(
+		"newBaseDir"))
+
+	if err != nil {
+		return newDirTree,
+			fmt.Errorf("%v\n"+
+				"Error returned from newBaseDir.MakeDir().\n"+
+				"newBaseDir.absolutePath='%v'\n"+
+				"Error= \n%v\n",
+				funcName,
+				newBaseDir.absolutePath,
+				err.Error())
 	}
 
 	if dirTree.Directories.dirMgrs == nil {
 
-		dirTree.Directories.dirMgrs = make([]DirMgr, 0, 50)
+		dirTree.Directories.dirMgrs = make([]DirMgr, 10)
 
 	}
 
 	lAry := len(dirTree.Directories.dirMgrs)
 
+	var newDMgr DirMgr
+	var fileDMgr DirMgr
+	var newFileMgr FileMgr
+
 	// Make the new Directory Tree
 	for i := 0; i < lAry; i++ {
 
-		newDMgr, err2 := dirTree.Directories.dirMgrs[i].SubstituteBaseDir(baseDir, newBaseDir)
+		newDMgr,
+			err = dirTree.Directories.dirMgrs[i].
+			SubstituteBaseDir(
+				baseDir,
+				newBaseDir,
+				ePrefix.XCpy(fmt.Sprintf(
+					"dirTree.Directories.dirMgrs[%v]", i)))
 
-		if err2 != nil {
+		if err != nil {
 			return DirectoryTreeInfo{},
-				fmt.Errorf(ePrefix+
+				fmt.Errorf("%v\n"+
 					"Error returned from SubstituteBaseDir(baseDir, newBaseDir).\n"+
-					"i='%v'\nError='%v'\n", i, err2.Error())
+					"i='%v'\n"+
+					"Error= \n%v\n",
+					funcName,
+					i,
+					err.Error())
 		}
 
-		err2 = newDMgr.MakeDir()
+		err = newDMgr.MakeDir(ePrefix.XCpy(
+			"newDMgr"))
 
-		if err2 != nil {
-			return DirectoryTreeInfo{}, fmt.Errorf(ePrefix+"Error returned fromnewDMgr.MakeDir()  Error='%v'", err2.Error())
+		if err != nil {
+			return DirectoryTreeInfo{},
+				fmt.Errorf("%v\n"+
+					"Error returned from newDMgr.MakeDir()\n"+
+					"Error= \n%v\n",
+					funcName,
+					err.Error())
 
 		}
 
-		newDirTree.Directories.AddDirMgr(newDMgr)
+		err = newDirTree.Directories.
+			AddDirMgr(newDMgr, ePrefix.XCpy(
+				"newDirTree<-newDMgr"))
+
+		if err != nil {
+			return DirectoryTreeInfo{},
+				fmt.Errorf("%v\n"+
+					"Error returned from newDirTree.Directories.AddDirMgr()\n"+
+					"Error= \n%v\n",
+					funcName,
+					err.Error())
+
+		}
 	}
 
 	if dirTree.FoundFiles.fileMgrs == nil {
-		dirTree.FoundFiles.fileMgrs = make([]FileMgr, 0, 50)
+		dirTree.FoundFiles.fileMgrs = make([]FileMgr, 0, 10)
 	}
 
 	lAry = len(dirTree.FoundFiles.fileMgrs)
 
 	for j := 0; j < lAry; j++ {
 
-		fileDMgr, err2 := dirTree.FoundFiles.fileMgrs[j].dMgr.SubstituteBaseDir(baseDir, newBaseDir)
+		fileDMgr,
+			err = dirTree.FoundFiles.fileMgrs[j].dMgr.
+			SubstituteBaseDir(
+				baseDir,
+				newBaseDir,
+				ePrefix.XCpy(
+					fmt.Sprintf("dirTree.FoundFiles.fileMgrs[%v].dMgr",
+						j)))
 
-		if err2 != nil {
+		if err != nil {
 			return DirectoryTreeInfo{},
-				fmt.Errorf(ePrefix+
+				fmt.Errorf("%v\n"+
 					"Error returned by dirTree.FoundFiles.fileMgrs[j].dMgr.SubstituteBaseDir(baseDir, newBaseDir).\n"+
-					"Error='%v'\n", err2.Error())
+					"Error= \n%v\n",
+					funcName,
+					err.Error())
 		}
 
-		newFileMgr, err2 :=
+		newFileMgr,
+			err =
 			new(FileMgr).NewFromDirMgrFileNameExt(
 				fileDMgr,
 				dirTree.FoundFiles.fileMgrs[j].fileNameExt,
-				ePrefix)
+				ePrefix.XCpy(
+					fmt.Sprintf("dirTree.FoundFiles.fileMgrs[%v].fileNameExt",
+						j)))
 
-		if err2 != nil {
+		if err != nil {
 			return DirectoryTreeInfo{},
-				fmt.Errorf(ePrefix+
+				fmt.Errorf("%v\n"+
 					"Error returned by FileMgr{}.NewFromDirMgrFileNameExt("+
 					"dMgr, dirTree.FoundFiles.fileMgrs[j].fileNameExt)\n"+
-					"dirTree.FoundFiles.fileMgrs[j].fileNameExt='%v'\nj='%v'\nError='%v'\n",
-					dirTree.FoundFiles.fileMgrs[j].fileNameExt, j, err2.Error())
+					"dirTree.FoundFiles.fileMgrs[j].fileNameExt='%v'\n"+
+					"j='%v'\n"+
+					"Error= \n%v\n",
+					funcName,
+					dirTree.FoundFiles.fileMgrs[j].fileNameExt,
+					j,
+					err.Error())
 		}
 
-		err2 = dirTree.FoundFiles.fileMgrs[j].
+		err = dirTree.FoundFiles.fileMgrs[j].
 			CopyFileMgrByIoByLink(
 				&newFileMgr,
-				ePrefix)
+				ePrefix.XCpy(
+					fmt.Sprintf("newFileMgr<-"+
+						"dirTree.FoundFiles.fileMgrs[%v]",
+						j)))
 
-		if err2 != nil {
+		if err != nil {
 			return DirectoryTreeInfo{},
-				fmt.Errorf(ePrefix+
+				fmt.Errorf("%v\n"+
 					"Error returned by fileMgrs[j].CopyFileMgrByIoByLink(&newFileMgr)\n"+
-					"SrcFileName:'%v'\nDestFileName:'%v'\n"+
-					"Error='%v'\n",
-					dirTree.FoundFiles.fileMgrs[j].fileNameExt, newFileMgr.fileNameExt, err2.Error())
+					"SrcFileName:'%v'\n"+
+					"DestFileName:'%v'\n"+
+					"Error= \n%v\n",
+					funcName,
+					dirTree.FoundFiles.fileMgrs[j].fileNameExt,
+					newFileMgr.fileNameExt,
+					err.Error())
 
 		}
 
-		newDirTree.FoundFiles.AddFileMgr(newFileMgr)
+		err = newDirTree.FoundFiles.
+			AddFileMgr(
+				newFileMgr,
+				ePrefix.XCpy(
+					"newDirTree.FoundFiles<-newFileMgr"))
+
+		if err != nil {
+
+			return DirectoryTreeInfo{},
+				fmt.Errorf("%v\n"+
+					"Error returned by newDirTree.FoundFiles.AddFileMgr()\n"+
+					"SrcFileName:'%v'\n"+
+					"DestFileName:'%v'\n"+
+					"'j' Loop No :'%v'"+
+					"Error= \n%v\n",
+					funcName,
+					dirTree.FoundFiles.fileMgrs[j].fileNameExt,
+					newFileMgr.fileNameExt,
+					j,
+					err.Error())
+
+		}
 	}
 
 	return newDirTree, nil
