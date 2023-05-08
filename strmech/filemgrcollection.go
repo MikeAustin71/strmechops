@@ -2172,15 +2172,13 @@ func (fMgrs *FileMgrCollection) InsertFileMgrAtIndex(
 
 	defer fMgrs.lock.Unlock()
 
-	funcName := "FileMgrCollection.InsertFileMgrAtIndex()"
-
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		funcName,
+		"FileMgrCollection.InsertFileMgrAtIndex()",
 		"")
 
 	if err != nil {
@@ -2245,17 +2243,45 @@ func (fMgrs *FileMgrCollection) InsertFileMgrAtIndex(
 	return err
 }
 
-// New - Creates and returns a new, empty and properly initialized
-// File Manager Collection ('FileMgrCollection').
+// New
+//
+// Creates and returns a new, empty and properly
+// initialized File Manager Collection
+// (FileMgrCollection).
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	FileMgrCollection
+//
+//		This method returns a new, empty and properly
+//		initialized File Manager Collection.
 func (fMgrs FileMgrCollection) New() FileMgrCollection {
 
+	if fMgrs.lock == nil {
+		fMgrs.lock = new(sync.Mutex)
+	}
+
+	fMgrs.lock.Lock()
+
+	defer fMgrs.lock.Unlock()
+
 	if fMgrs.fileMgrs == nil {
-		fMgrs.fileMgrs = make([]FileMgr, 0, 50)
+		fMgrs.fileMgrs = make([]FileMgr, 0, 5)
 	}
 
 	newFMgrCol := FileMgrCollection{}
 
-	newFMgrCol.fileMgrs = make([]FileMgr, 0, 100)
+	newFMgrCol.fileMgrs = make([]FileMgr, 0, 5)
+
+	newFMgrCol.lock = new(sync.Mutex)
 
 	return newFMgrCol
 }
