@@ -1378,38 +1378,166 @@ func (fMgrs *FileMgrCollection) CopyOut(
 	return fMgrs2, err
 }
 
-// DeleteAtIndex - Deletes a member File Manager from the
-// collection at the index specified by input parameter 'idx'.
+// DeleteAtIndex
 //
-// If successful, at the completion of this method, the File
-// Manager Collection array will have a length which is one
-// less than the starting array length.
-func (fMgrs *FileMgrCollection) DeleteAtIndex(idx int) error {
+// This method deletes an array element from the File
+// Manager Collection maintained by the current instance
+// of FileMgrCollection.
+//
+// The index of the array element to be deleted is
+// specified by input parameter 'idx'.
+//
+// If this method completes successfully, the File
+// Manager Collection array will have a length which is
+// one less than the starting array length.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	idx							int
+//
+//		This integer value specifies the index of the
+//		array element which will be deleted from the File
+//		Manager collection maintained by the current
+//		instance of FileMgrCollection.
+//
+//		If this value is less than zero or greater than
+//		the last index in the array, an error will be
+//		returned.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgrs *FileMgrCollection) DeleteAtIndex(
+	idx int,
+	errorPrefix interface{}) error {
 
-	ePrefix := "FileMgrCollection.DeleteAtIndex() "
+	if fMgrs.lock == nil {
+		fMgrs.lock = new(sync.Mutex)
+	}
+
+	fMgrs.lock.Lock()
+
+	defer fMgrs.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgrCollection."+
+			"DeleteAtIndex()",
+		"")
+
+	if err != nil {
+		return err
+	}
 
 	if fMgrs.fileMgrs == nil {
-		fMgrs.fileMgrs = make([]FileMgr, 0, 50)
+		fMgrs.fileMgrs = make([]FileMgr, 0, 5)
 	}
 
 	if idx < 0 {
-		return fmt.Errorf(ePrefix+
-			"Error: Input Parameter 'idx' is less than zero. "+
-			"Index Out-Of-Range! idx='%v'", idx)
+		return fmt.Errorf("%v\n"+
+			"Error: Input Parameter 'idx' is less than zero.\n"+
+			"Index Out-Of-Range!\n"+
+			"idx='%v'\n",
+			ePrefix.String(),
+			idx)
 	}
 
 	arrayLen := len(fMgrs.fileMgrs)
 
 	if arrayLen == 0 {
-		return errors.New(ePrefix +
-			"Error: The File Manager Collection, 'FileMgrCollection', is EMPTY!\n")
+		return fmt.Errorf("%v\n"+
+			"Error: The File Manager Collection, 'FileMgrCollection', is EMPTY!\n",
+			ePrefix.String())
 	}
 
 	if idx >= arrayLen {
-		return fmt.Errorf(ePrefix+
+		return fmt.Errorf("%v\n"+
 			"Error: Input Parameter 'idx' is greater than the "+
-			"length of the collection index. Index Out-Of-Range! "+
-			"idx='%v' Array Length='%v' ", idx, arrayLen)
+			"last index in the File Manager Collection.\n"+
+			"Index Out-Of-Range!\n"+
+			"idx= '%v'\n"+
+			"Last Array Index= '%v' ",
+			ePrefix.String(),
+			idx,
+			arrayLen-1)
 	}
 
 	if arrayLen == 1 {
@@ -1427,7 +1555,7 @@ func (fMgrs *FileMgrCollection) DeleteAtIndex(idx int) error {
 			append(fMgrs.fileMgrs[0:idx], fMgrs.fileMgrs[idx+1:]...)
 	}
 
-	return nil
+	return err
 }
 
 // FindFiles - Searches the current FileMgrCollection and returns a new
