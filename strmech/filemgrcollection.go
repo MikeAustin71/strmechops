@@ -2062,48 +2062,187 @@ func (fMgrs *FileMgrCollection) GetTotalFileBytes() uint64 {
 	return totalFileBytes
 }
 
-// InsertFileMgrAtIndex - Inserts a new File Manager into the collection at
-// array 'index'. The new File Manager is passed as input parameter 'fMgr'.
+// InsertFileMgrAtIndex
 //
-// If input parameter 'index' is less than zero, an error will be returned. If
-// 'index' exceeds the value of the last index in the collection, 'fMgr' will be
-// added to the end of the collection at the next legal index.
-func (fMgrs *FileMgrCollection) InsertFileMgrAtIndex(fMgr FileMgr, index int) error {
+// Inserts a new File Manager into the File Manager
+// Collection maintained by the current instance of
+// FileMgrCollection.
+//
+// A deep copy of the File Manager object passed as input
+// parameter 'fMgr' will be inserted into the File
+// Manager Collection at the array index specified by
+// input parameter 'index'.
+//
+// If input parameter 'index' is less than zero, an error
+// will be returned.
+//
+// If 'index' exceeds the value of the last index in the
+// collection, 'fMgr' will be added to the end of the
+// collection at the next legal index.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgrs *FileMgrCollection) InsertFileMgrAtIndex(
+	fMgr FileMgr,
+	index int,
+	errorPrefix interface{}) error {
 
-	ePrefix := "FileMgrCollection.InsertFileMgrAtIndex() "
+	if fMgrs.lock == nil {
+		fMgrs.lock = new(sync.Mutex)
+	}
+
+	fMgrs.lock.Lock()
+
+	defer fMgrs.lock.Unlock()
+
+	funcName := "FileMgrCollection.InsertFileMgrAtIndex()"
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
 
 	if fMgrs.fileMgrs == nil {
-		fMgrs.fileMgrs = make([]FileMgr, 0, 50)
+		fMgrs.fileMgrs = make([]FileMgr, 0, 1)
 	}
 
 	if index < 0 {
-		return fmt.Errorf(ePrefix+
-			"Error: Input parameter 'index' is LESS THAN ZERO! "+
-			"index='%v' ", index)
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter 'index' is LESS THAN ZERO!\n"+
+			"index= '%v'\n",
+			ePrefix.String(),
+			index)
 	}
 
 	lenfMgrs := len(fMgrs.fileMgrs)
 
-	if index >= lenfMgrs {
-		fMgrs.fileMgrs = append(fMgrs.fileMgrs, fMgr.CopyOut())
-		return nil
+	var deepCopyFileMgr FileMgr
+
+	deepCopyFileMgr,
+		err = fMgr.CopyOut(ePrefix.XCpy(
+		"deepCopyFileMgr<-fMgr"))
+
+	if err != nil {
+		return err
 	}
 
-	newFileMgrs := make([]FileMgr, 0, 100)
+	if index >= lenfMgrs {
+
+		fMgrs.fileMgrs = append(
+			fMgrs.fileMgrs, deepCopyFileMgr)
+
+		return err
+	}
+
+	newFileMgrs := make([]FileMgr, 0, 1)
 
 	if index == 0 {
-		newFileMgrs = append(newFileMgrs, fMgr.CopyOut())
-		fMgrs.fileMgrs = append(newFileMgrs, fMgrs.fileMgrs...)
-		return nil
+
+		newFileMgrs = append(newFileMgrs,
+			deepCopyFileMgr)
+
+		fMgrs.fileMgrs = append(
+			newFileMgrs,
+			fMgrs.fileMgrs...)
+
+		return err
 	}
 
-	newFileMgrs = append(newFileMgrs, fMgrs.fileMgrs[index:]...)
+	newFileMgrs = append(
+		newFileMgrs, fMgrs.fileMgrs[index:]...)
 
 	fMgrs.fileMgrs = append(fMgrs.fileMgrs[:index])
-	fMgrs.fileMgrs = append(fMgrs.fileMgrs, fMgr.CopyOut())
+
+	fMgrs.fileMgrs = append(fMgrs.fileMgrs, deepCopyFileMgr)
+
 	fMgrs.fileMgrs = append(fMgrs.fileMgrs, newFileMgrs...)
 
-	return nil
+	return err
 }
 
 // New - Creates and returns a new, empty and properly initialized
