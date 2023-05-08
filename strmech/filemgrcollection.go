@@ -2016,29 +2016,35 @@ func (fMgrs *FileMgrCollection) GetNumOfFileMgrs() int {
 	return len(fMgrs.fileMgrs)
 }
 
-// GetNumOfFiles
+// GetTotalFileBytes
 //
-// Returns the array length of the File Manager
-// Collection, 'FileMgrCollection'.
+// Returns the total number of file bytes represented by
+// all files in the File Manager Collection maintained by
+// the current instance of FileMgrCollection.
 //
-// Effectively, the returned integer is a count of the
-// number of files or File Managers (FileMgr's) in the
-// Collection.
-func (fMgrs *FileMgrCollection) GetNumOfFiles() int {
-
-	if fMgrs.fileMgrs == nil {
-		fMgrs.fileMgrs = make([]FileMgr, 0, 50)
-	}
-
-	return len(fMgrs.fileMgrs)
-}
-
-// GetTotalFileBytes - Returns the total number of file bytes
-// represented by all files in the collection.
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	uint64
 func (fMgrs *FileMgrCollection) GetTotalFileBytes() uint64 {
 
+	if fMgrs.lock == nil {
+		fMgrs.lock = new(sync.Mutex)
+	}
+
+	fMgrs.lock.Lock()
+
+	defer fMgrs.lock.Unlock()
+
 	if fMgrs.fileMgrs == nil {
-		fMgrs.fileMgrs = make([]FileMgr, 0, 50)
+		fMgrs.fileMgrs = make([]FileMgr, 0, 5)
 		return 0
 	}
 
@@ -2047,7 +2053,9 @@ func (fMgrs *FileMgrCollection) GetTotalFileBytes() uint64 {
 	for i := 0; i < len(fMgrs.fileMgrs); i++ {
 
 		if fMgrs.fileMgrs[i].actualFileInfo.isFInfoInitialized {
+
 			totalFileBytes += uint64(fMgrs.fileMgrs[i].actualFileInfo.Size())
+
 		}
 	}
 
