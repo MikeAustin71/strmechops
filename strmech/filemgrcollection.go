@@ -2398,16 +2398,21 @@ func (fMgrs *FileMgrCollection) PopLastFileMgr() (FileMgr, error) {
 	return fmgr, nil
 }
 
-// PeekFileMgrAtIndex - Returns a deep copy of the File Manager
-// ('FileMgr') object located at array index 'idx' in the File
-// Manager Collection ('FileMgrCollection'). This is a 'Peek'
-// method and therefore the original File Manager ('FileMgr')
-// object is NOT deleted from the File Manager Collection
-// ('FileMgrCollection') array.
+// PeekFileMgrAtIndex
 //
-// At the completion of this method, the length of the File
-// Manager Collection ('FileMgrCollection') array will remain
-// unchanged.
+// Returns a deep copy of the File Manager ('FileMgr')
+// object located at array index 'idx' in the File
+// Manager Collection maintained by the current instance
+// of FileMgrCollection.
+//
+// This is a 'Peek' method and therefore the original
+// File Manager ('FileMgr') object is NOT deleted from
+// the File Manager Collection ('FileMgrCollection')
+// array.
+//
+// At the completion of this method, the length of the
+// File Manager Collection ('FileMgrCollection') array
+// will remain unchanged.
 func (fMgrs *FileMgrCollection) PeekFileMgrAtIndex(idx int) (FileMgr, error) {
 
 	ePrefix := "FileMgrCollection.PeekFileMgrAtIndex() "
