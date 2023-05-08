@@ -1161,11 +1161,13 @@ func (fHelpMolecule *fileHelperMolecule) makeFileHelperWalkDirDeleteFilesFunc(
 		var err error
 		var ePrefix *ePref.ErrPrefixDto
 
+		funcName := "fileHelperMolecule." +
+			"makeFileHelperWalkDirDeleteFilesFunc()"
+
 		ePrefix,
 			err = ePref.ErrPrefixDto{}.NewIEmpty(
 			nil,
-			"fileHelperMolecule."+
-				"makeFileHelperWalkDirDeleteFilesFunc()",
+			funcName,
 			"")
 
 		if erIn != nil {
@@ -1177,7 +1179,10 @@ func (fHelpMolecule *fileHelperMolecule) makeFileHelperWalkDirDeleteFilesFunc(
 
 			var subDir DirMgr
 
-			subDir, err = new(DirMgr).New(pathFile)
+			subDir,
+				err = new(DirMgr).New(
+				pathFile,
+				ePrefix.XCpy("pathFile"))
 
 			if err != nil {
 
@@ -1185,7 +1190,7 @@ func (fHelpMolecule *fileHelperMolecule) makeFileHelperWalkDirDeleteFilesFunc(
 					"Error returned from DirMgr{}.New(pathFile).\n"+
 					"pathFile:='%v'\n"+
 					"Error= \n%v\n",
-					ePrefix.String(),
+					funcName,
 					pathFile,
 					err.Error())
 
@@ -1194,8 +1199,13 @@ func (fHelpMolecule *fileHelperMolecule) makeFileHelperWalkDirDeleteFilesFunc(
 				return nil
 			}
 
-			subDir.actualDirFileInfo, err =
-				new(FileInfoPlus).NewFromPathFileInfo(pathFile, info)
+			subDir.actualDirFileInfo,
+				err =
+				new(FileInfoPlus).NewFromPathFileInfo(
+					pathFile,
+					info,
+					ePrefix.XCpy(
+						"pathFile+info"))
 
 			if err != nil {
 
@@ -1204,7 +1214,7 @@ func (fHelpMolecule *fileHelperMolecule) makeFileHelperWalkDirDeleteFilesFunc(
 					"pathFile='%v'\n"+
 					"info.Name='%v'\n"+
 					"Error= \n%v\n",
-					ePrefix.String(),
+					funcName,
 					pathFile,
 					info.Name(),
 					err.Error())
@@ -1213,7 +1223,24 @@ func (fHelpMolecule *fileHelperMolecule) makeFileHelperWalkDirDeleteFilesFunc(
 
 			} else {
 
-				dInfo.Directories.AddDirMgr(subDir)
+				err = dInfo.Directories.AddDirMgr(
+					subDir,
+					ePrefix.XCpy("dInfo"))
+
+				if err != nil {
+
+					ex := fmt.Errorf("%v\n"+
+						"Error returned by dInfo.Directories.AddDirMgr(subDir)\n"+
+						"subDir='%v'\n"+
+						"Error= \n%v\n",
+						funcName,
+						subDir.absolutePath,
+						err.Error())
+
+					dInfo.ErrReturns = append(dInfo.ErrReturns, ex)
+
+				}
+
 			}
 
 			return nil
@@ -1383,7 +1410,10 @@ func (fHelpMolecule *fileHelperMolecule) makeFileHelperWalkDirFindFilesFunc(
 
 			var subDir DirMgr
 
-			subDir, err = new(DirMgr).NewFromFileInfo(pathFile, info)
+			subDir, err = new(DirMgr).NewFromFileInfo(
+				pathFile,
+				info,
+				ePrefix.XCpy("pathFile+info"))
 
 			if err != nil {
 
@@ -1391,7 +1421,7 @@ func (fHelpMolecule *fileHelperMolecule) makeFileHelperWalkDirFindFilesFunc(
 					"Error returned by DirMgr{}.New(pathFile).\n"+
 					"pathFile='%v'\n"+
 					"Error= \n%v\n",
-					ePrefix.String(),
+					funcName,
 					pathFile,
 					err.Error())
 
@@ -1400,7 +1430,23 @@ func (fHelpMolecule *fileHelperMolecule) makeFileHelperWalkDirFindFilesFunc(
 				return nil
 			}
 
-			dInfo.Directories.AddDirMgr(subDir)
+			err = dInfo.Directories.AddDirMgr(
+				subDir,
+				ePrefix.XCpy("subDir"))
+
+			if err != nil {
+
+				er2 = fmt.Errorf("%v\n"+
+					"Error returned by dInfo.Directories.AddDirMgr(subDir).\n"+
+					"subDir= '%v'\n"+
+					"Error= \n%v\n",
+					funcName,
+					subDir.absolutePath,
+					err.Error())
+
+				dInfo.ErrReturns = append(dInfo.ErrReturns, er2)
+
+			}
 
 			return nil
 		}

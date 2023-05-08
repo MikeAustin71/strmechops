@@ -211,6 +211,7 @@ func (fMgrs *FileMgrCollection) AddFileMgr(
 		return err
 	}
 
+	// Adds a deep copy of 'fMgr'
 	return new(FileMgrCollectionElectron).addFileMgr(
 		fMgrs,
 		&fMgr,
@@ -906,30 +907,166 @@ func (fMgrs *FileMgrCollection) AddFileMgrByFileInfo(
 	return nil
 }
 
-// AddFileMgrCollection - Adds another collection of File Manager (FileMgr)
-// objects to the current collection.
-func (fMgrs *FileMgrCollection) AddFileMgrCollection(fMgrs2 *FileMgrCollection) {
+// AddFileMgrCollection
+//
+// Adds another collection of File Manager (FileMgr)
+// objects to the File Manager Collection maintained
+// by the current instance of FileMgrCollection.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fMgrs2						*FileMgrCollection
+//
+//		A pointer to an instance of FileMgrCollection.
+//
+//		Deep copies of all the File Manager objects
+//		contained in this File Manager Collection, will
+//		be added
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgrs *FileMgrCollection) AddFileMgrCollection(
+	fMgrs2 *FileMgrCollection,
+	errorPrefix interface{}) error {
+
+	if fMgrs.lock == nil {
+		fMgrs.lock = new(sync.Mutex)
+	}
+
+	fMgrs.lock.Lock()
+
+	defer fMgrs.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	funcName := "FileMgrCollection." +
+		"AddFileMgrCollection()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
 
 	if fMgrs.fileMgrs == nil {
-		fMgrs.fileMgrs = make([]FileMgr, 0, 50)
+		fMgrs.fileMgrs = make([]FileMgr, 0, 5)
 	}
 
 	if fMgrs2.fileMgrs == nil {
-		fMgrs2.fileMgrs = make([]FileMgr, 0, 50)
+		fMgrs2.fileMgrs = make([]FileMgr, 0, 5)
 	}
 
 	lOmc2 := len(fMgrs2.fileMgrs)
 
 	if lOmc2 == 0 {
-		return
+		return err
 	}
+
+	fMgrColElectron := FileMgrCollectionElectron{}
 
 	for i := 0; i < lOmc2; i++ {
 
-		fMgrs.AddFileMgr(fMgrs2.fileMgrs[i].CopyOut())
+		// Adds a deep copy of 'fMgr'
+		err = fMgrColElectron.addFileMgr(
+			fMgrs,
+			&fMgrs2.fileMgrs[i],
+			ePrefix.XCpy(
+				"fMgrs<-fMgr"))
+
+		if err != nil {
+
+			return fmt.Errorf(
+				"%v\n"+
+					"Error returned by fMgrColElectron.addFileMgr(fMgrs2.fileMgrs[i])\n"+
+					"i Loop Number: '%v'\n"+
+					"Error = \n%v\n",
+				funcName,
+				i,
+				err.Error())
+		}
+
 	}
 
-	return
+	return err
 }
 
 // CopyFilesToDir - Copies all the files in the File Manager Collection to
@@ -1114,12 +1251,36 @@ func (fMgrs *FileMgrCollection) DeleteAtIndex(idx int) error {
 // FileMgrCollection containing FileMgr objects which match the specified
 // search criteria.
 func (fMgrs *FileMgrCollection) FindFiles(
-	fileSelectionCriteria FileSelectionCriteria) (FileMgrCollection, error) {
+	fileSelectionCriteria FileSelectionCriteria,
+	errorPrefix interface{}) (
+	FileMgrCollection,
+	error) {
 
-	ePrefix := "FileMgrCollection.FindFiles() "
+	if fMgrs.lock == nil {
+		fMgrs.lock = new(sync.Mutex)
+	}
+
+	fMgrs.lock.Lock()
+
+	defer fMgrs.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	funcName := "FileMgrCollection.FindFiles()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return FileMgrCollection{}, err
+	}
 
 	if fMgrs.fileMgrs == nil {
-		fMgrs.fileMgrs = make([]FileMgr, 0, 50)
+		fMgrs.fileMgrs = make([]FileMgr, 0, 5)
 	}
 
 	lDirCol := len(fMgrs.fileMgrs)
@@ -1131,12 +1292,14 @@ func (fMgrs *FileMgrCollection) FindFiles(
 	fh := FileHelper{}
 
 	var isMatchedFile bool
-	var err error
 
 	fMgrs2 := FileMgrCollection{}.New()
 
+	var fMgr FileMgr
+
 	for i := 0; i < lDirCol; i++ {
-		fMgr := fMgrs.fileMgrs[i]
+
+		fMgr = fMgrs.fileMgrs[i]
 
 		if fMgr.actualFileInfo.isFInfoInitialized {
 
@@ -1145,15 +1308,22 @@ func (fMgrs *FileMgrCollection) FindFiles(
 				_ = fh.FilterFileName(
 				&fMgr.actualFileInfo,
 				fileSelectionCriteria,
-				ePrefix)
+				ePrefix.XCpy(
+					"fMgr.actualFileInfo"))
 
 			if err != nil {
+
 				return FileMgrCollection{},
-					fmt.Errorf(ePrefix+
+					fmt.Errorf("%v\n"+
 						"Error returned by "+
 						"fh.FilterFileName(fMgr.actualFileInfo, fileSelectionCriteria) "+
-						"fMgr.actualFileInfo.Name()='%v'  Error='%v'",
-						fMgr.actualFileInfo.Name(), err.Error())
+						"fMgr.actualFileInfo.Name()='%v'\n"+
+						"'i' Loop Number: '%v'\n"+
+						"Error= \n%v\n",
+						funcName,
+						fMgr.actualFileInfo.Name(),
+						i,
+						err.Error())
 			}
 
 		} else {
@@ -1170,20 +1340,45 @@ func (fMgrs *FileMgrCollection) FindFiles(
 				ePrefix)
 
 			if err != nil {
-				return FileMgrCollection{}, fmt.Errorf(ePrefix+
-					"Error returned by fh.FilterFileName(fip, fileSelectionCriteria) "+
-					"fip.Name()='%v'  Error='%v'", fip.Name(), err.Error())
+				return FileMgrCollection{},
+					fmt.Errorf("%v\n"+
+						"Error returned by fh.FilterFileName(fip, fileSelectionCriteria)\n"+
+						"fip.Name()='%v'\n"+
+						"'i' Loop Number: '%v'\n"+
+						"Error= \n%v\n",
+						funcName,
+						fip.Name(),
+						i,
+						err.Error())
 			}
 
 		}
 
 		if isMatchedFile {
-			fMgrs2.AddFileMgr(fMgr)
+
+			// Adds a deep copy of fMgr
+			err = new(FileMgrCollectionElectron).addFileMgr(
+				&fMgrs2,
+				&fMgr,
+				ePrefix)
+
+			if err != nil {
+				return FileMgrCollection{},
+					fmt.Errorf("%v\n"+
+						"Error returned by FileMgrCollectionElectron).addFileMgr(fMgrs2<-fMgr)\n"+
+						"Error adding matched file to fMgrs2 Collection.\n"+
+						"'i' Loop Number: '%v'\n"+
+						"Error= \n%v\n",
+						funcName,
+						i,
+						err.Error())
+			}
+
 		}
 
 	}
 
-	return fMgrs2, nil
+	return fMgrs2, err
 }
 
 // GetFileMgrArray - Returns the entire Directory Manager Array managed
