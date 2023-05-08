@@ -10,6 +10,207 @@ type FileMgrCollectionElectron struct {
 	lock *sync.Mutex
 }
 
+//	deleteAtIndex
+//
+// This method deletes an array element from the File
+// Manager Collection encapsulated by the instance of
+// FileMgrCollection passed as input parameter 'fMgrs'.
+//
+// The index of the array element to be deleted is
+// specified by input parameter 'idx'.
+//
+// If this method completes successfully, the File
+// Manager Collection ('fMgrs') array will have a
+// length which is one less than the starting array
+// length.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fMgrs						*FileMgrCollection
+//
+//		A pointer to an instance of FileMgrCollection.
+//		The File Manager object 'fMgr' specified by
+//		the array index 'idx' will be deleted will be
+//		deleted from the File Manager Collection.
+//
+//
+//	idx							int
+//
+//		This integer value specifies the index of the
+//		array element which will be deleted from the File
+//		Manager Collection encapsulated by the instance
+//		of FileMgrCollection passed by input parameter
+//		'fMgrs'.
+//
+//		If this value is less than zero or greater than
+//		the last index in the array, an error will be
+//		returned.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgrColElectron *FileMgrCollectionElectron) deleteAtIndex(
+	fMgrs *FileMgrCollection,
+	idx int,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fMgrColElectron.lock == nil {
+		fMgrColElectron.lock = new(sync.Mutex)
+	}
+
+	fMgrColElectron.lock.Lock()
+
+	defer fMgrColElectron.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"FileMgrCollectionElectron."+
+			"deleteAtIndex()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if fMgrs == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fMgrs' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if fMgrs.fileMgrs == nil {
+		fMgrs.fileMgrs = make([]FileMgr, 0, 5)
+	}
+
+	if idx < 0 {
+		return fmt.Errorf("%v\n"+
+			"Error: Input Parameter 'idx' is less than zero.\n"+
+			"Index Out-Of-Range!\n"+
+			"idx='%v'\n",
+			ePrefix.String(),
+			idx)
+	}
+
+	arrayLen := len(fMgrs.fileMgrs)
+
+	if arrayLen == 0 {
+		return fmt.Errorf("%v\n"+
+			"Error: The File Manager Collection, 'FileMgrCollection', is EMPTY!\n",
+			ePrefix.String())
+	}
+
+	if idx >= arrayLen {
+		return fmt.Errorf("%v\n"+
+			"Error: Input Parameter 'idx' is greater than the "+
+			"last index in the File Manager Collection.\n"+
+			"Index Out-Of-Range!\n"+
+			"idx= '%v'\n"+
+			"Last Array Index= '%v' ",
+			ePrefix.String(),
+			idx,
+			arrayLen-1)
+	}
+
+	if arrayLen == 1 {
+		fMgrs.fileMgrs = make([]FileMgr, 0, 100)
+	} else if idx == 0 {
+		// arrayLen > 1 and requested idx = 0
+		fMgrs.fileMgrs = fMgrs.fileMgrs[1:]
+	} else if idx == arrayLen-1 {
+		// arrayLen > 1 and requested idx = last element index
+		fMgrs.fileMgrs = fMgrs.fileMgrs[0 : arrayLen-1]
+	} else {
+		// arrayLen > 1 and idx is in between
+		// first and last elements
+		fMgrs.fileMgrs =
+			append(fMgrs.fileMgrs[0:idx], fMgrs.fileMgrs[idx+1:]...)
+	}
+
+	return err
+}
+
 // addFileMgr
 //
 // Adds a deep copy of the FileMgr object passed as input

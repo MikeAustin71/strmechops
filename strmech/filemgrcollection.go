@@ -1399,7 +1399,7 @@ func (fMgrs *FileMgrCollection) CopyOut(
 //
 //		This integer value specifies the index of the
 //		array element which will be deleted from the File
-//		Manager collection maintained by the current
+//		Manager Collection maintained by the current
 //		instance of FileMgrCollection.
 //
 //		If this value is less than zero or greater than
@@ -1507,55 +1507,12 @@ func (fMgrs *FileMgrCollection) DeleteAtIndex(
 		return err
 	}
 
-	if fMgrs.fileMgrs == nil {
-		fMgrs.fileMgrs = make([]FileMgr, 0, 5)
-	}
-
-	if idx < 0 {
-		return fmt.Errorf("%v\n"+
-			"Error: Input Parameter 'idx' is less than zero.\n"+
-			"Index Out-Of-Range!\n"+
-			"idx='%v'\n",
-			ePrefix.String(),
-			idx)
-	}
-
-	arrayLen := len(fMgrs.fileMgrs)
-
-	if arrayLen == 0 {
-		return fmt.Errorf("%v\n"+
-			"Error: The File Manager Collection, 'FileMgrCollection', is EMPTY!\n",
-			ePrefix.String())
-	}
-
-	if idx >= arrayLen {
-		return fmt.Errorf("%v\n"+
-			"Error: Input Parameter 'idx' is greater than the "+
-			"last index in the File Manager Collection.\n"+
-			"Index Out-Of-Range!\n"+
-			"idx= '%v'\n"+
-			"Last Array Index= '%v' ",
-			ePrefix.String(),
+	return new(FileMgrCollectionElectron).
+		deleteAtIndex(
+			fMgrs,
 			idx,
-			arrayLen-1)
-	}
-
-	if arrayLen == 1 {
-		fMgrs.fileMgrs = make([]FileMgr, 0, 100)
-	} else if idx == 0 {
-		// arrayLen > 1 and requested idx = 0
-		fMgrs.fileMgrs = fMgrs.fileMgrs[1:]
-	} else if idx == arrayLen-1 {
-		// arrayLen > 1 and requested idx = last element index
-		fMgrs.fileMgrs = fMgrs.fileMgrs[0 : arrayLen-1]
-	} else {
-		// arrayLen > 1 and idx is in between
-		// first and last elements
-		fMgrs.fileMgrs =
-			append(fMgrs.fileMgrs[0:idx], fMgrs.fileMgrs[idx+1:]...)
-	}
-
-	return err
+			ePrefix.XCpy(
+				fmt.Sprintf("fMgrs[%v]", idx)))
 }
 
 // FindFiles
@@ -2286,43 +2243,83 @@ func (fMgrs FileMgrCollection) New() FileMgrCollection {
 	return newFMgrCol
 }
 
-// PopFileMgrAtIndex - Returns a deep copy of the File Manager
-// ('FileMgr') object located at index, 'idx', in the
-// File Manager Collection ('FileMgrCollection') array.
+// PopFileMgrAtIndex
 //
-// As a 'Pop' method, the original File Manager ('FileMgr')
-// object is deleted from the File Manager Collection
-// ('FileMgrCollection') array.
+// Returns a deep copy of the File Manager ('FileMgr')
+// object located at index, 'idx', in the File Manager
+// Collection ('FileMgrCollection') array.
 //
-// Therefore, at the completion of this method, the File Manager
-// Collection array has a length which is one less than the
-// starting array length.
-func (fMgrs *FileMgrCollection) PopFileMgrAtIndex(idx int) (FileMgr, error) {
+// As a 'Pop' method, the original File Manager
+// ('FileMgr') object is deleted from the File Manager
+// Collection ('FileMgrCollection') array.
+//
+// At the completion of this method, the File Manager
+// Collection for the current instance of
+// FileMgrCollection has an array length which is one
+// less than the starting array length.
+func (fMgrs *FileMgrCollection) PopFileMgrAtIndex(
+	idx int,
+	errorPrefix interface{}) (
+	FileMgr,
+	error) {
 
-	ePrefix := "FileMgrCollection.PopFileMgrAtIndex() "
+	if fMgrs.lock == nil {
+		fMgrs.lock = new(sync.Mutex)
+	}
+
+	fMgrs.lock.Lock()
+
+	defer fMgrs.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgrCollection."+
+			"PopFileMgrAtIndex()",
+		"")
+
+	if err != nil {
+		return FileMgr{}, err
+	}
 
 	if fMgrs.fileMgrs == nil {
-		fMgrs.fileMgrs = make([]FileMgr, 0, 50)
+		fMgrs.fileMgrs = make([]FileMgr, 0, 5)
 	}
 
 	if idx < 0 {
-		return FileMgr{}, fmt.Errorf(ePrefix+
-			"Error: Input Parameter is less than zero. Index Out-Of-Range! idx='%v'", idx)
+
+		return FileMgr{},
+			fmt.Errorf("%v\n"+
+				"Error: Input Parameter is less than zero.\n"+
+				"Index Out-Of-Range!\n"+
+				"idx='%v'",
+				ePrefix.String(),
+				idx)
 	}
 
 	arrayLen := len(fMgrs.fileMgrs)
 
 	if arrayLen == 0 {
 		return FileMgr{},
-			errors.New(ePrefix +
-				"Error: The File Manager Collection, 'FileMgrCollection', is EMPTY!\n")
+			fmt.Errorf("%v\n"+
+				"Error: The File Manager Collection, 'FileMgrCollection', is EMPTY!\n",
+				ePrefix.String())
 	}
 
 	if idx >= arrayLen {
-		return FileMgr{}, fmt.Errorf(ePrefix+
-			"Error: Input Parameter, 'idx' is greater than the length of the "+
-			"collection index. Index Out-Of-Range! "+
-			"idx='%v' Array Length='%v' ", idx, arrayLen)
+
+		return FileMgr{},
+			fmt.Errorf("%v\n"+
+				"Error: Input Parameter, 'idx' is greater than the last index in colleciton array\n"+
+				"Index Out-Of-Range!\n"+
+				"idx='%v'\n"+
+				"Last Array Index ='%v' ",
+				ePrefix.String(),
+				idx,
+				arrayLen-1)
 	}
 
 	if idx == 0 {
