@@ -1937,74 +1937,80 @@ func (fMgrs *FileMgrCollection) FindFiles(
 	return fMgrs2, err
 }
 
-// GetFileMgrArray - Returns the entire Directory Manager Array managed
-// by this collection.
+// GetFileMgrArray
 //
-// ------------------------------------------------------------------------
+// Returns a deep copy of the entire File Manager Array
+// generated from the File Manager Collection maintained
+// by the current instance of FileMgrCollection.
 //
-// Input Parameters:
+// ----------------------------------------------------------------
+//
+// # Input Parameters
 //
 //	None
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Return Values:
+// # Return Values
 //
-//	[]FileMgr      - The array of FileMgr instances maintained by this
-//	                 collection.
+//	[]FileMgr
+//		A deep copy of the File Manager array maintained
+//		by the current instance of FileMgrCollection.
 func (fMgrs *FileMgrCollection) GetFileMgrArray() []FileMgr {
 
+	if fMgrs.lock == nil {
+		fMgrs.lock = new(sync.Mutex)
+	}
+
+	fMgrs.lock.Lock()
+
+	defer fMgrs.lock.Unlock()
+
 	if fMgrs.fileMgrs == nil {
-		fMgrs.fileMgrs = make([]FileMgr, 0, 10)
+		fMgrs.fileMgrs = make([]FileMgr, 0, 5)
 	}
 
 	return fMgrs.fileMgrs
 }
 
-// GetFileMgrAtIndex - If successful, this method returns a pointer to
-// the FileMgr instance at the array index specified. The 'Peek' and 'Pop'
-// methods below return FileMgr objects using a 'deep' copy and therefore
-// offer better protection against data corruption.
-func (fMgrs *FileMgrCollection) GetFileMgrAtIndex(idx int) (*FileMgr, error) {
-
-	ePrefix := "FileMgrCollection.GetFileMgrAtIndex() "
-
-	emptyFileMgr := FileMgr{}
-
-	if fMgrs.fileMgrs == nil {
-		fMgrs.fileMgrs = make([]FileMgr, 0, 50)
-	}
-
-	arrayLen := len(fMgrs.fileMgrs)
-
-	if arrayLen == 0 {
-		return &emptyFileMgr,
-			fmt.Errorf(ePrefix +
-				"Error: This File Manager Collection ('FileMgrCollection') is EMPTY!\n")
-	}
-
-	if idx < 0 || idx >= arrayLen {
-
-		return &emptyFileMgr,
-			fmt.Errorf(ePrefix+
-				"Error: The input parameter, 'idx', is OUT OF RANGE! idx='%v'.  \n"+
-				"The minimum index is '0'. "+
-				"The maximum index is '%v'. ", idx, arrayLen-1)
-
-	}
-
-	return &fMgrs.fileMgrs[idx], nil
-
-}
-
-// GetNumOfFileMgrs - returns the array length of the
-// File Manager Collection, 'FileMgrCollection'.
+// GetNumOfFileMgrs
+//
+// This method returns the array length of the File
+// Manager Collection maintained by the current
+// instance of FileMgrCollection.
+//
 // Effectively, the returned integer is a count of the
-// number of File Managers (FileMgr's) in the Collection.
+// number of File Managers objects (FileMgr's) in the
+// File Manager Collection.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	int
+//
+//		This integer value specifies the number of File
+//		Manager (FileMgr) objects in the File Manager
+//		Collection maintained by the current instance of
+//		FileMgrCollection.
 func (fMgrs *FileMgrCollection) GetNumOfFileMgrs() int {
 
+	if fMgrs.lock == nil {
+		fMgrs.lock = new(sync.Mutex)
+	}
+
+	fMgrs.lock.Lock()
+
+	defer fMgrs.lock.Unlock()
+
 	if fMgrs.fileMgrs == nil {
-		fMgrs.fileMgrs = make([]FileMgr, 0, 50)
+		fMgrs.fileMgrs = make([]FileMgr, 0, 5)
 	}
 
 	return len(fMgrs.fileMgrs)
