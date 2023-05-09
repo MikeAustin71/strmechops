@@ -759,8 +759,12 @@ func (fHelperAtom *fileHelperAtom) doesDirectoryExist(
 			// The path really does exist!
 			dirPathDoesExist = true
 			err = nil
+
 			fInfoPlus, err2 = new(FileInfoPlus).
-				NewFromPathFileInfo(dirPath, info)
+				NewFromPathFileInfo(
+					dirPath,
+					info,
+					ePrefix.XCpy("dirPath+info"))
 
 			if err2 != nil {
 
@@ -985,10 +989,10 @@ func (fHelperAtom *fileHelperAtom) doesThisFileExist(
 // whether a file  'matches' the specified selection
 // criteria.
 //
-// If a given criterion is set to a non-zero value, then
-// that criterion is defined as 'set' and the file
-// information must comply with that criterion in order
-// to be judged as a match ('isMatchedFile=true').
+// If a given criterion has a non-zero value, it is
+// defined as 'set' and the file information must comply
+// with that criterion in order to be judged as a match
+// ('isMatchedFile=true').
 //
 // Again, if none of the three criterion are 'set', then
 // all files are judged as matched ('isMatchedFile=true').
