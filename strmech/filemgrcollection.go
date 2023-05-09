@@ -2398,34 +2398,140 @@ func (fMgrs *FileMgrCollection) PopFileMgrAtIndex(
 					idx)))
 }
 
-// PopFirstFileMgr - Returns a deep copy of the first File Manager
-// ('FileMgr') object in the File Manager Collection array. As a
-// 'Pop' method, the original File Manager ('FileMgr') object is
-// deleted from the File Manager Collection ('FileMgrCollection')
-// array.
+// PopFirstFileMgr
 //
-// Therefore, at the completion of this method, the File Manager
-// Collection array has a length which is one less than the starting
-// array length.
-func (fMgrs *FileMgrCollection) PopFirstFileMgr() (FileMgr, error) {
+// Returns a deep copy of the first File Manager
+// ('FileMgr') object in the File Manager Collection
+// array maintained by the current instance of
+// FileMgrCollection.
+//
+// As a 'Pop' method, the original File Manager
+// ('FileMgr') object residing at the File Manager
+// Collection array index zero('0'), WILL BE DELETED.
+//
+// Therefore, at the completion of this method, the File
+// Manager Collection array will have a length which is
+// one less than the starting array length.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete the File Manager object
+//	in the File Manager Collection residing at array
+//	index zero ('0').
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgrs *FileMgrCollection) PopFirstFileMgr(
+	errorPrefix interface{}) (FileMgr, error) {
 
-	ePrefix := "FileMgrCollection.PopFirstFileMgr() "
-
-	if fMgrs.fileMgrs == nil {
-		fMgrs.fileMgrs = make([]FileMgr, 0, 50)
+	if fMgrs.lock == nil {
+		fMgrs.lock = new(sync.Mutex)
 	}
 
-	if len(fMgrs.fileMgrs) == 0 {
-		return FileMgr{},
-			errors.New(ePrefix +
-				"Error: The File Manager Collection, 'FileMgrCollection' is EMPTY!\n")
+	fMgrs.lock.Lock()
+
+	defer fMgrs.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgrCollection."+
+			"PopFirstFileMgr()",
+		"")
+
+	if err != nil {
+		return FileMgr{}, err
 	}
 
-	fMgr := fMgrs.fileMgrs[0].CopyOut()
-
-	fMgrs.fileMgrs = fMgrs.fileMgrs[1:]
-
-	return fMgr, nil
+	return new(FileMgrCollectionMolecule).
+		peekOrPopAtIndex(
+			fMgrs,
+			0,
+			true,
+			ePrefix.XCpy(
+				"fMgrs[0]"))
 }
 
 // PopLastFileMgr - Returns a deep copy of the last File Manager
