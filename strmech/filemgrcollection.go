@@ -1,7 +1,6 @@
 package strmech
 
 import (
-	"errors"
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"os"
@@ -10,71 +9,95 @@ import (
 	"sync"
 )
 
-// SortFileMgrByAbsPathCaseSensitive - Sorts an array of File Managers
-// (FileMgr) by absolute path, filename and file extension. This sorting
-// operation is performed as a 'Case Sensitive' sort meaning the upper
-// and lower case characters are significant.
+// SortFileMgrByAbsPathCaseSensitive
 //
-// This method is designed to be used with the 'Go' Sort package:
+// Sorts an array of File Managers (FileMgr) by absolute
+// path, filename and file extension. This sorting
+// operation is performed as a 'Case Sensitive' sort
+// meaning the upper and lower case characters are
+// significant.
+//
+// This method is designed to be used with the 'Go' Sort
+// package:
 //
 //	https://golang.org/pkg/sort/
 //
-// Example Usage:
+// ----------------------------------------------------------------
+//
+// # Usage
 //
 //	sort.Sort(SortFileMgrByAbsPathCaseSensitive(FileMgrArray))
 type SortFileMgrByAbsPathCaseSensitive []FileMgr
 
-// Len - Required by the sort.Interface
+// Len
+//
+// Required by the sort.Interface
 func (sortAbsPathSens SortFileMgrByAbsPathCaseSensitive) Len() int {
 	return len(sortAbsPathSens)
 }
 
-// Swap - Required by the sort.Interface
+// Swap
+// Required by the sort.Interface
 func (sortAbsPathSens SortFileMgrByAbsPathCaseSensitive) Swap(i, j int) {
 	sortAbsPathSens[i], sortAbsPathSens[j] = sortAbsPathSens[j], sortAbsPathSens[i]
 }
 
-// Less - required by the sort.Interface
+// Less
+//
+// Required by the sort.Interface
 func (sortAbsPathSens SortFileMgrByAbsPathCaseSensitive) Less(i, j int) bool {
 
 	return sortAbsPathSens[i].absolutePathFileName < sortAbsPathSens[j].absolutePathFileName
 }
 
-// SortFileMgrByAbsPathCaseInSensitive - Sort by File Managers by
-// absolute path, filename and file extension. This sorting operation
-// is performed as a 'Case Insensitive' sort meaning the upper and
-// lower case characters are not significant. All sort comparisons
-// are therefore made by using lower case versions of the absolute
-// path, filename and file extension.
+// SortFileMgrByAbsPathCaseInSensitive
 //
-// This method is designed to be used with the 'Go' Sort package:
+// Sort by File Managers by absolute path, filename and
+// file extension. This sorting operation is performed as
+// a 'Case Insensitive' sort meaning the upper and lower
+// case characters are not significant. All sort
+// comparisons are therefore made by using lower case
+// versions of the absolute path, filename and file
+// extension.
+//
+// This method is designed to be used with the 'Go' Sort
+// package:
 //
 //	https://golang.org/pkg/sort/
 //
-// Example Usage:
+// ----------------------------------------------------------------
+//
+// # Usage
 //
 //	sort.Sort(SortFileMgrByAbsPathCaseInSensitive(FileMgrArray))
 type SortFileMgrByAbsPathCaseInSensitive []FileMgr
 
-// Len - Required by the sort.Interface
+// Len
+//
+// Required by the sort.Interface
 func (sortAbsPathInSens SortFileMgrByAbsPathCaseInSensitive) Len() int {
 	return len(sortAbsPathInSens)
 }
 
-// Swap - Required by the sort.Interface
+// Swap
+//
+// Required by the sort.Interface
 func (sortAbsPathInSens SortFileMgrByAbsPathCaseInSensitive) Swap(i, j int) {
 	sortAbsPathInSens[i], sortAbsPathInSens[j] = sortAbsPathInSens[j], sortAbsPathInSens[i]
 }
 
-// Less - required by the sort.Interface
+// Less
+//
+// Required by the sort.Interface
 func (sortAbsPathInSens SortFileMgrByAbsPathCaseInSensitive) Less(i, j int) bool {
 
 	return strings.ToLower(sortAbsPathInSens[i].absolutePathFileName) <
 		strings.ToLower(sortAbsPathInSens[j].absolutePathFileName)
 }
 
-// FileMgrCollection - Manages a collection of FileMgr
-// instances.
+// FileMgrCollection
+//
+// Manages a collection of FileMgr instances.
 //
 // Dependencies:
 // 'FileMgrCollection' depends on type, 'FileHelper'
@@ -3012,50 +3035,184 @@ func (fMgrs *FileMgrCollection) PeekFirstFileMgr(
 				"fMgrs[0]"))
 }
 
-// PeekLastFileMgr - Returns a deep copy of the last File Manager
+// PeekLastFileMgr
+//
+// Returns a deep copy of the last File Manager
 // ('FileMgr') object in the File Manager Collection
 // ('FileMgrCollection').
 //
-// This is a 'Peek' method and therefore the original File Manager
-// ('FileMgr') object is NOT deleted from the File Manager Collection
-// ('FileMgrCollection') array.
+// This is a 'Peek' method and therefore the original
+// File Manager ('FileMgr') object WILL NOT BE DELETED
+// from the File Manager Collection ('FileMgrCollection')
+// array.
 //
-// At the completion of this method, the length of the File Manager
-// Collection ('FileMgrCollection') array will remain unchanged.
-func (fMgrs *FileMgrCollection) PeekLastFileMgr() (FileMgr, error) {
+// At the completion of this method, the length of the
+// File Manager Collection ('FileMgrCollection') array
+// will remain unchanged.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method WILL NOT DELETE the File Manager
+//	('FileMgr') object located at the last array index in
+//	the File Manager Collection.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	FileMgr
+//
+//		If this method completes successfully without
+//		error, a deep copy of the File Manager object
+//		residing at the last array index in the File
+//		Manager Collection will be returned through this
+//		parameter.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgrs *FileMgrCollection) PeekLastFileMgr(
+	errorPrefix interface{}) (
+	FileMgr,
+	error) {
 
-	ePrefix := "FileMgrCollection.PeekLastFileMgr()"
-
-	if fMgrs.fileMgrs == nil {
-		fMgrs.fileMgrs = make([]FileMgr, 0, 50)
+	if fMgrs.lock == nil {
+		fMgrs.lock = new(sync.Mutex)
 	}
 
-	arrayLen := len(fMgrs.fileMgrs)
+	fMgrs.lock.Lock()
 
-	if arrayLen == 0 {
-		return FileMgr{},
-			errors.New(ePrefix +
-				"Error: The File Manager Collection ('FileMgrCollection') is EMPTY!\n")
+	defer fMgrs.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgrCollection."+
+			"PeekFirstFileMgr()",
+		"")
+
+	if err != nil {
+		return FileMgr{}, err
 	}
 
-	return fMgrs.fileMgrs[arrayLen-1].CopyOut(), nil
+	lastIndex := len(fMgrs.fileMgrs) - 1
+
+	return new(FileMgrCollectionMolecule).
+		peekOrPopAtIndex(
+			fMgrs,
+			lastIndex,
+			false,
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"fMgrs[%v]",
+					lastIndex)))
 }
 
-// SortByAbsPathFileName - Sorts the collection array of file managers
-// by absolute path, file name and file extension.
+// SortByAbsPathFileName
 //
-// If the input parameter 'caseInsensitiveSort' is set to 'true', it means
-// that upper and lower case characters are NOT significant in the sorting
-// operation. The sort operation therefore uses lower case versions of
-// absolute path, file name and file extension for comparison purposes.
+// Sorts the collection array of file managers by
+// absolute path, file name and file extension.
 //
-// On the other hand, if input parameter 'caseInsensitiveSort' is set to 'false',
-// it means that upper and lower chase characters ARE significant to the sort
-// operation.
-func (fMgrs *FileMgrCollection) SortByAbsPathFileName(caseInsensitiveSort bool) {
+// If the input parameter 'caseInsensitiveSort' is set to
+// 'true', it means that upper and lower case characters
+// are NOT significant in the sorting operation. The sort
+// operation therefore uses lower case versions of
+// absolute path, file name and file extension for
+// comparison purposes.
+//
+// If input parameter 'caseInsensitiveSort' is set to
+// 'false', it means that upper and lower case characters
+// ARE significant to the sort operation.
+func (fMgrs *FileMgrCollection) SortByAbsPathFileName(
+	caseInsensitiveSort bool) {
+
+	if fMgrs.lock == nil {
+		fMgrs.lock = new(sync.Mutex)
+	}
+
+	fMgrs.lock.Lock()
+
+	defer fMgrs.lock.Unlock()
 
 	if fMgrs.fileMgrs == nil {
-		fMgrs.fileMgrs = make([]FileMgr, 0, 50)
+		fMgrs.fileMgrs = make([]FileMgr, 0, 5)
 	}
 
 	if len(fMgrs.fileMgrs) == 0 {
