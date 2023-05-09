@@ -150,7 +150,7 @@ func (fMgrColElectron *FileMgrCollectionElectron) deleteAtIndex(
 	}
 
 	if arrayLen == 1 {
-		fMgrs.fileMgrs = make([]FileMgr, 0, 100)
+		fMgrs.fileMgrs = make([]FileMgr, 0, 5)
 	} else if idx == 0 {
 		// arrayLen > 1 and requested idx = 0
 		fMgrs.fileMgrs = fMgrs.fileMgrs[1:]

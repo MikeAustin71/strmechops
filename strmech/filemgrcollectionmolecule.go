@@ -10,19 +10,27 @@ type FileMgrCollectionMolecule struct {
 	lock *sync.Mutex
 }
 
-// peekAtIndex
+// peekOrPopAtIndex
 //
 // Returns a deep copy of the File Manager ('FileMgr')
 // object located at array index 'idx' in the File
 // Manager Collection passed as input parameter 'fMgrs'.
 //
-// This is a 'Peek' method and therefore the original
-// File Manager ('FileMgr') object is NOT deleted from
-// the File Manager Collection ('FileMgrCollection')
-// array.
+// If input parameter 'deleteIndex' is set to 'false',
+// this method will function as a 'Peek' method and
+// therefore, the original File Manager ('FileMgr')
+// object will NOT be deleted from the File Manager
+// Collection ('FileMgrCollection') array.
 //
-// At the completion of this method, the length of the
-// File Manager Collection ('FileMgrCollection') array
+// If input parameter 'deleteIndex' is set to 'true',
+// this method will function as a 'Pop' method and
+// therefore, the original File Manager ('FileMgr')
+// object WILL BE DELETED from the File Manager
+// Collection ('FileMgrCollection') array. The
+// deletion operation will be performed on the File
+// Manager object residing at the File Manager
+// Collection array index identified by input parameter
+// 'idx'.
 //
 // ----------------------------------------------------------------
 //
@@ -47,6 +55,18 @@ type FileMgrCollectionMolecule struct {
 //		If this value is less than zero or greater than
 //		the last index in the array, an error will be
 //		returned.
+//
+//	deleteIndex					bool
+//
+//		If this boolean value is set to 'true', the File
+//		Manager object residing at the File Manager
+//		Collection index identified by input parameter
+//		'idx', will be deleted from File Manager
+//		Collection 'fMgrs'.
+//
+//		If 'deleteIndex' is set to 'false', no deletion
+//		occur and the File Manager object residing at
+//		File Manager Collection index 'idx' will remain.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -86,9 +106,10 @@ type FileMgrCollectionMolecule struct {
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fMgrColMolecule *FileMgrCollectionMolecule) peekAtIndex(
+func (fMgrColMolecule *FileMgrCollectionMolecule) peekOrPopAtIndex(
 	fMgrs *FileMgrCollection,
 	idx int,
+	deleteIndex bool,
 	errPrefDto *ePref.ErrPrefixDto) (
 	FileMgr,
 	error) {
@@ -109,7 +130,7 @@ func (fMgrColMolecule *FileMgrCollectionMolecule) peekAtIndex(
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		"FileMgrCollectionElectron."+
-			"peekAtIndex()",
+			"peekOrPopAtIndex()",
 		"")
 
 	if err != nil {
@@ -160,8 +181,39 @@ func (fMgrColMolecule *FileMgrCollectionMolecule) peekAtIndex(
 				arrayLen-1)
 	}
 
-	return fMgrs.fileMgrs[idx].CopyOut(
+	var deepCopyFileMgr FileMgr
+
+	deepCopyFileMgr,
+		err = fMgrs.fileMgrs[idx].CopyOut(
 		ePrefix.XCpy(fmt.Sprintf(
 			"fMgrs.fileMgrs[%v]",
 			idx)))
+
+	if err != nil ||
+		deleteIndex == false {
+		return deepCopyFileMgr, err
+	}
+
+	// deleteIndex == true
+
+	if arrayLen == 1 {
+
+		fMgrs.fileMgrs = make([]FileMgr, 0, 5)
+
+	} else if idx == 0 {
+		// arrayLen > 1 and requested idx = 0
+		fMgrs.fileMgrs = fMgrs.fileMgrs[1:]
+
+	} else if idx == arrayLen-1 {
+		// arrayLen > 1 and requested idx = last element index
+		fMgrs.fileMgrs = fMgrs.fileMgrs[0 : arrayLen-1]
+
+	} else {
+		// arrayLen > 1 and idx is in between
+		// first and last elements
+		fMgrs.fileMgrs =
+			append(fMgrs.fileMgrs[0:idx], fMgrs.fileMgrs[idx+1:]...)
+	}
+
+	return deepCopyFileMgr, err
 }
