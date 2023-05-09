@@ -6,8 +6,11 @@ import (
 	"sync"
 )
 
-// FileOps - This type is used to manage and coordinate various
-// operations performed on files. Hence, the name File Operations.
+// FileOps
+//
+// This type is used to manage and coordinate various
+// operations performed on files. Hence, the name File
+// Operations.
 type FileOps struct {
 	isInitialized bool
 	source        FileMgr
@@ -17,8 +20,9 @@ type FileOps struct {
 	lock *sync.Mutex
 }
 
-// CopyOut - Returns a deep copy of the current
-// FileOps instance.
+// CopyOut
+//
+// Returns a deep copy of the current FileOps instance.
 func (fops *FileOps) CopyOut() FileOps {
 
 	if !fops.isInitialized {
