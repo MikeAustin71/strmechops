@@ -43,7 +43,6 @@ type FileMgrCollectionMolecule struct {
 //		the array index 'idx' will be deleted will be
 //		deleted from the File Manager Collection.
 //
-//
 //	idx							int
 //
 //		This integer value specifies the index of the
