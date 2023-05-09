@@ -2284,6 +2284,9 @@ func (fMgrs FileMgrCollection) New() FileMgrCollection {
 //		the last index in the array, an error will be
 //		returned.
 //
+//		A deep copy of the deleted File Manager object
+//		will be returned by this method.
+//
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
@@ -2353,6 +2356,11 @@ func (fMgrs FileMgrCollection) New() FileMgrCollection {
 //		error, a deep copy of the File Manager object
 //		residing at array index 'idx' will be returned
 //		through this parameter.
+//
+//		Remember that the original File Manager object
+//		will be deleted from the File Manager Collection
+//		maintained by the current instance of
+//		FileMgrCollection.
 //
 //	error
 //
@@ -2704,46 +2712,157 @@ func (fMgrs *FileMgrCollection) PopLastFileMgr(
 // of FileMgrCollection.
 //
 // This is a 'Peek' method and therefore the original
-// File Manager ('FileMgr') object is NOT deleted from
-// the File Manager Collection ('FileMgrCollection')
+// File Manager ('FileMgr') object WILL NOT BE DELETED
+// from the File Manager Collection ('FileMgrCollection')
 // array.
 //
 // At the completion of this method, the length of the
 // File Manager Collection ('FileMgrCollection') array
 // will remain unchanged.
-func (fMgrs *FileMgrCollection) PeekFileMgrAtIndex(idx int) (FileMgr, error) {
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method WILL NOT DELETE the File Manager
+//	('FileMgr') object located at the array index
+//	specified by input parameter 'idx'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	idx							int
+//
+//		This integer value specifies the index of the
+//		array element which will be deleted from the File
+//		Manager Collection encapsulated by the instance
+//		of FileMgrCollection passed by input parameter
+//		'fMgrs'.
+//
+//		If this value is less than zero or greater than
+//		the last index in the array, an error will be
+//		returned.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	FileMgr
+//
+//		If this method completes successfully without
+//		error, a deep copy of the File Manager object
+//		residing at array index 'idx' will be returned
+//		through this parameter.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgrs *FileMgrCollection) PeekFileMgrAtIndex(
+	idx int,
+	errorPrefix interface{}) (
+	FileMgr,
+	error) {
 
-	ePrefix := "FileMgrCollection.PeekFileMgrAtIndex() "
-
-	if fMgrs.fileMgrs == nil {
-		fMgrs.fileMgrs = make([]FileMgr, 0, 50)
+	if fMgrs.lock == nil {
+		fMgrs.lock = new(sync.Mutex)
 	}
 
-	arrayLen := len(fMgrs.fileMgrs)
+	fMgrs.lock.Lock()
 
-	if arrayLen == 0 {
-		return FileMgr{},
-			errors.New(ePrefix +
-				"Error: The File Manager Collection, 'FileMgrCollection' is EMPTY!\n")
+	defer fMgrs.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgrCollection."+
+			"PeekFileMgrAtIndex()",
+		"")
+
+	if err != nil {
+		return FileMgr{}, err
 	}
 
-	if idx < 0 {
-		return FileMgr{},
-			fmt.Errorf(ePrefix+
-				"Error: Input Parameter 'idx' is less than zero. "+
-				"Index Out-Of-Range! idx='%v'", idx)
-	}
-
-	if idx >= arrayLen {
-		return FileMgr{},
-			fmt.Errorf(ePrefix+
-				"Error: Input Parameter 'idx' is greater than the length "+
-				"of the collection array. "+
-				"Index Out-Of-Range! idx='%v' Array Length='%v' ",
-				idx, arrayLen)
-	}
-
-	return fMgrs.fileMgrs[idx].CopyOut(), nil
+	return new(FileMgrCollectionMolecule).
+		peekOrPopAtIndex(
+			fMgrs,
+			idx,
+			false,
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"fMgrs[%v]",
+					idx)))
 }
 
 // PeekFirstFileMgr - Returns a deep copy of the first File
