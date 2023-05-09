@@ -2865,31 +2865,151 @@ func (fMgrs *FileMgrCollection) PeekFileMgrAtIndex(
 					idx)))
 }
 
-// PeekFirstFileMgr - Returns a deep copy of the first File
-// Manager ('FileMgr') object in the File Manager Collection
-// ('FileMgrCollection'). This is a 'Peek' method and therefore
-// the original File Manager ('FileMgr') object is NOT deleted
+// PeekFirstFileMgr
+//
+// Returns a deep copy of the first File Manager
+// ('FileMgr') object in the File Manager Collection
+// maintained by the current instance of
+// FileMgrCollection.
+//
+// This is a 'Peek' method and therefore the original
+// File Manager ('FileMgr') object WILL NOT BE DELETED
 // from the File Manager Collection ('FileMgrCollection')
 // array.
 //
-// At the completion of this method, the length of the File
-// Manager Collection ('FileMgrCollection') array will remain
-// unchanged.
-func (fMgrs *FileMgrCollection) PeekFirstFileMgr() (FileMgr, error) {
+// At the completion of this method, the length of the
+// File Manager Collection ('FileMgrCollection') array
+// will remain unchanged.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method WILL NOT DELETE the File Manager
+//	('FileMgr') object located at the first array index
+//	in the File Manager Collection.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	FileMgr
+//
+//		If this method completes successfully without
+//		error, a deep copy of the File Manager object
+//		residing at the first array index in the File
+//		Manager Collection will be returned through this
+//		parameter.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgrs *FileMgrCollection) PeekFirstFileMgr(
+	errorPrefix interface{}) (
+	FileMgr,
+	error) {
 
-	ePrefix := "FileMgrCollection.PeekFirstFileMgr() "
-
-	if fMgrs.fileMgrs == nil {
-		fMgrs.fileMgrs = make([]FileMgr, 0, 50)
+	if fMgrs.lock == nil {
+		fMgrs.lock = new(sync.Mutex)
 	}
 
-	if len(fMgrs.fileMgrs) == 0 {
-		return FileMgr{},
-			errors.New(ePrefix +
-				"Error: The File Manager Collection ('FileMgrCollection') is EMPTY!\n")
+	fMgrs.lock.Lock()
+
+	defer fMgrs.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgrCollection."+
+			"PeekFirstFileMgr()",
+		"")
+
+	if err != nil {
+		return FileMgr{}, err
 	}
 
-	return fMgrs.fileMgrs[0].CopyOut(), nil
+	return new(FileMgrCollectionMolecule).
+		peekOrPopAtIndex(
+			fMgrs,
+			0,
+			false,
+			ePrefix.XCpy(
+				"fMgrs[0]"))
 }
 
 // PeekLastFileMgr - Returns a deep copy of the last File Manager
