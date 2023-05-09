@@ -10,7 +10,7 @@ type FileOperationsNanobot struct {
 	lock *sync.Mutex
 }
 
-// CopyOut
+// copyOut
 //
 // Returns a deep copy of the current FileOps instance
 // passed as input parameter 'fOps'.
