@@ -280,19 +280,44 @@ func (fops *FileOps) IsInitialized() bool {
 //
 //	FileOperationCode(0).CreateDestinationFile()
 //		Creates the Destination File
-func (fops *FileOps) ExecuteFileOperation(fileOp FileOperationCode) error {
+func (fops *FileOps) ExecuteFileOperation(
+	fileOp FileOperationCode,
+	errorPrefix interface{}) error {
 
-	ePrefix := "FileOps.ExecuteFileOperation() "
+	if fops.lock == nil {
+		fops.lock = new(sync.Mutex)
+	}
+
+	fops.lock.Lock()
+
+	defer fops.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	funcName := "FileOps.ExecuteFileOperation()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
 
 	fops.opToExecute = fileOp
-	var err error
 
 	err = nil
 
 	switch fops.opToExecute {
 
 	case FileOpCode.None():
-		err = errors.New("Error: Input parameter 'fileOp' is 'NONE' or No Operation!\n")
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fileOp' is 'NONE' or No Operation!\n",
+			ePrefix.String())
 
 	case FileOpCode.MoveSourceFileToDestinationDir():
 		err = fops.moveSourceFileToDestinationDir()
@@ -313,7 +338,11 @@ func (fops *FileOps) ExecuteFileOperation(fileOp FileOperationCode) error {
 		err = fops.copySrcToDestByHardLinkByIo()
 
 	case FileOpCode.CopySourceToDestinationByIoByHardLink():
-		err = fops.copySrcToDestByIoByHardLink()
+
+		err = new(FileOperationsNanobot).
+			copySrcToDestByIoByHardLink(
+				fops,
+				ePrefix)
 
 	case FileOpCode.CopySourceToDestinationByHardLink():
 		err = fops.copySrcToDestByHardLink()
@@ -344,7 +373,10 @@ func (fops *FileOps) ExecuteFileOperation(fileOp FileOperationCode) error {
 	}
 
 	if err != nil {
-		return fmt.Errorf(ePrefix+"%v", err.Error())
+		return fmt.Errorf("%v\n"+""+
+			"Error= \n%v\n",
+			funcName,
+			err.Error())
 	}
 
 	return nil
@@ -628,22 +660,6 @@ func (fops *FileOps) deleteSourceAndDestinationFiles() error {
 
 	if len(cumErrMsg) != cumErrLen {
 		return errors.New(cumErrMsg)
-	}
-
-	return nil
-}
-
-func (fops *FileOps) copySrcToDestByIoByHardLink() error {
-
-	ePrefix := "FileOps.copySrcToDestByIoByHardLink() "
-
-	err := fops.source.
-		CopyFileMgrByIoByLink(
-			&fops.destination,
-			ePrefix)
-
-	if err != nil {
-		return fmt.Errorf(ePrefix+"%v", err.Error())
 	}
 
 	return nil
