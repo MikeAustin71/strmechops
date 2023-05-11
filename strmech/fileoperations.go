@@ -311,6 +311,8 @@ func (fops *FileOps) ExecuteFileOperation(
 
 	err = nil
 
+	fOpsElectron := FileOperationsElectron{}
+
 	switch fops.opToExecute {
 
 	case FileOpCode.None():
@@ -326,7 +328,11 @@ func (fops *FileOps) ExecuteFileOperation(
 		err = fops.moveSourceFileToDestinationFile()
 
 	case FileOpCode.DeleteDestinationFile():
-		err = fops.deleteDestinationFile()
+
+		err = fOpsElectron.
+			deleteDestinationFile(
+				fops,
+				ePrefix)
 
 	case FileOpCode.DeleteSourceFile():
 		err = fops.deleteSourceFile()
@@ -603,21 +609,6 @@ func (fops *FileOps) SetFileOpsCode(fOpCode FileOperationCode) error {
 	}
 
 	fops.opToExecute = fOpCode
-
-	return nil
-}
-
-// deleteDestinationFile - Deletes the destination file in the
-// current FileOps instance.
-func (fops *FileOps) deleteDestinationFile() error {
-
-	ePrefix := "FileOps.deleteDestinationFile() Destination Deletion Failed: "
-
-	err := fops.destination.DeleteThisFile(ePrefix)
-
-	if err != nil {
-		return fmt.Errorf(ePrefix+"%v", err.Error())
-	}
 
 	return nil
 }
