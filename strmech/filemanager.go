@@ -594,7 +594,8 @@ func (fMgr *FileMgr) CopyFileMgrByIo(
 //
 // # Reference:
 //
-// https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
+//	https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
+//	https://golang.org/pkg/os/#Link
 //
 // ----------------------------------------------------------------
 //

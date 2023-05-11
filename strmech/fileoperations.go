@@ -312,6 +312,7 @@ func (fops *FileOps) ExecuteFileOperation(
 	err = nil
 
 	fOpsElectron := FileOperationsElectron{}
+	fOpsNanobot := FileOperationsNanobot{}
 
 	switch fops.opToExecute {
 
@@ -347,11 +348,15 @@ func (fops *FileOps) ExecuteFileOperation(
 				ePrefix)
 
 	case FileOpCode.CopySourceToDestinationByHardLinkByIo():
-		err = fops.copySrcToDestByHardLinkByIo()
+
+		err = fOpsNanobot.
+			copySrcToDestByHardLinkByIo(
+				fops,
+				ePrefix)
 
 	case FileOpCode.CopySourceToDestinationByIoByHardLink():
 
-		err = new(FileOperationsNanobot).
+		err = fOpsNanobot.
 			copySrcToDestByIoByHardLink(
 				fops,
 				ePrefix)
@@ -615,21 +620,6 @@ func (fops *FileOps) SetFileOpsCode(fOpCode FileOperationCode) error {
 	}
 
 	fops.opToExecute = fOpCode
-
-	return nil
-}
-
-func (fops *FileOps) copySrcToDestByHardLinkByIo() error {
-
-	ePrefix := "FileOps.copySrcToDestByHardLinkByIo() "
-
-	err := fops.source.CopyFileMgrByLinkByIo(
-		&fops.destination,
-		ePrefix)
-
-	if err != nil {
-		return fmt.Errorf(ePrefix+"%v", err.Error())
-	}
 
 	return nil
 }
