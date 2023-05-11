@@ -341,7 +341,10 @@ func (fops *FileOps) ExecuteFileOperation(
 			ePrefix)
 
 	case FileOpCode.DeleteSourceAndDestinationFiles():
-		err = fops.deleteSourceAndDestinationFiles()
+		err = new(FileOperationsAtom).
+			deleteSourceAndDestinationFiles(
+				fops,
+				ePrefix)
 
 	case FileOpCode.CopySourceToDestinationByHardLinkByIo():
 		err = fops.copySrcToDestByHardLinkByIo()
@@ -612,34 +615,6 @@ func (fops *FileOps) SetFileOpsCode(fOpCode FileOperationCode) error {
 	}
 
 	fops.opToExecute = fOpCode
-
-	return nil
-}
-
-// deleteSourceAndDestinationFiles - Deletes both the source
-// and destination files configured in the current FileOps
-// instance.
-func (fops *FileOps) deleteSourceAndDestinationFiles() error {
-
-	cumErrMsg := "FileOps.FileOperationCode(0).DeleteSourceAndDestinationFiles()- "
-
-	cumErrLen := len(cumErrMsg)
-
-	err := fops.destination.DeleteThisFile(cumErrMsg)
-
-	if err != nil {
-		cumErrMsg += "Destination Deletion Failed: " + err.Error() + "\n"
-	}
-
-	err = fops.source.DeleteThisFile(cumErrMsg)
-
-	if err != nil {
-		cumErrMsg += "Source Deletion Failed: " + err.Error() + "\n"
-	}
-
-	if len(cumErrMsg) != cumErrLen {
-		return errors.New(cumErrMsg)
-	}
 
 	return nil
 }

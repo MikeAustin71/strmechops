@@ -34,6 +34,9 @@ type FileOperationsElectron struct {
 //	 	identified by the internal member variable
 //	 	'fOps.destination' will be deleted.
 //
+//		If 'fOps' has not been properly initialized,
+//		an error will be returned.
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -158,6 +161,9 @@ func (fOpsElectron *FileOperationsElectron) deleteDestinationFile(
 //		A pointer to an instance of FileOps. The file
 //	 	identified by the internal member variable
 //	 	'fOps.source' will be deleted.
+//
+//		If 'fOps' has not been properly initialized,
+//		an error will be returned.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
