@@ -362,12 +362,18 @@ func (fops *FileOps) ExecuteFileOperation(
 				ePrefix)
 
 	case FileOpCode.CopySourceToDestinationByHardLink():
+
 		err = fops.copySrcToDestByHardLink()
 
 	case FileOpCode.CopySourceToDestinationByIo():
-		err = fops.copySrcToDestByIo()
+
+		err = fOpsNanobot.
+			copySrcToDestByIo(
+				fops,
+				ePrefix)
 
 	case FileOpCode.CreateSourceDir():
+
 		err = fops.createSrcDirectory()
 
 	case FileOpCode.CreateSourceDirAndFile():
@@ -620,23 +626,6 @@ func (fops *FileOps) SetFileOpsCode(fOpCode FileOperationCode) error {
 	}
 
 	fops.opToExecute = fOpCode
-
-	return nil
-}
-
-// copySrcToDestByIo - Copies source file to destination
-// using IO.
-func (fops *FileOps) copySrcToDestByIo() error {
-
-	ePrefix := "FileOps.copySrcToDestByIo() "
-
-	err := fops.source.CopyFileMgrByIo(
-		&fops.destination,
-		ePrefix)
-
-	if err != nil {
-		return fmt.Errorf(ePrefix+"%v", err.Error())
-	}
 
 	return nil
 }

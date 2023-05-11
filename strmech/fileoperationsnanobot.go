@@ -302,12 +302,164 @@ func (fOpsNanobot *FileOperationsNanobot) copySrcToDestByHardLinkByIo(
 	return err
 }
 
+// copySrcToDestByIo
+//
+// This method receives an instance of FileOps. This
+// structure contains both a source File Manager
+// (fOps.source  FileMgr) and a destination File
+// Manager (fOps.destination  FileMgr) identifying
+// both source and destination files.
+//
+// This method proceeds to copy the source file to
+// the destination location represented by the
+// destination File Manager.
+//
+// The copy operation will be accomplished using a
+// technique known as 'io.Copy'. This technique
+// involves copying the source file to the destination by
+// creating a new destination file before copying the
+// source file contents to that new destination file.
+//
+// Note that if the destination directory does not
+// exist, this method will attempt to create it.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
+//	https://golang.org/pkg/os/#Link
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fOps 						*FileOps
+//
+//		A pointer to an instance of FileOps. This
+//		structure contains a source File Manager and a
+//		destination File Manager. The source file
+//		identified by the source File Manager will be
+//		copied to the location and file name identified
+//		by the destination File Manager.
+//
+//		The source File Manager is represented by
+//		internal member variable 'fOps.source'.
+//
+//		The destination File Manager is represented by
+//		internal member variable 'fOps.destination'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fOpsNanobot *FileOperationsNanobot) copySrcToDestByIo(
+	fOps *FileOps,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fOpsNanobot.lock == nil {
+		fOpsNanobot.lock = new(sync.Mutex)
+	}
+
+	fOpsNanobot.lock.Lock()
+
+	defer fOpsNanobot.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "FileOperationsNanobot." +
+		"copySrcToDestByIo()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if fOps == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: FileOps instance is invalid!\n"+
+			"Input parameter 'fOps' is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if !fOps.isInitialized {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: FileOps instance is invalid!\n"+
+			"Input parameter 'fOps' has NOT been initialized.\n"+
+			"fOps.isInitialized = 'false'.",
+			ePrefix.String())
+
+		return err
+	}
+
+	var err2 error
+
+	err2 = fOps.source.CopyFileMgrByIo(
+		&fOps.destination,
+		ePrefix)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while copying the\n"+
+			"source file to the destination file.\n"+
+			"fOps.source File = '%v'\n"+
+			"fOps.destination File = '%v'\n"+
+			"Error= \n%v\n",
+			funcName,
+			fOps.source.GetAbsolutePathFileName(),
+			fOps.destination.GetAbsolutePathFileName(),
+			err2.Error())
+	}
+
+	return err
+}
+
 // copySrcToDestByIoByHardLink
 //
 // This method receives an instance of FileOps. This
 // structure contains both a source File Manager
 // (fOps.source  FileMgr) and a destination File
-// Manager (fOps.destination  FileMgr).
+// Manager (fOps.destination  FileMgr) identifying
+// both source and destination files.
 //
 // This method proceeds to copy the source file to
 // the destination location represented by the
@@ -405,11 +557,13 @@ func (fOpsNanobot *FileOperationsNanobot) copySrcToDestByIoByHardLink(
 
 	var ePrefix *ePref.ErrPrefixDto
 
+	funcName := "FileOperationsNanobot." +
+		"copySrcToDestByIoByHardLink()"
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"FileOperationsNanobot."+
-			"copySrcToDestByIoByHardLink()",
+		funcName,
 		"")
 
 	if err != nil {
@@ -437,9 +591,25 @@ func (fOpsNanobot *FileOperationsNanobot) copySrcToDestByIoByHardLink(
 		return err
 	}
 
-	return fOps.source.
+	var err2 error
+
+	err2 = fOps.source.
 		CopyFileMgrByIoByLink(
 			&fOps.destination,
-			ePrefix.XCpy(
-				"fOps.source<-fOps.destination"))
+			ePrefix)
+
+	if err2 != nil {
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while copying the\n"+
+			"source file to the destination file.\n"+
+			"fOps.source File = '%v'\n"+
+			"fOps.destination File = '%v'\n"+
+			"Error= \n%v\n",
+			funcName,
+			fOps.source.GetAbsolutePathFileName(),
+			fOps.destination.GetAbsolutePathFileName(),
+			err2.Error())
+	}
+
+	return err
 }
