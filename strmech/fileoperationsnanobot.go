@@ -140,6 +140,99 @@ func (fOpsNanobot *FileOperationsNanobot) copyOut(
 	return newFOps, err
 }
 
+// copySrcToDestByHardLink
+//
+// This method receives an instance of FileOps. This
+// structure contains both a source File Manager
+// (fOps.source  FileMgr) and a destination File
+// Manager (fOps.destination  FileMgr) identifying
+// both source and destination files.
+//
+// This method proceeds to copy the source file to
+// the destination file location represented by the
+// destination File Manager. The copy operation will be
+// made using a technique known as a 'Hard Link'. This
+// technique will utilize a hard symbolic link to the
+// existing source file in order to create the
+// destination file.
+//
+// If the copy operation fails, an error will be
+// returned.
+//
+// Note that if the destination directory does not
+// exist, this method will attempt to create it.
+func (fOpsNanobot *FileOperationsNanobot) copySrcToDestByHardLink(
+	fOps *FileOps,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fOpsNanobot.lock == nil {
+		fOpsNanobot.lock = new(sync.Mutex)
+	}
+
+	fOpsNanobot.lock.Lock()
+
+	defer fOpsNanobot.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "FileOps.copySrcToDestByHardLink()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if fOps == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: FileOps instance is invalid!\n"+
+			"Input parameter 'fOps' is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if !fOps.isInitialized {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: FileOps instance is invalid!\n"+
+			"Input parameter 'fOps' has NOT been initialized.\n"+
+			"fOps.isInitialized = 'false'.",
+			ePrefix.String())
+
+		return err
+	}
+
+	var err2 error
+
+	err2 = fOps.source.CopyFileMgrByLink(
+		&fOps.destination,
+		ePrefix)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while copying the\n"+
+			"source file to the destination file.\n"+
+			"fOps.source File = '%v'\n"+
+			"fOps.destination File = '%v'\n"+
+			"Error= \n%v\n",
+			funcName,
+			fOps.source.GetAbsolutePathFileName(),
+			fOps.destination.GetAbsolutePathFileName(),
+			err2.Error())
+	}
+
+	return err
+}
+
 // copySrcToDestByHardLinkByIo
 //
 // This method receives an instance of FileOps. This
@@ -158,17 +251,21 @@ func (fOpsNanobot *FileOperationsNanobot) copyOut(
 // The copy operation will be carried out in two
 // attempts.
 //
-// If this first file copy operation fails, a second
-// attempt will be made using a technique known as a
-// 'Hard Link'. This technique will utilize a hard
-// symbolic link to the existing source file in order to
-// create the destination file.
+// If this first attempted file copy operation will be
+// made using a technique known as a 'Hard Link'. This
+// technique will utilize a hard symbolic link to the
+// existing source file in order to create the
+// destination file.
 //
 // If the first attempted copy operation fails, a second
 // attempt will try to copy the source file to the
 // destination by creating a new destination file and
 // copying the source file contents to that new
 // destination file using a technique known as 'io.Copy'.
+// This technique involves copying the source file to the
+// destination by creating a new destination file before
+// copying the source file contents to that new
+// destination file.
 //
 // If both attempted copy operations fail, and error will
 // be returned.

@@ -363,7 +363,10 @@ func (fops *FileOps) ExecuteFileOperation(
 
 	case FileOpCode.CopySourceToDestinationByHardLink():
 
-		err = fops.copySrcToDestByHardLink()
+		err = fOpsNanobot.
+			copySrcToDestByHardLink(
+				fops,
+				ePrefix)
 
 	case FileOpCode.CopySourceToDestinationByIo():
 
@@ -626,21 +629,6 @@ func (fops *FileOps) SetFileOpsCode(fOpCode FileOperationCode) error {
 	}
 
 	fops.opToExecute = fOpCode
-
-	return nil
-}
-
-func (fops *FileOps) copySrcToDestByHardLink() error {
-
-	ePrefix := "FileOps.copySrcToDestByHardLink() "
-
-	err := fops.source.CopyFileMgrByLink(
-		&fops.destination,
-		ePrefix)
-
-	if err != nil {
-		return fmt.Errorf(ePrefix+"%v", err.Error())
-	}
 
 	return nil
 }
