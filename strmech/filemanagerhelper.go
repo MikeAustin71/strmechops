@@ -532,8 +532,6 @@ func (fMgrHlpr *fileMgrHelper) createFile(
 		return err
 	}
 
-	var directoryPathDoesExist bool
-
 	_,
 		err = new(fileMgrHelperAtom).doesFileMgrPathFileExist(
 		fMgr,
@@ -545,7 +543,10 @@ func (fMgrHlpr *fileMgrHelper) createFile(
 		return err
 	}
 
-	directoryPathDoesExist, err =
+	var directoryPathDoesExist bool
+
+	directoryPathDoesExist,
+		err =
 		fMgr.dMgr.DoesThisDirectoryExist(
 			ePrefix.XCpy(
 				"fMgr.dMgr"))

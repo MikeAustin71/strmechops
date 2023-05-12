@@ -383,7 +383,11 @@ func (fops *FileOps) ExecuteFileOperation(
 				ePrefix)
 
 	case FileOpCode.CreateSourceDirAndFile():
-		err = fops.createSrcDirectoryAndFile()
+
+		err = fOpsNanobot.
+			createSrcDirectoryAndFile(
+				fops,
+				ePrefix)
 
 	case FileOpCode.CreateSourceFile():
 		err = fops.createSrcFile()
@@ -636,31 +640,11 @@ func (fops *FileOps) SetFileOpsCode(fOpCode FileOperationCode) error {
 	return nil
 }
 
-// createSrcDirectoryAndFile
-//
-// Creates the source file and directory using
-// information from the FileOps source file manager.
-func (fops *FileOps) createSrcDirectoryAndFile() error {
-
-	ePrefix := "FileOps.createSrcDirectoryAndFile() "
-
-	err := fops.source.CreateDirAndFile(ePrefix)
-
-	if err != nil {
-		return fmt.Errorf(ePrefix+"%v\n", err.Error())
-	}
-
-	err = fops.source.CloseThisFile(ePrefix)
-
-	if err != nil {
-		return fmt.Errorf(ePrefix+"%v\n", err.Error())
-	}
-
-	return nil
-}
-
 // createSrcFile - Creates the source file using
 // information from the FileOps source file manager.
+//
+// If the source directory does NOT exist, an error
+// will be returned.
 func (fops *FileOps) createSrcFile() error {
 
 	ePrefix := "FileOps.createSrcFile() "
