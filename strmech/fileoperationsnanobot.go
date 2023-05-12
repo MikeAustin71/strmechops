@@ -143,6 +143,138 @@ func (fOpsNanobot *FileOperationsNanobot) copyOut(
 	return newFOps, err
 }
 
+// createDestDirectory
+//
+// Creates the destination directory using information
+// from the FileOps destination file manager. The FileOps
+// object is passed as input parameter 'fOps'.
+//
+// The destination directory is specified in the internal
+// member File Manager object, 'fOps.destination'.
+//
+// If the source directory already exists, no action will
+// be taken and this method will exit without error.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fOps 						*FileOps
+//
+//		A pointer to an instance of FileOps. This
+//		structure contains a destination File Manager.
+//		The destination file directory path identified by
+//		the destination File Manager will be used to
+//		create the destination directory.
+//
+//		The destination File Manager is represented by
+//		internal member variable 'fOps.destination'.
+//
+//		If 'fOps' has not been properly initialized,
+//		an error will be returned.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fOpsNanobot *FileOperationsNanobot) createDestDirectory(
+	fOps *FileOps,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fOpsNanobot.lock == nil {
+		fOpsNanobot.lock = new(sync.Mutex)
+	}
+
+	fOpsNanobot.lock.Lock()
+
+	defer fOpsNanobot.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName :=
+		"FileOperationsNanobot.createDestDirectory()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if fOps == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: FileOps instance is invalid!\n"+
+			"Input parameter 'fOps' is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if !fOps.isInitialized {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: FileOps instance is invalid!\n"+
+			"Input parameter 'fOps' has NOT been initialized.\n"+
+			"fOps.isInitialized = 'false'.",
+			ePrefix.String())
+
+		return err
+	}
+
+	var err2 error
+
+	err2 = fOps.destination.CreateDir(
+		ePrefix.XCpy(
+			"fOps.destination"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while creating the\n"+
+			"destination file directory.\n"+
+			"fOps.destination File Directory = '%v'\n"+
+			"Error= \n%v\n",
+			funcName,
+			fOps.destination.GetAbsolutePath(),
+			err2.Error())
+	}
+
+	return err
+}
+
 // createSrcDirectory
 //
 // This method receives an instance of FileOps and then
@@ -254,7 +386,8 @@ func (fOpsNanobot *FileOperationsNanobot) createSrcDirectory(
 	var err2 error
 
 	err2 = fOps.source.CreateDir(
-		ePrefix)
+		ePrefix.XCpy(
+			"fOps.source"))
 
 	if err2 != nil {
 
