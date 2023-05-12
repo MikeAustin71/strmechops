@@ -474,11 +474,17 @@ func (fMgrHlpr *fileMgrHelper) createDirectory(
 	return nil
 }
 
-// createFile - FileMgr helper method. Creates a file
-// identified by input parameter 'fMgr'.
+// createFile
+//
+// FileMgr helper method. Creates a file identified by
+// input parameter 'fMgr'.
 //
 // The file open operation uses create/truncate open
 // codes.
+//
+// If input parameter 'createTheDirectory' is set to
+// 'true', this method will create the directory if it
+// does not previously exist.
 func (fMgrHlpr *fileMgrHelper) createFile(
 	fMgr *FileMgr,
 	createTheDirectory bool,
