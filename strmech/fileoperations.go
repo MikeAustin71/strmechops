@@ -656,26 +656,6 @@ func (fops *FileOps) SetFileOpsCode(fOpCode FileOperationCode) error {
 	return nil
 }
 
-// moveSourceFileFileToDestinationDir - Moves the source file
-// to the destination directory. The file name will be designated
-// by the destination file name.
-func (fops *FileOps) moveSourceFileToDestinationDir() error {
-
-	ePrefix := "FileOps.moveSourceFileToDestinationDir() "
-
-	_, err := fops.source.
-		MoveFileToNewDirMgr(
-			fops.destination.GetDirMgr(),
-			ePrefix)
-
-	if err != nil {
-		return fmt.Errorf(ePrefix+"%v\n",
-			err.Error())
-	}
-
-	return nil
-}
-
 // moveSourceFileToDestinationFile - Moves the source file
 // to the destination by fist copying the source file
 // to the destination and then deleting the source file.

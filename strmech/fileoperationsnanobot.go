@@ -547,7 +547,7 @@ func (fOpsNanobot *FileOperationsNanobot) createDestFile(
 		ePrefix.XCpy(
 			"fOps.destination"))
 
-	if err != nil {
+	if err2 != nil {
 
 		err = fmt.Errorf("%v\n"+
 			"An error occurred while creating the\n"+
@@ -557,6 +557,8 @@ func (fOpsNanobot *FileOperationsNanobot) createDestFile(
 			funcName,
 			fOps.destination.GetAbsolutePathFileName(),
 			err2.Error())
+
+		return err
 	}
 
 	err2 = fOps.destination.CloseThisFile(ePrefix.XCpy(
@@ -826,7 +828,7 @@ func (fOpsNanobot *FileOperationsNanobot) createSrcDirectoryAndFile(
 			"fOps.source"))
 
 	if err2 != nil {
-		return fmt.Errorf("%v\n"+
+		err = fmt.Errorf("%v\n"+
 			"An error occurred while creating the\n"+
 			"Source Directory and Source File.\n"+
 			"fOps.source Directory= '%v\n"+
@@ -836,6 +838,8 @@ func (fOpsNanobot *FileOperationsNanobot) createSrcDirectoryAndFile(
 			fOps.source.GetAbsolutePath(),
 			fOps.source.GetAbsolutePathFileName(),
 			err2.Error())
+
+		return err
 	}
 
 	err2 = fOps.source.CloseThisFile(ePrefix.XCpy(
@@ -985,6 +989,8 @@ func (fOpsNanobot *FileOperationsNanobot) createSrcFile(
 			funcName,
 			fOps.source.GetAbsolutePathFileName(),
 			err2.Error())
+
+		return err
 	}
 
 	err2 = fOps.source.CloseThisFile(ePrefix.XCpy(
@@ -1640,6 +1646,115 @@ func (fOpsNanobot *FileOperationsNanobot) copySrcToDestByIoByHardLink(
 			funcName,
 			fOps.source.GetAbsolutePathFileName(),
 			fOps.destination.GetAbsolutePathFileName(),
+			err2.Error())
+	}
+
+	return err
+}
+
+// moveSourceFileFileToDestinationDir
+//
+// Moves the source file to the destination directory.
+// The file name is specified by the destination file
+// name taken from a FileOps object passed as input
+// parameter 'fOps'.
+//
+// The FileOps structure contains a destination File
+// Manager (fOps.destination  FileMgr) identifying the
+// destination file which will be created by this method.
+//
+// If the destination directory does NOT exist, an error
+// will be returned.
+func (fOpsNanobot *FileOperationsNanobot) moveSourceFileToDestinationDir(
+	fOps *FileOps,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fOpsNanobot.lock == nil {
+		fOpsNanobot.lock = new(sync.Mutex)
+	}
+
+	fOpsNanobot.lock.Lock()
+
+	defer fOpsNanobot.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName :=
+		"FileOperationsNanobot.moveSourceFileToDestinationDir()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if fOps == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: FileOps instance is invalid!\n"+
+			"Input parameter 'fOps' is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if !fOps.isInitialized {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: FileOps instance is invalid!\n"+
+			"Input parameter 'fOps' has NOT been initialized.\n"+
+			"fOps.isInitialized = 'false'.",
+			ePrefix.String())
+
+		return err
+	}
+
+	var deepCopyDirMgr DirMgr
+
+	var err2 error
+
+	deepCopyDirMgr,
+		err2 = fOps.destination.GetDirMgr(
+		ePrefix)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while retrieving the\n"+
+			"Destination Directory Manager.\n"+
+			"fOps.destination Directory = '%v'\n"+
+			"Error= \n%v\n",
+			funcName,
+			fOps.destination.GetAbsolutePath(),
+			err2.Error())
+
+		return err
+	}
+
+	_,
+		err2 = fOps.source.
+		MoveFileToNewDirMgr(
+			deepCopyDirMgr,
+			ePrefix.XCpy(
+				"fOps.source"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while moving the\n"+
+			"Source file to the Destination Directory.\n"+
+			"fOps.source File Name = '%v'\n"+
+			"fOps.destination Directory = '%v'\n"+
+			"Error= \n%v\n",
+			funcName,
+			fOps.source.GetAbsolutePathFileName(),
+			deepCopyDirMgr.GetAbsolutePath(),
 			err2.Error())
 	}
 
