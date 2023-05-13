@@ -275,6 +275,157 @@ func (fOpsNanobot *FileOperationsNanobot) createDestDirectory(
 	return err
 }
 
+// createDestDirectoryAndFile
+//
+// Creates the destination directory and file using
+// information from a FileOps object passed as input
+// parameter 'fOps'.
+//
+// The FileOps structure contains a destination File
+// Manager (fOps.destination  FileMgr) identifying the
+// destination directory and destination file which will
+// be created by this method.
+//
+// The newly created destination file will be empty and
+// contain zero (0) bytes.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fOps 						*FileOps
+//
+//		A pointer to an instance of FileOps. This
+//		structure contains a source File Manager. The
+//		source directory and file identified by this
+//		source File Manager will be created. The source
+//		file will be created as an empty file with zero
+//		(0) bytes.
+//
+//		The source File Manager is represented by
+//		internal member variable 'fOps.source'.
+//
+//		If 'fOps' has not been properly initialized,
+//		an error will be returned.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fOpsNanobot *FileOperationsNanobot) createDestDirectoryAndFile(
+	fOps *FileOps,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fOpsNanobot.lock == nil {
+		fOpsNanobot.lock = new(sync.Mutex)
+	}
+
+	fOpsNanobot.lock.Lock()
+
+	defer fOpsNanobot.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName :=
+		"FileOperationsNanobot.createDestDirectoryAndFile()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if fOps == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: FileOps instance is invalid!\n"+
+			"Input parameter 'fOps' is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if !fOps.isInitialized {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: FileOps instance is invalid!\n"+
+			"Input parameter 'fOps' has NOT been initialized.\n"+
+			"fOps.isInitialized = 'false'.",
+			ePrefix.String())
+
+		return err
+	}
+
+	var err2 error
+
+	err2 = fOps.destination.CreateDirAndFile(
+		ePrefix.XCpy(
+			"fOps.destination"))
+
+	if err2 != nil {
+
+		return fmt.Errorf("%v\n"+
+			"An error occurred while creating the\n"+
+			"Destination Directory and Destination File.\n"+
+			"fOps.destination Directory= '%v\n"+
+			"fOps.destination File= '%v'\n"+
+			"Error= \n%v\n",
+			funcName,
+			fOps.destination.GetAbsolutePath(),
+			fOps.destination.GetAbsolutePathFileName(),
+			err2.Error())
+	}
+
+	err2 = fOps.destination.CloseThisFile(ePrefix.XCpy(
+		"fOps.destination"))
+
+	if err2 != nil {
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while closing the\n"+
+			"Destination File.\n"+
+			"fOps.destination File= '%v'\n"+
+			"Error= \n%v\n",
+			funcName,
+			fOps.destination.GetAbsolutePathFileName(),
+			err2.Error())
+	}
+
+	return err
+}
+
 // createSrcDirectory
 //
 // This method receives an instance of FileOps and then
@@ -406,14 +557,17 @@ func (fOpsNanobot *FileOperationsNanobot) createSrcDirectory(
 
 // createSrcDirectoryAndFile
 //
-// This method receives an instance of FileOps. This
-// structure contains a source File Manager
-// (fOps.source  FileMgr) identifying the source
-// directory and source file which be created by this
-// method.
+// Creates the source directory and file using
+// information from a FileOps object passed as input
+// parameter 'fOps'.
 //
-// The newly created file will be empty and contain zero
-// (0) bytes.
+// The FileOps structure contains a source File Manager
+// (fOps.source  FileMgr) identifying the source
+// directory and source file which will be created by
+// this method.
+//
+// The newly created source file will be empty and
+// contain zero (0) bytes.
 //
 // ----------------------------------------------------------------
 //

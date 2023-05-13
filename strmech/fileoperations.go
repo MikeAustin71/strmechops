@@ -404,7 +404,11 @@ func (fops *FileOps) ExecuteFileOperation(
 				ePrefix)
 
 	case FileOpCode.CreateDestinationDirAndFile():
-		err = fops.createDestDirectoryAndFile()
+
+		err = fOpsNanobot.
+			createDestDirectoryAndFile(
+				fops,
+				ePrefix)
 
 	case FileOpCode.CreateDestinationFile():
 		err = fops.createDestFile()
@@ -644,28 +648,6 @@ func (fops *FileOps) SetFileOpsCode(fOpCode FileOperationCode) error {
 	}
 
 	fops.opToExecute = fOpCode
-
-	return nil
-}
-
-// createDestDirectoryAndFile - Creates the destination
-// directory and file using information from the FileOps
-// destination file manager.
-func (fops *FileOps) createDestDirectoryAndFile() error {
-
-	ePrefix := "FileOps.createDestDirectoryAndFile() "
-
-	err := fops.destination.CreateDirAndFile(ePrefix)
-
-	if err != nil {
-		return fmt.Errorf(ePrefix+"%v\n", err.Error())
-	}
-
-	err = fops.destination.CloseThisFile(ePrefix)
-
-	if err != nil {
-		return fmt.Errorf(ePrefix+"%v\n", err.Error())
-	}
 
 	return nil
 }
