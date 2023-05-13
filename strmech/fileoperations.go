@@ -411,7 +411,11 @@ func (fops *FileOps) ExecuteFileOperation(
 				ePrefix)
 
 	case FileOpCode.CreateDestinationFile():
-		err = fops.createDestFile()
+
+		err = fOpsNanobot.
+			createDestFile(
+				fops,
+				ePrefix)
 
 	default:
 		err = errors.New("Invalid 'FileOperationCode' Execution Command! ")
@@ -648,27 +652,6 @@ func (fops *FileOps) SetFileOpsCode(fOpCode FileOperationCode) error {
 	}
 
 	fops.opToExecute = fOpCode
-
-	return nil
-}
-
-// createDestFile - Creates the destination file using
-// information from the FileOps destination file manager.
-func (fops *FileOps) createDestFile() error {
-
-	ePrefix := "FileOps.createDestFile() "
-
-	err := fops.destination.CreateThisFile(ePrefix)
-
-	if err != nil {
-		return fmt.Errorf(ePrefix+"%v", err.Error())
-	}
-
-	err = fops.destination.CloseThisFile(ePrefix)
-
-	if err != nil {
-		return fmt.Errorf(ePrefix+"%v\n", err.Error())
-	}
 
 	return nil
 }
