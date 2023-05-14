@@ -271,12 +271,5 @@ func (fOpsAtom *FileOperationsAtom) setFileOps(
 		destinationFMgr,
 		ePrefix)
 
-	if err != nil {
-
-		return err
-	}
-
-	fOps.isInitialized = true
-
 	return err
 }

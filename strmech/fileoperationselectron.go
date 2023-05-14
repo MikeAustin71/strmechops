@@ -372,7 +372,10 @@ func (fOpsElectron *FileOperationsElectron) setFileOpsDestination(
 		return err
 	}
 
-	err = destinationFMgr.IsFileMgrValid(
+	fMgrHelperAtom := new(fileMgrHelperAtom)
+
+	err = fMgrHelperAtom.isFileMgrValid(
+		&destinationFMgr,
 		ePrefix.XCpy("destinationFMgr"))
 
 	if err != nil {
@@ -385,25 +388,10 @@ func (fOpsElectron *FileOperationsElectron) setFileOpsDestination(
 
 	}
 
-	var newDestinationFMgr FileMgr
-
-	newDestinationFMgr,
-		err = destinationFMgr.CopyOut(ePrefix.XCpy(
-		"newDestinationFMgr"))
-
-	if err != nil {
-
-		return fmt.Errorf("%v\n"+
-			"Deep Copy of Destination File Manager Failed!\n"+
-			"Error= \n%v\n",
-			funcName,
-			err.Error())
-	}
-
 	err = fOps.destination.CopyIn(
-		&newDestinationFMgr,
+		&destinationFMgr,
 		ePrefix.XCpy(
-			"fOps.destination<-newDestinationFMgr"))
+			"fOps.destination<-destinationFMgr"))
 
 	if err != nil {
 
@@ -413,6 +401,19 @@ func (fOpsElectron *FileOperationsElectron) setFileOpsDestination(
 			"Error= \n%v\n",
 			funcName,
 			err.Error())
+	}
+
+	err = fMgrHelperAtom.isFileMgrValid(
+		&fOps.source,
+		ePrefix.XCpy("fOps.source"))
+
+	if err == nil {
+
+		fOps.isInitialized = true
+
+	} else {
+
+		err = nil
 	}
 
 	return err
@@ -524,7 +525,10 @@ func (fOpsElectron *FileOperationsElectron) setFileOpsSource(
 		return err
 	}
 
-	err = sourceFMgr.IsFileMgrValid(
+	fMgrHelperAtom := new(fileMgrHelperAtom)
+
+	err = fMgrHelperAtom.isFileMgrValid(
+		&sourceFMgr,
 		ePrefix.XCpy("sourceFMgr"))
 
 	if err != nil {
@@ -537,25 +541,10 @@ func (fOpsElectron *FileOperationsElectron) setFileOpsSource(
 
 	}
 
-	var newSourceFMgr FileMgr
-
-	newSourceFMgr,
-		err = sourceFMgr.CopyOut(ePrefix.XCpy(
-		"newSourceFMgr"))
-
-	if err != nil {
-
-		return fmt.Errorf("%v\n"+
-			"Deep Copy of Source File Manager Failed!\n"+
-			"Error= \n%v\n",
-			funcName,
-			err.Error())
-	}
-
 	err = fOps.source.CopyIn(
-		&newSourceFMgr,
+		&sourceFMgr,
 		ePrefix.XCpy(
-			"fOps.source<-newSourceFMgr"))
+			"fOps.source<-sourceFMgr"))
 
 	if err != nil {
 
@@ -565,6 +554,19 @@ func (fOpsElectron *FileOperationsElectron) setFileOpsSource(
 			"Error= \n%v\n",
 			funcName,
 			err.Error())
+	}
+
+	err = fMgrHelperAtom.isFileMgrValid(
+		&fOps.destination,
+		ePrefix.XCpy("fOps.destination"))
+
+	if err == nil {
+
+		fOps.isInitialized = true
+
+	} else {
+
+		err = nil
 	}
 
 	return err

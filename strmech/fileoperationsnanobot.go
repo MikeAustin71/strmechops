@@ -2224,6 +2224,245 @@ func (fOpsNanobot *FileOperationsNanobot) setFileOpsByDirAndFileNameStr(
 		ePrefix)
 }
 
+// setFileOpsByDirMgrFileName
+//
+// Reconfigures an instance of FileOps using source and
+// destination file names passed as directory managers
+// and file name string components.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete and reconfigure all
+//	pre-existing data values in the FileOps instance
+//	passed as input parameter 'fOps'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fOps						FileOps
+//
+//		A pointer to an instance of FileOps. This
+//		instance will be reconfigured using information
+//		provided by the source and destination parameters
+//		listed below.
+//
+//	sourceDir					DirMgr
+//
+//		This instance of Directory Manager specifies the
+//		source file directory which will be combined with
+//		the source file name parameter to configure the
+//		source file member variable 'fOps.source'
+//		contained in the 'fOps' FileOps object.
+//
+//		If this parameter is evaluated as invalid, an
+//		error will be returned.
+//
+//	sourceFileNameExt			string
+//
+//		This string specifies the source file name and
+//		file extension which will be combined with the
+//		source directory parameter to configure the
+//		source file member variable 'fOps.source'
+//		contained in the 'fOps' FileOps object.
+//
+//		If this parameter is submitted as an empty string
+//		with a zero (0) string length, an error will be
+//		returned.
+//
+//	destinationDir				DirMgr
+//
+//		This instance of Directory Manager specifies the
+//		destination file directory which will be combined
+//		with the destination file name parameter to
+//		configure the destination file member variable
+//		'fOps.destination' contained in the 'fOps'
+//		FileOps object.
+//
+//		If this parameter is evaluated as invalid, an
+//		error will be returned.
+//
+//	destinationFileNameExtStr	string
+//
+//		This string specifies the destination file name
+//		and file extension which will be combined with
+//		the destination directory parameter to configure
+//		the destination file member variable
+//		'fOps.destination' contained in the 'fOps'
+//		FileOps object.
+//
+//		If this parameter is submitted as an empty string
+//		with a zero (0) string length, an error will be
+//		returned.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fOpsNanobot *FileOperationsNanobot) setFileOpsByDirMgrFileName(
+	fOps *FileOps,
+	sourceDir DirMgr,
+	sourceFileNameExt string,
+	destinationDir DirMgr,
+	destinationFileNameExt string,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fOpsNanobot.lock == nil {
+		fOpsNanobot.lock = new(sync.Mutex)
+	}
+
+	fOpsNanobot.lock.Lock()
+
+	defer fOpsNanobot.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName :=
+		"FileOperationsNanobot." +
+			"setFileOpsByDirMgrFileName()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if fOps == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: FileOps instance is invalid!\n"+
+			"Input parameter 'fOps' is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	dMgrHelper := new(dirMgrHelper)
+
+	err = dMgrHelper.isDirMgrValid(
+		&sourceDir,
+		ePrefix.XCpy("sourceDir"))
+
+	if err != nil {
+
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter 'sourceDir' is invalid!\n"+
+			"Error= \n%v\n",
+			funcName,
+			err.Error())
+	}
+
+	if len(sourceFileNameExt) == 0 {
+
+		return fmt.Errorf("%v\n"+
+			"Error: 'sourceFileNameExtStr' is an EMPTY STRING!\n",
+			ePrefix.String())
+	}
+
+	err = dMgrHelper.isDirMgrValid(
+		&destinationDir,
+		ePrefix.XCpy("destinationDir"))
+
+	if err != nil {
+
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter 'destinationDir' is invalid!\n"+
+			"Error= \n%v\n",
+			funcName,
+			err.Error())
+	}
+
+	if len(destinationFileNameExt) == 0 {
+
+		return fmt.Errorf("%v\n"+
+			"Error: 'destinationFileNameExtStr' is an EMPTY STRING!\n",
+			ePrefix.String())
+	}
+
+	var sourceFMgr, destinationFMgr FileMgr
+
+	sourceFMgr,
+		err = new(FileMgr).
+		NewFromDirMgrFileNameExt(
+			sourceDir,
+			sourceFileNameExt,
+			ePrefix)
+
+	if err != nil {
+
+		return fmt.Errorf("%v\n"+
+			"Creation of intermediate source File Manager Failed!\n"+
+			"sourceDir= '%v'\n"+
+			"sourceFileNameExt= '%v'\n"+
+			"Error= \n%v\n",
+			funcName,
+			sourceDir.GetAbsolutePath(),
+			sourceFileNameExt,
+			err.Error())
+	}
+
+	destinationFMgr,
+		err = new(FileMgr).
+		NewFromDirMgrFileNameExt(
+			destinationDir,
+			destinationFileNameExt,
+			ePrefix)
+
+	if err != nil {
+
+		return fmt.Errorf("%v\n"+
+			"Creation of intermediate destination File Manager Failed!\n"+
+			"destinationDir= '%v'\n"+
+			"destinationFileNameExt= '%v'\n"+
+			"Error= \n%v\n",
+			funcName,
+			destinationDir.GetAbsolutePath(),
+			destinationFileNameExt,
+			err.Error())
+	}
+
+	return new(FileOperationsAtom).setFileOps(
+		fOps,
+		sourceFMgr,
+		destinationFMgr,
+		ePrefix)
+}
+
 // setFileOpsByStrings
 //
 // Reconfigures an instance of FileOps using source and destination
