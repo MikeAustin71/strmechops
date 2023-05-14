@@ -323,10 +323,18 @@ func (fops *FileOps) ExecuteFileOperation(
 			ePrefix.String())
 
 	case FileOpCode.MoveSourceFileToDestinationDir():
-		err = fops.moveSourceFileToDestinationDir()
+
+		err = fOpsNanobot.
+			moveSourceFileToDestinationDir(
+				fops,
+				ePrefix)
 
 	case FileOpCode.MoveSourceFileToDestinationFile():
-		err = fops.moveSourceFileToDestinationFile()
+
+		err = fOpsNanobot.
+			moveSourceFileToDestinationFile(
+				fops,
+				ePrefix)
 
 	case FileOpCode.DeleteDestinationFile():
 
@@ -342,6 +350,7 @@ func (fops *FileOps) ExecuteFileOperation(
 			ePrefix)
 
 	case FileOpCode.DeleteSourceAndDestinationFiles():
+
 		err = new(FileOperationsAtom).
 			deleteSourceAndDestinationFiles(
 				fops,
@@ -652,27 +661,6 @@ func (fops *FileOps) SetFileOpsCode(fOpCode FileOperationCode) error {
 	}
 
 	fops.opToExecute = fOpCode
-
-	return nil
-}
-
-// moveSourceFileToDestinationFile - Moves the source file
-// to the destination by fist copying the source file
-// to the destination and then deleting the source file.
-//
-// The final name will be the destination file in the
-// destination directory.
-func (fops *FileOps) moveSourceFileToDestinationFile() error {
-
-	ePrefix := "FileOps.moveSourceFileToDestinationFile() "
-
-	err := fops.source.MoveFileToFileMgr(
-		fops.destination,
-		ePrefix)
-
-	if err != nil {
-		return fmt.Errorf(ePrefix+"%v\n", err.Error())
-	}
 
 	return nil
 }

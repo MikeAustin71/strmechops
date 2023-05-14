@@ -1654,17 +1654,86 @@ func (fOpsNanobot *FileOperationsNanobot) copySrcToDestByIoByHardLink(
 
 // moveSourceFileFileToDestinationDir
 //
-// Moves the source file to the destination directory.
-// The file name is specified by the destination file
-// name taken from a FileOps object passed as input
+// Moves a source file to the destination directory.
+// The source file and destination file names are
+// specified by the FileOps object passed as input
 // parameter 'fOps'.
 //
 // The FileOps structure contains a destination File
-// Manager (fOps.destination  FileMgr) identifying the
+// Manager (fOps.destination FileMgr) identifying the
 // destination file which will be created by this method.
 //
-// If the destination directory does NOT exist, an error
-// will be returned.
+// This same FileOps structure also contains a source
+// File Manager which specifies the source directory and
+// file name (fOps.source FileMgr).
+//
+// If the destination directory does NOT exist, this
+// method will attempt to create that directory.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This is a 'move' file operation. Therefore, by
+//	definition, the original source file in the original
+//	source directory will be deleted after it is moved to
+//	the destination directory.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fOps 						*FileOps
+//
+//		A pointer to an instance of FileOps. This
+//		structure contains a source File Manager and a
+//		destination File Manager. The source file
+//		identified by the source File Manager will be
+//		moved to the location and file name identified
+//		by the destination File Manager. After the 'move'
+//		operation is completed, the source file will be
+//		deleted.
+//
+//		The source File Manager is represented by
+//		internal member variable 'fOps.source'.
+//
+//		The destination File Manager is represented by
+//		internal member variable 'fOps.destination'.
+//
+//		If 'fOps' has not been properly initialized,
+//		an error will be returned.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fOpsNanobot *FileOperationsNanobot) moveSourceFileToDestinationDir(
 	fOps *FileOps,
 	errPrefDto *ePref.ErrPrefixDto) error {
@@ -1682,7 +1751,8 @@ func (fOpsNanobot *FileOperationsNanobot) moveSourceFileToDestinationDir(
 	var ePrefix *ePref.ErrPrefixDto
 
 	funcName :=
-		"FileOperationsNanobot.moveSourceFileToDestinationDir()"
+		"FileOperationsNanobot." +
+			"moveSourceFileToDestinationDir()"
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -1755,6 +1825,171 @@ func (fOpsNanobot *FileOperationsNanobot) moveSourceFileToDestinationDir(
 			funcName,
 			fOps.source.GetAbsolutePathFileName(),
 			deepCopyDirMgr.GetAbsolutePath(),
+			err2.Error())
+	}
+
+	return err
+}
+
+// moveSourceFileToDestinationFile
+//
+// Moves a source file to the destination file by first
+// copying the source file to the destination and then
+// deleting the source file. The source file and
+// destination file names are specified by the FileOps
+// object passed as input parameter 'fOps'.
+//
+// The final file name consist of the destination file
+// name in the destination directory.
+//
+// The FileOps structure contains a source File Manager
+// which specifies the source directory and source file
+// name (fOps.source FileMgr).
+//
+// The FileOps structure also contains a destination File
+// Manager (fOps.destination FileMgr) identifying the
+// destination file which will be created by this method.
+//
+// The contents of the source file will be copied to the
+// destination file name. After the 'move' operation is
+// completed, the source file will be deleted.
+//
+// If the destination directory does NOT exist, an error
+// will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This is a 'move' file operation. Therefore, by
+//	definition, the original source file in the original
+//	source directory will be deleted after it is moved to
+//	the destination directory and destination file name.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fOps 						*FileOps
+//
+//		A pointer to an instance of FileOps. This
+//		structure contains a source File Manager and a
+//		destination File Manager. The source file
+//		identified by the source File Manager will be
+//		moved to the location and file name identified
+//		by the destination File Manager. After the 'move'
+//		operation is completed, the source file will be
+//		deleted.
+//
+//		The source File Manager is represented by
+//		internal member variable 'fOps.source'.
+//
+//		The destination File Manager is represented by
+//		internal member variable 'fOps.destination'.
+//
+//		If 'fOps' has not been properly initialized,
+//		an error will be returned.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fOpsNanobot *FileOperationsNanobot) moveSourceFileToDestinationFile(
+	fOps *FileOps,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fOpsNanobot.lock == nil {
+		fOpsNanobot.lock = new(sync.Mutex)
+	}
+
+	fOpsNanobot.lock.Lock()
+
+	defer fOpsNanobot.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName :=
+		"FileOperationsNanobot." +
+			"moveSourceFileToDestinationFile()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if fOps == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: FileOps instance is invalid!\n"+
+			"Input parameter 'fOps' is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if !fOps.isInitialized {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: FileOps instance is invalid!\n"+
+			"Input parameter 'fOps' has NOT been initialized.\n"+
+			"fOps.isInitialized = 'false'.",
+			ePrefix.String())
+
+		return err
+	}
+
+	var err2 error
+
+	err2 = fOps.source.MoveFileToFileMgr(
+		fOps.destination,
+		ePrefix.XCpy(
+			"fOps.destination<-fOps.source"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while moving the\n"+
+			"Source File to the Destination Directory.\n"+
+			"fOps.destination Directory = '%v'\n"+
+			"fOps.source File = '%v'\n"+
+			"Error= \n%v\n",
+			funcName,
+			fOps.destination.GetAbsolutePath(),
+			fOps.source.GetAbsolutePathFileName(),
 			err2.Error())
 	}
 

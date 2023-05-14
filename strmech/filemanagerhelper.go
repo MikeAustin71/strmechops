@@ -1466,6 +1466,7 @@ func (fMgrHlpr *fileMgrHelper) moveFile(
 			"Error: Input parameter 'targetFMgr' is a nil pointer!\n",
 			ePrefix.String())
 	}
+
 	var sourceFilePathDoesExist, targetFilePathDoesExist bool
 
 	fHelperAtom := new(fileMgrHelperAtom)
