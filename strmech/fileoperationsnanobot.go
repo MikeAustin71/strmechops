@@ -2050,7 +2050,7 @@ func (fOpsNanobot *FileOperationsNanobot) moveSourceFileToDestinationFile(
 //		This string specifies the destination file
 //		directory which will be combined with the
 //		destination file name parameter to configure the
-//		destination file member	variable 'fOps.source'
+//		destination file member	variable 'fOps.destination'
 //		contained in the 'fOps' FileOps object.
 //
 //		If this parameter is submitted as an empty string

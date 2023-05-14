@@ -851,9 +851,6 @@ func (fops *FileOps) NewByFileMgrs(
 // name and extension string, destination Directory
 // Manager and destination file name and extension string.
 //
-// If the destinationFileNameExt string is submitted as
-// an empty string, an error will be returned.
-//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -1037,68 +1034,198 @@ func (fops *FileOps) NewByDirMgrFileName(
 	return fOpsNew, err
 }
 
-// NewByDirStrsAndFileNameExtStrs - Creates and returns a new FileOps instance
-// based on source and destination input parameters which consist of two pairs
-// of directory or path strings and file name and extension strings.
+// NewByDirStrsAndFileNameExtStrs
+//
+// Creates and returns a new FileOps instance based on
+// source and destination input parameters which consist
+// of two pairs of directory or path strings and file
+// name and extension strings.
 //
 // If the input parameter, 'destinationFileNameExtStr' is an empty string, it
 // will be defaulted to a string value equal to 'sourceFileNameExtStr'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	sourceDirStr				string
+//
+//		This string specifies the source file directory
+//		which will be combined with the source file name
+//		parameter to configure the source file member
+//		variable 'fOps.source' contained in the returned
+//		instance of FileOps.
+//
+//		If this parameter is submitted as an empty string
+//		with a zero (0) string length, an error will be
+//		returned.
+//
+//	sourceFileNameExtStr		string
+//
+//		This string specifies the source file name and
+//		file extension which will be combined with the
+//		source directory parameter to configure the
+//		source file member variable 'fOps.source'
+//		contained in the returned instance of FileOps.
+//
+//		If this parameter is submitted as an empty string
+//		with a zero (0) string length, an error will be
+//		returned.
+//
+//	destinationDirStr			string
+//
+//		This string specifies the destination file
+//		directory which will be combined with the
+//		destination file name parameter to configure the
+//		destination file member	variable 'fOps.destination'
+//		contained in the returned instance of FileOps.
+//
+//		If this parameter is submitted as an empty string
+//		with a zero (0) string length, an error will be
+//		returned.
+//
+//	destinationFileNameExtStr	string
+//
+//		This string specifies the destination file name
+//		and file extension which will be combined with
+//		the destination directory parameter to configure
+//		the destination file member variable
+//		'fOps.destination' contained in the returned
+//		instance of FileOps.
+//
+//		If this parameter is submitted as an empty string
+//		with a zero (0) string length, an error will be
+//		returned.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	FileOps
+//
+//		If this method completes successfully, this
+//		parameter will return a new, and properly
+//		initialized instance, of FileOps.
+//
+//		Data values for this new instance will be
+//		constructed from the source and destination
+//		values passed as input parameters.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fops *FileOps) NewByDirStrsAndFileNameExtStrs(
 	sourceDirStr string,
 	sourceFileNameExtStr string,
 	destinationDirStr string,
-	destinationFileNameExtStr string) (FileOps, error) {
+	destinationFileNameExtStr string,
+	errorPrefix interface{}) (
+	FileOps,
+	error) {
 
-	ePrefix := "FileOps.NewByPathFileNameExtStrs() "
+	if fops.lock == nil {
+		fops.lock = new(sync.Mutex)
+	}
+
+	fops.lock.Lock()
+
+	defer fops.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileOps."+
+			"NewByDirStrsAndFileNameExtStrs()",
+		"")
+
+	if err != nil {
+		return FileOps{}, err
+	}
 
 	fOpsNew := FileOps{}
 
-	var err error
-
-	if len(sourceDirStr) == 0 {
-		return FileOps{},
-			fmt.Errorf("%v\n"+
-				"Error: 'sourceDirStr' is an EMPTY STRING!\n",
-				ePrefix)
-	}
-
-	if len(sourceFileNameExtStr) == 0 {
-		return FileOps{},
-			fmt.Errorf("%v\n"+
-				"Error: 'sourceFileNameExtStr' is an EMPTY STRING!\n",
-				ePrefix)
-	}
-
-	if len(destinationFileNameExtStr) == 0 {
-		destinationFileNameExtStr = sourceFileNameExtStr
-	}
-
-	fOpsNew.source, err = new(FileMgr).
-		NewFromDirStrFileNameStr(
+	err = new(FileOperationsNanobot).
+		setFileOpsByDirAndFileNameStr(
+			&fOpsNew,
 			sourceDirStr,
 			sourceFileNameExtStr,
-			ePrefix)
-
-	if err != nil {
-		return FileOps{},
-			fmt.Errorf(ePrefix+"Source File Error: %v", err.Error())
-	}
-
-	fOpsNew.destination, err = new(FileMgr).
-		NewFromDirStrFileNameStr(
 			destinationDirStr,
 			destinationFileNameExtStr,
-			ePrefix)
+			ePrefix.XCpy(
+				"fOpsNew<-"))
 
-	if err != nil {
-		return FileOps{},
-			fmt.Errorf(ePrefix+"Destination File Error: %v", err.Error())
-	}
-
-	fOpsNew.isInitialized = true
-
-	return fOpsNew, nil
-
+	return fOpsNew, err
 }
 
 // NewByPathFileNameExtStrs - Creates and returns a new FileOps instance

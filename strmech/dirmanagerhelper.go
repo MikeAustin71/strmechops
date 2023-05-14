@@ -3784,12 +3784,14 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryFileOps(
 		// Must be a match - this is a 'selected' file!
 		srcFileNameExt = nameFInfo.Name()
 
-		fileOp,
-			err2 = new(FileOps).NewByDirStrsAndFileNameExtStrs(
-			sourceDMgr.absolutePath,
-			srcFileNameExt,
-			targetBaseDir.absolutePath,
-			srcFileNameExt)
+		err2 = new(FileOperationsNanobot).
+			setFileOpsByDirAndFileNameStr(
+				&fileOp,
+				sourceDMgr.absolutePath,
+				srcFileNameExt,
+				targetBaseDir.absolutePath,
+				srcFileNameExt,
+				ePrefix.XCpy("fileOp<-"))
 
 		if err2 != nil {
 
@@ -3798,7 +3800,7 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryFileOps(
 			}
 
 			err = fmt.Errorf("%v\n"+
-				"Error returned by FileOps{}.NewByDirStrsAndFileNameExtStrs()\n"+
+				"Error returned by FileOps.NewByDirStrsAndFileNameExtStrs()\n"+
 				"%v Source Path='%v'\n"+
 				"srcFileNameExt='%v'\n"+
 				"%v Destination Directory='%v'\n"+
@@ -3820,7 +3822,9 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryFileOps(
 
 		for i := 0; i < len(fileOps); i++ {
 
-			err2 = fileOp.ExecuteFileOperation(fileOps[i])
+			err2 = fileOp.ExecuteFileOperation(
+				fileOps[i],
+				ePrefix)
 
 			if err2 != nil {
 

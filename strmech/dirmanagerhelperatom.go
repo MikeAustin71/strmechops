@@ -549,8 +549,14 @@ func (dMgrHlprAtom *dirMgrHelperAtom) executeFileOpsOnFoundFiles(
 			return nil
 		}
 
-		fileOp, err := new(FileOps).NewByDirStrsAndFileNameExtStrs(
-			pathFile, srcFileNameExt, destDir, srcFileNameExt)
+		fileOp,
+			err := new(FileOps).
+			NewByDirStrsAndFileNameExtStrs(
+				pathFile,
+				srcFileNameExt,
+				destDir,
+				srcFileNameExt,
+				ePrefix.XCpy("fileOp<-"))
 
 		if err != nil {
 			err2 = fmt.Errorf("%v\n"+
@@ -572,7 +578,9 @@ func (dMgrHlprAtom *dirMgrHelperAtom) executeFileOpsOnFoundFiles(
 
 		for i := 0; i < len(dirOp.FileOps); i++ {
 
-			err = fileOp.ExecuteFileOperation(dirOp.FileOps[i])
+			err = fileOp.ExecuteFileOperation(
+				dirOp.FileOps[i],
+				ePrefix)
 
 			if err != nil {
 				err2 = fmt.Errorf("%v\n"+
