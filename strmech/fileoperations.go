@@ -1392,18 +1392,184 @@ func (fops FileOps) NewByPathFileNameExtStrs(
 	return fOpsNew, err
 }
 
-// SetFileOpsCode - Sets the File Operations code for the current FileOps
+// SetFileOpsCode
+//
+// Sets the File Operations code for the current FileOps
 // instance.
-func (fops *FileOps) SetFileOpsCode(fOpCode FileOperationCode) error {
+//
+// The File Operations Code is an integer enumeration. It
+// signals the type of operation to be performed on a file.
+//
+// This method stores the user specified File Operations
+// Code internally for later use in the performance of file
+// operations.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fOpCode						FileOperationCode
+//
+//		An enumeration value which will be stored
+//		internal to the current FileOps instance for
+//		later use in specifying the performance of
+//		file operations.
+//
+//		Valid File Operation Codes are listed as
+//		follows:
+//
+//			FileOperationCode(0).None()
+//			FileOperationCode(0).MoveSourceFileToDestinationFile()
+//			FileOperationCode(0).MoveSourceFileToDestinationDir()
+//			FileOperationCode(0).DeleteDestinationFile()
+//			FileOperationCode(0).DeleteSourceFile()
+//			FileOperationCode(0).DeleteSourceAndDestinationFiles()
+//			FileOperationCode(0).CopySourceToDestinationByHardLinkByIo()
+//			FileOperationCode(0).CopySourceToDestinationByIoByHardLink()
+//			FileOperationCode(0).CopySourceToDestinationByHardLink()
+//			FileOperationCode(0).CopySourceToDestinationByIo()
+//			FileOperationCode(0).CreateSourceDir()
+//			FileOperationCode(0).CreateSourceDirAndFile()
+//			FileOperationCode(0).CreateSourceFile()
+//			FileOperationCode(0).CreateDestinationDir()
+//			FileOperationCode(0).CreateDestinationDirAndFile()
+//			FileOperationCode(0).CreateDestinationFile()
+//
+//		Users may find it easier to use the shorthand
+//		notation for designating valid File Operation
+//		Codes.
+//
+//			FileOpCode.None()
+//			FileOpCode.MoveSourceFileToDestinationFile()
+//			FileOpCode.MoveSourceFileToDestinationDir()
+//			FileOpCode.DeleteDestinationFile()
+//			FileOpCode.DeleteSourceFile()
+//			FileOpCode.DeleteSourceAndDestinationFiles()
+//			FileOpCode.CopySourceToDestinationByHardLinkByIo()
+//			FileOpCode.CopySourceToDestinationByIoByHardLink()
+//			FileOpCode.CopySourceToDestinationByHardLink()
+//			FileOpCode.CopySourceToDestinationByIo()
+//			FileOpCode.CreateSourceDir()
+//			FileOpCode.CreateSourceDirAndFile()
+//			FileOpCode.CreateSourceFile()
+//			FileOpCode.CreateDestinationDir()
+//			FileOpCode.CreateDestinationDirAndFile()
+//			FileOpCode.CreateDestinationFile()
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fops *FileOps) SetFileOpsCode(
+	fOpCode FileOperationCode,
+	errorPrefix interface{}) error {
 
-	err := fOpCode.IsValid()
+	if fops.lock == nil {
+		fops.lock = new(sync.Mutex)
+	}
+
+	fops.lock.Lock()
+
+	defer fops.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	funcName := "FileOps.SetFileOpsCode()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
 
 	if err != nil {
-		return fmt.Errorf("FileOps.SetFileOpsCode()\n"+
-			"Error returned by fOpCode.IsValidInstanceError()\nError='%v'", err.Error())
+		return err
+	}
+
+	err = fOpCode.IsValid()
+
+	if err != nil {
+
+		return fmt.Errorf("%v\n"+
+			"Error returned by fOpCode.IsValidInstanceError()\n"+
+			"Error= \n%v\n",
+			ePrefix.String(),
+			err.Error())
 	}
 
 	fops.opToExecute = fOpCode
 
-	return nil
+	return err
 }
