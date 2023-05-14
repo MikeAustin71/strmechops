@@ -254,86 +254,26 @@ func (fOpsAtom *FileOperationsAtom) setFileOps(
 		return err
 	}
 
-	err = sourceFMgr.IsFileMgrValid(
-		ePrefix.XCpy("sourceFMgr"))
+	fOpsElectron := FileOperationsElectron{}
+
+	err = fOpsElectron.setFileOpsSource(
+		fOps,
+		sourceFMgr,
+		ePrefix)
 
 	if err != nil {
 
-		return fmt.Errorf("%v\n"+
-			"Source File Manager is INVALID!\n"+
-			"Error= \n%v\n",
-			funcName,
-			err.Error())
+		return err
 	}
 
-	err = destinationFMgr.IsFileMgrValid(
-		ePrefix.XCpy("destinationFMgr"))
+	err = fOpsElectron.setFileOpsDestination(
+		fOps,
+		destinationFMgr,
+		ePrefix)
 
 	if err != nil {
 
-		return fmt.Errorf("%v\n"+
-			"Destination File Manager is INVALID!\n"+
-			"Error= \n%v\n",
-			funcName,
-			err.Error())
-	}
-
-	var newSourceFMgr, newDestinationFMgr FileMgr
-
-	newSourceFMgr,
-		err = sourceFMgr.CopyOut(ePrefix.XCpy(
-		"sourceFMgr"))
-
-	if err != nil {
-
-		return fmt.Errorf("%v\n"+
-			"Deep Copy of Source File Manager Failed!\n"+
-			"Error= \n%v\n",
-			funcName,
-			err.Error())
-	}
-
-	newDestinationFMgr,
-		err = destinationFMgr.CopyOut(ePrefix.XCpy(
-		"destinationFMgr"))
-
-	if err != nil {
-
-		return fmt.Errorf("%v\n"+
-			"Deep Copy of Destination File Manager Failed!\n"+
-			"Error= \n%v\n",
-			funcName,
-			err.Error())
-	}
-
-	err = fOps.source.CopyIn(
-		&newSourceFMgr,
-		ePrefix.XCpy(
-			"fOps.source<-newSourceFMgr"))
-
-	if err != nil {
-
-		return fmt.Errorf("%v\n"+
-			"Error Copying Source File Manager to\n"+
-			"fOps.source."+
-			"Error= \n%v\n",
-			funcName,
-			err.Error())
-	}
-
-	err = fOps.destination.CopyIn(
-		&newDestinationFMgr,
-		ePrefix.XCpy(
-			"fOps.destination<-newDestinationFMgr"))
-
-	if err != nil {
-
-		return fmt.Errorf("%v\n"+
-			"Error Copying Destination File Manager to\n"+
-			"fOps.destination."+
-			"Error= \n%v\n",
-			funcName,
-			err.Error())
+		return err
 	}
 
 	fOps.isInitialized = true
