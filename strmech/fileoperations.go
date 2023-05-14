@@ -695,34 +695,48 @@ func (fops *FileOps) GetDestination(
 		ePrefix.XCpy("fops.destination"))
 }
 
-// NewByFileMgrs - Creates and returns a new FileOps
-// instance based on input parameters 'source' and
-// 'destination' File Managers.
+// NewByFileMgrs
+//
+// Creates and returns a new FileOps instance based on
+// input parameters 'source' and 'destination' File
+// Managers.
 func (fops FileOps) NewByFileMgrs(
-	source,
-	destination FileMgr) (FileOps, error) {
+	source FileMgr,
+	destination FileMgr,
+	errorPrefix interface{}) (
+	FileOps,
+	error) {
 
-	ePrefix := "FileOps.NewByFileMgrs() "
-
-	err := source.IsFileMgrValid(ePrefix + "sourceFileMgr Error: ")
-
-	if err != nil {
-		return FileOps{},
-			fmt.Errorf("Source File Manager INVALID!\n%v", err.Error())
+	if fops.lock == nil {
+		fops.lock = new(sync.Mutex)
 	}
 
-	err = destination.IsFileMgrValid(ePrefix + "destinationFileMgr Error: ")
+	fops.lock.Lock()
+
+	defer fops.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileOps."+
+			"NewByFileMgrs()",
+		"")
 
 	if err != nil {
-		return FileOps{},
-			fmt.Errorf("Destination File Manager INVALID!\n%v", err.Error())
+		return FileOps{}, err
 	}
 
 	fOpsNew := FileOps{}
 
-	fOpsNew.source = source.CopyOut()
-	fOpsNew.destination = destination.CopyOut()
-	fOpsNew.isInitialized = true
+	err = new(FileOperationsAtom).
+		setFileOps(
+			&fOpsNew,
+			source,
+			destination,
+			ePrefix.XCpy("fOpsNew"))
 
 	return fOpsNew, nil
 }
