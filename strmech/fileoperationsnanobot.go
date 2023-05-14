@@ -2488,7 +2488,7 @@ func (fOpsNanobot *FileOperationsNanobot) setFileOpsByDirMgrFileName(
 //		input parameters 'sourcePathFileName' and
 //		'destinationPathFileName'.
 //
-//	sourcePathFileName			string
+//	sourcePathFileNameExt		string
 //
 //		This string contains the source path and file
 //		name used to configure the source File Manager
@@ -2498,7 +2498,7 @@ func (fOpsNanobot *FileOperationsNanobot) setFileOpsByDirMgrFileName(
 //		with a zero (0) string length, an error will be
 //		returned.
 //
-//	destinationPathFileName		string
+//	destinationPathFileNameExt	string
 //
 //		This string contains the destination path and
 //		file name used to configure the destination File
@@ -2542,8 +2542,8 @@ func (fOpsNanobot *FileOperationsNanobot) setFileOpsByDirMgrFileName(
 //	 	attached to the	beginning of the error message.
 func (fOpsNanobot *FileOperationsNanobot) setFileOpsByStrings(
 	fOps *FileOps,
-	sourcePathFileName string,
-	destinationPathFileName string,
+	sourcePathFileNameExt string,
+	destinationPathFileNameExt string,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if fOpsNanobot.lock == nil {
@@ -2582,17 +2582,17 @@ func (fOpsNanobot *FileOperationsNanobot) setFileOpsByStrings(
 		return err
 	}
 
-	if len(sourcePathFileName) == 0 {
+	if len(sourcePathFileNameExt) == 0 {
 
 		return fmt.Errorf("%v\n"+
 			"Error: 'sourceFileNameExtStr' is an EMPTY STRING!\n",
 			ePrefix.String())
 	}
 
-	if len(destinationPathFileName) == 0 {
+	if len(destinationPathFileNameExt) == 0 {
 
 		return fmt.Errorf("%v\n"+
-			"Error: 'destinationPathFileName' is an EMPTY STRING!\n",
+			"Error: 'destinationPathFileNameExt' is an EMPTY STRING!\n",
 			ePrefix.String())
 	}
 
@@ -2600,35 +2600,35 @@ func (fOpsNanobot *FileOperationsNanobot) setFileOpsByStrings(
 
 	sourceFMgr,
 		err = new(FileMgr).New(
-		sourcePathFileName,
+		sourcePathFileNameExt,
 		ePrefix.XCpy(
-			"sourceFMgr<-sourcePathFileName"))
+			"sourceFMgr<-sourcePathFileNameExt"))
 
 	if err != nil {
 
 		return fmt.Errorf("%v\n"+
 			"Creation of intermediate source File Manager Failed!\n"+
-			"sourcePathFileName= '%v'\n"+
+			"sourcePathFileNameExt= '%v'\n"+
 			"Error= \n%v\n",
 			funcName,
-			sourcePathFileName,
+			sourcePathFileNameExt,
 			err.Error())
 	}
 
 	destinationFMgr,
 		err = new(FileMgr).New(
-		destinationPathFileName,
+		destinationPathFileNameExt,
 		ePrefix.XCpy(
-			"destinationFMgr<-destinationPathFileName"))
+			"destinationFMgr<-destinationPathFileNameExt"))
 
 	if err != nil {
 
 		return fmt.Errorf("%v\n"+
 			"Creation of intermediate destination File Manager Failed!\n"+
-			"destinationPathFileName= '%v'\n"+
+			"destinationPathFileNameExt= '%v'\n"+
 			"Error= \n%v\n",
 			funcName,
-			destinationPathFileName,
+			destinationPathFileNameExt,
 			err.Error())
 	}
 

@@ -1228,43 +1228,168 @@ func (fops *FileOps) NewByDirStrsAndFileNameExtStrs(
 	return fOpsNew, err
 }
 
-// NewByPathFileNameExtStrs - Creates and returns a new FileOps instance
-// based on two string input parameters. The first represents the path name,
-// file name and extension of the source file. The second represents the
-// path name, file name and extension of the destination file.
+// NewByPathFileNameExtStrs
+//
+// Creates and returns a new FileOps instance based on
+// two string input parameters.
+//
+// The first parameter represents the path name, file
+// name and extension of the source file.
+//
+// The second represents the path name, file name and
+// extension of the destination file.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	sourcePathFileNameExt		string
+//
+//		This string contains the source path and file
+//		name used to configure the source File Manager
+//		encapsulated in the returned instance of FileOps
+//		(FileOps.source).
+//
+//		If this parameter is submitted as an empty string
+//		with a zero (0) string length, an error will be
+//		returned.
+//
+//	destinationPathFileNameExt	string
+//
+//		This string contains the destination path and
+//		file name used to configure the destination File
+//		Manager encapsulated in  the returned instance of
+//		FileOps (FileOps.destination).
+//
+//		If this parameter is submitted as an empty string
+//		with a zero (0) string length, an error will be
+//		returned.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	FileOps
+//
+//		If this method completes successfully, this
+//		parameter will return a new, and properly
+//		initialized instance, of FileOps.
+//
+//		Data values for this new instance will be
+//		constructed from the source and destination
+//		values passed as input parameters.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fops FileOps) NewByPathFileNameExtStrs(
 	sourcePathFileNameExt string,
-	destinationPathFileNameExt string) (FileOps, error) {
+	destinationPathFileNameExt string,
+	errorPrefix interface{}) (
+	FileOps,
+	error) {
 
-	ePrefix := "FileOps.NewByPathFileNameExtStrs() "
+	if fops.lock == nil {
+		fops.lock = new(sync.Mutex)
+	}
+
+	fops.lock.Lock()
+
+	defer fops.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileOps."+
+			"NewByPathFileNameExtStrs()",
+		"")
+
+	if err != nil {
+		return FileOps{}, err
+	}
 
 	fOpsNew := FileOps{}
 
-	var err error
-
-	fOpsNew.source, err = new(FileMgr).
-		NewFromPathFileNameExtStr(
+	err = new(FileOperationsNanobot).
+		setFileOpsByStrings(
+			&fOpsNew,
 			sourcePathFileNameExt,
-			ePrefix)
-
-	if err != nil {
-		return FileOps{},
-			fmt.Errorf(ePrefix+"Source File Error: %v", err.Error())
-	}
-
-	fOpsNew.destination, err = new(FileMgr).
-		NewFromPathFileNameExtStr(
 			destinationPathFileNameExt,
-			ePrefix)
+			ePrefix.XCpy(
+				"fOpsNew<-"))
 
-	if err != nil {
-		return FileOps{},
-			fmt.Errorf(ePrefix+"Destination File Error: %v", err.Error())
-	}
-
-	fOpsNew.isInitialized = true
-
-	return fOpsNew, nil
+	return fOpsNew, err
 }
 
 // SetFileOpsCode - Sets the File Operations code for the current FileOps
