@@ -1995,3 +1995,89 @@ func (fOpsNanobot *FileOperationsNanobot) moveSourceFileToDestinationFile(
 
 	return err
 }
+
+// setFileOpsByStrings
+//
+// Reconfigures an instance of FileOps using source and destination
+// file names passed as strings via input parameters
+// 'sourcePathFileName' and 'destinationPathFileName'.
+func (fOpsNanobot *FileOperationsNanobot) setFileOpsByStrings(
+	fOps *FileOps,
+	sourcePathFileName string,
+	destinationPathFileName string,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fOpsNanobot.lock == nil {
+		fOpsNanobot.lock = new(sync.Mutex)
+	}
+
+	fOpsNanobot.lock.Lock()
+
+	defer fOpsNanobot.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName :=
+		"FileOperationsNanobot." +
+			"setFileOpsByStrings()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if fOps == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: FileOps instance is invalid!\n"+
+			"Input parameter 'fOps' is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	var sourceFMgr, destinationFMgr FileMgr
+
+	sourceFMgr,
+		err = new(FileMgr).New(
+		sourcePathFileName,
+		ePrefix.XCpy(
+			"sourceFMgr<-sourcePathFileName"))
+
+	if err != nil {
+
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter 'sourcePathFileName' is invalid!\n"+
+			"Error= \n%v\n",
+			funcName,
+			err.Error())
+	}
+
+	destinationFMgr,
+		err = new(FileMgr).New(
+		destinationPathFileName,
+		ePrefix.XCpy(
+			"destinationFMgr<-destinationPathFileName"))
+
+	if err != nil {
+
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter 'destinationPathFileName' is invalid!\n"+
+			"Error= \n%v\n",
+			funcName,
+			err.Error())
+	}
+
+	return new(FileOperationsAtom).setFileOps(
+		fOps,
+		sourceFMgr,
+		destinationFMgr,
+		ePrefix)
+}
