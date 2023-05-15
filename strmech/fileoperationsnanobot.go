@@ -2463,7 +2463,7 @@ func (fOpsNanobot *FileOperationsNanobot) setFileOpsByDirMgrFileName(
 		ePrefix)
 }
 
-// setFileOpsByStrings
+// setByPathFileNameExtStrs
 //
 // Reconfigures an instance of FileOps using source and destination
 // file names passed as strings via input parameters
@@ -2540,7 +2540,7 @@ func (fOpsNanobot *FileOperationsNanobot) setFileOpsByDirMgrFileName(
 //	 	text passed by input parameter, 'errPrefDto'.
 //	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fOpsNanobot *FileOperationsNanobot) setFileOpsByStrings(
+func (fOpsNanobot *FileOperationsNanobot) setByPathFileNameExtStrs(
 	fOps *FileOps,
 	sourcePathFileNameExt string,
 	destinationPathFileNameExt string,
@@ -2560,7 +2560,7 @@ func (fOpsNanobot *FileOperationsNanobot) setFileOpsByStrings(
 
 	funcName :=
 		"FileOperationsNanobot." +
-			"setFileOpsByStrings()"
+			"setByPathFileNameExtStrs()"
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
