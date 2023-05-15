@@ -39,6 +39,7 @@ import (
 //	new(FileOps).NewByDirStrsAndFileNameExtStrs(...)
 //	new(FileOps).NewByPathFileNameExtStrs(...)
 //	new(FileOps).SetByFileMgrs(...)
+//	new(FileOps).SetByDirMgrFileName(...)
 type FileOps struct {
 	isInitialized bool
 	source        FileMgr
@@ -874,10 +875,10 @@ func (fops *FileOps) NewByFileMgrs(
 // NewByDirMgrFileName
 //
 // Creates and returns a new FileOps instance based on
-// input parameters a source Directory Manger, a source
-// file name and extension string, a destination
-// Directory Manager and a destination file name and
-// extension string.
+// input parameters consisting of a source Directory
+// Manger, a source file name and extension string, a
+// destination Directory Manager and a destination file
+// name and extension string.
 //
 // ----------------------------------------------------------------
 //
@@ -1066,11 +1067,8 @@ func (fops *FileOps) NewByDirMgrFileName(
 //
 // Creates and returns a new FileOps instance based on
 // source and destination input parameters which consist
-// of two pairs of directory or path strings and file
-// name and extension strings.
-//
-// If the input parameter, 'destinationFileNameExtStr' is an empty string, it
-// will be defaulted to a string value equal to 'sourceFileNameExtStr'.
+// of two pairs of directory strings and file name and
+// extension strings.
 //
 // ----------------------------------------------------------------
 //
@@ -1562,13 +1560,17 @@ func (fops *FileOps) SetByFileMgrs(
 
 // SetByDirMgrFileName
 //
-// # Reconfigures the current FileOps instance based on
+// Reconfigures the current FileOps instance based on
+// input parameters consisting of a source Directory
+// Manger, a source file name and extension string, a
+// destination Directory Manager and a destination file
+// name and extension string.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	sourceDir					DirMgr
+//	sourceDirStr				DirMgr
 //
 //		This instance of Directory Manager specifies the
 //		source file directory which will be combined with
@@ -1579,7 +1581,7 @@ func (fops *FileOps) SetByFileMgrs(
 //		If this parameter is evaluated as invalid, an
 //		error will be returned.
 //
-//	sourceFileNameExt			string
+//	sourceFileNameExtStr		string
 //
 //		This string specifies the source file name and
 //		file extension which will be combined with the
@@ -1591,7 +1593,7 @@ func (fops *FileOps) SetByFileMgrs(
 //		with a zero (0) string length, an error will be
 //		returned.
 //
-//	destinationDir				DirMgr
+//	destinationDirStr			DirMgr
 //
 //		This instance of Directory Manager specifies the
 //		destination file directory which will be combined
@@ -1603,7 +1605,7 @@ func (fops *FileOps) SetByFileMgrs(
 //		If this parameter is evaluated as invalid, an
 //		error will be returned.
 //
-//	destinationFileNameExt		string
+//	destinationFileNameExtStr	string
 //
 //		This string specifies the destination file name
 //		and file extension which will be combined with
@@ -1679,17 +1681,6 @@ func (fops *FileOps) SetByFileMgrs(
 //
 // # Return Values
 //
-//	FileOps
-//
-//		If this method completes successfully, this
-//		parameter will return a new, and properly
-//		initialized instance, of FileOps.
-//
-//		Data values for this new instance will be
-//		constructed from the source and destination
-//		Directory Managers file name strings passed as
-//		input parameters.
-//
 //	error
 //
 //		If this method completes successfully, the
@@ -1739,6 +1730,182 @@ func (fops *FileOps) SetByDirMgrFileName(
 			destinationDir,
 			destinationFileNameExt,
 			ePrefix.XCpy("fops<-"))
+}
+
+// SetByDirStrsAndFileNameExtStrs
+//
+// Reconfigures the current FileOps instance based on
+// input parameters consisting of a source Directory
+// Manger, a source file name and extension string, a
+// destination Directory Manager and a destination file
+// name and extension string.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	sourceDirStr				string
+//
+//		This string specifies the source file directory
+//		which will be combined with the source file name
+//		parameter to configure the source file member
+//		variable 'FileOps.source' contained in the
+//		current instance of FileOps.
+//
+//		If this parameter is submitted as an empty string
+//		with a zero (0) string length, an error will be
+//		returned.
+//
+//	sourceFileNameExtStr		string
+//
+//		This string specifies the source file name and
+//		file extension which will be combined with the
+//		source directory parameter to configure the
+//		source file member variable 'FileOps.source'
+//		contained in the current instance of FileOps.
+//
+//		If this parameter is submitted as an empty string
+//		with a zero (0) string length, an error will be
+//		returned.
+//
+//	destinationDirStr			string
+//
+//		This string specifies the destination file
+//		directory which will be combined with the
+//		destination file name parameter to configure the
+//		destination file member	variable 'fOps.destination'
+//		contained in the current instance of FileOps.
+//
+//		If this parameter is submitted as an empty string
+//		with a zero (0) string length, an error will be
+//		returned.
+//
+//	destinationFileNameExtStr	string
+//
+//		This string specifies the destination file name
+//		and file extension which will be combined with
+//		the destination directory parameter to configure
+//		the destination file member variable
+//		'fOps.destination' contained in the current
+//		instance of FileOps.
+//
+//		If this parameter is submitted as an empty string
+//		with a zero (0) string length, an error will be
+//		returned.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fops *FileOps) SetByDirStrsAndFileNameExtStrs(
+	sourceDirStr string,
+	sourceFileNameExtStr string,
+	destinationDirStr string,
+	destinationFileNameExtStr string,
+	errorPrefix interface{}) error {
+
+	if fops.lock == nil {
+		fops.lock = new(sync.Mutex)
+	}
+
+	fops.lock.Lock()
+
+	defer fops.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileOps."+
+			"SetByDirStrsAndFileNameExtStrs()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(FileOperationsNanobot).
+		setFileOpsByDirAndFileNameStr(
+			fops,
+			sourceDirStr,
+			sourceFileNameExtStr,
+			destinationDirStr,
+			destinationFileNameExtStr,
+			ePrefix.XCpy(
+				"fops"))
 }
 
 // SetFileOpsCode
