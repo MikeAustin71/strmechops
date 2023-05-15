@@ -10,6 +10,221 @@ type FileOperationsNanobot struct {
 	lock *sync.Mutex
 }
 
+// copyIn
+//
+// This method receives two instances of FileOps, the
+// Destination FileOps and the Source FileOps.
+//
+// All data contained in the Source FileOps instance
+// will be copied to corresponding data elements in
+// the Destination FileOps instance.
+//
+// The type of copy operation performed is a 'Deep'
+// copy.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	destinationFOps				*FileOps
+//
+//		A pointer to an instance of FileOps. A deep copy
+//		of the internal member data values contained in
+//		'sourceFOps' will be copied to the corresponding
+//		data elements contained this parameter,
+//		'destinationFOps'.
+//
+//		If 'fOps' has not been properly initialized,
+//		an error will be returned.
+//
+//	sourceFOps					*FileOps
+//
+//		A pointer to an instance of FileOps. A deep copy
+//		of the internal member data values contained in
+//		this intance will be copied to the corresponding
+//		data elements contained parameter
+//		'destinationFOps'.
+//
+//		If 'sourceFOps' evaluates as invalid, an error
+//		will be returned.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fOpsNanobot *FileOperationsNanobot) copyIn(
+	destinationFOps *FileOps,
+	sourceFOps *FileOps,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fOpsNanobot.lock == nil {
+		fOpsNanobot.lock = new(sync.Mutex)
+	}
+
+	fOpsNanobot.lock.Lock()
+
+	defer fOpsNanobot.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName :=
+		"FileOperationsNanobot." +
+			"copyIn()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if destinationFOps == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Target FileOps instance is invalid!\n"+
+			"Input parameter 'destinationFOps' is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if sourceFOps == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Source FileOps instance is invalid!\n"+
+			"Input parameter 'sourceFOps' is a nil pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if !sourceFOps.isInitialized {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Source FileOps instance is invalid!\n"+
+			"Input parameter 'sourceFOps' has NOT been initialized.\n"+
+			"sourceFOps.isInitialized = 'false'.",
+			ePrefix.String())
+
+		return err
+	}
+
+	fHelperAtom := fileMgrHelperAtom{}
+
+	err = fHelperAtom.
+		isFileMgrValid(
+			&sourceFOps.source,
+			ePrefix.XCpy("sourceFOps.source"))
+
+	if err != nil {
+
+		return fmt.Errorf("%v\n"+
+			"Error: The Source FileOps source File Manager\n"+
+			"'sourceFOps.source' is Invalid!\n"+
+			"Error= \n%v\n",
+			funcName,
+			err.Error())
+	}
+
+	err = fHelperAtom.
+		isFileMgrValid(
+			&sourceFOps.destination,
+			ePrefix.XCpy("sourceFOps.source"))
+
+	if err != nil {
+
+		return fmt.Errorf("%v\n"+
+			"Error: The Source FileOps destination File Manager\n"+
+			"'sourceFOps.destination' is Invalid!\n"+
+			"Error= \n%v\n",
+			funcName,
+			err.Error())
+	}
+
+	err = sourceFOps.opToExecute.IsValid()
+
+	if err != nil {
+
+		sourceFOps.opToExecute = FileOpCode.None()
+
+	}
+
+	err = new(fileMgrHelperAtom).copyInFileMgr(
+		&destinationFOps.source,
+		&sourceFOps.source,
+		ePrefix.XCpy(
+			"destinationFOps.source<-"+
+				"sourceFOps.source"))
+
+	if err != nil {
+
+		return fmt.Errorf("%v\n"+
+			"The Source FileOps copy operation FAILED!\n"+
+			"Error: destinationFOps.source <- sourceFOps.source\n"+
+			"sourceFOps.source= '%v'\n"+
+			"Error= \n%v\n",
+			funcName,
+			sourceFOps.source.absolutePathFileName,
+			err.Error())
+	}
+
+	err = new(fileMgrHelperAtom).copyInFileMgr(
+		&destinationFOps.destination,
+		&sourceFOps.destination,
+		ePrefix.XCpy(
+			"destinationFOps.destination<-"+
+				"sourceFOps.destination"))
+
+	if err != nil {
+
+		return fmt.Errorf("%v\n"+
+			"The Source FileOps copy operation FAILED!\n"+
+			"Error: destinationFOps.destination <- sourceFOps.destination\n"+
+			"sourceFOps.destination= '%v'\n"+
+			"Error= \n%v\n",
+			funcName,
+			sourceFOps.destination.absolutePathFileName,
+			err.Error())
+	}
+
+	destinationFOps.opToExecute =
+		sourceFOps.opToExecute
+
+	return err
+}
+
 // copyOut
 //
 // Returns a deep copy of the current FileOps instance
