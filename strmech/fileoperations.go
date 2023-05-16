@@ -299,12 +299,42 @@ func (fops *FileOps) CopyOut(
 		ePrefix.XCpy("<-fops"))
 }
 
-// Equal - Returns 'true' if source, destination and opToExecute are
-// equivalent. In other words both the current File Operations instance
-// and the File Operations instance passed as an input parameter must
-// have data fields which are equal in all respects.
+// Equal
 //
-// If any data field is found to be unequal, this method returns 'false'.
+// Returns 'true' if source, destination and opToExecute
+// are data values are equivalent.
+//
+// In other words, a return value of 'true' signals that
+// both the current File Operations instance and the File
+// Operations instance passed as an input parameter
+// ('fops2') must have data fields which are equal in all
+// respects.
+//
+// If any data field is found to be unequal, this method
+// returns 'false'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fops2						*FileOps
+//
+//		A pointer to an external instance of FileOps.
+//		All the internal member data values in this
+//		instance will be compared to the corresponding
+//		data values in the current instance of FileOps to
+//		determine if they are equivalent.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If all the internal member data values in the
+//		current instance of FileOps are equivalent to the
+//		corresponding data values contained in 'fops2',
+//		this parameter will return a value of 'true'.
 func (fops *FileOps) Equal(fops2 *FileOps) bool {
 
 	if !fops.source.Equal(&fops2.source) {
@@ -322,18 +352,53 @@ func (fops *FileOps) Equal(fops2 *FileOps) bool {
 	return true
 }
 
-// EqualPathFileNameExt - Compares two File Operations Types, 'FileOps'. The method
-// returns 'true' if source and destination absolute paths, file
-// names and file extensions are equivalent. Data Field 'opToExecute' is
+// EqualPathFileNameExt
+//
+// Compares the current instance of FileOps to an
+// external instance of FileOps passed as input parameter
+// 'fops2'.
+//
+// This comparison will only encompass the member
+// variables for source and destination file path/names.
+//
+// This method returns 'true' if source and destination
+// absolute paths, file names and file extensions are
+// equivalent. The member data element 'opToExecute' is
 // not included in the comparison.
 //
-// The absolute path, file name and file extension comparisons are
-// case-insensitive. This means that all strings used in the comparisons are
-// first converted to lower case before testing for equivalency.
+// The absolute path, file name and file extension
+// comparison is case-insensitive. This means that all
+// strings used in the comparisons are first converted to
+// lower case before applying the test for equivalency.
 //
-// If the absolute paths, file names and file extensions are NOT equal,
-// this method returns 'false'.
-func (fops *FileOps) EqualPathFileNameExt(fops2 *FileOps) bool {
+// If the absolute paths, file names and file extensions
+// are NOT equal, this method returns 'false'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fops2						*FileOps
+//
+//		A pointer to an external instance of FileOps.
+//		The source and destination member data values in
+//		this instance will be compared to the corresponding
+//		data values in the current FileOps instance to
+//		determine if they are equivalent.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If all the source and destination member data
+//		values int the current instance of FileOps are
+//		equivalent to the corresponding data values
+//		contained in 'fops2', this parameter will return
+//		a value of 'true'.
+func (fops *FileOps) EqualPathFileNameExt(
+	fops2 *FileOps) bool {
 
 	if !fops.source.EqualPathFileNameExt(&fops2.source) {
 		return false
@@ -346,8 +411,11 @@ func (fops *FileOps) EqualPathFileNameExt(fops2 *FileOps) bool {
 	return true
 }
 
-// IsInitialized - Returns a boolean value indicating whether
-// this FileOps instance has been properly initialized.
+// IsInitialized
+//
+// Returns a boolean value indicating whether the
+// current FileOps instance has been properly
+// initialized.
 func (fops *FileOps) IsInitialized() bool {
 	return fops.isInitialized
 }
