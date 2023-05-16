@@ -264,6 +264,62 @@ func (fOpsElectron *FileOperationsElectron) deleteSourceFile(
 	return err
 }
 
+// empty
+//
+// This method receives a pointer to an instance of
+// FileOps and proceeds to delete and reset all the
+// contained member variable data values to their zero
+// value or uninitialized state.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete and reset all pre-existing
+//	data values in the current instance of FileOps to
+//	their zero value or uninitialized state.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fOps						*FileOps
+//
+//		A pointer to an instance of FileOps. All member
+//		variable data values contained in this instance
+//		will be deleted and reset to their zero value or
+//		uninitialized state.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	-- NONE --
+func (fOpsElectron *FileOperationsElectron) empty(
+	fOps *FileOps) {
+
+	if fOpsElectron.lock == nil {
+		fOpsElectron.lock = new(sync.Mutex)
+	}
+
+	fOpsElectron.lock.Lock()
+
+	defer fOpsElectron.lock.Unlock()
+
+	if fOps == nil {
+
+		return
+	}
+
+	fOps.source.Empty()
+
+	fOps.destination.Empty()
+
+	fOps.opToExecute = FileOpCode.None()
+
+	return
+}
+
 // setFileOpsDestination
 //
 // Reconfigures the 'destination' File Manager
