@@ -277,7 +277,7 @@ func (fOpsElectron *FileOperationsElectron) deleteSourceFile(
 //
 //	This method will delete and reset all pre-existing
 //	data values in the current instance of FileOps to
-//	their zero value or uninitialized state.
+//	their zero values or uninitialized states.
 //
 // ----------------------------------------------------------------
 //

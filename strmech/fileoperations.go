@@ -40,6 +40,8 @@ import (
 //	new(FileOps).NewByPathFileNameExtStrs(...)
 //	new(FileOps).SetByFileMgrs(...)
 //	new(FileOps).SetByDirMgrFileName(...)
+//	new(FileOps).SetByDirStrsAndFileNameExtStrs(...)
+//	new(FileOps).SetByPathFileNameExtStrs(...)
 type FileOps struct {
 	isInitialized bool
 	source        FileMgr
@@ -299,6 +301,29 @@ func (fops *FileOps) CopyOut(
 		ePrefix.XCpy("<-fops"))
 }
 
+// Empty
+//
+// This method will delete and reset all pre-existing
+// data values in the current instance of FileOps to
+// their zero values or uninitialized states.
+func (fops *FileOps) Empty() {
+
+	if fops.lock == nil {
+		fops.lock = new(sync.Mutex)
+	}
+
+	fops.lock.Lock()
+
+	new(FileOperationsElectron).
+		empty(fops)
+
+	fops.lock.Unlock()
+
+	fops.lock = nil
+
+	return
+}
+
 // Equal
 //
 // Returns 'true' if source, destination and opToExecute
@@ -336,6 +361,14 @@ func (fops *FileOps) CopyOut(
 //		corresponding data values contained in 'fops2',
 //		this parameter will return a value of 'true'.
 func (fops *FileOps) Equal(fops2 *FileOps) bool {
+
+	if fops.lock == nil {
+		fops.lock = new(sync.Mutex)
+	}
+
+	fops.lock.Lock()
+
+	defer fops.lock.Unlock()
 
 	if !fops.source.Equal(&fops2.source) {
 		return false
@@ -400,6 +433,14 @@ func (fops *FileOps) Equal(fops2 *FileOps) bool {
 func (fops *FileOps) EqualPathFileNameExt(
 	fops2 *FileOps) bool {
 
+	if fops.lock == nil {
+		fops.lock = new(sync.Mutex)
+	}
+
+	fops.lock.Lock()
+
+	defer fops.lock.Unlock()
+
 	if !fops.source.EqualPathFileNameExt(&fops2.source) {
 		return false
 	}
@@ -416,7 +457,33 @@ func (fops *FileOps) EqualPathFileNameExt(
 // Returns a boolean value indicating whether the
 // current FileOps instance has been properly
 // initialized.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+// In order to ensure that new instances of FileOps are
+// properly initialized, users must call one of the
+// following methods:
+//
+//	new(FileOps).NewByFileMgrs(...)
+//	new(FileOps).NewByDirMgrFileName(...)
+//	new(FileOps).NewByDirStrsAndFileNameExtStrs(...)
+//	new(FileOps).NewByPathFileNameExtStrs(...)
+//	new(FileOps).SetByFileMgrs(...)
+//	new(FileOps).SetByDirMgrFileName(...)
+//	new(FileOps).SetByDirStrsAndFileNameExtStrs(...)
+//	new(FileOps).SetByPathFileNameExtStrs(...)
 func (fops *FileOps) IsInitialized() bool {
+
+	if fops.lock == nil {
+		fops.lock = new(sync.Mutex)
+	}
+
+	fops.lock.Lock()
+
+	defer fops.lock.Unlock()
+
 	return fops.isInitialized
 }
 
