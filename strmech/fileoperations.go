@@ -487,6 +487,55 @@ func (fops *FileOps) IsInitialized() bool {
 	return fops.isInitialized
 }
 
+// IsValidInstance
+//
+// Performs a diagnostic review of the data values
+// encapsulated in the current FileOps instance to
+// determine if they are valid.
+//
+// If all data elements evaluate as valid, this method
+// returns 'true'.
+//
+// If any data element is invalid, this method returns
+// 'false'.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	isValid             bool
+//
+//		If all data elements encapsulated by the current
+//		instance of FileOps are valid, this returned
+//		boolean value is set to 'true'. If any data
+//		values are invalid, this return parameter is set
+//		to 'false'.
+func (fops *FileOps) IsValidInstance() (
+	isValid bool) {
+
+	if fops.lock == nil {
+		fops.lock = new(sync.Mutex)
+	}
+
+	fops.lock.Lock()
+
+	defer fops.lock.Unlock()
+
+	isValid,
+		_ = new(FileOperationsElectron).
+		testValidityOfFileOps(
+			fops,
+			nil)
+
+	return isValid
+}
+
 // ExecuteFileOperation - Executes specific operations on the source
 // and/or destination files configured and identified in the current
 // FileOps instance.
