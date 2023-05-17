@@ -482,7 +482,16 @@ func (fOpsElectron *FileOperationsElectron) testValidityOfFileOps(
 		ePrefix.XCpy("fOps.source,"))
 
 	if err != nil {
-		return isValid, err
+
+		return isValid,
+			fmt.Errorf("%v\n"+
+				"Error: Source File Manager is Invalid!\n"+
+				"'fOps.source' returned a validation error.\n"+
+				"fOps.source = '%v\n"+
+				"Error= \n%v\n",
+				funcName,
+				fOps.source.absolutePathFileName,
+				err.Error())
 	}
 
 	err = fMgrHelperAtom.isFileMgrValid(
@@ -490,7 +499,16 @@ func (fOpsElectron *FileOperationsElectron) testValidityOfFileOps(
 		ePrefix.XCpy("fOps.source,"))
 
 	if err != nil {
-		return isValid, err
+
+		return isValid,
+			fmt.Errorf("%v\n"+
+				"Error: Destination File Manager is Invalid!\n"+
+				"'fOps.destination' returned a validation error.\n"+
+				"fOps.destination = '%v\n"+
+				"Error= \n%v\n",
+				funcName,
+				fOps.destination.absolutePathFileName,
+				err.Error())
 	}
 
 	err = fOps.opToExecute.IsValid()
