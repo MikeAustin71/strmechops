@@ -6927,7 +6927,7 @@ func (fMgr *FileMgr) IsFileExtPopulated() bool {
 	return true
 }
 
-// IsFileMgrValid
+// IsValidInstanceError
 //
 // Analyzes the current FileMgr object. If the current
 // FileMgr object is INVALID, an error is returned.
@@ -7030,7 +7030,7 @@ func (fMgr *FileMgr) IsFileExtPopulated() bool {
 //		passed by input parameter, 'errorPrefix'. The
 //		'errorPrefix' text will be attached to the
 //		beginning of the error message.
-func (fMgr *FileMgr) IsFileMgrValid(
+func (fMgr *FileMgr) IsValidInstanceError(
 	errorPrefix interface{}) error {
 
 	if fMgr.lock == nil {
@@ -7048,7 +7048,7 @@ func (fMgr *FileMgr) IsFileMgrValid(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"FileMgr.IsFileMgrValid()",
+		"FileMgr.IsValidInstanceError()",
 		"")
 
 	if err != nil {

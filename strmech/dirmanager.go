@@ -6701,7 +6701,7 @@ func (dMgr *DirMgr) NewFromFileMgr(
 		return DirMgr{}, err
 	}
 
-	err = fMgr.IsFileMgrValid(
+	err = fMgr.IsValidInstanceError(
 		ePrefix.XCpy("fMgr"))
 
 	if err != nil {
