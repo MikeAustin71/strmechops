@@ -5674,9 +5674,11 @@ func (fMgr *FileMgr) GetFileInfo(
 //
 //	fileInfoPlus				FileInfoPlus
 //
-//		This returned FileInfoPlus instance contains
-//		os.FileInfo and other data on the current
-//		FileManager instance.
+//		This returned FileInfoPlus instance implements
+//		the	os.FileInfo interface. In addition,
+//		FileInfoPlus provides additional data on the
+//		current FileManager instance beyond that provided
+//		by the standard os.FileInfo interface.
 //
 //	err							error
 //
@@ -8652,14 +8654,21 @@ func (fMgr *FileMgr) NewFromDirStrFileNameStr(
 //
 //	fileInfo					os.FileInfo
 //
-//		A valid and populated FileInfo structure
-//		containing the file name.
+//		An object which implements the os.FileInfo
+//		interface. This parameter may transmit an
+//		instance of FileInfoPlus which implements
+//		the os.FileInfo interface but provides file
+//		information over and above that provided by the
+//		standard os.FileInfo interface.
 //
-//		Note:
-//
-//			An instance of FileInfoPlus may be submitted
-//			for this parameter because FileInfoPlus
-//			implements the os.FileInfo interface.
+//	 	type FileInfo interface {
+//			 Name() string       // base name of the file
+//			 Size() int64        // length in bytes for regular files; system-dependent for others
+//			 Mode() FileMode     // file mode bits
+//			 ModTime() time.Time // modification time
+//			 IsDir() bool        // abbreviation for Mode().IsDir()
+//			 Sys() interface{}   // underlying data source (can return nil)
+//	 	}
 //
 // ----------------------------------------------------------------
 //
@@ -11205,12 +11214,23 @@ func (fMgr *FileMgr) SetWriterBufferSize(
 //
 // # Input Parameters
 //
-//	info						os.FileInfo
+//	fInfo						os.FileInfo
 //
 //		An object which implements the os.FileInfo
 //		interface. This parameter may transmit an
 //		instance of FileInfoPlus which implements
-//		the os.FileInfo interface.
+//		the os.FileInfo interface but provides file
+//		information over and above that provided by the
+//		standard os.FileInfo interface.
+//
+//	 	type FileInfo interface {
+//			 Name() string       // base name of the file
+//			 Size() int64        // length in bytes for regular files; system-dependent for others
+//			 Mode() FileMode     // file mode bits
+//			 ModTime() time.Time // modification time
+//			 IsDir() bool        // abbreviation for Mode().IsDir()
+//			 Sys() interface{}   // underlying data source (can return nil)
+//	 	}
 //
 //	errorPrefix					interface{}
 //
@@ -11288,8 +11308,8 @@ func (fMgr *FileMgr) SetWriterBufferSize(
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (fMgr *FileMgr) SetFileInfo(
-	errorPrefix interface{},
-	info os.FileInfo) error {
+	fInfo os.FileInfo,
+	errorPrefix interface{}) error {
 
 	if fMgr.lock == nil {
 		fMgr.lock = new(sync.Mutex)
@@ -11313,46 +11333,46 @@ func (fMgr *FileMgr) SetFileInfo(
 		return err
 	}
 
-	if info == nil {
+	if fInfo == nil {
 		return fmt.Errorf("%v\n"+
-			"Error: Input parameter 'info' is 'nil' and INVALID!\n",
+			"Error: Input parameter 'fInfo' is 'nil' and INVALID!\n",
 			ePrefix.String())
 	}
 
-	if info.Name() == "" {
+	if fInfo.Name() == "" {
 		return fmt.Errorf("%v\n"+
-			"Error: info.Name() is an EMPTY string!\n",
+			"Error: fInfo.Name() is an EMPTY string!\n",
 			ePrefix.String())
 	}
 
-	if info.IsDir() {
+	if fInfo.IsDir() {
 		return fmt.Errorf("%v\n"+
-			"Input parameter info.IsDir()=='true'.\n"+
-			"'info' is a Directory and NOT A FILE!\n",
+			"Input parameter fInfo.IsDir()=='true'.\n"+
+			"'fInfo' is a Directory and NOT A FILE!\n",
 			ePrefix.String())
 	}
 
-	if strings.ToLower(info.Name()) != strings.ToLower(fMgr.fileNameExt) {
+	if strings.ToLower(fInfo.Name()) != strings.ToLower(fMgr.fileNameExt) {
 
 		return fmt.Errorf("%v\n"+
-			"Error: Input parameter 'info' does NOT match current FileMgr file name.\n"+
+			"Error: Input parameter 'fInfo' does NOT match current FileMgr file name.\n"+
 			"FileMgr File Name='%v'\n"+
-			"info File Name='%v'\n",
+			"fInfo File Name='%v'\n",
 			ePrefix.String(),
 			fMgr.fileNameExt,
-			info.Name())
+			fInfo.Name())
 	}
 
 	fMgr.actualFileInfo =
-		new(FileInfoPlus).NewFromFileInfo(info)
+		new(FileInfoPlus).NewFromFileInfo(fInfo)
 
 	if !fMgr.actualFileInfo.isFInfoInitialized {
 
 		return fmt.Errorf("%v\n"+
 			"Error: Failed to initialize fMgr.actualFileInfo object.\n"+
-			"info.Name()='%v'\n",
+			"fInfo.Name()='%v'\n",
 			ePrefix.String(),
-			info.Name())
+			fInfo.Name())
 	}
 
 	return nil

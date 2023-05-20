@@ -531,9 +531,117 @@ func (dMgrs *DirMgrCollection) AddDirMgrByPathNameStr(
 // Adds a Directory Manager object to the collection
 // based on input from a parent directory path string and
 // an os.FileInfo object.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	parentDirectoryPath			string
+//
+//		The parent directory path. This path will be
+//		combined with any subsidiary directories found
+//		in the os.FileInfo object to create the final
+//		directory path which will be converted to a
+//		Directory Manager (DirMgr) and added to the
+//		Directory Manager Collection maintained by the
+//		current instance of DirMgrCollection.
+//
+//	fInfo						os.FileInfo
+//
+//		An object which implements the os.FileInfo
+//		interface. This parameter may transmit an
+//		instance of FileInfoPlus which implements
+//		the os.FileInfo interface but provides file
+//		information over and above that provided by the
+//		standard os.FileInfo interface.
+//
+//	 	type FileInfo interface {
+//			 Name() string       // base name of the file
+//			 Size() int64        // length in bytes for regular files; system-dependent for others
+//			 Mode() FileMode     // file mode bits
+//			 ModTime() time.Time // modification time
+//			 IsDir() bool        // abbreviation for Mode().IsDir()
+//			 Sys() interface{}   // underlying data source (can return nil)
+//	 	}
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (dMgrs *DirMgrCollection) AddFileInfo(
 	parentDirectoryPath string,
-	info os.FileInfo,
+	fInfo os.FileInfo,
 	errorPrefix interface{}) error {
 
 	if dMgrs.lock == nil {
@@ -573,7 +681,7 @@ func (dMgrs *DirMgrCollection) AddFileInfo(
 		setDirMgrFromKnownPathDirName(
 			&newDirMgr,
 			parentDirectoryPath,
-			info.Name(),
+			fInfo.Name(),
 			"newDirMgr",
 			"parentDirectoryPath",
 			"FileInfo.Name()",
@@ -589,7 +697,7 @@ func (dMgrs *DirMgrCollection) AddFileInfo(
 			"Error= \n%v\n",
 			funcName,
 			parentDirectoryPath,
-			info.Name(),
+			fInfo.Name(),
 			err.Error())
 	}
 
@@ -602,7 +710,7 @@ func (dMgrs *DirMgrCollection) AddFileInfo(
 			"FileInfo.Name()= '%v'\n",
 			ePrefix.String(),
 			parentDirectoryPath,
-			info.Name())
+			fInfo.Name())
 	}
 
 	dMgrs.dirMgrs = append(dMgrs.dirMgrs, newDirMgr)
