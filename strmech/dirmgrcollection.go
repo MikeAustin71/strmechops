@@ -720,12 +720,25 @@ func (dMgrs *DirMgrCollection) AddFileInfo(
 
 // AddDirMgrCollection
 //
-// Adds another collection of File Manager (DirMgr)
-// objects to the current collection.
+// Adds another collection of Directory Manager (DirMgr)
+// objects (dMgrs2) to the Directory Manager Collection
+// maintained by the current instance of
+// DirMgrCollection. The new collection will be appended
+// to the end of the Directory Manager Collection
+// maintained by the current instance of
+// DirMgrCollection.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
+//
+//	dMgrs2						*DirMgrCollection
+//
+//		A pointer to an instance of DirMgrCollection. The
+//		Directory Manager collection contained in
+//		'dMgrs2' will be appended to the end of the
+//		Directory Managers Collection maintained by the
+//		current instance of DirMgrCollection.
 //
 //	errorPrefix					interface{}
 //
@@ -817,11 +830,13 @@ func (dMgrs *DirMgrCollection) AddDirMgrCollection(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
+	funcName := "DirMgrCollection." +
+		"AddDirMgrCollection()"
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"DirMgrCollection."+
-			"AddDirMgrCollection()",
+		funcName,
 		"")
 
 	if err != nil {
@@ -859,13 +874,20 @@ func (dMgrs *DirMgrCollection) AddDirMgrCollection(
 
 		dMgrCopy,
 			err = dMgrs2.dirMgrs[i].CopyOut(
-			ePrefix.XCpy(fmt.Sprintf(
-				"dMgrs2.dirMgrs[%v]",
-				i)))
+			ePrefix.XCpy("dMgrs2.dirMgrs[i]"))
 
 		if err != nil {
 
-			return err
+			return fmt.Errorf("%v\n"+
+				"Error returned by dMgrs2.dirMgrs[%v].CopyOut()\n"+
+				"dMgrs2 index = %v\n"+
+				"Directory Manager = %v\n"+
+				"Error=\n%v\n",
+				funcName,
+				i,
+				i,
+				dMgrs2.dirMgrs[i].absolutePath,
+				err.Error())
 		}
 
 		dMgrs.dirMgrs = append(dMgrs.dirMgrs, dMgrCopy)
