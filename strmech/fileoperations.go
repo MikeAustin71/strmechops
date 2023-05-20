@@ -2779,11 +2779,11 @@ func (fops *FileOps) SetFileOpsCode(
 
 // SetDestinationByDirMgrFileName
 //
-// Receives an instance of File Manager (FMgr) and
-// proceeds to reconfigure the internal member variable
-// 'FileOps.destination' with a deep copy of the data
-// values supplied by the destination file manager input
-// parameter 'destinationFMgr'.
+// Receives input parameters consisting of a destination
+// Directory Manager (DirMgr) and a destination file name
+// and extension string. The data extracted from these
+// input parameters will be used to reset or reconfigure
+// the internal member variable 'FileOps.destination'.
 //
 // Type FileOps encapsulates path and file names for both
 // a destination file and a destination file. This method
@@ -3300,6 +3300,212 @@ func (fops *FileOps) SetDestinationByPathFileNameExtStrs(
 			ePrefix.XCpy("fops<-destinationFMgr"))
 }
 
+// SetSourceByDirMgrFileName
+//
+// Receives input parameters consisting of a source
+// Directory Manager (DirMgr) and a source file name and
+// extension string. The data extracted from these input
+// parameters will be used to reset or reconfigure the
+// internal member variable 'FileOps.source'.
+//
+// Type FileOps encapsulates path and file names for both
+// a source file and a source file. This method
+// reconfigures the source file internal member
+// variable 'FileOps.source' for the current
+// instance of 'FileOps'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset the
+//	pre-existing data value for the internal member
+//	variable 'FileOps.source' encapsulated in the
+//	current instance of FileOps.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	sourceDir				DirMgr
+//
+//		This instance of Directory Manager specifies the
+//		source file directory which will be combined
+//		with the source file name parameter to
+//		reset or reconfigure the source file member
+//		variable 'fOps.source' encapsulated in the
+//		current instance of FileOps.
+//
+//		If this parameter is evaluated as invalid, an
+//		error will be returned.
+//
+//	sourceFileNameExt		string
+//
+//		This string specifies the source file name
+//		and file extension which will be combined with
+//		the source directory parameter to reset or
+//		reconfigure the source file member variable
+//		'fOps.source' encapsulated in the current
+//		instance of FileOps.
+//
+//		If this parameter is submitted as an empty string
+//		with a zero (0) string length, an error will be
+//		returned.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+func (fops *FileOps) SetSourceByDirMgrFileName(
+	sourceDir DirMgr,
+	sourceFileNameExt string,
+	errorPrefix interface{}) error {
+
+	if fops.lock == nil {
+		fops.lock = new(sync.Mutex)
+	}
+
+	fops.lock.Lock()
+
+	defer fops.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	funcName := "FileOps." +
+		"SetSourceByDirMgrFileName()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	dMgrHelper := new(dirMgrHelper)
+
+	err = dMgrHelper.isDirMgrValid(
+		&sourceDir,
+		ePrefix.XCpy("sourceDir"))
+
+	if err != nil {
+
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter 'sourceDir' is invalid!\n"+
+			"Error= \n%v\n",
+			funcName,
+			err.Error())
+	}
+
+	if len(sourceFileNameExt) == 0 {
+
+		return fmt.Errorf("%v\n"+
+			"Error: 'sourceFileNameExtStr' is an EMPTY STRING!\n",
+			ePrefix.String())
+	}
+
+	var sourceFMgr FileMgr
+
+	sourceFMgr,
+		err = new(FileMgr).
+		NewFromDirMgrFileNameExt(
+			sourceDir,
+			sourceFileNameExt,
+			ePrefix)
+
+	if err != nil {
+
+		return fmt.Errorf("%v\n"+
+			"Creation of intermediate source File Manager Failed!\n"+
+			"sourceDir= '%v'\n"+
+			"sourceFileNameExt= '%v'\n"+
+			"Error= \n%v\n",
+			funcName,
+			sourceDir.GetAbsolutePath(),
+			sourceFileNameExt,
+			err.Error())
+	}
+
+	return new(FileOperationsElectron).
+		setFileOpsSource(
+			fops,
+			sourceFMgr,
+			ePrefix.XCpy("fops<-sourceFMgr"))
+}
+
 // SetSourceByFileMgr
 //
 // Receives an instance of File Manager (FMgr) and
@@ -3326,6 +3532,12 @@ func (fops *FileOps) SetDestinationByPathFileNameExtStrs(
 // ----------------------------------------------------------------
 //
 // # Input Parameters
+//
+//	sourceFMgr					FileMgr
+//
+//		A concrete instance of FileMgr which is used
+//		to reset or reconfigure the source File Manager
+//		encapsulated in the returned instance of FileOps.
 //
 //	errorPrefix					interface{}
 //
