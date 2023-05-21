@@ -1221,6 +1221,57 @@ func (dMgrs *DirMgrCollection) DeleteAtIndex(idx int) error {
 	return nil
 }
 
+//	Empty
+//
+//	Resets all internal member variables for the current
+//	instance of DirMgrCollection to their initial or zero
+//	values.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete all pre-existing DirMgr
+//	objects contained in the Directory Manager Collection
+//	encapsulated in the current instance of
+//	DirMgrCollection. Upon completion of this method, the
+//	internal Directory Manager Collection for the current
+//	DirMgrCollection instance will have a length of zero.
+//
+// ------------------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ------------------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (dMgrs *DirMgrCollection) Empty() {
+
+	if dMgrs.lock == nil {
+		dMgrs.lock = new(sync.Mutex)
+	}
+
+	dMgrs.lock.Lock()
+
+	colArrayLen := len(dMgrs.dirMgrs)
+
+	for i := 0; i < colArrayLen; i++ {
+
+		dMgrs.dirMgrs[i].Empty()
+
+	}
+
+	dMgrs.dirMgrs = make([]DirMgr, 0)
+
+	dMgrs.lock.Unlock()
+
+	return
+}
+
 // FindDirectories
 //
 // Searches through the DirMgrCollection to find DirMgr
