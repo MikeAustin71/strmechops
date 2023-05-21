@@ -1,7 +1,6 @@
 package strmech
 
 import (
-	"errors"
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"os"
@@ -1169,56 +1168,140 @@ func (dMgrs *DirMgrCollection) CopyOut(
 	return dMgrs2, err
 }
 
-// DeleteAtIndex - Deletes a member Directory Manager from
-// the collection at the index specified by input parameter 'idx'.
+// DeleteAtIndex
 //
-// If successful, at the completion of this method, the Directory
-// Manager Collection array will have a length which is one less
-// than the starting array length.
-func (dMgrs *DirMgrCollection) DeleteAtIndex(idx int) error {
+// Deletes a member Directory Manager object from the
+// Directory Manager Collection encapsulated by the
+// current instance of DirMgrCollection.
+//
+// The Directory Manager object to be deleted from the
+// Directory Manager Collection is specified by the
+// array index passed by input parameter 'idx.
+//
+// If successful, at the completion of this method, the
+// Directory Manager Collection array will have a length
+// which is one less than the starting array length.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	idx							int
+//
+//		This integer value specifies the Directory
+//		Manager array index which will identify the
+//		Directory Manager object (DirMgr) to be deleted.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (dMgrs *DirMgrCollection) DeleteAtIndex(
+	idx int,
+	errorPrefix interface{}) error {
 
-	ePrefix := "DirMgrCollection.DeleteAtIndex() "
-
-	if dMgrs.dirMgrs == nil {
-		dMgrs.dirMgrs = make([]DirMgr, 0, 100)
+	if dMgrs.lock == nil {
+		dMgrs.lock = new(sync.Mutex)
 	}
 
-	if idx < 0 {
-		return fmt.Errorf(ePrefix+
-			"Error: Input Parameter 'idx' is less than zero. "+
-			"Index Out-Of-Range! idx='%v'", idx)
+	dMgrs.lock.Lock()
+
+	defer dMgrs.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgrCollection.DeleteAtIndex()",
+		"")
+
+	if err != nil {
+		return err
 	}
 
-	arrayLen := len(dMgrs.dirMgrs)
+	_,
+		err = new(dirMgrCollectionHelper).
+		peekOrPopAtIndex(
+			dMgrs,
+			idx,
+			true,
+			ePrefix.XCpy(
+				"dMgrs"))
 
-	if arrayLen == 0 {
-		return errors.New(ePrefix +
-			"Error: The Directory Manager Collection, 'DirMgrCollection', is EMPTY!\n")
-	}
-
-	if idx >= arrayLen {
-		return fmt.Errorf(ePrefix+
-			"Error: Input Parameter 'idx' is greater than the "+
-			"length of the collection index. Index Out-Of-Range! "+
-			"idx='%v' Array Length='%v' ", idx, arrayLen)
-	}
-
-	if arrayLen == 1 {
-		dMgrs.dirMgrs = make([]DirMgr, 0, 100)
-	} else if idx == 0 {
-		// arrayLen > 1
-		dMgrs.dirMgrs = dMgrs.dirMgrs[1:]
-	} else if idx == arrayLen-1 {
-		// arrayLen > 1
-		dMgrs.dirMgrs = dMgrs.dirMgrs[0 : arrayLen-1]
-	} else {
-		// arrayLen > 1 and idx is in between
-		// first and last elements
-		dMgrs.dirMgrs =
-			append(dMgrs.dirMgrs[0:idx], dMgrs.dirMgrs[idx+1:]...)
-	}
-
-	return nil
+	return err
 }
 
 //	Empty
