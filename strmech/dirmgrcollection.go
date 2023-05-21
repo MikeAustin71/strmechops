@@ -1014,38 +1014,16 @@ func (dMgrs *DirMgrCollection) CopyOut(
 		return DirMgrCollection{}, err
 	}
 
-	if dMgrs.dirMgrs == nil {
-		dMgrs.dirMgrs = make([]DirMgr, 0, 5)
-	}
-
-	lenDMgrs := len(dMgrs.dirMgrs)
-
-	if lenDMgrs == 0 {
-		return DirMgrCollection{},
-			fmt.Errorf("%v\n"+
-				"Error: Empty DirMgrCollection.\n",
-				ePrefix.String())
-	}
-
 	dMgrs2 := DirMgrCollection{}.New()
 
-	var dMgrCopy DirMgr
+	err = new(dirMgrCollectionHelper).
+		copyCollection(
+			dMgrs,
+			&dMgrs2,
+			ePrefix.XCpy(
+				"dMgrs<-dMgrs2"))
 
-	for i := 0; i < lenDMgrs; i++ {
-
-		dMgrCopy,
-			err = dMgrs.dirMgrs[i].CopyOut(ePrefix.XCpy(
-			fmt.Sprintf("dMgrs.dirMgrs[%v]",
-				i)))
-
-		if err != nil {
-			return dMgrs2, err
-		}
-
-		dMgrs2.dirMgrs = append(dMgrs2.dirMgrs, dMgrCopy)
-	}
-
-	return dMgrs2, nil
+	return dMgrs2, err
 }
 
 // DeleteAtIndex - Deletes a member Directory Manager from
