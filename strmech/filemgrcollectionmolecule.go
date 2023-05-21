@@ -125,11 +125,13 @@ func (fMgrColMolecule *FileMgrCollectionMolecule) peekOrPopAtIndex(
 
 	var ePrefix *ePref.ErrPrefixDto
 
+	funcName := "FileMgrCollectionElectron." +
+		"peekOrPopAtIndex()"
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"FileMgrCollectionElectron."+
-			"peekOrPopAtIndex()",
+		funcName,
 		"")
 
 	if err != nil {
@@ -171,7 +173,7 @@ func (fMgrColMolecule *FileMgrCollectionMolecule) peekOrPopAtIndex(
 		return FileMgr{},
 			fmt.Errorf("%v\n"+
 				"Error: Input Parameter 'idx' is greater than the\n"+
-				" last array index of the collection array.\n"+
+				" last array index of the File Manager Collection array.\n"+
 				"Index Out-Of-Range!\n"+
 				"idx= '%v' "+
 				"Last Array Index= '%v' ",
@@ -188,8 +190,22 @@ func (fMgrColMolecule *FileMgrCollectionMolecule) peekOrPopAtIndex(
 			"fMgrs.fileMgrs[%v]",
 			idx)))
 
-	if err != nil ||
-		deleteIndex == false {
+	if err != nil {
+		return FileMgr{},
+			fmt.Errorf("%v\n"+
+				"Error: fMgrs.fileMgrs[%v].CopyOut()\n"+
+				"fMgrs.fileMgrs index = '%v'\n"+
+				"fMgrs.fileMgrs[%v] = '%v'\n"+
+				"Error= \n%v\n",
+				funcName,
+				idx,
+				idx,
+				idx,
+				fMgrs.fileMgrs[idx].absolutePathFileName,
+				err.Error())
+	}
+
+	if deleteIndex == false {
 		return deepCopyFileMgr, err
 	}
 
@@ -197,7 +213,7 @@ func (fMgrColMolecule *FileMgrCollectionMolecule) peekOrPopAtIndex(
 
 	if arrayLen == 1 {
 
-		fMgrs.fileMgrs = make([]FileMgr, 0, 5)
+		fMgrs.fileMgrs = make([]FileMgr, 0, 1)
 
 	} else if idx == 0 {
 		// arrayLen > 1 and requested idx = 0
