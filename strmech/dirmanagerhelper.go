@@ -1662,7 +1662,13 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeInfo(
 		}
 
 		nextDir,
-			err = deleteTreeInfo.Directories.GetDirMgrAtIndex(i)
+			err = deleteTreeInfo.Directories.
+			GetDirMgrAtIndex(
+				i,
+				ePrefix.XCpy(
+					fmt.Sprintf(
+						"deleteTreeInfo.Directories idx=%v",
+						i)))
 
 		if err != nil {
 			errs = append(errs, err)
@@ -4834,7 +4840,13 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 			isTopLevelDir = false
 		}
 
-		nextDir, err = dTreeInfo.Directories.GetDirMgrAtIndex(i)
+		nextDir, err = dTreeInfo.Directories.
+			GetDirMgrAtIndex(
+				i,
+				ePrefix.XCpy(
+					fmt.Sprintf(
+						"dTreeInfo.Directories idx=%v",
+						i)))
 
 		if err != nil {
 			errs = append(errs, err)
