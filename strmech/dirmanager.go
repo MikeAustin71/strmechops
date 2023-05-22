@@ -2204,8 +2204,12 @@ func (dMgr *DirMgr) Empty() {
 
 }
 
-// Equal - Compares two DirMgr objects to determine if
-// they are equal.
+// Equal
+//
+// Compares two DirMgr objects to determine if they are
+// equal.
+//
+// The Directory Path comparisons are NOT case-sensitive.
 func (dMgr *DirMgr) Equal(dMgr2 *DirMgr) bool {
 
 	if dMgr.lock == nil {

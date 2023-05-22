@@ -1297,7 +1297,7 @@ func (dMgrs *DirMgrCollection) DeleteAtIndex(
 		peekOrPopAtIndex(
 			dMgrs,
 			idx,
-			true,
+			true, // Delete DirMgr object
 			ePrefix.XCpy(
 				"dMgrs"))
 
@@ -1729,7 +1729,64 @@ func (dMgrs *DirMgrCollection) FindDirectories(
 //
 // # Input Parameters
 //
-//	--- None ---
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -1737,9 +1794,23 @@ func (dMgrs *DirMgrCollection) FindDirectories(
 //
 //	[]DirMgr
 //
-//	A deep copy of the array of DirMgr objects contained
-//	in the Directory Manager Collection encapsulated in
-//	the current instance of DirMgrCollection.
+//		A deep copy of the array of DirMgr objects
+//		contained in the Directory Manager Collection
+//		encapsulated in the current instance of
+//		DirMgrCollection.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (dMgrs *DirMgrCollection) GetDirMgrArray(
 	errorPrefix interface{}) (
 	[]DirMgr,
@@ -1864,13 +1935,29 @@ func (dMgrs *DirMgrCollection) GetDirMgrAtIndex(idx int) (*DirMgr, error) {
 	return &dMgrs.dirMgrs[idx], nil
 }
 
-// GetNumOfDirs - returns the number of directories
-// contained in this Directory Manager Collection.
+// GetNumOfDirs
+//
+// Returns the number of Directory Manager objects
+// contained in the current Directory Manager Collection.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	int
+//
+//		The integer value returned by this method
+//		specifies the number of Directory Manager objects
+//		(DirMgr) contained in the Directory Manager
+//		Collection maintained by the current instance of
+//		DirMgrCollection
 func (dMgrs *DirMgrCollection) GetNumOfDirs() int {
-
-	if dMgrs.dirMgrs == nil {
-		dMgrs.dirMgrs = make([]DirMgr, 0, 100)
-	}
 
 	return len(dMgrs.dirMgrs)
 }
