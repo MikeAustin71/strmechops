@@ -1885,6 +1885,9 @@ func (dMgrs *DirMgrCollection) GetDirMgrArray(
 // using a 'deep' copy and therefore offer better
 // protection against data corruption.
 //
+// If the Directory Manager Collection for the current
+// DirMgrCollection is empty, an error will be returned.
+//
 // ----------------------------------------------------------------
 //
 // # WARNING
@@ -1904,35 +1907,162 @@ func (dMgrs *DirMgrCollection) GetDirMgrArray(
 //	are strongly encouraged use one of the 'peek' or
 //	'pop' methods which return deep copies of the
 //	specified DirMgr object.
-func (dMgrs *DirMgrCollection) GetDirMgrAtIndex(idx int) (*DirMgr, error) {
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	idx							int
+//
+//		This integer value specifies the index of the
+//		Directory Manager (DirMgr) object in the
+//		Directory Manager Collection maintained by the
+//		current instance of	DirMgrCollection.
+//
+//		A pointer to the DirMgr object identified by this
+//		Directory Manager Collection array index value
+//		will be returned by this method.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	*DirMgr
+//
+//		If this method completes successfully, a pointer
+//		to the DirMgr object identified by the Directory
+//		Manager Collection array index value 'idx' will
+//		be returned.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (dMgrs *DirMgrCollection) GetDirMgrAtIndex(
+	idx int,
+	errorPrefix interface{}) (
+	*DirMgr,
+	error) {
 
-	ePrefix := "DirMgrCollection.GetDirMgrAtIndex() "
+	if dMgrs.lock == nil {
+		dMgrs.lock = new(sync.Mutex)
+	}
 
-	emptyDirMgr := DirMgr{}
+	dMgrs.lock.Lock()
+
+	defer dMgrs.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	funcName := "DirMgrCollection." +
+		"GetDirMgrAtIndex()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return &DirMgr{}, err
+	}
 
 	if dMgrs.dirMgrs == nil {
-		dMgrs.dirMgrs = make([]DirMgr, 0, 100)
+		dMgrs.dirMgrs = make([]DirMgr, 0)
 	}
 
 	arrayLen := len(dMgrs.dirMgrs)
 
 	if arrayLen == 0 {
-		return &emptyDirMgr,
-			fmt.Errorf(ePrefix +
-				"Error: This Directory Manager Collection ('DirMgrCollection') is EMPTY!\n")
+		return &DirMgr{},
+			fmt.Errorf("%v\n"+
+				"Error: This Directory Manager Collection ('DirMgrCollection') is EMPTY!\n",
+				ePrefix.String())
 	}
 
 	if idx < 0 || idx >= arrayLen {
 
-		return &emptyDirMgr,
-			fmt.Errorf(ePrefix+
-				"Error: The input parameter, 'idx', is OUT OF RANGE! idx='%v'.  \n"+
+		return &DirMgr{},
+			fmt.Errorf("%v\n"+
+				"Error: The input parameter, 'idx', is OUT OF RANGE!\n"+
+				"idx='%v'\n"+
 				"The minimum index is '0'. "+
-				"The maximum index is '%v'. ", idx, arrayLen-1)
+				"The maximum index is '%v'. ",
+				ePrefix.String(),
+				idx,
+				arrayLen-1)
 
 	}
 
-	return &dMgrs.dirMgrs[idx], nil
+	return &dMgrs.dirMgrs[idx], err
 }
 
 // GetNumOfDirs
