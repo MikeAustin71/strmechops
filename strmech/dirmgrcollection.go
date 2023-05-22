@@ -2089,6 +2089,14 @@ func (dMgrs *DirMgrCollection) GetDirMgrAtIndex(
 //		DirMgrCollection
 func (dMgrs *DirMgrCollection) GetNumOfDirs() int {
 
+	if dMgrs.lock == nil {
+		dMgrs.lock = new(sync.Mutex)
+	}
+
+	dMgrs.lock.Lock()
+
+	defer dMgrs.lock.Unlock()
+
 	return len(dMgrs.dirMgrs)
 }
 
