@@ -1713,34 +1713,126 @@ func (dMgrs *DirMgrCollection) FindDirectories(
 	return dMgrs2, err
 }
 
-// GetDirMgrArray - Returns the entire Directory Manager Array managed
-// by this collection.
+// GetDirMgrArray
 //
-// ------------------------------------------------------------------------
+// Returns the Directory Manager Collection.
 //
-// Input Parameter
+// This method returns a deep copy of the Directory
+// Manager Array maintained by the current instance of
+// DirMgrCollection.
 //
-//	None
+// If the current DirMgrCollection Directory Manager
+// Collection is empty, this method will return an
+// empty array and no error will be returned.
 //
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Return Values
+// # Input Parameters
 //
-//	[]DirMgr      - The array of DirMgr instances maintained by this
-//	                collection.
-func (dMgrs *DirMgrCollection) GetDirMgrArray() []DirMgr {
+//	--- None ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	[]DirMgr
+//
+//	A deep copy of the array of DirMgr objects contained
+//	in the Directory Manager Collection encapsulated in
+//	the current instance of DirMgrCollection.
+func (dMgrs *DirMgrCollection) GetDirMgrArray(
+	errorPrefix interface{}) (
+	[]DirMgr,
+	error) {
 
-	if dMgrs.dirMgrs == nil {
-		dMgrs.dirMgrs = make([]DirMgr, 0, 10)
+	if dMgrs.lock == nil {
+		dMgrs.lock = new(sync.Mutex)
 	}
 
-	return dMgrs.dirMgrs
+	dMgrs.lock.Lock()
+
+	defer dMgrs.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	funcName := "DirMgrCollection." +
+		"GetDirMgrArray()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return make([]DirMgr, 0), err
+	}
+
+	lenDirMgrs := len(dMgrs.dirMgrs)
+
+	if lenDirMgrs == 0 {
+		return make([]DirMgr, 0), err
+	}
+
+	var newDirMgrCollection []DirMgr
+
+	newDirMgrCollection = make([]DirMgr, lenDirMgrs)
+
+	for i := 0; i < lenDirMgrs; i++ {
+
+		err = newDirMgrCollection[i].CopyIn(
+			&dMgrs.dirMgrs[i],
+			ePrefix.XCpy(
+				"dMgrs.dirMgrs[i]"))
+
+		if err != nil {
+
+			return make([]DirMgr, 0),
+				fmt.Errorf("%v\n"+
+					"Error: newDirMgrCollection[%v].CopyIn()\n"+
+					"dMgrs.dirMgrs Index = %v\n"+
+					"dMgrs.dirMgrs[%v] = %v\n"+
+					"Error= \n%v\n",
+					funcName,
+					i,
+					i,
+					i,
+					dMgrs.dirMgrs[i].absolutePath,
+					err.Error())
+		}
+	}
+
+	return newDirMgrCollection, err
 }
 
-// GetDirMgrAtIndex - If successful, this method returns a pointer to
-// the DirMgr instance at the array index specified. The 'Peek' and 'Pop'
-// methods below return DirMgr objects using a 'deep' copy and therefore
-// offer better protection against data corruption.
+// GetDirMgrAtIndex
+//
+// If successful, this method returns a pointer to the
+// DirMgr instance at the array index specified. The
+// 'Peek' and 'Pop' methods below return DirMgr objects
+// using a 'deep' copy and therefore offer better
+// protection against data corruption.
+//
+// ----------------------------------------------------------------
+//
+// # WARNING
+//
+//	Since this method returns a pointer to Directory
+//	Manager object residing in the Directory Manager
+//	Collection maintained by the current DirMgrCollection
+//	instance, users must be cautious about changing data
+//	values.
+//
+//	Since users are working a pointer to a DirMgr instance,
+//	altering data values will change the content of the
+//	Directory Manager Collection.
+//
+//	This feature is provided to promote efficiency. In
+//	the interests of data integrity and safety, users
+//	are strongly encouraged use one of the 'peek' or
+//	'pop' methods which return deep copies of the
+//	specified DirMgr object.
 func (dMgrs *DirMgrCollection) GetDirMgrAtIndex(idx int) (*DirMgr, error) {
 
 	ePrefix := "DirMgrCollection.GetDirMgrAtIndex() "
