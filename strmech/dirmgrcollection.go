@@ -1357,6 +1357,72 @@ func (dMgrs *DirMgrCollection) Empty() {
 	return
 }
 
+// Equal
+//
+// This method receives a pointer to an incoming instance
+// of DirMgrCollection and proceeds to compare the
+// encapsulated Directory Manager Collection with the
+// Directory Manager Collection contained in the current
+// instance of DirMgrCollection.
+//
+// If any of the Directory Manager (DirMgr) objects in
+// the two collections are not equal, this method returns
+// a boolean value of 'false'.
+//
+// A value of 'true' is only returned if all Directory
+// Manager objects in both collections are equal in all
+// respects.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	incomingDMgrCollection		*DirMgrCollection
+//
+//		A pointer to an external instance of
+//		DirMgrCollection. All the Directory Manager
+//		objects in this Directory Manager Collection will
+//		be compared to the Directory Manager Collection
+//		contained in the current instance of
+//		DirMgrCollection to determine if all the
+//		Directory Manager objects are equivalent.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		Two Directory Manager Collections from input
+//		parameter 'incomingDMgrCollection' and the
+//		current instance of DirMgrCollection are
+//		compared to determine if they are equal in all
+//		respects.
+//
+//		If any of the Directory Manager (DirMgr) objects
+//		in the two collections are not equal, this method
+//		returns a boolean value of 'false'.
+//
+//		A value of 'true' is only returned if all
+//	 	Directory Manager objects in both collections are
+//	 	equal in all respects.
+func (dMgrs *DirMgrCollection) Equal(
+	incomingDMgrCollection *DirMgrCollection) bool {
+
+	if dMgrs.lock == nil {
+		dMgrs.lock = new(sync.Mutex)
+	}
+
+	dMgrs.lock.Lock()
+
+	defer dMgrs.lock.Unlock()
+
+	return new(dirMgrCollectionHelper).
+		equalDMgrCollections(
+			dMgrs,
+			incomingDMgrCollection)
+}
+
 // FindDirectories
 //
 // Searches through the DirMgrCollection to find DirMgr
