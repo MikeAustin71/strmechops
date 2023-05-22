@@ -6028,7 +6028,7 @@ func (dMgrHlpr *dirMgrHelper) getDirectoryTree(
 
 	defer dMgrHlpr.lock.Unlock()
 
-	dirMgrs = DirMgrCollection{}.New()
+	dirMgrs = new(DirMgrCollection).New()
 
 	var err, err2, err3 error
 

@@ -1157,7 +1157,8 @@ func (dMgrs *DirMgrCollection) CopyOut(
 		return DirMgrCollection{}, err
 	}
 
-	dMgrs2 := new(DirMgrCollection).New()
+	dMgrs2 := new(dirMgrCollectionHelper).
+		newEmptyDMgrCollection()
 
 	err = new(dirMgrCollectionHelper).
 		copyCollection(
@@ -1619,7 +1620,7 @@ func (dMgrs *DirMgrCollection) FindDirectories(
 		"")
 
 	if err != nil {
-		return new(DirMgrCollection).New(), err
+		return new(dirMgrCollectionHelper).newEmptyDMgrCollection(), err
 	}
 
 	if dMgrs.dirMgrs == nil {
@@ -1629,14 +1630,14 @@ func (dMgrs *DirMgrCollection) FindDirectories(
 	lDirCol := len(dMgrs.dirMgrs)
 
 	if lDirCol == 0 {
-		return new(DirMgrCollection).New(), nil
+		return new(dirMgrCollectionHelper).newEmptyDMgrCollection(), nil
 	}
 
 	fh := FileHelper{}
 
 	var isMatchedFile bool
 
-	dMgrs2 := new(DirMgrCollection).New()
+	dMgrs2 := new(dirMgrCollectionHelper).newEmptyDMgrCollection()
 
 	for i := 0; i < lDirCol; i++ {
 		dMgr := dMgrs.dirMgrs[i]
@@ -2348,11 +2349,7 @@ func (dMgrs *DirMgrCollection) New() DirMgrCollection {
 
 	defer dMgrs.lock.Unlock()
 
-	newDirMgrCol := DirMgrCollection{}
-
-	newDirMgrCol.dirMgrs = make([]DirMgr, 0)
-
-	return newDirMgrCol
+	return new(dirMgrCollectionHelper).newEmptyDMgrCollection()
 }
 
 // PopDirMgrAtIndex
