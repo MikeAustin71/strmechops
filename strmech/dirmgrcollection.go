@@ -2504,86 +2504,13 @@ func (dMgrs *DirMgrCollection) PopDirMgrAtIndex(
 		return DirMgr{}, err
 	}
 
-	if dMgrs.dirMgrs == nil {
-		dMgrs.dirMgrs = make([]DirMgr, 0, 100)
-	}
-
-	if idx < 0 {
-		return DirMgr{},
-			fmt.Errorf("%v\n"+
-				"Error: Input Parameter 'idx' is less than zero.\n"+
-				"Index Out-Of-Range! idx='%v'\n",
-				ePrefix.String(),
-				idx)
-	}
-
-	arrayLen := len(dMgrs.dirMgrs)
-
-	if arrayLen == 0 {
-		return DirMgr{},
-			fmt.Errorf("%v\n"+
-				"Error: The Directory Manager Collection is EMPTY!\n"+
-				"The length of 'dMgrs.dirMgrs' is Zero Elements.\n",
-				ePrefix.String())
-	}
-
-	if idx >= arrayLen {
-
-		return DirMgr{},
-			fmt.Errorf("%v\n"+
-				"Error: Input Parameter 'idx' is greater than the\n"+
-				"length of the collection index. Index Out-Of-Range!\n"+
-				"idx='%v' Array Length='%v'\n",
-				ePrefix.String(),
-				idx,
-				arrayLen)
-	}
-
-	if idx < 0 {
-
-		return DirMgr{},
-			fmt.Errorf("%v\n"+
-				"Error: Input Parameter 'idx' is less than zero.\n"+
-				"Index ('idx') is Out-Of-Range!\n"+
-				"idx='%v' Array Length='%v'\n",
-				ePrefix.String(),
-				idx,
-				arrayLen)
-
-	}
-
-	var dirMgrCopy DirMgr
-
-	dirMgrCopy,
-		err = dMgrs.dirMgrs[idx].CopyOut(
-		ePrefix.XCpy(fmt.Sprintf(
-			"dMgrs.dirMgrs[%v]",
-			idx)))
-
-	if err != nil {
-
-		return dirMgrCopy, err
-	}
-
-	if idx == 0 {
-		// First Element
-
-		dMgrs.dirMgrs = dMgrs.dirMgrs[1:]
-
-		return dirMgrCopy, err
-	}
-
-	if idx == arrayLen-1 {
-		// Last Element
-		dMgrs.dirMgrs = dMgrs.dirMgrs[0 : arrayLen-1]
-
-		return dirMgrCopy, err
-	}
-
-	dMgrs.dirMgrs =
-		append(dMgrs.dirMgrs[0:idx], dMgrs.dirMgrs[idx+1:]...)
-
-	return dirMgrCopy, err
+	return new(dirMgrCollectionHelper).
+		peekOrPopAtIndex(
+			dMgrs,
+			idx,
+			true, // Delete 'idx' on exit
+			ePrefix.XCpy(
+				fmt.Sprintf("dMgrs[%v]", idx)))
 }
 
 // PopFirstDirMgr
