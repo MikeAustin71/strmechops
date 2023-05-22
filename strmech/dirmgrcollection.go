@@ -2788,10 +2788,6 @@ func (dMgrs *DirMgrCollection) PopLastDirMgr(
 		return DirMgr{}, err
 	}
 
-	if dMgrs.dirMgrs == nil {
-		dMgrs.dirMgrs = make([]DirMgr, 0, 10)
-	}
-
 	arrayLen := len(dMgrs.dirMgrs)
 
 	if arrayLen == 0 {
@@ -2805,26 +2801,17 @@ func (dMgrs *DirMgrCollection) PopLastDirMgr(
 				ePrefix.String())
 	}
 
-	var dirMgrCopy DirMgr
+	arrayLen--
 
-	dirMgrCopy,
-		err = dMgrs.dirMgrs[arrayLen-1].CopyOut(
-		ePrefix.XCpy(fmt.Sprintf("dMgrs.dirMgrs[%v-1]",
-			arrayLen)))
-
-	if err != nil {
-		return DirMgr{}, err
-	}
-
-	if arrayLen == 1 {
-		dMgrs.dirMgrs = make([]DirMgr, 0, 100)
-
-	} else {
-		// arrayLen > 1
-		dMgrs.dirMgrs = dMgrs.dirMgrs[0 : arrayLen-1]
-	}
-
-	return dirMgrCopy, err
+	return new(dirMgrCollectionHelper).
+		peekOrPopAtIndex(
+			dMgrs,
+			arrayLen,
+			true, // Delete Last Index in array
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"dMgrs[%v]",
+					arrayLen)))
 }
 
 // PeekDirMgrAtIndex

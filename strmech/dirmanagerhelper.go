@@ -1892,7 +1892,8 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeInfo(
 
 		_,
 			_ = deleteTreeInfo.Directories.PopFirstDirMgr(
-			ePrefix)
+			ePrefix.XCpy(
+				"deleteTreeInfo.Directories"))
 	}
 
 	for i := 0; i < len(errs); i++ {
@@ -5050,7 +5051,8 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 		skipTopLevelDirectory {
 
 		_, _ = dTreeInfo.Directories.PopFirstDirMgr(
-			ePrefix)
+			ePrefix.XCpy(
+				"dTreeInfo.Directories"))
 
 	}
 
