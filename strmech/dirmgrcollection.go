@@ -2245,11 +2245,15 @@ func (dMgrs *DirMgrCollection) InsertDirMgrAtIndex(
 		return err
 	}
 
-	if dMgrs.dirMgrs == nil {
-		dMgrs.dirMgrs = make([]DirMgr, 0, 100)
+	lenDirMgrs := len(dMgrs.dirMgrs)
+
+	if lenDirMgrs == 0 {
+		dMgrs.dirMgrs = make([]DirMgr, 0, 1)
 	}
 
-	err = dMgr.IsDirMgrValid(ePrefix.XCpy("dMgr"))
+	err = new(dirMgrHelper).isDirMgrValid(
+		&dMgr,
+		ePrefix.XCpy("dMgr"))
 
 	if err != nil {
 
@@ -2270,40 +2274,45 @@ func (dMgrs *DirMgrCollection) InsertDirMgrAtIndex(
 			index)
 	}
 
-	lenDgrs := len(dMgrs.dirMgrs)
-
 	var dMgrCopy DirMgr
 
 	dMgrCopy,
 		err = dMgr.CopyOut(ePrefix.XCpy(
-		"dMgr"))
+		"dMgrCopy<-dMgr"))
 
 	if err != nil {
 		return err
 	}
 
-	if index >= lenDgrs {
+	if index >= lenDirMgrs {
 
 		dMgrs.dirMgrs = append(dMgrs.dirMgrs, dMgrCopy)
 
 		return err
 	}
 
-	newDirMgrs := make([]DirMgr, 0, 100)
+	var newDirMgrs []DirMgr
 
 	if index == 0 {
+
+		newDirMgrs = make([]DirMgr, 0, 1)
+
 		newDirMgrs = append(newDirMgrs, dMgrCopy)
 		dMgrs.dirMgrs = append(newDirMgrs, dMgrs.dirMgrs...)
-		return nil
+
+		return err
 	}
 
-	newDirMgrs = append(newDirMgrs, dMgrs.dirMgrs[index:]...)
+	newDirMgrs = make([]DirMgr, 0, lenDirMgrs-index)
+
+	newDirMgrs = append(
+		newDirMgrs, dMgrs.dirMgrs[index:]...)
 
 	dMgrs.dirMgrs = append(dMgrs.dirMgrs[:index])
 	dMgrs.dirMgrs = append(dMgrs.dirMgrs, dMgrCopy)
 	dMgrs.dirMgrs = append(dMgrs.dirMgrs, newDirMgrs...)
 
-	return nil
+	return err
 }
 
 // New - Creates and returns a new and properly initialized
