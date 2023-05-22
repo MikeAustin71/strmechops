@@ -2953,46 +2953,15 @@ func (dMgrs *DirMgrCollection) PeekDirMgrAtIndex(
 		return DirMgr{}, err
 	}
 
-	arrayLen := len(dMgrs.dirMgrs)
-
-	if arrayLen == 0 {
-
-		return DirMgr{},
-			fmt.Errorf("%v\n"+
-				"Error: The current DirMgrCollection is Empty!\n"+
-				"The are zero Directory Manager objects ('DirMgr')\n"+
-				"in the collection.\n",
-				ePrefix.String())
-
-	}
-
-	if idx < 0 {
-		return DirMgr{},
-			fmt.Errorf("%v\n"+
-				"Error: Input Parameter 'idx' is less than zero.\n"+
-				"Index Out-Of-Range!\n"+
-				"idx='%v'",
-				ePrefix.String(),
-				idx)
-	}
-
-	if idx >= arrayLen {
-
-		return DirMgr{},
-			fmt.Errorf("%v\n"+
-				"Error: Input Parameter 'idx' is greater than the\n"+
-				"length of the collection array. Index Out-Of-Range!\n"+
-				"idx='%v'\n"+
-				"Array Length='%v' ",
-				ePrefix.String(),
-				idx,
-				arrayLen)
-
-	}
-
-	return dMgrs.dirMgrs[idx].CopyOut(ePrefix.XCpy(
-		fmt.Sprintf("dMgrs.dirMgrs[%v]",
-			idx)))
+	return new(dirMgrCollectionHelper).
+		peekOrPopAtIndex(
+			dMgrs,
+			idx,
+			false, // Do NOT Delete 'idx'
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"dMgrs[%v]",
+					idx)))
 }
 
 // PeekFirstDirMgr
