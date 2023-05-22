@@ -171,6 +171,45 @@ func (dMgrColHelper *dirMgrCollectionHelper) copyCollection(
 	return err
 }
 
+// newEmptyDMgrCollection
+//
+// Creates and returns a new, empty and properly
+// initialized Directory Manager Collection
+// ('DirMgrCollection') instance.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	DirMgrCollection
+//
+//		This method returns a concrete instance of
+//		DirMgrCollection. The returned instance consists
+//		of an empty and properly initialized instance of
+//		DirMgrCollection.
+func (dMgrColHelper *dirMgrCollectionHelper) newEmptyDMgrCollection() DirMgrCollection {
+
+	if dMgrColHelper.lock == nil {
+		dMgrColHelper.lock = new(sync.Mutex)
+	}
+
+	dMgrColHelper.lock.Lock()
+
+	defer dMgrColHelper.lock.Unlock()
+
+	newDirMgrCol := DirMgrCollection{}
+
+	newDirMgrCol.dirMgrs = make([]DirMgr, 0)
+
+	return newDirMgrCol
+}
+
 // peekOrPopAtIndex
 //
 // Returns a deep copy of the Directory Manager

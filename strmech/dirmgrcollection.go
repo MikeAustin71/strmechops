@@ -37,6 +37,7 @@ type DirMgrCollection struct {
 }
 
 // AddDirMgr
+//
 // Adds a DirMgr object to the collection.
 //
 // Note that this method does not perform a validity
@@ -1156,7 +1157,7 @@ func (dMgrs *DirMgrCollection) CopyOut(
 		return DirMgrCollection{}, err
 	}
 
-	dMgrs2 := DirMgrCollection{}.New()
+	dMgrs2 := new(DirMgrCollection).New()
 
 	err = new(dirMgrCollectionHelper).
 		copyCollection(
@@ -1618,7 +1619,7 @@ func (dMgrs *DirMgrCollection) FindDirectories(
 		"")
 
 	if err != nil {
-		return DirMgrCollection{}.New(), err
+		return new(DirMgrCollection).New(), err
 	}
 
 	if dMgrs.dirMgrs == nil {
@@ -1628,14 +1629,14 @@ func (dMgrs *DirMgrCollection) FindDirectories(
 	lDirCol := len(dMgrs.dirMgrs)
 
 	if lDirCol == 0 {
-		return DirMgrCollection{}.New(), nil
+		return new(DirMgrCollection).New(), nil
 	}
 
 	fh := FileHelper{}
 
 	var isMatchedFile bool
 
-	dMgrs2 := DirMgrCollection{}.New()
+	dMgrs2 := new(DirMgrCollection).New()
 
 	for i := 0; i < lDirCol; i++ {
 		dMgr := dMgrs.dirMgrs[i]
@@ -2315,16 +2316,41 @@ func (dMgrs *DirMgrCollection) InsertDirMgrAtIndex(
 	return err
 }
 
-// New - Creates and returns a new and properly initialized
-// Directory Manager Collection ('DirMgrCollection').
-func (dMgrs DirMgrCollection) New() DirMgrCollection {
+// New
+//
+// Creates and returns a new, empty and properly
+// initialized Directory Manager Collection
+// ('DirMgrCollection') instance.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	DirMgrCollection
+//
+//		This method returns a concrete instance of
+//		DirMgrCollection. The returned instance consists
+//		of an empty and properly initialized instance of
+//		DirMgrCollection.
+func (dMgrs *DirMgrCollection) New() DirMgrCollection {
 
-	if dMgrs.dirMgrs == nil {
-		dMgrs.dirMgrs = make([]DirMgr, 0, 5)
+	if dMgrs.lock == nil {
+		dMgrs.lock = new(sync.Mutex)
 	}
 
+	dMgrs.lock.Lock()
+
+	defer dMgrs.lock.Unlock()
+
 	newDirMgrCol := DirMgrCollection{}
-	newDirMgrCol.dirMgrs = make([]DirMgr, 0, 5)
+
+	newDirMgrCol.dirMgrs = make([]DirMgr, 0)
 
 	return newDirMgrCol
 }
