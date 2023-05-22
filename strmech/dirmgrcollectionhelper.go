@@ -142,20 +142,20 @@ func (dMgrColHelper *dirMgrCollectionHelper) copyCollection(
 			ePrefix.String())
 	}
 
-	destinationDMgrCollection.dirMgrs = make([]DirMgr, 0, lenSourceDMgrs)
-
-	var dMgrCopy DirMgr
+	destinationDMgrCollection.dirMgrs = make([]DirMgr, lenSourceDMgrs)
 
 	for i := 0; i < lenSourceDMgrs; i++ {
 
-		dMgrCopy,
-			err = sourceDMgrCollection.dirMgrs[i].CopyOut(ePrefix.XCpy(
-			"sourceDMgrCollection.dirMgrs[i]"))
+		err = destinationDMgrCollection.dirMgrs[i].
+			CopyIn(
+				&sourceDMgrCollection.dirMgrs[i],
+				ePrefix.XCpy(
+					"sourceDMgrCollection.dirMgrs[i]"))
 
 		if err != nil {
 
 			return fmt.Errorf("%v\n"+
-				"Error: sourceDMgrCollection.dirMgrs[%v].CopyOut()\n"+
+				"Error: destinationDMgrCollection.dirMgrs[%v].CopyIn()\n"+
 				"sourceDMgrCollection.dirMgrs index= '%v'\n"+
 				"sourceDMgrCollection DirMgr= '%v'\n"+
 				"Error= \n%v\n",
@@ -166,9 +166,6 @@ func (dMgrColHelper *dirMgrCollectionHelper) copyCollection(
 				err.Error())
 		}
 
-		sourceDMgrCollection.dirMgrs =
-			append(sourceDMgrCollection.dirMgrs,
-				dMgrCopy)
 	}
 
 	return err
