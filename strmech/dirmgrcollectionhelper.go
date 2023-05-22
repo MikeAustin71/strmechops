@@ -171,6 +171,101 @@ func (dMgrColHelper *dirMgrCollectionHelper) copyCollection(
 	return err
 }
 
+// equalDMgrCollections
+//
+// This method receives pointers to two instances of
+// DirMgrCollection and proceeds to analyze all members
+// of each Directory Manager Collection to determine if
+// the collections are equal in all respects.
+//
+// If any of the Directory Manager (DirMgr) objects in
+// the two collections are not equal, this method returns
+// a boolean value of 'false'.
+//
+// A value of 'true' is only returned if all Directory
+// Manager objects in both collections are equal in all
+// respects.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dMgrCollectionOne			*DirMgrCollection
+//
+//		A pointer to an instance of DirMgrCollection. All
+//		the Directory Manager objects in this Directory
+//		Manager Collection will be compared to the
+//		Directory Manager Collection contained in input
+//		parameter 'dMgrCollectionTwo' to determine if
+//		all the Directory Manager objects are equivalent.
+//
+//	dMgrCollectionTwo			*DirMgrCollection
+//
+//		A pointer to an instance of DirMgrCollection. All
+//		the Directory Manager objects in this Directory
+//		Manager Collection will be compared to the
+//		Directory Manager Collection contained in input
+//		parameter 'dMgrCollectionOne' to determine if
+//		all the Directory Manager objects are equivalent.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		Two Directory Manager Collections from input
+//		parameters 'dMgrCollectionOne' and
+//		'dMgrCollectionTwo' are compared to determine
+//		if they are equal in all respects.
+//
+//		If any of the Directory Manager (DirMgr) objects
+//		in the two collections are not equal, this method
+//		returns a boolean value of 'false'.
+//
+//		A value of 'true' is only returned if all
+//	 	Directory Manager objects in both collections are
+//	 	equal in all respects.
+func (dMgrColHelper *dirMgrCollectionHelper) equalDMgrCollections(
+	dMgrCollectionOne *DirMgrCollection,
+	dMgrCollectionTwo *DirMgrCollection) bool {
+
+	if dMgrColHelper.lock == nil {
+		dMgrColHelper.lock = new(sync.Mutex)
+	}
+
+	dMgrColHelper.lock.Lock()
+
+	defer dMgrColHelper.lock.Unlock()
+
+	if dMgrCollectionOne == nil ||
+		dMgrCollectionTwo == nil {
+
+		return false
+	}
+
+	collectionLen := len(dMgrCollectionOne.dirMgrs)
+
+	if collectionLen != len(dMgrCollectionTwo.dirMgrs) {
+
+		return false
+	}
+
+	// Collection array lengths are equal
+
+	for i := 0; i < collectionLen; i++ {
+
+		if !dMgrCollectionOne.dirMgrs[i].Equal(
+			&dMgrCollectionTwo.dirMgrs[i]) {
+
+			return false
+		}
+
+	}
+
+	return true
+}
+
 // newEmptyDMgrCollection
 //
 // Creates and returns a new, empty and properly
