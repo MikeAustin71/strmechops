@@ -2517,8 +2517,9 @@ func (dMgrs *DirMgrCollection) PopDirMgrAtIndex(
 //
 // Returns a deep copy of the first Directory Manager
 // ('DirMgr') object in the Directory Manager Collection
-// array for the current DirMgrCollection instance. As a
-// 'Pop' method, the original Directory Manager
+// array for the current DirMgrCollection instance.
+//
+// As a 'Pop' method, the original Directory Manager
 // ('DirMgr') object is deleted from the first array
 // index of the Directory Manager Collection
 // (dMgrs.dirMgrs array index = 0).
@@ -2646,42 +2647,13 @@ func (dMgrs *DirMgrCollection) PopFirstDirMgr(
 		return DirMgr{}, err
 	}
 
-	if dMgrs.dirMgrs == nil {
-		dMgrs.dirMgrs = make([]DirMgr, 0, 5)
-	}
-
-	arrayLen := len(dMgrs.dirMgrs)
-
-	if arrayLen == 0 {
-
-		return DirMgr{},
-			fmt.Errorf("%v\n"+
-				"Error: The Director Managers Collection\n"+
-				"for the current DirMgrCollection instance\n"+
-				"is EMPTY. The Collection array has an array\n"+
-				"length of Zero.\n",
-				ePrefix.String())
-	}
-
-	var dMgrCopy DirMgr
-
-	dMgrCopy,
-		err = dMgrs.dirMgrs[0].CopyOut(ePrefix.XCpy(
-		"dMgrs.dirMgrs[0]"))
-
-	if err != nil {
-		return DirMgr{}, err
-	}
-
-	if arrayLen == 1 {
-		dMgrs.dirMgrs = make([]DirMgr, 0, 100)
-
-	} else {
-		// arrayLen > 1
-		dMgrs.dirMgrs = dMgrs.dirMgrs[1:]
-	}
-
-	return dMgrCopy, err
+	return new(dirMgrCollectionHelper).
+		peekOrPopAtIndex(
+			dMgrs,
+			0,
+			true, // Delete index 0 on exit
+			ePrefix.XCpy(
+				"dMgrs[0]"))
 }
 
 // PopLastDirMgr
