@@ -3158,19 +3158,13 @@ func (dMgrs *DirMgrCollection) PeekFirstDirMgr(
 		return DirMgr{}, err
 	}
 
-	if len(dMgrs.dirMgrs) == 0 {
-
-		return DirMgr{},
-			fmt.Errorf("%v\n"+
-				"Error: The current DirMgrCollection is Empty!\n"+
-				"The are zero Directory Manager objects ('DirMgr')\n"+
-				"in the collection.\n",
-				ePrefix.String())
-
-	}
-
-	return dMgrs.dirMgrs[0].CopyOut(ePrefix.XCpy(
-		"dMgrs.dirMgrs[0]"))
+	return new(dirMgrCollectionHelper).
+		peekOrPopAtIndex(
+			dMgrs,
+			0,
+			false, // Do NOT Delete 'dMgrs.dirMgrs[0]'
+			ePrefix.XCpy(
+				"dMgrs.dirMgrs[0]"))
 }
 
 // PeekLastDirMgr
