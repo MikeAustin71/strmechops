@@ -2854,9 +2854,9 @@ func (dMgrs *DirMgrCollection) PopLastDirMgr(
 		return DirMgr{}, err
 	}
 
-	arrayLen := len(dMgrs.dirMgrs)
+	lastArrayIndex := len(dMgrs.dirMgrs)
 
-	if arrayLen == 0 {
+	if lastArrayIndex == 0 {
 
 		return DirMgr{},
 			fmt.Errorf("%v\n"+
@@ -2867,17 +2867,17 @@ func (dMgrs *DirMgrCollection) PopLastDirMgr(
 				ePrefix.String())
 	}
 
-	arrayLen--
+	lastArrayIndex--
 
 	return new(dirMgrCollectionHelper).
 		peekOrPopAtIndex(
 			dMgrs,
-			arrayLen,
+			lastArrayIndex,
 			true, // Delete Last Index in array
 			ePrefix.XCpy(
 				fmt.Sprintf(
 					"dMgrs[%v]",
-					arrayLen)))
+					lastArrayIndex)))
 }
 
 // PeekDirMgrAtIndex
@@ -3295,23 +3295,16 @@ func (dMgrs *DirMgrCollection) PeekLastDirMgr(
 		return DirMgr{}, err
 	}
 
-	arrayLen := len(dMgrs.dirMgrs)
+	lastArrayIndex := len(dMgrs.dirMgrs)
 
-	if arrayLen == 0 {
+	lastArrayIndex--
 
-		return DirMgr{},
-			fmt.Errorf("%v\n"+
-				"Error: The current DirMgrCollection is Empty!\n"+
-				"The are zero Directory Manager objects ('DirMgr')\n"+
-				"in the collection.\n",
-				ePrefix.String())
-
-	}
-
-	arrayLen--
-
-	return dMgrs.dirMgrs[arrayLen].
-		CopyOut(ePrefix.XCpy(
-			fmt.Sprintf("dMgrs.dirMgrs[%v]",
-				arrayLen)))
+	return new(dirMgrCollectionHelper).
+		peekOrPopAtIndex(
+			dMgrs,
+			lastArrayIndex,
+			false, // Do NOT Delete 'dMgrs.dirMgrs[lastArrayIndex]'
+			ePrefix.XCpy(
+				fmt.Sprintf("dMgrs.dirMgrs[%v]",
+					lastArrayIndex)))
 }
