@@ -149,6 +149,23 @@ type SourceCodeComments struct {
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
+//
+//	errs						[]error
+//
+//		An array of errors is returned. If the method
+//		completes successfully with no errors, a
+//		ZERO-length array is returned.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		Remember, this error array may contain multiple
+//		errors.
 func (srcCodeComments *SourceCodeComments) testPrimaryComments(
 	errorPrefix interface{}) error {
 
