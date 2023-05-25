@@ -1608,26 +1608,39 @@ func (dMgr *DirMgr) DeleteDirectoryTreeFiles(
 	return deleteDirStats, errs
 }
 
-// DeleteFilesByNamePattern - Receives a string defining a pattern to use
-// in searching file names for all files in the directory identified
-// by the current DirMgr instance.
+// DeleteFilesByNamePattern
 //
-// *                        BE CAREFUL!!                         *
-// If a file name matches the pattern specified by input parameter,
-// 'fileSearchPattern', it will be deleted.
+// Receives a string defining a pattern to use in
+// searching file names for all files in the directory
+// identified by the current DirMgr instance.
 //
-// Only files in the directory identified by the current DirMgr instance
-// will be subject to deletion. Files in subdirectories or parent directories
-// will NOT be deleted or altered in any way.
+// ----------------------------------------------------------------
 //
-// If the 'fileSearchPattern' is improperly formatted, an error will be returned.
+// # WARNING
 //
-// If the directory path identified by the current DirMgr instance does NOT
-// exist, an error will be returned.
+//	This method will delete files matching the specified
+//	file search pattern.
 //
-// ------------------------------------------------------------------------
+//	If a file name matches the pattern specified by input
+//	parameter, 'fileSearchPattern', it will be deleted.
 //
-// Example 'filePatterns'
+// ----------------------------------------------------------------
+//
+// Only files in the directory identified by the current
+// DirMgr instance will be subject to deletion. Files
+// residing in subdirectories of the parent directory
+// identified by the current of DirMgr instance WILL NOT
+// BE DELETED or altered in any way.
+//
+// If the 'fileSearchPattern' is improperly formatted, an
+// error will be returned.
+//
+// If the directory path identified by the current DirMgr
+// instance does NOT exist, an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Example 'fileSearchPattern'
 //
 //	*.*              will match  all files in directory
 //	*.html           will match  anyfilename.html
@@ -1637,8 +1650,122 @@ func (dMgr *DirMgr) DeleteDirectoryTreeFiles(
 //
 //	Reference For Matching Details:
 //	  https://golang.org/pkg/path/filepath/#Match
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fileSearchPattern			string
+//
+//		This string contains the file search pattern
+//		which will be used to identify files for deletion
+//		in the directory identified by the current DirMgr
+//		instance.
+//
+//		See the 'fileSearchPattern' example shown above.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	deleteDirStats				DeleteDirFilesStats
+//
+//		If this method completes successfully, this
+//		return parameter will be populated with
+//		information and statistics on the file deletion
+//		operation. This information includes the number
+//		of files deleted.
+//
+//			type DeleteDirFilesStats struct {
+//				TotalFilesProcessed        uint64
+//				FilesDeleted               uint64
+//				FilesDeletedBytes          uint64
+//				FilesRemaining             uint64
+//				FilesRemainingBytes        uint64
+//				TotalSubDirectories        uint64
+//				TotalDirsScanned           uint64
+//				NumOfDirsWhereFilesDeleted uint64
+//				DirectoriesDeleted         uint64
+//			}
+//
+//	errs						[]error
+//
+//		An array of error objects.
+//
+//		If this method completes successfully, the
+//		returned error array is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		This error array may contain multiple errors.
 func (dMgr *DirMgr) DeleteFilesByNamePattern(
-	fileSearchPattern string) (
+	fileSearchPattern string,
+	errorPrefix interface{}) (
 	deleteDirStats DeleteDirFilesStats,
 	errs []error) {
 
@@ -1656,7 +1783,7 @@ func (dMgr *DirMgr) DeleteFilesByNamePattern(
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		nil,
+		errorPrefix,
 		"DirMgr.DeleteFilesByNamePattern()",
 		"")
 
