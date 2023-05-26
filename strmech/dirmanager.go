@@ -3279,13 +3279,11 @@ func (dMgr *DirMgr) DeleteWalkDirFiles(
 		return deleteFilesInfo, err
 	}
 
-	dMgrHlpr := dirMgrHelper{}
-
 	var errs []error
 
 	deleteFilesInfo,
 		errs =
-		dMgrHlpr.deleteDirectoryTreeInfo(
+		new(dirMgrHelper).deleteDirectoryTreeInfo(
 			dMgr,
 			deleteFileSelectionCriteria,
 			false, // skip top level directory
@@ -3301,13 +3299,47 @@ func (dMgr *DirMgr) DeleteWalkDirFiles(
 	return deleteFilesInfo, err
 }
 
-// DoesAbsolutePathExist - Performs two operations.
-// First the method determine whether the directory
-// path indicated by the DirMgr.absolutePath field
-// actually does exist on disk and returns a 'true'
-// or 'false' boolean value accordingly. In addition,
-// it also updates the DirMgr field
+// DoesAbsolutePathExist
+//
+// Performs two operations.
+//
+// First this method determines whether the absolute
+// directory path indicated by the DirMgr.absolutePath
+// field actually does exist on disk and returns a 'true'
+// or 'false' boolean value accordingly.
+//
+// Second, this method also updates the DirMgr field
 // 'DirMgr.doesAbsolutePathExist'.
+//
+// ----------------------------------------------------------------
+//
+// # Definition of Terms
+//
+// An absolute or full path points to the same location
+// in a file system, regardless of the current working
+// directory. To do that, it must include the root
+// directory.
+//
+//	https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If the absolute directory path specified by the
+//		current instance of DirMgr actually does exist on
+//		disk, this return value is set to 'true'.
+//
+//		If the absolute directory path does NOT exist, a
+//		value of 'false' is returned.
 func (dMgr *DirMgr) DoesAbsolutePathExist() bool {
 
 	if dMgr.lock == nil {
@@ -3320,15 +3352,6 @@ func (dMgr *DirMgr) DoesAbsolutePathExist() bool {
 
 	var err error
 
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		nil,
-		"DirMgr."+
-			"DoesAbsolutePathExist()",
-		"")
-
 	var dirPathDoesExist bool
 
 	dirPathDoesExist,
@@ -3339,7 +3362,7 @@ func (dMgr *DirMgr) DoesAbsolutePathExist() bool {
 				dMgr,
 				PreProcPathCode.None(),
 				"dMgr",
-				ePrefix)
+				nil)
 
 	if err != nil {
 		dirPathDoesExist = false
@@ -3353,8 +3376,41 @@ func (dMgr *DirMgr) DoesAbsolutePathExist() bool {
 // Returns two boolean values indicating whether the
 // Directory path exists and if the Directory absolute
 // path exists.
+//
+// ----------------------------------------------------------------
+//
+// # Definition of Terms
+//
+// An absolute or full path points to the same location
+// in a file system, regardless of the current working
+// directory. To do that, it must include the root
+// directory.
+//
+//	https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	doesPathExist				bool
+//
+//		If the directory path specified by the current
+//		instance of DirMgr exists, this return parameter
+//		will be set to 'true'.
+//
+//	doesAbsolutePathExist		bool
+//
+//		If the absolute directory path associated with
+//		the current instance of DirMgr exists on disk,
+//		this return parameter will be set to 'true'.
 func (dMgr *DirMgr) DoesDirectoryExist() (
-	doesPathExist,
+	doesPathExist bool,
 	doesAbsolutePathExist bool) {
 
 	if dMgr.lock == nil {

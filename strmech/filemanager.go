@@ -4841,6 +4841,17 @@ func (fMgr *FileMgr) EqualFileNameExt(
 //
 // ----------------------------------------------------------------
 //
+// # Definition of Terms
+//
+// An absolute or full path points to the same location
+// in a file system, regardless of the current working
+// directory. To do that, it must include the root
+// directory.
+//
+//	https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	fMgr2						*FileMgr
@@ -5082,6 +5093,13 @@ func (fMgr *FileMgr) FlushBytesToDisk(
 //
 //		This string returns the absolute path (a.k.a.
 //		directory) for the current FileMgr instance.
+//
+//		An absolute or full path points to the same location
+//		in a file system, regardless of the current working
+//		directory. To do that, it must include the root
+//		directory.
+//
+//			https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
 func (fMgr *FileMgr) GetAbsolutePath() string {
 
 	if fMgr.lock == nil {
@@ -5123,6 +5141,13 @@ func (fMgr *FileMgr) GetAbsolutePath() string {
 //		This string returns the absolute path, file name
 //		and file extension for the current File Manager
 //		(FileMgr) instance.
+//
+//		An absolute or full path points to the same location
+//		in a file system, regardless of the current working
+//		directory. To do that, it must include the root
+//		directory.
+//
+//			https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
 func (fMgr *FileMgr) GetAbsolutePathFileName() string {
 
 	if fMgr.lock == nil {
@@ -5162,6 +5187,17 @@ func (fMgr *FileMgr) GetAbsolutePathFileName() string {
 //
 // ----------------------------------------------------------------
 //
+// # Definition of Terms
+//
+// An absolute or full path points to the same location
+// in a file system, regardless of the current working
+// directory. To do that, it must include the root
+// directory.
+//
+//	https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	--- NONE ---
@@ -5176,6 +5212,13 @@ func (fMgr *FileMgr) GetAbsolutePathFileName() string {
 //		and file extension for the current File Manager
 //		(FileMgr) instance formatted entirely with lower
 //		case text characters.
+//
+//		An absolute or full path points to the same location
+//		in a file system, regardless of the current working
+//		directory. To do that, it must include the root
+//		directory.
+//
+//			https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
 func (fMgr *FileMgr) GetAbsolutePathFileNameLc() string {
 
 	if fMgr.lock == nil {
@@ -6770,6 +6813,10 @@ func (fMgr *FileMgr) GetWriterBufferSize() int {
 // absolute path and file name are populated and that the
 // file actually exists on disk.
 //
+// ----------------------------------------------------------------
+//
+// # Definition of Terms
+//
 // An absolute or full path points to the same location
 // in a file system, regardless of the current working
 // directory. To do that, it must include the root
@@ -7148,6 +7195,17 @@ func (fMgr *FileMgr) IsFileNameExtPopulated() bool {
 //
 //	(2) The File Name is populated but does NOT exist
 //		on disk.
+//
+// ----------------------------------------------------------------
+//
+// # Definition of Terms
+//
+// An absolute or full path points to the same location
+// in a file system, regardless of the current working
+// directory. To do that, it must include the root
+// directory.
+//
+//	https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
 //
 // ----------------------------------------------------------------
 //
@@ -9131,6 +9189,17 @@ func (fMgr *FileMgr) OpenThisFile(
 //
 // ----------------------------------------------------------------
 //
+// # Definition of Terms
+//
+// An absolute or full path points to the same location
+// in a file system, regardless of the current working
+// directory. To do that, it must include the root
+// directory.
+//
+//	https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
+//
+// ----------------------------------------------------------------
+//
 // # BE ADVISED
 //
 //	If the current FileMgr directory path and/or file
@@ -9277,6 +9346,17 @@ func (fMgr *FileMgr) OpenThisFileReadOnly(
 //
 // The FileMode is set to "--w--w--w-" and the permission
 // Code is set to '0222'.
+//
+// ----------------------------------------------------------------
+//
+// # Definition of Terms
+//
+// An absolute or full path points to the same location
+// in a file system, regardless of the current working
+// directory. To do that, it must include the root
+// directory.
+//
+//	https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
 //
 // ----------------------------------------------------------------
 //
@@ -9715,6 +9795,17 @@ func (fMgr *FileMgr) OpenThisFileWriteOnlyTruncate(
 //
 // ----------------------------------------------------------------
 //
+// # Definition of Terms
+//
+// An absolute or full path points to the same location
+// in a file system, regardless of the current working
+// directory. To do that, it must include the root
+// directory.
+//
+//	https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
+//
+// ----------------------------------------------------------------
+//
 // # BE ADVISED
 //
 //	If the current FileMgr directory path and file do not
@@ -9868,6 +9959,17 @@ func (fMgr *FileMgr) OpenThisFileReadWrite(
 //
 // ----------------------------------------------------------------
 //
+// # Definition of Terms
+//
+// An absolute or full path points to the same location
+// in a file system, regardless of the current working
+// directory. To do that, it must include the root
+// directory.
+//
+//	https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
+//
+// ----------------------------------------------------------------
+//
 // # BE ADVISED
 //
 //	If the current FileMgr directory path and file do not
@@ -10017,6 +10119,17 @@ func (fMgr *FileMgr) OpenThisFileReadWriteAppend(
 // If the file being opened previously exists, it will be
 // opened for read/write operations and the file's
 // contents will be truncated or deleted.
+//
+// ----------------------------------------------------------------
+//
+// # Definition of Terms
+//
+// An absolute or full path points to the same location
+// in a file system, regardless of the current working
+// directory. To do that, it must include the root
+// directory.
+//
+//	https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
 //
 // ----------------------------------------------------------------
 //
