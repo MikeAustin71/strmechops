@@ -3423,15 +3423,6 @@ func (dMgr *DirMgr) DoesDirectoryExist() (
 
 	var err error
 
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		nil,
-		"DirMgr."+
-			"DoesDirectoryExist()",
-		"")
-
 	dirPathDoesExist := false
 
 	dirPathDoesExist,
@@ -3442,21 +3433,59 @@ func (dMgr *DirMgr) DoesDirectoryExist() (
 				dMgr,
 				PreProcPathCode.None(),
 				"dMgr",
-				ePrefix)
+				nil)
 
 	if err != nil {
 		dirPathDoesExist = false
 	}
 
-	return dirPathDoesExist, dirPathDoesExist
+	doesAbsolutePathExist = dirPathDoesExist
+
+	return dirPathDoesExist, doesAbsolutePathExist
 }
 
-// DoesPathExist - Performs two operations.
-// First the method determine whether the directory
+// DoesPathExist
+//
+// Performs two operations on the current instance of
+// DirMgr.
+//
+// First the method determines whether the directory
 // path indicated by the DirMgr.path field actually
 // does exist on disk and returns a 'true' or 'false'
-// boolean value accordingly. In addition, it also
-// updates the DirMgr field DirMgr.doesPathExist field.
+// boolean value accordingly.
+//
+// In addition, it also updates the DirMgr field
+// DirMgr.doesPathExist field.
+//
+// The DirMgr directory may be configured either as
+// an absolute path or a relative path.
+//
+// ----------------------------------------------------------------
+//
+// # Definition of Terms
+//
+// An absolute or full path points to the same location
+// in a file system, regardless of the current working
+// directory. To do that, it must include the root
+// directory.
+//
+//	https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If the directory path specified by the current
+//		instance of DirMgr actually exists on disk, this
+//		return parameter will be set to 'true'.
 func (dMgr *DirMgr) DoesPathExist() bool {
 
 	if dMgr.lock == nil {
@@ -3471,15 +3500,6 @@ func (dMgr *DirMgr) DoesPathExist() bool {
 
 	var err error
 
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		nil,
-		"DirMgr."+
-			"DoesPathExist()",
-		"")
-
 	dirPathDoesExist,
 		_,
 		err =
@@ -3488,7 +3508,7 @@ func (dMgr *DirMgr) DoesPathExist() bool {
 				dMgr,
 				PreProcPathCode.None(),
 				"dMgr",
-				ePrefix)
+				nil)
 
 	if err != nil {
 		dirPathDoesExist = false
