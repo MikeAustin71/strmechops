@@ -3772,8 +3772,8 @@ func (dMgr *DirMgr) Equal(dMgr2 *DirMgr) bool {
 // EqualAbsPaths
 //
 // This method compares the absolute paths for the
-// current directory manager and the input directory
-// manager ('incomingDirMgr').
+// current directory manager and the external directory
+// manager passed as input paramter 'incomingDirMgr'.
 //
 // If the two absolute paths are equal, this method
 // returns 'true'.
@@ -3788,6 +3788,17 @@ func (dMgr *DirMgr) Equal(dMgr2 *DirMgr) bool {
 // If either the current DirMgr ('dMgr') or the input
 // parameter 'incomingDirMgr' are uninitialized, a value
 // of 'false' is returned.
+//
+// ----------------------------------------------------------------
+//
+// # Definition of Terms
+//
+// An absolute or full path points to the same location
+// in a file system, regardless of the current working
+// directory. To do that, it must include the root
+// directory.
+//
+//	https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
 //
 // ----------------------------------------------------------------
 //
