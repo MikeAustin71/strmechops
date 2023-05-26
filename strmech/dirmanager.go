@@ -3678,8 +3678,31 @@ func (dMgr *DirMgr) DoesThisDirectoryExist(
 	return directoryDoesExist, nonPathError
 }
 
-// Empty - Returns all DirMgr field values to their uninitialized
-// or original zero values.
+// Empty
+//
+// Resets all internal member data field values to their
+// uninitialized or original zero values for the current
+// instance of DirMgr.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete and reset all pre-existing
+//	data values in the current instance of DirMgr to
+//	their original zero or uninitialized values.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	--- NONE ---
 func (dMgr *DirMgr) Empty() {
 
 	if dMgr.lock == nil {
@@ -3688,11 +3711,12 @@ func (dMgr *DirMgr) Empty() {
 
 	dMgr.lock.Lock()
 
-	defer dMgr.lock.Unlock()
-
 	_ = new(dirMgrHelperElectron).
 		empty(dMgr, "DirMgr.Empty() ", nil)
 
+	dMgr.lock.Unlock()
+
+	dMgr.lock = nil
 }
 
 // Equal
