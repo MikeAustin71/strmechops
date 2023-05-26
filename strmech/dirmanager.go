@@ -3464,10 +3464,15 @@ func (dMgr *DirMgr) DoesDirectoryExist() (
 //
 // # Definition of Terms
 //
-// An absolute or full path points to the same location
-// in a file system, regardless of the current working
-// directory. To do that, it must include the root
-// directory.
+//	An absolute or full path points to the same location
+//	in a file system, regardless of the current working
+//	directory. To do that, it must include the root
+//	directory.
+//
+//	By contrast, a relative path starts from some given
+//	working directory, avoiding the need to provide the
+//	full absolute path. A filename can be considered as
+//	a relative path based at the current working directory.
 //
 //	https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
 //
@@ -3517,16 +3522,121 @@ func (dMgr *DirMgr) DoesPathExist() bool {
 	return dirPathDoesExist
 }
 
-// DoesThisDirectoryExist - Returns a boolean value of true if the directory identified
-// by the current DirMgr instance does in fact exist.
+// DoesThisDirectoryExist
 //
-// If, during the process of verifying the existence of the current directory, an error
-// is encountered it will be a non-path error. Non-Path errors are most commonly associated
-// with 'access-denied' situations. However, there may be other reasons for triggering Non-Path
-// errors.
+// Returns a boolean value of 'true' if the directory
+// identified by the current DirMgr instance does in
+// fact exist.
 //
-// If a Non-Path error is encountered, an appropriate error message is returned along with
-// a boolean value of 'false'.
+// If, during the process of verifying the existence of
+// the current directory, an error is encountered it will
+// be a non-path error.
+//
+// Non-Path errors are most commonly associated with
+// 'access-denied' situations. However, there may be
+// other reasons for triggering Non-Path errors.
+//
+// If a Non-Path error is encountered, an appropriate
+// error message is returned along with a boolean value
+// of 'false'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	directoryDoesExist			bool
+//
+//		If the directory path specified by the current
+//		instance of DirMgr actually exists on disk, this
+//		return parameter is set to 'true'.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If, during the process of verifying the existence
+//		of the current directory, an error is encountered
+//	 	it will be a non-path error.
+//
+//		Non-Path errors are most commonly associated with
+//		'access-denied' situations. However, there may be
+//		other reasons for triggering Non-Path errors.
+//
+//		If a Non-Path error is encountered, an appropriate
+//		error message is returned and the return parameter
+//		'directoryDoesExist' will be set to 'false'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (dMgr *DirMgr) DoesThisDirectoryExist(
 	errorPrefix interface{}) (
 	directoryDoesExist bool,
