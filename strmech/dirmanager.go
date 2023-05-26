@@ -3722,9 +3722,39 @@ func (dMgr *DirMgr) Empty() {
 // Equal
 //
 // Compares two DirMgr objects to determine if they are
-// equal.
+// equal in all respects.
 //
 // The Directory Path comparisons are NOT case-sensitive.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dMgr2						*DirMgr
+//
+//		A pointer to an external instance of DirMgr. The
+//		internal member data field values contained in
+//		this instance will be compared to the
+//	 	corresponding data values in the current instance
+//		of DirMgr. If the compared data values are equal
+//		in all respects, a boolean value of 'true' will
+//		be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		This method compares the internal data values
+//		contained in the current instance of DirMgr to
+//		the corresponding data values in an external
+//		DirMgr instance passed as 'dMgr2'.
+//
+//		If all the data values contained in the current
+//		instance of DirMgr and input parameter 'dMgr2'
+//		are equal in all respects, this return parameter
+//		will be set to 'true'.
 func (dMgr *DirMgr) Equal(dMgr2 *DirMgr) bool {
 
 	if dMgr.lock == nil {
