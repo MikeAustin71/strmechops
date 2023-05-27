@@ -4819,6 +4819,7 @@ func (dMgr *DirMgr) ExecuteDirectoryTreeOps(
 //	  this criteria will be returned as 'Found Files'.
 //
 //			type FileSelectionCriteria struct {
+//
 //			 FileNamePatterns    []string
 //				An array of strings containing File Name Patterns
 //
@@ -5661,6 +5662,7 @@ func (dMgr *DirMgr) FindFilesBySelectCriteria(
 //		'Found Files'.
 //
 //			type FileSelectionCriteria struct {
+//
 //			 FileNamePatterns    []string
 //				An array of strings containing File Name Patterns
 //
