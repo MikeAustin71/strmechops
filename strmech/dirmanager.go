@@ -6346,11 +6346,13 @@ func (dMgr *DirMgr) FindWalkSubDirFiles(
 //
 // Returns a string containing the absolute path for the
 // current Directory Manager instance (DirMgr). This
-// string returned by this method will NOT contain a
+// string returned by this method WILL NEVER contain a
 // trailing path separator (Linux='/' or Windows='\').
 //
 // The returned absolute path string may consist of upper
-// and lower case characters.
+// and lower case characters if the current DirMgr
+// path was initialized with upper and lower case
+// characters.
 //
 // See companion method GetAbsolutePathLc() to
 // acquire a lower case version of absolute path.
@@ -6371,11 +6373,13 @@ func (dMgr *DirMgr) FindWalkSubDirFiles(
 // # BE ADVISED
 //
 //	(1)	The absolute path string returned by this method
-//		will NOT contain a trailing path separator
+//		WILL NEVER contain a trailing path separator
 //		(Linux='/' or Windows='\').
 //
 //	(2)	The absolute path string returned by this method
-//		may consist of upper and lower case characters.
+//		may consist of upper and lower case characters if
+//		the current DirMgr path was initialized with
+//		upper and lower case characters.
 //
 //	(3) If this method returns an empty string, it
 //		signals that some type of error was encountered.
@@ -6397,12 +6401,13 @@ func (dMgr *DirMgr) FindWalkSubDirFiles(
 //		This method returns a string containing the
 //		absolute path specified by the current instance
 //		of DirMgr. Remember that the returned absolute
-//		path string will NOT contain a trailing path
+//		path string WILL NEVER contain a trailing path
 //		separator (Linux='/' or Windows='\').
 //
 //		The absolute path string returned by this
 //		parameter may consist of upper and lower case
-//		characters.
+//		characters if the current DirMgr path was
+//		initialized with upper and lower case characters.
 //
 //		If this method returns an empty string it signals
 //		that some type of error was encountered. To
@@ -6693,13 +6698,15 @@ func (dMgr *DirMgr) GetAbsolutePathElements(
 
 // GetAbsolutePathWithSeparator
 //
-// Returns the current absolute path specified by the
-// current DirMgr instance. The returned path will
-// contain a trailing os.PathSeparator character
-// (Linux='/' or Windows='\').
+// Returns the absolute path specified by the current
+// DirMgr instance. The returned path WILL ALWAYS contain
+// a trailing os.PathSeparator character (Linux='/' or
+// Windows='\').
 //
 // The returned absolute path string may consist of upper
-// and lower case characters.
+// and lower case characters if the current DirMgr
+// path was initialized with upper and lower case
+// characters.
 //
 // See the companion method
 // DirMgr.GetAbsolutePathWithSeparatorLc() which returns a
@@ -6725,7 +6732,9 @@ func (dMgr *DirMgr) GetAbsolutePathElements(
 //		character (Linux='/' or Windows='\').
 //
 //	(2)	The absolute path string returned by this method
-//		may consist of upper and lower case characters.
+//		may consist of upper and lower case characters if
+//		the current DirMgr path was initialized with
+//		upper and lower case characters.
 //
 //	(3) If this method returns an empty string, it
 //		signals that some type of error was encountered.
@@ -6753,7 +6762,8 @@ func (dMgr *DirMgr) GetAbsolutePathElements(
 //
 //		The absolute path string returned by this
 //		parameter may consist of upper and lower case
-//		characters.
+//		characters if the current DirMgr path was
+//		initialized with upper and lower case characters.
 //
 //		If this method returns an empty string it signals
 //		that some type of error was encountered. To
@@ -6797,14 +6807,74 @@ func (dMgr *DirMgr) GetAbsolutePathWithSeparator() string {
 	return absolutePath
 }
 
-// GetAbsolutePathWithSeparatorLc - Returns the current
-// DirMgr.absolutePath with a trailing os.PathSeparator
-// character. The path string will consist of all lower
-// case characters.
+// GetAbsolutePathWithSeparatorLc
 //
-// See the companion method GetAbsolutePathWithSeparator()
-// which returns a path string consisting of upper and lower
-// case characters.
+// Returns the absolute path specified by the current
+// DirMgr instance. The returned path WILL ALWAYS contain
+// a trailing os.PathSeparator character (Linux='/' or
+// Windows='\').
+//
+// The returned absolute path string WILL ALWAYS consist
+// of lower case characters.
+//
+// See the companion method
+// DirMgr.GetAbsolutePathWithSeparator() which returns a
+// path string containing upper and lower case characters.
+//
+// ----------------------------------------------------------------
+//
+// # Definition of Terms
+//
+// An absolute or full path points to the same location
+// in a file system, regardless of the current working
+// directory. To do that, it must include the root
+// directory.
+//
+//	https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	(1)	The absolute path string returned by this method
+//		WILL ALWAYS contain a trailing os.PathSeparator
+//		character (Linux='/' or Windows='\').
+//
+//	(2)	The absolute path string returned by this method
+//		WILL ALWAYS consist of lower case characters.
+//
+//	(3) If this method returns an empty string, it
+//		signals that some type of error was encountered.
+//		To examine detailed error messages, call method:
+//			DirMgr.DoesThisDirectoryExist()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		This method returns a string containing the
+//		absolute path specified by the current instance
+//		of DirMgr. Remember that the returned absolute
+//		path string WILL ALWAYS contain a trailing
+//		os.PathSeparator character (Linux='/' or
+//		Windows='\').
+//
+//		The absolute path string returned by this
+//		parameter WILL ALWAYS consist of lower case
+//		characters.
+//
+//		If this method returns an empty string it signals
+//		that some type of error was encountered. To
+//		examine detailed error messages, call method:
+//			DirMgr.DoesThisDirectoryExist()
 func (dMgr *DirMgr) GetAbsolutePathWithSeparatorLc() string {
 
 	if dMgr.lock == nil {
@@ -6826,9 +6896,7 @@ func (dMgr *DirMgr) GetAbsolutePathWithSeparatorLc() string {
 			"",
 			nil)
 
-	if err != nil {
-		absolutePath = ""
-	} else {
+	if err == nil {
 		absolutePath = strings.ToLower(dMgr.absolutePath)
 	}
 
