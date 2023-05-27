@@ -6342,13 +6342,51 @@ func (dMgr *DirMgr) FindWalkSubDirFiles(
 	return dTreeInfo, err
 }
 
-// GetAbsolutePath - Returns a string containing the
-// absolute path for the current Directory Manager
-// instance. This string returned by this method
-// will NOT have a trailing path separator.
+// GetAbsolutePath
+//
+// Returns a string containing the absolute path for the
+// current Directory Manager instance (DirMgr). This
+// string returned by this method will NOT have a
+// trailing path separator.
 //
 // See companion method GetAbsolutePathLc() to
 // acquire a lower case version of absolute path.
+//
+// ----------------------------------------------------------------
+//
+// # Definition of Terms
+//
+// An absolute or full path points to the same location
+// in a file system, regardless of the current working
+// directory. To do that, it must include the root
+// directory.
+//
+//	https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	The absolute path string returned by this method will
+//	NOT contain a trailing path separator ('/' or '\').
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		This method returns a string containing the
+//		absolute path specified by the current instance
+//		of DirMgr. Remember that the returned absolute
+//		path string will NOT contain a trailing path
+//		separator ('/' or '\').
 func (dMgr *DirMgr) GetAbsolutePath() string {
 
 	if dMgr.lock == nil {
@@ -6370,10 +6408,10 @@ func (dMgr *DirMgr) GetAbsolutePath() string {
 			"",
 			nil)
 
-	if err != nil {
-		absolutePath = ""
-	} else {
+	if err == nil {
+
 		absolutePath = dMgr.absolutePath
+
 	}
 
 	return absolutePath
