@@ -5129,52 +5129,135 @@ func (dMgr *DirMgr) FindDirectoryTreeFiles(
 	return dTreeInfo, errs
 }
 
-// FindFilesByNamePattern - searches the current directory using a name pattern file
+// FindFilesByNamePattern
+//
+// This method searches the directory identified by the
+// current DirMgr instance using a name pattern file
 // search criteria.
 //
-// Regardless of the search pattern used, this method will never return subdirectories
-// of the target search directory.
+// The directory specified by the current instance of
+// DirMgr is treated as the target directory.
 //
-// Again, the file search will always be limited to the directory identified by the
-// current DirMgr instance. No subdirectories will be searched.
+// Regardless of the search pattern used, this method
+// will never return subdirectories of the target
+// directory. The file search operation will always be
+// restricted to the directory identified by the current
+// DirMgr instance. Again, no subdirectories will be
+// searched.
 //
-// If the 'fileSearchPattern' is an empty string or improperly formatted, an error
-// will be returned.
+// If the 'fileSearchPattern' is an empty string or
+// improperly formatted, an error will be returned.
 //
 // ------------------------------------------------------------------------
 //
 // # Input parameter
 //
-//	fileSearchPattern  string -  The fileSearchPattern is string containing
-//	                             parameters used to select target files in
-//	                             directory identified by the 'DirMgr' type.
+//	fileSearchPattern			string
 //
-//	                             Example 'fileSearchPattern' strings
+//		The fileSearchPattern is string containing
+//		parameters used to select target files in the
+//		directory identified by the current 'DirMgr'
+//		instance.
 //
-//	                             *.*             will match all files in directory.
-//	                             *.html          will match  anyfilename.html
-//	                             a*              will match  appleJack.txt
-//	                             j????row.txt    will match  j1x34row.txt
-//	                             data[0-9]*      will match 	data123.csv
+//		Example 'fileSearchPattern' strings
 //
-//	                             Reference For File Pattern Matching Details:
-//	                               https://golang.org/pkg/path/filepath/#Match
+//		*.*             will match all files in directory.
+//		*.html          will match  anyfilename.html
+//		a*              will match  appleJack.txt
+//		j????row.txt    will match  j1x34row.txt
+//		data[0-9]*      will match 	data123.csv
 //
-// ---------------------------------------------------------------------------
+//		Reference For File Pattern Matching Details:
+//		  https://golang.org/pkg/path/filepath/#Match
 //
-// Return Values:
+//	errorPrefix					interface{}
 //
-//	FileMgrCollection - If this method completes successfully without error, the
-//	                    returned FileMgrCollection type will contain an array of
-//	                    FileMgr types identifying each of the files matched by
-//	                    input parameter, 'fileSearchPattern'.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
-//	error             - If this method completes successfully, this return value
-//	                    will be set to 'nil'. Otherwise, a valid error message will
-//	                    be encapsulated in the returned type 'error'.
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	FileMgrCollection
+//
+//		If this method completes successfully without
+//		error, this returned FileMgrCollection instance
+//		will contain an array of FileMgr types
+//		identifying each of the files matched by input
+//		parameter, 'fileSearchPattern'.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (dMgr *DirMgr) FindFilesByNamePattern(
-	fileSearchPattern string) (
-	FileMgrCollection, error) {
+	fileSearchPattern string,
+	errorPrefix interface{}) (
+	FileMgrCollection,
+	error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -5192,7 +5275,7 @@ func (dMgr *DirMgr) FindFilesByNamePattern(
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		nil,
+		errorPrefix,
 		"DirMgr."+
 			"FindFilesByNamePattern()",
 		"")
@@ -5201,17 +5284,12 @@ func (dMgr *DirMgr) FindFilesByNamePattern(
 		return fileMgrCol, err
 	}
 
-	dMgrHlpr := dirMgrHelper{}
-
-	fileMgrCol,
-		err = dMgrHlpr.findFilesByNamePattern(
+	return new(dirMgrHelper).findFilesByNamePattern(
 		dMgr,
 		fileSearchPattern,
 		"dMgr",
 		"fileSearchPattern",
 		ePrefix)
-
-	return fileMgrCol, err
 }
 
 // FindFilesBySelectCriteria - Conducts a file search in the directory
