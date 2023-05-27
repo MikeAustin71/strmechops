@@ -5034,6 +5034,7 @@ func (dMgr *DirMgr) ExecuteDirectoryTreeOps(
 //		files found during the search operation.
 //
 //	          type DirectoryTreeInfo struct {
+//
 //	            StartPath             string
 //					The starting path or directory for the file
 //	                search.
@@ -5610,193 +5611,325 @@ func (dMgr *DirMgr) FindFilesBySelectCriteria(
 	return dTreeInfo.FoundFiles, err
 }
 
-// FindWalkDirFiles - This method returns file information on files residing in a
-// specific directory tree identified by the current DirMgr instance. The directory
-// identified by 'DirMgr' is treated as the parent directory for the search.
+// FindWalkDirFiles
 //
-// In addition to file information, this method also returns data on the directory tree
-// being searched including the parent directory and all subdirectories in the tree.
+// This method returns file information on files residing
+// in a specific directory tree identified by the current
+// DirMgr instance. The directory identified by 'DirMgr'
+// is treated as the parent directory for the search.
 //
-// This method 'walks the directory tree' locating all files in the directory tree which
-// match the file selection criteria submitted as input parameter, 'fileSelectCriteria'.
+// In addition to file information, this method also
+// returns data on the directory tree being searched
+// including the parent directory and all subdirectories
+// in the tree.
 //
-// All directories including the top level parent directory ('DirMgr') are searched. This
-// differs from method 'DirMgr.FindWalkSubDirFiles()' which only searches the subdirectory
-// tree.
+// This method 'walks the directory tree' locating all
+// files in the directory tree which match the file
+// selection criteria submitted as input parameter,
+// 'fileSelectCriteria'.
 //
-// If a file matches the File Selection Criteria, it is included in the returned field,
-// 'DirectoryTreeInfo.FoundFiles'. If ALL the file selection criterion are set to zero
-// values or 'Inactive', then ALL FILES in the directory are selected and returned in
-// the field, 'DirectoryTreeInfo.FoundFiles'.
+// All directories in the tree are searched including the
+// top level parent directory identified by the current
+// DirMgr instance. This differs from method
+// 'DirMgr.FindWalkSubDirFiles()' which only searches the
+// subdirectory tree.
 //
-// All directories searched will be included in the returned collection
-// 'DirectoryTreeInfo.Directories'. This returned 'DirectoryTreeInfo.Directories'
-// collection will always include the top level parent directory identified by 'DirMgr'.
+// If a file matches the File Selection Criteria passed
+// as input parameter 'fileSelectCriteria', that file is
+// included in the returned DirectoryTreeInfo structure
+// (DirectoryTreeInfo.FoundFiles). If ALL the file
+// selection criterion are set to zero values or
+// 'Inactive', then ALL FILES in the directory are
+// selected and returned in the field,
+// 'DirectoryTreeInfo.FoundFiles'.
 //
-// ------------------------------------------------------------------------
+// All directories searched will be included in the
+// returned collection 'DirectoryTreeInfo.Directories'.
+// This returned 'DirectoryTreeInfo.Directories'
+// collection will always include the top level parent
+// directory identified by 'DirMgr'.
 //
-// Input Parameters:
+// ----------------------------------------------------------------
 //
-//	fileSelectCriteria FileSelectionCriteria
-//	  This input parameter should be configured with the desired file
-//	  selection criteria. Files matching this criteria will be returned as
-//	  'Found Files'.
+// # Input Parameters
 //
-//	  type FileSelectionCriteria struct {
-//	    FileNamePatterns     []string     // An array of strings containing File Name Patterns
-//	    FilesOlderThan       time.Time    // Match files with older modification date times
-//	    FilesNewerThan       time.Time    // Match files with newer modification date times
-//	    SelectByFileMode     FilePermissionConfig  // Match file mode (os.FileMode).
-//	  }
+//	fileSelectCriteria			FileSelectionCriteria
 //
-//	  The FileSelectionCriteria type allows for configuration of single or multiple file
-//	  selection criterion. The 'SelectCriterionMode' can be used to specify whether the
-//	  file must match all, or any one, of the active file selection criterion.
+//		This input parameter should be configured with
+//		the desired file selection criteria. Files
+//		matching this criteria will be returned as
+//		'Found Files'.
 //
-//	  Elements of the FileSelectionCriteria are described below:
+//			type FileSelectionCriteria struct {
+//			 FileNamePatterns    []string
+//				An array of strings containing File Name Patterns
+//
+//			 FilesOlderThan      time.Time
+//			 	Match files with older modification date times
+//
+//			 FilesNewerThan      time.Time
+//			 	Match files with newer modification date times
+//
+//			 SelectByFileMode    FilePermissionConfig
+//			 	Match file mode (os.FileMode).
+//
+//			 SelectCriterionModeFileSelectCriterionMode
+//			 	Specifies 'AND' or 'OR' selection mode
+//			}
+//
+//		The FileSelectionCriteria type allows for configuration of single or multiple file
+//		selection criterion. The 'SelectCriterionMode' can be used to specify whether the
+//		file must match all, or any one, of the active file selection criterion.
+//
+//		Elements of the FileSelectionCriteria are described
+//		below:
+//
+//			FileNamePatterns		[]string
+//
+//				An array of strings which may define one or more
+//				search patterns. If a file name matches any one
+//				of the search pattern strings, it is deemed to be
+//				a 'match' for the search pattern criterion.
+//
+//				Example Patterns:
+//					FileNamePatterns = []string{"*.log"}
+//					FileNamePatterns = []string{"current*.txt"}
+//					FileNamePatterns = []string{"*.txt", "*.log"}
+//
+//				If this string array has zero length or if
+//				all the strings are empty strings, then this
+//				file search criterion is considered 'Inactive'
+//				or 'Not Set'.
 //
 //
-//	  type FileSelectionCriteria struct {
-//	   FileNamePatterns    []string// An array of strings containing File Name Patterns
-//	   FilesOlderThan      time.Time// Match files with older modification date times
-//	   FilesNewerThan      time.Time// Match files with newer modification date times
-//	   SelectByFileMode    FilePermissionConfig  // Match file mode (os.FileMode).
-//	   SelectCriterionModeFileSelectCriterionMode // Specifies 'AND' or 'OR' selection mode
-//	  }
+//			FilesOlderThan		time.Time
 //
-//	  The FileSelectionCriteria type allows for configuration of single or multiple file
-//	  selection criterion. The 'SelectCriterionMode' can be used to specify whether the
-//	  file must match all, or any one, of the active file selection criterion.
+//				This date time type is compared to file
+//				modification date times in order to determine
+//				whether the file is older than the
+//				'FilesOlderThan' file selection criterion. If
+//				the file modification date time is older than
+//				the 'FilesOlderThan' date time, that file is
+//				considered a 'match' for this file selection
+//				criterion.
 //
-//	  Elements of the FileSelectionCriteria are described below:
+//				If the value of 'FilesOlderThan' is set to
+//				time zero, the default value for type
+//				time.Time{}, then this file selection
+//				criterion is considered to be 'Inactive' or
+//				'Not Set'.
 //
-//	  FileNamePatterns    []string  - An array of strings which may define one or more
-//	                                  search patterns. If a file name matches any one of the
-//	                                  search pattern strings, it is deemed to be a 'match'
-//	                                  for the search pattern criterion.
+//			FilesNewerThan      time.Time
 //
-//	                                    Example Patterns:
-//	                                     FileNamePatterns = []string{"*.log"}
-//	                                     FileNamePatterns = []string{"current*.txt"}
-//	                                     FileNamePatterns = []string{"*.txt", "*.log"}
+//				This date time type is compared to the file
+//				modification date time in order to determine
+//				whether the file is newer than the
+//				'FilesNewerThan' file selection criterion. If
+//				the file modification date time is newer than
+//				the 'FilesNewerThan' date time, that file is
+//				considered a 'match' for this file selection
+//				criterion.
 //
-//	                                  If this string array has zero length or if
-//	                                  all the strings are empty strings, then this
-//	                                  file search criterion is considered 'Inactive'
-//	                                  or 'Not Set'.
+//				If the value of 'FilesNewerThan' is set to
+//				time zero, the default value for type
+//				time.Time{}, then this file selection
+//				criterion is considered to be 'Inactive' or
+//				'Not Set'.
 //
+//			SelectByFileMode  FilePermissionConfig
 //
-//	  FilesOlderThan      time.Time - This date time type is compared to file
-//	                                  modification date times in order to determine
-//	                                  whether the file is older than the 'FilesOlderThan'
-//	                                  file selection criterion. If the file modification
-//	                                  date time is older than the 'FilesOlderThan' date time,
-//	                                  that file is considered a 'match'	for this file selection
-//	                                  criterion.
+//				Type FilePermissionConfig encapsulates an os.FileMode. The
+//				file selection criterion allows for the selection of files
+//				by File Mode.
 //
-//	                                  If the value of 'FilesOlderThan' is set to time zero,
-//	                                  the default value for type time.Time{}, then this
-//	                                  file selection criterion is considered to be 'Inactive'
-//	                                  or 'Not Set'.
+//				File modes are compared to the value of 'SelectByFileMode'.
+//				If the File Mode for a given file is equal to the value of
+//				'SelectByFileMode', that file is considered to be a 'match'
+//				for this file selection criterion. Examples for setting
+//				SelectByFileMode are shown as follows:
 //
-//	  FilesNewerThan      time.Time - This date time type is compared to the file
-//	                                  modification date time in order to determine
-//	                                  whether the file is newer than the 'FilesNewerThan'
-//	                                  file selection criterion. If the file modification date time
-//	                                  is newer than the 'FilesNewerThan' date time, that file is
-//	                                  considered a 'match' for this file selection criterion.
+//				fsc := FileSelectionCriteria{}
 //
-//	                                  If the value of 'FilesNewerThan' is set to time zero,
-//	                                  the default value for type time.Time{}, then this
-//	                                  file selection criterion is considered to be 'Inactive'
-//	                                  or 'Not Set'.
+//				err = fsc.SelectByFileMode.SetByFileMode(os.FileMode(0666))
 //
-//	  SelectByFileMode  FilePermissionConfig -
-//	                                  Type FilePermissionConfig encapsulates an os.FileMode. The file
-//	                                  selection criterion allows for the selection of files by File Mode.
-//	                                  File modes are compared to the value	of 'SelectByFileMode'. If the
-//	                                  File Mode for a given file is equal to the value of 'SelectByFileMode',
-//	                                  that file is considered to be a 'match' for this file selection
-//	                                  criterion. Examples for setting SelectByFileMode are shown as follows:
+//				err = fsc.SelectByFileMode.SetFileModeByTextCode("-r--r--r--")
 //
-//	                                       fsc := FileSelectionCriteria{}
-//	                                       err = fsc.SelectByFileMode.SetByFileMode(os.FileMode(0666))
-//	                                       err = fsc.SelectByFileMode.SetFileModeByTextCode("-r--r--r--")
+//			SelectCriterionMode FileSelectCriterionMode
 //
-//	  SelectCriterionMode FileSelectCriterionMode -
-//	                                  This parameter selects the manner in which the file selection
-//	                                  criteria above are applied in determining a 'match' for file
-//	                                  selection purposes. 'SelectCriterionMode' may be set to one of
-//	                                  two constant values:
+//			This parameter selects the manner in which the file selection
+//			criteria above are applied in determining a 'match' for file
+//			selection purposes. 'SelectCriterionMode' may be set to one of
+//			two constant values:
 //
-//	                                  FileSelectMode.ANDSelect() - File selected if all active selection
-//	                                    criteria are satisfied.
+//			(1) FileSelectCriterionMode(0).ANDSelect()
 //
-//	                                    If this constant value is specified for the file selection mode,
-//	                                    then a given file will not be judged as 'selected' unless all
-//	                                    the active selection criterion are satisfied. In other words, if
-//	                                    three active search criterion are provided for 'FileNamePatterns',
-//	                                    'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
-//	                                    selected unless it has satisfied all three criterion in this example.
+//				File selected if all active selection criteria
+//				are satisfied.
 //
-//	                                  FileSelectMode.ORSelect() - File selected if any active selection
-//	                                    criterion is satisfied.
+//				If this constant value is specified for the file selection mode,
+//				then a given file will not be judged as 'selected' unless all
+//				the active selection criterion are satisfied. In other words, if
+//				three active search criterion are provided for 'FileNamePatterns',
+//				'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
+//				selected unless it has satisfied all three criterion in this example.
 //
-//	                                    If this constant value is specified for the file selection mode,
-//	                                    then a given file will be selected if any one of the active file
-//	                                    selection criterion is satisfied. In other words, if three active
-//	                                    search criterion are provided for 'FileNamePatterns', 'FilesOlderThan'
-//	                                    and 'FilesNewerThan', then a file will be selected if it satisfies any
-//	                                    one of the three criterion in this example.
+//			(2) FileSelectCriterionMode(0).ORSelect()
 //
-// ------------------------------------------------------------------------
+//				File selected if any active selection criterion is satisfied.
 //
-// IMPORTANT:
+//				If this constant value is specified for the file selection mode,
+//				then a given file will be selected if any one of the active file
+//				selection criterion is satisfied. In other words, if three active
+//				search criterion are provided for 'FileNamePatterns', 'FilesOlderThan'
+//				and 'FilesNewerThan', then a file will be selected if it satisfies any
+//				one of the three criterion in this example.
 //
-// If all of the file selection criterion in the FileSelectionCriteria object are
-// 'Inactive' or 'Not Set' (set to their zero or default values), then all
-// the files processed in the directory tree will be selected and returned as
-// 'Found Files'.
+//		------------------------------------------------------------------------
 //
-//	Example:
-//	     fsc := FileSelectionCriteria{} // fsc is NOT initialized
+//		IMPORTANT:
 //
-//	     In this example, all the selection criterion are
-//	     'Inactive' and therefore all the files encountered
-//	     in the target directory will be selected and returned
-//	     as 'Found Files'.
+//		If all of the file selection criterion in the FileSelectionCriteria
+//		object are 'Inactive' or 'Not Set' (set to their zero or default values),
+//		then all the files processed in the directory tree will be selected and
+//	 	returned as 'Found Files'.
 //
-// ------------------------------------------------------------------------
+//			Example:
+//			     fsc := FileSelectionCriteria{} // fsc is NOT initialized
 //
-// Return Values:
+//			     In this example, all the selection criterion are
+//			     'Inactive' and therefore all the files encountered
+//			     in the target directory will be selected and returned
+//			     as 'Found Files'.
 //
-//	DirectoryTreeInfo structure	-
-//	        type DirectoryTreeInfo struct {
-//	          StartPath             string                // The starting path or directory for the file search
-//	          Directories           DirMgrCollection      // Directory Managers found during directory tree search.
-//	                                                      // This collection will ALWAYS return the parent directory
-//	                                                      // ('DirMgr') as the first entry in the collection.
-//	          FoundFiles            FileMgrCollection     // Found Files matching file selection criteria
-//	          ErrReturns            []error               // Internal System errors encountered
-//	          FileSelectCriteria    FileSelectionCriteria // The File Selection Criteria submitted as an
-//	                                                      // input parameter to this method.
-//	        }
+//		------------------------------------------------------------------------
 //
-//	        If successful, files matching the file selection criteria input
-//	        parameter shown above will be returned in a 'DirectoryTreeInfo'
-//	        object. The field 'DirectoryTreeInfo.FoundFiles' contains information
-//	        on all the files in the specified directory tree which match the file selection
-//	        criteria.
+//	errorPrefix					interface{}
 //
-//	        Note: It is a good idea to check the returned field 'DirectoryTreeInfo.ErrReturns'
-//	              to determine if any internal system errors were encountered while processing
-//	              the directory tree.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
-//	error - If a program execution error is encountered during processing, it will
-//	        be returned as an 'error' type. Also, see the comment on
-//	        'DirectoryTreeInfo.ErrReturns', above.
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	DirectoryTreeInfo
+//
+//		If this method completes successfully, files
+//		matching the file selection criteria input
+//		parameter 'fileSelectCriteria' will be returned
+//		in a 'DirectoryTreeInfo' object. The field
+//		'DirectoryTreeInfo.FoundFiles' contains
+//		information on all the files in the specified
+//		directory tree which match the file selection
+//		criteria.
+//
+//		Note: It is a good idea to check the returned field 'DirectoryTreeInfo.ErrReturns'
+//			  to determine if any internal system errors were encountered while processing
+//			  the directory tree.
+//
+//		This structure contains detailed information on
+//		files found during the search operation.
+//
+//	          type DirectoryTreeInfo struct {
+//
+//	            StartPath             string
+//					The starting path or directory for the file
+//	                search.
+//
+//	            Directories           DirMgrCollection
+//					Directory Managers found during directory tree
+//					search.
+//
+//					This collection will ALWAYS return the parent
+//					directory ('DirMgr') as the first entry in the
+//					collection.
+//
+//	            FoundFiles            FileMgrCollection
+//					Found Files matching file selection criteria
+//
+//	            ErrReturns            []error
+//					Internal System errors encountered
+//
+//	            FileSelectCriteria    FileSelectionCriteria
+//	            	The File Selection Criteria submitted as an
+//					input parameter to this method.
+//	           }
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		In addition, internal system errors are
+//	 	documented in 'DirectoryTreeInfo.ErrReturns' as
+//	 	shown above.
 func (dMgr *DirMgr) FindWalkDirFiles(
-	fileSelectCriteria FileSelectionCriteria) (DirectoryTreeInfo, error) {
+	fileSelectCriteria FileSelectionCriteria,
+	errorPrefix interface{}) (
+	DirectoryTreeInfo,
+	error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -5815,7 +5948,7 @@ func (dMgr *DirMgr) FindWalkDirFiles(
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		nil,
+		errorPrefix,
 		"DirMgr."+
 			"FindWalkDirFiles()",
 		"")
