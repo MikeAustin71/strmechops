@@ -390,7 +390,10 @@ func (dMgrHlprElectron *dirMgrHelperElectron) lowLevelDoesDirectoryExist(
 
 			fInfoPlus,
 				err2 = new(FileInfoPlus).
-				NewFromPathFileInfo(dirPath, info)
+				NewFromPathFileInfo(
+					dirPath,
+					info,
+					ePrefix.XCpy("dirPath"))
 
 			if err2 != nil {
 
