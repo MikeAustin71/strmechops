@@ -7308,8 +7308,78 @@ func (dMgr *DirMgr) GetDirectoryTree(
 	return dirMgrs, errs
 }
 
-// GetDirectoryName - Returns a string containing the name
-// of the directory without the parent path.
+// GetDirectoryName
+//
+// Returns a string containing the name of the directory
+// without the parent path.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	--------------------
+//	Example-1 (Windows)
+//	--------------------
+//
+//	var dMgr DirMgr
+//	var err error
+//	dirPathString := "C:\t01\MyDirectory"
+//
+//	dMgr,
+//	err = new(DirMgr).New(
+//			dirPathString,
+//			"CallingMethod()")
+//
+//	if err == nil {
+//		fmt.Println(err.Error())
+//	}
+//
+//	var directoryName string
+//
+//	directoryName = dMgr.GetDirectoryName()
+//
+//	'directoryName' is now equal to "MyDirectory"
+//
+//	--------------------
+//	Example-2 (Linux)
+//	--------------------
+//
+//	var dMgr DirMgr
+//	var err error
+//	dirPathString := "/c/t01/mydirectory"
+//
+//	dMgr,
+//	err = new(DirMgr).New(
+//			dirPathString,
+//			"CallingMethod()")
+//
+//	if err == nil {
+//		fmt.Println(err.Error())
+//	}
+//
+//	var directoryName string
+//
+//	directoryName = dMgr.GetDirectoryName()
+//
+//	'directoryName' is now equal to "mydirectory"
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		This method returns the last directory name
+//		element extracted from the directory path
+//		specified by the current instance of DirMgr.
+//
+//		See examples shown above.
 func (dMgr *DirMgr) GetDirectoryName() string {
 
 	if dMgr.lock == nil {
@@ -7320,7 +7390,11 @@ func (dMgr *DirMgr) GetDirectoryName() string {
 
 	defer dMgr.lock.Unlock()
 
-	directoryName := ""
+	if !dMgr.isInitialized {
+
+		return ""
+
+	}
 
 	_,
 		_,
@@ -7330,17 +7404,7 @@ func (dMgr *DirMgr) GetDirectoryName() string {
 		"dMgr",
 		nil)
 
-	if !dMgr.isInitialized {
-
-		directoryName = ""
-
-	} else {
-
-		directoryName = dMgr.directoryName
-
-	}
-
-	return directoryName
+	return dMgr.directoryName
 }
 
 // GetFileInfoPlus - Returns a FileInfoPlus instance detailing file
