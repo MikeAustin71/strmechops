@@ -314,7 +314,7 @@ func (fip *FileInfoPlus) DirPath() string {
 // fields in the incoming FileInfo instance, this method
 // returns 'true'.
 //
-// The Directory Path comparisons are NOT case sensitive.
+// The Directory Path comparisons are NOT case-sensitive.
 //
 // This method is NOT part of the FileInfo interface.
 func (fip *FileInfoPlus) Equal(fip2 *FileInfoPlus) bool {
