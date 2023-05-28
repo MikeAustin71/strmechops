@@ -7931,8 +7931,48 @@ func (dMgr *DirMgr) GetNumberOfAbsPathElements(
 	return len(pathElements), err
 }
 
-// GetOriginalPath - Returns the original path used to initialize
-// this Directory Manager instance.
+// GetOriginalPath
+//
+// Returns the original path used to initialize this
+// Directory Manager instance. This returned path may
+// be an absolute path or a relative path depending on
+// how the DirMgr instance was initialized.
+//
+// ----------------------------------------------------------------
+//
+// # Definition of Terms
+//
+//	An absolute or full path points to the same location
+//	in a file system, regardless of the current working
+//	directory. To do that, it must include the root
+//	directory.
+//
+//	By contrast, a relative path starts from some given
+//	working directory, avoiding the need to provide the
+//	full absolute path. A filename can be considered as
+//	a relative path based at the current working directory.
+//
+//	https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		This string returns the original path used to
+//		initialize the current Directory Manager
+//		instance.
+//
+//		The returned path may be an absolute path or a
+//		relative path depending on how the current DirMgr
+//		instance was initialized.
 func (dMgr *DirMgr) GetOriginalPath() string {
 
 	if dMgr.lock == nil {
@@ -7956,6 +7996,173 @@ func (dMgr *DirMgr) GetOriginalPath() string {
 	}
 
 	return originalPath
+}
+
+// GetOriginalAbsolutePath
+//
+// Returns the original path used to initialize this
+// Directory Manager instance as an absolute path.
+//
+// This method differs from DirMgr.GetOriginalPath in
+// that this method will ALWAYS return the absolute
+// path used to initialize the current instance of
+// DirMgr.
+//
+// If the current instance of DirMgr has not been
+// correctly initialized, an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Definition of Terms
+//
+// An absolute or full path points to the same location
+// in a file system, regardless of the current working
+// directory. To do that, it must include the root
+// directory.
+//
+//	https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		This string returns the original path used to
+//		initialize the current Directory Manager
+//		instance.
+//
+//		The returned path may be an absolute path or a
+//		relative path depending on how the current DirMgr
+//		instance was initialized.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (dMgr *DirMgr) GetOriginalAbsolutePath(
+	errorPrefix interface{}) (
+	string,
+	error) {
+
+	if dMgr.lock == nil {
+		dMgr.lock = new(sync.Mutex)
+	}
+
+	dMgr.lock.Lock()
+
+	defer dMgr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgr.GetOriginalAbsolutePath()",
+		"")
+
+	if err != nil {
+		return "", err
+	}
+
+	if !dMgr.isInitialized {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The current instance DirMgr\n"+
+			"was NOT correctly initialized.\n",
+			ePrefix.String())
+
+		return "", err
+
+	}
+
+	validPathDto := ValidPathStrDto{}.New()
+
+	validPathDto,
+		err =
+		new(dirMgrHelperMolecule).
+			getValidPathStr(
+				dMgr.originalPath,
+				"dMgr.originalPath",
+				ePrefix)
+
+	if err != nil {
+		return "", err
+	}
+
+	return validPathDto.absPathStr, err
 }
 
 // GetParentDirMgr - Returns a new Directory Manager instance
