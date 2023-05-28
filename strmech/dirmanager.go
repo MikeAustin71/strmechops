@@ -7154,9 +7154,10 @@ func (dMgr *DirMgr) GetDirectoryStats(
 
 // GetDirectoryTree
 //
-// Returns a DirMgrCollection containing all the
-// subdirectories in the path of the parent directory
-// identified by the current DirMgr instance.
+// Returns a Directory Manager Collection
+// (DirMgrCollection) containing all the subdirectories
+// in the path of the parent directory identified by the
+// current DirMgr instance.
 //
 // The returned DirMgrCollection will always contain the
 // parent directory at the top of the array (index=0).
@@ -7246,6 +7247,10 @@ func (dMgr *DirMgr) GetDirectoryStats(
 //			type DirMgrCollection struct {
 //				dirMgrs []DirMgr
 //			}
+//
+//		Type DirMgrCollection contains public methods
+//		retrieving DirMgr objects from the Directory
+//		Manager Collection
 //
 //	errs						[]error
 //
