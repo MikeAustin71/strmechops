@@ -8207,23 +8207,6 @@ func (dMgr *DirMgr) GetOriginalAbsolutePath(
 //		Current DirMgr Absolute Path =
 //			"/d/adir/bdir/cdir/edir"
 //
-// Return Values:
-//
-//	dirMgrOut  DirMgr - If successful, this method returns a Directory Manager
-//	                  which is a parent of the current Directory Manager.
-//
-//	hasParent  bool - If 'true', it signals that the current Directory Manager
-//	                  has a valid parent directory. If 'false', it signals that
-//	                  the current Directory Manager represents a top level directory
-//	                  which has no parent directory. In that case a copy of the
-//	                  current Directory will be returned.
-//
-//	err       error - If an error is encountered this error type will be populated
-//	                  with an appropriate error message. Otherwise, a value of 'nil'
-//	                  will be returned.
-//
-//	                  If 'hasParent' is 'false', no error will be returned.
-//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -8367,8 +8350,59 @@ func (dMgr *DirMgr) GetParentDirMgr(
 // GetParentPath
 //
 // Returns a string containing the parent path for the
-// current Directory Manager instance. The Parent Path
-// string will NOT contain a trailing path separator.
+// current Directory Manager instance (DirMgr).
+//
+// The returned Parent Path string will NOT contain a
+// trailing os.PathSeparator character (Linux='/' or
+// Windows='\').
+//
+// The returned path will be an absolute path.
+//
+// ----------------------------------------------------------------
+//
+// # Definition of Terms
+//
+//	Absolute Path
+//
+//		An absolute or full path points to the same location
+//		in a file system, regardless of the current working
+//		directory. To do that, it must include the root
+//		directory.
+//
+//		https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
+//
+//	os.PathSeparator
+//
+//		The type of path separator applied depends on the
+//		operating system. Linux='/' or Windows='\'
+//
+//		https://pkg.go.dev/os#pkg-constants
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	--------------------
+//	Example-1 (Windows)
+//	--------------------
+//
+//		Current DirMgr Absolute Path =
+//			"D:\ADir\BDir\CDir\EDir"
+//
+//		The returned Parent Absolute Path:
+//
+//			"D:\ADir\BDir\CDir"
+//
+//	--------------------
+//	Example-2 (Linux)
+//	--------------------
+//
+//		Current DirMgr Absolute Path =
+//			"/d/adir/bdir/cdir/edir"
+//
+//		The returned Parent Absolute Path:
+//
+//			"/d/adir/bdir/cdir"
 //
 // ----------------------------------------------------------------
 //
@@ -8441,12 +8475,13 @@ func (dMgr *DirMgr) GetParentDirMgr(
 //
 //		If this method completes successfully, this
 //		method will return a string containing the
-//	 	absolute value of the parent path for the
-//	 	directory specified by the current instance of
-//		Directory Manager (DirMgr).
+//	 	absolute parent path for the directory specified
+//	 	by the current instance of Directory Manager
+//	 	(DirMgr).
 //
 //		Be advised that the returned path will NOT
-//		contain a trailing path separator.
+//		contain a trailing path separator
+//		(os.PathSeparator).
 //
 //	error
 //
