@@ -3524,13 +3524,16 @@ func (dMgr *DirMgr) DoesPathExist() bool {
 
 // DoesThisDirectoryExist
 //
-// Returns a boolean value of 'true' if the directory
-// identified by the current DirMgr instance does in
-// fact exist.
+// This method performs a test to determine if the
+// directory specified by the current DirMgr instance
+// actually exists on disk.
 //
-// If, during the process of verifying the existence of
-// the current directory, an error is encountered it will
-// be a non-path error.
+// This method returns a boolean value of 'true' if the
+// directory identified by the current DirMgr instance
+// does in fact exist. However, this method differs from
+// similar methods in that it returns an error if any
+// Non-Path errors are encountered during the path
+// existence test.
 //
 // Non-Path errors are most commonly associated with
 // 'access-denied' situations. However, there may be
@@ -6913,9 +6916,182 @@ func (dMgr *DirMgr) GetAbsolutePathWithSeparatorLc() string {
 	return absolutePath
 }
 
-// GetDirectoryStats - Returns the number of bytes in the current directory identified
-// by the 'DirMgr' instance. This method only returns bytes in the current directory
+// GetDirectoryStats
+//
+// Returns statistics and information on the directory
+// structure identified by the current instance of
+// DirMgr.
+//
+// For the purposes of this method, the directory
+// specified by the current DirMgr instance is treated
+// as the top-level or 'parent' directory.
+//
+// This method returns an instance of DirectoryStatsDto
+// which contains information and statistics on the
+// specified directory structure.
+//
+// The statistics and information returned will cover the
+// parent directory, the parent directory and
+// subdirectories or subdirectories exclusively,
+// depending on the input parameters
+// 'includeParentDirectory' and 'includeSubDirectories'.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	(1)	Be careful to understand the settings for input
+//		parameters 'includeParentDirectory' and
+//		'includeSubDirectories' in the context of the
+//		returned directory statistics. For example,
+//		if 'includeParentDirectory' is set to 'false' and
+//		'includeSubDirectories' is set to 'true', the
+//		returned directory statistics will ONLY include
+//		the subdirectory tree and files in the
+//		subdirectory tree.
+//
+//	(1)	If 'includeSubDirectories' is set to 'false' and
+//		'includeSubDirectories' is set to 'false' an
+//		error will be returned. These settings specify
+//		that NO directories will be included in the
+//	 	accumulated directory statistics. This represents
+//	 	a NULL set and an error condition.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	includeParentDirectory		bool
+//
+//		If this parameter is set to 'true' it signals
+//		that the top-level or parent directory
+//		specified by the current DirMgr instance will
+//		be included in the returned directory statistics.
+//
+//		If both parameters 'includeParentDirectory' and
+//		'includeSubDirectories' are set to 'false', it
+//		defines a NULL set and an error will be returned.
+//
+//	includeSubDirectories bool
+//
+//		If this parameter is set to 'true' it signals
+//		that the subdirectory tree relative to the
+//		parent directory specified by the current DirMgr
+//		instance will be included in the returned
+//		directory statistics.
+//
+//		If both parameters 'includeParentDirectory' and
+//		'includeSubDirectories' are set to 'false', it
+//		defines a NULL set and an error will be returned.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	dTreeStats					DirectoryStatsDto
+//
+//		If this method completes successfully, this
+//		returned instance of DirectoryStatsDto will
+//		contain information on files and directories
+//		contained in the directory tree specified by
+//		the current instance of DirMgr and the input
+//		parameters 'includeParentDirectory' and
+//		'includeSubDirectories'.
+//
+//		The DirectoryStatsDto structure is used to
+//		accumulate and disseminate statistical
+//		information relating to a specific directory
+//		tree.
+//
+//			type DirectoryStatsDto struct {
+//				numOfFiles    uint64
+//				numOfSubDirs  uint64
+//				numOfBytes    uint64
+//				isInitialized bool // 'false' = error condition
+//			}
+//
+//		Type DirectoryStatsDto contains public methods
+//		for retrieving the specified directory statistics
+//		and information.
+//
+//	errs						[]error
+//
+//		An array of error objects.
+//
+//		If this method completes successfully, the
+//		returned error array is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		This error array may contain multiple errors.
 func (dMgr *DirMgr) GetDirectoryStats(
+	includeParentDirectory bool,
+	includeSubDirectories bool,
 	errorPrefix interface{}) (
 	dirStats DirectoryStatsDto,
 	errs []error) {
@@ -6946,44 +7122,19 @@ func (dMgr *DirMgr) GetDirectoryStats(
 		return dirStats, errs
 	}
 
-	dirStats,
-		errs = new(dirMgrHelper).findDirectoryTreeStats(
-		dMgr,
-		false,
-		true,
-		"dMgr",
-		ePrefix)
+	if includeParentDirectory == false &&
+		includeSubDirectories == false {
 
-	return dirStats, errs
-}
-
-// GetDirectoryTreeStats - Returns all the bytes in a directory tree.
-// The parent directory for the search is identified by the current
-// DirMgr instance.
-func (dMgr *DirMgr) GetDirectoryTreeStats() (
-	dirStats DirectoryStatsDto,
-	errs []error) {
-
-	if dMgr.lock == nil {
-		dMgr.lock = new(sync.Mutex)
-	}
-
-	dMgr.lock.Lock()
-
-	defer dMgr.lock.Unlock()
-
-	var err error
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		nil,
-		"DirMgr."+
-			"GetDirectoryTreeStats()",
-		"")
-
-	if err != nil {
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameters 'includeParentDirectory'\n"+
+			"and 'includeSubDirectories' are conflicted.\n"+
+			"includeParentDirectory= 'false'\n"+
+			"includeSubDirectories= 'false'\n"+
+			"This represents a NULL set and an error condition.\n"+
+			"In means that neither the parent directory nor the\n"+
+			"the subdirectory tree will be included in the returned\n"+
+			"directory statistics.\n",
+			ePrefix.String())
 
 		errs = append(errs, err)
 
@@ -6993,8 +7144,8 @@ func (dMgr *DirMgr) GetDirectoryTreeStats() (
 	dirStats,
 		errs = new(dirMgrHelper).findDirectoryTreeStats(
 		dMgr,
-		false,
-		true,
+		!includeParentDirectory,
+		includeSubDirectories,
 		"dMgr",
 		ePrefix)
 

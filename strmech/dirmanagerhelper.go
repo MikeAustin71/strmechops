@@ -5155,6 +5155,10 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 //		contained in the directory tree specified by
 //		input parameter 'targetBaseDir'.
 //
+//		Type DirectoryStatsDto contains public methods
+//		for retrieving the specified directory statistics
+//		and information.
+//
 //	errs						[]error
 //
 //		An array of error objects.
