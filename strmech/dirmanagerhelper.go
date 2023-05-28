@@ -6286,7 +6286,7 @@ func (dMgrHlpr *dirMgrHelper) getDirectoryTree(
 //		returned boolean value will be set to 'true'.
 //
 //		Otherwise, this value is set to 'false' signaling
-//		that 'dMgr' does not have a parent path and that
+//		that 'dMgr' does not have a parent path and the
 //		absolute path specified by 'dMgr' is a parent path.
 //
 //	err							error

@@ -8165,10 +8165,47 @@ func (dMgr *DirMgr) GetOriginalAbsolutePath(
 	return validPathDto.absPathStr, err
 }
 
-// GetParentDirMgr - Returns a new Directory Manager instance
-// which represents the parent path for the current
-// Directory Manager. The current Directory Manager absolute
-// path is used in extracting the parent Directory Manager.
+// GetParentDirMgr
+//
+// Returns a new Directory Manager instance which
+// represents the parent path for the current Directory
+// Manager (DirMgr). The current Directory Manager
+// absolute path is used in extracting the parent
+// Directory Manager.
+//
+// ----------------------------------------------------------------
+//
+// # Definition of Terms
+//
+// An absolute or full path points to the same location
+// in a file system, regardless of the current working
+// directory. To do that, it must include the root
+// directory.
+//
+//	https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	--------------------
+//	Example-1 (Windows)
+//	--------------------
+//
+//		Current DirMgr Absolute Path =
+//			"D:\ADir\BDir\CDir\EDir"
+//
+//		The returned Parent DirMgr will be configured
+//		with the absolute path:
+//
+//			"D:\ADir\BDir\CDir\EDir"
+//
+//	--------------------
+//	Example-2 (Linux)
+//	--------------------
+//
+//		Current DirMgr Absolute Path =
+//			"/d/adir/bdir/cdir/edir"
 //
 // Return Values:
 //
@@ -8186,6 +8223,109 @@ func (dMgr *DirMgr) GetOriginalAbsolutePath(
 //	                  will be returned.
 //
 //	                  If 'hasParent' is 'false', no error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	dirMgrParent				DirMgr
+//
+//		If this method completes successfully, this
+//		returned instance of DirMgr will contain the
+//		absolute parent path extracted from the current
+//		instance of DirMgr.
+//
+//	hasParent					bool
+//
+//		If the current DirMgr instance has a parent path,
+//		this returned boolean value will be set to 'true'.
+//
+//		Otherwise, this value is set to 'false' signaling
+//		that the current DirMgr instance does not have a
+//		parent path and the absolute path specified by
+//		the current DirMgr instance is a parent path.
+//
+//			Example: "D:\MyDir"
+//
+//				The original absolute path is "D:\MyDir"
+//				and the parent absolute path is also
+//				"D:\MyDir".
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (dMgr *DirMgr) GetParentDirMgr(
 	errorPrefix interface{}) (
 	dirMgrParent DirMgr,
