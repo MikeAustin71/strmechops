@@ -8559,9 +8559,8 @@ func (dMgr *DirMgr) GetParentPath(
 // trailing os.PathSeparator character (Linux='/' or
 // Windows='\').
 //
-// In addition, the returned directory path may or may not
-// be an absolute path depending on how it was originally
-// initialized.
+// In addition, the returned directory path WILL ALWAYS
+// be an absolute path.
 //
 // ----------------------------------------------------------------
 //
@@ -8573,16 +8572,6 @@ func (dMgr *DirMgr) GetParentPath(
 //		location in a file system, regardless of the
 //		current working directory. To do that, it must
 //		include the root directory.
-//
-//		https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
-//
-//	Relative Path
-//
-//		In contrast to an absolute path, a relative path
-//	 	starts from some given working directory,
-//	 	avoiding the need to provide the full absolute
-//	 	path. A filename can be considered as a relative
-//	 	path based at the current working directory.
 //
 //		https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
 //
@@ -8613,9 +8602,7 @@ func (dMgr *DirMgr) GetParentPath(
 //		contain a trailing os.PathSeparator character
 //		(Linux='/' or Windows='\').
 //
-//		The returned path may be an absolute path or a
-//		relative path depending on how the current DirMgr
-//		instance was initialized.
+//		The returned path will be an absolute path.
 func (dMgr *DirMgr) GetPath() string {
 
 	if dMgr.lock == nil {
