@@ -9036,6 +9036,40 @@ func (dMgr *DirMgr) IsInitialized() bool {
 // Returns a boolean value indicating whether the parent
 // path for the current Directory Manager instance is
 // populated.
+//
+// ----------------------------------------------------------------
+//
+// # Example - Parent Path
+//
+//	--------------------
+//	Example-1 (Windows)
+//	--------------------
+//
+//		Current DirMgr Absolute Path =
+//			"D:\ADir\BDir\CDir\EDir"
+//
+//		The Parent Absolute Path:
+//
+//			"D:\ADir\BDir\CDir"
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If the Parent Path for the current DirMgr
+//		instance exists and properly configured,
+//		this return parameter is set to 'true'.
+//
+//		Otherwise, a boolean value of 'false' is
+//		returned.
 func (dMgr *DirMgr) IsParentPathPopulated() bool {
 
 	if dMgr.lock == nil {
