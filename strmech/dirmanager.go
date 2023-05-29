@@ -8973,8 +8973,42 @@ func (dMgr *DirMgr) IsValidInstanceError(
 		ePrefix.XCpy("dMgr"))
 }
 
-// IsInitialized - Returns a boolean value indicating
-// whether the Directory Manager instance is initialized.
+// IsInitialized
+//
+// Returns a boolean value indicating whether the current
+// Directory Manager instance (DirMgr) has been properly
+// initialized.
+//
+// If this method returns a boolean value of 'false' it
+// signals that the current DirMgr instance is malformed
+// and may produce incorrect operational results.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		This method analyzes the current instance of
+//		DirMgr to determine if it has been properly
+//		initialized.
+//
+//		If the current DirMgr instance has been properly
+//		initialize and is operationally ready, this
+//		return parameter is set to 'true'.
+//
+//		If the analysis determines that the current
+//		DirMgr not been properly initialized, this
+//		return parameter is set to 'false'. A return
+//		value of 'false' signals that the current DirMgr
+//		is malformed and may produce incorrect
+//		operational results.
 func (dMgr *DirMgr) IsInitialized() bool {
 
 	if dMgr.lock == nil {
@@ -8985,8 +9019,6 @@ func (dMgr *DirMgr) IsInitialized() bool {
 
 	defer dMgr.lock.Unlock()
 
-	isInitialized := false
-
 	_,
 		_,
 		_ = new(dirMgrHelperAtom).
@@ -8996,9 +9028,7 @@ func (dMgr *DirMgr) IsInitialized() bool {
 			"dMgr",
 			nil)
 
-	isInitialized = dMgr.isInitialized
-
-	return isInitialized
+	return dMgr.isInitialized
 }
 
 // IsParentPathPopulated
