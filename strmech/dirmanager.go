@@ -9080,30 +9080,51 @@ func (dMgr *DirMgr) IsParentPathPopulated() bool {
 
 	defer dMgr.lock.Unlock()
 
-	dMgrHlpr := dirMgrHelper{}
-	isParentPathPopulated := false
-
 	_,
 		_,
-		_ = dMgrHlpr.getParentDirMgr(
+		_ = new(dirMgrHelper).getParentDirMgr(
 		dMgr,
 		"dMgr",
 		nil)
 
 	if len(dMgr.parentPath) == 0 ||
 		!dMgr.isInitialized {
-		isParentPathPopulated = false
-	} else {
-		isParentPathPopulated = true
+
+		return false
 	}
 
-	return isParentPathPopulated
+	return true
 }
 
 // IsPathPopulated
 //
 // Returns a boolean value indicating whether the current
-// Directory Manager path string is populated.
+// Directory Manager (DirMgr) path string is populated.
+//
+// The Director Manager is stored in private internal
+// member variables. If the path has not been populated,
+// it indicates that the current DirMgr instance is not
+// serviceable and will produce invalid operational
+// results.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		This return parameter is set to 'true' if the
+//		directory path for the current DirMgr instance
+//		has been correctly configured and populated.
+//
+//		Otherwise, a boolean value of 'false' is
+//		returned.
 func (dMgr *DirMgr) IsPathPopulated() bool {
 
 	if dMgr.lock == nil {
@@ -9113,13 +9134,10 @@ func (dMgr *DirMgr) IsPathPopulated() bool {
 	dMgr.lock.Lock()
 
 	defer dMgr.lock.Unlock()
-
-	dMgrHlpr := dirMgrHelper{}
-	isDMgrPathPopulated := false
 	var err error
 	_,
 		_,
-		err = dMgrHlpr.getParentDirMgr(
+		err = new(dirMgrHelper).getParentDirMgr(
 		dMgr,
 		"",
 		nil)
@@ -9128,14 +9146,11 @@ func (dMgr *DirMgr) IsPathPopulated() bool {
 		!dMgr.isInitialized ||
 		err != nil {
 
-		isDMgrPathPopulated = false
+		return false
 
-	} else {
-
-		isDMgrPathPopulated = true
 	}
 
-	return isDMgrPathPopulated
+	return true
 }
 
 // ParseValidPathStr
