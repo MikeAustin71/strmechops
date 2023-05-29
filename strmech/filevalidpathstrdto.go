@@ -56,42 +56,105 @@ type ValidPathStrDto struct {
 }
 
 func (vpDto *ValidPathStrDto) AbsolutePathDoesExist() PathExistsStatusCode {
+
+	if vpDto.lock == nil {
+		vpDto.lock = new(sync.Mutex)
+	}
+
+	vpDto.lock.Lock()
+
+	defer vpDto.lock.Unlock()
+
 	return vpDto.absPathDoesExist
 }
 
 // GetAbsPath - "getter" method for internal field,
 // ValidPathStrDto.absPathStr .
 func (vpDto *ValidPathStrDto) GetAbsPath() string {
+
+	if vpDto.lock == nil {
+		vpDto.lock = new(sync.Mutex)
+	}
+
+	vpDto.lock.Lock()
+
+	defer vpDto.lock.Unlock()
+
 	return vpDto.absPathStr
 }
 
 // GetAbsPathStrLen - "getter" method for internal field,
 // ValidPathStrDto.absPathStrLength .
 func (vpDto *ValidPathStrDto) GetAbsPathStrLen() int {
+
+	if vpDto.lock == nil {
+		vpDto.lock = new(sync.Mutex)
+	}
+
+	vpDto.lock.Lock()
+
+	defer vpDto.lock.Unlock()
+
 	return vpDto.absPathStrLength
 }
 
 // GetAbsPathFileInfo - "getter" method for internal field,
 // ValidPathStrDto.absPathFInfoPlus .
 func (vpDto *ValidPathStrDto) GetAbsPathFileInfo() FileInfoPlus {
+
+	if vpDto.lock == nil {
+		vpDto.lock = new(sync.Mutex)
+	}
+
+	vpDto.lock.Lock()
+
+	defer vpDto.lock.Unlock()
+
 	return vpDto.absPathFInfoPlus
 }
 
 // GetOriginalPathStr - "getter" method for internal field,
 // ValidPathStrDto.originalPathStr .
 func (vpDto *ValidPathStrDto) GetOriginalPathStr() string {
+
+	if vpDto.lock == nil {
+		vpDto.lock = new(sync.Mutex)
+	}
+
+	vpDto.lock.Lock()
+
+	defer vpDto.lock.Unlock()
+
 	return vpDto.originalPathStr
 }
 
 // GetPath - "getter" method for internal field,
 // ValidPathStrDto.pathStr .
 func (vpDto *ValidPathStrDto) GetPath() string {
+
+	if vpDto.lock == nil {
+		vpDto.lock = new(sync.Mutex)
+	}
+
+	vpDto.lock.Lock()
+
+	defer vpDto.lock.Unlock()
+
 	return vpDto.pathStr
 }
 
 // GetPathFileInfo - "getter" method for internal field,
 // ValidPathStrDto.pathFInfoPlus .
 func (vpDto *ValidPathStrDto) GetPathFileInfo() FileInfoPlus {
+
+	if vpDto.lock == nil {
+		vpDto.lock = new(sync.Mutex)
+	}
+
+	vpDto.lock.Lock()
+
+	defer vpDto.lock.Unlock()
+
 	return vpDto.pathFInfoPlus
 }
 
@@ -111,36 +174,90 @@ func (vpDto *ValidPathStrDto) GetPathFileInfo() FileInfoPlus {
 //	PathValidityStatusCode(0).Valid()     +1  Tests have verified that the Path/file
 //	                                          name is 'Valid'.
 func (vpDto *ValidPathStrDto) GetPathIsValid() PathValidityStatusCode {
+
+	if vpDto.lock == nil {
+		vpDto.lock = new(sync.Mutex)
+	}
+
+	vpDto.lock.Lock()
+
+	defer vpDto.lock.Unlock()
+
 	return vpDto.pathIsValid
 }
 
 // GetPathStrLen - "getter" method for internal field,
 // ValidPathStrDto.pathStrLength .
 func (vpDto *ValidPathStrDto) GetPathStrLen() int {
+
+	if vpDto.lock == nil {
+		vpDto.lock = new(sync.Mutex)
+	}
+
+	vpDto.lock.Lock()
+
+	defer vpDto.lock.Unlock()
+
 	return vpDto.pathStrLength
 }
 
 // GetPathType - "getter" method for internal field,
 // ValidPathStrDto.pathType .
 func (vpDto *ValidPathStrDto) GetPathType() PathFileTypeCode {
+
+	if vpDto.lock == nil {
+		vpDto.lock = new(sync.Mutex)
+	}
+
+	vpDto.lock.Lock()
+
+	defer vpDto.lock.Unlock()
+
 	return vpDto.pathType
 }
 
 // GetPathVolumeName - "getter" method for internal field,
 // ValidPathStrDto.pathVolumeName .
 func (vpDto *ValidPathStrDto) GetPathVolumeName() string {
+
+	if vpDto.lock == nil {
+		vpDto.lock = new(sync.Mutex)
+	}
+
+	vpDto.lock.Lock()
+
+	defer vpDto.lock.Unlock()
+
 	return vpDto.pathVolumeName
 }
 
 // GetPathVolumeIndex - "getter" method for internal field,
 // ValidPathStrDto.pathVolumeIndex .
 func (vpDto *ValidPathStrDto) GetPathVolumeIndex() int {
+
+	if vpDto.lock == nil {
+		vpDto.lock = new(sync.Mutex)
+	}
+
+	vpDto.lock.Lock()
+
+	defer vpDto.lock.Unlock()
+
 	return vpDto.pathVolumeIndex
 }
 
 // GetPathVolumeStrLength - "getter" method for internal field,
 // ValidPathStrDto.pathVolumeStrLength .
 func (vpDto *ValidPathStrDto) GetPathVolumeStrLength() int {
+
+	if vpDto.lock == nil {
+		vpDto.lock = new(sync.Mutex)
+	}
+
+	vpDto.lock.Lock()
+
+	defer vpDto.lock.Unlock()
+
 	return vpDto.pathVolumeStrLength
 }
 
@@ -149,6 +266,15 @@ func (vpDto *ValidPathStrDto) GetPathVolumeStrLength() int {
 // operations performed on the current ValidPathStrDto
 // instance are recorded here.
 func (vpDto *ValidPathStrDto) GetError() error {
+
+	if vpDto.lock == nil {
+		vpDto.lock = new(sync.Mutex)
+	}
+
+	vpDto.lock.Lock()
+
+	defer vpDto.lock.Unlock()
+
 	return vpDto.err
 }
 
@@ -238,6 +364,15 @@ func (vpDto *ValidPathStrDto) IsDtoValid(
 // IsInitialized - Returns a boolean value indicating whether the current instance
 // of ValidPathStrDto has been initialized.
 func (vpDto *ValidPathStrDto) IsInitialized() bool {
+
+	if vpDto.lock == nil {
+		vpDto.lock = new(sync.Mutex)
+	}
+
+	vpDto.lock.Lock()
+
+	defer vpDto.lock.Unlock()
+
 	return vpDto.isInitialized
 }
 
@@ -307,34 +442,87 @@ func (vpDto *ValidPathStrDto) New() ValidPathStrDto {
 //	                                            and path file name DOES exist on
 //	                                            disk.
 func (vpDto *ValidPathStrDto) PathDoesExist() PathExistsStatusCode {
+
+	if vpDto.lock == nil {
+		vpDto.lock = new(sync.Mutex)
+	}
+
+	vpDto.lock.Lock()
+
+	defer vpDto.lock.Unlock()
+
 	return vpDto.pathDoesExist
 }
 
 // SetIsInitialized - "setter" method for internal data field
 // vpDto.isInitialized .
 func (vpDto *ValidPathStrDto) SetIsInitialized(isInitialized bool) {
+
+	if vpDto.lock == nil {
+		vpDto.lock = new(sync.Mutex)
+	}
+
+	vpDto.lock.Lock()
+
+	defer vpDto.lock.Unlock()
+
 	vpDto.isInitialized = isInitialized
+
+	return
 }
 
 // SetPath - "setter" method for internal data fields
 // vpDto.pathStr and  vpDto.pathStrLength.
 func (vpDto *ValidPathStrDto) SetPath(pathStr string) {
+
+	if vpDto.lock == nil {
+		vpDto.lock = new(sync.Mutex)
+	}
+
+	vpDto.lock.Lock()
+
+	defer vpDto.lock.Unlock()
+
 	vpDto.pathStr = pathStr
 
 	vpDto.pathStrLength = len(pathStr)
+
+	return
 }
 
 // SetPathFileInfo - "setter" method for internal data field
 // vpDto.pathFInfoPlus .
 func (vpDto *ValidPathStrDto) SetPathFileInfo(fInfPlus FileInfoPlus) {
+
+	if vpDto.lock == nil {
+		vpDto.lock = new(sync.Mutex)
+	}
+
+	vpDto.lock.Lock()
+
+	defer vpDto.lock.Unlock()
+
 	vpDto.pathFInfoPlus = fInfPlus.CopyOut()
+
+	return
 }
 
 // SetAbsPath - "setter" method for internal data fields
 // vpDto.absPathStr and vpDto.absPathStrLength.
 func (vpDto *ValidPathStrDto) SetAbsPath(absPathStr string) {
+
+	if vpDto.lock == nil {
+		vpDto.lock = new(sync.Mutex)
+	}
+
+	vpDto.lock.Lock()
+
+	defer vpDto.lock.Unlock()
+
 	vpDto.absPathStr = absPathStr
 	vpDto.absPathStrLength = len(absPathStr)
+
+	return
 }
 
 // SetAbsPathDoesExistStatus - Input parameter 'absPathExistStatus' is used to set
@@ -354,13 +542,40 @@ func (vpDto *ValidPathStrDto) SetAbsPath(absPathStr string) {
 //	                                            and path file name DOES exist on
 //	                                            disk.
 func (vpDto *ValidPathStrDto) SetAbsPathDoesExistStatus(
-	absPathExistStatus PathExistsStatusCode) error {
+	absPathExistStatus PathExistsStatusCode,
+	errorPrefix interface{}) error {
 
-	err := absPathExistStatus.StatusIsValid()
+	if vpDto.lock == nil {
+		vpDto.lock = new(sync.Mutex)
+	}
+
+	vpDto.lock.Lock()
+
+	defer vpDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"ValidPathStrDto."+
+			"SetAbsPathDoesExistStatus()",
+		"")
 
 	if err != nil {
-		return fmt.Errorf("ValidPathStrDto.SetAbsPathDoesExistStatus()"+
-			" %v\n", err.Error())
+		return err
+	}
+
+	err = absPathExistStatus.StatusIsValid()
+
+	if err != nil {
+
+		return fmt.Errorf("%v\n"+
+			"Error Return: absPathExistStatus.StatusIsValid()\n"+
+			"Error= \n%v\n",
+			ePrefix.String(),
+			err.Error())
 	}
 
 	vpDto.absPathDoesExist = absPathExistStatus
