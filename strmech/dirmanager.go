@@ -8688,7 +8688,6 @@ func (dMgr *DirMgr) GetPathWithSeparator() string {
 	dMgr.lock.Lock()
 
 	defer dMgr.lock.Unlock()
-
 	_,
 		_,
 		_ = new(dirMgrHelperAtom).
@@ -8720,9 +8719,46 @@ func (dMgr *DirMgr) GetPathWithSeparator() string {
 	return dPath
 }
 
-// GetVolumeName - Returns a string containing the volume name
-// of the directory identified by the current Directory Manager
-// instance.
+// GetVolumeName
+//
+// Returns a string containing the volume name of the
+// directory identified by the current Directory Manager
+// instance (DirMgr).
+//
+// If the current instance of DirMgr was improperly
+// initialized, an empty string will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Definition Of Terms:
+//
+//	Volume Name
+//		VolumeName returns leading volume name.
+//		Given "C:\foo\bar" it returns "C:" on Windows.
+//		Given "\\host\share\foo" it returns "\\host\share".
+//		On other platforms it returns "".
+//
+//	https://pkg.go.dev/path/filepath#VolumeName
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		This method returns a string containing the
+//		volume name associated with the directory
+//		specified by the current instance of DirMgr.
+//		Reference the definition of Volume Name above.
+//
+//		If the current instance of DirMgr was improperly
+//		initialized, an empty string will be returned.
 func (dMgr *DirMgr) GetVolumeName() string {
 
 	if dMgr.lock == nil {
@@ -8732,8 +8768,6 @@ func (dMgr *DirMgr) GetVolumeName() string {
 	dMgr.lock.Lock()
 
 	defer dMgr.lock.Unlock()
-
-	volumeName := ""
 
 	_,
 		_,
@@ -8747,15 +8781,11 @@ func (dMgr *DirMgr) GetVolumeName() string {
 	if len(dMgr.volumeName) == 0 ||
 		!dMgr.isInitialized {
 
-		volumeName = ""
-
-	} else {
-
-		volumeName = dMgr.volumeName
+		return ""
 
 	}
 
-	return volumeName
+	return dMgr.volumeName
 }
 
 // IsDirMgrValid - This method examines the current DirMgr object

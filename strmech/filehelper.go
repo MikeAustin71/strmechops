@@ -7867,6 +7867,18 @@ func (fh *FileHelper) GetVolumeName(
 //
 // ----------------------------------------------------------------
 //
+// # Definition Of Terms:
+//
+//	Volume Name
+//		VolumeName returns leading volume name.
+//		Given "C:\foo\bar" it returns "C:" on Windows.
+//		Given "\\host\share\foo" it returns "\\host\share".
+//		On other platforms it returns "".
+//
+//	https://pkg.go.dev/path/filepath#VolumeName
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	pathStr						string
