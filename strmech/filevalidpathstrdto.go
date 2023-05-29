@@ -773,24 +773,24 @@ func (vpDto *ValidPathStrDto) SetPathDoesExist(
 //
 //	pathIsValid					PathValidityStatusCode
 //
-//	This instance of 'PathValidityStatusCode' is an
-//	enumeration which must be set to one of the following
-//	valid values:
+//		This instance of 'PathValidityStatusCode' is an
+//		enumeration which must be set to one of the following
+//		valid values:
 //
-//	                  Path Validity
-//	 Method            Status Code
-//	  Name               Constant       Description
-//	______________________________________________________________________
+//		                  Path Validity
+//		 Method            Status Code
+//		  Name               Constant       Description
+//		______________________________________________________________________
 //
-//	PathValidityStatusCode(0).Unknown()     -1  Path/file name validity has NOT been
-//	                                            tested and its status as 'Valid' or
-//	                                            'invalid' is 'Unknown'.
+//		PathValidityStatusCode(0).Unknown()     -1  Path/file name validity has NOT been
+//		                                            tested and its status as 'Valid' or
+//		                                            'invalid' is 'Unknown'.
 //
-//	PathValidityStatusCode(0).Invalid()      0  Tests have verified that the Path/file
-//	                                            name is 'Invalid'.
+//		PathValidityStatusCode(0).Invalid()      0  Tests have verified that the Path/file
+//		                                            name is 'Invalid'.
 //
-//	PathValidityStatusCode(0).Valid()       +1  Tests have verified that the Path/file
-//	                                            name is 'Valid'.
+//		PathValidityStatusCode(0).Valid()       +1  Tests have verified that the Path/file
+//		                                            name is 'Valid'.
 //
 //	errorPrefix					interface{}
 //
@@ -906,47 +906,174 @@ func (vpDto *ValidPathStrDto) SetPathIsValid(
 
 	vpDto.pathIsValid = pathIsValid
 
-	return nil
+	return err
 }
 
-// SetPathType - "setter" method for internal data field vpDto.pathDoesExist
-// which is of type PathFileTypeCode.
+// SetPathType
 //
-//	                               Path File
-//	         Method                Type Code
-//	          Name                 Constant            Description
-//	_______________________________________________________________________________
-//	PathFileTypeCode(0).None()        0           Path/file name type has NOT been
-//	                                              tested and its status not known.
+// This "setter" method for internal data field
+// vpDto.pathDoesExist which is of type PathFileTypeCode.
 //
-//	PathFileTypeCode.Path()           1           Tests have established that the
-//	                                              Path/file name string is a
-//	                                              directory path which does NOT
-//	                                              contain a file name.
+// ----------------------------------------------------------------
 //
-//	PathFileTypeCode.PathFile()       2           Tests have established that the
-//	                                              Path/file name string includes
-//	                                              both a directory path AND a file
-//	                                              name.
+// # Input Parameters
 //
-//	PathFileTypeCode.File()           3           Tests have established that the
-//	                                              Path/file name string consists
-//	                                              solely of a file name and does
-//	                                              NOT include a directory path.
+//	pathType					PathFileTypeCode
 //
-//	PathFileTypeCode.Volume()         4           Tests have established that the
-//	                                              Path/file name string consists
-//	                                              solely of a volume name and does
-//	                                              NOT include a directory path or
-//	                                              file name.
+//		This instance of 'PathFileTypeCode' is an
+//		enumeration which must be set to one of the
+//		following valid values:
 //
-//	PathFileTypeCode.Indeterminate()  5           Tests have been conducted on the
-//	                                              Path/file name string, but the
-//	                                              string cannot be classified and
-//	                                              its status cannot be determined
-//	                                              with certainty.
-func (vpDto *ValidPathStrDto) SetPathType(pathType PathFileTypeCode) {
+//		                               Path File
+//		         Method                Type Code
+//		          Name                 Constant            Description
+//		_______________________________________________________________________________
+//		PathFileTypeCode(0).None()        0           Path/file name type has NOT been
+//		                                              tested and its status not known.
+//
+//		PathFileTypeCode.Path()           1           Tests have established that the
+//		                                              Path/file name string is a
+//		                                              directory path which does NOT
+//		                                              contain a file name.
+//
+//		PathFileTypeCode.PathFile()       2           Tests have established that the
+//		                                              Path/file name string includes
+//		                                              both a directory path AND a file
+//		                                              name.
+//
+//		PathFileTypeCode.File()           3           Tests have established that the
+//		                                              Path/file name string consists
+//		                                              solely of a file name and does
+//		                                              NOT include a directory path.
+//
+//		PathFileTypeCode.Volume()         4           Tests have established that the
+//		                                              Path/file name string consists
+//		                                              solely of a volume name and does
+//		                                              NOT include a directory path or
+//		                                              file name.
+//
+//		PathFileTypeCode.Indeterminate()  5           Tests have been conducted on the
+//		                                              Path/file name string, but the
+//		                                              string cannot be classified and
+//		                                              its status cannot be determined
+//		                                              with certainty.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If input parameter 'pathIsValid' is set to a
+//		valid value, the returned error Type is set equal
+//		to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (vpDto *ValidPathStrDto) SetPathType(
+	pathType PathFileTypeCode,
+	errorPrefix interface{}) error {
+
+	if vpDto.lock == nil {
+		vpDto.lock = new(sync.Mutex)
+	}
+
+	vpDto.lock.Lock()
+
+	defer vpDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"ValidPathStrDto."+
+			"SetPathType()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	err = pathType.StatusIsValid()
+
+	if err != nil {
+
+		return fmt.Errorf("%v\n"+
+			"Error Return: pathType.StatusIsValid()\n"+
+			"Error= \n%v\n",
+			ePrefix.String(),
+			err.Error())
+	}
+
 	vpDto.pathType = pathType
+
+	return err
 }
 
 // SetPathVolumeName - "setter" method for internal data fields

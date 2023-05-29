@@ -269,6 +269,29 @@ func (pfTyp PathFileTypeCode) StatusValue() PathFileTypeCode {
 	return pfTyp
 }
 
+// StatusIsValid - If the value of the current PathFileTypeCode instance
+// is 'invalid', this method will return an error.
+//
+// If the PathFileTypeCode is instance is 'valid', this method will
+// return a value of 'nil'.
+//
+// This is a standard utility method and is not part of the valid enumerations
+// for this type.
+func (pfTyp PathFileTypeCode) StatusIsValid() error {
+
+	_, ok := mPathFileTypeCodeToString[pfTyp]
+
+	if !ok {
+		ePrefix := "PathFileTypeCode.StatusIsValid()\n"
+
+		return fmt.Errorf(ePrefix+
+			"Error: The current PathFileTypeCode is INVALID! "+
+			"PathFileTypeCode Integer Value='%v'", int(pfTyp))
+	}
+
+	return nil
+}
+
 // PathFileType - public global variable of
 // type PathFileTypeCode.
 //
