@@ -8632,9 +8632,53 @@ func (dMgr *DirMgr) GetPath() string {
 	return dMgr.path
 }
 
-// GetPathWithSeparator - Returns the current
-// DirMgr.absolutePath with a trailing os.PathSeparator
-// character.
+// GetPathWithSeparator
+//
+// Returns the absolute directory path representing the
+// directory specified by the current instance of DirMgr.
+//
+// The returned path WILL ALWAYS contain a trailing
+// os.PathSeparator character (Linux='/' or Windows='\').
+//
+// ----------------------------------------------------------------
+//
+// # Definition of Terms
+//
+//	Absolute Path
+//
+//		An absolute or full path points to the same location
+//		in a file system, regardless of the current working
+//		directory. To do that, it must include the root
+//		directory.
+//
+//		https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
+//
+//	os.PathSeparator
+//
+//		The type of path separator applied depends on the
+//		operating system. Linux='/' or Windows='\'
+//
+//		https://pkg.go.dev/os#pkg-constants
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		This string parameter returns the absolute
+//		directory path specified by the current instance
+//		of DirMgr.
+//
+//		The returned absolute directory path WILL ALWAYS
+//		contain a trailing os.PathSeparator character
+//		(Linux='/' or Windows='\').
 func (dMgr *DirMgr) GetPathWithSeparator() string {
 
 	if dMgr.lock == nil {
@@ -8644,8 +8688,6 @@ func (dMgr *DirMgr) GetPathWithSeparator() string {
 	dMgr.lock.Lock()
 
 	defer dMgr.lock.Unlock()
-
-	dPath := ""
 
 	_,
 		_,
@@ -8659,12 +8701,11 @@ func (dMgr *DirMgr) GetPathWithSeparator() string {
 	if len(dMgr.path) == 0 ||
 		!dMgr.isInitialized {
 
-		dPath = ""
+		return ""
 
-	} else {
-
-		dPath = dMgr.path
 	}
+
+	dPath := dMgr.path
 
 	lPath := len(dPath)
 
