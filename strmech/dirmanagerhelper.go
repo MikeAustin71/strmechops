@@ -7992,7 +7992,7 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrFromKnownPathDirName(
 
 	var err2 error
 
-	validPathDto := ValidPathStrDto{}.New()
+	validPathDto := new(ValidPathStrDto).New()
 
 	validPathDto.originalPathStr = finalPathStr
 	validPathDto.pathStr = finalPathStr
@@ -8265,7 +8265,7 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrWithPathDirectoryName(
 		finalPathStr = parentDirectoryPath + directoryName
 	}
 
-	validPathDto := ValidPathStrDto{}.New()
+	validPathDto := new(ValidPathStrDto).New()
 
 	validPathDto,
 		err =

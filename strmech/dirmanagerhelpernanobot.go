@@ -1346,7 +1346,7 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) setDirMgr(
 
 	}
 
-	validPathDto := ValidPathStrDto{}.New()
+	validPathDto := new(ValidPathStrDto).New()
 
 	validPathDto,
 		err =

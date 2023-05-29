@@ -8148,7 +8148,7 @@ func (dMgr *DirMgr) GetOriginalAbsolutePath(
 
 	}
 
-	validPathDto := ValidPathStrDto{}.New()
+	validPathDto := new(ValidPathStrDto).New()
 
 	validPathDto,
 		err =
@@ -9157,7 +9157,7 @@ func (dMgr *DirMgr) IsPathPopulated() bool {
 //
 // Receives a valid path string and parses that string
 // into is basic elements. Those elements are returned
-// in a type ValidPathStrDto
+// in a type ValidPathStrDto.
 func (dMgr *DirMgr) ParseValidPathStr(
 	pathStr string,
 	errorPrefix interface{}) (
@@ -9173,7 +9173,7 @@ func (dMgr *DirMgr) ParseValidPathStr(
 	defer dMgr.lock.Unlock()
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
-	validPathDto := ValidPathStrDto{}.New()
+	validPathDto := new(ValidPathStrDto).New()
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(

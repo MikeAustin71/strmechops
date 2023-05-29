@@ -55,24 +55,6 @@ type ValidPathStrDto struct {
 	lock *sync.Mutex
 }
 
-func (vpDto ValidPathStrDto) New() ValidPathStrDto {
-	newValPathDto := ValidPathStrDto{}
-	newValPathDto.pathStr = ""
-	newValPathDto.pathStrLength = -1
-	newValPathDto.absPathStr = ""
-	newValPathDto.absPathStrLength = -1
-	newValPathDto.pathDoesExist = PathExistsStatus.Unknown()
-	newValPathDto.absPathDoesExist = PathExistsStatus.Unknown()
-	newValPathDto.pathIsValid = PathValidStatus.Unknown()
-	newValPathDto.isInitialized = false
-	newValPathDto.pathVolumeName = ""
-	newValPathDto.pathVolumeIndex = -1
-	newValPathDto.pathVolumeStrLength = 0
-	newValPathDto.err = nil
-
-	return newValPathDto
-}
-
 func (vpDto *ValidPathStrDto) AbsolutePathDoesExist() PathExistsStatusCode {
 	return vpDto.absPathDoesExist
 }
@@ -257,6 +239,55 @@ func (vpDto *ValidPathStrDto) IsDtoValid(
 // of ValidPathStrDto has been initialized.
 func (vpDto *ValidPathStrDto) IsInitialized() bool {
 	return vpDto.isInitialized
+}
+
+// New
+//
+// This method returns a new and empty instance of
+// ValidPathStrDto.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	ValidPathStrDto
+//
+//		This method returns a new and empty instance of
+//		ValidPathStrDto.
+//
+//		All member data fields in this new instance are
+//		initialized to their zero or empty values.
+func (vpDto *ValidPathStrDto) New() ValidPathStrDto {
+
+	if vpDto.lock == nil {
+		vpDto.lock = new(sync.Mutex)
+	}
+
+	vpDto.lock.Lock()
+
+	defer vpDto.lock.Unlock()
+
+	newValPathDto := ValidPathStrDto{}
+	newValPathDto.pathStr = ""
+	newValPathDto.pathStrLength = -1
+	newValPathDto.absPathStr = ""
+	newValPathDto.absPathStrLength = -1
+	newValPathDto.pathDoesExist = PathExistsStatus.Unknown()
+	newValPathDto.absPathDoesExist = PathExistsStatus.Unknown()
+	newValPathDto.pathIsValid = PathValidStatus.Unknown()
+	newValPathDto.isInitialized = false
+	newValPathDto.pathVolumeName = ""
+	newValPathDto.pathVolumeIndex = -1
+	newValPathDto.pathVolumeStrLength = 0
+	newValPathDto.err = nil
+
+	return newValPathDto
 }
 
 // PathDoesExist - Returns a boolean value indicating whether the path

@@ -338,7 +338,7 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) getValidPathStr(
 	defer dMgrHlprMolecule.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	validPathDto = ValidPathStrDto{}.New()
+	validPathDto = new(ValidPathStrDto).New()
 
 	funcName := "dirMgrHelper.getValidPathStr()"
 
