@@ -2474,7 +2474,7 @@ func (fMgr *FileMgr) CopyFileToDirByIo(
 		return err
 	}
 
-	err = dir.IsDirMgrValid(
+	err = dir.IsValidInstanceError(
 		ePrefix.String() + "Input Parameter 'dir' ")
 
 	if err != nil {
@@ -2694,7 +2694,7 @@ func (fMgr *FileMgr) CopyFileToDirByIoByLink(
 		return err
 	}
 
-	err = dir.IsDirMgrValid(
+	err = dir.IsValidInstanceError(
 		ePrefix.String() +
 			"Input Parameter 'dir' ")
 
@@ -2914,7 +2914,7 @@ func (fMgr *FileMgr) CopyFileToDirByLink(
 		"FileMgr.CopyFileToDirByLink()",
 		"")
 
-	err = dir.IsDirMgrValid(ePrefix.String() +
+	err = dir.IsValidInstanceError(ePrefix.String() +
 		"Input Parameter 'dir' ")
 
 	if err != nil {
@@ -3130,7 +3130,7 @@ func (fMgr *FileMgr) CopyFileToDirByLinkByIo(
 			"CopyFileToDirByLinkByIo()",
 		"")
 
-	err = dir.IsDirMgrValid(ePrefix.String() +
+	err = dir.IsValidInstanceError(ePrefix.String() +
 		"Input Parameter 'dir'")
 
 	if err != nil {
@@ -8064,7 +8064,7 @@ func (fMgr *FileMgr) MoveFileToNewDirMgr(
 		return FileMgr{}, err
 	}
 
-	err2 := dMgr.IsDirMgrValid("dMgr")
+	err2 := dMgr.IsValidInstanceError("dMgr")
 
 	if err2 != nil {
 		return FileMgr{}, fmt.Errorf("%v\n"+

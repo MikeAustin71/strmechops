@@ -6439,7 +6439,7 @@ func (dMgrHlpr *dirMgrHelper) isDirMgrValid(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"DirMgr.IsDirMgrValid()",
+		"DirMgr.IsValidInstanceError()",
 		"")
 
 	if err != nil {

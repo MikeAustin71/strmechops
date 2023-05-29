@@ -43,7 +43,7 @@ type DirMgrCollection struct {
 // Note that this method does not perform a validity
 // check on input parameter, 'dMgr'.
 //
-// It is recommended that dMgr.IsDirMgrValid() be called
+// It is recommended that dMgr.IsValidInstanceError() be called
 // before adding the directory manager to the collection.
 //
 // ----------------------------------------------------------------
@@ -2326,7 +2326,7 @@ func (dMgrs *DirMgrCollection) InsertDirMgrAtIndex(
 	if err != nil {
 
 		return fmt.Errorf("%v\n"+
-			"Error: dMgr.IsDirMgrValid()"+
+			"Error: dMgr.IsValidInstanceError()"+
 			"Input parameter 'dMgr' is INVALID!\n"+
 			"Error = \n%v\n",
 			funcName,

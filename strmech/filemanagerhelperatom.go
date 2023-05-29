@@ -560,7 +560,7 @@ func (fMgrHlprAtom *fileMgrHelperAtom) doesFileMgrPathFileExist(
 
 	var err2, err3 error
 
-	err2 = fileMgr.dMgr.IsDirMgrValid(ePrefix.String())
+	err2 = fileMgr.dMgr.IsValidInstanceError(ePrefix.String())
 
 	if err2 != nil {
 		nonPathError = fmt.Errorf("\nFileMgr Directory Manager INVALID!\n"+
@@ -823,7 +823,7 @@ func (fMgrHlprAtom *fileMgrHelperAtom) setFileMgrDirMgrFileName(
 		return isEmpty, err
 	}
 
-	err2 := dMgr.IsDirMgrValid(ePrefix.String())
+	err2 := dMgr.IsValidInstanceError(ePrefix.String())
 
 	if err2 != nil {
 

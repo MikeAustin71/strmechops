@@ -634,7 +634,7 @@ func (fip *FileInfoPlus) NewFromDirMgrFileInfo(
 		return FileInfoPlus{}, err
 	}
 
-	err = dMgr.IsDirMgrValid("")
+	err = dMgr.IsValidInstanceError("")
 
 	if err != nil {
 		return FileInfoPlus{},

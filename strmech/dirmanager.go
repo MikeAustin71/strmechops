@@ -8788,14 +8788,163 @@ func (dMgr *DirMgr) GetVolumeName() string {
 	return dMgr.volumeName
 }
 
-// IsDirMgrValid - This method examines the current DirMgr object
-// to determine whether it has been properly configured.
-// If the current DirMgr object is valid, the method returns
-// 'nil' for no errors.
+// IsValidInstance
 //
-// Otherwise, if the DirMgr object is INVALID, an error is
-// returned.
-func (dMgr *DirMgr) IsDirMgrValid(
+// Performs a diagnostic review of the data values
+// encapsulated in the current DirMgr instance to
+// determine if they are valid.
+//
+// If any data element evaluates as invalid, this
+// method will return a boolean value of 'false'.
+//
+// If all data elements are determined to be valid in all
+// respects, this method returns a boolean value of
+// 'true'.
+//
+// This method is functionally equivalent to
+// DirMgr.IsValidInstanceError() with the sole exceptions
+// being that this method takes no input parameters and
+// returns a boolean value.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If any of the internal member data values
+//		contained in the current instance of DirMgr are
+//		found to be invalid, this method will return a
+//		boolean value of 'false'.
+//
+//		If all internal member data variables contained
+//		in the current instance of DirMgr are found to be
+//		valid in all respects, this method returns a
+//		boolean value of 'true'.
+func (dMgr *DirMgr) IsValidInstance() bool {
+
+	if dMgr.lock == nil {
+		dMgr.lock = new(sync.Mutex)
+	}
+
+	dMgr.lock.Lock()
+
+	defer dMgr.lock.Unlock()
+
+	var err error
+
+	err = new(dirMgrHelper).isDirMgrValid(
+		dMgr,
+		nil)
+
+	if err != nil {
+
+		return false
+	}
+
+	return true
+}
+
+// IsValidInstanceError
+//
+// Performs a diagnostic review of the data values
+// encapsulated in the current DirMgr instance to
+// determine if they are valid in all respects.
+//
+// If any data element evaluates as invalid, this
+// method will return an error containing an appropriate
+// message describing the nature of the invalid error.
+//
+// If all member data elements are determined to be
+// valid in all respects, this method returns a value
+// of 'nil'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (dMgr *DirMgr) IsValidInstanceError(
 	errorPrefix interface{}) error {
 
 	if dMgr.lock == nil {
@@ -8812,7 +8961,7 @@ func (dMgr *DirMgr) IsDirMgrValid(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"DirMgr.IsDirMgrValid()",
+		"DirMgr.IsValidInstanceError()",
 		"")
 
 	if err != nil {

@@ -201,7 +201,7 @@ func (dirTree *DirectoryTreeInfo) CopyToDirectoryTree(
 		return newDirTree, err
 	}
 
-	err = baseDir.IsDirMgrValid(
+	err = baseDir.IsValidInstanceError(
 		ePrefix.XCpy("baseDir"))
 
 	if err != nil {
@@ -212,7 +212,7 @@ func (dirTree *DirectoryTreeInfo) CopyToDirectoryTree(
 			err.Error())
 	}
 
-	err = newBaseDir.IsDirMgrValid(ePrefix.XCpy(
+	err = newBaseDir.IsValidInstanceError(ePrefix.XCpy(
 		"newBaseDir"))
 
 	if err != nil {
