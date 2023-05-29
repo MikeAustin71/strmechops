@@ -9157,7 +9157,167 @@ func (dMgr *DirMgr) IsPathPopulated() bool {
 //
 // Receives a valid path string and parses that string
 // into is basic elements. Those elements are returned
-// in a type ValidPathStrDto.
+// in an instance of type ValidPathStrDto.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathStr						string
+//
+//		This string contains a directory path which
+//		will parsed into its basic elements and
+//		returned as an instance of ValidPathStrDto.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	ValidPathStrDto
+//
+//		The directory path passed as input parameter
+//		'pathStr' will be broken down to its basic
+//		path elements and returned as an instance
+//		of ValidPathStrDto.
+//
+//		Type ValidPathStrDto encapsulates a series of
+//		private member variables describing the basic
+//		elements of a directory path. All of these
+//		private member variables can be accessed through
+//		public methods provided by Type ValidPathStrDto.
+//
+//		type ValidPathStrDto struct {
+//			isInitialized bool
+//			//	Signals whether the current ValidPathStrDto instance
+//			//	has been properly initialized.
+//
+//			originalPathStr string
+//			//	The original, unformatted path string
+//
+//			pathStr string
+//			//	The path string which may or may not be
+//			//	the absolute path.
+//
+//			pathFInfoPlus FileInfoPlus
+//			// Only populated if absValidPath exists on disk.
+//
+//			pathDoesExist PathExistsStatusCode
+//			//	-1 = don't know, file/path existence has not been tested
+//			//	 0 - No, tests show the file/path doesn't exist on disk.
+//			//	 1 - Yes, tests show the file/path does exist on disk.
+//
+//			pathStrLength int
+//			// Length of the path string
+//
+//			absPathStr string
+//			// The absolute path version of 'path'
+//
+//			absPathFInfoPlus FileInfoPlus
+//			// Only populated if absPathStr
+//			// exists on disk.
+//
+//			absPathDoesExist PathExistsStatusCode
+//			//	-1 = don't know, has not been tested
+//			//	 0 - No, tests shown path doesn't exist
+//			//	 1 - Yes, tests show path does exist
+//
+//			absPathStrLength int
+//			//	Length of the absolute path string
+//
+//			pathType PathFileTypeCode
+//			//	The path type. Path File, Path Directory
+//
+//			pathIsValid PathValidityStatusCode
+//			//	-1 - don't know
+//			//	 0 - No path is NOT valid
+//			//	 1 - Yes, path is valid
+//
+//			pathVolumeName string
+//			//	Volume name associated with current path
+//
+//			pathVolumeIndex int
+//			// Index of the starting character of Volume Name
+//			// in the path string.
+//
+//			pathVolumeStrLength int
+//			// Length of the Volume name in the path string.
+//
+//			err error
+//			// If no error is encountered
+//			// this value is nil
+//		}
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (dMgr *DirMgr) ParseValidPathStr(
 	pathStr string,
 	errorPrefix interface{}) (
@@ -9178,8 +9338,8 @@ func (dMgr *DirMgr) ParseValidPathStr(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"FilePermissionConfig."+
-			"GetEntryTypeComponent()",
+		"DirMgr."+
+			"ParseValidPathStr()",
 		"")
 
 	if err != nil {

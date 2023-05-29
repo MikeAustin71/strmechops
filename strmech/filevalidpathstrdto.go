@@ -6,50 +6,67 @@ import (
 	"sync"
 )
 
-// ValidPathStrDto - Used to transfer file/path string attributes and
+// ValidPathStrDto
+// Used to transfer file/path string attributes and
 // associated errors.
 type ValidPathStrDto struct {
-	isInitialized bool // signals whether the current ValidPathStrDto instance
-	//  has been properly initialized.
+	isInitialized bool
+	//	Signals whether the current ValidPathStrDto instance
+	//	has been properly initialized.
 
-	originalPathStr string // The original, unformatted path string
+	originalPathStr string
+	//	The original, unformatted path string
 
-	pathStr string // The path string which may or may not be
-	//  the absolute path
+	pathStr string
+	//	The path string which may or may not be
+	//	the absolute path.
 
-	pathFInfoPlus FileInfoPlus // Only populated if absValidPath exists on disk.
+	pathFInfoPlus FileInfoPlus
+	// Only populated if absValidPath exists on disk.
 
-	pathDoesExist PathExistsStatusCode // -1 = don't know, file/path existence has not been tested
-	//  0 - No, tests show the file/path doesn't exist on disk.
-	//  1 - Yes, tests show the file/path does exist on disk.
+	pathDoesExist PathExistsStatusCode
+	//	-1 = don't know, file/path existence has not been tested
+	//	 0 - No, tests show the file/path doesn't exist on disk.
+	//	 1 - Yes, tests show the file/path does exist on disk.
 
-	pathStrLength int // Length of the path string
+	pathStrLength int
+	// Length of the path string
 
-	absPathStr string // The absolute path version of 'path'
+	absPathStr string
+	// The absolute path version of 'path'
 
-	absPathFInfoPlus FileInfoPlus // Only populated if absValidPath
+	absPathFInfoPlus FileInfoPlus
+	// Only populated if absPathStr
 	// exists on disk.
 
-	absPathDoesExist PathExistsStatusCode // -1 = don't know, has not been tested
-	//  0 - No, tests shown path doesn't exist
-	//  1 - Yes, tests show path does exist
+	absPathDoesExist PathExistsStatusCode
+	//	-1 = don't know, has not been tested
+	//	 0 - No, tests shown path doesn't exist
+	//	 1 - Yes, tests show path does exist
 
-	absPathStrLength int // Length of the absolute path string
+	absPathStrLength int
+	//	Length of the absolute path string
 
-	pathType PathFileTypeCode // The path type. Path File, Path Directory
+	pathType PathFileTypeCode
+	//	The path type. Path File, Path Directory
 
-	pathIsValid PathValidityStatusCode // -1 - don't know
-	//  0 - No path is NOT valid
-	//  1 - Yes, path is valid
+	pathIsValid PathValidityStatusCode
+	//	-1 - don't know
+	//	 0 - No path is NOT valid
+	//	 1 - Yes, path is valid
 
-	pathVolumeName string // Volume name associated with current path
+	pathVolumeName string
+	//	Volume name associated with current path
 
-	pathVolumeIndex int // Index of the starting character of Volume Name
+	pathVolumeIndex int
+	// Index of the starting character of Volume Name
 	// in the path string.
 
-	pathVolumeStrLength int // Length of the Volume name in the path string.
+	pathVolumeStrLength int
+	// Length of the Volume name in the path string.
 
-	err error // If no error is encountered
+	err error
+	// If no error is encountered
 	// this value is nil
 
 	lock *sync.Mutex
