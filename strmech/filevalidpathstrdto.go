@@ -1078,7 +1078,17 @@ func (vpDto *ValidPathStrDto) SetPathType(
 
 // SetPathVolumeName - "setter" method for internal data fields
 // vpDto.pathVolumeName and vpDto.pathVolumeStrLength .
-func (vpDto *ValidPathStrDto) SetPathVolumeName(volumeNameStr string) {
+func (vpDto *ValidPathStrDto) SetPathVolumeName(
+	volumeNameStr string) {
+
+	if vpDto.lock == nil {
+		vpDto.lock = new(sync.Mutex)
+	}
+
+	vpDto.lock.Lock()
+
+	defer vpDto.lock.Unlock()
+
 	vpDto.pathVolumeName = volumeNameStr
 	vpDto.pathVolumeStrLength = len(volumeNameStr)
 }
@@ -1086,11 +1096,29 @@ func (vpDto *ValidPathStrDto) SetPathVolumeName(volumeNameStr string) {
 // SetPathVolumeIndex - "setter" method for internal data field
 // vpDto.pathVolumeIndex .
 func (vpDto *ValidPathStrDto) SetPathVolumeIndex(volIndex int) {
+
+	if vpDto.lock == nil {
+		vpDto.lock = new(sync.Mutex)
+	}
+
+	vpDto.lock.Lock()
+
+	defer vpDto.lock.Unlock()
+
 	vpDto.pathVolumeIndex = volIndex
 }
 
 // SetError - "setter" method for internal data field
 // vpDto.err .
 func (vpDto *ValidPathStrDto) SetError(err error) {
+
+	if vpDto.lock == nil {
+		vpDto.lock = new(sync.Mutex)
+	}
+
+	vpDto.lock.Lock()
+
+	defer vpDto.lock.Unlock()
+
 	vpDto.err = fmt.Errorf("%v", err.Error())
 }
