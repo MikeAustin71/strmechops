@@ -9356,9 +9356,27 @@ func (dMgr *DirMgr) ParseValidPathStr(
 	return validPathDto, err
 }
 
-// IsVolumeNamePopulated - Returns a boolean value indicating
-// whether the Volume Name for the current Directory Manager
+// IsVolumeNamePopulated
+//
+// Returns a boolean value indicating whether the
+// Volume Name for the current Directory Manager
 // instance is populated.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		This method returns a boolean value of 'true' if
+//		the Volume Name for the current Directory Manager
+//		instance is populated.
 func (dMgr *DirMgr) IsVolumeNamePopulated() bool {
 
 	if dMgr.lock == nil {
