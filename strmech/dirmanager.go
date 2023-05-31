@@ -11036,7 +11036,7 @@ func (dMgr *DirMgr) NewFromDirMgrFileInfo(
 //
 //		A valid, concrete instance of FileMgr. The data
 //		elements in this instance will be used to
-//		construct and a return a new, full populated
+//		construct and a return a new, fully populated
 //		instance of DirMgr.
 //
 //	errorPrefix					interface{}
@@ -11101,6 +11101,12 @@ func (dMgr *DirMgr) NewFromDirMgrFileInfo(
 // ----------------------------------------------------------------
 //
 // # Return Values
+//
+//	DirMgr
+//
+//		If this method completes successfully, this
+//		parameter will return a new, fully populated
+//		instance of Directory Manager (DirMgr).
 //
 //	error
 //
