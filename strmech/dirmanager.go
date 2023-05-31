@@ -11305,12 +11305,10 @@ func (dMgr *DirMgr) NewFromKnownPathDirectoryName(
 		return newDirMgr, err
 	}
 
-	dMgrHlpr := dirMgrHelper{}
-
 	var isEmpty bool
 
 	isEmpty,
-		err = dMgrHlpr.setDirMgrFromKnownPathDirName(
+		err = new(dirMgrHelper).setDirMgrFromKnownPathDirName(
 		&newDirMgr,
 		parentPathName,
 		directoryName,
@@ -11346,14 +11344,22 @@ func (dMgr *DirMgr) NewFromKnownPathDirectoryName(
 //
 // ----------------------------------------------------------------
 //
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the current instance of
+//	DirMgr.
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
-//	pathStr string
+//	pathStr						string
 //
 //		A path string designating a path or directory.
 //		To reduce errors, the 'pathStr' should be
-//		terminated with an appropriate path separator
-//		('/' or '\').
+//		terminated with an appropriate os.PathSeparator
+//		character (Linux='/' or Windows='\').
 //
 //	errorPrefix					interface{}
 //
