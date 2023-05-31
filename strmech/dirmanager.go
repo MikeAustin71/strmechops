@@ -10077,10 +10077,8 @@ func (dMgr *DirMgr) MoveDirectory(
 		return dirMoveStats, errs
 	}
 
-	dMgrHlpr := dirMgrHelper{}
-
 	dirMoveStats,
-		errs = dMgrHlpr.moveDirectory(
+		errs = new(dirMgrHelper).moveDirectory(
 		dMgr,
 		&targetDMgr,
 		fileSelectCriteria,
@@ -10116,9 +10114,9 @@ func (dMgr *DirMgr) MoveDirectory(
 // means that all files in this directory tree will also
 // be deleted.
 //
-// --------------------------------------------------------------------
+// ----------------------------------------------------------------
 //
-// Input Parameters:
+// # Input Parameters
 //
 //	targetDMgr					DirMgr
 //
@@ -10257,10 +10255,8 @@ func (dMgr *DirMgr) MoveDirectoryTree(
 		return dirMoveStats, errs
 	}
 
-	dMgrHlpr := dirMgrHelper{}
-
 	dirMoveStats,
-		errs = dMgrHlpr.moveDirectoryTree(
+		errs = new(dirMgrHelper).moveDirectoryTree(
 		dMgr,
 		&targetDMgr,
 		"dMgr",
