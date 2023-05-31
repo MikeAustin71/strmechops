@@ -10266,12 +10266,16 @@ func (dMgr *DirMgr) MoveDirectoryTree(
 	return dirMoveStats, errs
 }
 
-// MoveSubDirectoryTree - Moves all subdirectories and their constituent
-// files from the source or parent directory 'DirMgr' to a target directory
-// tree specified by input parameter 'targetDMgr'. If successful, all
-// subdirectories and files in the source directory tree will be deleted.
-// The source or parent directory identified by 'DirMgr' and the files
-// within 'DirMgr' will NOT be deleted.
+// MoveSubDirectoryTree
+//
+// Moves all subdirectories and their constituent files
+// from the source or parent directory 'DirMgr' to a
+// target directory tree specified by input parameter
+// 'targetDMgr'. If successful, all subdirectories and
+// files in the source subdirectory tree will be deleted.
+//
+// The source or parent directory identified by 'DirMgr'
+// and the files within 'DirMgr' will NOT be deleted.
 //
 // ----------------------------------------------------------------
 //
@@ -10285,9 +10289,9 @@ func (dMgr *DirMgr) MoveDirectoryTree(
 //
 // ----------------------------------------------------------------
 //
-// # Input Parameters
+// # Return Values
 //
-//	targetDMgr   DirMgr
+//	targetDMgr					DirMgr
 //
 //		An instance of 'DirMgr' initialized with the
 //		directory path of the target directory to which
@@ -10425,11 +10429,9 @@ func (dMgr *DirMgr) MoveSubDirectoryTree(
 		return dirMoveStats, errs
 	}
 
-	dMgrHlpr := dirMgrHelper{}
-
 	dirMoveStats,
 		errs =
-		dMgrHlpr.moveSubDirectoryTree(
+		new(dirMgrHelper).moveSubDirectoryTree(
 			dMgr,
 			&targetDMgr,
 			"dMgr",
