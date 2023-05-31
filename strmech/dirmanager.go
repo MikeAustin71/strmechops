@@ -10441,8 +10441,10 @@ func (dMgr *DirMgr) MoveSubDirectoryTree(
 	return dirMoveStats, errs
 }
 
-// New - Returns a new DirMgr object and populates the
-// the data fields.
+// New
+//
+// Returns a new DirMgr object and populates the the data
+// fields.
 //
 // ----------------------------------------------------------------
 //
@@ -10454,7 +10456,7 @@ func (dMgr *DirMgr) MoveSubDirectoryTree(
 //
 //		To reduce errors, the 'pathStr' should be
 //		terminated with an appropriate path separator
-//		('/' or '\').
+//		(os.PathSeparator Linux='/' or Windows='\').
 //
 //	errorPrefix					interface{}
 //
