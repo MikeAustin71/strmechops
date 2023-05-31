@@ -72,6 +72,64 @@ type ValidPathStrDto struct {
 	lock *sync.Mutex
 }
 
+// AbsolutePathDoesExist
+//
+// This method returns "Path Exists Status Code"
+// associated with the absolute path encapsulated by the
+// current instance of ValidPathStrDto.
+//
+// The instance of PathExistsStatusCode returned by this
+// method is an enumeration describing the status of the
+// subject absolute path. As such, the returned instance
+// of PathExistsStatusCode will be set to one of the
+// following three enumeration values.
+//
+// ----------------------------------------------------------------
+//
+// # Definition of Terms
+//
+// An absolute or full path points to the same location
+// in a file system, regardless of the current working
+// directory. To do that, it must include the root
+// directory.
+//
+//	https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+// PathExistsStatusCode
+//
+//	This method evaluates the absolute path encapsulated
+//	in the current instance of ValidPathStrDto and
+//	returns an enumeration value describing the status of
+//	that absolute path. The returned instance of
+//	PathExistsStatusCode will be set to one of the
+//	following values:
+//
+//	----------------------------------------------------------------------------
+//						PathExistsStatusCode
+//
+//	                                      Int
+//	   Enumeration                       Value         Definition
+//	----------------------------------------------------------------------------
+//	PathExistsStatusCode(0).Unknown()     -1    Path file existence has NOT been
+//	                                            tested and status is 'Unknown'.
+//
+//	PathExistsStatusCode(0).DoesNotExist() 0    Path file existence HAS been tested
+//	                                            and path file name does NOT exist on
+//	                                            disk.
+//
+//	PathExistsStatusCode(0).Exists()      +1    Path file existence HAD been tested
+//	                                            and path file name DOES exist on
+//	                                            disk.
 func (vpDto *ValidPathStrDto) AbsolutePathDoesExist() PathExistsStatusCode {
 
 	if vpDto.lock == nil {
