@@ -11520,25 +11520,137 @@ func (dMgr *DirMgr) SetDirMgr(
 	return isEmpty, err
 }
 
-// SetDirMgrFromKnownPathDirName - Configures the internal
-// field values for the current DirMgr instance using a parent
-// path name and a directory name. The parent path and directory
-// name are combined to form the full path for the current 'DirMgr'
-// instance.
+// SetDirMgrFromKnownPathDirName
 //
-// This method will replace all previous field values with new
-// values based on input parameters 'parentPathName' and
-// 'directoryName'.
+// Configures the internal data field values for the
+// current DirMgr instance using a parent path name and
+// a directory name. The parent path and directory name
+// are combined to form the full path for the current
+// 'DirMgr' instance.
 //
-// This method differs from other "Set" methods in that it
-// assumes the input parameters are known values and do not
-// require the usual analysis and validation screening applied
-// by similar methods.
+// This method differs from other "Set" methods in that
+// it assumes the input parameters are known values and
+// do not require the usual analysis and validation
+// screening applied by similar methods.
 //
-// If more rigours input parameter validation is required,
+// If more rigorous input parameter validation is required,
 // consider using method, DirMgr.SetDirMgr().
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the current instance of
+//	DirMgr.
+//
+//	All previous data field values will be replaced with
+//	new values based on input parameters 'parentPathName'
+//	and 'directoryName'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	parentPathName				string
+//
+//		This string contains the parent directory which
+//		will be added to the directory name supplied by
+//		input parameter 'directoryName'. These two
+//		elements are combined to create the new directory
+//		path.
+//
+//	directoryName string
+//
+//		This string contains the directory name which
+//		will be added to the parent directory, specified
+//		by input parameter 'parentPathName', to create
+//		the new directory path.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	isEmpty						bool
+//
+//		If this returned boolean value is set to 'true',
+//		it signals that the 'parentPathName' and
+//		'directoryName' input parameters resulted in an
+//		empty or zero length directory string.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (dMgr *DirMgr) SetDirMgrFromKnownPathDirName(
-	parentPathName,
+	parentPathName string,
 	directoryName string,
 	errorPrefix interface{}) (
 	isEmpty bool,
