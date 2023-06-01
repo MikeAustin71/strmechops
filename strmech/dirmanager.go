@@ -10653,7 +10653,6 @@ func (dMgr *DirMgr) New(
 //		input parameter 'fInfo'. These two elements are
 //		combined to create the new directory path.
 //
-//
 //	fInfo						os.FileInfo
 //
 //		An os.FileInfo object containing the directory
@@ -11707,17 +11706,33 @@ func (dMgr *DirMgr) SetDirMgrFromKnownPathDirName(
 //
 // ----------------------------------------------------------------
 //
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the current instance of
+//	DirMgr.
+//
+//	All previous data field values will be replaced with
+//	new values based on input parameters 'parentPathName'
+//	and 'directoryName'.
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	parentDirectoryPath			string
 //
-//		The parent directory path.
+//		This string contains the parent directory which
+//		will be added to the directory name supplied by
+//		input parameter 'fInfo'. These two elements are
+//		combined to create the new directory path.
 //
-//	info						os.FileInfo
+//	fInfo						os.FileInfo
 //
-//		An os.FileInfo structure containing the directory
-//		name which will be added to the parent directory
-//		in order to create the new directory path.
+//		An os.FileInfo object containing the directory
+//		name which will be added to the parent directory,
+//		specified by input parameter 'parentDirectoryPath',
+//		to create the new directory path.
 //
 //		Note:
 //
@@ -11802,7 +11817,7 @@ func (dMgr *DirMgr) SetDirMgrFromKnownPathDirName(
 //	 	attached to the	beginning of the error message.
 func (dMgr *DirMgr) SetDirMgrWithFileInfo(
 	parentDirectoryPath string,
-	info os.FileInfo,
+	fInfo os.FileInfo,
 	errorPrefix interface{}) (
 	err error) {
 
@@ -11827,10 +11842,10 @@ func (dMgr *DirMgr) SetDirMgrWithFileInfo(
 		return err
 	}
 
-	if info == nil {
+	if fInfo == nil {
 
 		return fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'info' is 'nil' and INVALID!\n",
+			"ERROR: Input parameter 'fInfo' is 'nil' and INVALID!\n",
 			ePrefix.String())
 	}
 
@@ -11841,7 +11856,7 @@ func (dMgr *DirMgr) SetDirMgrWithFileInfo(
 		setDirMgrWithPathDirectoryName(
 			dMgr,
 			parentDirectoryPath,
-			info.Name(),
+			fInfo.Name(),
 			"dMgr",
 			"parentDirectoryPath",
 			"FileInfo.Name()",
@@ -11856,7 +11871,7 @@ func (dMgr *DirMgr) SetDirMgrWithFileInfo(
 			"FileInfo.Name()= '%v'\n",
 			ePrefix.String(),
 			parentDirectoryPath,
-			info.Name())
+			fInfo.Name())
 	}
 
 	return err
