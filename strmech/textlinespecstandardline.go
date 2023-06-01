@@ -2355,9 +2355,9 @@ func (stdLine *TextLineSpecStandardLine) CopyIn(
 //	     if errors are encountered, this return value will contain
 //	     an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//	     If an error occurs, the text value of input parameter
+//	     'errorPrefix' will be inserted or prefixed at the
+//	     beginning of the error message.
 func (stdLine *TextLineSpecStandardLine) CopyOut(
 	errorPrefix interface{}) (
 	TextLineSpecStandardLine,
@@ -2467,9 +2467,9 @@ func (stdLine *TextLineSpecStandardLine) CopyOut(
 //	     if errors are encountered, this return value will contain
 //	     an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//	     If an error occurs, the text value of input parameter
+//	     'errorPrefix' will be inserted or prefixed at the
+//	     beginning of the error message.
 func (stdLine *TextLineSpecStandardLine) CopyOutITextLine(
 	errorPrefix interface{}) (
 	ITextLineSpecification,
@@ -2578,9 +2578,9 @@ func (stdLine *TextLineSpecStandardLine) CopyOutITextLine(
 //	     if errors are encountered, this return value will contain
 //	     an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//	     If an error occurs, the text value of input parameter
+//	     'errorPrefix' will be inserted or prefixed at the
+//	     beginning of the error message.
 func (stdLine *TextLineSpecStandardLine) CopyOutPtr(
 	errorPrefix interface{}) (
 	*TextLineSpecStandardLine,
@@ -3494,9 +3494,9 @@ func (stdLine *TextLineSpecStandardLine) GetTextField(
 //	     if errors are encountered, this return value will contain
 //	     an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//	     If an error occurs, the text value of input parameter
+//	     'errorPrefix' will be inserted or prefixed at the
+//	     beginning of the error message.
 func (stdLine *TextLineSpecStandardLine) GetTextFieldCollection(
 	errorPrefix interface{}) (
 	[]ITextFieldSpecification,

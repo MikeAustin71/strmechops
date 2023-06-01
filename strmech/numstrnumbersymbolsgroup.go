@@ -204,8 +204,8 @@ type NumStrNumberSymbolGroup struct {
 	//		Number String:   "0.00+"
 
 	currencySymbol NumStrNumberSymbolSpec
-	//	A Currency Symbol next to a number shows the
-	//	number is a monetary amount.
+	//	A Currency Symbol positioned next to a numeric
+	//	value designates the number is a monetary amount.
 	//
 	//	Examples of Currency Symbols include the Dollar
 	//	sign ('$'), Euro sign ('€') or Pound sign ('£').

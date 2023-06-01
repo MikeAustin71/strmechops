@@ -347,8 +347,8 @@ func (txtLineTitleMarqueeElectron *textLineSpecTitleMarqueeElectron) equal(
 //		error Type is set equal to 'nil'.
 //
 //		If input parameter 'TextLineSpecTitleMarquee' is
-//		found to be invalid, the returned error Type will
-//		encapsulate an appropriate error message.
+//		invalid, the returned error Type will encapsulate
+//		an appropriate error message.
 //
 //		If an error message is returned, the text value
 //		for input parameter 'errPrefDto' (error prefix)

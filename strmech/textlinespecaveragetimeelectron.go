@@ -540,10 +540,10 @@ func (txtLineAvgTimeElectron *textLineSpecAverageTimeElectron) equal(
 //		be invalid, this returned error Type will
 //		encapsulate an appropriate error message.
 //
-//		If an error message is returned, the text value
-//		for input parameter 'errPrefDto' (error prefix)
-//		will be prefixed or attached at the beginning of
-//		the error message.
+//		If an error occurs, the text value for input
+//		parameter 'errPrefDto' (error prefix) will be
+//		prefixed or attached at the beginning of the
+//		error message.
 //
 //		If input parameter 'txtLineAvgTimer' is found to
 //		be valid and no errors are encountered during

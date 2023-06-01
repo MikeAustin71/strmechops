@@ -2209,9 +2209,9 @@ func (runeArrayCol *RuneArrayCollection) CopyIn(
 //	     if errors are encountered, this return value will contain
 //	     an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//	     If an error occurs, the text value of input parameter
+//	     'errorPrefix' will be inserted or prefixed at the
+//	     beginning of the error message.
 func (runeArrayCol *RuneArrayCollection) CopyOut(
 	errorPrefix interface{}) (
 	RuneArrayCollection,
@@ -3959,7 +3959,7 @@ func (runeArrayCol *RuneArrayCollection) PopFirstElement(
 //	     invalid or if the Rune Arrays Collection is empty, an
 //	     error will be returned.
 //
-//	     Afterwards, this method will proceed to DELETE the array
+//	     Afterward, this method will proceed to DELETE the array
 //	     element in the Rune Arrays Collection specified by this
 //	     input parameter.
 //

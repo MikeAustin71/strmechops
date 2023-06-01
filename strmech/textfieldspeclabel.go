@@ -282,9 +282,9 @@ func (txtFieldLabel *TextFieldSpecLabel) CopyIn(
 //	     if errors are encountered, this return value will contain
 //	     an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//	     If an error occurs, the text value of input parameter
+//	     'errorPrefix' will be inserted or prefixed at the
+//	     beginning of the error message.
 func (txtFieldLabel *TextFieldSpecLabel) CopyOut(
 	errorPrefix interface{}) (
 	TextFieldSpecLabel,
@@ -397,9 +397,9 @@ func (txtFieldLabel *TextFieldSpecLabel) CopyOut(
 //	     if errors are encountered, this return value will contain
 //	     an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//	     If an error occurs, the text value of input parameter
+//	     'errorPrefix' will be inserted or prefixed at the
+//	     beginning of the error message.
 func (txtFieldLabel *TextFieldSpecLabel) CopyOutITextField(
 	errorPrefix interface{}) (
 	ITextFieldSpecification,
@@ -512,9 +512,9 @@ func (txtFieldLabel *TextFieldSpecLabel) CopyOutITextField(
 //	     if errors are encountered, this return value will contain
 //	     an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//	     If an error occurs, the text value of input parameter
+//	     'errorPrefix' will be inserted or prefixed at the
+//	     beginning of the error message.
 func (txtFieldLabel *TextFieldSpecLabel) CopyOutPtr(
 	errorPrefix interface{}) (
 	*TextFieldSpecLabel,

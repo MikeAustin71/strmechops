@@ -226,9 +226,9 @@ func (txtFieldSpacer *TextFieldSpecSpacer) CopyIn(
 //	     if errors are encountered, this return value will contain
 //	     an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//	     If an error occurs, the text value of input parameter
+//	     'errorPrefix' will be inserted or prefixed at the
+//	     beginning of the error message.
 func (txtFieldSpacer *TextFieldSpecSpacer) CopyOut(
 	errorPrefix interface{}) (
 	TextFieldSpecSpacer,
@@ -336,9 +336,9 @@ func (txtFieldSpacer *TextFieldSpecSpacer) CopyOut(
 //	     if errors are encountered, this return value will contain
 //	     an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//	     If an error occurs, the text value of input parameter
+//	     'errorPrefix' will be inserted or prefixed at the
+//	     beginning of the error message.
 func (txtFieldSpacer *TextFieldSpecSpacer) CopyOutITextField(
 	errorPrefix interface{}) (
 	ITextFieldSpecification,
@@ -452,9 +452,9 @@ func (txtFieldSpacer *TextFieldSpecSpacer) CopyOutITextField(
 //	     if errors are encountered, this return value will contain
 //	     an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//	     If an error occurs, the text value of input parameter
+//	     'errorPrefix' will be inserted or prefixed at the
+//	     beginning of the error message.
 func (txtFieldSpacer *TextFieldSpecSpacer) CopyOutPtr(
 	errorPrefix interface{}) (
 	*TextFieldSpecSpacer,
@@ -725,9 +725,9 @@ func (txtFieldSpacer *TextFieldSpecSpacer) GetFormattedStrLength() int {
 //	     if errors are encountered, this return value will contain
 //	     an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//	     If an error occurs, the text value of input parameter
+//	     'errorPrefix' will be inserted or prefixed at the
+//	     beginning of the error message.
 //
 // ------------------------------------------------------------------------
 //

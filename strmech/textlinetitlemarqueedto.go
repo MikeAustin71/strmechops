@@ -4888,9 +4888,9 @@ func (txtTitleMarqueeDtoAtom *textLineTitleMarqueeDtoAtom) empty(
 //		to be valid in all respects, the returned error
 //		Type is set equal to 'nil'.
 //
-//		If input parameter 'txtTitleMarqueeDto' is found
-//		to be invalid, the returned error Type will
-//		encapsulate an appropriate error message.
+//		If input parameter 'txtTitleMarqueeDto' is invalid,
+//		the returned error Type will encapsulate an
+//		appropriate error message.
 //
 //		If an error message is returned, the text value
 //		for input parameter 'errPrefDto' (error prefix)

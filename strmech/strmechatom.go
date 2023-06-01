@@ -503,13 +503,13 @@ func (sMechAtom *strMechAtom) copyOut(
 //	     CommentDelimiter               string //  If a Comment Delimiter is detected it is stored here.
 //	     CommentDelimiterIndex          int    //  If a Comment Delimiter is detected, the string index in 'TargetStr' showing its location is stored here.
 //	     EndOfLineDelimiter             string //  If an End-Of-Line Delimiter is detected it is captured and stored here.
-//	     EndOfLineDelimiterIndex        int    //  If an End-Of-Line Delimiter is detected, the string index in 'TargetStr' showing its location is stored here.
+//	     EndOfLineDelimiterIndex        int    //  If an End-Of-Line Delimiter presents, the string index in 'TargetStr' showing its location, is stored here.
 //	  }
 //
 //
 //	 error
 //	   - If the method completes successfully and no errors are encountered
-//	     this return value is set to 'nil'. Otherwise, if errors are encountered
+//	     this parameter returns 'nil'. Otherwise, if errors are encountered
 //	     this return value will contain an appropriate error message.
 //
 //	     The most likely source of errors are invalid input parameters.

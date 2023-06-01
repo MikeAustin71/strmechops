@@ -640,9 +640,9 @@ func (numStrKernel *NumberStrKernel) CopyIn(
 //	     if errors are encountered, this return value will contain
 //	     an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//		If an error occurs, the text value for input parameter
+//		'errPrefDto' (error prefix) will be prefixed or attached
+//		at the beginning of the error message.
 func (numStrKernel *NumberStrKernel) CopyOut(
 	errorPrefix interface{}) (
 	deepCopyNumStrKernel NumberStrKernel,
@@ -9141,8 +9141,8 @@ func (numStrKernel *NumberStrKernel) FmtNumStr(
 //
 //			currencySymbol NumStrNumberSymbolSpec
 //
-//				A Currency Symbol next to a number shows the
-//				number is a monetary amount.
+//				A Currency Symbol positioned next to a numeric
+//				value designates the number as a monetary amount.
 //
 //				Examples of Currency Symbols include the Dollar
 //				sign ('$'), Euro sign ('€') or Pound sign ('£').
@@ -10448,8 +10448,8 @@ func (numStrKernel *NumberStrKernel) FmtNumStrDefaultRound(
 //
 //	currencySymbol					NumStrNumberSymbolSpec
 //
-//		A Currency Symbol next to a number shows the
-//		number is a monetary amount.
+//		A Currency Symbol positioned next to a numeric
+//		value designates the number as a monetary amount.
 //
 //		The Number String Currency Symbol Specification
 //		is used to configure currency symbols for

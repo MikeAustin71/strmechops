@@ -63,13 +63,13 @@ type filePermissionConfigElectron struct {
 //		be invalid, this returned error Type will
 //		encapsulate an appropriate error message.
 //
-//		If an error message is returned, the text value
-//		for input parameter 'errPrefDto' (error prefix)
-//		will be prefixed or attached at the beginning of
-//		the error message.
+//		If an error occurs, the text value for input
+//		parameter 'errPrefDto' (error prefix) will be
+//		prefixed or attached at the beginning of the
+//		error message.
 //
 //		If input parameter 'filePermConfig' is found to
-//		be valid and no errors are encountered during
+//		be valid, and no errors are encountered during
 //		processing, this returned error parameter is set
 //		to 'nil'.
 func (filePermCfgElectron *filePermissionConfigElectron) testValidityOfFilePermissionConfig(

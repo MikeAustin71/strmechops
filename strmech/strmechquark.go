@@ -28,72 +28,69 @@ type strMechQuark struct {
 // spaces are converted to "[SPACE]" in the returned string.
 //
 // Reference:
-//    https://www.juniper.net/documentation/en_US/idp5.1/topics/reference/general/intrusion-detection-prevention-custom-attack-object-extended-ascii.html
 //
+//	https://www.juniper.net/documentation/en_US/idp5.1/topics/reference/general/intrusion-detection-prevention-custom-attack-object-extended-ascii.html
 //
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  nonPrintableChars   []rune
-//     - An array of runes containing non-printable characters.
-//       The non-printable characters will be converted to
-//       printable characters.
+//	nonPrintableChars   []rune
+//	   - An array of runes containing non-printable characters.
+//	     The non-printable characters will be converted to
+//	     printable characters.
 //
-//  convertSpace        bool
-//     - Space or white space characters (0x20) are by default
-//       translated as " ". However, if this parameter is set to
-//       'true', space characters will be converted to "[SPACE]".
+//	convertSpace        bool
+//	   - Space or white space characters (0x20) are by default
+//	     translated as " ". However, if this parameter is set to
+//	     'true', space characters will be converted to "[SPACE]".
 //
 //
-//  ePrefix             *ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	ePrefix             *ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  printableChars      string
-//     - This returned string is identical to input parameter
-//       'nonPrintableChars' with the exception that non-printable
-//       characters are translated into printable characters.
+//	 printableChars      string
+//	    - This returned string is identical to input parameter
+//	      'nonPrintableChars' with the exception that non-printable
+//	      characters are translated into printable characters.
 //
 //
-//  err                 error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered this return value will contain
-//       an appropriate error message.
+//	 err                 error
+//	    - If the method completes successfully and no errors are
+//	      encountered this return value is set to 'nil'. Otherwise,
+//	      if errors are encountered this return value will contain
+//	      an appropriate error message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'ePrefix' (error prefix) will be inserted or
-//
+//			 If an error occurs, the text value for input parameter
+//			 'ePrefix' (error prefix) will be inserted or
 //
 // ------------------------------------------------------------------------
 //
 // Example Usage
 //
-//  testStr := "Hello world!\n"
-//  testRunes := []rune(testStr)
+//	testStr := "Hello world!\n"
+//	testRunes := []rune(testStr)
 //
-//  actualStr :=
-//    StrMech{}.NewConstructor().
-//      ConvertNonPrintableChars(testRunes, true)
+//	actualStr :=
+//	  StrMech{}.NewConstructor().
+//	    ConvertNonPrintableChars(testRunes, true)
 //
-//  ----------------------------------------------------
-//  'actualStr' is now equal to:
-//     "Hello[SPACE]world!\\n"
-//
+//	----------------------------------------------------
+//	'actualStr' is now equal to:
+//	   "Hello[SPACE]world!\\n"
 func (sMechQuark *strMechQuark) convertNonPrintableChars(
 	nonPrintableChars []rune,
 	convertSpace bool,
@@ -219,73 +216,70 @@ func (sMechQuark *strMechQuark) convertNonPrintableChars(
 // content.
 //
 // Reference:
-//    https://www.juniper.net/documentation/en_US/idp5.1/topics/reference/general/intrusion-detection-prevention-custom-attack-object-extended-ascii.html
 //
+//	https://www.juniper.net/documentation/en_US/idp5.1/topics/reference/general/intrusion-detection-prevention-custom-attack-object-extended-ascii.html
 //
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  printableChars      string
-//     - A string which may contain non-printable characters converted
-//       to their printable equivalents. These printable characters will
-//       be converted back to their native, non-printable values.
+//	printableChars      string
+//	   - A string which may contain non-printable characters converted
+//	     to their printable equivalents. These printable characters will
+//	     be converted back to their native, non-printable values.
 //
 //
-//  ePrefix             *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	ePrefix             *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  nonPrintableChars   []rune
-//     - An array of runes containing non-printable characters.
-//       The non-printable characters will be converted from the
-//       printable characters contained in input parameter
-//       'printableChars'.
+//	nonPrintableChars   []rune
+//	   - An array of runes containing non-printable characters.
+//	     The non-printable characters will be converted from the
+//	     printable characters contained in input parameter
+//	     'printableChars'.
 //
 //
-//  err                 error
-//     - If this method completes successfully, the returned error
-//       Type is set equal to 'nil'. If errors are encountered during
-//       processing, the returned error Type will encapsulate an error
-//       message.
+//	err                 error
+//	   - If this method completes successfully, the returned error
+//	     Type is set equal to 'nil'. If errors are encountered during
+//	     processing, the returned error Type will encapsulate an error
+//	     message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'ePrefix' (error prefix) will be prefixed or
-//       attached at the beginning of the error message
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'ePrefix' (error prefix) will be prefixed or
+//	     attached at the beginning of the error message
 //
 // ------------------------------------------------------------------------
 //
 // Example Usage
 //
-//  testStr := "Hello[SPACE]world!\\n"
-//  ePrefix := "theCallingFunction()"
+//	testStr := "Hello[SPACE]world!\\n"
+//	ePrefix := "theCallingFunction()"
 //
-//  ePrefQuark := errPrefQuark{}
+//	ePrefQuark := errPrefQuark{}
 //
-//  actualRuneArray :=
-//    ePrefQuark.
-//      convertPrintableChars(
-//           testStr,
-//           ePrefix)
+//	actualRuneArray :=
+//	  ePrefQuark.
+//	    convertPrintableChars(
+//	         testStr,
+//	         ePrefix)
 //
-//  ----------------------------------------------------
-//  'actualRuneArray' is now equal to:
-//     "Hello world!\n"
-//
+//	----------------------------------------------------
+//	'actualRuneArray' is now equal to:
+//	   "Hello world!\n"
 func (sMechQuark *strMechQuark) convertPrintableChars(
 	printableChars string,
 	ePrefix *ePref.ErrPrefixDto) (
@@ -400,88 +394,85 @@ func (sMechQuark *strMechQuark) convertPrintableChars(
 // calling function based on the criteria contained in the input
 // parameters 'startSearchIndex' and 'characterSearchLength'.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  targetSearchRunes          []rune
-//     - This rune array represents the universe of runes which
-//       will be searched by the calling function. A subset universe
-//       of runes will be created using the other input parameters
-//       to reduce the total number of runes which must be searched.
+//	targetSearchRunes          []rune
+//	   - This rune array represents the universe of runes which
+//	     will be searched by the calling function. A subset universe
+//	     of runes will be created using the other input parameters
+//	     to reduce the total number of runes which must be searched.
 //
 //
-//  targetSearchRunesName      string
-//     - This is the label which will be used to describe the
-//       'targetSearchRunes' array in any error messages that are
-//       generated by this method. If this string is empty or has
-//       a character length of zero, it will be defaulted to
-//       'targetSearchRunes'
+//	targetSearchRunesName      string
+//	   - This is the label which will be used to describe the
+//	     'targetSearchRunes' array in any error messages that are
+//	     generated by this method. If this string is empty or has
+//	     a character length of zero, it will be defaulted to
+//	     'targetSearchRunes'
 //
 //
-//  startSearchIndex           int
-//     - This is the zero based index of the 'targetSearchRunes'
-//       array at which the search operation will be commenced. It
-//       is also the index which will constituted index zero (0) in
-//       the returned rune array 'searchRunes'.
+//	startSearchIndex           int
+//	   - This is the zero based index of the 'targetSearchRunes'
+//	     array at which the search operation will be commenced. It
+//	     is also the index which will constituted index zero (0) in
+//	     the returned rune array 'searchRunes'.
 //
 //
-//  characterSearchLength      int
-//     - The number of characters to be searched beginning at the
-//       starting at the zero based search index
-//       ('startSearchIndex') in the rune array
-//       'targetSearchRunesName'.
+//	characterSearchLength      int
+//	   - The number of characters to be searched beginning at the
+//	     starting at the zero based search index
+//	     ('startSearchIndex') in the rune array
+//	     'targetSearchRunesName'.
 //
 //
-//  errPrefDto                 *ePref.ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	errPrefDto                 *ePref.ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//  searchRunes                []rune
-//     - If this method successfully executes without error, the
-//       returned 'searchRunes' rune array will be a subset
-//       of the 'targetSearchRunes' array representing the minimum
-//       number of runes which must be searched according to the
-//       criteria specified by input parameters 'startSearchIndex'
-//       and 'characterSearchLength'.
+//	searchRunes                []rune
+//	   - If this method successfully executes without error, the
+//	     returned 'searchRunes' rune array will be a subset
+//	     of the 'targetSearchRunes' array representing the minimum
+//	     number of runes which must be searched according to the
+//	     criteria specified by input parameters 'startSearchIndex'
+//	     and 'characterSearchLength'.
 //
 //
-//  relativeStartIndex         int
-//     - If this method completes successfully, this parameter will
-//       contain the index in input parameter 'targetSearchRunes'
-//       which corresponds to index zero (0) in the returned
-//       'searchRunes' array.
+//	relativeStartIndex         int
+//	   - If this method completes successfully, this parameter will
+//	     contain the index in input parameter 'targetSearchRunes'
+//	     which corresponds to index zero (0) in the returned
+//	     'searchRunes' array.
 //
 //
-//  actualSearchRunesLength    int
-//     - If this method completes successfully, this parameter will
-//       contain the length of returned rune array, 'searchRunes'.
+//	actualSearchRunesLength    int
+//	   - If this method completes successfully, this parameter will
+//	     contain the length of returned rune array, 'searchRunes'.
 //
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered, this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered, this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (sMechQuark *strMechQuark) createCharacterSearchRunes(
 	targetSearchRunes []rune,
 	targetSearchRunesName string,
@@ -646,7 +637,6 @@ func (sMechQuark *strMechQuark) createCharacterSearchRunes(
 // doesLastCharExist - returns true if the last character (rune) of
 // input string 'testStr' is equal to input parameter 'lastChar' which
 // is of type 'rune'.
-//
 func (sMechQuark *strMechQuark) doesLastCharExist(
 	testStr string,
 	lastChar rune) bool {
@@ -682,7 +672,6 @@ func (sMechQuark *strMechQuark) doesLastCharExist(
 //
 // If one array is 'nil' and the other is a zero length array,
 // this method will return 'false'.
-//
 func (sMechQuark *strMechQuark) equalRuneArraysNil(
 	runeAryOne []rune,
 	runeAryTwo []rune) (
@@ -725,13 +714,11 @@ func (sMechQuark *strMechQuark) equalRuneArraysNil(
 // 'targetStr' segment. The search therefore starts at 'endIdx' and proceeds towards
 // 'startIdx' until the last non-space character in the string segment is identified.
 //
-//
 // If the last non-space character is found, that string index is returned. If the string
 // segment consists entirely of space characters, the return value is -1.
 //
 // if 'targetStr' is a zero length string, an error will be triggered. Likewise, if 'startIdx'
 // of 'endIdx' are invalid, an error will be returned.
-//
 func (sMechQuark *strMechQuark) findLastNonSpaceChar(
 	targetStr string,
 	startIdx,
@@ -841,64 +828,62 @@ func (sMechQuark *strMechQuark) findLastNonSpaceChar(
 //
 // Input Parameters
 //
-//  targetStr           string
-//     - The string segment to be searched for the last space
-//       character resides in this string.
+//	targetStr           string
+//	   - The string segment to be searched for the last space
+//	     character resides in this string.
 //
-//  startIdx            int
-//     - Defines the actual ending index for the string segment to
-//       be searched. The search is a 'backwards' search and
-//       proceeds from right to left. Therefore, the starting point
-//       for the string segment is input parameter 'endIdx' while
-//       the ending point for the string segment is this 'startIdx'.
-//
-//
-//  endIdx              int
-//     - Defines the actual beginning index of the string segment
-//       to be searched. The search is a 'backwards' search and
-//       proceeds from right to left. Therefore, the starting point
-//       for the string segment is defined by this 'endIdx'
-//       parameter while the ending point for the string segment is
-//       marked by the input parameter, 'startIdx'.
+//	startIdx            int
+//	   - Defines the actual ending index for the string segment to
+//	     be searched. The search is a 'backwards' search and
+//	     proceeds from right to left. Therefore, the starting point
+//	     for the string segment is input parameter 'endIdx' while
+//	     the ending point for the string segment is this 'startIdx'.
 //
 //
-//  ePrefix             *ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	endIdx              int
+//	   - Defines the actual beginning index of the string segment
+//	     to be searched. The search is a 'backwards' search and
+//	     proceeds from right to left. Therefore, the starting point
+//	     for the string segment is defined by this 'endIdx'
+//	     parameter while the ending point for the string segment is
+//	     marked by the input parameter, 'startIdx'.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
+//	ePrefix             *ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
+//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  int
-//     - If this method completes successfully, this returned
-//       integer value will constitute the string index of the last
-//       space character in the string segment marked by input
-//       parameters 'startIdx' and 'endIdx'.
+//	int
+//	   - If this method completes successfully, this returned
+//	     integer value will constitute the string index of the last
+//	     space character in the string segment marked by input
+//	     parameters 'startIdx' and 'endIdx'.
 //
-//       If a space character is NOT found in the specified string
-//       segment, a value of minus one (-1) is returned.
+//	     If a space character is NOT found in the specified string
+//	     segment, a value of minus one (-1) is returned.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'ePrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'ePrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 func (sMechQuark *strMechQuark) findLastSpace(
 	targetStr string,
 	startIdx int,
@@ -995,22 +980,21 @@ func (sMechQuark *strMechQuark) findLastSpace(
 //
 // ------------------------------------------------------------------------
 //
-// Examples
+// # Examples
 //
+//	Example-1
+//	  In the text string segment:
 //
-//   Example-1
-//     In the text string segment:
+//	  "The cow jumped over the moon."
 //
-//     "The cow jumped over the moon."
+//	  The last word would be defined as "moon."
 //
-//     The last word would be defined as "moon."
+//	  Example-2
+//	    In the text string segment:
 //
-//     Example-2
-//       In the text string segment:
+//	    "  somewhere over the rainbow  "
 //
-//       "  somewhere over the rainbow  "
-//
-//       The last word would be defined as "rainbow"
+//	    The last word would be defined as "rainbow"
 //
 // ------------------------------------------------------------------------
 //
@@ -1031,78 +1015,75 @@ func (sMechQuark *strMechQuark) findLastSpace(
 //
 // ------------------------------------------------------------------------
 //
-// Input Parameters
+// # Input Parameters
+//
+//	targetStr      string
+//	   - The string containing the string segment which
+//	     will be searched to identify the last word
+//	     in the string segment.
 //
 //
-//  targetStr      string
-//     - The string containing the string segment which
-//       will be searched to identify the last word
-//       in the string segment.
+//	startIndex     int
+//	   - The index marking the beginning of the string
+//	     segment in 'targetStr'.
 //
 //
-//  startIndex     int
-//     - The index marking the beginning of the string
-//       segment in 'targetStr'.
+//	endIndex       int
+//	   - The index marking the end of the string segment
+//	     in 'targetStr'.
 //
 //
-//  endIndex       int
-//     - The index marking the end of the string segment
-//       in 'targetStr'.
+//	ePrefix             *ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//  ePrefix             *ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
-//
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
-//
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  beginWrdIdx         int
-//     - The index marking the beginning of the last word
-//       in the string segment identified by input parameters
-//       'startIndex' and 'endIndex'. If the string segment
-//       consists of all spaces or is empty, this value is
-//       set to minus one (-1).
+//	beginWrdIdx         int
+//	   - The index marking the beginning of the last word
+//	     in the string segment identified by input parameters
+//	     'startIndex' and 'endIndex'. If the string segment
+//	     consists of all spaces or is empty, this value is
+//	     set to minus one (-1).
 //
-//  endWrdIdx           int
-//     - The index marking the end of the last word in the
-//       string segment identified by input parameters 'startIndex'
-//       and 'endIndex'. If the string segment consists of all
-//       spaces or is empty, this value is set to -1.
+//	endWrdIdx           int
+//	   - The index marking the end of the last word in the
+//	     string segment identified by input parameters 'startIndex'
+//	     and 'endIndex'. If the string segment consists of all
+//	     spaces or is empty, this value is set to -1.
 //
-//  isAllOneWord        bool
-//     - If the string segment identified by input parameters
-//       'startIndex' and 'endIndex' consists entirely of non-space
-//       characters (characters other than ' '), this value is set
-//       to 'true'.
+//	isAllOneWord        bool
+//	   - If the string segment identified by input parameters
+//	     'startIndex' and 'endIndex' consists entirely of non-space
+//	     characters (characters other than ' '), this value is set
+//	     to 'true'.
 //
-//  isAllSpaces         bool
-//     - If the string segment identified by input parameters
-//       'startIndex' and 'endIndex' consists entirely of space
-//       characters (character = ' '), this value is set to 'true'.
+//	isAllSpaces         bool
+//	   - If the string segment identified by input parameters
+//	     'startIndex' and 'endIndex' consists entirely of space
+//	     characters (character = ' '), this value is set to 'true'.
 //
 //
 //
-//  err                 error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered this return value will contain
-//       an appropriate error message.
+//	err                 error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors occur, this return value will contain an
+//	     appropriate error message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'ePrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'ePrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 func (sMechQuark *strMechQuark) findLastWord(
 	targetStr string,
 	startIndex int,
@@ -1314,13 +1295,12 @@ func (sMechQuark *strMechQuark) findLastWord(
 //
 // ------------------------------------------------------------------------
 //
-// Return Value
+// # Return Value
 //
 // The return value is an array of integers. If no match is found the return
 // value is 'nil'.  If regular expression is successfully matched, the match
 // will be located at targetStr[loc[0]:loc[1]]. Again, a return value of 'nil'
 // signals that no match was found.
-//
 func (sMechQuark *strMechQuark) findRegExIndex(
 	targetStr string,
 	regex string) []int {
@@ -1348,26 +1328,23 @@ func (sMechQuark *strMechQuark) findRegExIndex(
 // strMechQuark.getRuneCountInStr() and research the 'utf8' Rune
 // Count In String function at:
 //
-//   https://golang.org/pkg/unicode/utf8/#RuneCountInString
-//
+//	https://golang.org/pkg/unicode/utf8/#RuneCountInString
 //
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  targetStr           string
-//     - The number of 'runes' in this string will be counted and
-//       that count will be returned to the calling function.
-//
+//	targetStr           string
+//	   - The number of 'runes' in this string will be counted and
+//	     that count will be returned to the calling function.
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  int
-//     - This returned integer value will be set to the number of
-//       'runes' counted in 'targetStr'.
-//
+//	int
+//	   - This returned integer value will be set to the number of
+//	     'runes' counted in 'targetStr'.
 func (sMechQuark *strMechQuark) getCharCountInStr(
 	targetStr string) int {
 
@@ -1390,26 +1367,24 @@ func (sMechQuark *strMechQuark) getCharCountInStr(
 //
 // For more information on the 'utf8' Rune Count In String function,
 // Reference:
-//   https://golang.org/pkg/unicode/utf8/#RuneCountInString
 //
+//	https://golang.org/pkg/unicode/utf8/#RuneCountInString
 //
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  targetStr           string
-//     - The number of 'runes' in this string will be counted and
-//       that count will be returned to the calling function.
-//
+//	targetStr           string
+//	   - The number of 'runes' in this string will be counted and
+//	     that count will be returned to the calling function.
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  int
-//     - This returned integer value will be set to the number of
-//       'runes' counted in 'targetStr'.
-//
+//	int
+//	   - This returned integer value will be set to the number of
+//	     'runes' counted in 'targetStr'.
 func (sMechQuark *strMechQuark) getRuneCountInStr(
 	targetStr string) int {
 
@@ -1434,56 +1409,54 @@ func (sMechQuark *strMechQuark) getRuneCountInStr(
 //
 // Input Parameters
 //
-//  targetBytes         [] byte
-//     - An array of characters (bytes) which will be examined
-//       for valid characters. The list of valid characters is
-//       found in input parameter 'validBytes'. Valid characters
-//       in targetBytes will be returned by this method as an
-//       array of bytes. Invalid characters will be discarded.
+//	targetBytes         [] byte
+//	   - An array of characters (bytes) which will be examined
+//	     for valid characters. The list of valid characters is
+//	     found in input parameter 'validBytes'. Valid characters
+//	     in targetBytes will be returned by this method as an
+//	     array of bytes. Invalid characters will be discarded.
 //
 //
-//  validBytes          [] byte
-//     - An array of bytes containing valid characters. If a character
-//       (byte) in 'targetBytes' is also present in 'validBytes' it will
-//       be classified as 'valid' and included in the returned array of
-//       bytes. Invalid characters will be discarded.
+//	validBytes          [] byte
+//	   - An array of bytes containing valid characters. If a character
+//	     (byte) in 'targetBytes' is also present in 'validBytes' it will
+//	     be classified as 'valid' and included in the returned array of
+//	     bytes. Invalid characters will be discarded.
 //
 //
-//  ePrefix             *ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the names of the calling method or methods listed
-//       as a function chain.
+//	ePrefix             *ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the names of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  [] byte
-//     - An array of bytes which contains bytes that are
-//       present in both 'targetBytes' and 'validBytes'.
-//       Note: If all characters in 'targetBytes' are classified
-//       as 'invalid', the returned array of bytes will be a zero
-//       length array.
+//	[] byte
+//	   - An array of bytes which contains bytes that are
+//	     present in both 'targetBytes' and 'validBytes'.
+//	     Note: If all characters in 'targetBytes' are classified
+//	     as 'invalid', the returned array of bytes will be a zero
+//	     length array.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'ePrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'ePrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 func (sMechQuark *strMechQuark) getValidBytes(
 	targetBytes []byte,
 	validBytes []byte,
@@ -1555,50 +1528,48 @@ func (sMechQuark *strMechQuark) getValidBytes(
 //
 // Input Parameters
 //
-//  targetRunes    [] rune  - An array of characters (runes) which will be examined
-//                            for valid characters. The list of valid characters is
-//                            found in input parameter 'validRunes'. Valid characters
-//                            in targetRunes will be returned by this method as an
-//                            array of runes. Invalid characters will be discarded.
+//	targetRunes    [] rune  - An array of characters (runes) which will be examined
+//	                          for valid characters. The list of valid characters is
+//	                          found in input parameter 'validRunes'. Valid characters
+//	                          in targetRunes will be returned by this method as an
+//	                          array of runes. Invalid characters will be discarded.
 //
-//  validRunes    [] rune  - An array of runes containing valid characters. If a character
-//                           (rune) in targetRunes is also present in 'validRunes' it will
-//                           be classified as 'valid' and included in the returned array of
-//                           runes. Invalid characters will be discarded.
+//	validRunes    [] rune  - An array of runes containing valid characters. If a character
+//	                         (rune) in targetRunes is also present in 'validRunes' it will
+//	                         be classified as 'valid' and included in the returned array of
+//	                         runes. Invalid characters will be discarded.
 //
 //
-//  ePrefix             *ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the names of the calling method or methods listed
-//       as a function chain.
+//	ePrefix             *ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the names of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  [] rune  - An array of runes which contains runes that are present in 'targetRunes' and
-//             'validRunes'. Note: If all characters in 'targetRunes' are classified as
-//             'invalid', the returned array of runes will be a zero length array.
+//	[] rune  - An array of runes which contains runes that are present in 'targetRunes' and
+//	           'validRunes'. Note: If all characters in 'targetRunes' are classified as
+//	           'invalid', the returned array of runes will be a zero length array.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'ePrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'ePrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 func (sMechQuark *strMechQuark) getValidRunes(
 	targetRunes []rune,
 	validRunes []rune,
@@ -1661,7 +1632,6 @@ func (sMechQuark *strMechQuark) getValidRunes(
 
 // isEmptyOrWhiteSpace - Analyzes the incoming string and returns
 // 'true' if the strings is empty or consists of all white space.
-//
 func (sMechQuark *strMechQuark) isEmptyOrWhiteSpace(
 	targetStr string) bool {
 
@@ -1686,7 +1656,6 @@ func (sMechQuark *strMechQuark) isEmptyOrWhiteSpace(
 
 // LowerCaseFirstLetter - Finds the first alphabetic character
 // in a string (a-z A-Z) and converts it to lower case.
-//
 func (sMechQuark *strMechQuark) lowerCaseFirstLetter(
 	str string) string {
 
@@ -1732,64 +1701,60 @@ func (sMechQuark *strMechQuark) lowerCaseFirstLetter(
 // a single character passed through input parameter, 'charRune' as type
 // 'rune'.
 //
-//
 // Example Usage:
 //
-//     sUtil := StrMech{}
-//     requestedLen := 5
-//     charRune := '='
-//     outputStr, err := sUtil.MakeSingleCharString(charRune, requestedLen)
+//	sUtil := StrMech{}
+//	requestedLen := 5
+//	charRune := '='
+//	outputStr, err := sUtil.MakeSingleCharString(charRune, requestedLen)
 //
-//     outputStr is now equal to "====="
-//
+//	outputStr is now equal to "====="
 //
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  charRune            rune
-//     - The text character which will be repeated throughout the
-//       length of the returned string.
+//	charRune            rune
+//	   - The text character which will be repeated throughout the
+//	     length of the returned string.
 //
 //
-//  strLen              int
-//     - The length of the returned string containing the repeated
-//       characters.
+//	strLen              int
+//	   - The length of the returned string containing the repeated
+//	     characters.
 //
 //
-//  ePrefix             *ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	ePrefix             *ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  string
-//     - This returned string will have a length of 'strLen' and
-//       contain 'strLen' characters all of which will be equal to
-//       'charRune'.
+//	string
+//	   - This returned string will have a length of 'strLen' and
+//	     contain 'strLen' characters all of which will be equal to
+//	     'charRune'.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'ePrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'ePrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 func (sMechQuark *strMechQuark) makeSingleCharString(
 	charRune rune,
 	strLen int,
@@ -1858,7 +1823,6 @@ func (sMechQuark *strMechQuark) makeSingleCharString(
 
 // ptr - Returns a pointer to a new instance of
 // strMechQuark.
-//
 func (sMechQuark strMechQuark) ptr() *strMechQuark {
 
 	if sMechQuark.lock == nil {
@@ -1877,75 +1841,72 @@ func (sMechQuark strMechQuark) ptr() *strMechQuark {
 // removeStringChar - Removes or deletes a specified character
 // from a string and returns a new string.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  targetStr                  string
-//     - The target string containing the character to be removed.
-//       If this is a zero length or empty string, an error will
-//       be returned.
+//	targetStr                  string
+//	   - The target string containing the character to be removed.
+//	     If this is a zero length or empty string, an error will
+//	     be returned.
 //
 //
-//  charToRemove               rune
-//     - The character which will be removed from 'targetStr'. If
-//       this is an empty character or zero value rune, an error
-//       will be returned.
+//	charToRemove               rune
+//	   - The character which will be removed from 'targetStr'. If
+//	     this is an empty character or zero value rune, an error
+//	     will be returned.
 //
 //
-//  maxNumOfCharDeletions      int
-//     - If this parameter is set to minus one (-1), all instances
-//       of 'charToRemove' in 'targetStr' will be deleted in the
-//       returned string. If this parameter is greater than zero,
-//       it will limit the maximum number of character deletions
-//       in this operation. Remember that the search for
-//       'charToRemove' proceeds from left to right starting at
-//       index zero (0).
+//	maxNumOfCharDeletions      int
+//	   - If this parameter is set to minus one (-1), all instances
+//	     of 'charToRemove' in 'targetStr' will be deleted in the
+//	     returned string. If this parameter is greater than zero,
+//	     it will limit the maximum number of character deletions
+//	     in this operation. Remember that the search for
+//	     'charToRemove' proceeds from left to right starting at
+//	     index zero (0).
 //
-//       If this parameter is set to zero, an error will be
-//       returned.
+//	     If this parameter is set to zero, an error will be
+//	     returned.
 //
 //
-//  ePrefix             *ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	ePrefix             *ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // -----------------------------------------------------------------
 //
 // Return Values
 //
-//  newStr                     string
-//     - If this method completes successfully, a new string
-//       will be returned containing all the characters in
-//       input parameter 'targetStr' except those removed by
-//       the deletion operation.
+//	newStr                     string
+//	   - If this method completes successfully, a new string
+//	     will be returned containing all the characters in
+//	     input parameter 'targetStr' except those removed by
+//	     the deletion operation.
 //
 //
-//  numOfDeletions             int
-//     - This parameter will record the number of character
-//       deletions performed by this operation.
+//	numOfDeletions             int
+//	   - This parameter will record the number of character
+//	     deletions performed by this operation.
 //
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered this return value will contain
-//       an appropriate error message.
+//	err                        error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'ePrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'ePrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 func (sMechQuark *strMechQuark) removeStringChar(
 	targetStr string,
 	charToRemove rune,
@@ -2033,69 +1994,66 @@ func (sMechQuark *strMechQuark) removeStringChar(
 // The number of 'targetSubStr' instances deleted from 'strToSearch'
 // is controlled by input parameter, 'maxRemovalCount'.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  strToSearch                string
-//     - This is the parent string which will be searched for
-//       instances of the target sub-string to be deleted.
+//	strToSearch                string
+//	   - This is the parent string which will be searched for
+//	     instances of the target sub-string to be deleted.
 //
 //
-//  targetSubStr               string
-//     - This is the sub-string which will be targeted for deletion
-//       and removal when located in 'strToSearch'.
+//	targetSubStr               string
+//	   - This is the sub-string which will be targeted for deletion
+//	     and removal when located in 'strToSearch'.
 //
 //
-//  maxRemovalCount            int
-//     - Specifies the maximum number of 'targetSubStr' instances
-//       which will be deleted and removed from 'strToSearch'.
+//	maxRemovalCount            int
+//	   - Specifies the maximum number of 'targetSubStr' instances
+//	     which will be deleted and removed from 'strToSearch'.
 //
-//       If 'maxRemovalCount' is set to a value less than one (+1),
-//       it specifies that all instances of 'targetSubStr' which
-//       exist in 'strToSearch' will be deleted and removed.
+//	     If 'maxRemovalCount' is set to a value less than one (+1),
+//	     it specifies that all instances of 'targetSubStr' which
+//	     exist in 'strToSearch' will be deleted and removed.
 //
 //
-//  ePrefix             *ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	ePrefix             *ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  string
-//     - If this method completes successfully, this string will be
-//       populated with an identical copy of 'strToSearch' minus the
-//       target sub-strings deleted and removed.
+//	string
+//	   - If this method completes successfully, this string will be
+//	     populated with an identical copy of 'strToSearch' minus the
+//	     target sub-strings deleted and removed.
 //
 //
-//  int
-//     - If this method completes successfully, this integer value
-//       will record the number of target sub-strings removed from
-//       'strToSearch'.
+//	int
+//	   - If this method completes successfully, this integer value
+//	     will record the number of target sub-strings removed from
+//	     'strToSearch'.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'ePrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'ePrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 func (sMechQuark *strMechQuark) removeSubString(
 	strToSearch string,
 	targetSubStr string,
@@ -2199,60 +2157,58 @@ func (sMechQuark *strMechQuark) removeSubString(
 //
 // Input Parameters
 //
-//  targetRunes         []rune
-//     - The rune array which will be examined. If target characters
-//       ('runes') eligible for replacement are identified by
-//       replacementRunes[i][0], they will be replaced by the
-//       character specified in replacementRunes[i][1].
+//	targetRunes         []rune
+//	   - The rune array which will be examined. If target characters
+//	     ('runes') eligible for replacement are identified by
+//	     replacementRunes[i][0], they will be replaced by the
+//	     character specified in replacementRunes[i][1].
 //
 //
-//  replacementRunes    [][2]rune
-//     - A two-dimensional slice of type 'rune'. Element [i][0]
-//       contains the target character to locate in 'targetRunes'.
-//       Element[i][1] contains the replacement character which will
-//       replace the target character in 'targetRunes'. If the
-//       replacement character element [i][1] is a zero value, the
-//       target character will not be replaced. Instead, it will be
-//       eliminated or removed from the returned rune array
-//       ([]rune).
+//	replacementRunes    [][2]rune
+//	   - A two-dimensional slice of type 'rune'. Element [i][0]
+//	     contains the target character to locate in 'targetRunes'.
+//	     Element[i][1] contains the replacement character which will
+//	     replace the target character in 'targetRunes'. If the
+//	     replacement character element [i][1] is a zero value, the
+//	     target character will not be replaced. Instead, it will be
+//	     eliminated or removed from the returned rune array
+//	     ([]rune).
 //
 //
-//  ePrefix             *ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	ePrefix             *ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  []rune
-//     - The returned rune array containing the characters replaced
-//       from the original 'targetRunes' array.
+//	[]rune
+//	   - The returned rune array containing the characters replaced
+//	     from the original 'targetRunes' array.
 //
 //
-//  error
-//     - If the method completes successfully this value is 'nil'.
-//       If an error is encountered this value will contain the
-//       error message. Examples of possible errors include a zero
-//       length 'targetRunes' array or 'replacementRunes' array.
+//	error
+//	   - If the method completes successfully this value is 'nil'.
+//	     If an error is encountered this value will contain the
+//	     error message. Examples of possible errors include a zero
+//	     length 'targetRunes' array or 'replacementRunes' array.
 //
-//       In addition, if any of the replacementRunes[][x] 2nd
-//       dimension elements have a length less than two, an
-//       error will be returned.
+//	     In addition, if any of the replacementRunes[][x] 2nd
+//	     dimension elements have a length less than two, an
+//	     error will be returned.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'ePrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'ePrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 func (sMechQuark *strMechQuark) replaceRunes(
 	targetRunes []rune,
 	replacementRunes [][2]rune,
@@ -2336,74 +2292,72 @@ func (sMechQuark *strMechQuark) replaceRunes(
 //
 // Input Parameters
 //
-//  targetStr                  string
-//     - The string containing the character to be replaced.
-//       If this is an empty string, an error will be returned.
+//	targetStr                  string
+//	   - The string containing the character to be replaced.
+//	     If this is an empty string, an error will be returned.
 //
 //
-//  charToReplace              rune
-//     - The character within input parameter string 'targetStr'
-//       which will be replaced. If this parameter is set to zero
-//       signaling an empty character, this method will return an
-//       error.
+//	charToReplace              rune
+//	   - The character within input parameter string 'targetStr'
+//	     which will be replaced. If this parameter is set to zero
+//	     signaling an empty character, this method will return an
+//	     error.
 //
 //
-//  replacementChar            rune
-//     - The character which will replace 'charToReplace' in
-//       'targetStr'. If this parameter is set to zero signaling an
-//       empty character, this method will return an error.
+//	replacementChar            rune
+//	   - The character which will replace 'charToReplace' in
+//	     'targetStr'. If this parameter is set to zero signaling an
+//	     empty character, this method will return an error.
 //
 //
-//  maxNumOfReplacements       int
-//     - The maximum number of replacements allowed for this
-//       operation. If this parameter is set to minus one (-1), all
-//       instances of 'charToReplace' in 'targetStr' will be
-//       replaced with 'replacementChar'.
+//	maxNumOfReplacements       int
+//	   - The maximum number of replacements allowed for this
+//	     operation. If this parameter is set to minus one (-1), all
+//	     instances of 'charToReplace' in 'targetStr' will be
+//	     replaced with 'replacementChar'.
 //
-//       If this parameter is set to zero ('0'), an error will be
-//       returned.
+//	     If this parameter is set to zero ('0'), an error will be
+//	     returned.
 //
-//       The replacement operation proceeds from left to right
-//       within the 'targetStr' beginning with index zero (0).
+//	     The replacement operation proceeds from left to right
+//	     within the 'targetStr' beginning with index zero (0).
 //
 //
-//  ePrefix             *ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	ePrefix             *ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  string
-//     - If this method completes successfully, a new string will be
-//       returned with the designated replacement characters.
+//	string
+//	   - If this method completes successfully, a new string will be
+//	     returned with the designated replacement characters.
 //
 //
-//  int
-//     - The integer value records the number of characters
-//       replaced in 'targetStr'.
+//	int
+//	   - The integer value records the number of characters
+//	     replaced in 'targetStr'.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'ePrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'ePrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 func (sMechQuark *strMechQuark) replaceStringChar(
 	targetStr string,
 	charToReplace rune,
@@ -2500,77 +2454,74 @@ func (sMechQuark *strMechQuark) replaceStringChar(
 // The number of instances located and replaced in 'strToSearch' is
 // controlled by input parameter 'maxReplacementCount'.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  strToSearch                string
-//     - This is the parent string which will be searched for
-//       instances of the target sub-string to be replaced.
+//	strToSearch                string
+//	   - This is the parent string which will be searched for
+//	     instances of the target sub-string to be replaced.
 //
 //
-//  targetSubStr               string
-//     - This is the sub-string which will be targeted for
-//       replacement when located in 'strToSearch'.
+//	targetSubStr               string
+//	   - This is the sub-string which will be targeted for
+//	     replacement when located in 'strToSearch'.
 //
 //
-//  replacementStr             string
-//     - This is the replacement string which will replace instances
-//       of 'targetSubStr' located in 'strToSearch'.
+//	replacementStr             string
+//	   - This is the replacement string which will replace instances
+//	     of 'targetSubStr' located in 'strToSearch'.
 //
 //
-//  maxReplacementCount        int
-//     - Specifies the maximum number of 'targetSubStr' instances
-//       which will be replaced with 'replacementStr' in the parent
-//       string, 'strToSearch'.
+//	maxReplacementCount        int
+//	   - Specifies the maximum number of 'targetSubStr' instances
+//	     which will be replaced with 'replacementStr' in the parent
+//	     string, 'strToSearch'.
 //
-//       If 'maxReplacementCount' is set to a value less than one
-//       (+1), it specifies that all instances of 'targetSubStr'
-//       which exist in 'strToSearch' will be replaced with the
-//       replacement string, 'replacementStr' .
+//	     If 'maxReplacementCount' is set to a value less than one
+//	     (+1), it specifies that all instances of 'targetSubStr'
+//	     which exist in 'strToSearch' will be replaced with the
+//	     replacement string, 'replacementStr' .
 //
 //
-//  ePrefix             *ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	ePrefix             *ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  string
-//     - If this method completes successfully, this string will be
-//       populated with an identical copy of 'strToSearch' where
-//       instances of the target sub-string have been replaced with
-//       the replacement string, 'replacementStr'.
+//	string
+//	   - If this method completes successfully, this string will be
+//	     populated with an identical copy of 'strToSearch' where
+//	     instances of the target sub-string have been replaced with
+//	     the replacement string, 'replacementStr'.
 //
 //
-//  int
-//     - If this method completes successfully, this integer value
-//       will record the number of target sub-strings replaced
-//       within 'strToSearch'.
+//	int
+//	   - If this method completes successfully, this integer value
+//	     will record the number of target sub-strings replaced
+//	     within 'strToSearch'.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'ePrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'ePrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 func (sMechQuark *strMechQuark) replaceSubString(
 	strToSearch string,
 	targetSubStr string,
@@ -2692,56 +2643,50 @@ func (sMechQuark *strMechQuark) replaceSubString(
 // All instances of 'badChars' sub-strings are deleted from the
 // target string which is passed as input parameter, 'targetStr'.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  targetStr           string
-//     - The string which will be searched for the sub-strings
-//       identified in the 'badChars' array for deletion.
+//	targetStr           string
+//	   - The string which will be searched for the sub-strings
+//	     identified in the 'badChars' array for deletion.
 //
 //
-//  badChars            []string
-//     - A one dimensional array of strings which contains the
-//       sub-strings to be deleted from input parameter,
-//       'targetStr'.
-//
+//	badChars            []string
+//	   - A one dimensional array of strings which contains the
+//	     sub-strings to be deleted from input parameter,
+//	     'targetStr'.
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  cleanStr            string
-//     - This returned string is a copy of 'targetStr' minus the
-//       sub-strings identified in the 'badChars' array which are
-//       deleted.
+//	cleanStr            string
+//	   - This returned string is a copy of 'targetStr' minus the
+//	     sub-strings identified in the 'badChars' array which are
+//	     deleted.
 //
-//  strLen              int
-//     - This integer value contains the length of the newly
-//       generated, 'cleanStr', described above.
-//
+//	strLen              int
+//	   - This integer value contains the length of the newly
+//	     generated, 'cleanStr', described above.
 //
 // ------------------------------------------------------------------------
 //
-// Example Usage
+// # Example Usage
 //
+//	 badChars := []string{"@@"}
 //
-//   badChars := []string{"@@"}
+//	 expectedStrLen := len(expectedStr)
+//	                12    123456789    12  12
+//	 testString := "@@Some@@@@@@@@@Stri@@ng@@"
 //
-//   expectedStrLen := len(expectedStr)
-//                  12    123456789    12  12
-//   testString := "@@Some@@@@@@@@@Stri@@ng@@"
+//	 actualString, actualStrLen :=
+//	       new(StrMech).StripBadChars(
+//	                          testString,
+//	                          badChars)
 //
-//   actualString, actualStrLen :=
-//         new(StrMech).StripBadChars(
-//                            testString,
-//                            badChars)
-//
-//  -----------------------------------------------
-//   actualString is now equal to "Some@String"
-//
-//
+//	-----------------------------------------------
+//	 actualString is now equal to "Some@String"
 func (sMechQuark *strMechQuark) stripBadChars(
 	targetStr string,
 	badChars []string) (
@@ -2829,72 +2774,66 @@ Done:
 // sub-strings identified in the 'badChars' array. In addition, the
 // length of the final 'clean string' is also returned.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  targetStr           string
-//     - The string which will be searched for leading sub-strings
-//       identified in the 'badChars' array for deletion.
+//	targetStr           string
+//	   - The string which will be searched for leading sub-strings
+//	     identified in the 'badChars' array for deletion.
 //
 //
-//  badChars            []string
-//     - A one dimensional array of strings which contains the
-//       sub-strings to be deleted from input parameter,
-//       'targetStr'.
-//
+//	badChars            []string
+//	   - A one dimensional array of strings which contains the
+//	     sub-strings to be deleted from input parameter,
+//	     'targetStr'.
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  cleanStr            string
-//     - This returned string is a copy of 'targetStr' minus the
-//       sub-strings identified in the 'badChars' array which are
-//       deleted from the front of 'targetStr'.
+//	cleanStr            string
+//	   - This returned string is a copy of 'targetStr' minus the
+//	     sub-strings identified in the 'badChars' array which are
+//	     deleted from the front of 'targetStr'.
 //
-//  strLen              int
-//     - This integer value contains the length of the newly
-//       generated, 'cleanStr', described above.
-//
+//	strLen              int
+//	   - This integer value contains the length of the newly
+//	     generated, 'cleanStr', described above.
 //
 // ------------------------------------------------------------------------
 //
-// Example Usage
+// # Example Usage
 //
+//	badChars := []string{
+//	               " ", // A single white-space character
+//	               "/",
+//	               "//",
+//	               "\\\\",
+//	               "\\",
+//	               ".\\",
+//	               "../",
+//	               ".",
+//	               "..\\",
+//	               "\\\\\\",
+//	               "..",
+//	               "./",
+//	               "//",
+//	               "///",
+//	               "////",
+//	               "..."}
 //
-//  badChars := []string{
-//                 " ", // A single white-space character
-//                 "/",
-//                 "//",
-//                 "\\\\",
-//                 "\\",
-//                 ".\\",
-//                 "../",
-//                 ".",
-//                 "..\\",
-//                 "\\\\\\",
-//                 "..",
-//                 "./",
-//                 "//",
-//                 "///",
-//                 "////",
-//                 "..."}
+//	testString :=
+//	 "..........      ./../.\\.\\..\\////   SomeString"
 //
-//  testString :=
-//   "..........      ./../.\\.\\..\\////   SomeString"
+//	actualString, actualStrLen :=
+//	    new(StrMech).StripLeadingChars(
+//	                     testString,
+//	                     badChars)
 //
-//  actualString, actualStrLen :=
-//      new(StrMech).StripLeadingChars(
-//                       testString,
-//                       badChars)
-//
-//  ----------------------------------------------------
-//  actualString is now equal to "SomeString"
-//  actualStrLen is now equal to 10
-//
-//
+//	----------------------------------------------------
+//	actualString is now equal to "SomeString"
+//	actualStrLen is now equal to 10
 func (sMechQuark *strMechQuark) stripLeadingChars(
 	targetStr string,
 	badChars []string) (
@@ -2973,73 +2912,68 @@ Done:
 // is equivalent to input parameter, 'targetStr', minus the trailing
 // sub-strings identified by string array 'badChars'.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  targetStr           string
-//     - The parent or host string which will be searched for
-//       instances of trailing sub-strings identified in the
-//       'badChars' string array for deletion.
+//	targetStr           string
+//	   - The parent or host string which will be searched for
+//	     instances of trailing sub-strings identified in the
+//	     'badChars' string array for deletion.
 //
 //
-//  badChars            []string
-//     - A one dimensional array of strings which contains the
-//       sub-strings to be deleted from the end of 'targetStr'.
-//
+//	badChars            []string
+//	   - A one dimensional array of strings which contains the
+//	     sub-strings to be deleted from the end of 'targetStr'.
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  cleanStr            string
-//     - This returned string is a copy of 'targetStr' minus the
-//       trailing sub-strings identified for deletion in the
-//       'badChars' array.
+//	cleanStr            string
+//	   - This returned string is a copy of 'targetStr' minus the
+//	     trailing sub-strings identified for deletion in the
+//	     'badChars' array.
 //
-//  strLen              int
-//     - This integer value contains the length of the newly
-//       generated, 'cleanStr', described above.
-//
+//	strLen              int
+//	   - This integer value contains the length of the newly
+//	     generated, 'cleanStr', described above.
 //
 // ------------------------------------------------------------------------
 //
-// Example Usage
+// # Example Usage
 //
+//	badChars := []string{
+//	               " ", // Single white space character
+//	               "/",
+//	               "//",
+//	               "\\\\",
+//	               "\\",
+//	               ".\\",
+//	               "../",
+//	               ".",
+//	               "..\\",
+//	               "\\\\\\",
+//	               "..",
+//	               "./",
+//	               "//",
+//	               "///",
+//	               "////",
+//	               "..."}
 //
-//  badChars := []string{
-//                 " ", // Single white space character
-//                 "/",
-//                 "//",
-//                 "\\\\",
-//                 "\\",
-//                 ".\\",
-//                 "../",
-//                 ".",
-//                 "..\\",
-//                 "\\\\\\",
-//                 "..",
-//                 "./",
-//                 "//",
-//                 "///",
-//                 "////",
-//                 "..."}
+//	testString :=
+//	 "SomeString..........      ./../.\\.\\..\\////   "
 //
-//  testString :=
-//   "SomeString..........      ./../.\\.\\..\\////   "
+//	actualString, actualStrLen :=
+//	  new(StrMech).StripTrailingChars(
+//	                    testString,
+//	                    badChars)
 //
-//  actualString, actualStrLen :=
-//    new(StrMech).StripTrailingChars(
-//                      testString,
-//                      badChars)
+//	-------------------------------------------------------------
 //
-//  -------------------------------------------------------------
-//
-//                                1234567890
-//  actualString is now equal to "SomeString"
-//  actualStrLen is now equal to 10
-//
+//	                              1234567890
+//	actualString is now equal to "SomeString"
+//	actualStrLen is now equal to 10
 func (sMechQuark *strMechQuark) stripTrailingChars(
 	targetStr string,
 	badChars []string) (
@@ -3122,99 +3056,97 @@ Done:
 // be generated and the empty 'targetStr' will be returned.
 //
 // For more information on 'runes', reference:
-//   https://www.geeksforgeeks.org/rune-in-golang/
-//   https://golangbyexample.com/understanding-rune-in-golang/
 //
+//	https://www.geeksforgeeks.org/rune-in-golang/
+//	https://golangbyexample.com/understanding-rune-in-golang/
 //
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  targetStr           string
-//     - This string will be searched for instances of 'oldRune'.
-//       When 'oldRune' is located in this string, it will be
-//       replaced with 'newRune'.
+//	targetStr           string
+//	   - This string will be searched for instances of 'oldRune'.
+//	     When 'oldRune' is located in this string, it will be
+//	     replaced with 'newRune'.
 //
 //
-//  oldRune             rune
-//     - This rune or text character will be used search the parent
-//       string, 'targetStr'. When instances of 'oldRune' are
-//       located in 'targetStr', they will be replaced with
-//       'newRune'.
+//	oldRune             rune
+//	   - This rune or text character will be used search the parent
+//	     string, 'targetStr'. When instances of 'oldRune' are
+//	     located in 'targetStr', they will be replaced with
+//	     'newRune'.
 //
 //
-//  newRune             rune
-//     - This rune or text character will be used to replaced
-//       instances of 'oldRune' located in a search of 'targetStr'.
+//	newRune             rune
+//	   - This rune or text character will be used to replaced
+//	     instances of 'oldRune' located in a search of 'targetStr'.
 //
 //
-//  maxNumOfSwaps       int
-//     - This integer value constitutes the upper limit for the
-//       number of character substitutions performed by this method.
-//       If this value is less than one (+1), no limit will be
-//       imposed and all instances of 'oldRune' found in 'targetStr'
-//       will be replaced with 'newRune'.
+//	maxNumOfSwaps       int
+//	   - This integer value constitutes the upper limit for the
+//	     number of character substitutions performed by this method.
+//	     If this value is less than one (+1), no limit will be
+//	     imposed and all instances of 'oldRune' found in 'targetStr'
+//	     will be replaced with 'newRune'.
 //
 //
-//  ePrefix             *ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	ePrefix             *ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  string
-//     - This string will be populated with the contents of
-//       'targetStr' after instances of 'oldRune' have been
-//        replaced by 'newRune'. Effectively, this string is the
-//        result of the character substitution operation.
+//	string
+//	   - This string will be populated with the contents of
+//	     'targetStr' after instances of 'oldRune' have been
+//	      replaced by 'newRune'. Effectively, this string is the
+//	      result of the character substitution operation.
 //
-//  int
-//     - The value of this returned integer records the number of
-//       character substitutions performed on 'targetStr'.
+//	int
+//	   - The value of this returned integer records the number of
+//	     character substitutions performed on 'targetStr'.
 //
 //
-//  error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'ePrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
+//	     If an error message is returned, the text value for input
+//	     parameter 'ePrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 //
 // ------------------------------------------------------------------------
 //
 // Example Usage
 //
-//     tStr := "  Hello   World  "
-//     ePrefix := "theCallingMethodName "
+//	 tStr := "  Hello   World  "
+//	 ePrefix := "theCallingMethodName "
 //
-//     su := StrMech{}
-//        resultStr,
-//        numOfReplacements,
-//        err := su.SwapRune(
-//                 tStr,
-//                 ' ',
-//                 '!',
-//                 -1,
-//                 ePrefix)
+//	 su := StrMech{}
+//	    resultStr,
+//	    numOfReplacements,
+//	    err := su.SwapRune(
+//	             tStr,
+//	             ' ',
+//	             '!',
+//	             -1,
+//	             ePrefix)
 //
 //
-//    resultSt is now equal to "!!Hello!!!World!!"
-//    numOfReplacements is equal to '7'
-//
+//	resultSt is now equal to "!!Hello!!!World!!"
+//	numOfReplacements is equal to '7'
 func (sMechQuark *strMechQuark) swapRune(
 	targetStr string,
 	oldRune rune,
@@ -3280,77 +3212,72 @@ func (sMechQuark *strMechQuark) swapRune(
 //  2. Within the interior of a string, multiple instances of
 //     'trimChar' are reduced to a single instance.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  targetStr           string
-//     - The parent or host string which will be searched for
-//       instances of the character 'trimChar'.
+//	targetStr           string
+//	   - The parent or host string which will be searched for
+//	     instances of the character 'trimChar'.
 //
 //
-//  trimChar            rune
-//     - 'targetStr' will be searched for instances of this
-//       character. If this character is a leading or trailing
-//       character in 'targetStr', those instances will be deleted.
-//       If this character is found in the interior of 'targetStr',
-//       it will be reduced to one single instance of the
-//       character.
+//	trimChar            rune
+//	   - 'targetStr' will be searched for instances of this
+//	     character. If this character is a leading or trailing
+//	     character in 'targetStr', those instances will be deleted.
+//	     If this character is found in the interior of 'targetStr',
+//	     it will be reduced to one single instance of the
+//	     character.
 //
 //
-//  ePrefix             *ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	ePrefix             *ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  rStr                string
-//     - This is the 'result' string. It consists of all the
-//       characters in the original 'targetStr' minus those
-//       'trimChar' characters deleted in the 'trim' operation.
+//	rStr                string
+//	   - This is the 'result' string. It consists of all the
+//	     characters in the original 'targetStr' minus those
+//	     'trimChar' characters deleted in the 'trim' operation.
 //
 //
-//  err                 error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered this return value will contain
-//       an appropriate error message.
+//	err                 error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'ePrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'ePrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 //
 // ------------------------------------------------------------------------
 //
 // Example Usage
 //
-//  ePrefix := "theCallingFunctionName() "
-//  targetStr = "       Hello          World        "
-//  trimChar  = ' ' (One Space Character)
-//  sops := StrMech{}
+//	ePrefix := "theCallingFunctionName() "
+//	targetStr = "       Hello          World        "
+//	trimChar  = ' ' (One Space Character)
+//	sops := StrMech{}
 //
-//  rStr,
-//  err := sops.TrimMultipleChars(
-//           targetStr,
-//           trimChar,
-//           ePrefix)
+//	rStr,
+//	err := sops.TrimMultipleChars(
+//	         targetStr,
+//	         trimChar,
+//	         ePrefix)
 //
-//  returned string (rStr) now equal to "Hello World"
-//
-//
+//	returned string (rStr) now equal to "Hello World"
 func (sMechQuark *strMechQuark) trimMultipleChars(
 	targetStr string,
 	trimChar rune,
@@ -3440,77 +3367,72 @@ func (sMechQuark *strMechQuark) trimMultipleChars(
 // 'trimChar' from the beginning and end of input parameter string
 // 'targetStr'.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  targetStr           string
-//     - The parent or host string which will be searched for
-//       instances of the character 'trimChar'.
+//	targetStr           string
+//	   - The parent or host string which will be searched for
+//	     instances of the character 'trimChar'.
 //
 //
-//  trimChar            rune
-//     - 'targetStr' will be searched for instances of this
-//       character. If the character is found to be either a
-//       trailing character or a leading character, it will be
-//       deleted. If this character exists in the interior of
-//       'targetStr' it will be ignored and NOT deleted.
+//	trimChar            rune
+//	   - 'targetStr' will be searched for instances of this
+//	     character. If the character is found to be either a
+//	     trailing character or a leading character, it will be
+//	     deleted. If this character exists in the interior of
+//	     'targetStr' it will be ignored and NOT deleted.
 //
 //
-//  ePrefix             *ErrPrefixDto
-//     - This object encapsulates an error prefix string which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods listed
-//       as a function chain.
+//	ePrefix             *ErrPrefixDto
+//	   - This object encapsulates an error prefix string which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods listed
+//	     as a function chain.
 //
-//       If no error prefix information is needed, set this parameter
-//       to 'nil'.
+//	     If no error prefix information is needed, set this parameter
+//	     to 'nil'.
 //
-//       Type ErrPrefixDto is included in the 'errpref' software
-//       package, "github.com/MikeAustin71/errpref".
-//
+//	     Type ErrPrefixDto is included in the 'errpref' software
+//	     package, "github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  rStr                string
-//     - This is the 'result' string. It comprises all the
-//       characters in the original 'targetStr' minus those
-//       'trimChar' characters deleted in the 'trim' operation.
+//	rStr                string
+//	   - This is the 'result' string. It comprises all the
+//	     characters in the original 'targetStr' minus those
+//	     'trimChar' characters deleted in the 'trim' operation.
 //
 //
-//  err                 error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered this return value will contain
-//       an appropriate error message.
+//	err                 error
+//	   - If the method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value for input
-//       parameter 'ePrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value for input
+//	     parameter 'ePrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 //
 // ------------------------------------------------------------------------
 //
 // Example Usage
 //
-//     ePrefix := "TestStrOps_TrimStringEnds_01() "
-//     tStr := "XXXHello WorlXdXXX"
-//     trimChar := 'X'
+//	   ePrefix := "TestStrOps_TrimStringEnds_01() "
+//	   tStr := "XXXHello WorlXdXXX"
+//	   trimChar := 'X'
 //
-//     sops := StrMech{}
+//	   sops := StrMech{}
 //
-//     result,
-//     err := sops.TrimStringEnds(
-//              tStr,
-//              trimChar,
-//              ePrefix)
+//	   result,
+//	   err := sops.TrimStringEnds(
+//	            tStr,
+//	            trimChar,
+//	            ePrefix)
 //
-//  result is now equal to "Hello WorlXd"
-//
-//
+//	result is now equal to "Hello WorlXd"
 func (sMechQuark *strMechQuark) trimStringEnds(
 	targetStr string,
 	trimChar rune,
@@ -3608,40 +3530,34 @@ func (sMechQuark *strMechQuark) trimStringEnds(
 // upperCaseFirstLetter - Finds the first alphabetic character in a string
 // (a-z A-Z) and converts it to upper case.
 //
-//
 // ------------------------------------------------------------------------
 //
 // Input Parameters
 //
-//  str                 string
-//     - The first character in this string will be converted to
-//       an Upper Case Letter.
-//
-//
+//	str                 string
+//	   - The first character in this string will be converted to
+//	     an Upper Case Letter.
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  string              string
-//     - This is copy of input parameter 'str' with the first
-//       character converted to upper case (a.k.a. a capital
-//       letter).
-//
+//	string              string
+//	   - This is copy of input parameter 'str' with the first
+//	     character converted to upper case (a.k.a. a capital
+//	     letter).
 //
 // ------------------------------------------------------------------------
 //
 // Example Usage
 //
-//   str := "how now brown cow."
+//	 str := "how now brown cow."
 //
-//   sMech := StrMech{}
+//	 sMech := StrMech{}
 //
-//   actualStr := sMech.upperCaseFirstLetter(str)
+//	 actualStr := sMech.upperCaseFirstLetter(str)
 //
-//  'actualStr' is now equal to "How now brown cow."
-//
-//
+//	'actualStr' is now equal to "How now brown cow."
 func (sMechQuark *strMechQuark) upperCaseFirstLetter(
 	str string) string {
 

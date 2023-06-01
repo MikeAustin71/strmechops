@@ -393,21 +393,21 @@ func (txtDateTimeField *TextFieldSpecDateTime) CopyIn(
 //
 // Return Values
 //
-//	TextFieldSpecDateTime
-//	   - If this method completes successfully and no errors are
-//	     encountered, this parameter will return a deep copy of the
-//	     current TextFieldSpecDateTime instance.
+//		TextFieldSpecDateTime
+//		   - If this method completes successfully and no errors are
+//		     encountered, this parameter will return a deep copy of the
+//		     current TextFieldSpecDateTime instance.
 //
 //
-//	error
-//	   - If this method completes successfully and no errors are
-//	     encountered this return value is set to 'nil'. Otherwise,
-//	     if errors are encountered, this return value will contain
-//	     an appropriate error message.
+//		error
+//		   - If this method completes successfully and no errors are
+//		     encountered this return value is set to 'nil'. Otherwise,
+//		     if errors are encountered, this return value will contain
+//		     an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//	      If an error occurs, the text value for input parameter
+//	      'ePrefix' (error prefix) will be inserted or prefixed at
+//	      the beginning of the error message.
 func (txtDateTimeField *TextFieldSpecDateTime) CopyOut(
 	errorPrefix interface{}) (
 	TextFieldSpecDateTime, error) {
@@ -514,9 +514,9 @@ func (txtDateTimeField *TextFieldSpecDateTime) CopyOut(
 //	     if errors are encountered, this return value will contain
 //	     an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//	     If an error occurs, the text value of input parameter
+//	     'errorPrefix' will be inserted or prefixed at the
+//	     beginning of the error message.
 func (txtDateTimeField *TextFieldSpecDateTime) CopyOutITextField(
 	errorPrefix interface{}) (
 	ITextFieldSpecification,
@@ -630,9 +630,9 @@ func (txtDateTimeField *TextFieldSpecDateTime) CopyOutITextField(
 //	     if errors are encountered, this return value will contain
 //	     an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//	     If an error occurs, the text value of input parameter
+//	     'errorPrefix' will be inserted or prefixed at the
+//	     beginning of the error message.
 func (txtDateTimeField *TextFieldSpecDateTime) CopyOutPtr(
 	errorPrefix interface{}) (
 	*TextFieldSpecDateTime,

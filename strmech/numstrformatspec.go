@@ -599,9 +599,9 @@ func (numStrFmtSpec *NumStrFormatSpec) CopyIn(
 //		if errors are encountered, this return value will contain
 //		an appropriate error message.
 //
-//		If an error message is returned, the text value of input
-//		parameter 'errorPrefix' will be inserted or prefixed at
-//		the beginning of the error message.
+//		If an error occurs, the text value of input parameter
+//		'errorPrefix' will be inserted or prefixed at the
+//		beginning of the error message.
 func (numStrFmtSpec *NumStrFormatSpec) CopyOut(
 	errorPrefix interface{}) (
 	deepCopySignedNumFmtSpec NumStrFormatSpec,
@@ -8406,8 +8406,8 @@ func (numStrFmtSpec *NumStrFormatSpec) NewCurrencySimpleRunes(
 //
 //			currencySymbol NumStrNumberSymbolSpec
 //
-//				A Currency Symbol next to a number shows the
-//				number is a monetary amount.
+//				A Currency Symbol positioned next to a numeric
+//				value designates the number as a monetary amount.
 //
 //				Examples of Currency Symbols include the Dollar
 //				sign ('$'), Euro sign ('€') or Pound sign ('£').
@@ -8874,8 +8874,8 @@ func (numStrFmtSpec *NumStrFormatSpec) NewNumFmtComponents(
 //
 //	currencySymbol					NumStrNumberSymbolSpec
 //
-//		A Currency Symbol next to a number shows the
-//		number is a monetary amount.
+//		A Currency Symbol positioned next to a numeric
+//		value designates the number is a monetary amount.
 //
 //		The Number String Currency Symbol Specification
 //		is used to configure currency symbols for
@@ -20645,8 +20645,9 @@ func (numStrFmtSpec *NumStrFormatSpec) SetPositiveNumberFmtSpec(
 //
 //			currencySymbol NumStrNumberSymbolSpec
 //
-//				A Currency Symbol next to a number shows the
-//				number is a monetary amount.
+//				A Currency Symbol positioned next to a numeric
+//				value designates the number is a monetary
+//				amount.
 //
 //				Examples of Currency Symbols include the Dollar
 //				sign ('$'), Euro sign ('€') or Pound sign ('£').
@@ -21113,8 +21114,8 @@ func (numStrFmtSpec *NumStrFormatSpec) SetNumFmtComponents(
 //
 //	currencySymbol					NumStrNumberSymbolSpec
 //
-//		A Currency Symbol next to a number shows the
-//		number is a monetary amount.
+//		A Currency Symbol positioned next to a numeric
+//		value designates the number is a monetary amount.
 //
 //		The Number String Currency Symbol Specification
 //		is used to configure currency symbols for

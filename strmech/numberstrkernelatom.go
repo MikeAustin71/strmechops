@@ -1151,8 +1151,8 @@ func (numStrKernelAtom *numberStrKernelAtom) emptyIntegerDigits(
 //
 //	currencySymbol					NumStrNumberSymbolSpec
 //
-//		A Currency Symbol next to a number shows the
-//		number is a monetary amount.
+//		A Currency Symbol positioned next to a numeric
+//		value designates the number as a monetary amount.
 //
 //		The Number String Currency Symbol Specification
 //		is used to configure currency symbols for

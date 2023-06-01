@@ -244,9 +244,9 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) CopyIn(
 //	     if errors are encountered, this return value will contain
 //	     an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//	     If an error occurs, the text value of input parameter
+//	     'errorPrefix' will be inserted or prefixed at the
+//	     beginning of the error message.
 func (txtSpecSolidLine *TextLineSpecSolidLine) CopyOut(
 	errorPrefix interface{}) (
 	TextLineSpecSolidLine,
@@ -356,9 +356,9 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) CopyOut(
 //	     if errors are encountered, this return value will contain
 //	     an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//	     If an error occurs, the text value of input parameter
+//	     'errorPrefix' will be inserted or prefixed at the
+//	     beginning of the error message.
 func (txtSpecSolidLine *TextLineSpecSolidLine) CopyOutITextLine(
 	errorPrefix interface{}) (
 	ITextLineSpecification,
@@ -467,9 +467,9 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) CopyOutITextLine(
 //	     if errors are encountered, this return value will contain
 //	     an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//	     If an error occurs, the text value of input parameter
+//	     'errorPrefix' will be inserted or prefixed at the
+//	     beginning of the error message.
 func (txtSpecSolidLine *TextLineSpecSolidLine) CopyOutPtr(
 	errorPrefix interface{}) (
 	*TextLineSpecSolidLine,

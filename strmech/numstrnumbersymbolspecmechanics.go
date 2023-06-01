@@ -1507,9 +1507,9 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsBa
 //
 // The positive signed number symbol is configured as
 // empty or blank because under French formatting
-// standards, positive number signs are implied and not
-// specifically displayed. Therefore, no leading plus
-// ('+') symbol is required.
+// standards, positive number signs are implicit, and
+// not specifically displayed. Therefore, no leading
+// plus ('+') symbol is required.
 //
 // Likewise, the zero signed number symbol is also
 // configured as empty or blank because under French
@@ -1707,9 +1707,9 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsDe
 //
 // The positive signed number symbol is configured as
 // empty or blank because under German formatting
-// standards, positive number signs are implied and not
-// specifically displayed. Therefore, no leading plus
-// ('+') symbol is required.
+// standards, positive number signs are implicit, and
+// not specifically displayed. Therefore, no leading
+// plus ('+') symbol is required.
 //
 // Likewise, the zero signed number symbol is also
 // configured as empty or blank because under German
@@ -1907,7 +1907,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsDe
 //
 // The positive signed number symbol is configured as
 // empty or blank because under United States formatting
-// standards, positive number signs are implied and not
+// standards, positive number signs are implicit, and not
 // specifically displayed. Therefore, no leading plus
 // ('+') symbol is required.
 //
@@ -2105,7 +2105,7 @@ func (nStrNumSymSpecMech *numStrNumberSymbolSpecMechanics) setSignedNumSymbolsDe
 //
 // The positive signed number symbol is configured as
 // empty or blank because under United States formatting
-// standards, positive number signs are implied and not
+// standards, positive number signs are implicit, and not
 // specifically displayed. Therefore, no leading plus
 // ('+') symbol is required.
 //

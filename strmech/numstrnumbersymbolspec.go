@@ -725,9 +725,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) CopyIn(
 //		if errors are encountered, this return value will contain
 //		an appropriate error message.
 //
-//		If an error message is returned, the text value of input
-//		parameter 'errorPrefix' will be inserted or prefixed at
-//		the beginning of the error message.
+//	     If an error occurs, the text value of input parameter
+//	     'errorPrefix' will be inserted or prefixed at the
+//	     beginning of the error message.
 func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) CopyOut(
 	errorPrefix interface{}) (
 	deepCopyNStrNumSymSpec NumStrNumberSymbolSpec,
@@ -2999,9 +2999,9 @@ func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsUKMinusOu
 //		if errors are encountered, this return value will contain
 //		an appropriate error message.
 //
-//		If an error message is returned, the text value of input
-//		parameter 'errorPrefix' will be inserted or prefixed at
-//		the beginning of the error message.
+//	     If an error occurs, the text value of input parameter
+//	     'errorPrefix' will be inserted or prefixed at the
+//	     beginning of the error message.
 func (nStrNumberSymbolSpec *NumStrNumberSymbolSpec) NewCurrencyDefaultsUS(
 	errorPrefix interface{}) (
 	usCurrencySymbols NumStrNumberSymbolSpec,

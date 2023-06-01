@@ -438,10 +438,10 @@ func (sMechNanobot *strMechNanobot) strCenterInStrLeft(
 //		encountered this return value will contain an
 //		appropriate error message.
 //
-//		If an error message is returned, the text value
-//		for input parameter 'ePrefix' (error prefix)
-//		will be inserted or prefixed at the beginning of
-//		the error message.
+//		If an error occurs, the text value of input
+//		parameter 'errorPrefix' (error prefix) will be
+//		inserted or prefixed at the beginning of the
+//		error message.
 //
 // ------------------------------------------------------------------------
 //

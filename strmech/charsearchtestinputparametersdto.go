@@ -13,7 +13,7 @@ import (
 //
 // ----------------------------------------------------------------
 //
-// TERMINOLOGY
+// # TERMINOLOGY
 //
 // Text Character Search algorithms typically perform comparisons
 // between two strings or groups of text characters to determine
@@ -27,16 +27,16 @@ import (
 // ('CharacterSearchType') rely on a framework consisting of a
 // 'Target Search String' and a 'Test String'.
 //
-//    Target String        - A string character or characters which
-//                           will be searched for the occurrence of
-//                           another predefined character or
-//                           characters referred to as a Test
-//                           String.
+//	Target String        - A string character or characters which
+//	                       will be searched for the occurrence of
+//	                       another predefined character or
+//	                       characters referred to as a Test
+//	                       String.
 //
 //
-//    Test String          - A string character or characters which
-//                           will be used to search for matching
-//                           characters in a Target Search String.
+//	Test String          - A string character or characters which
+//	                       will be used to search for matching
+//	                       characters in a Target Search String.
 //
 // A comparison of text characters contained in the Target Search
 // String and the Test String serves as the basis for determining
@@ -51,7 +51,6 @@ import (
 // Object type (CharSearchTestInputParametersDto) is used to
 // transmit Test String input parameters to methods performing
 // search operations.
-//
 type CharSearchTestInputParametersDto struct {
 	TestInputParametersName string
 	// The Name, Label or descriptive Tag associated with this
@@ -225,7 +224,7 @@ type CharSearchTestInputParametersDto struct {
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // All the data fields in current
 // CharSearchTestInputParametersDto instance
@@ -234,84 +233,81 @@ type CharSearchTestInputParametersDto struct {
 // Also, NO data validation is performed on input parameter
 // 'sourceTestInputParms'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  sourceTestInputParms     *CharSearchTestInputParametersDto
-//     - A pointer to an instance of
-//       CharSearchTestInputParametersDto. This method will NOT
-//       change the values of internal member variables contained
-//       in this instance.
+//	sourceTestInputParms     *CharSearchTestInputParametersDto
+//	   - A pointer to an instance of
+//	     CharSearchTestInputParametersDto. This method will NOT
+//	     change the values of internal member variables contained
+//	     in this instance.
 //
-//       All data values in this CharSearchTestInputParametersDto
-//       instance will be copied to current
-//       CharSearchTestInputParametersDto instance
-//       ('searchTestInputParmsDto').
-//
-//
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
-//
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
-//
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     All data values in this CharSearchTestInputParametersDto
+//	     instance will be copied to current
+//	     CharSearchTestInputParametersDto instance
+//	     ('searchTestInputParmsDto').
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       2. string - A string containing error prefix information.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     2. string - A string containing error prefix information.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
+//
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
+//
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
+//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (testSearchInputParms *CharSearchTestInputParametersDto) CopyIn(
 	sourceTestInputParms *CharSearchTestInputParametersDto,
 	errorPrefix interface{}) error {
@@ -356,88 +352,87 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) CopyIn(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // NO data validation is performed on the current instance of
 // CharSearchTestInputParametersDto prior to the creation of
 // the deep copy returned to the calling function.
 //
 // It may be necessary to call the validation method
-//   CharSearchTestInputParametersDto.IsValidInstanceError()
-// before calling this method.
 //
+//	CharSearchTestInputParametersDto.IsValidInstanceError()
+//
+// before calling this method.
 //
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  deepCopyTestInputParms     CharSearchTestInputParametersDto
-//     - If this method completes successfully and no errors are
-//       encountered, this parameter will return a deep copy of the
-//       current CharSearchTestInputParametersDto instance.
+//	 deepCopyTestInputParms     CharSearchTestInputParametersDto
+//	    - If this method completes successfully and no errors are
+//	      encountered, this parameter will return a deep copy of the
+//	      current CharSearchTestInputParametersDto instance.
 //
 //
-//  err                        error
-//     - If the method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	 err                        error
+//	    - If the method completes successfully and no errors are
+//	      encountered this return value is set to 'nil'. Otherwise,
+//	      if errors are encountered, this return value will contain
+//	      an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//		     If an error occurs, the text value of input parameter
+//		     'errorPrefix' will be inserted or prefixed at the
+//		     beginning of the error message.
 func (testSearchInputParms *CharSearchTestInputParametersDto) CopyOut(
 	errorPrefix interface{}) (
 	deepCopyTestInputParms CharSearchTestInputParametersDto,
@@ -486,7 +481,7 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) CopyOut(
 //
 // ----------------------------------------------------------------
 //
-// IMPORTANT
+// # IMPORTANT
 //
 // This method will delete all member variable data values in the
 // current instance of CharSearchTestInputParametersDto. All member
@@ -501,15 +496,13 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) CopyOut(
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (testSearchInputParms *CharSearchTestInputParametersDto) Empty() {
 
 	if testSearchInputParms.lock == nil {
@@ -534,20 +527,17 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) Empty() {
 // text character search operations. The Test String is configured
 // as an internal member variable of type RuneArrayDto.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (testSearchInputParms *CharSearchTestInputParametersDto) EmptyTestString() {
 
 	if testSearchInputParms.lock == nil {
@@ -575,34 +565,31 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) EmptyTestString() 
 // in all respects, this flag is set to 'true'. Otherwise, this
 // method returns 'false'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingTestInputParms     *CharSearchTestInputParametersDto
-//     - A pointer to an instance of
-//       CharSearchTestInputParametersDto. The internal member
-//       variable data values in this instance will be compared to
-//       those in the current instance of
-//       CharSearchTestInputParametersDto. The results of this
-//       comparison will be returned to the calling functions as a
-//       boolean value.
-//
+//	incomingTestInputParms     *CharSearchTestInputParametersDto
+//	   - A pointer to an instance of
+//	     CharSearchTestInputParametersDto. The internal member
+//	     variable data values in this instance will be compared to
+//	     those in the current instance of
+//	     CharSearchTestInputParametersDto. The results of this
+//	     comparison will be returned to the calling functions as a
+//	     boolean value.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  bool
-//     - If the internal member variable data values contained in
-//       input parameter 'incomingTestInputParms' are equivalent
-//       in all respects to those contained in the current instance
-//       of CharSearchTestInputParametersDto, this return value
-//       will be set to 'true'.
+//	bool
+//	   - If the internal member variable data values contained in
+//	     input parameter 'incomingTestInputParms' are equivalent
+//	     in all respects to those contained in the current instance
+//	     of CharSearchTestInputParametersDto, this return value
+//	     will be set to 'true'.
 //
-//       Otherwise, this method will return 'false'.
-//
+//	     Otherwise, this method will return 'false'.
 func (testSearchInputParms *CharSearchTestInputParametersDto) Equal(
 	incomingTestInputParms *CharSearchTestInputParametersDto) bool {
 
@@ -633,37 +620,34 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) Equal(
 // instances are equal in all respects, this flag is set to 'true'.
 // Otherwise, this method returns a boolean value of 'false'.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  incomingTestInputParms   *CharSearchTestInputParametersDto
-//     - A pointer to an instance of
-//       CharSearchTestInputParametersDto. The internal member
-//       variable 'TestString' contained in this instance will be
-//       compared to the same member variable 'TestString'
-//       contained in the current instance of
-//       CharSearchTestInputParametersDto. The results of this
-//       comparison will be returned to the calling functions as a
-//       boolean value.
-//
+//	incomingTestInputParms   *CharSearchTestInputParametersDto
+//	   - A pointer to an instance of
+//	     CharSearchTestInputParametersDto. The internal member
+//	     variable 'TestString' contained in this instance will be
+//	     compared to the same member variable 'TestString'
+//	     contained in the current instance of
+//	     CharSearchTestInputParametersDto. The results of this
+//	     comparison will be returned to the calling functions as a
+//	     boolean value.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  bool
-//     - If the internal member variable 'TestString' contained
-//       in input parameter 'incomingTestInputParms' is
-//       equivalent in all respects to the same member variable
-//       'TestString' contained in the current instance of
-//       CharSearchTestInputParametersDto, this return value
-//       will be set to 'true'.
+//	bool
+//	   - If the internal member variable 'TestString' contained
+//	     in input parameter 'incomingTestInputParms' is
+//	     equivalent in all respects to the same member variable
+//	     'TestString' contained in the current instance of
+//	     CharSearchTestInputParametersDto, this return value
+//	     will be set to 'true'.
 //
-//       Otherwise, this method will return a boolean value of
-//       'false'.
-//
+//	     Otherwise, this method will return a boolean value of
+//	     'false'.
 func (testSearchInputParms *CharSearchTestInputParametersDto) EqualTestStrings(
 	incomingTestInputParms *CharSearchTestInputParametersDto) bool {
 
@@ -685,78 +669,75 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) EqualTestStrings(
 // detailing all internal member variables and their values for
 // the current instance of CharSearchTestInputParametersDto.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  strBuilder                 *strings.Builder
-//     - A pointer to an instance of *strings.Builder. The
-//       formatted text characters produced by this method will be
-//       written to this instance of strings.Builder.
+//	strBuilder                 *strings.Builder
+//	   - A pointer to an instance of *strings.Builder. The
+//	     formatted text characters produced by this method will be
+//	     written to this instance of strings.Builder.
 //
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If this method completes successfully and no errors are
-//       encountered this return value is set to 'nil'. Otherwise,
-//       if errors are encountered, this return value will contain
-//       an appropriate error message.
+//	error
+//	   - If this method completes successfully and no errors are
+//	     encountered this return value is set to 'nil'. Otherwise,
+//	     if errors are encountered, this return value will contain
+//	     an appropriate error message.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' will be inserted or prefixed at
-//       the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' will be inserted or prefixed at
+//	     the beginning of the error message.
 func (testSearchInputParms *CharSearchTestInputParametersDto) GetParameterTextListing(
 	strBuilder *strings.Builder,
 	errorPrefix interface{}) error {
@@ -805,7 +786,7 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) GetParameterTextLi
 //
 // ----------------------------------------------------------------
 //
-// Be Advised
+// # Be Advised
 //
 // In addition to performing validation diagnostics on the current
 // instance of CharSearchTestInputParametersDto, this method will
@@ -819,25 +800,22 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) GetParameterTextLi
 // strings are empty when this method is called, those empty label
 // strings will be set to their default values.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  --- NONE ---
-//
+//	--- NONE ---
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//  isValid             bool
-//     - If all data elements encapsulated by the current instance
-//       of CharSearchTestInputParametersDto are valid, this
-//       returned boolean value is set to 'true'. If any data
-//       values are invalid, this return parameter is set to
-//       'false'.
-//
+//	isValid             bool
+//	   - If all data elements encapsulated by the current instance
+//	     of CharSearchTestInputParametersDto are valid, this
+//	     returned boolean value is set to 'true'. If any data
+//	     values are invalid, this return parameter is set to
+//	     'false'.
 func (testSearchInputParms *CharSearchTestInputParametersDto) IsValidInstance() (
 	isValid bool) {
 
@@ -867,80 +845,78 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) IsValidInstance() 
 // return an error.
 //
 // This method is functionally equivalent to method:
-//  CharSearchTestInputParametersDto.ValidateTestParameters()
+//
+//	CharSearchTestInputParametersDto.ValidateTestParameters()
 //
 // This method, IsValidInstanceError(), is included for convenience
 // and continuity as many other types in this package also use a
 // method of this name when checking the validity of internal member
 // variables.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If any of the internal member data variables contained in
-//       the current instance of CharSearchTestInputParametersDto
-//       are found to be invalid, this method will return an error.
-//       If the member data variables are determined to be valid,
-//       this error return parameter will be set to 'nil'.
+//	error
+//	   - If any of the internal member data variables contained in
+//	     the current instance of CharSearchTestInputParametersDto
+//	     are found to be invalid, this method will return an error.
+//	     If the member data variables are determined to be valid,
+//	     this error return parameter will be set to 'nil'.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 func (testSearchInputParms *CharSearchTestInputParametersDto) IsValidInstanceError(
 	errorPrefix interface{}) error {
 
@@ -984,31 +960,28 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) IsValidInstanceErr
 //
 // ----------------------------------------------------------------
 //
-// Be Advised
+// # Be Advised
 //
 // CharSearchTestInputParametersDto.TestStringStartingIndex is
 // overwritten ONLY if 'testConfigDto.TestStringStartingIndex' has
 // a value greater than minus one (-1). Valid array indexes must
 // have a value greater than minus one (-1).
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  testConfigDto       CharSearchTestConfigDto
-//     - An instance of CharSearchTestConfigDto containing Test
-//      Input Parameter configuration data. Data elements from
-//      'testConfigDto' will be copied to the current instance
-//      of CharSearchTestInputParametersDto.
-//
+//	testConfigDto       CharSearchTestConfigDto
+//	   - An instance of CharSearchTestConfigDto containing Test
+//	    Input Parameter configuration data. Data elements from
+//	    'testConfigDto' will be copied to the current instance
+//	    of CharSearchTestInputParametersDto.
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  NONE
-//
+//	NONE
 func (testSearchInputParms *CharSearchTestInputParametersDto) LoadTestConfigDto(
 	testConfigDto CharSearchTestConfigDto) {
 
@@ -1121,7 +1094,6 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) LoadTestConfigDto(
 
 // New - Returns a new uninitialized instance of
 // CharSearchTestInputParametersDto
-//
 func (testSearchInputParms CharSearchTestInputParametersDto) New() CharSearchTestInputParametersDto {
 
 	if testSearchInputParms.lock == nil {
@@ -1145,7 +1117,6 @@ func (testSearchInputParms CharSearchTestInputParametersDto) New() CharSearchTes
 // string returned by this method.
 //
 // This method implements the Stringer Interface.
-//
 func (testSearchInputParms *CharSearchTestInputParametersDto) String() string {
 
 	if testSearchInputParms.lock == nil {
@@ -1203,12 +1174,12 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) String() string {
 // CharSearchTestInputParametersDto.
 //
 // This method is functionally equivalent to method:
-//   CharSearchTestInputParametersDto.IsValidInstanceError()
 //
+//	CharSearchTestInputParametersDto.IsValidInstanceError()
 //
 // ----------------------------------------------------------------
 //
-// Be Advised
+// # Be Advised
 //
 // In addition to performing validation diagnostics on the current
 // instance of CharSearchTestInputParametersDto, this method will
@@ -1222,73 +1193,70 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) String() string {
 // strings are empty when this method is called, those empty label
 // strings will be set to their default values.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  errorPrefix                interface{}
-//     - This object encapsulates error prefix text which is
-//       included in all returned error messages. Usually, it
-//       contains the name of the calling method or methods
-//       listed as a method or function chain of execution.
+//	errorPrefix                interface{}
+//	   - This object encapsulates error prefix text which is
+//	     included in all returned error messages. Usually, it
+//	     contains the name of the calling method or methods
+//	     listed as a method or function chain of execution.
 //
-//       If no error prefix information is needed, set this
-//       parameter to 'nil'.
+//	     If no error prefix information is needed, set this
+//	     parameter to 'nil'.
 //
-//       This empty interface must be convertible to one of the
-//       following types:
+//	     This empty interface must be convertible to one of the
+//	     following types:
 //
 //
-//       1. nil - A nil value is valid and generates an empty
-//                collection of error prefix and error context
-//                information.
+//	     1. nil - A nil value is valid and generates an empty
+//	              collection of error prefix and error context
+//	              information.
 //
-//       2. string - A string containing error prefix information.
+//	     2. string - A string containing error prefix information.
 //
-//       3. []string A one-dimensional slice of strings containing
-//                   error prefix information
+//	     3. []string A one-dimensional slice of strings containing
+//	                 error prefix information
 //
-//       4. [][2]string A two-dimensional slice of strings
-//          containing error prefix and error context information.
+//	     4. [][2]string A two-dimensional slice of strings
+//	        containing error prefix and error context information.
 //
-//       5. ErrPrefixDto - An instance of ErrPrefixDto. The
-//                         ErrorPrefixInfo from this object will be
-//                         copied to 'errPrefDto'.
+//	     5. ErrPrefixDto - An instance of ErrPrefixDto. The
+//	                       ErrorPrefixInfo from this object will be
+//	                       copied to 'errPrefDto'.
 //
-//       6. *ErrPrefixDto - A pointer to an instance of
-//                          ErrPrefixDto. ErrorPrefixInfo from this
-//                          object will be copied to 'errPrefDto'.
+//	     6. *ErrPrefixDto - A pointer to an instance of
+//	                        ErrPrefixDto. ErrorPrefixInfo from this
+//	                        object will be copied to 'errPrefDto'.
 //
-//       7. IBasicErrorPrefix - An interface to a method generating
-//                              a two-dimensional slice of strings
-//                              containing error prefix and error
-//                              context information.
+//	     7. IBasicErrorPrefix - An interface to a method generating
+//	                            a two-dimensional slice of strings
+//	                            containing error prefix and error
+//	                            context information.
 //
-//       If parameter 'errorPrefix' is NOT convertible to one of
-//       the valid types listed above, it will be considered
-//       invalid and trigger the return of an error.
+//	     If parameter 'errorPrefix' is NOT convertible to one of
+//	     the valid types listed above, it will be considered
+//	     invalid and trigger the return of an error.
 //
-//       Types ErrPrefixDto and IBasicErrorPrefix are included in
-//       the 'errpref' software package,
-//       "github.com/MikeAustin71/errpref".
-//
+//	     Types ErrPrefixDto and IBasicErrorPrefix are included in
+//	     the 'errpref' software package,
+//	     "github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If any of the internal member data variables contained in
-//       the current instance of CharSearchTestInputParametersDto
-//       are found to be invalid, this method will return an error.
-//       If the member data variables are determined to be valid,
-//       this error return parameter will be set to 'nil'.
+//	error
+//	   - If any of the internal member data variables contained in
+//	     the current instance of CharSearchTestInputParametersDto
+//	     are found to be invalid, this method will return an error.
+//	     If the member data variables are determined to be valid,
+//	     this error return parameter will be set to 'nil'.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 func (testSearchInputParms *CharSearchTestInputParametersDto) ValidateTestParameters(
 	errorPrefix interface{}) error {
 
@@ -1336,10 +1304,11 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) ValidateTestParame
 // required parameter for all text character search operations.
 //
 // Possible enumeration values are listed as follows:
-//  CharSearchType.None()                      - Invalid Value
-//  CharSearchType.LinearTargetStartingIndex() - Valid - Default
-//  CharSearchType.SingleTargetChar()          - Valid
-//  CharSearchType.LinearEndOfString()         - Valid
+//
+//	CharSearchType.None()                      - Invalid Value
+//	CharSearchType.LinearTargetStartingIndex() - Valid - Default
+//	CharSearchType.SingleTargetChar()          - Valid
+//	CharSearchType.LinearEndOfString()         - Valid
 //
 // For more information, see the documentation for
 // type CharacterSearchType.
@@ -1348,32 +1317,28 @@ func (testSearchInputParms *CharSearchTestInputParametersDto) ValidateTestParame
 // an error if the current value of 'TextCharSearchType' is found
 // to be invalid.
 //
-//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
-//  NONE
-//
+//	NONE
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
-//  error
-//     - If the member variable 'TextCharSearchType' contained in
-//       the current instance of CharSearchTestInputParametersDto
-//       is found to be invalid, this method will return an error.
+//	error
+//	   - If the member variable 'TextCharSearchType' contained in
+//	     the current instance of CharSearchTestInputParametersDto
+//	     is found to be invalid, this method will return an error.
 //
-//       If the member data variable 'TextCharSearchType' is found
-//       to be valid, this error return parameter will be set to
-//       'nil'.
+//	     If the member data variable 'TextCharSearchType' is found
+//	     to be valid, this error return parameter will be set to
+//	     'nil'.
 //
-//       If an error message is returned, the text value of input
-//       parameter 'errorPrefix' (error prefix) will be inserted or
-//       prefixed at the beginning of the error message.
-//
-//
+//	     If an error message is returned, the text value of input
+//	     parameter 'errorPrefix' (error prefix) will be inserted or
+//	     prefixed at the beginning of the error message.
 func (testSearchInputParms *CharSearchTestInputParametersDto) ValidateCharSearchType(
 	errorPrefix interface{}) error {
 

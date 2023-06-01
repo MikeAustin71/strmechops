@@ -1274,14 +1274,13 @@ func (sMech *StrMech) EqualRuneArraysNil(
 //	     CommentDelimiter               string //  If a Comment Delimiter is detected it is stored here.
 //	     CommentDelimiterIndex          int    //  If a Comment Delimiter is detected, the string index in 'TargetStr' showing its location is stored here.
 //	     EndOfLineDelimiter             string //  If an End-Of-Line Delimiter is detected it is captured and stored here.
-//	     EndOfLineDelimiterIndex        int    //  If an End-Of-Line Delimiter is detected, the string index in 'TargetStr' showing its location is stored here.
+//	     EndOfLineDelimiterIndex        int    //  If an End-Of-Line Delimiter presents, the string index in 'TargetStr' showing its location, is stored here.
 //	   }
 //
 //	 error
-//	   - If the method completes successfully and no errors are
-//	     encountered this return value is set to 'nil'. Otherwise,
-//	     if errors are encountered, this return value will contain
-//	     an appropriate error message.
+//	   - If the method completes successfully, this error parameter
+//	     returns 'nil'. Otherwise, if errors are encountered, this
+//	     return value will contain an appropriate error message.
 //
 //	     The most likely source of errors are invalid input parameters.
 //	     Input parameters 'targetStr', 'startIdx',
@@ -2074,9 +2073,9 @@ func (sMech *StrMech) ExtractNumberRunes(
 //	     if errors are encountered this return value will contain
 //	     an appropriate error message.
 //
-//	     If an error message is returned, the input parameter
-//	     'errorPrefix' (error prefix) will be inserted or prefixed
-//	     at the beginning of the error message.
+//	     If an error occurs, the input parameter 'errorPrefix'
+//	     (error prefix) will be inserted or prefixed at the
+//	     beginning of the error message.
 func (sMech *StrMech) ExtractTextLines(
 	targetStr string,
 	endOfLineDelimiters []string,
@@ -2690,12 +2689,12 @@ func (sMech *StrMech) FindLastSpace(
 //	err                 error
 //	   - If the method completes successfully and no errors are
 //	     encountered this return value is set to 'nil'. Otherwise,
-//	     if errors are encountered this return value will contain
-//	     an appropriate error message.
+//	     when errors occur, this return value will contain an
+//	     appropriate error message.
 //
-//	     If an error message is returned, the input parameter
-//	     'errorPrefix' (error prefix) will be inserted or prefixed
-//	     at the beginning of the error message.
+//	     If an error occurs, the input parameter 'errorPrefix'
+//	     (error prefix) will be inserted or prefixed at the
+//	     beginning of the error message.
 func (sMech *StrMech) FindLastWord(
 	targetStr string,
 	startIndex,
@@ -3487,11 +3486,11 @@ func (sMech *StrMech) GetValidRunes(
 //	error
 //	   - If the method completes successfully and no errors are
 //	     encountered this return value is set to 'nil'. Otherwise,
-//	     if errors are encountered this return value will contain
-//	     an appropriate error message.
+//	     when errors occur, this return value will contain an
+//	     appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' (error prefix) will be inserted or
+//	     If an error occurs, the text value of input parameter
+//	     'errorPrefix' (error prefix) will be inserted or
 //	     prefixed at the beginning of the error message.
 //
 // ------------------------------------------------------------------------
@@ -4386,8 +4385,8 @@ func (sMech *StrMech) IsValidRuneIntArray(
 //	     if errors are encountered this return value will contain
 //	     an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' (error prefix) will be inserted or
+//	     If an error occurs, the text value of input parameter
+//	     'errorPrefix' (error prefix) will be inserted or
 //	     prefixed at the beginning of the error message.
 //
 // ------------------------------------------------------------------------
@@ -5960,13 +5959,13 @@ func (sMech *StrMech) StrCenterInStrLeft(
 //
 //	error
 //	   - If this method completes successfully, the returned error
-//	     Type is set equal to 'nil'. If errors are encountered during
-//	     processing, the returned error Type will encapsulate an error
-//	     message.
+//	     Type is set equal to 'nil'. If errors occur during
+//	     processing, this returned error Type will encapsulate an
+//	     error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' (error prefix) will be inserted or
-//	     prefixed at the beginning of the error message.
+//	     If an error does occur, the text value of input parameter
+//	     'errorPrefix' (error prefix) will be inserted or prefixed
+//	     at the beginning of the error message.
 //
 // ------------------------------------------------------------------------
 //

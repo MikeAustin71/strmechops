@@ -41,7 +41,7 @@ type FileOperationsNanobot struct {
 //
 //		A pointer to an instance of FileOps. A deep copy
 //		of the internal member data values contained in
-//		this intance will be copied to the corresponding
+//		this instance will be copied to the corresponding
 //		data elements contained parameter
 //		'destinationFOps'.
 //

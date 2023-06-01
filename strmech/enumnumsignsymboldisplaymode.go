@@ -41,10 +41,10 @@ var mapNumSignSymbolDisplayModeLwrCaseStringToCode = map[string]NumSignSymbolDis
 // In contrast, numeric values are often presented without Number
 // Sign Symbols (Example: '123'). In this case the Number Sign
 // Symbol is implied or 'implicit'. This means that the Number Sign
-// Symbol is NOT displayed and the numeric value is assumed to be
-// positive. For example the numeric value '123' has an assumed or
-// implicit numeric sign of plus ('+') meaning the value '123'
-// is equal to the positive value '+123'.
+// Symbol is NOT displayed and the numeric value is positive. For
+// example the numeric value '123' has an assumed or implicit
+// numeric sign of plus ('+') meaning the value '123' is equal
+// to the positive value '+123'.
 //
 // The NumSignSymbolDisplayMode enumeration is used to signal whether
 // the number sign for a numeric value is 'explicit' or 'implicit'.

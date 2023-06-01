@@ -1948,9 +1948,9 @@ func (numStrKernel *NumberStrKernel) GetNumberOfNumericDigits() int {
 //	     if errors are encountered, this return value will contain
 //	     an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//	     If an error occurs, the text value of input parameter
+//	     'errorPrefix' will be inserted or prefixed at the
+//	     beginning of the error message.
 func (numStrKernel *NumberStrKernel) GetNumberSign(
 	errorPrefix interface{}) (
 	NumericSignValueType,
@@ -8060,8 +8060,8 @@ func (numStrKernel *NumberStrKernel) SetDefaultNumStrFmtSpec(
 //
 //	currencySymbol					NumStrNumberSymbolSpec
 //
-//		A Currency Symbol next to a number shows the
-//		number is a monetary amount.
+//		A Currency Symbol positioned next to a numeric
+//		value designates the number as a monetary amount.
 //
 //		The Number String Currency Symbol Specification
 //		is used to configure currency symbols for
