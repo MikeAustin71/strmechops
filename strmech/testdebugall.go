@@ -293,11 +293,15 @@ func (testDebug *TestDebugAll) RandomNum1(
 	var intNums []int
 	var selection int
 
+	newRandGenerator := rand.New(rand.NewSource(time.Now().UnixNano()))
+
 	for i := 0; i < 10; i++ {
 
-		rand.Seed(time.Now().UnixNano())
+		// Old Code Pre Go 1.20
+		// rand.Seed(time.Now().UnixNano())
+		//intNums = rand.Perm(10)
 
-		intNums = rand.Perm(10)
+		intNums = newRandGenerator.Perm(10)
 
 		for j := 0; j < 3; j++ {
 			selection = rand.Intn(9)
