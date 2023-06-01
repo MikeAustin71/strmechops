@@ -4495,47 +4495,10 @@ func (fMgr *FileMgr) Equal(
 
 	defer fMgr.lock.Unlock()
 
-	if fMgr2 == nil {
-		fMgr2 = &FileMgr{}
-	}
-
-	result := true
-
-	if fMgr.isInitialized != fMgr2.isInitialized ||
-		fMgr.originalPathFileName != fMgr2.originalPathFileName ||
-		fMgr.isAbsolutePathFileNamePopulated != fMgr2.isAbsolutePathFileNamePopulated ||
-		fMgr.doesAbsolutePathFileNameExist != fMgr2.doesAbsolutePathFileNameExist ||
-		fMgr.absolutePathFileName != fMgr2.absolutePathFileName ||
-		fMgr.fileName != fMgr2.fileName ||
-		fMgr.isFileNamePopulated != fMgr2.isFileNamePopulated ||
-		fMgr.fileExt != fMgr2.fileExt ||
-		fMgr.isFileExtPopulated != fMgr2.isFileExtPopulated ||
-		fMgr.fileNameExt != fMgr2.fileNameExt ||
-		fMgr.isFileNameExtPopulated != fMgr2.isFileNameExtPopulated ||
-		fMgr.filePtr != fMgr2.filePtr ||
-		fMgr.isFilePtrOpen != fMgr2.isFilePtrOpen ||
-		fMgr.fileRdrBufSize != fMgr2.fileRdrBufSize ||
-		fMgr.fileWriterBufSize != fMgr2.fileWriterBufSize {
-
-		result = false
-	}
-
-	if result == true &&
-		!fMgr.fileAccessStatus.Equal(&fMgr2.fileAccessStatus) {
-		result = false
-	}
-
-	if result == true &&
-		!fMgr.dMgr.Equal(&fMgr2.dMgr) {
-		result = false
-	}
-
-	if result == true &&
-		!fMgr.actualFileInfo.Equal(&fMgr2.actualFileInfo) {
-		result = false
-	}
-
-	return result
+	return new(fileMgrHelperBoson).
+		equalFileMgrs(
+			fMgr,
+			fMgr2)
 }
 
 // EqualAbsPaths
