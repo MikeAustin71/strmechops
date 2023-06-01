@@ -129,6 +129,114 @@ func (fMgrHlprBoson *fileMgrHelperBoson) emptyFileMgr(
 	return nil
 }
 
+// equalFileMgrs
+//
+// This method receives two instances of FileMgr and
+// proceeds to compare the internal data values to
+// determine if they are equal in all respects.
+//
+// If all internal data values in the two instances are
+// equivalent, this method returns 'true'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fMgrOne						*FileMgr
+//
+//		A pointer to an incoming instance of FileMgr.
+//		The data fields contained in this instance will
+//		be compared to corresponding data fields in the
+//		FileMgr instance passed as input parameter
+//		'fMgrTwo'. If all data fields are equivalent in
+//		all respects, this method returns a boolean value
+//		of 'true'.
+//
+//	fMgrTwo						*FileMgr
+//
+//		A pointer to an incoming instance of FileMgr.
+//		The data fields contained in this instance will
+//		be compared to corresponding data fields in the
+//		FileMgr instance passed as input parameter
+//		'fMgrOne'. If all data fields are equivalent in
+//		all respects, this method returns a boolean value
+//		of 'true'.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If all the corresponding data fields contained in
+//		input parameters 'fMgrOne' and 'fMgrTwo' are
+//		equivalent,	this return value is set to 'true'.
+//
+//		If the data fields in these two FileMgr instances
+//		are not equal in all respects, this return value
+//		is set to 'false'.
+func (fMgrHlprBoson *fileMgrHelperBoson) equalFileMgrs(
+	fMgrOne *FileMgr,
+	fMgrTwo *FileMgr) bool {
+
+	if fMgrHlprBoson.lock == nil {
+		fMgrHlprBoson.lock = new(sync.Mutex)
+	}
+
+	fMgrHlprBoson.lock.Lock()
+
+	defer fMgrHlprBoson.lock.Unlock()
+
+	if fMgrOne == nil ||
+		fMgrTwo == nil {
+
+		return false
+	}
+
+	if fMgrOne.isInitialized != fMgrTwo.isInitialized ||
+		fMgrOne.originalPathFileName != fMgrTwo.originalPathFileName ||
+		fMgrOne.isAbsolutePathFileNamePopulated != fMgrTwo.isAbsolutePathFileNamePopulated ||
+		fMgrOne.doesAbsolutePathFileNameExist != fMgrTwo.doesAbsolutePathFileNameExist ||
+		fMgrOne.absolutePathFileName != fMgrTwo.absolutePathFileName ||
+		fMgrOne.fileName != fMgrTwo.fileName ||
+		fMgrOne.isFileNamePopulated != fMgrTwo.isFileNamePopulated ||
+		fMgrOne.fileExt != fMgrTwo.fileExt ||
+		fMgrOne.isFileExtPopulated != fMgrTwo.isFileExtPopulated ||
+		fMgrOne.fileNameExt != fMgrTwo.fileNameExt ||
+		fMgrOne.isFileNameExtPopulated != fMgrTwo.isFileNameExtPopulated ||
+		fMgrOne.filePtr != fMgrTwo.filePtr ||
+		fMgrOne.isFilePtrOpen != fMgrTwo.isFilePtrOpen ||
+		fMgrOne.fileRdrBufSize != fMgrTwo.fileRdrBufSize ||
+		fMgrOne.fileWriterBufSize != fMgrTwo.fileWriterBufSize {
+
+		return false
+	}
+
+	if !fMgrOne.fileAccessStatus.Equal(&fMgrTwo.fileAccessStatus) {
+
+		return false
+	}
+
+	if !fMgrOne.dMgr.Equal(&fMgrTwo.dMgr) {
+
+		return false
+	}
+
+	if !new(dirMgrHelper).equal(
+		&fMgrOne.dMgr,
+		&fMgrTwo.dMgr) {
+
+		return false
+	}
+
+	if !fMgrOne.actualFileInfo.Equal(&fMgrTwo.actualFileInfo) {
+
+		return false
+	}
+
+	return true
+}
+
 // flushBytesToDisk
 //
 //	Helper method which is designed to flush all buffers
