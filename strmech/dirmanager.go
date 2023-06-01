@@ -12076,6 +12076,13 @@ func (dMgr *DirMgr) SetPermissions(
 //
 // ----------------------------------------------------------------
 //
+// # BE ADVISED
+//
+//	This method will NOT modify the current instance of
+//	DirMgr.
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	baseDir						DirMgr
