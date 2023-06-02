@@ -63,9 +63,15 @@ type DirMgr struct {
 //
 //	https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
 //
-// NOTE: This method ONLY copies files from the current
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+// This method ONLY copies files from the current
 // directory identified by 'DirMgr'. It does NOT copy
 // files from subdirectories.
+//
+// ----------------------------------------------------------------
 //
 // If the target directory does not exist and files are
 // located matching the file selection criteria, this
@@ -5565,7 +5571,10 @@ func (dMgr *DirMgr) FindFilesByNamePattern(
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (dMgr *DirMgr) FindFilesBySelectCriteria(
-	fileSelectCriteria FileSelectionCriteria) (FileMgrCollection, error) {
+	fileSelectCriteria FileSelectionCriteria,
+	errorPrefix interface{}) (
+	FileMgrCollection,
+	error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -5583,7 +5592,7 @@ func (dMgr *DirMgr) FindFilesBySelectCriteria(
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		nil,
+		errorPrefix,
 		"DirMgr."+
 			"FindFilesBySelectCriteria()",
 		"")
