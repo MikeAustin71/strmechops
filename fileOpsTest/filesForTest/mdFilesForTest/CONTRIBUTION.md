@@ -1,209 +1,209 @@
-# Contributing to RxJS
+# PC Software Configuration
 
-[Read and abide by the Code of Conduct](CODE_OF_CONDUCT.md)! Even if you don't read it,
-it still applies to you. Ignorance is not an exemption.
+[TOC]
 
-Contents
-- [Pull Requests](#pull-requests)
-  - [Coding Style](#code)
-  - [Commit Messages](#commit)
-- [Performance Tests](#performance-tests)
-  - [Macro](#macro)
-  - [Micro](#micro)
+## AMD Eco Mode
 
-(This document is a work and progress and is subject to change)
-
-### <a name="pull-requests"></a> Submitting a Pull Request (PR)
-Before you submit your Pull Request (PR) consider the following guidelines:
-
-* Search [GitHub](https://github.com/ReactiveX/RxJS/pulls) for an open or closed PR
-  that relates to your submission. You don't want to duplicate effort.
-* Make your changes in a new git branch:
-
-     ```shell
-     git checkout -b my-fix-branch master
-     ```
-
-* Create your patch, following [code style guidelines](#code), and **including appropriate test cases**.
-* Run the full test suite and ensure that all tests pass.
-* Run the micro and macro performance tests against your feature branch and compare against master
-  to ensure performance wasn't changed for the worse.
-* Commit your changes using a descriptive commit message that follows our
-  [commit message conventions](#commit). Adherence to these conventions
-  is necessary because release notes are automatically generated from these messages.
-
-     ```shell
-     git commit -a
-     ```
-  Note: the optional commit `-a` command line option will automatically "add" and "rm" edited files.
-
-* Push your branch to GitHub:
-
-    ```shell
-    git push origin my-fix-branch
-    ```
-
-* In GitHub, send a pull request to `RxJS:master`.
-* If we suggest changes then:
-  * Make the required updates.
-  * Re-run the test suites to ensure tests are still passing.
-  * Re-run performance tests to make sure your changes didn't hurt performance.
-  * Rebase your branch and force push to your GitHub repository (this will update your Pull Request):
-
-    ```shell
-    git rebase master -i
-    git push -f
-    ```
-
-That's it! Thank you for your contribution!
+[AMD Ryzen Eco Mode Deep-Dive & Benchmarks on R9 7950X (Zen 4) - YouTube](https://www.youtube.com/watch?v=W6aKQ-eBFk0)
 
 
-#### After your pull request is merged
 
-After your pull request is merged, you can safely delete your branch and pull the changes
-from the main (upstream) repository:
+## Diagnostic Software
 
-* Delete the remote branch on GitHub either through the GitHub web UI or your local shell as follows:
+[Best Programs for Your Gaming PC: How to Check Thermals, Bottlenecks, & Use Command Prompt - YouTube](https://www.youtube.com/watch?v=XqY-BL5pLjQ)
 
-    ```shell
-    git push origin --delete my-fix-branch
-    ```
+https://geni.us/eFBIdh2
 
-* Check out the master branch:
+[CPU-Z | Software | CPUID](https://www.cpuid.com/softwares/cpu-z.html)
 
-    ```shell
-    git checkout master -f
-    ```
+## Fixing Micro Stuttering
 
-* Delete the local branch:
-
-    ```shell
-    git branch -D my-fix-branch
-    ```
-
-* Update your master with the latest upstream version:
-
-    ```shell
-    git pull --ff upstream master
-    ```
-
-### <a id="coding"></a> Coding Style Guidelines
-
-- Please use proper types and generics throughout your code.
-- 2 space indentation only
-- favor readability over terseness
-
-(TBD): For now try to follow the style that exists elsewhere in the source, and use your best judgment.
-
-### <a id="performance-tests"></a>Performance Tests
-
-One of the primary goals of this library is (and will continue to be) great performance. As such, we've employed a variety of performance
-testing techniques.
-
-  - DON'T labor over minute variations in ops/sec or milliseconds, there will always be varience in perf test results.
-  - DON'T alter a performance test unless absolutely necessary. Performance tests may be compared to previous results from previous builds.
-  - DO run tests multiple times and make sure the margins of error are low
-  - DO run tests in your feature branches and compare them to master
-  - DO add performance tests for all new operators
-  - DO add performance tests that you feel are missing from other operators
-  - DO add additional performance tests for all worthy code paths. If you develop an operator with special handling for scalar observables,
-    please add tests for those scenarios
-    
-
-#### <a id="macro"></a>Macro
-  
-[Macro performance tests](perf/macro) are best written for scenarios where many object instance allocations (or deallocations) are occuring. Operators
-that create a lot of child subscriptions, or operators that emit new objects like Observables and Subjects are definitely worth creating 
-macro performance tests for.
-
-Other scenarios for macro performance testing may include common end-to-end scenarios from real-world apps. If you have a situation in your 
-app where you feal RxJS is performing poorly, please [submit and issue](/ReactiveX/RxJS/issues) and include a minimal code example showing
-your performance issues. We would love to solve perf for your real-world problems and add those tests to our perf test battery.
-
-Macro performance tests can be run by hosting the root directory with any web server (we use [http-server](https://www.npmjs.com/package/http-server)), 
-then running:
-
-```sh
-npm run build_all
-protractor protractor.conf.js
-```
+[Fixing the AMD Ryzen 7950X 1% and 0.1% Micro Stuttering Problem. - YouTube](https://www.youtube.com/watch?v=ZrnWII_XQlw)
 
 
-#### <a id="micro"></a>Micro
 
-[Micro performance tests](perf/micro) really only serve to test operations per second. They're quick and easy to develop, and provide a reasonable look into the
-relative performance of our operators versus prior versions. All operators should have corresponding micro performance tests.
+## Graphics Card Drivers
 
-Micro performance test can be run with:
+### DDU
 
-```sh
-npm run build_all
-node perf/micro
-```
+[This is the CORRECT way to Install or Update your GPU Drivers! - YouTube](https://www.youtube.com/watch?v=1XlwirtWs_c&t=0s)
 
-If you wish to run a single micro performance test, you can do so by providing a single argument with the name of the perf test file(s):
+[Display Driver Uninstaller Download version 18.0.6.4 (guru3d.com)](https://www.guru3d.com/files-details/display-driver-uninstaller-download.html)
 
-```sh
-node perf/micro zip
-```
+[How to Use the Display Driver Uninstaller (DDU) to Uninstall an... (intel.com)](https://www.intel.com/content/www/us/en/support/articles/000091878/graphics.html)
 
-## <a name="commit"></a> Commit Message Guidelines
+[Wagnardsoft.com](https://www.wagnardsoft.com/)
 
-We have very precise rules over how our git commit messages can be formatted.  This leads to **more
-readable messages** that are easy to follow when looking through the **project history**.  But also,
-we use the git commit messages to **generate the RxJS change log**.
+[Display Driver Uninstaller (DDU) – Best Graphics Driver Removal Tool (graphicscardhub.com)](https://graphicscardhub.com/display-driver-uninstaller-ddu/)
 
-### Commit Message Format
-Each commit message consists of a **header**, a **body** and a **footer**.  The header has a special
-format that includes a **type**, a **scope** and a **subject**:
 
-```
-<type>(<scope>): <subject>
-<BLANK LINE>
-<body>
-<BLANK LINE>
-<footer>
-```
 
-The **header** is mandatory and the **scope** of the header is optional.
+## Motherboard Setup
 
-Any line of the commit message cannot be longer 100 characters! This allows the message to be easier
-to read on GitHub as well as in various git tools.
+[Do This As Soon As Your Motherboard Arrives.. - YouTube](https://www.youtube.com/watch?v=Z55KYhiltyY)
 
-### Revert
-If the commit reverts a previous commit, it should begin with `revert: `, followed by the header of the reverted commit. In the body it should say: `This reverts commit <hash>.`, where the hash is the SHA of the commit being reverted.
 
-### Type
-Must be one of the following:
 
-* **feat**: A new feature
-* **fix**: A bug fix
-* **docs**: Documentation only changes
-* **style**: Changes that do not affect the meaning of the code (white-space, formatting, missing
-  semi-colons, etc)
-* **refactor**: A code change that neither fixes a bug nor adds a feature
-* **perf**: A code change that improves performance
-* **test**: Adding missing tests
-* **chore**: Changes to the build process or auxiliary tools and libraries such as documentation
-  generation
+## Install Radeon Drivers
 
-### Scope
-The scope could be anything specifying place of the commit change. For example
-`Observable`, `Subject`, `switchLatest`, etc.
+Go to https://amd.com
 
-### Subject
-The subject contains succinct description of the change:
+[How to Install or Upgrade Radeon Drivers - YouTube](https://www.youtube.com/watch?v=3IS1z3IUB9s)
 
-* use the imperative, present tense: "change" not "changed" nor "changes"
-* don't capitalize first letter
-* no dot (.) at the end
 
-### Body
-Just as in the **subject**, use the imperative, present tense: "change" not "changed" nor "changes".
-The body should include the motivation for the change and contrast this with previous behavior.
 
-### Footer
-The footer should contain any information about **Breaking Changes** and is also the place to
-reference GitHub issues that this commit **Closes**.
+## Resizable Bar Scaling
 
-**Breaking Changes** should start with the word `BREAKING CHANGE:` with a space or two newlines. The rest of the commit message is then used for this.
+[Resizable BAR scaling on 7950X3D and 13900k - YouTube](https://www.youtube.com/watch?v=-9Ui290l1F4&t=16s)
+
+
+
+## 7950x Undervolting
+
+[AMD Ryzen 9 7950X Review: The Most Brutal CPU Yet! - YouTube](https://www.youtube.com/watch?v=R4z6E4V9NM8&list=PLpCmLACuDqpSb9ggrVIbsDM1LNzPmeqvH&index=6)
+
+### Tech YES City
+
+Using Ryzen Master to set under volting profile.
+
+#### 	CPU Clock Speed
+
+​		**4.8 Ghz**
+
+#### 	CPU Voltage
+
+​		**0.975 Volts**
+
+[From 94 To 55 Degrees Celsius. Make your Ryzen 9 7950X the BEST! - YouTube](https://www.youtube.com/watch?v=7JiYAwKIHRY)
+
+### Gamers Nexus
+
+#### 	Recommendation
+
+​			105 Eco Mode
+
+[AMD Ryzen Eco Mode Deep-Dive & Benchmarks on R9 7950X (Zen 4) - YouTube](https://www.youtube.com/watch?v=W6aKQ-eBFk0&t=92s)
+
+### Level 1 Techs
+
+[Kicking Ryzen 7000 into HYPERDRIVE! Overclocking, Curve Optimizer, 5.85 GHz! - YouTube](https://www.youtube.com/watch?v=RpliIip01tA)
+
+#### AMD Curve Optimizer
+
+​	Negative 10
+
+### Tech quickie (Linus Tech Tips)
+
+[What's the Point of UNDERVOLTING Your CPU? - YouTube](https://www.youtube.com/watch?v=9b3JUiK1aWU)
+
+### Jay's Two Cents
+
+[How to under volt your CPU for cooler temps - YouTube](https://www.youtube.com/watch?v=R460NL_wdGc)
+
+
+
+### TECHOSAUR
+
+[PBO Overclocking guide with Ryzen 7950x ( Easy method For Beginners and Advanced users ) - YouTube](https://www.youtube.com/watch?v=Wb-GZ82kkEs)
+
+
+
+
+
+## Stress Testing
+
+[How to stress test a PC to find errors and crashes - YouTube](https://www.youtube.com/watch?v=AkNEvIWp2fM)
+
+[How to stress test a PC to find errors and crashes - YouTube](https://www.youtube.com/watch?v=AkNEvIWp2fM&t=7s)
+
+
+
+## Fan Hub
+
+[Add Extra PC PWM Fans With Arctic SATA Powered 10 Port Fan Hub - YouTube](https://www.youtube.com/watch?v=A46TZQQdDME)
+
+
+
+## Tech Notice
+
+[How To Set Up a PC After Building It? | Software 👉Drivers 👉Tips 👉 TEST❗️feat. Asus Z690 ProArt - YouTube](https://www.youtube.com/watch?v=TNYyQuhrMjQ&t=0s)
+
+[⚪️⚪️How to set up a PC after Building it? | $1500 White 4k Video Editing PC Build [Part 3\] - YouTube](https://www.youtube.com/watch?v=s4zVALehknc&t=0s)
+
+[Default BIOS Settings Hinder Your Gaming Performance: Project SeVeN - YouTube](https://www.youtube.com/watch?v=BgWq6__3jXM)
+
+## Cloning M.2 Drive
+
+[The PROPER Steps to Cloning and Replacing your M.2 NVME SSD Hard Drive! See Pinned Comment. - YouTube](https://www.youtube.com/watch?v=yNgMl5zK09E)
+
+
+
+## Microsoft Account
+
+[Don't give Microsoft what they want... - YouTube](https://www.youtube.com/watch?v=EOUcvgqOV-0)
+
+
+
+## Wiring Connections
+
+[Where to connect PC case cables, power cables and more - computer wiring tips - YouTube](https://www.youtube.com/watch?v=RYkW2WywN5I)
+
+## What To Do After You Build Your PC
+
+[What to do AFTER you build your PC... Updated for 2023 - YouTube](https://www.youtube.com/watch?v=xhHtHMQygzE)
+
+[🛑 Get MAX FPS 🛑 How to Set Up PC After Build | Bios, Windows, Drivers | Best PC Setup 2023 - YouTube](https://www.youtube.com/watch?v=SY7iNTMjdrc&t=352s)
+
+[Ryzen 9 7950x3d Unboxing and PC Build Video - YouTube](https://www.youtube.com/watch?v=HBnkLZd426c&t=750s)
+
+
+
+## Fan Control Software
+
+Recommended by:
+
+[Everyone NEEDS this FREE piece of software... You will thank me! - YouTube](https://www.youtube.com/watch?v=uDPKVKBMQU8&t=21s)
+
+[GitHub - Rem0o/FanControl.Releases: This is the release repository for Fan Control, a highly customizable fan controlling software for Windows.](https://github.com/rem0o/fancontrol.releases)
+
+
+
+## Graphics Card Configuration
+
+[AMD Radeon Settings vs Nvidia Control Panel vs Intel ARC Control - YouTube](https://www.youtube.com/watch?v=nnH2sbQkIy8)
+
+
+
+
+
+## Setup And Configuration
+
+[(1) How to set up a new PC! Windows 10 Install, Memory Overclock and Benchmarking | Robeytech - YouTube](https://www.youtube.com/watch?v=K1vtj5ffZY8)
+
+[(1) Guide: What to do AFTER building your computer... - YouTube](https://www.youtube.com/watch?v=RYYoCXh2gtw)
+
+[(1) What to do AFTER you build your PC... Updated for 2023 - YouTube](https://www.youtube.com/watch?v=xhHtHMQygzE&t=85s)
+
+[(1) How I Setup My Personal Gaming PC AFTER Building! 💪 - YouTube](https://www.youtube.com/watch?v=Bvs_DmrTo68)
+
+[🛑 How to Set Up PC After Build 🛑 Bios, Windows, Drivers | Best PC Setup 2023 - YouTube](https://www.youtube.com/watch?v=SY7iNTMjdrc)
+
+[What to do AFTER you build your PC... Updated for 2023 - YouTube](https://www.youtube.com/watch?v=xhHtHMQygzE&t=137s)
+
+[How To Set Up a PC After Building It? | Software 👉Drivers 👉Tips 👉 TEST❗️feat. Asus Z690 ProArt - YouTube](https://www.youtube.com/watch?v=TNYyQuhrMjQ&t=429s)
+
+[BIOS Flashback ASUS Motherboard Update Guide - Intel & AMD - AM5, Z790, Z690, B660, Z170, etc. - YouTube](https://www.youtube.com/watch?v=8tYXNe92JU0&list=PLSofK8pvSk5p0tD_S9IocWS0tKHb7u-tj)
+
+[Best Programs for Your Gaming PC: How to Check Thermals, Bottlenecks, & Use Command Prompt - YouTube](https://www.youtube.com/watch?v=XqY-BL5pLjQ&t=492s)
+
+
+
+## CMOS
+
+[Why messing with your CMOS can be a huge headache - YouTube](https://www.youtube.com/watch?v=u-JvdMCwnV4)
+
+
+
+## Requirements
+
+**USB 8gb - 32gb**
