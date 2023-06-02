@@ -1,11 +1,181 @@
 package strmech
 
 import (
+	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"strings"
 	"testing"
 )
 
-func TestDataFieldProfileDto_ConvertToErrorState_01(t *testing.T) {
+func TestStrMech_ConsolidateErrors_000100(t *testing.T) {
+
+	funcName := "TestStrMech_ConsolidateErrors_000100()"
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		funcName,
+		"")
+
+	errs := make([]error, 0, 9)
+
+	maxCnt := 9
+
+	for i := 0; i < maxCnt; i++ {
+
+		err := fmt.Errorf("error-%v text", i+1)
+
+		errs = append(errs, err)
+
+	}
+
+	conSolError := new(StrMech).ConsolidateErrors(
+		errs)
+
+	if conSolError == nil {
+
+		t.Errorf("\n%v\n"+
+			"Test Error returned from new(StrMech).ConsolidateErrors(errs)\n"+
+			"Error return is 'nil'\n"+
+			"Error return SHOULD CONTAIN ERRORS!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	errStr := fmt.Sprintf("%v", conSolError.Error())
+
+	if len(errStr) == 0 {
+
+		t.Errorf("\n%v\n"+
+			"Error string returned from\n"+
+			"new(StrMech).ConsolidateErrors(errs) is\n"+
+			"zero length!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	testCnt := 0
+
+	for j := 0; j < maxCnt; j++ {
+
+		//testStr := fmt.Sprintf("Error-%v text", j+1)
+		testStr := fmt.Sprintf("error-%v text", j+1)
+
+		if strings.Contains(errStr, testStr) {
+			testCnt++
+		}
+	}
+
+	if maxCnt != testCnt {
+		t.Errorf("\n%v\n"+
+			"ERROR: Expected Error String to contain %v Errors.\n"+
+			"Instead, found only %v Errors.\n",
+			ePrefix.String(),
+			maxCnt,
+			testCnt)
+	}
+
+	return
+}
+
+func TestStrMech_ConsolidateErrors_000200(t *testing.T) {
+
+	funcName := "TestStrMech_ConsolidateErrors_000200()"
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		funcName,
+		"")
+
+	errs := make([]error, 0, 300)
+
+	maxCnt := 9
+
+	for i := 0; i < maxCnt; i++ {
+
+		err := fmt.Errorf("error-%v text", i+1)
+
+		errs = append(errs, err)
+
+	}
+
+	conSolError := new(StrMech).ConsolidateErrors(errs)
+
+	if conSolError == nil {
+
+		t.Errorf("\n%v\n"+
+			"No Errors Returned From:\n"+
+			"new(StrMech).ConsolidateErrors(errs)\n",
+			ePrefix.String())
+
+		return
+
+	}
+
+	errStr := fmt.Sprintf("%v", conSolError.Error())
+
+	if len(errStr) == 0 {
+
+		t.Errorf("\n%v\n"+
+			"Error string returned from\n"+
+			"new(StrMech).ConsolidateErrors(errs) is\n"+
+			"zero length!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	testCnt := 0
+
+	for j := 0; j < maxCnt; j++ {
+
+		testStr := fmt.Sprintf("error-%v text", j+1)
+
+		if strings.Contains(errStr, testStr) {
+			testCnt++
+		}
+	}
+
+	if maxCnt != testCnt {
+		t.Errorf("\n%v\n"+
+			"ERROR: Expected Error String to contain %v Errors.\n"+
+			"Instead, found only %v Errors.\n",
+			ePrefix.String(),
+			maxCnt,
+			testCnt)
+	}
+
+}
+
+func TestStrMech_ConsolidateErrors_000300(t *testing.T) {
+
+	funcName := "TestStrMech_ConsolidateErrors_000300()"
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		funcName,
+		"")
+
+	errs := make([]error, 0)
+
+	conSolError := new(StrMech).ConsolidateErrors(errs)
+
+	if conSolError != nil {
+		t.Errorf("\n%v\n"+
+			"ERROR: Expected a 'nil' return from new(StrMech).ConsolidateErrors(errs)\n"+
+			"because errs is 'nil'.\n"+
+			"However, the returned value was NOT 'nil'!",
+			ePrefix.String())
+	}
+
+	return
+}
+
+func TestStrMech_DataFieldProfileDto_000100(t *testing.T) {
+
+	funcName := "TestStrMech_DataFieldProfileDto_000100()"
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		funcName,
+		"")
 
 	dfProfile := DataFieldProfileDto{}
 
@@ -18,24 +188,48 @@ func TestDataFieldProfileDto_ConvertToErrorState_01(t *testing.T) {
 	dfProfile.ConvertToErrorState()
 
 	if dfProfile.DataFieldStr != "" {
-		t.Errorf("Expected dfProfile.DataFieldStr==Empty String.\n"+
-			"Instead dfProfile.DataFieldStr='%v'\n", dfProfile.DataFieldStr)
+
+		t.Errorf("\n%v\n"+
+			"Expected dfProfile.DataFieldStr==Empty String.\n"+
+			"Instead dfProfile.DataFieldStr='%v'\n",
+			ePrefix.String(),
+			dfProfile.DataFieldStr)
+
+		return
 	}
 
 	if dfProfile.DataFieldIndex != -1 {
-		t.Errorf("Expected dfProfile.DataFieldIndex==-1\n"+
-			"Instead, dfProfile.DataFieldIndex=='%v'\n", dfProfile.DataFieldIndex)
+
+		t.Errorf("\n%v\n"+
+			"Expected dfProfile.DataFieldIndex==-1\n"+
+			"Instead, dfProfile.DataFieldIndex=='%v'\n",
+			ePrefix.String(),
+			dfProfile.DataFieldIndex)
+
+		return
 	}
 
 	if dfProfile.DataFieldLength != 0 {
-		t.Errorf("Expected dfProfile.DataFieldLength==0\n"+
-			"Instead, dfProfile.DataFieldLength=='%v'\n", dfProfile.DataFieldLength)
+
+		t.Errorf("\n%v\n"+
+			"Expected dfProfile.DataFieldLength==0\n"+
+			"Instead, dfProfile.DataFieldLength=='%v'\n",
+			ePrefix.String(),
+			dfProfile.DataFieldLength)
+
+		return
 	}
 
 	if dfProfile.NextTargetStrIndex != -1 {
-		t.Errorf("Expected dfProfile.NextTargetStrIndex==-1\n"+
-			"Instead, dfProfile.NextTargetStrIndex=='%v'\n", dfProfile.NextTargetStrIndex)
+
+		t.Errorf("\n%v\n"+
+			"Expected dfProfile.NextTargetStrIndex==-1\n"+
+			"Instead, dfProfile.NextTargetStrIndex=='%v'\n",
+			ePrefix.String(),
+			dfProfile.NextTargetStrIndex)
 	}
+
+	return
 }
 
 func TestStrMech_BreakTextAtLineLength_01(t *testing.T) {

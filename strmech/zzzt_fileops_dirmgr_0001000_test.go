@@ -5,11 +5,6 @@ import (
 	"testing"
 )
 
-const (
-	FILEOpsTestLogDir = "../fileOpsTest/logTest"
-	//commonDir = "../../pathFileOps"
-)
-
 func TestDirMgr_ChangeWorkingDir_000100(t *testing.T) {
 
 	funcName := "TestDirMgr_ChangeWorkingDir_000100()"
