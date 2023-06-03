@@ -2739,6 +2739,23 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 		return deleteDirStats, errs
 	}
 
+	if len(dMgrLabel) == 0 {
+
+		dMgrLabel = "dMgr"
+	}
+
+	if dMgr == nil {
+
+		err = fmt.Errorf("%v \n"+
+			"ERROR: Input paramter '%v' is a nil pointer!\n",
+			ePrefix.String(),
+			dMgrLabel)
+
+		errs = append(errs, err)
+
+		return deleteDirStats, errs
+	}
+
 	var dirPathDoesExist bool
 
 	dirPathDoesExist,

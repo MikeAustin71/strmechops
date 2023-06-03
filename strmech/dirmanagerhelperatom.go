@@ -113,11 +113,13 @@ func (dMgrHlprAtom *dirMgrHelperAtom) doesDirectoryExist(
 
 	var ePrefix *ePref.ErrPrefixDto
 
+	funcName := "dirMgrHelperAtom." +
+		"doesDirectoryExist()"
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"dirMgrHelperAtom."+
-			"doesDirectoryExist()",
+		funcName,
 		"")
 
 	if err != nil {
@@ -127,6 +129,10 @@ func (dMgrHlprAtom *dirMgrHelperAtom) doesDirectoryExist(
 	dirPathDoesExist = false
 	fInfo = FileInfoPlus{}
 	err = nil
+
+	if len(dMgrLabel) == 0 {
+		dMgrLabel = "dMgr"
+	}
 
 	if dMgr == nil {
 
@@ -138,21 +144,27 @@ func (dMgrHlprAtom *dirMgrHelperAtom) doesDirectoryExist(
 		return dirPathDoesExist, fInfo, err
 	}
 
-	if !dMgr.isInitialized {
+	err = new(dirMgrHelper).isDirMgrValid(
+		dMgr,
+		ePrefix.XCpy(dMgrLabel))
 
-		err = fmt.Errorf(
-			"%v\n"+
-				"Error: DirMgr is NOT Initialized.\n",
-			ePrefix.String())
+	if err != nil {
 
-		return dirPathDoesExist, fInfo, err
+		return dirPathDoesExist, fInfo, fmt.Errorf("%v\n"+
+			"Error: Input paramter '%v' is INVALID!\n"+
+			"Error= \n%v\n",
+			funcName,
+			dMgrLabel,
+			err.Error())
 	}
 
 	fh := new(FileHelper)
 
 	errCode := 0
 
-	errCode, _, dMgr.absolutePath =
+	errCode,
+		_,
+		dMgr.absolutePath =
 		fh.IsStringEmptyOrBlank(dMgr.absolutePath)
 
 	if errCode == -1 {
@@ -220,7 +232,9 @@ func (dMgrHlprAtom *dirMgrHelperAtom) doesDirectoryExist(
 		}
 	}
 
-	errCode, _, dMgr.path =
+	errCode,
+		_,
+		dMgr.path =
 		fh.IsStringEmptyOrBlank(dMgr.path)
 
 	if errCode < 0 {
@@ -235,7 +249,9 @@ func (dMgrHlprAtom *dirMgrHelperAtom) doesDirectoryExist(
 
 	idx := strings.Index(dMgr.absolutePath, idxStr)
 
-	dMgr.parentPath = fh.RemovePathSeparatorFromEndOfPathString(dMgr.absolutePath[0:idx])
+	dMgr.parentPath =
+		fh.RemovePathSeparatorFromEndOfPathString(
+			dMgr.absolutePath[0:idx])
 
 	dMgr.isParentPathPopulated = true
 
