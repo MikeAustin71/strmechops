@@ -455,18 +455,16 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 
 	fh := new(FileHelper)
 
-	// TODO Fix this file loop!
-
 	for err3 != io.EOF {
 
-		nameFileInfos, err3 = dirPtr.Readdir(2)
+		nameFileInfos, err3 = dirPtr.Readdir(2000)
 
 		if err3 != nil && err3 != io.EOF {
 
 			_ = dirPtr.Close()
 
 			err2 = fmt.Errorf("%v\n"+
-				"Error returned by dirPtr.Readdirnames(1000).\n"+
+				"Error returned by dirPtr.Readdirnames(2000).\n"+
 				"%v.absolutePath='%v'\n"+
 				"Error= \n%v\n",
 				ePrefix.String(),
@@ -480,8 +478,6 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 		}
 
 		for _, nameFInfo := range nameFileInfos {
-
-			err3 = nil
 
 			if nameFInfo.IsDir() {
 				// We don't care about sub-directories
