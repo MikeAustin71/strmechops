@@ -1640,7 +1640,7 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeInfo(
 
 	osPathSepStr := string(os.PathSeparator)
 
-	fh := FileHelper{}
+	fh := new(FileHelper)
 
 	file2LoopIsDone := false
 
@@ -1735,7 +1735,7 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeInfo(
 
 		for !file2LoopIsDone {
 
-			nameFileInfos, err = dirPtr.Readdir(10000)
+			nameFileInfos, err = dirPtr.Readdir(2000)
 
 			lNameFileInfos := len(nameFileInfos)
 
@@ -1750,7 +1750,7 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeInfo(
 			} else if err != nil {
 
 				err2 = fmt.Errorf("%v\n"+
-					"Error returned by dirPtr.Readdir(10000).\n"+
+					"Error returned by dirPtr.Readdir(2000).\n"+
 					"Error= \n%v\n",
 					ePrefix.String(),
 					err.Error())
