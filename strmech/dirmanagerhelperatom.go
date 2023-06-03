@@ -504,6 +504,17 @@ func (dMgrHlprAtom *dirMgrHelperAtom) executeFileOpsOnFoundFiles(
 
 		var err2 error
 
+		if info == nil {
+
+			err2 = fmt.Errorf("%v\n"+
+				"Error: Input parameter 'info' is nil and Invalid!\n",
+				ePrefix.String())
+
+			dirOp.ErrReturns = append(dirOp.ErrReturns, err2)
+
+			return nil
+		}
+
 		if erIn != nil {
 
 			err2 = fmt.Errorf("%v\n"+
@@ -523,7 +534,7 @@ func (dMgrHlprAtom *dirMgrHelperAtom) executeFileOpsOnFoundFiles(
 			return nil
 		}
 
-		fh := FileHelper{}
+		fh := new(FileHelper)
 
 		// This is not a directory. It is a file.
 		// Determine if it matches the find file criteria.
