@@ -678,11 +678,13 @@ func (dMgrHlpr *dirMgrHelper) copyIn(
 
 	var ePrefix *ePref.ErrPrefixDto
 
+	funcName := "dirMgrHelper." +
+		"copyIn()"
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"dirMgrHelper."+
-			"copyIn()",
+		funcName,
 		"")
 
 	if err != nil {
@@ -705,6 +707,19 @@ func (dMgrHlpr *dirMgrHelper) copyIn(
 			ePrefix.String())
 
 		return err
+	}
+
+	err = new(dirMgrHelper).isDirMgrValid(
+		sourceDMgrIn,
+		ePrefix.XCpy("sourceDMgrIn"))
+
+	if err != nil {
+
+		return fmt.Errorf("%v\n"+
+			"Error: Input paramter 'sourceDMgrIn' is INVALID!\n"+
+			"Error= \n%v\n",
+			funcName,
+			err.Error())
 	}
 
 	destinationDMgr.isInitialized = sourceDMgrIn.isInitialized
