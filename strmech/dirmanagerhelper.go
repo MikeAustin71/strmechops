@@ -3106,6 +3106,11 @@ func (dMgrHlpr *dirMgrHelper) equalAbsolutePaths(
 
 	dMgrHlprAtom := dirMgrHelperAtom{}
 
+	if dMgr1 == nil || dMgr2 == nil {
+
+		return false
+	}
+
 	if !dMgr1.isInitialized || !dMgr2.isInitialized {
 		return false
 	}
