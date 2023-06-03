@@ -29,6 +29,15 @@ type dirMgrHelper struct {
 //
 // ----------------------------------------------------------------
 //
+// # BE ADVISED
+//
+// This method ONLY copies files from the directory
+// identified by 'sourceDMgr' to the directory identified
+// by 'targetDMgr'. It does NOT copy files from
+// subdirectories of 'sourceDMgr'.
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	sourceDMgr					*DirMgr
@@ -313,6 +322,11 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 		return dirCopyStats, errs
 	}
 
+	if len(sourceDMgrLabel) == 0 {
+
+		sourceDMgrLabel = "sourceDMgr"
+	}
+
 	if sourceDMgr == nil {
 
 		err = fmt.Errorf("%v \n"+
@@ -324,9 +338,9 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 		return dirCopyStats, errs
 	}
 
-	if len(sourceDMgrLabel) == 0 {
+	if len(targetDMgrLabel) == 0 {
 
-		sourceDMgrLabel = "sourceDMgr"
+		targetDMgrLabel = "targetDMgr"
 	}
 
 	if targetDMgr == nil {
@@ -340,14 +354,9 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 		return dirCopyStats, errs
 	}
 
-	if len(targetDMgrLabel) == 0 {
-
-		targetDMgrLabel = "targetDMgr"
-	}
-
 	var dirPathDoesExist, targetPathDoesExist, dirCreated bool
 
-	dMgrHlprAtom := dirMgrHelperAtom{}
+	dMgrHlprAtom := new(dirMgrHelperAtom)
 
 	dirPathDoesExist,
 		_,
@@ -442,11 +451,15 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 	var nameFileInfos []os.FileInfo
 	err3 = nil
 
-	fh := FileHelper{}
+	dMgrHelpMolecule := new(dirMgrHelperMolecule)
+
+	fh := new(FileHelper)
+
+	// TODO Fix this file loop!
 
 	for err3 != io.EOF {
 
-		nameFileInfos, err3 = dirPtr.Readdir(0)
+		nameFileInfos, err3 = dirPtr.Readdir(2)
 
 		if err3 != nil && err3 != io.EOF {
 
@@ -467,6 +480,8 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 		}
 
 		for _, nameFInfo := range nameFileInfos {
+
+			err3 = nil
 
 			if nameFInfo.IsDir() {
 				// We don't care about sub-directories
@@ -521,7 +536,7 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 				if !targetPathDoesExist {
 
 					dirCreated,
-						err = new(dirMgrHelperMolecule).lowLevelMakeDir(
+						err = dMgrHelpMolecule.lowLevelMakeDir(
 						targetDMgr,
 						"targetDMgr",
 						ePrefix)
@@ -556,7 +571,7 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 				target = targetDMgr.absolutePath +
 					osPathSeparatorStr + nameFInfo.Name()
 
-				err = new(dirMgrHelperMolecule).lowLevelCopyFile(
+				err = dMgrHelpMolecule.lowLevelCopyFile(
 					src,
 					nameFInfo,
 					target,

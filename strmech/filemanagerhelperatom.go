@@ -823,7 +823,14 @@ func (fMgrHlprAtom *fileMgrHelperAtom) setFileMgrDirMgrFileName(
 		return isEmpty, err
 	}
 
-	err2 := dMgr.IsValidInstanceError(ePrefix.String())
+	var err2 error
+
+	err2 = new(dirMgrHelper).
+		isDirMgrValid(
+			dMgr,
+			ePrefix.XCpy("dMgr"))
+
+	//err2 := dMgr.IsValidInstanceError(ePrefix.String())
 
 	if err2 != nil {
 
@@ -906,8 +913,13 @@ func (fMgrHlprAtom *fileMgrHelperAtom) setFileMgrDirMgrFileName(
 		return isEmpty, err
 	}
 
+	//fMgr.dMgr,
+	//	err = dMgr.CopyOut(ePrefix.XCpy("dMgr"))
+
 	fMgr.dMgr,
-		err = dMgr.CopyOut(ePrefix.XCpy("dMgr"))
+		err = new(dirMgrHelperAtom).copyOut(
+		dMgr,
+		ePrefix.XCpy("dMgr"))
 
 	if err != nil {
 		return isEmpty, err

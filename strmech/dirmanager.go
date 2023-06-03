@@ -5601,7 +5601,7 @@ func (dMgr *DirMgr) FindFilesBySelectCriteria(
 		return dTreeInfo.FoundFiles, err
 	}
 
-	dMgrHlpr := dirMgrHelper{}
+	dMgrHlpr := new(dirMgrHelper)
 
 	dTreeInfo,
 		errs := dMgrHlpr.findDirectoryTreeFiles(

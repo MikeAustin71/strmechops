@@ -978,6 +978,10 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 		return err
 	}
 
+	if len(srcLabel) == 0 {
+		srcLabel = "srcFile"
+	}
+
 	if len(srcFile) == 0 {
 
 		return fmt.Errorf("%v\n"+
@@ -986,8 +990,61 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 			srcLabel)
 	}
 
-	if len(srcLabel) == 0 {
-		srcLabel = "srcFile"
+	errCode := 0
+
+	errCode,
+		_,
+		srcFile =
+		new(fileHelperElectron).isStringEmptyOrBlank(srcFile)
+
+	if errCode == -1 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: '%v' is an empty string!\n",
+			ePrefix.String(),
+			srcLabel)
+
+		return err
+	}
+
+	if errCode == -2 {
+
+		err = fmt.Errorf("%v\n"+
+			"\nError: '%v' consists of blank spaces!\n",
+			ePrefix.String(),
+			srcLabel)
+
+		return err
+	}
+
+	var doesFileExist bool
+
+	srcFile,
+		doesFileExist,
+		_,
+		err = new(fileHelperMolecule).
+		doesPathFileExist(
+			srcFile,
+			PreProcPathCode.AbsolutePath(),
+			ePrefix.XCpy("srcFile"),
+			srcLabel)
+
+	if err != nil {
+		return err
+	}
+
+	if !doesFileExist {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: %v does NOT exist on disk!\n",
+			ePrefix.String(),
+			srcLabel)
+
+		return err
+	}
+
+	if len(dstLabel) == 0 {
+		dstLabel = "dstFile"
 	}
 
 	if len(dstFile) == 0 {
@@ -996,10 +1053,6 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 			"Error: Input parameter %v is an empty string!\n",
 			ePrefix.String(),
 			dstLabel)
-	}
-
-	if len(dstLabel) == 0 {
-		dstLabel = "dstFile"
 	}
 
 	if !srcFInfo.Mode().IsRegular() {
