@@ -2271,19 +2271,20 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 		return deleteDirStats, errs
 	}
 
+	if len(dMgrLabel) == 0 {
+		dMgrLabel = "dMgr"
+	}
+
 	if dMgr == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'dMgr' is a nil pointer!\n",
-			ePrefix.String())
+			"Error: Input parameter '%v' is a nil pointer!\n",
+			ePrefix.String(),
+			dMgrLabel)
 
 		errs = append(errs, err)
 
 		return deleteDirStats, errs
-	}
-
-	if len(dMgrLabel) == 0 {
-		dMgrLabel = "dMgr"
 	}
 
 	if skipTopLevelDirectory &&
@@ -2300,7 +2301,7 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 		return deleteDirStats, errs
 	}
 
-	dMgrHlprAtom := dirMgrHelperAtom{}
+	dMgrHlprAtom := new(dirMgrHelperAtom)
 
 	dirPathDoesExist,
 		_,
@@ -2459,7 +2460,7 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 		for !file2LoopIsDone {
 
 			nameFileInfos,
-				err = dirPtr.Readdir(10000)
+				err = dirPtr.Readdir(2000)
 
 			if err != nil && err == io.EOF {
 
@@ -2473,7 +2474,7 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 			} else if err != nil {
 
 				err2 = fmt.Errorf("%v\n"+
-					"Error returned by dirPtr.Readdir(10000).\n"+
+					"Error returned by dirPtr.Readdir(2000).\n"+
 					"Error= \n%v\n",
 					ePrefix.String(),
 					err.Error())
