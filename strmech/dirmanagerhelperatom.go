@@ -35,11 +35,13 @@ func (dMgrHlprAtom *dirMgrHelperAtom) copyOut(
 
 	dOut := DirMgr{}
 
+	funcName := "dirMgrHelperAtom." +
+		"copyOut()"
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"dirMgrHelperAtom."+
-			"copyOut()",
+		funcName,
 		"")
 
 	if err != nil {
@@ -53,6 +55,19 @@ func (dMgrHlprAtom *dirMgrHelperAtom) copyOut(
 			ePrefix.String())
 
 		return dOut, err
+	}
+
+	err = new(dirMgrHelper).isDirMgrValid(
+		dMgr,
+		ePrefix.XCpy("dMgr"))
+
+	if err != nil {
+
+		return dOut, fmt.Errorf("%v\n"+
+			"Error: Input paramter 'dMgr' is INVALID!\n"+
+			"Error= \n%v\n",
+			funcName,
+			err.Error())
 	}
 
 	dOut.isInitialized = dMgr.isInitialized

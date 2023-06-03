@@ -1163,6 +1163,15 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryAll(
 		return err
 	}
 
+	if dMgr == nil {
+
+		err = fmt.Errorf("%v \n"+
+			"ERROR: Input paramter 'dMgr' is a nil pointer!\n",
+			ePrefix.String())
+
+		return err
+	}
+
 	dMgrHlprAtom := dirMgrHelperAtom{}
 
 	dirPathDoesExist,
@@ -1554,19 +1563,20 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeInfo(
 		return deleteTreeInfo, errs
 	}
 
+	if len(dMgrLabel) == 0 {
+		dMgrLabel = "dMgr"
+	}
+
 	if dMgr == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'dMgr' is a nil pointer!\n",
-			ePrefix.String())
+			"Error: Input parameter '%v' is a nil pointer!\n",
+			ePrefix.String(),
+			dMgrLabel)
 
 		errs = append(errs, err)
 
 		return deleteTreeInfo, errs
-	}
-
-	if len(dMgrLabel) == 0 {
-		dMgrLabel = "dMgr"
 	}
 
 	if len(deleteFileSelectLabel) == 0 {
@@ -1589,7 +1599,7 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeInfo(
 		return deleteTreeInfo, errs
 	}
 
-	dMgrHlprAtom := dirMgrHelperAtom{}
+	dMgrHlprAtom := new(dirMgrHelperAtom)
 
 	dirPathDoesExist,
 		_,
