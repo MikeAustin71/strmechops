@@ -337,7 +337,6 @@ func (fHelpElectron *fileHelperElectron) getExecutablePathFileName(
 //	            3. 'testStr'     = ""
 //	               return string = ""
 //
-// /
 // ----------------------------------------------------------------
 //
 // # Input Parameters

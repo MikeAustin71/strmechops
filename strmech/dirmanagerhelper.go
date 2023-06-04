@@ -1933,7 +1933,7 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeInfo(
 func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 	dMgr *DirMgr,
 	deleteFileSelectionCriteria FileSelectionCriteria,
-	skipTopLevelDirectory,
+	skipTopLevelDirectory bool,
 	scanSubDirectories bool,
 	dMgrLabel string,
 	deleteSelectionLabel string,
@@ -2392,9 +2392,11 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 		dMgrLabel = "dMgr"
 	}
 
+	dMgrHlprPreon := new(dirMgrHelperPreon)
+
 	_,
 		_,
-		err = new(dirMgrHelperPreon).
+		err = dMgrHlprPreon.
 		validateDirMgr(
 			dMgr,
 			true,
@@ -2408,36 +2410,16 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 		return deleteDirStats, errs
 	}
 
-	var err2 error
+	fileSearchPattern,
+		err = dMgrHlprPreon.
+		validateInputString(
+			fileSearchPattern,
+			"fileSearchPattern",
+			ePrefix)
 
-	errCode := 0
+	if err != nil {
 
-	errCode,
-		_,
-		fileSearchPattern =
-		new(fileHelperElectron).
-			isStringEmptyOrBlank(fileSearchPattern)
-
-	if errCode == -1 {
-
-		err2 = fmt.Errorf("%v\n"+
-			"Error: Input parameter '%v' is an empty string!\n",
-			ePrefix.String(),
-			fileSearchLabel)
-
-		errs = append(errs, err2)
-
-		return deleteDirStats, errs
-	}
-
-	if errCode == -2 {
-
-		err2 = fmt.Errorf("%v\n"+
-			"Error: Input parameter '%v' consists of blank spaces!\n",
-			ePrefix.String(),
-			fileSearchLabel)
-
-		errs = append(errs, err2)
+		errs = append(errs, err)
 
 		return deleteDirStats, errs
 	}
@@ -2447,6 +2429,7 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 	var nameDirEntries []os.DirEntry
 	osPathSepStr := string(os.PathSeparator)
 	var isMatch bool
+	var err2 error
 
 	nameDirEntries,
 		err2 = os.ReadDir(dMgr.absolutePath)
