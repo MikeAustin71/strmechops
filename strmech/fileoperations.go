@@ -2750,9 +2750,7 @@ func (fops *FileOps) SetDestinationByDirMgrFileName(
 		return err
 	}
 
-	dMgrHelper := new(dirMgrHelper)
-
-	err = dMgrHelper.isDirMgrValid(
+	err = new(dirMgrHelperBoson).isDirMgrValid(
 		&destinationDir,
 		ePrefix.XCpy("destinationDir"))
 
@@ -3455,9 +3453,7 @@ func (fops *FileOps) SetSourceByDirMgrFileName(
 		return err
 	}
 
-	dMgrHelper := new(dirMgrHelper)
-
-	err = dMgrHelper.isDirMgrValid(
+	err = new(dirMgrHelperBoson).isDirMgrValid(
 		&sourceDir,
 		ePrefix.XCpy("sourceDir"))
 

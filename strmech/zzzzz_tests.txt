@@ -128,4 +128,4 @@
 --- PASS: TestDirMgr_ChangeWorkingDir_000100 (0.00s)
 === RUN   TestDirMgr_CopyDirectory_000100
 exit status 0xc000013a
-FAIL	github.com/MikeAustin71/strmechops/strmech	107.459s
+FAIL	github.com/MikeAustin71/strmechops/strmech	53.048s

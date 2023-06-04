@@ -2319,7 +2319,7 @@ func (dMgrs *DirMgrCollection) InsertDirMgrAtIndex(
 		dMgrs.dirMgrs = make([]DirMgr, 0, 1)
 	}
 
-	err = new(dirMgrHelper).isDirMgrValid(
+	err = new(dirMgrHelperBoson).isDirMgrValid(
 		&dMgr,
 		ePrefix.XCpy("dMgr"))
 

@@ -8848,7 +8848,7 @@ func (dMgr *DirMgr) IsValidInstance() bool {
 
 	var err error
 
-	err = new(dirMgrHelper).isDirMgrValid(
+	err = new(dirMgrHelperBoson).isDirMgrValid(
 		dMgr,
 		nil)
 
@@ -8977,7 +8977,7 @@ func (dMgr *DirMgr) IsValidInstanceError(
 		return err
 	}
 
-	return new(dirMgrHelper).isDirMgrValid(
+	return new(dirMgrHelperBoson).isDirMgrValid(
 		dMgr,
 		ePrefix.XCpy("dMgr"))
 }
@@ -10984,9 +10984,7 @@ func (dMgr *DirMgr) NewFromDirMgrFileInfo(
 				ePrefix.String())
 	}
 
-	dMgrHlpr := dirMgrHelper{}
-
-	err = dMgrHlpr.isDirMgrValid(
+	err = new(dirMgrHelperBoson).isDirMgrValid(
 		&parentDirectory,
 		ePrefix.XCpy(
 			"parentDirectory"))
@@ -11003,7 +11001,7 @@ func (dMgr *DirMgr) NewFromDirMgrFileInfo(
 	isEmpty := false
 
 	isEmpty,
-		err = dMgrHlpr.setDirMgrFromKnownPathDirName(
+		err = new(dirMgrHelper).setDirMgrFromKnownPathDirName(
 		&newDirMgr,
 		parentDirectory.absolutePath,
 		directoryFileInfo.Name(),

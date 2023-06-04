@@ -438,7 +438,7 @@ func (fMgrHlprAtom *fileMgrHelperAtom) isFileMgrValid(
 
 	var err2 error
 
-	err2 = new(dirMgrHelper).isDirMgrValid(
+	err2 = new(dirMgrHelperBoson).isDirMgrValid(
 		&fMgr.dMgr,
 		ePrefix.XCpy("fMgr.dMgr"))
 
@@ -825,7 +825,7 @@ func (fMgrHlprAtom *fileMgrHelperAtom) setFileMgrDirMgrFileName(
 
 	var err2 error
 
-	err2 = new(dirMgrHelper).
+	err2 = new(dirMgrHelperBoson).
 		isDirMgrValid(
 			dMgr,
 			ePrefix.XCpy("dMgr"))

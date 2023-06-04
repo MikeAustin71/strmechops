@@ -2587,9 +2587,9 @@ func (fOpsNanobot *FileOperationsNanobot) setFileOpsByDirMgrFileName(
 		return err
 	}
 
-	dMgrHelper := new(dirMgrHelper)
+	dMgrHelperBoson := new(dirMgrHelperBoson)
 
-	err = dMgrHelper.isDirMgrValid(
+	err = dMgrHelperBoson.isDirMgrValid(
 		&sourceDir,
 		ePrefix.XCpy("sourceDir"))
 
@@ -2609,7 +2609,7 @@ func (fOpsNanobot *FileOperationsNanobot) setFileOpsByDirMgrFileName(
 			ePrefix.String())
 	}
 
-	err = dMgrHelper.isDirMgrValid(
+	err = dMgrHelperBoson.isDirMgrValid(
 		&destinationDir,
 		ePrefix.XCpy("destinationDir"))
 

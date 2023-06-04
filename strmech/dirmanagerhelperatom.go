@@ -57,7 +57,7 @@ func (dMgrHlprAtom *dirMgrHelperAtom) copyOut(
 		return dOut, err
 	}
 
-	err = new(dirMgrHelper).isDirMgrValid(
+	err = new(dirMgrHelperBoson).isDirMgrValid(
 		dMgr,
 		ePrefix.XCpy("dMgr"))
 
@@ -142,20 +142,6 @@ func (dMgrHlprAtom *dirMgrHelperAtom) doesDirectoryExist(
 			dMgrLabel)
 
 		return dirPathDoesExist, fInfo, err
-	}
-
-	err = new(dirMgrHelper).isDirMgrValid(
-		dMgr,
-		ePrefix.XCpy(dMgrLabel))
-
-	if err != nil {
-
-		return dirPathDoesExist, fInfo, fmt.Errorf("%v\n"+
-			"Error: Input paramter '%v' is INVALID!\n"+
-			"Error= \n%v\n",
-			funcName,
-			dMgrLabel,
-			err.Error())
 	}
 
 	fh := new(FileHelper)
