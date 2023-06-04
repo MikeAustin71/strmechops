@@ -762,29 +762,49 @@ func (dMgrHlpr *dirMgrHelper) deleteAllFilesInDirectory(
 		return deleteDirStats, errs
 	}
 
-	if dMgr == nil {
-
-		err = fmt.Errorf("%v \n"+
-			"ERROR: Input paramter 'dMgr' is a nil pointer!\n",
-			ePrefix.String())
-
-		return deleteDirStats, errs
-	}
-
 	if len(dMgrLabel) == 0 {
 
 		dMgrLabel = "dMgr"
 	}
 
+	if dMgr == nil {
+
+		err = fmt.Errorf("%v \n"+
+			"ERROR: Input paramter '%v' is a nil pointer!\n",
+			ePrefix.String(),
+			dMgrLabel)
+
+		return deleteDirStats, errs
+	}
+
 	var err2 error
+
+	err2 = new(dirMgrHelperBoson).isDirMgrValid(
+		dMgr,
+		ePrefix.XCpy(dMgrLabel))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input paramter '%v' is INVALID!\n"+
+			"Error= \n%v\n",
+			funcName,
+			dMgrLabel,
+			err2.Error())
+
+		errs = append(errs, err)
+
+		return deleteDirStats, errs
+	}
+
 	osPathSepStr := string(os.PathSeparator)
 
 	dirPathDoesExist,
 		_,
 		err := new(dirMgrHelperAtom).doesDirectoryExist(
 		dMgr,
-		PreProcPathCode.None(),
-		"dMgr",
+		PreProcPathCode.AbsolutePath(),
+		dMgrLabel,
 		ePrefix)
 
 	if err != nil {
@@ -807,149 +827,115 @@ func (dMgrHlpr *dirMgrHelper) deleteAllFilesInDirectory(
 		return deleteDirStats, errs
 	}
 
-	dirPtr, err := os.Open(dMgr.absolutePath)
+	deleteDirStats.TotalDirsScanned = 1
 
-	if err != nil {
+	var nameDirEntries []os.DirEntry
 
-		err2 = fmt.Errorf("%v\n"+
-			"Error return by os.Open(%v.absolutePath).\n"+
+	isNewDir := true
+
+	nameDirEntries,
+		err2 = os.ReadDir(dMgr.absolutePath)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by dirPtr.Readdirnames(10000).\n"+
 			"%v.absolutePath='%v'\n"+
 			"Error= \n%v\n",
 			ePrefix.String(),
 			dMgrLabel,
-			dMgrLabel,
 			dMgr.absolutePath,
-			err.Error())
+			err2.Error())
 
-		errs = append(errs, err2)
+		errs = append(errs, err)
 
 		return deleteDirStats, errs
 	}
 
-	deleteDirStats.TotalDirsScanned = 1
+	var nameFileInfo os.FileInfo
 
-	var nameFileInfos []os.FileInfo
+	for _, nameDirEntry := range nameDirEntries {
 
-	file2LoopIsDone := false
+		if nameDirEntry.IsDir() {
 
-	isNewDir := true
+			// This is a Directory.
+			// Skip it and proceed.
+			deleteDirStats.TotalSubDirectories++
 
-	for !file2LoopIsDone {
+			continue
 
-		nameFileInfos, err = dirPtr.Readdir(10000)
+		} else {
+			// This is a file
 
-		if err != nil && err == io.EOF {
+			nameFileInfo,
+				err2 = nameDirEntry.Info()
 
-			file2LoopIsDone = true
+			if err2 != nil {
 
-			if len(nameFileInfos) == 0 {
+				err = fmt.Errorf("%v\n"+
+					"Error: Error Returned by nameDirEntry.Info().\n"+
+					"The conversion of DirEntry to os.FileInfo Failed."+
+					"Error= \n%v\n",
+					ePrefix.String(),
+					err2.Error())
 
-				break
+				errs = append(errs, err)
+
+				return deleteDirStats, errs
 			}
 
-		} else if err != nil {
+			deleteDirStats.TotalFilesProcessed++
 
-			err2 = fmt.Errorf("%v\n"+
-				"Error returned by dirPtr.Readdirnames(10000).\n"+
-				"%v.absolutePath='%v'\n"+
-				"Error= \n%v\n",
-				ePrefix.String(),
-				dMgrLabel,
-				dMgr.absolutePath,
-				err.Error())
+			if !nameFileInfo.Mode().IsRegular() {
 
-			errs = append(errs, err2)
+				err = fmt.Errorf("%v\n"+
+					"Error: File Name is NOT classified as a 'Regular' File!\n"+
+					"fileName='%v'\n",
+					ePrefix.String(),
+					dMgr.absolutePath+osPathSepStr+nameFileInfo.Name())
 
-			file2LoopIsDone = true
+				errs = append(errs, err)
 
-			break
-		}
+				deleteDirStats.FilesRemaining++
 
-		for _, nameFInfo := range nameFileInfos {
-
-			if nameFInfo.IsDir() {
-
-				deleteDirStats.TotalSubDirectories++
+				deleteDirStats.FilesRemainingBytes += uint64(nameFileInfo.Size())
 
 				continue
+			}
+
+			// This is a Regular File
+			err2 = os.Remove(dMgr.absolutePath + osPathSepStr + nameFileInfo.Name())
+
+			if err2 != nil {
+
+				err = fmt.Errorf("%v\n"+
+					"Error returned by os.Remove(fileName).\n"+
+					"An attempt to delete 'fileName' as Failed!\n"+
+					"%v.absolutePath='%v'\n"+
+					"fileName='%v'\n"+
+					"Error= \n%v\n",
+					ePrefix.String(),
+					dMgrLabel,
+					dMgr.absolutePath,
+					dMgr.absolutePath+osPathSepStr+nameFileInfo.Name(),
+					err2.Error())
+
+				deleteDirStats.FilesRemaining++
+				deleteDirStats.FilesRemainingBytes += uint64(nameFileInfo.Size())
+
+				errs = append(errs, err)
 
 			} else {
 
-				deleteDirStats.TotalFilesProcessed++
+				deleteDirStats.FilesDeleted++
+				deleteDirStats.FilesDeletedBytes += uint64(nameFileInfo.Size())
 
-				if !nameFInfo.Mode().IsRegular() {
-
-					err2 = fmt.Errorf("%v\n"+
-						"Error: fileName is NOT classified as a 'Regular' File!\n"+
-						"fileName='%v'\n",
-						ePrefix.String(),
-						dMgr.absolutePath+osPathSepStr+nameFInfo.Name())
-
-					errs = append(errs, err2)
-
-					deleteDirStats.FilesRemaining++
-
-					deleteDirStats.FilesRemainingBytes += uint64(nameFInfo.Size())
-
-					continue
+				if isNewDir {
+					isNewDir = false
+					deleteDirStats.NumOfDirsWhereFilesDeleted++
 				}
 
-				// This is a file
-				err = os.Remove(dMgr.absolutePath + osPathSepStr + nameFInfo.Name())
-
-				if err != nil {
-
-					err2 = fmt.Errorf("%v\n"+
-						"Error returned by os.Remove(fileName).\n"+
-						"An attempt to delete 'fileName' as Failed!\n"+
-						"%v.absolutePath='%v'\n"+
-						"fileName='%v'\n"+
-						"Error= \n%v\n",
-						ePrefix.String(),
-						dMgrLabel,
-						dMgr.absolutePath,
-						dMgr.absolutePath+osPathSepStr+nameFInfo.Name(),
-						err.Error())
-
-					deleteDirStats.FilesRemaining++
-					deleteDirStats.FilesRemainingBytes += uint64(nameFInfo.Size())
-
-					errs = append(errs, err2)
-
-				} else {
-
-					deleteDirStats.FilesDeleted++
-					deleteDirStats.FilesDeletedBytes += uint64(nameFInfo.Size())
-
-					if isNewDir {
-						isNewDir = false
-						deleteDirStats.NumOfDirsWhereFilesDeleted++
-					}
-
-				}
 			}
-		}
-	}
-
-	if dirPtr != nil {
-
-		err = dirPtr.Close()
-
-		if err != nil {
-
-			err2 = fmt.Errorf("%v\n"+
-				"Error returned by dirPtr.Close().\n"+
-				"An attempt to close the os.File pointer to the current\n"+
-				"%v path has FAILED!\n"+
-				"%v.absolutePath='%v'\n"+
-				"Error= \n%v\n",
-				ePrefix.String(),
-				dMgrLabel,
-				dMgrLabel,
-				dMgr.absolutePath,
-				err.Error())
-
-			errs = append(errs, err2)
 		}
 	}
 
