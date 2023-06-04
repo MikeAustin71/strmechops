@@ -2269,7 +2269,8 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 //	This method deletes files in the directory specified
 //	by the current instance of DirMgr. Only files in the
 //	parent or top level directory identified by DirMgr
-//	are eligible for deletion.
+//	are eligible for deletion. No files in the DirMgr
+//	subdirectory tree will be deleted.
 //
 // ----------------------------------------------------------------
 //
@@ -2391,46 +2392,12 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 		dMgrLabel = "dMgr"
 	}
 
-	if dMgr == nil {
-
-		err = fmt.Errorf("%v \n"+
-			"ERROR: Input paramter '%v' is a nil pointer!\n",
-			ePrefix.String(),
-			dMgrLabel)
-
-		errs = append(errs, err)
-
-		return deleteDirStats, errs
-	}
-
-	var err2 error
-
-	err2 = new(dirMgrHelperBoson).isDirMgrValid(
-		dMgr,
-		ePrefix.XCpy(dMgrLabel))
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input paramter '%v' is INVALID!\n"+
-			"Error= \n%v\n",
-			funcName,
-			dMgrLabel,
-			err2.Error())
-
-		errs = append(errs, err)
-
-		return deleteDirStats, errs
-	}
-
-	var dirPathDoesExist bool
-
-	dirPathDoesExist,
+	_,
 		_,
-		err = new(dirMgrHelperAtom).
-		doesDirectoryExist(
+		err = new(dirMgrHelperPreon).
+		validateDirMgr(
 			dMgr,
-			PreProcPathCode.AbsolutePath(),
+			true,
 			dMgrLabel,
 			ePrefix)
 
@@ -2441,20 +2408,7 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 		return deleteDirStats, errs
 	}
 
-	if !dirPathDoesExist {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: %v Directory Path DOES NOT EXIST!\n"+
-			"%v='%v'\n",
-			ePrefix.String(),
-			dMgrLabel,
-			dMgrLabel,
-			dMgr.absolutePath)
-
-		errs = append(errs, err)
-
-		return deleteDirStats, errs
-	}
+	var err2 error
 
 	errCode := 0
 
