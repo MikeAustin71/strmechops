@@ -191,7 +191,7 @@ func (dMgrHlprPreon *dirMgrHelperPreon) validateDirMgr(
 	if !pathDoesExist {
 
 		err = fmt.Errorf("%v\n"+
-			"The current DirMgr path DOES NOT EXIST!\n"+
+			"Error: The current DirMgr path DOES NOT EXIST!\n"+
 			"%v.absolutePath='%v'\n",
 			ePrefix.String(),
 			finalDirMgrLabel,
