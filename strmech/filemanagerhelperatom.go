@@ -131,7 +131,7 @@ func (fMgrHlprAtom *fileMgrHelperAtom) copyInFileMgr(
 
 	destinationFMgr.isInitialized = sourceFMgr.isInitialized
 
-	err = new(dirMgrHelper).copyIn(
+	err = new(dirMgrHelperBoson).copyDirMgrs(
 		&destinationFMgr.dMgr,
 		&sourceFMgr.dMgr,
 		ePrefix.XCpy(
@@ -286,7 +286,7 @@ func (fMgrHlprAtom *fileMgrHelperAtom) copyOutFileMgr(
 
 	deepCopyOfFileMgr.isInitialized = fileMgr.isInitialized
 
-	err = new(dirMgrHelper).copyIn(
+	err = new(dirMgrHelperBoson).copyDirMgrs(
 		&deepCopyOfFileMgr.dMgr,
 		&fileMgr.dMgr,
 		ePrefix.XCpy(

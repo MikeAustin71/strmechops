@@ -780,8 +780,6 @@ func (dMgr *DirMgr) CopyIn(
 
 	defer dMgr.lock.Unlock()
 
-	dMgrHlpr := dirMgrHelper{}
-
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
@@ -796,7 +794,7 @@ func (dMgr *DirMgr) CopyIn(
 		return err
 	}
 
-	return dMgrHlpr.copyIn(
+	return new(dirMgrHelperBoson).copyDirMgrs(
 		dMgr,
 		dMgrIn,
 		ePrefix.XCpy(
@@ -921,9 +919,14 @@ func (dMgr *DirMgr) CopyOut(
 		return DirMgr{}, err
 	}
 
-	return new(dirMgrHelperAtom).copyOut(
+	newDirMgr := DirMgr{}
+
+	err = new(dirMgrHelperBoson).copyDirMgrs(
+		&newDirMgr,
 		dMgr,
 		ePrefix.XCpy("dMgr->"))
+
+	return newDirMgr, err
 }
 
 // CopySubDirectoryTree

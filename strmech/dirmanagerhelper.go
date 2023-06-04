@@ -304,6 +304,373 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 
 	defer dMgrHlpr.lock.Unlock()
 
+	var err, err2 error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "dirMgrHelper." +
+		"copyDirectory()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return dirCopyStats, errs
+	}
+
+	if len(sourceDMgrLabel) == 0 {
+
+		sourceDMgrLabel = "sourceDMgr"
+	}
+
+	if sourceDMgr == nil {
+
+		err = fmt.Errorf("%v \n"+
+			"ERROR: Input paramter 'sourceDMgr' is a nil pointer!\n",
+			ePrefix.String())
+
+		errs = append(errs, err)
+
+		return dirCopyStats, errs
+	}
+
+	if len(targetDMgrLabel) == 0 {
+
+		targetDMgrLabel = "targetDMgr"
+	}
+
+	if targetDMgr == nil {
+
+		err = fmt.Errorf("%v \n"+
+			"ERROR: Input paramter 'targetDMgr' is a nil pointer!\n",
+			ePrefix.String())
+
+		errs = append(errs, err)
+
+		return dirCopyStats, errs
+	}
+
+	dMgrHlprBoson := new(dirMgrHelperBoson)
+
+	err2 = dMgrHlprBoson.isDirMgrValid(
+		sourceDMgr,
+		ePrefix.XCpy(sourceDMgrLabel))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input paramter '%v' is INVALID!\n"+
+			"Error= \n%v\n",
+			funcName,
+			sourceDMgrLabel,
+			err2.Error())
+
+		errs = append(errs, err)
+
+		return dirCopyStats, errs
+	}
+
+	err2 = dMgrHlprBoson.isDirMgrValid(
+		targetDMgr,
+		ePrefix.XCpy(targetDMgrLabel))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input paramter '%v' is INVALID!\n"+
+			"Error= \n%v\n",
+			funcName,
+			targetDMgrLabel,
+			err2.Error())
+
+		errs = append(errs, err)
+
+		return dirCopyStats, errs
+	}
+
+	var dirPathDoesExist, targetPathDoesExist, dirCreated bool
+
+	dMgrHlprAtom := new(dirMgrHelperAtom)
+
+	dirPathDoesExist,
+		_,
+		err =
+		dMgrHlprAtom.doesDirectoryExist(
+			sourceDMgr,
+			PreProcPathCode.None(),
+			sourceDMgrLabel,
+			ePrefix.XCpy("sourceDMgr"))
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return dirCopyStats, errs
+	}
+
+	if !dirPathDoesExist {
+
+		err = fmt.Errorf("%v\n"+
+			"The current DirMgr path DOES NOT EXIST!\n"+
+			"%v.absolutePath='%v'\n",
+			ePrefix.String(),
+			sourceDMgrLabel,
+			sourceDMgr.absolutePath)
+
+		errs = append(errs, err)
+
+		return dirCopyStats, errs
+	}
+
+	targetPathDoesExist,
+		_,
+		err =
+		dMgrHlprAtom.doesDirectoryExist(
+			targetDMgr,
+			PreProcPathCode.None(),
+			targetDMgrLabel,
+			ePrefix.XCpy(
+				"targetDMgr"))
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return dirCopyStats, errs
+	}
+
+	if !targetPathDoesExist && copyEmptyDirectory {
+
+		dirCreated,
+			err = new(dirMgrHelperMolecule).lowLevelMakeDir(
+			targetDMgr,
+			"targetDMgr",
+			ePrefix.XCpy("targetDMgr"))
+
+		if err != nil {
+			errs = append(errs, err)
+			return dirCopyStats, errs
+		}
+
+		if dirCreated {
+			dirCopyStats.DirCreated++
+		}
+
+		targetPathDoesExist = true
+	}
+
+	/*
+		dirPtr, err := os.Open(sourceDMgr.absolutePath)
+
+		if err != nil {
+
+			err2 = fmt.Errorf("%v\n"+
+				"Error return by os.Open(%v.absolutePath).\n"+
+				"%v.absolutePath='%v'\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				sourceDMgrLabel,
+				sourceDMgrLabel,
+				sourceDMgr.absolutePath,
+				err.Error())
+
+			errs = append(errs, err2)
+
+			return dirCopyStats, errs
+		}
+	*/
+
+	osPathSeparatorStr := string(os.PathSeparator)
+
+	var src, target string
+	var isMatch bool
+	var nameDirEntries []os.DirEntry
+
+	dMgrHelpMolecule := new(dirMgrHelperMolecule)
+
+	fh := new(FileHelper)
+
+	nameDirEntries,
+		err2 = os.ReadDir(sourceDMgr.absolutePath)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by os.ReadDir(sourceDMgr.absolutePath).\n"+
+			"%v.absolutePath='%v'\n"+
+			"Error= \n%v\n",
+			ePrefix.String(),
+			sourceDMgrLabel,
+			sourceDMgr.absolutePath,
+			err2.Error())
+
+		errs = append(errs, err)
+
+		return dirCopyStats, errs
+	}
+
+	var nameFileInfo os.FileInfo
+
+	for _, nameDirEntryInfo := range nameDirEntries {
+
+		if nameDirEntryInfo.IsDir() {
+			// We don't care about sub-directories
+			continue
+
+		}
+
+		// This is a File. Proceed...
+		dirCopyStats.TotalFilesProcessed++
+
+		// This is not a directory. It is a file.
+		// Determine if it matches the find file criteria.
+
+		nameFileInfo,
+			err2 = nameDirEntryInfo.Info()
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Error Returned by nameDirEntryInfo.Info()\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				err2.Error())
+
+			errs = append(errs, err)
+
+			return dirCopyStats, errs
+		}
+
+		isMatch,
+			err2,
+			_ =
+			fh.FilterFileName(
+				nameFileInfo,
+				fileSelectCriteria,
+				ePrefix.XCpy("nameFileInfo"))
+
+		if err2 != nil {
+
+			err =
+				fmt.Errorf("%v\n"+
+					"Error returned by fh.FilterFileName(nameFileInfo, fileSelectCriteria).\n"+
+					"%v directorySearched='%v'\n"+
+					"fileName='%v'\n"+
+					"Error= \n%v\n",
+					ePrefix.String(),
+					sourceDMgrLabel,
+					sourceDMgr.absolutePath,
+					nameFileInfo.Name(),
+					err2.Error())
+
+			errs = append(errs, err)
+
+			continue
+		}
+
+		if !isMatch {
+
+			dirCopyStats.FilesNotCopied++
+
+			dirCopyStats.FileBytesNotCopied += uint64(nameFileInfo.Size())
+
+			continue
+
+		} else {
+
+			// We have a match
+
+			// Create Directory if needed
+			if !targetPathDoesExist {
+
+				dirCreated,
+					err = dMgrHelpMolecule.lowLevelMakeDir(
+					targetDMgr,
+					"targetDMgr",
+					ePrefix)
+
+				if err != nil {
+					err2 = fmt.Errorf("%v\n"+
+						"Error creating target directory!\n"+
+						"%v Directory='%v'\n"+
+						"Error= \n%v\n",
+						ePrefix.String(),
+						targetDMgrLabel,
+						targetDMgr.absolutePath,
+						err.Error())
+
+					errs = append(errs, err2)
+
+					continue
+				}
+
+				targetPathDoesExist = true
+
+				if dirCreated {
+					dirCopyStats.DirCreated++
+				}
+			}
+
+			src = sourceDMgr.absolutePath +
+				osPathSeparatorStr + nameFileInfo.Name()
+
+			target = targetDMgr.absolutePath +
+				osPathSeparatorStr + nameFileInfo.Name()
+
+			err = dMgrHelpMolecule.lowLevelCopyFile(
+				src,
+				nameFileInfo,
+				target,
+				"srcFile",
+				"destinationFile",
+				ePrefix)
+
+			if err != nil {
+
+				errs = append(errs, err)
+
+				dirCopyStats.FilesNotCopied++
+
+				dirCopyStats.FileBytesNotCopied += uint64(nameFileInfo.Size())
+
+			} else {
+
+				dirCopyStats.FilesCopied++
+
+				dirCopyStats.FileBytesCopied += uint64(nameFileInfo.Size())
+			}
+		}
+	}
+
+	return dirCopyStats, errs
+}
+
+/*
+	func (dMgrHlpr *dirMgrHelper) copyDirectory(
+	sourceDMgr *DirMgr,
+	targetDMgr *DirMgr,
+	fileSelectCriteria FileSelectionCriteria,
+	copyEmptyDirectory bool,
+	sourceDMgrLabel string,
+	targetDMgrLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	dirCopyStats DirectoryCopyStats,
+	errs []error) {
+
+	if dMgrHlpr.lock == nil {
+		dMgrHlpr.lock = new(sync.Mutex)
+	}
+
+	dMgrHlpr.lock.Lock()
+
+	defer dMgrHlpr.lock.Unlock()
+
 	var err, err2, err3 error
 
 	var ePrefix *ePref.ErrPrefixDto
@@ -615,132 +982,7 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 
 	return dirCopyStats, errs
 }
-
-// copyIn
-//
-// Receives a pointer to an incoming DirMgr object
-// ('sourceDMgrIn') as an input parameter and copies the
-// data values from the incoming object to the input
-// parameter, 'destinationDMgr'.
-//
-// When the copy operation is completed, the
-// 'destinationDMgr' object is configured as a duplicate
-// of the incoming DirMgr object ('sourceDMgrIn').
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	destinationDMgr				*DirMgr
-//
-//		A pointer to an instance of DirMgr. All the data
-//		values contained in input parameter
-//		'sourceDMgrIn' will be copied to the
-//		corresponding member data values contained in
-//		'destinationDMgr'.
-//
-//		When the copy operation is completed, all data
-//		values in 'destinationDMgr' will duplicate
-//		corresponding data values contained in
-//		'sourceDMgrIn'.
-//
-//	sourceDMgrIn				*DirMgr
-//
-//		A pointer to an instance of DirMgr. Data values
-//		contained in this instance will be copied to
-//		corresponding member data values encapsulated
-//		by input parameter 'destinationDMgr'.
-//
-//		When the copy operation is completed, all data
-//		values in 'destinationDMgr' will duplicate
-//		corresponding data values contained in
-//		'sourceDMgrIn'.
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	--- NONE ---
-func (dMgrHlpr *dirMgrHelper) copyIn(
-	destinationDMgr *DirMgr,
-	sourceDMgrIn *DirMgr,
-	errPrefDto *ePref.ErrPrefixDto) error {
-
-	if dMgrHlpr.lock == nil {
-		dMgrHlpr.lock = new(sync.Mutex)
-	}
-
-	dMgrHlpr.lock.Lock()
-
-	defer dMgrHlpr.lock.Unlock()
-
-	var err error
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	funcName := "dirMgrHelper." +
-		"copyIn()"
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		funcName,
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	if destinationDMgr == nil {
-
-		err = fmt.Errorf("%v \n"+
-			"ERROR: Input paramter 'destinationDMgr' is a nil pointer!\n",
-			ePrefix.String())
-
-		return err
-	}
-
-	if sourceDMgrIn == nil {
-
-		err = fmt.Errorf("%v \n"+
-			"ERROR: Input paramter 'sourceDMgrIn' is a nil pointer!\n",
-			ePrefix.String())
-
-		return err
-	}
-
-	err = new(dirMgrHelper).isDirMgrValid(
-		sourceDMgrIn,
-		ePrefix.XCpy("sourceDMgrIn"))
-
-	if err != nil {
-
-		return fmt.Errorf("%v\n"+
-			"Error: Input paramter 'sourceDMgrIn' is INVALID!\n"+
-			"Error= \n%v\n",
-			funcName,
-			err.Error())
-	}
-
-	destinationDMgr.isInitialized = sourceDMgrIn.isInitialized
-	destinationDMgr.originalPath = sourceDMgrIn.originalPath
-	destinationDMgr.path = sourceDMgrIn.path
-	destinationDMgr.isPathPopulated = sourceDMgrIn.isPathPopulated
-	destinationDMgr.doesPathExist = sourceDMgrIn.doesPathExist
-	destinationDMgr.parentPath = sourceDMgrIn.parentPath
-	destinationDMgr.isParentPathPopulated = sourceDMgrIn.isParentPathPopulated
-	destinationDMgr.absolutePath = sourceDMgrIn.absolutePath
-	destinationDMgr.isAbsolutePathPopulated = sourceDMgrIn.isAbsolutePathPopulated
-	destinationDMgr.doesAbsolutePathExist = sourceDMgrIn.doesAbsolutePathExist
-	destinationDMgr.isAbsolutePathDifferentFromPath = sourceDMgrIn.isAbsolutePathDifferentFromPath
-	destinationDMgr.directoryName = sourceDMgrIn.directoryName
-	destinationDMgr.volumeName = sourceDMgrIn.volumeName
-	destinationDMgr.isVolumePopulated = sourceDMgrIn.isVolumePopulated
-	destinationDMgr.actualDirFileInfo =
-		sourceDMgrIn.actualDirFileInfo.CopyOut()
-
-	return err
-}
+*/
 
 // deleteAllFilesInDirectory
 //
@@ -6469,51 +6711,6 @@ func (dMgrHlpr *dirMgrHelper) getParentDirMgr(
 	err = nil
 
 	return dirMgrParent, hasParent, err
-}
-
-// isDirMgrValid
-//
-// This method examines the current DirMgr object to
-// determine whether it has been properly configured. If
-// the current DirMgr object is valid, the method returns
-// 'nil' for no errors.
-//
-// Otherwise, if the DirMgr object is INVALID, an error
-// is returned.
-func (dMgrHlpr *dirMgrHelper) isDirMgrValid(
-	dMgr *DirMgr,
-	errPrefDto *ePref.ErrPrefixDto) error {
-
-	if dMgr.lock == nil {
-		dMgr.lock = new(sync.Mutex)
-	}
-
-	dMgr.lock.Lock()
-
-	defer dMgr.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		"DirMgr.IsValidInstanceError()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	_,
-		_,
-		err = new(dirMgrHelperAtom).doesDirectoryExist(
-		dMgr,
-		PreProcPathCode.None(),
-		"dMgr",
-		ePrefix.XCpy("dMgr"))
-
-	return err
 }
 
 // moveDirectory
