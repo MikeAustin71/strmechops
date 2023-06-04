@@ -4662,22 +4662,24 @@ func (fMgr *FileMgr) EqualAbsPaths(
 
 	var dirMgr1, dirMgr2 DirMgr
 
-	dMgrHelperAtom := dirMgrHelperAtom{}
+	dMgrHelperBoson := dirMgrHelperBoson{}
 
-	dirMgr1,
-		err = dMgrHelperAtom.copyOut(
-		&fMgr.dMgr,
-		ePrefix.XCpy("<-fMgr.dMgr"))
+	err = dMgrHelperBoson.
+		copyDirMgrs(
+			&dirMgr1,
+			&fMgr.dMgr,
+			ePrefix.XCpy("<-fMgr.dMgr"))
 
 	if err != nil {
 
 		return false, err
 	}
 
-	dirMgr2,
-		err = dMgrHelperAtom.copyOut(
-		&fMgr2.dMgr,
-		ePrefix.XCpy("<-fMgr2.dMgr"))
+	err = dMgrHelperBoson.
+		copyDirMgrs(
+			&dirMgr2,
+			&fMgr2.dMgr,
+			ePrefix.XCpy("dirMgr2<-fMgr2.dMgr"))
 
 	if err != nil {
 
@@ -5338,9 +5340,14 @@ func (fMgr *FileMgr) GetDirMgr(
 		return DirMgr{}, err
 	}
 
-	return new(dirMgrHelperAtom).copyOut(
+	var newDirMgr = DirMgr{}
+
+	err = new(dirMgrHelperBoson).copyDirMgrs(
+		&newDirMgr,
 		&fMgr.dMgr,
-		ePrefix.XCpy("dMgr->"))
+		ePrefix.XCpy("newDirMgr<-fMgr.dMgr"))
+
+	return newDirMgr, err
 }
 
 // GetFileBytesWritten

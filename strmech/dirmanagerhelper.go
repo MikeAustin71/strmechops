@@ -403,7 +403,7 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 		err =
 		dMgrHlprAtom.doesDirectoryExist(
 			sourceDMgr,
-			PreProcPathCode.None(),
+			PreProcPathCode.AbsolutePath(),
 			sourceDMgrLabel,
 			ePrefix.XCpy("sourceDMgr"))
 
@@ -1894,12 +1894,14 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeInfo(
 
 	deleteTreeInfo.DeleteFileSelectCriteria = deleteFileSelectionCriteria
 
-	var newDirMgr DirMgr
+	var newDirMgr = DirMgr{}
 
-	newDirMgr,
-		err = dMgrHlprAtom.copyOut(
-		dMgr,
-		ePrefix.XCpy("dMgr"))
+	err = new(dirMgrHelperBoson).
+		copyDirMgrs(
+			&newDirMgr,
+			dMgr,
+			ePrefix.XCpy(
+				"dMgr"))
 
 	if err != nil {
 
@@ -2590,11 +2592,12 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 
 	var dirMgrCopy DirMgr
 
-	dirMgrCopy,
-		err = dMgrHlprAtom.copyOut(
-		dMgr,
-		ePrefix.XCpy(
-			"dMgr->"))
+	err = new(dirMgrHelperBoson).
+		copyDirMgrs(
+			&dirMgrCopy,
+			dMgr,
+			ePrefix.XCpy(
+				"dMgr->"))
 
 	if err != nil {
 
@@ -5106,10 +5109,10 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 	isMatch := false
 	isTopLevelDir := true
 
-	var targetBaseDirCopy DirMgr
+	var targetBaseDirCopy = DirMgr{}
 
-	targetBaseDirCopy,
-		err = new(dirMgrHelperAtom).copyOut(
+	err = new(dirMgrHelperBoson).copyDirMgrs(
+		&targetBaseDirCopy,
 		targetBaseDir,
 		ePrefix.XCpy(
 			"targetBaseDir->"))
@@ -5573,12 +5576,13 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeStats(
 	isTopLevelDir := true
 	file2LoopIsDone := false
 
-	var dirMgrCopy DirMgr
+	var dirMgrCopy = DirMgr{}
 
-	dirMgrCopy,
-		err = dMgrHlprAtom.copyOut(
-		targetBaseDir,
-		ePrefix.XCpy("targetBaseDir"))
+	err = new(dirMgrHelperBoson).
+		copyDirMgrs(
+			&dirMgrCopy,
+			targetBaseDir,
+			ePrefix.XCpy("dirMgrCopy<-targetBaseDir"))
 
 	if err != nil {
 
@@ -6403,12 +6407,13 @@ func (dMgrHlpr *dirMgrHelper) getDirectoryTree(
 		return dirMgrs, errs
 	}
 
-	var dirMgrCopy DirMgr
+	var dirMgrCopy = DirMgr{}
 
-	dirMgrCopy,
-		err = dMgrHlprAtom.copyOut(
-		dMgr,
-		ePrefix.XCpy("dMgr"))
+	err = new(dirMgrHelperBoson).
+		copyDirMgrs(
+			&dirMgrCopy,
+			dMgr,
+			ePrefix.XCpy("dirMgrCopy<-dMgr"))
 
 	if err != nil {
 
@@ -6668,10 +6673,11 @@ func (dMgrHlpr *dirMgrHelper) getParentDirMgr(
 
 	if len(dMgr.parentPath) == 0 {
 
-		dirMgrParent,
-			err = dMgrHlprAtom.copyOut(
-			dMgr,
-			ePrefix.XCpy("dMgr Copy Errors"))
+		err = new(dirMgrHelperBoson).
+			copyDirMgrs(
+				&dirMgrParent,
+				dMgr,
+				ePrefix.XCpy("dMgr Copy Errors"))
 
 		hasParent = false
 

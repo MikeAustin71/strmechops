@@ -11163,9 +11163,14 @@ func (dMgr *DirMgr) NewFromFileMgr(
 		return DirMgr{}, err
 	}
 
-	return new(dirMgrHelperAtom).copyOut(
+	newDirMgr := DirMgr{}
+
+	err = new(dirMgrHelperBoson).copyDirMgrs(
+		&newDirMgr,
 		&fMgr.dMgr,
 		ePrefix.XCpy("fMgr.dMgr->"))
+
+	return newDirMgr, err
 }
 
 // NewFromKnownPathDirectoryName

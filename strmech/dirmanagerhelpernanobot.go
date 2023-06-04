@@ -379,10 +379,11 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 
 	var dMgrCopy DirMgr
 
-	dMgrCopy,
-		err = dMgrHlprAtom.copyOut(
-		sourceDMgr,
-		ePrefix.XCpy("sourceDMgr"))
+	err = new(dirMgrHelperBoson).
+		copyDirMgrs(
+			&dMgrCopy,
+			sourceDMgr,
+			ePrefix.XCpy("dMgrCopy<-sourceDMgr"))
 
 	if err != nil {
 

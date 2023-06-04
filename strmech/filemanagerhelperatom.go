@@ -913,13 +913,11 @@ func (fMgrHlprAtom *fileMgrHelperAtom) setFileMgrDirMgrFileName(
 		return isEmpty, err
 	}
 
-	//fMgr.dMgr,
-	//	err = dMgr.CopyOut(ePrefix.XCpy("dMgr"))
-
-	fMgr.dMgr,
-		err = new(dirMgrHelperAtom).copyOut(
-		dMgr,
-		ePrefix.XCpy("dMgr"))
+	err = new(dirMgrHelperBoson).
+		copyDirMgrs(
+			&fMgr.dMgr,
+			dMgr,
+			ePrefix.XCpy("fMgr.dMgr<-dMgr"))
 
 	if err != nil {
 		return isEmpty, err
