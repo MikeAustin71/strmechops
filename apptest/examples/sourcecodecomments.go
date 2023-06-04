@@ -12,7 +12,7 @@ type SourceCodeComments struct {
 }
 
 // testPrimaryComments
-//
+// dirPtr.Readdirnames(2000)
 // Sample test primary comments. Bla, bla, bla.
 //
 // ----------------------------------------------------------------
