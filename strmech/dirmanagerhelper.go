@@ -2366,8 +2366,7 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 		return deleteDirStats, errs
 	}
 
-	if fileSearchPattern,
-		err = new(strMechHelperErrors).
+	if err = new(strMechHelperErrors).
 		validateInputString(
 			fileSearchPattern,
 			"fileSearchPattern",

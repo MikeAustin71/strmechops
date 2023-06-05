@@ -61,16 +61,6 @@ type strMechHelperErrors struct {
 //
 // # Return Values
 //
-//	finalInputStr				string
-//
-//		If input parameter 'inputStr' consists of
-//		non-white space characters, this method will
-//		delete leading and trailing white spaces.
-//
-//		If 'inputStr' consists entirely of white space
-//		characters, 'finalInputStr' will be returned as
-//		an empty string ("").
-//
 //	err							error
 //
 //		If this method completes successfully, the
@@ -87,7 +77,6 @@ func (strMechHlprErrors *strMechHelperErrors) validateInputString(
 	inputStr string,
 	inputStrLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
-	finalInputStr string,
 	err error) {
 
 	if strMechHlprErrors.lock == nil {
@@ -111,7 +100,7 @@ func (strMechHlprErrors *strMechHelperErrors) validateInputString(
 
 	if err != nil {
 
-		return finalInputStr, err
+		return err
 	}
 
 	if len(inputStrLabel) == 0 {
@@ -123,27 +112,31 @@ func (strMechHlprErrors *strMechHelperErrors) validateInputString(
 
 	errCode,
 		_,
-		finalInputStr =
+		_ =
 		new(fileHelperElectron).
 			isStringEmptyOrBlank(inputStr)
 
 	if errCode == -1 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter '%v' is an empty string!\n",
+			"Error: Input parameter '%v' is invalid!\n"+
+			"Input parameter '%v' is an empty string.\n",
 			ePrefix.String(),
+			inputStrLabel,
 			inputStrLabel)
 
-		return finalInputStr, err
+		return err
 	}
 
 	if errCode == -2 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter '%v' consists of blank spaces!\n",
+			"Error: Input parameter '%v' is invalid!\n"+
+			"Input parameter '%v' consists of blank spaces.\n",
 			ePrefix.String(),
+			inputStrLabel,
 			inputStrLabel)
 	}
 
-	return finalInputStr, err
+	return err
 }
