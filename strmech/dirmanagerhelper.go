@@ -5214,8 +5214,8 @@ func (dMgrHlpr *dirMgrHelper) findFilesByNamePattern(
 
 // getAbsolutePathElements
 //
-// Receives an instance of DirMgr and returns all the
-// directories and drive specifications as an array of
+// Receives an instance of DirMgr and returns the drive
+// and directory specifications as an array of
 // strings.
 //
 // Example:
@@ -5237,13 +5237,15 @@ func (dMgrHlpr *dirMgrHelper) findFilesByNamePattern(
 //
 //	dMgr						*DirMgr
 //
-//		A pointer to an instance of DirMgr. All files
-//		in the top level directory identified by 'dMgr'
-//		will be deleted.
+//		A pointer to an instance of DirMgr.
 //
-//		Any files residing subdirectories of the top
-//		level directory identified by 'dMgr' will NOT
-//		be deleted.
+//		The drive and directory specifications in the
+//		directory path contained in this instance will
+//		be returned as individual elements in an array
+//		of strings.
+//
+//		The directory path for this DirMgr instance is
+//		NOT required to exist on disk.
 //
 //	dMgrLabel					string
 //
@@ -5336,15 +5338,6 @@ func (dMgrHlpr *dirMgrHelper) getAbsolutePathElements(
 		return pathElements, err
 	}
 
-	if dMgr == nil {
-
-		err = fmt.Errorf("%v \n"+
-			"ERROR: Input paramter 'dMgr' is a nil pointer!\n",
-			ePrefix.String())
-
-		return pathElements, err
-	}
-
 	if len(dMgrLabel) == 0 {
 
 		dMgrLabel = "dMgr"
@@ -5352,16 +5345,17 @@ func (dMgrHlpr *dirMgrHelper) getAbsolutePathElements(
 
 	_,
 		_,
-		err = new(dirMgrHelperAtom).doesDirectoryExist(
-		dMgr,
-		PreProcPathCode.None(),
-		dMgrLabel,
-		ePrefix)
+		err = new(dirMgrHelperPreon).
+		validateDirMgr(
+			dMgr,
+			false, // Path is NOT required to exist on disk
+			dMgrLabel,
+			ePrefix.XCpy(
+				dMgrLabel))
 
 	if err != nil {
 
 		return pathElements, err
-
 	}
 
 	var absolutePath string
