@@ -767,7 +767,7 @@ func (dMgrHlpr *dirMgrHelper) deleteAllFilesInDirectory(
 
 				errs = append(errs, err)
 
-				return deleteDirStats, errs
+				continue
 			}
 
 			deleteDirStats.TotalFilesProcessed++
@@ -1492,7 +1492,20 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeInfo(
 
 					errs = append(errs, err)
 
-					return deleteTreeInfo, errs
+					continue
+				}
+
+				if !nameFileInfo.Mode().IsRegular() {
+
+					err = fmt.Errorf("%v\n"+
+						"Error: File Name is NOT classified as a 'Regular' File!\n"+
+						"fileName='%v'\n",
+						ePrefix.String(),
+						nextDir.absolutePath+osPathSepStr+nameFileInfo.Name())
+
+					errs = append(errs, err)
+
+					continue
 				}
 
 				// This is not a directory. It is a file.
@@ -2417,6 +2430,7 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 		} else {
 			// This is a file.
 			// Look for a match with selection criteria.
+
 			nameFileInfo,
 				err2 = nameDirEntry.Info()
 
@@ -2431,7 +2445,7 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 
 				errs = append(errs, err)
 
-				return deleteDirStats, errs
+				continue
 			}
 
 			if !nameFileInfo.Mode().IsRegular() {
@@ -3982,8 +3996,8 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryTreeOps(
 // # IMPORTANT
 //
 //	If the parent or top level directory specified by
-//	'targetBaseDir' does not exist on disk, an error
-//	will be returned.
+//	input parameter 'targetBaseDir' does not exist on
+//	disk, an error will be returned.
 //
 // ----------------------------------------------------------------
 //
@@ -4306,7 +4320,7 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 		err = new(dirMgrHelperPreon).
 		validateDirMgr(
 			targetBaseDir,
-			true,
+			true, // Path MUST exist on disk
 			targetBaseDirLabel,
 			ePrefix.XCpy(
 				targetBaseDirLabel))
@@ -4445,6 +4459,33 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 				nameFileInfo,
 					err2 = nameDirEntry.Info()
 
+				if err2 != nil {
+
+					err = fmt.Errorf("%v\n"+
+						"Error: Error Returned by nameDirEntry.Info().\n"+
+						"The conversion of DirEntry to os.FileInfo Failed."+
+						"Error= \n%v\n",
+						ePrefix.String(),
+						err2.Error())
+
+					errs = append(errs, err)
+
+					continue
+				}
+
+				if !nameFileInfo.Mode().IsRegular() {
+
+					err = fmt.Errorf("%v\n"+
+						"Error: File Name is NOT classified as a 'Regular' File!\n"+
+						"fileName='%v'\n",
+						ePrefix.String(),
+						nextDir.absolutePath+osPathSepStr+nameFileInfo.Name())
+
+					errs = append(errs, err)
+
+					continue
+				}
+
 				// This is not a directory. It is a file.
 				// Determine if it matches the find file criteria.
 				isMatch,
@@ -4535,6 +4576,14 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 // directory specified by input parameter 'targetBaseDir'
 // and return statistical information on ALL files and
 // subdirectories residing in that directory tree.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	If the parent or top level directory specified by
+//	input parameter 'targetBaseDir' does not exist on
+//	disk, an error will be returned.
 //
 // ----------------------------------------------------------------
 //
@@ -4680,48 +4729,22 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeStats(
 		return dTreeStats, errs
 	}
 
-	if targetBaseDir == nil {
-
-		err = fmt.Errorf("%v \n"+
-			"ERROR: Input paramter 'targetBaseDir' is a nil pointer!\n",
-			ePrefix.String())
-
-		errs = append(errs, err)
-
-		return dTreeStats, errs
-	}
-
 	if len(targetBaseDirLabel) == 0 {
 
 		targetBaseDirLabel = "targetBaseDir"
 	}
 
-	dMgrHlprAtom := dirMgrHelperAtom{}
-
-	dMgrPathDoesExist,
+	_,
 		_,
-		err :=
-		dMgrHlprAtom.doesDirectoryExist(
+		err = new(dirMgrHelperPreon).
+		validateDirMgr(
 			targetBaseDir,
-			PreProcPathCode.None(),
+			true, // Path MUST exist on disk
 			targetBaseDirLabel,
-			ePrefix)
+			ePrefix.XCpy(
+				targetBaseDirLabel))
 
 	if err != nil {
-		errs = append(errs, err)
-
-		return dTreeStats, errs
-	}
-
-	if !dMgrPathDoesExist {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: %v directory path DOES NOT EXIST!\n"+
-			"%v= \n%v\n",
-			ePrefix.String(),
-			targetBaseDirLabel,
-			targetBaseDirLabel,
-			targetBaseDir.absolutePath)
 
 		errs = append(errs, err)
 
@@ -4730,32 +4753,17 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeStats(
 
 	var err2 error
 	dirs := DirMgrCollection{}
-	var nameFileInfos []os.FileInfo
+	var nameDirEntries []os.DirEntry
+	var nameFileInfo os.FileInfo
 	var nextDir DirMgr
-	var dirPtr *os.File
 	mainLoopIsDone := false
 	isFirstLoop := true
 	isTopLevelDir := true
-	file2LoopIsDone := false
-
-	var dirMgrCopy = DirMgr{}
-
-	err = new(dirMgrHelperBoson).
-		copyDirMgrs(
-			&dirMgrCopy,
-			targetBaseDir,
-			ePrefix.XCpy("dirMgrCopy<-targetBaseDir"))
-
-	if err != nil {
-
-		errs = append(errs, err)
-
-		return dTreeStats, errs
-	}
+	osPathSepStr := string(os.PathSeparator)
 
 	err = dirs.AddDirMgr(
-		dirMgrCopy,
-		ePrefix.XCpy("dirMgrCopy"))
+		*targetBaseDir,
+		ePrefix.XCpy("targetBaseDir"))
 
 	if err != nil {
 
@@ -4777,7 +4785,8 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeStats(
 			err = dirs.PopFirstDirMgr(ePrefix.XCpy(
 			"dirs"))
 
-		if err != nil {
+		if err != nil && err == io.EOF {
+
 			mainLoopIsDone = true
 			break
 
@@ -4794,104 +4803,85 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeStats(
 			return dTreeStats, errs
 		}
 
-		dirPtr, err = os.Open(nextDir.absolutePath)
+		nameDirEntries,
+			err2 = os.ReadDir(nextDir.absolutePath)
 
-		if err != nil {
+		if err2 != nil {
 
-			err2 = fmt.Errorf("%v\n"+
-				"Error return by os.Open(nextDir.absolutePath).\n"+
-				"nextDir.absolutePath='%v'\n"+
+			err = fmt.Errorf("%v\n"+
+				"Error returned by os.ReadDir(nextDir.absolutePath).\n"+
+				"%v.absolutePath='%v'\n"+
 				"Error= \n%v\n",
 				ePrefix.String(),
+				"nextDir",
 				nextDir.absolutePath,
-				err.Error())
+				err2.Error())
 
-			errs = append(errs, err2)
+			errs = append(errs, err)
 
 			continue
 		}
 
-		file2LoopIsDone = false
+		for _, nameDirEntry := range nameDirEntries {
 
-		for !file2LoopIsDone {
+			if nameDirEntry.IsDir() {
+				// This is a directory
+				err = dirs.
+					AddDirMgrByKnownPathDirName(
+						nextDir.absolutePath,
+						nameDirEntry.Name(),
+						ePrefix.XCpy(
+							"nextDir.absolutePath"))
 
-			nameFileInfos, err = dirPtr.Readdir(2000)
-
-			if err != nil && err == io.EOF {
-
-				file2LoopIsDone = true
-
-				if len(nameFileInfos) == 0 {
-
-					break
+				if err != nil {
+					errs = append(errs, err2)
+					continue
 				}
 
-			} else if err != nil {
+				dTreeStats.numOfSubDirs++
 
-				err2 = fmt.Errorf("%v\n"+
-					"Error returned by dirPtr.Readdir(2000).\n"+
-					"Error= \n%v\n",
-					ePrefix.String(),
-					err.Error())
+			} else {
 
-				errs = append(errs, err2)
-
-				file2LoopIsDone = true
-
-				break
-			}
-
-			for _, nameFInfo := range nameFileInfos {
-
-				if nameFInfo.IsDir() {
-					// This is a directory
-					err = dirs.
-						AddDirMgrByKnownPathDirName(
-							nextDir.absolutePath,
-							nameFInfo.Name(),
-							ePrefix.XCpy(
-								"nextDir.absolutePath"))
-
-					if err != nil {
-						errs = append(errs, err2)
-						continue
-					}
-
-					dTreeStats.numOfSubDirs++
-
-				} else {
-
-					if isTopLevelDir && skipTopLevelDirectory {
-						continue
-					}
-
-					// This is a file
-					dTreeStats.numOfFiles++
-					dTreeStats.numOfBytes += uint64(nameFInfo.Size())
+				if isTopLevelDir && skipTopLevelDirectory {
+					continue
 				}
-			} // for _, nameFInfo := range nameFileInfos
-		} // for !file2LoopIsDone
 
-		if dirPtr != nil {
+				// This is a file
 
-			err = dirPtr.Close()
+				nameFileInfo,
+					err2 = nameDirEntry.Info()
 
-			if err != nil {
+				if err2 != nil {
 
-				err2 = fmt.Errorf("%v\n"+
-					"Error returned by dirPtr.Close()\n"+
-					"Error= \n%v\n",
-					ePrefix.String(),
-					err.Error())
+					err = fmt.Errorf("%v\n"+
+						"Error: Error Returned by nameDirEntry.Info().\n"+
+						"The conversion of DirEntry to os.FileInfo Failed."+
+						"Error= \n%v\n",
+						ePrefix.String(),
+						err2.Error())
 
-				errs = append(errs, err2)
+					errs = append(errs, err)
 
-				mainLoopIsDone = true
-				break
+					continue
+				}
+
+				if !nameFileInfo.Mode().IsRegular() {
+
+					err = fmt.Errorf("%v\n"+
+						"Error: File Name is NOT classified as a 'Regular' File!\n"+
+						"fileName='%v'\n",
+						ePrefix.String(),
+						nextDir.absolutePath+osPathSepStr+nameFileInfo.Name())
+
+					errs = append(errs, err)
+
+					continue
+				}
+
+				dTreeStats.numOfFiles++
+				dTreeStats.numOfBytes += uint64(nameFileInfo.Size())
 			}
-
-			dirPtr = nil
-		}
+		} // for _, nameDirEntry := range nameFileInfos
 
 		if isTopLevelDir && !scanSubDirectories {
 			mainLoopIsDone = true
@@ -4899,6 +4889,8 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeStats(
 		}
 
 	} // for !mainLoopIsDone
+
+	nameDirEntries = make([]os.DirEntry, 0)
 
 	return dTreeStats, errs
 }
