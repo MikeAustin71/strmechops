@@ -3271,12 +3271,19 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryFileOps(
 		sourceDMgrLabel = "sourceDMgr"
 	}
 
-	if sourceDMgr == nil {
+	dMgrHlprPreon := new(dirMgrHelperPreon)
 
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input paramter '%v' is a nil pointer!\n",
-			ePrefix.String(),
-			sourceDMgrLabel)
+	_,
+		_,
+		err = dMgrHlprPreon.
+		validateDirMgr(
+			sourceDMgr,
+			true,
+			sourceDMgrLabel,
+			ePrefix.XCpy(
+				sourceDMgrLabel))
+
+	if err != nil {
 
 		errs = append(errs, err)
 
@@ -3288,12 +3295,17 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryFileOps(
 		targetDMgrLabel = "targetBaseDir"
 	}
 
-	if targetBaseDir == nil {
+	_,
+		_,
+		err = dMgrHlprPreon.
+		validateDirMgr(
+			targetBaseDir,
+			true,
+			targetDMgrLabel,
+			ePrefix.XCpy(
+				sourceDMgrLabel))
 
-		err = fmt.Errorf("%v \n"+
-			"ERROR: Input paramter '%v' is a nil pointer!\n",
-			ePrefix.String(),
-			targetDMgrLabel)
+	if err != nil {
 
 		errs = append(errs, err)
 
@@ -3310,88 +3322,6 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryFileOps(
 		fileSelectLabel = "Files For Deletion"
 	}
 
-	dMgrHlprBoson := new(dirMgrHelperBoson)
-
-	var err2 error
-
-	err2 = dMgrHlprBoson.isDirMgrValid(
-		sourceDMgr,
-		ePrefix.XCpy(sourceDMgrLabel))
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input paramter '%v' is INVALID!\n"+
-			"Error= \n%v\n",
-			funcName,
-			sourceDMgrLabel,
-			err2.Error())
-
-		errs = append(errs, err)
-
-		return errs
-	}
-
-	err2 = dMgrHlprBoson.isDirMgrValid(
-		targetBaseDir,
-		ePrefix.XCpy(sourceDMgrLabel))
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input paramter '%v' is INVALID!\n"+
-			"Error= \n%v\n",
-			funcName,
-			targetDMgrLabel,
-			err2.Error())
-
-		errs = append(errs, err)
-
-		return errs
-	}
-
-	dMgrHlprAtom := dirMgrHelperAtom{}
-
-	dMgrPathDoesExist,
-		_,
-		err := dMgrHlprAtom.doesDirectoryExist(
-		sourceDMgr,
-		PreProcPathCode.AbsolutePath(),
-		sourceDMgrLabel,
-		ePrefix.XCpy(sourceDMgrLabel))
-
-	if err != nil {
-		errs = append(errs, err)
-		return errs
-	}
-
-	if !dMgrPathDoesExist {
-		err = fmt.Errorf("%v\n"+
-			"\nERROR: %v Directory Path DOES NOT EXIST!\n"+
-			"%v='%v'\n",
-			ePrefix.String(),
-			sourceDMgrLabel,
-			sourceDMgrLabel,
-			sourceDMgr.absolutePath)
-
-		errs = append(errs, err)
-
-		return errs
-	}
-
-	_,
-		_,
-		err = dMgrHlprAtom.doesDirectoryExist(
-		targetBaseDir,
-		PreProcPathCode.AbsolutePath(),
-		targetDMgrLabel,
-		ePrefix)
-
-	if err != nil {
-		errs = append(errs, err)
-		return errs
-	}
-
 	if len(fileOps) == 0 {
 
 		err = fmt.Errorf("%v\n"+
@@ -3404,6 +3334,8 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryFileOps(
 	}
 
 	var nameDirEntries []os.DirEntry
+
+	var err2 error
 
 	nameDirEntries,
 		err2 = os.ReadDir(sourceDMgr.absolutePath)
