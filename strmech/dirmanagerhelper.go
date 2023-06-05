@@ -2366,14 +2366,12 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 		return deleteDirStats, errs
 	}
 
-	fileSearchPattern,
-		err = dMgrHlprPreon.
+	if fileSearchPattern,
+		err = new(strMechHelperErrors).
 		validateInputString(
 			fileSearchPattern,
 			"fileSearchPattern",
-			ePrefix)
-
-	if err != nil {
+			ePrefix); err != nil {
 
 		errs = append(errs, err)
 
