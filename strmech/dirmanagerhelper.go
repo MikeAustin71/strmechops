@@ -4910,6 +4910,14 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeStats(
 //
 // ----------------------------------------------------------------
 //
+// # IMPORTANT
+//
+//	If the parent or top level directory specified by
+//	input parameter 'targetBaseDir' does not exist on
+//	disk, an error will be returned.
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	targetBaseDir				*DirMgr
@@ -5028,7 +5036,7 @@ func (dMgrHlpr *dirMgrHelper) findFilesByNamePattern(
 
 	fileMgrCol := FileMgrCollection{}.New()
 
-	var err, err2, err3 error
+	var err error
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -5045,18 +5053,24 @@ func (dMgrHlpr *dirMgrHelper) findFilesByNamePattern(
 		return fileMgrCol, err
 	}
 
-	if targetBaseDir == nil {
-
-		err = fmt.Errorf("%v \n"+
-			"ERROR: Input paramter 'targetBaseDir' is a nil pointer!\n",
-			ePrefix.String())
-
-		return fileMgrCol, err
-	}
-
 	if len(targetBaseDirLabel) == 0 {
 
 		targetBaseDirLabel = "targetBaseDir"
+	}
+
+	_,
+		_,
+		err = new(dirMgrHelperPreon).
+		validateDirMgr(
+			targetBaseDir,
+			true, // Path MUST exist on disk
+			targetBaseDirLabel,
+			ePrefix.XCpy(
+				targetBaseDirLabel))
+
+	if err != nil {
+
+		return fileMgrCol, err
 	}
 
 	if len(fileSearchPatternLabel) == 0 {
@@ -5064,166 +5078,136 @@ func (dMgrHlpr *dirMgrHelper) findFilesByNamePattern(
 		fileSearchPatternLabel = "File Search Pattern"
 	}
 
-	var dMgrPathDoesExist bool
-
-	dMgrPathDoesExist,
-		_,
-		err = new(dirMgrHelperAtom).doesDirectoryExist(
-		targetBaseDir,
-		PreProcPathCode.None(),
-		targetBaseDirLabel,
-		ePrefix)
-
-	if err != nil {
-		return fileMgrCol, err
-	}
-
-	if !dMgrPathDoesExist {
-		err = fmt.Errorf("%v\n"+
-			"ERROR: %v Directory Path DOES NOT EXIST!\n"+
-			"%v='%v'\n",
-			ePrefix.String(),
-			targetBaseDirLabel,
-			targetBaseDirLabel,
-			targetBaseDir.absolutePath)
+	if err = new(strMechHelperErrors).
+		validateInputString(
+			fileSearchPattern,
+			fileSearchPatternLabel,
+			ePrefix.XCpy(fileSearchPatternLabel)); err != nil {
 
 		return fileMgrCol, err
+
 	}
 
-	fh := new(FileHelper)
-
-	errCode := 0
-
-	errCode, _, fileSearchPattern =
-		fh.IsStringEmptyOrBlank(fileSearchPattern)
-
-	if errCode < 0 {
-
-		return fileMgrCol,
-			fmt.Errorf("%v\n"+
-				"Input parameter '%v' is INVALID!\n"+
-				"'%v' is an EMPTY STRING!\n",
-				ePrefix.String(),
-				fileSearchPatternLabel,
-				fileSearchPatternLabel)
-	}
-
-	dirPtr, err := os.Open(targetBaseDir.absolutePath)
-
-	if err != nil {
-
-		return fileMgrCol,
-			fmt.Errorf("%v\n"+
-				"Error return by os.Open(%v.absolutePath).\n"+
-				"%v.absolutePath='%v'\n"+
-				"Error= \n%v\n",
-				ePrefix.String(),
-				targetBaseDirLabel,
-				targetBaseDirLabel,
-				targetBaseDir.absolutePath,
-				err.Error())
-	}
-
-	err3 = nil
 	var isMatch bool
-	var nameFileInfos []os.FileInfo
-	errs := make([]error, 0, 300)
+	var nameDirEntries []os.DirEntry
+	var nameFileInfo os.FileInfo
+	var err2 error
+	errs := make([]error, 0, 10)
+	osPathSepStr := string(os.PathSeparator)
 
-	for err3 != io.EOF {
+	nameDirEntries,
+		err2 = os.ReadDir(targetBaseDir.absolutePath)
 
-		nameFileInfos, err3 = dirPtr.Readdir(2000)
+	if err2 != nil {
 
-		if err3 != nil && err3 != io.EOF {
+		err = fmt.Errorf("%v\n"+
+			"Error returned by os.ReadDir(targetBaseDir.absolutePath).\n"+
+			"%v.absolutePath='%v'\n"+
+			"Error= \n%v\n",
+			ePrefix.String(),
+			"targetBaseDir",
+			targetBaseDir.absolutePath,
+			err2.Error())
 
-			err2 = fmt.Errorf("%v\n"+
-				"Error returned by dirPtr.Readdirnames(2000).\n"+
-				"%v.absolutePath='%v'\n"+
-				"Error= \n%v\n",
-				ePrefix.String(),
-				targetBaseDirLabel,
-				targetBaseDir.absolutePath,
-				err3.Error())
+		return fileMgrCol, err
+	}
 
-			errs = append(errs, err2)
-			break
-		}
+	for _, nameDirEntry := range nameDirEntries {
 
-		for _, nameFInfo := range nameFileInfos {
+		if nameDirEntry.IsDir() {
+			continue
 
-			if nameFInfo.IsDir() {
+		} else {
+			// This is a file.
+
+			nameFileInfo,
+				err2 = nameDirEntry.Info()
+
+			if err2 != nil {
+
+				err = fmt.Errorf("%v\n"+
+					"Error: Error Returned by nameDirEntry.Info().\n"+
+					"The conversion of DirEntry to os.FileInfo Failed."+
+					"Error= \n%v\n",
+					ePrefix.String(),
+					err2.Error())
+
+				errs = append(errs, err)
+
+				continue
+			}
+
+			if !nameFileInfo.Mode().IsRegular() {
+
+				err = fmt.Errorf("%v\n"+
+					"Error: File Name is NOT classified as a 'Regular' File!\n"+
+					"targetBaseDir= '%v'\n"+
+					"fileName= '%v'\n",
+					ePrefix.String(),
+					targetBaseDir.absolutePath,
+					targetBaseDir.absolutePath+osPathSepStr+nameFileInfo.Name())
+
+				errs = append(errs, err)
+
+				continue
+			}
+
+			// Check for pattern match.
+			isMatch, err = pf.Match(fileSearchPattern, nameDirEntry.Name())
+
+			if err != nil {
+
+				err2 = fmt.Errorf("%v\n"+
+					"Error returned by fp.Match(%v, fileName).\n"+
+					"directorySearched='%v'\n"+
+					"%v='%v'\n"+
+					"fileName='%v'\n"+
+					"Error= \n%v\n ",
+					ePrefix.String(),
+					fileSearchPatternLabel,
+					targetBaseDir.absolutePath,
+					fileSearchPatternLabel,
+					fileSearchPattern,
+					nameDirEntry.Name(),
+					err.Error())
+
+				errs = append(errs, err2)
+				continue
+			}
+
+			if !isMatch {
+
 				continue
 
 			} else {
-				// This is a file. Check for pattern match.
-				isMatch, err = pf.Match(fileSearchPattern, nameFInfo.Name())
+				// This file is a match. Process it.
+				err = fileMgrCol.AddFileMgrByFileInfo(
+					targetBaseDir.absolutePath,
+					nameFileInfo,
+					ePrefix)
 
 				if err != nil {
 
 					err2 = fmt.Errorf("%v\n"+
-						"Error returned by fp.Match(%v, fileName).\n"+
-						"directorySearched='%v'\n"+
-						"%v='%v'\n"+
-						"fileName='%v'\n"+
-						"Error= \n%v\n ",
-						ePrefix.String(),
-						fileSearchPatternLabel,
+						"Error returned by fileMgrCol.AddFileMgrByFileInfo(%v.absolutePath, nameDirEntry).\n"+
+						"Directory='%v'\n"+
+						"FileName='%v'\n"+
+						"Error= \n%v\n",
+						funcName,
+						targetBaseDirLabel,
 						targetBaseDir.absolutePath,
-						fileSearchPatternLabel,
-						fileSearchPattern,
-						nameFInfo.Name(),
+						nameDirEntry.Name(),
 						err.Error())
 
 					errs = append(errs, err2)
+
 					continue
-				}
-
-				if !isMatch {
-					continue
-				} else {
-					// This file is a match. Process it.
-					err = fileMgrCol.AddFileMgrByFileInfo(
-						targetBaseDir.absolutePath,
-						nameFInfo,
-						ePrefix)
-
-					if err != nil {
-
-						err2 = fmt.Errorf("%v\n"+
-							"Error returned by fileMgrCol.AddFileMgrByFileInfo(%v.absolutePath, nameFInfo).\n"+
-							"Directory='%v'\n"+
-							"FileName='%v'\n"+
-							"Error= \n%v\n",
-							funcName,
-							targetBaseDirLabel,
-							targetBaseDir.absolutePath,
-							nameFInfo.Name(),
-							err.Error())
-
-						errs = append(errs, err2)
-						err3 = io.EOF
-						break
-					}
 				}
 			}
 		}
 	}
 
-	if dirPtr != nil {
-
-		err = dirPtr.Close()
-
-		if err != nil {
-
-			err2 = fmt.Errorf("%v\n"+
-				"Error returned by dirPtr.Close().\n"+
-				"dirPtr Path='%v'\n"+
-				"Error= \n%v\n",
-				ePrefix.String(),
-				targetBaseDir.absolutePath, err.Error())
-
-			errs = append(errs, err2)
-		}
-	}
+	nameDirEntries = make([]os.DirEntry, 0)
 
 	return fileMgrCol, new(StrMech).ConsolidateErrors(errs)
 }
