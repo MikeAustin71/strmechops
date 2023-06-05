@@ -374,11 +374,11 @@ func (fMgrs *FileMgrCollection) AddFileMgrByDirFileNameExt(
 		fMgrs.fileMgrs = make([]FileMgr, 0, 50)
 	}
 
-	fMgr := FileMgr{}
+	newFMgr := FileMgr{}
 
 	isEmpty, err :=
 		new(fileMgrHelperAtom).setFileMgrDirMgrFileName(
-			&fMgr,
+			&newFMgr,
 			&directory,
 			fileNameExt,
 			ePrefix)
@@ -398,7 +398,7 @@ func (fMgrs *FileMgrCollection) AddFileMgrByDirFileNameExt(
 			fileNameExt)
 	}
 
-	fMgrs.fileMgrs = append(fMgrs.fileMgrs, fMgr)
+	fMgrs.fileMgrs = append(fMgrs.fileMgrs, newFMgr)
 
 	return nil
 }

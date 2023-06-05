@@ -164,10 +164,11 @@ func (dMgrs *DirMgrCollection) AddDirMgr(
 
 	var dMgrCopy DirMgr
 
-	dMgrCopy,
-		err = dMgr.CopyOut(
+	err = new(dirMgrHelperBoson).copyDirMgrs(
+		&dMgrCopy,
+		&dMgr,
 		ePrefix.XCpy(
-			"dMgr->dMgrCopy"))
+			"dMgrCopy<-dMgr"))
 
 	if err != nil {
 		return err

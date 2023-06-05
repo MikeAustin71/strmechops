@@ -824,13 +824,15 @@ func (fMgrHlprAtom *fileMgrHelperAtom) setFileMgrDirMgrFileName(
 	}
 
 	var err2 error
-
-	err2 = new(dirMgrHelperBoson).
-		isDirMgrValid(
+	_,
+		_,
+		err2 = new(dirMgrHelperPreon).
+		validateDirMgr(
 			dMgr,
-			ePrefix.XCpy("dMgr"))
-
-	//err2 := dMgr.IsValidInstanceError(ePrefix.String())
+			false, // Not required to exist
+			"dMgr",
+			ePrefix.XCpy(
+				"dMgr"))
 
 	if err2 != nil {
 
