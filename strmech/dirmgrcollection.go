@@ -2320,8 +2320,9 @@ func (dMgrs *DirMgrCollection) InsertDirMgrAtIndex(
 		dMgrs.dirMgrs = make([]DirMgr, 0, 1)
 	}
 
-	err = new(dirMgrHelperBoson).isDirMgrValid(
+	err = new(dirMgrHelperPlanck).isDirMgrValid(
 		&dMgr,
+		"dMgr",
 		ePrefix.XCpy("dMgr"))
 
 	if err != nil {

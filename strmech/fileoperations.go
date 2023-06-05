@@ -2750,8 +2750,12 @@ func (fops *FileOps) SetDestinationByDirMgrFileName(
 		return err
 	}
 
-	err = new(dirMgrHelperBoson).isDirMgrValid(
+	_,
+		_,
+		err = new(dirMgrHelperPreon).validateDirMgr(
 		&destinationDir,
+		false,
+		"destinationDir",
 		ePrefix.XCpy("destinationDir"))
 
 	if err != nil {
@@ -3453,8 +3457,12 @@ func (fops *FileOps) SetSourceByDirMgrFileName(
 		return err
 	}
 
-	err = new(dirMgrHelperBoson).isDirMgrValid(
+	_,
+		_,
+		err = new(dirMgrHelperPreon).validateDirMgr(
 		&sourceDir,
+		false, // sourceDir NOT required to exist on disk
+		"sourceDir",
 		ePrefix.XCpy("sourceDir"))
 
 	if err != nil {

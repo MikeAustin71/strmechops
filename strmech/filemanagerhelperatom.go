@@ -438,8 +438,9 @@ func (fMgrHlprAtom *fileMgrHelperAtom) isFileMgrValid(
 
 	var err2 error
 
-	err2 = new(dirMgrHelperBoson).isDirMgrValid(
+	err2 = new(dirMgrHelperPlanck).isDirMgrValid(
 		&fMgr.dMgr,
+		"fMgr.dMgr",
 		ePrefix.XCpy("fMgr.dMgr"))
 
 	if err2 != nil {

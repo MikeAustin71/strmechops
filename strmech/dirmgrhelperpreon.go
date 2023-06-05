@@ -151,9 +151,10 @@ func (dMgrHlprPreon *dirMgrHelperPreon) validateDirMgr(
 
 	var err2 error
 
-	err2 = new(dirMgrHelperBoson).
+	err2 = new(dirMgrHelperPlanck).
 		isDirMgrValid(
 			dMgr,
+			dMgrLabel,
 			ePrefix.XCpy(finalDirMgrLabel))
 
 	if err2 != nil {

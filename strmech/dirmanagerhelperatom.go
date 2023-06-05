@@ -88,7 +88,8 @@ func (dMgrHlprAtom *dirMgrHelperAtom) doesDirectoryExist(
 		dirPathDoesExist = false
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter '%v'.absolutePath is an empty string!\n",
+			"Error: This Directory Manager instance is invalid!\n"+
+			"Input parameter '%v'.absolutePath is an empty string.\n",
 			ePrefix.String(),
 			dMgrLabel)
 
@@ -105,7 +106,8 @@ func (dMgrHlprAtom *dirMgrHelperAtom) doesDirectoryExist(
 		dirPathDoesExist = false
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter '%v' consists of blank spaces!\n",
+			"Error: This Directory Manager instance is invalid!\n"+
+			"Input parameter '%v' consists of blank spaces.\n",
 			ePrefix.String(),
 			dMgrLabel)
 
@@ -129,7 +131,8 @@ func (dMgrHlprAtom *dirMgrHelperAtom) doesDirectoryExist(
 		if err2 != nil {
 
 			err = fmt.Errorf("%v\n"+
-				"Error: fh.MakeAbsolutePath(%v.absolutePath) FAILED!\n"+
+				"Error: This Directory Manager instance is invalid!\n"+
+				"fh.MakeAbsolutePath(%v.absolutePath) FAILED.\n"+
 				"%v.absolutePath='%v'\n"+
 				"Error='%v'\n\n",
 				ePrefix.String(),
@@ -229,7 +232,8 @@ func (dMgrHlprAtom *dirMgrHelperAtom) doesDirectoryExist(
 		dMgr.actualDirFileInfo = FileInfoPlus{}
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Directory absolute path exists, but "+
+			"This Directory Manager instance is invalid!\n"+
+			"Directory absolute path exists, but "+
 			"it is a file - NOT A DIRECTORY!\n"+
 			"%v='%v'\n",
 			ePrefix.String(),
@@ -248,8 +252,9 @@ func (dMgrHlprAtom *dirMgrHelperAtom) doesDirectoryExist(
 		dMgr.actualDirFileInfo = FileInfoPlus{}
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Directory absolute path exists,\n"+
-			"but it is classified as as a Regular File!\n"+
+			"Error: This Directory Manager instance is invalid!\n"+
+			"The Directory absolute path exists, but it is\n"+
+			"classified as as a Regular File.\n"+
 			"%v='%v'\n",
 			ePrefix.String(),
 			dMgrLabel,

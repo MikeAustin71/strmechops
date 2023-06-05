@@ -2587,19 +2587,18 @@ func (fOpsNanobot *FileOperationsNanobot) setFileOpsByDirMgrFileName(
 		return err
 	}
 
-	dMgrHelperBoson := new(dirMgrHelperBoson)
+	dMgrHelperPreon := new(dirMgrHelperPreon)
 
-	err = dMgrHelperBoson.isDirMgrValid(
+	_,
+		_,
+		err = dMgrHelperPreon.validateDirMgr(
 		&sourceDir,
+		false, // sourceDir NOT required to exist on disk
+		"sourceDir",
 		ePrefix.XCpy("sourceDir"))
 
 	if err != nil {
-
-		return fmt.Errorf("%v\n"+
-			"Error: Input parameter 'sourceDir' is invalid!\n"+
-			"Error= \n%v\n",
-			funcName,
-			err.Error())
+		return err
 	}
 
 	if len(sourceFileNameExt) == 0 {
@@ -2609,17 +2608,16 @@ func (fOpsNanobot *FileOperationsNanobot) setFileOpsByDirMgrFileName(
 			ePrefix.String())
 	}
 
-	err = dMgrHelperBoson.isDirMgrValid(
+	_,
+		_,
+		err = dMgrHelperPreon.validateDirMgr(
 		&destinationDir,
+		false, // sourceDir NOT required to exist on disk
+		"destinationDir",
 		ePrefix.XCpy("destinationDir"))
 
 	if err != nil {
-
-		return fmt.Errorf("%v\n"+
-			"Error: Input parameter 'destinationDir' is invalid!\n"+
-			"Error= \n%v\n",
-			funcName,
-			err.Error())
+		return err
 	}
 
 	if len(destinationFileNameExt) == 0 {

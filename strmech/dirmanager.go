@@ -8851,8 +8851,12 @@ func (dMgr *DirMgr) IsValidInstance() bool {
 
 	var err error
 
-	err = new(dirMgrHelperBoson).isDirMgrValid(
+	_,
+		_,
+		err = new(dirMgrHelperPreon).validateDirMgr(
 		dMgr,
+		false, // Path is NOT required to exit on disk
+		"dMgr",
 		nil)
 
 	if err != nil {
@@ -8980,9 +8984,15 @@ func (dMgr *DirMgr) IsValidInstanceError(
 		return err
 	}
 
-	return new(dirMgrHelperBoson).isDirMgrValid(
+	_,
+		_,
+		err = new(dirMgrHelperPreon).validateDirMgr(
 		dMgr,
-		ePrefix.XCpy("dMgr"))
+		false, // Path is NOT required to exit on disk
+		"dMgr",
+		ePrefix)
+
+	return err
 }
 
 // IsInitialized
@@ -10987,8 +10997,9 @@ func (dMgr *DirMgr) NewFromDirMgrFileInfo(
 				ePrefix.String())
 	}
 
-	err = new(dirMgrHelperBoson).isDirMgrValid(
+	err = new(dirMgrHelperPlanck).isDirMgrValid(
 		&parentDirectory,
+		"parentDirectory",
 		ePrefix.XCpy(
 			"parentDirectory"))
 

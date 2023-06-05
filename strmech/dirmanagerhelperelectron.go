@@ -335,7 +335,8 @@ func (dMgrHlprElectron *dirMgrHelperElectron) lowLevelDoesDirectoryExist(
 
 	if errCode < 0 {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input paramter %v is an empty string!\n",
+			"Error: This Directory Manager instance is invalid!\n"+
+			"Input paramter %v.path is an empty string.\n",
 			ePrefix.String(),
 			dirPathLabel)
 
@@ -369,7 +370,9 @@ func (dMgrHlprElectron *dirMgrHelperElectron) lowLevelDoesDirectoryExist(
 			// This is a non-path error. The non-path error will be
 			// tested up to 3-times before it is returned.
 			err = fmt.Errorf("%v\n"+
-				"Non-Path error returned by os.Stat(%v)\n"+
+				"Error: This Directory Manager instance is invalid!\n"+
+				"Non-Path error returned by os.Stat(%v) while attempty\n"+
+				"to acquire os.FileInfo data on this directory path.\n"+
 				"%v= %v\n"+
 				"Error= \n%v\n",
 				ePrefix.String(),
@@ -398,9 +401,14 @@ func (dMgrHlprElectron *dirMgrHelperElectron) lowLevelDoesDirectoryExist(
 			if err2 != nil {
 
 				err = fmt.Errorf("%v\n"+
+					"Error: An internal error occurred while processing\n"+
+					"the os.FileInfo data for %v directory path.\n"+
 					"Error returned by FileInfoPlus{}.NewFromPathFileInfo(dirPath, info)\n"+
+					"dirPath= '%v'\n"+
 					"Error= \n%v\n",
 					ePrefix.String(),
+					dirPathLabel,
+					dirPath,
 					err2.Error())
 
 				fInfoPlus = FileInfoPlus{}
