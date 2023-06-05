@@ -3497,6 +3497,10 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryFileOps(
 //		subdirectories in the directory tree specified by
 //		'sourceDMgr'.
 //
+//		If the parent or top level directory specified by
+//		'sourceDMgr' does not exist on disk, an error
+//		will be returned.
+//
 //	fileSelectCriteria			FileSelectionCriteria
 //
 //	  This input parameter should be configured with the
@@ -3844,27 +3848,24 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryTreeOps(
 		return errs
 	}
 
-	if sourceDMgr == nil {
-
-		err = fmt.Errorf("%v \n"+
-			"ERROR: Input paramter 'sourceDMgr' is a nil pointer!\n",
-			ePrefix.String())
-
-		errs = append(errs, err)
-
-		return errs
-	}
-
 	if len(sourceDMgrLabel) == 0 {
 
 		sourceDMgrLabel = "sourceDMgrLabel"
 	}
 
-	if targetBaseDir == nil {
+	dMgrHlprPreon := new(dirMgrHelperPreon)
 
-		err = fmt.Errorf("%v \n"+
-			"ERROR: Input paramter 'targetBaseDir' is a nil pointer!\n",
-			ePrefix.String())
+	_,
+		_,
+		err = dMgrHlprPreon.
+		validateDirMgr(
+			sourceDMgr,
+			true,
+			sourceDMgrLabel,
+			ePrefix.XCpy(
+				sourceDMgrLabel))
+
+	if err != nil {
 
 		errs = append(errs, err)
 
@@ -3876,54 +3877,29 @@ func (dMgrHlpr *dirMgrHelper) executeDirectoryTreeOps(
 		targetBaseDirLabel = "targetBaseDir"
 	}
 
+	_,
+		_,
+		err = dMgrHlprPreon.
+		validateDirMgr(
+			targetBaseDir,
+			true,
+			targetBaseDirLabel,
+			ePrefix.XCpy(
+				sourceDMgrLabel))
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return errs
+	}
+
 	if len(fileOpsLabel) == 0 {
 
 		fileOpsLabel = "File Operations"
 	}
 
-	dMgrHlprAtom := dirMgrHelperAtom{}
-
-	dMgrPathDoesExist,
-		_,
-		err := dMgrHlprAtom.doesDirectoryExist(
-		sourceDMgr,
-		PreProcPathCode.None(),
-		sourceDMgrLabel,
-		ePrefix.XCpy("sourceDMgr"))
-
-	if err != nil {
-		errs = append(errs, err)
-		return errs
-	}
-
-	if !dMgrPathDoesExist {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: %v Directory Path DOES NOT EXIST!\n"+
-			"%v='%v'\n",
-			ePrefix.String(),
-			sourceDMgrLabel,
-			sourceDMgrLabel,
-			sourceDMgr.absolutePath)
-
-		errs = append(errs, err)
-
-		return errs
-	}
-
-	_,
-		_,
-		err2 := dMgrHlprAtom.doesDirectoryExist(
-		targetBaseDir,
-		PreProcPathCode.None(),
-		targetBaseDirLabel,
-		ePrefix.XCpy(
-			"targetBaseDir"))
-
-	if err2 != nil {
-		errs = append(errs, err2)
-		return errs
-	}
+	var err2 error
 
 	if len(fileOps) == 0 {
 
