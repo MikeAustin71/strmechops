@@ -5386,6 +5386,14 @@ func (dMgrHlpr *dirMgrHelper) getAbsolutePathElements(
 //
 // ----------------------------------------------------------------
 //
+// # IMPORTANT
+//
+//	If the parent or top level directory specified by
+//	input parameter 'dMgr' does not exist on disk, an
+//	error will be returned.
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	dMgr						*DirMgr
@@ -5394,6 +5402,10 @@ func (dMgrHlpr *dirMgrHelper) getAbsolutePathElements(
 //		directory. This method will identify the 'dMgr'
 //		parent directory and all existing subdirectories
 //		through a returned instance of DirMgrCollection.
+//
+//		If the parent or top level directory specified by
+//		'dMgr' does not exist on disk, an error	will be
+//		returned.
 //
 //	dMgrLabel					string
 //
@@ -5473,7 +5485,7 @@ func (dMgrHlpr *dirMgrHelper) getDirectoryTree(
 
 	dirMgrs = new(DirMgrCollection).New()
 
-	var err, err2, err3 error
+	var err, err2 error
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -5490,62 +5502,20 @@ func (dMgrHlpr *dirMgrHelper) getDirectoryTree(
 		return dirMgrs, errs
 	}
 
-	if dMgr == nil {
-
-		err = fmt.Errorf("%v \n"+
-			"ERROR: Input paramter 'dMgr' is a nil pointer!\n",
-			ePrefix.String())
-
-		errs = append(errs, err)
-
-		return dirMgrs, errs
-	}
-
 	if len(dMgrLabel) == 0 {
 
 		dMgrLabel = "dMgr"
 	}
 
-	dMgrHlprAtom := dirMgrHelperAtom{}
-
-	var dMgrPathDoesExist bool
-
-	dMgrPathDoesExist,
+	_,
 		_,
-		err = dMgrHlprAtom.doesDirectoryExist(
-		dMgr,
-		PreProcPathCode.None(),
-		dMgrLabel,
-		ePrefix)
-
-	if err != nil {
-
-		errs = append(errs, err)
-
-		return dirMgrs, errs
-	}
-
-	if !dMgrPathDoesExist {
-		err = fmt.Errorf("%v\n"+
-			"ERROR: %v Directory Path DOES NOT EXIST!\n"+
-			"%v='%v'\n",
-			ePrefix.String(),
-			dMgrLabel,
-			dMgrLabel,
-			dMgr.absolutePath)
-
-		errs = append(errs, err)
-
-		return dirMgrs, errs
-	}
-
-	var dirMgrCopy = DirMgr{}
-
-	err = new(dirMgrHelperBoson).
-		copyDirMgrs(
-			&dirMgrCopy,
+		err = new(dirMgrHelperPreon).
+		validateDirMgr(
 			dMgr,
-			ePrefix.XCpy("dirMgrCopy<-dMgr"))
+			true, // Path MUST exist on disk
+			dMgrLabel,
+			ePrefix.XCpy(
+				dMgrLabel))
 
 	if err != nil {
 
@@ -5555,8 +5525,8 @@ func (dMgrHlpr *dirMgrHelper) getDirectoryTree(
 	}
 
 	err = dirMgrs.AddDirMgr(
-		dirMgrCopy,
-		ePrefix.XCpy("dirMgrCopy"))
+		*dMgr,
+		ePrefix.XCpy("dMgr"))
 
 	if err != nil {
 
@@ -5565,101 +5535,65 @@ func (dMgrHlpr *dirMgrHelper) getDirectoryTree(
 		return dirMgrs, errs
 	}
 
-	fh := FileHelper{}
+	var fh = new(FileHelper)
+	var nameDirEntries []os.DirEntry
 
 	maxLen := dirMgrs.GetNumOfDirs()
 
-	var dirPtr *os.File
-	var nameFileInfos []os.FileInfo
-
 	for i := 0; i < maxLen; i++ {
 
-		dirPtr, err = os.Open(dirMgrs.dirMgrs[i].absolutePath)
+		nameDirEntries,
+			err2 = os.ReadDir(dirMgrs.dirMgrs[i].absolutePath)
 
-		if err != nil {
+		if err2 != nil {
 
-			err2 = fmt.Errorf("%v\n"+
-				"Error return by os.Open(dirMgrs.dirMgrs[%v].absolutePath).\n"+
-				"dMgr.absolutePath='%v'\n"+
+			err = fmt.Errorf("%v\n"+
+				"Error returned by os.ReadDir(dirMgrs.dirMgrs[%v].absolutePath).\n"+
+				"%v.absolutePath='%v'\n"+
 				"Error= \n%v\n",
 				ePrefix.String(),
 				i,
+				"dirMgrs.dirMgrs[i]",
 				dirMgrs.dirMgrs[i].absolutePath,
-				err.Error())
+				err2.Error())
 
-			errs = append(errs, err2)
+			errs = append(errs, err)
+
 			continue
 		}
 
-		err3 = nil
+		for _, nameDirEntry := range nameDirEntries {
 
-		for err3 != io.EOF {
+			if nameDirEntry.IsDir() {
 
-			nameFileInfos, err3 = dirPtr.Readdir(2000)
+				newDirPathFileName :=
+					fh.JoinPathsAdjustSeparators(
+						dirMgrs.dirMgrs[i].absolutePath, nameDirEntry.Name())
 
-			if err3 != nil && err3 != io.EOF {
+				err = dirMgrs.AddDirMgrByPathNameStr(
+					newDirPathFileName,
+					ePrefix)
 
-				err2 = fmt.Errorf("%v\n"+
-					"Error returned by dirPtr.Readdirnames(-1).\n"+
-					"dMgr.absolutePath='%v'\n"+
-					"Error= \n%v\n",
-					ePrefix.String(),
-					dMgr.absolutePath,
-					err3.Error())
+				if err != nil {
 
-				errs = append(errs, err2)
-				break
-			}
+					err2 =
+						fmt.Errorf("%v\n"+
+							"Error returned by dirMgrs.AddDirMgrByPathNameStr(newDirPathFileName).\n"+
+							"dirPtr='%v'\n"+
+							"Error='%v'\n",
+							ePrefix.String(),
+							newDirPathFileName,
+							err.Error())
 
-			for _, nameFInfo := range nameFileInfos {
-
-				if nameFInfo.IsDir() {
-
-					newDirPathFileName :=
-						fh.JoinPathsAdjustSeparators(dirMgrs.dirMgrs[i].absolutePath, nameFInfo.Name())
-
-					err = dirMgrs.AddDirMgrByPathNameStr(
-						newDirPathFileName,
-						ePrefix)
-
-					if err != nil {
-
-						err2 =
-							fmt.Errorf("%v\n"+
-								"Error returned by dirMgrs.AddDirMgrByPathNameStr(newDirPathFileName).\n"+
-								"dirPtr='%v'\n"+
-								"Error='%v'\n",
-								ePrefix.String(),
-								newDirPathFileName,
-								err.Error())
-
-						errs = append(errs, err2)
-						continue
-					}
-
-					maxLen = dirMgrs.GetNumOfDirs()
+					errs = append(errs, err2)
+					continue
 				}
+
+				maxLen = dirMgrs.GetNumOfDirs()
 			}
-		}
+		} // END OF: for _, nameDirEntry := range nameDirEntries
 
-		if dirPtr != nil {
-
-			err = dirPtr.Close()
-
-			if err != nil {
-
-				err2 = fmt.Errorf("%v\n"+
-					"Error returned by dirPtr.Close().\n"+
-					"dirPtr='%v'\n"+
-					"Error= \n%v\n",
-					ePrefix.String(),
-					dMgr.absolutePath,
-					err.Error())
-
-				errs = append(errs, err2)
-			}
-		}
-	}
+	} // END OF: for i := 0; i < maxLen; i++
 
 	return dirMgrs, errs
 }
