@@ -5704,38 +5704,25 @@ func (dMgrHlpr *dirMgrHelper) getParentDirMgr(
 		return dirMgrParent, hasParent, err
 	}
 
-	if dMgr == nil {
-
-		err = fmt.Errorf("%v \n"+
-			"ERROR: Input paramter 'dMgr' is a nil pointer!\n",
-			ePrefix.String())
-
-		return dirMgrParent, hasParent, err
-	}
-
 	if len(dMgrLabel) == 0 {
 
 		dMgrLabel = "dMgr"
 	}
 
-	dMgrHlprAtom := dirMgrHelperAtom{}
-
 	_,
 		_,
-		err = dMgrHlprAtom.doesDirectoryExist(
-		dMgr,
-		PreProcPathCode.None(),
-		dMgrLabel,
-		ePrefix)
+		err = new(dirMgrHelperPreon).
+		validateDirMgr(
+			dMgr,
+			false, // Path is NOT required to exist on disk
+			dMgrLabel,
+			ePrefix.XCpy(
+				dMgrLabel))
 
-	if err != nil && !dMgr.isInitialized {
+	if err != nil {
 
-		dirMgrParent = DirMgr{}
-		hasParent = false
 		return dirMgrParent, hasParent, err
 	}
-
-	err = nil
 
 	if len(dMgr.parentPath) == 0 {
 
@@ -5779,8 +5766,6 @@ func (dMgrHlpr *dirMgrHelper) getParentDirMgr(
 
 		return dirMgrParent, hasParent, err
 	}
-
-	err = nil
 
 	return dirMgrParent, hasParent, err
 }
