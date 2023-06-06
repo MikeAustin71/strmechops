@@ -761,8 +761,13 @@ func (dMgrHlpr *dirMgrHelper) deleteAllFilesInDirectory(
 				err = fmt.Errorf("%v\n"+
 					"Error: Error Returned by nameDirEntry.Info().\n"+
 					"The conversion of DirEntry to os.FileInfo Failed."+
+					"%v= '%v'\n"+
+					"FileName= '%v'\n"+
 					"Error= \n%v\n",
 					ePrefix.String(),
+					dMgrLabel,
+					dMgr.absolutePath,
+					dMgr.absolutePath+osPathSepStr+nameFileInfo.Name(),
 					err2.Error())
 
 				errs = append(errs, err)
@@ -776,8 +781,11 @@ func (dMgrHlpr *dirMgrHelper) deleteAllFilesInDirectory(
 
 				err = fmt.Errorf("%v\n"+
 					"Error: File Name is NOT classified as a 'Regular' File!\n"+
-					"fileName='%v'\n",
+					"%v= '%v'\n"+
+					"fileName= '%v'\n",
 					ePrefix.String(),
+					dMgrLabel,
+					dMgr.absolutePath,
 					dMgr.absolutePath+osPathSepStr+nameFileInfo.Name())
 
 				errs = append(errs, err)
@@ -1485,9 +1493,13 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeInfo(
 
 					err = fmt.Errorf("%v\n"+
 						"Error: Error Returned by nameDirEntry.Info().\n"+
-						"The conversion of DirEntry to os.FileInfo Failed."+
+						"The conversion of DirEntry to os.FileInfo Failed.\n"+
+						"nextDir= '%v'\n"+
+						"FileName= '%v'\n"+
 						"Error= \n%v\n",
 						ePrefix.String(),
+						nextDir.absolutePath,
+						nextDir.absolutePath+osPathSepStr+nameFileInfo.Name(),
 						err2.Error())
 
 					errs = append(errs, err)
@@ -1499,8 +1511,10 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeInfo(
 
 					err = fmt.Errorf("%v\n"+
 						"Error: File Name is NOT classified as a 'Regular' File!\n"+
+						"nextDir= '%v'\n"+
 						"fileName='%v'\n",
 						ePrefix.String(),
+						nextDir.absolutePath,
 						nextDir.absolutePath+osPathSepStr+nameFileInfo.Name())
 
 					errs = append(errs, err)
@@ -2439,8 +2453,13 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 				err = fmt.Errorf("%v\n"+
 					"Error: Error Returned by nameDirEntry.Info().\n"+
 					"The conversion of DirEntry to os.FileInfo Failed."+
+					"%v= '%v'\n"+
+					"FileName= '%v'\n"+
 					"Error= \n%v\n",
 					ePrefix.String(),
+					dMgrLabel,
+					dMgr.absolutePath,
+					dMgr.absolutePath+osPathSepStr+nameFileInfo.Name(),
 					err2.Error())
 
 				errs = append(errs, err)
@@ -2452,8 +2471,11 @@ func (dMgrHlpr *dirMgrHelper) deleteFilesByNamePattern(
 
 				err = fmt.Errorf("%v\n"+
 					"Error: File Name is NOT classified as a 'Regular' File!\n"+
-					"fileName='%v'\n",
+					"%v= '%v'\n"+
+					"fileName= '%v'\n",
 					ePrefix.String(),
+					dMgrLabel,
+					dMgr.absolutePath,
 					dMgr.absolutePath+osPathSepStr+nameFileInfo.Name())
 
 				errs = append(errs, err)
@@ -4463,9 +4485,13 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 
 					err = fmt.Errorf("%v\n"+
 						"Error: Error Returned by nameDirEntry.Info().\n"+
-						"The conversion of DirEntry to os.FileInfo Failed."+
+						"The conversion of DirEntry to os.FileInfo Failed.\n"+
+						"nextDir= '%v'\n"+
+						"fileName='%v'\n"+
 						"Error= \n%v\n",
 						ePrefix.String(),
+						nextDir.absolutePath,
+						nextDir.absolutePath+osPathSepStr+nameFileInfo.Name(),
 						err2.Error())
 
 					errs = append(errs, err)
@@ -4477,8 +4503,10 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 
 					err = fmt.Errorf("%v\n"+
 						"Error: File Name is NOT classified as a 'Regular' File!\n"+
+						"nextDir= '%v'\n"+
 						"fileName='%v'\n",
 						ePrefix.String(),
+						nextDir.absolutePath,
 						nextDir.absolutePath+osPathSepStr+nameFileInfo.Name())
 
 					errs = append(errs, err)
@@ -4855,9 +4883,13 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeStats(
 
 					err = fmt.Errorf("%v\n"+
 						"Error: Error Returned by nameDirEntry.Info().\n"+
-						"The conversion of DirEntry to os.FileInfo Failed."+
+						"The conversion of DirEntry to os.FileInfo Failed.\n"+
+						"nextDir= '%v'\n"+
+						"FileName= '%v'\n"+
 						"Error= \n%v\n",
 						ePrefix.String(),
+						nextDir.absolutePath,
+						nextDir.absolutePath+osPathSepStr+nameFileInfo.Name(),
 						err2.Error())
 
 					errs = append(errs, err)
@@ -4869,8 +4901,10 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeStats(
 
 					err = fmt.Errorf("%v\n"+
 						"Error: File Name is NOT classified as a 'Regular' File!\n"+
+						"nextDir= '%v'\n"+
 						"fileName='%v'\n",
 						ePrefix.String(),
+						nextDir.absolutePath,
 						nextDir.absolutePath+osPathSepStr+nameFileInfo.Name())
 
 					errs = append(errs, err)
@@ -5105,7 +5139,7 @@ func (dMgrHlpr *dirMgrHelper) findFilesByNamePattern(
 			"%v.absolutePath='%v'\n"+
 			"Error= \n%v\n",
 			ePrefix.String(),
-			"targetBaseDir",
+			targetBaseDirLabel,
 			targetBaseDir.absolutePath,
 			err2.Error())
 
@@ -5141,9 +5175,10 @@ func (dMgrHlpr *dirMgrHelper) findFilesByNamePattern(
 
 				err = fmt.Errorf("%v\n"+
 					"Error: File Name is NOT classified as a 'Regular' File!\n"+
-					"targetBaseDir= '%v'\n"+
+					"%v= '%v'\n"+
 					"fileName= '%v'\n",
 					ePrefix.String(),
+					targetBaseDirLabel,
 					targetBaseDir.absolutePath,
 					targetBaseDir.absolutePath+osPathSepStr+nameFileInfo.Name())
 
@@ -6133,21 +6168,19 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 		return dirMoveStats, errs
 	}
 
-	var err2 error
-	var dMgrPathDoesExist, targetDMgrPathDoesExist bool
+	var dMgrHlprPreon = new(dirMgrHelperPreon)
 
-	if len(dMgrLabel) == 0 {
-		dMgrLabel = "dMgr"
-	}
+	_,
+		_,
+		err = dMgrHlprPreon.
+		validateDirMgr(
+			dMgr,
+			true, // Path MUST exist on disk
+			dMgrLabel,
+			ePrefix.XCpy(
+				dMgrLabel))
 
-	if dMgr == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter %v pointer is 'nil'!\n",
-			ePrefix.String(),
-			dMgrLabel)
-
-		errs = append(errs, err)
+	if err != nil {
 
 		return dirMoveStats, errs
 	}
@@ -6155,6 +6188,23 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 	if len(targetDMgrLabel) == 0 {
 
 		targetDMgrLabel = "targetDMgr"
+	}
+
+	var targetDMgrPathDoesExist bool
+
+	_,
+		targetDMgrPathDoesExist,
+		err = dMgrHlprPreon.
+		validateDirMgr(
+			targetDMgr,
+			false, // Path is NOT required to exist on disk
+			targetDMgrLabel,
+			ePrefix.XCpy(
+				targetDMgrLabel))
+
+	if err != nil {
+
+		return dirMoveStats, errs
 	}
 
 	if targetDMgr == nil {
@@ -6170,251 +6220,202 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 
 	}
 
-	dMgrHlprAtom := dirMgrHelperAtom{}
+	fh := FileHelper{}
+	var err2 error
+	var nameDirEntries []os.DirEntry
 
-	dMgrPathDoesExist,
-		_,
-		err = dMgrHlprAtom.
-		doesDirectoryExist(
-			dMgr,
-			PreProcPathCode.None(),
-			dMgrLabel,
-			ePrefix)
+	nameDirEntries,
+		err2 = os.ReadDir(dMgr.absolutePath)
 
-	if err != nil {
-
-		errs = append(errs, err)
-
-		return dirMoveStats, errs
-	}
-
-	if !dMgrPathDoesExist {
+	if err2 != nil {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: %v Directory Path DOES NOT EXIST!\n"+
-			"%v='%v'\n",
-			ePrefix.String(),
-			dMgrLabel,
-			dMgrLabel,
-			dMgr.absolutePath)
-
-		errs = append(errs, err)
-
-		return dirMoveStats, errs
-	}
-
-	targetDMgrPathDoesExist,
-		_,
-		err = dMgrHlprAtom.doesDirectoryExist(
-		targetDMgr,
-		PreProcPathCode.None(),
-		targetDMgrLabel,
-		ePrefix)
-
-	if err != nil {
-
-		errs = append(errs, err)
-
-		return dirMoveStats, errs
-	}
-
-	fh := FileHelper{}
-
-	dir, err := os.Open(dMgr.absolutePath)
-
-	if err != nil {
-
-		err2 = fmt.Errorf("%v\n"+
-			"Error return by os.Open(%v.absolutePath).\n"+
+			"Error returned by os.ReadDir(targetBaseDir.absolutePath).\n"+
 			"%v.absolutePath='%v'\n"+
 			"Error= \n%v\n",
 			ePrefix.String(),
 			dMgrLabel,
-			dMgrLabel,
 			dMgr.absolutePath,
-			err.Error())
-
-		errs = append(errs, err2)
+			err2.Error())
 
 		return dirMoveStats, errs
 	}
 
-	osPathSeparatorStr := string(os.PathSeparator)
+	var nameFileInfo os.FileInfo
+	osPathSepStr := string(os.PathSeparator)
 	var src, target string
 	var isMatch, dirCreated bool
-	var nameFileInfos []os.FileInfo
 	dMgrHlprMolecule := dirMgrHelperMolecule{}
 
-	file2LoopIsDone := false
+	for _, nameDirEntry := range nameDirEntries {
 
-	for !file2LoopIsDone {
+		if nameDirEntry.IsDir() {
+			// This is a directory.
+			dirMoveStats.NumOfSubDirectories++
+			continue
 
-		nameFileInfos, err = dir.Readdir(2000)
+		}
 
-		if err != nil && err == io.EOF {
-			file2LoopIsDone = true
+		// This is not a directory. It is a file.
+		// Determine if it matches the find file criteria.
 
-			if len(nameFileInfos) == 0 {
-				break
-			}
+		nameFileInfo,
+			err2 = nameDirEntry.Info()
 
-		} else if err != nil {
+		if err2 != nil {
 
-			err2 = fmt.Errorf("%v\n"+
-				"Error returned by dir.Readdirnames(2000).\n"+
-				"%v.absolutePath='%v'\n"+
+			err = fmt.Errorf("%v\n"+
+				"Error: Error Returned by nameDirEntry.Info().\n"+
+				"The conversion of DirEntry to os.FileInfo Failed."+
+				"%v= '%v'\n"+
+				"FileName= '%v'\n"+
 				"Error= \n%v\n",
 				ePrefix.String(),
 				dMgrLabel,
 				dMgr.absolutePath,
-				err.Error())
+				dMgr.absolutePath+osPathSepStr+nameFileInfo.Name(),
+				err2.Error())
+
+			errs = append(errs, err)
+
+			continue
+		}
+
+		if !nameFileInfo.Mode().IsRegular() {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: File Name is NOT classified as a 'Regular' File!\n"+
+				"%v= '%v'\n"+
+				"fileName= '%v'\n",
+				ePrefix.String(),
+				dMgrLabel,
+				dMgr.absolutePath,
+				dMgr.absolutePath+osPathSepStr+nameFileInfo.Name())
+
+			errs = append(errs, err)
+
+			continue
+		}
+
+		dirMoveStats.TotalSrcFilesProcessed++
+
+		isMatch,
+			err,
+			_ =
+			fh.FilterFileName(
+				nameFileInfo,
+				fileSelectCriteria,
+				ePrefix.XCpy("nameDirEntry"))
+
+		if err != nil {
+
+			err2 =
+				fmt.Errorf("%v\n"+
+					"Error returned by fh.FilterFileName(nameFileInfo, %v).\n"+
+					"%v Directory Searched='%v'\n"+
+					"fileName='%v'\n"+
+					"Error= \n%v\n",
+					funcName,
+					fileSelectLabel,
+					dMgrLabel,
+					dMgr.absolutePath,
+					nameFileInfo.Name(),
+					err.Error())
 
 			errs = append(errs, err2)
 
-			file2LoopIsDone = true
-
-			break
+			continue
 		}
 
-		for _, nameFInfo := range nameFileInfos {
+		if !isMatch {
+			dirMoveStats.SourceFilesRemaining++
+			continue
 
-			if nameFInfo.IsDir() {
-				dirMoveStats.NumOfSubDirectories++
-				continue
+		} else {
+			// We have a match
+			dirCreated = false
+			// Create Directory if needed
+			if !targetDMgrPathDoesExist {
 
-			}
-
-			// This is not a directory. It is a file.
-			// Determine if it matches the find file criteria.
-			dirMoveStats.TotalSrcFilesProcessed++
-
-			isMatch,
-				err,
-				_ =
-				fh.FilterFileName(
-					nameFInfo,
-					fileSelectCriteria,
-					ePrefix.XCpy("nameFInfo"))
-
-			if err != nil {
-
-				err2 =
-					fmt.Errorf("%v\n"+
-						"Error returned by fh.FilterFileName(nameFInfo, %v).\n"+
-						"%v Directory Searched='%v'\n"+
-						"fileName='%v'\n"+
-						"Error= \n%v\n",
-						funcName,
-						fileSelectLabel,
-						dMgrLabel,
-						dMgr.absolutePath,
-						nameFInfo.Name(),
-						err.Error())
-
-				errs = append(errs, err2)
-
-				continue
-			}
-
-			if !isMatch {
-				dirMoveStats.SourceFilesRemaining++
-				continue
-
-			} else {
-				// We have a match
-				dirCreated = false
-				// Create Directory if needed
-				if !targetDMgrPathDoesExist {
-
-					dirCreated,
-						err = new(dirMgrHelperMolecule).
-						lowLevelMakeDir(
-							targetDMgr,
-							targetDMgrLabel,
-							ePrefix)
-
-					if err != nil {
-						err2 = fmt.Errorf("%v\n"+
-							"Error creating target directory!\n"+
-							"%v Directory='%v'\n"+
-							"Error= \n%v\n",
-							funcName,
-							targetDMgrLabel,
-							targetDMgr.absolutePath,
-							err.Error())
-
-						errs = append(errs, err2)
-						file2LoopIsDone = true
-						break
-					}
-
-					if dirCreated {
-						dirMoveStats.DirsCreated++
-					}
-
-					dirMoveStats.DirsCreated++
-					targetDMgrPathDoesExist = true
-				}
-
-				src = dMgr.absolutePath +
-					osPathSeparatorStr + nameFInfo.Name()
-
-				target = targetDMgr.absolutePath +
-					osPathSeparatorStr + nameFInfo.Name()
-
-				err = dMgrHlprMolecule.
-					lowLevelCopyFile(
-						src,
-						nameFInfo,
-						target,
-						"sourceFile",
-						"destinationFile",
+				dirCreated,
+					err = new(dirMgrHelperMolecule).
+					lowLevelMakeDir(
+						targetDMgr,
+						targetDMgrLabel,
 						ePrefix)
 
 				if err != nil {
-					errs = append(errs, err)
-					dirMoveStats.SourceFilesRemaining++
-					continue
-
-				}
-
-				err = os.Remove(src)
-
-				if err != nil {
 					err2 = fmt.Errorf("%v\n"+
-						"Error occurred after file copy completed during delete operation!\n"+
-						"Error returned by os.Remove(sourceFile)\n"+
-						"sourceFile='%v'\n"+
+						"Error creating target directory!\n"+
+						"%v Directory='%v'\n"+
 						"Error= \n%v\n",
-						ePrefix.String(),
-						src,
+						funcName,
+						targetDMgrLabel,
+						targetDMgr.absolutePath,
 						err.Error())
 
-					errs = append(errs, err)
-					dirMoveStats.SourceFilesRemaining++
-					continue
+					errs = append(errs, err2)
+
+					break
 				}
 
-				dirMoveStats.SourceFilesMoved++
+				if dirCreated {
+					dirMoveStats.DirsCreated++
+				}
+
+				dirMoveStats.DirsCreated++
+				targetDMgrPathDoesExist = true
 			}
+
+			src = dMgr.absolutePath +
+				osPathSepStr + nameDirEntry.Name()
+
+			target = targetDMgr.absolutePath +
+				osPathSepStr + nameDirEntry.Name()
+
+			err = dMgrHlprMolecule.
+				lowLevelCopyFile(
+					src,
+					nameFileInfo,
+					target,
+					"sourceFile",
+					"destinationFile",
+					ePrefix)
+
+			if err != nil {
+
+				errs = append(errs, err)
+
+				dirMoveStats.SourceFilesRemaining++
+
+				continue
+
+			}
+
+			err = os.Remove(src)
+
+			if err != nil {
+				err2 = fmt.Errorf("%v\n"+
+					"Error occurred after file copy completed during delete operation!\n"+
+					"Error returned by os.Remove(sourceFile)\n"+
+					"sourceFile='%v'\n"+
+					"Error= \n%v\n",
+					ePrefix.String(),
+					src,
+					err.Error())
+
+				errs = append(errs, err)
+
+				dirMoveStats.SourceFilesRemaining++
+
+				continue
+			}
+
+			dirMoveStats.SourceFilesMoved++
 		}
-	}
+	} // END OF: for _, nameDirEntry := range nameDirEntries
 
-	if dir != nil {
-		err = dir.Close()
-
-		if err != nil {
-			err2 = fmt.Errorf("%v\n"+
-				"Error returned by dir.Close().\n"+
-				"dir= '%v'\n"+
-				"Error= \n%v\n ",
-				ePrefix.String(),
-				dMgr.absolutePath,
-				err.Error())
-
-			errs = append(errs, err2)
-		}
-	}
+	nameDirEntries = make([]os.DirEntry, 0)
 
 	if dirMoveStats.TotalSrcFilesProcessed !=
 		dirMoveStats.SourceFilesMoved+dirMoveStats.SourceFilesRemaining {
