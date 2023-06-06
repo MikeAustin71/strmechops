@@ -313,30 +313,22 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 		return dTreeCopyStats, errs
 	}
 
-	if targetDMgr == nil {
+	if len(sourceDMgrLabel) == 0 {
 
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter %v pointer is 'nil'!\n",
-			ePrefix.String(),
-			targetDMgrLabel)
-
-		errs = append(errs, err)
-
-		return dTreeCopyStats, errs
-
+		sourceDMgrLabel = "sourceDMgr"
 	}
 
-	dMgrHlprAtom := dirMgrHelperAtom{}
+	var dMgrHlprPreon = new(dirMgrHelperPreon)
 
-	dMgrPathDoesExist,
+	_,
 		_,
-		err :=
-		dMgrHlprAtom.doesDirectoryExist(
+		err = dMgrHlprPreon.
+		validateDirMgr(
 			sourceDMgr,
-			PreProcPathCode.None(),
+			true, // Path MUST exist on disk
 			sourceDMgrLabel,
 			ePrefix.XCpy(
-				"sourceDMgr"))
+				sourceDMgrLabel))
 
 	if err != nil {
 
@@ -345,15 +337,35 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 		return dTreeCopyStats, errs
 	}
 
-	if !dMgrPathDoesExist {
+	if len(targetDMgrLabel) == 0 {
 
-		err = fmt.Errorf("%v\n"+
-			"Error: %v directory path DOES NOT EXIST!\n"+
-			"%v='%v'\n",
-			ePrefix,
-			sourceDMgrLabel,
-			sourceDMgrLabel,
-			sourceDMgr.absolutePath)
+		targetDMgrLabel = "targetDMgr"
+	}
+
+	_,
+		_,
+		err = dMgrHlprPreon.
+		validateDirMgr(
+			targetDMgr,
+			false, // Path is NOT required to exist on disk
+			targetDMgrLabel,
+			ePrefix.XCpy(
+				targetDMgrLabel))
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return dTreeCopyStats, errs
+	}
+
+	dirs := DirMgrCollection{}
+
+	err = dirs.AddDirMgr(
+		*sourceDMgr,
+		ePrefix.XCpy("sourceDMgr"))
+
+	if err != nil {
 
 		errs = append(errs, err)
 
@@ -365,57 +377,28 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 	baseDirLen := len(sourceDMgr.absolutePath)
 
 	var nextTargetDMgr DirMgr
-	var nameFileInfos []os.FileInfo
 
 	osPathSepStr := string(os.PathSeparator)
 
-	dirs := DirMgrCollection{}
-
 	var nextDir DirMgr
-	var dirPtr *os.File
-	dirPtr = nil
 	var srcFile, targetFile string
 	fh := FileHelper{}
-
-	var dMgrCopy DirMgr
-
-	err = new(dirMgrHelperBoson).
-		copyDirMgrs(
-			&dMgrCopy,
-			sourceDMgr,
-			ePrefix.XCpy("dMgrCopy<-sourceDMgr"))
-
-	if err != nil {
-
-		errs = append(errs, err)
-
-		return dTreeCopyStats, errs
-	}
-
-	err = dirs.AddDirMgr(
-		dMgrCopy,
-		ePrefix.XCpy("dMgrCopy"))
-
-	if err != nil {
-
-		errs = append(errs, err)
-
-		return dTreeCopyStats, errs
-	}
-
-	if !skipTopLevelDirectory {
-		dTreeCopyStats.TotalDirsScanned++
-	}
-
+	dMgrHlprMolecule := dirMgrHelperMolecule{}
+	dMgrHlprAtom := dirMgrHelperAtom{}
+	dMgrHlprElectron := dirMgrHelperElectron{}
+	var fileInfos []FileInfoPlus
+	var errs2 []error
 	dirCreated := false
 	mainLoopIsDone := false
-	file2LoopIsDone := false
 	isMatch := false
 	isTopLevelDir := true
 	isNewDir := false
 	isFirstLoop := true
+	dMgrPathDoesExist := false
 
-	dMgrHlprMolecule := dirMgrHelperMolecule{}
+	if !skipTopLevelDirectory {
+		dTreeCopyStats.TotalDirsScanned++
+	}
 
 	for !mainLoopIsDone {
 
@@ -424,24 +407,6 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 			isFirstLoop = false
 		} else {
 			isTopLevelDir = false
-		}
-
-		if dirPtr != nil {
-
-			err = dirPtr.Close()
-
-			if err != nil {
-
-				err2 = fmt.Errorf("%v"+
-					"Error returned by dirPtr.Close()\n"+
-					"Error= \n%v\n",
-					ePrefix.String(),
-					err.Error())
-
-				errs = append(errs, err2)
-			}
-
-			dirPtr = nil
 		}
 
 		nextDir, err = dirs.PopFirstDirMgr(
@@ -542,7 +507,9 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 		}
 
 		if !skipTopLevelDirectory && copyEmptyDirectories {
+
 			dTreeCopyStats.DirsCopied++
+
 		} else if skipTopLevelDirectory &&
 			copyEmptyDirectories &&
 			!isTopLevelDir {
@@ -550,213 +517,179 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 			dTreeCopyStats.DirsCopied++
 		}
 
-		isNewDir = true
+		fileInfos,
+			_,
+			errs2 = dMgrHlprElectron.
+			getFileInfosFromDirectory(
+				&nextDir,
+				"nextDir",
+				ePrefix.XCpy("nextDir"))
 
-		dirPtr, err = os.Open(nextDir.absolutePath)
+		if len(errs2) != 0 {
 
-		if err != nil {
-
-			err2 = fmt.Errorf("%v\n"+
-				"Error return by os.Open(nextDir.absolutePath).\n"+
-				"nextDir.absolutePath='%v'\n"+
-				"Error= \n%v\n",
-				ePrefix.String(),
-				nextDir.absolutePath,
-				err.Error())
-
-			errs = append(errs, err2)
+			errs = append(errs, errs2...)
 
 			continue
 		}
 
-		file2LoopIsDone = false
+		isNewDir = true
 
-		for !file2LoopIsDone {
+		for _, fileInfo := range fileInfos {
 
-			nameFileInfos, err = dirPtr.Readdir(0)
+			if fileInfo.IsDir() {
+				// This is a directory
 
-			if err != nil && err == io.EOF {
+				err = dirs.AddDirMgrByPathNameStr(
+					nextDir.absolutePath+
+						osPathSepStr+
+						fileInfo.Name(),
+					ePrefix)
 
-				file2LoopIsDone = true
+				if err != nil {
+					err2 = fmt.Errorf("%v\n"+
+						"Error returned by dirs.AddDirMgrByPathNameStr(newDir).\n"+
+						"newDir='%v'\n"+
+						"Error= \n%v\n",
+						ePrefix.String(),
+						nextDir.absolutePath+osPathSepStr+fileInfo.Name(),
+						err.Error())
 
-				if len(nameFileInfos) == 0 {
-
-					break
+					errs = append(errs, err2)
+					continue
 				}
 
-			} else if err != nil {
+				// Count Directories Processed
+				dTreeCopyStats.TotalDirsScanned++
+
+				continue
+			} // End of IsDir()
+
+			// This is a file
+			if isTopLevelDir && skipTopLevelDirectory {
+				// Skip all files in the
+				// parent directory.
+				continue
+			}
+
+			// This is a file eligible for
+			// matching with selection criteria
+			dTreeCopyStats.TotalFilesProcessed++
+
+			// Determine if it matches the find file criteria.
+			isMatch,
+				err,
+				_ =
+				fh.FilterFileName(
+					fileInfo,
+					fileSelectCriteria,
+					ePrefix)
+
+			if err != nil {
 
 				err2 = fmt.Errorf("%v\n"+
-					"Error returned by dirPtr.Readdir(0).\n"+
+					"Error returned by fh.FilterFileName(nameDirEntry, fileSelectCriteria).\n"+
+					"Directory='%v'\n"+
+					"File Name='%v'\n"+
 					"Error= \n%v\n",
 					ePrefix.String(),
+					nextDir.absolutePath,
+					fileInfo.Name(),
 					err.Error())
+
+				dTreeCopyStats.TotalFilesProcessed--
 
 				errs = append(errs, err2)
 
-				file2LoopIsDone = true
-
-				break
+				continue
 			}
 
-			for _, nameFInfo := range nameFileInfos {
+			if isMatch {
+				// This file is a Match!
+				dirCreated = false
 
-				if nameFInfo.IsDir() {
-					// This is a directory
+				dMgrPathDoesExist,
+					_,
+					err =
+					dMgrHlprAtom.doesDirectoryExist(
+						&nextTargetDMgr,
+						PreProcPathCode.None(),
+						"nextTargetDMgr",
+						ePrefix)
 
-					err = dirs.AddDirMgrByPathNameStr(
-						nextDir.absolutePath+
-							osPathSepStr+
-							nameFInfo.Name(),
+				if err != nil {
+					errs = append(errs, err)
+					break
+				}
+
+				// Create Directory if needed
+				if !dMgrPathDoesExist {
+
+					dirCreated,
+						err = dMgrHlprMolecule.lowLevelMakeDir(
+						&nextTargetDMgr,
+						"3-nextTargetDMgr",
 						ePrefix)
 
 					if err != nil {
 						err2 = fmt.Errorf("%v\n"+
-							"Error returned by dirs.AddDirMgrByPathNameStr(newDir).\n"+
-							"newDir='%v'\n"+
+							"Error creating targetFile directory!\n"+
+							"Target Directory='%v'\n"+
 							"Error= \n%v\n",
-							ePrefix.String(),
-							nextDir.absolutePath+osPathSepStr+nameFInfo.Name(),
+							funcName,
+							nextTargetDMgr.absolutePath,
 							err.Error())
 
 						errs = append(errs, err2)
-						continue
+						break
+
+					} else if dirCreated {
+						dTreeCopyStats.DirsCreated++
+						dTreeCopyStats.DirsCopied++
 					}
 
-					// Count Directories Processed
-					dTreeCopyStats.TotalDirsScanned++
+				} else if isNewDir && !copyEmptyDirectories {
 
-					continue
-				} // End of IsDir()
-
-				// This is a file
-				if isTopLevelDir && skipTopLevelDirectory {
-					// Skip all files in the
-					// parent directory.
-					continue
+					dTreeCopyStats.DirsCopied++
 				}
 
-				// This is a file eligible for
-				// matching with selection criteria
-				dTreeCopyStats.TotalFilesProcessed++
+				isNewDir = false
 
-				// Determine if it matches the find file criteria.
-				isMatch,
-					err,
-					_ =
-					fh.FilterFileName(nameFInfo,
-						fileSelectCriteria,
+				srcFile = nextDir.absolutePath +
+					osPathSepStr + fileInfo.Name()
+
+				targetFile = nextTargetDMgr.absolutePath +
+					osPathSepStr + fileInfo.Name()
+
+				err = dMgrHlprMolecule.
+					lowLevelCopyFile(
+						srcFile,
+						fileInfo,
+						targetFile,
+						"srcFile",
+						"targetFile",
 						ePrefix)
 
 				if err != nil {
 
-					err2 = fmt.Errorf("%v\n"+
-						"Error returned by fh.FilterFileName(nameFInfo, fileSelectCriteria).\n"+
-						"Directory='%v'\n"+
-						"File Name='%v'\n"+
-						"Error= \n%v\n",
-						ePrefix.String(),
-						nextDir.absolutePath,
-						nameFInfo.Name(),
-						err.Error())
+					errs = append(errs, err)
 
-					dTreeCopyStats.TotalFilesProcessed--
-
-					errs = append(errs, err2)
-
-					continue
-				}
-
-				if isMatch {
-					// This file is a Match!
-					dirCreated = false
-
-					dMgrPathDoesExist,
-						_,
-						err =
-						dMgrHlprAtom.doesDirectoryExist(
-							&nextTargetDMgr,
-							PreProcPathCode.None(),
-							"nextTargetDMgr",
-							ePrefix)
-
-					if err != nil {
-						file2LoopIsDone = true
-						errs = append(errs, err)
-						break
-					}
-
-					// Create Directory if needed
-					if !dMgrPathDoesExist {
-
-						dirCreated,
-							err = dMgrHlprMolecule.lowLevelMakeDir(
-							&nextTargetDMgr,
-							"3-nextTargetDMgr",
-							ePrefix)
-
-						if err != nil {
-							err2 = fmt.Errorf("%v\n"+
-								"Error creating targetFile directory!\n"+
-								"Target Directory='%v'\n"+
-								"Error= \n%v\n",
-								funcName,
-								nextTargetDMgr.absolutePath,
-								err.Error())
-
-							errs = append(errs, err2)
-							file2LoopIsDone = true
-							break
-
-						} else if dirCreated {
-							dTreeCopyStats.DirsCreated++
-							dTreeCopyStats.DirsCopied++
-						}
-
-					} else if isNewDir && !copyEmptyDirectories {
-
-						dTreeCopyStats.DirsCopied++
-					}
-
-					isNewDir = false
-
-					srcFile = nextDir.absolutePath +
-						osPathSepStr + nameFInfo.Name()
-
-					targetFile = nextTargetDMgr.absolutePath +
-						osPathSepStr + nameFInfo.Name()
-
-					err = dMgrHlprMolecule.
-						lowLevelCopyFile(
-							srcFile,
-							nameFInfo,
-							targetFile,
-							"srcFile",
-							"destinationFile",
-							ePrefix)
-
-					if err != nil {
-
-						errs = append(errs, err)
-
-						dTreeCopyStats.FilesNotCopied++
-						dTreeCopyStats.FileBytesNotCopied += uint64(nameFInfo.Size())
-
-					} else {
-
-						dTreeCopyStats.FilesCopied++
-						dTreeCopyStats.FileBytesCopied += uint64(nameFInfo.Size())
-					}
+					dTreeCopyStats.FilesNotCopied++
+					dTreeCopyStats.FileBytesNotCopied += uint64(fileInfo.Size())
 
 				} else {
-					// This file is NOT A Match
-					// NOT Selected File
-					dTreeCopyStats.FilesNotCopied++
-					dTreeCopyStats.FileBytesNotCopied += uint64(nameFInfo.Size())
 
+					dTreeCopyStats.FilesCopied++
+					dTreeCopyStats.FileBytesCopied += uint64(fileInfo.Size())
 				}
-			} // End of range nameFileInfos
-		} // End of file 2 Loop
+
+			} else {
+				// This file is NOT A Match
+				// NOT Selected File
+				dTreeCopyStats.FilesNotCopied++
+				dTreeCopyStats.FileBytesNotCopied += uint64(fileInfo.Size())
+
+			}
+		} // End of range nameFileInfos
 
 		isTopLevelDir = false
 	} // End of main loop

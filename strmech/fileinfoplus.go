@@ -50,7 +50,7 @@ type FileInfoPlus struct {
 //	Example:
 //	            Complete File Name: "newerFileForTest_01.txt"
 //	  Base Name returned by Name(): "newerFileForTest_01.txt"
-func (fip *FileInfoPlus) Name() string {
+func (fip FileInfoPlus) Name() string {
 
 	if fip.lock == nil {
 		fip.lock = new(sync.Mutex)
@@ -67,7 +67,7 @@ func (fip *FileInfoPlus) Name() string {
 //
 // Returns the file length in bytes for regular files;
 // system-dependent for others.
-func (fip *FileInfoPlus) Size() int64 {
+func (fip FileInfoPlus) Size() int64 {
 
 	if fip.lock == nil {
 		fip.lock = new(sync.Mutex)
@@ -121,7 +121,7 @@ func (fip *FileInfoPlus) Size() int64 {
 //		ModePerm FileMode = 0777 // Unix permission bits
 //
 // )
-func (fip *FileInfoPlus) Mode() os.FileMode {
+func (fip FileInfoPlus) Mode() os.FileMode {
 
 	if fip.lock == nil {
 		fip.lock = new(sync.Mutex)
@@ -137,7 +137,7 @@ func (fip *FileInfoPlus) Mode() os.FileMode {
 // ModTime
 //
 // Returns the last file modification time.
-func (fip *FileInfoPlus) ModTime() time.Time {
+func (fip FileInfoPlus) ModTime() time.Time {
 
 	if fip.lock == nil {
 		fip.lock = new(sync.Mutex)
@@ -155,7 +155,7 @@ func (fip *FileInfoPlus) ModTime() time.Time {
 // This method returns a boolean value of 'true'
 // if the current instance of FileInfoPlus specifies
 // a directory and not a file.
-func (fip *FileInfoPlus) IsDir() bool {
+func (fip FileInfoPlus) IsDir() bool {
 
 	if fip.lock == nil {
 		fip.lock = new(sync.Mutex)
@@ -182,7 +182,7 @@ func (fip *FileInfoPlus) IsDir() bool {
 // # BE ADVISED
 //
 // This method can return nil.
-func (fip *FileInfoPlus) Sys() interface{} {
+func (fip FileInfoPlus) Sys() interface{} {
 
 	if fip.lock == nil {
 		fip.lock = new(sync.Mutex)
