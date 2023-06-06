@@ -5687,11 +5687,23 @@ func (fMgr *FileMgr) GetFileInfo(
 //
 //	fileInfoPlus				FileInfoPlus
 //
-//		This returned FileInfoPlus instance implements
-//		the	os.FileInfo interface. In addition,
-//		FileInfoPlus provides additional data on the
-//		current FileManager instance beyond that provided
-//		by the standard os.FileInfo interface.
+//		An object which implements the os.FileInfo
+//		interface. This parameter may transmit an
+//		instance of FileInfoPlus which implements
+//		the os.FileInfo interface but provides file
+//		information over and above that provided by the
+//		standard os.FileInfo interface.
+//
+//		The os.FileInfo interface is defined as follows:
+//
+//	 	type FileInfo interface {
+//			 Name() string       // base name of the file
+//			 Size() int64        // length in bytes for regular files; system-dependent for others
+//			 Mode() FileMode     // file mode bits
+//			 ModTime() time.Time // modification time
+//			 IsDir() bool        // abbreviation for Mode().IsDir()
+//			 Sys() interface{}   // underlying data source (can return nil)
+//	 	}
 //
 //	err							error
 //
@@ -8689,6 +8701,8 @@ func (fMgr *FileMgr) NewFromDirStrFileNameStr(
 //		information over and above that provided by the
 //		standard os.FileInfo interface.
 //
+//		The os.FileInfo interface is defined as follows:
+//
 //	 	type FileInfo interface {
 //			 Name() string       // base name of the file
 //			 Size() int64        // length in bytes for regular files; system-dependent for others
@@ -11305,6 +11319,8 @@ func (fMgr *FileMgr) SetWriterBufferSize(
 //		the os.FileInfo interface but provides file
 //		information over and above that provided by the
 //		standard os.FileInfo interface.
+//
+//		The os.FileInfo interface is defined as follows:
 //
 //	 	type FileInfo interface {
 //			 Name() string       // base name of the file

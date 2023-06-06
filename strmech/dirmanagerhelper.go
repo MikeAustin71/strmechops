@@ -6182,6 +6182,8 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 
 	if err != nil {
 
+		errs = append(errs, err)
+
 		return dirMoveStats, errs
 	}
 
@@ -6204,20 +6206,9 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 
 	if err != nil {
 
-		return dirMoveStats, errs
-	}
-
-	if targetDMgr == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter %v pointer is 'nil'!\n",
-			ePrefix.String(),
-			targetDMgrLabel)
-
 		errs = append(errs, err)
 
 		return dirMoveStats, errs
-
 	}
 
 	fh := FileHelper{}
@@ -6230,13 +6221,16 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 	if err2 != nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error returned by os.ReadDir(targetBaseDir.absolutePath).\n"+
+			"Error returned by os.ReadDir(%v.absolutePath).\n"+
 			"%v.absolutePath='%v'\n"+
 			"Error= \n%v\n",
 			ePrefix.String(),
 			dMgrLabel,
+			dMgrLabel,
 			dMgr.absolutePath,
 			err2.Error())
+
+		errs = append(errs, err)
 
 		return dirMoveStats, errs
 	}
@@ -6626,14 +6620,19 @@ func (dMgrHlpr *dirMgrHelper) moveDirectoryTree(
 		dMgrLabel = "dMgr"
 	}
 
-	if dMgr == nil {
+	var dMgrHlprPreon = new(dirMgrHelperPreon)
 
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter %v pointer is 'nil'!\n",
-			ePrefix.String(),
-			dMgrLabel)
+	_,
+		_,
+		err = dMgrHlprPreon.
+		validateDirMgr(
+			dMgr,
+			true, // Path MUST exist on disk
+			dMgrLabel,
+			ePrefix.XCpy(
+				dMgrLabel))
 
-		errs = append(errs, err)
+	if err != nil {
 
 		return dirMoveStats, errs
 	}
@@ -6643,17 +6642,19 @@ func (dMgrHlpr *dirMgrHelper) moveDirectoryTree(
 		targetDMgrLabel = "targetDMgr"
 	}
 
-	if targetDMgr == nil {
+	_,
+		_,
+		err = dMgrHlprPreon.
+		validateDirMgr(
+			targetDMgr,
+			false, // Path is NOT required to exist on disk
+			targetDMgrLabel,
+			ePrefix.XCpy(
+				targetDMgrLabel))
 
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter %v pointer is 'nil'!\n",
-			ePrefix.String(),
-			targetDMgrLabel)
-
-		errs = append(errs, err)
+	if err != nil {
 
 		return dirMoveStats, errs
-
 	}
 
 	var err2 error
@@ -6669,8 +6670,8 @@ func (dMgrHlpr *dirMgrHelper) moveDirectoryTree(
 				true,
 				false,
 				fileSelectCriteria,
-				"dMgr",
-				"targetDMgr",
+				dMgrLabel,
+				targetDMgrLabel,
 				ePrefix)
 
 	if len(errs2) > 0 {
