@@ -398,33 +398,44 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 
 	var src, target string
 	var isMatch bool
-	var nameDirEntries []os.DirEntry
+	var fileInfos []FileInfoPlus
+	var lenFileInfos int
+	var errs2 []error
 
-	nameDirEntries,
-		err2 = os.ReadDir(sourceDMgr.absolutePath)
+	fileInfos,
+		lenFileInfos,
+		errs2 = new(dirMgrHelperElectron).
+		getFileInfosFromDirectory(
+			sourceDMgr,
+			sourceDMgrLabel,
+			ePrefix.XCpy(sourceDMgrLabel))
 
-	if err2 != nil {
+	if len(errs2) != 0 {
+
+		errs = append(errs, errs2...)
+
+	}
+
+	if lenFileInfos == 0 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error returned by os.ReadDir(sourceDMgr.absolutePath).\n"+
-			"%v.absolutePath='%v'\n"+
-			"Error= \n%v\n",
+			"Error: dirMgrHelperElectron.getFileInfosFromDirectory()\n"+
+			"returned a zero length array of File Info Objects from:\n"+
+			"%v = %v\n",
 			ePrefix.String(),
 			sourceDMgrLabel,
-			sourceDMgr.absolutePath,
-			err2.Error())
+			sourceDMgr.absolutePath)
 
 		errs = append(errs, err)
 
 		return dirCopyStats, errs
 	}
 
-	var nameFileInfo os.FileInfo
 	fh := new(FileHelper)
 
-	for _, nameDirEntryInfo := range nameDirEntries {
+	for _, nameFileInfo := range fileInfos {
 
-		if nameDirEntryInfo.IsDir() {
+		if nameFileInfo.IsDir() {
 			// We don't care about sub-directories
 			continue
 
@@ -435,23 +446,6 @@ func (dMgrHlpr *dirMgrHelper) copyDirectory(
 
 		// This is not a directory. It is a file.
 		// Determine if it matches the find file criteria.
-
-		nameFileInfo,
-			err2 = nameDirEntryInfo.Info()
-
-		if err2 != nil {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: Error Returned by nameDirEntryInfo.Info().\n"+
-				"The conversion of DirEntry to os.FileInfo Failed."+
-				"Error= \n%v\n",
-				ePrefix.String(),
-				err2.Error())
-
-			errs = append(errs, err)
-
-			return dirCopyStats, errs
-		}
 
 		isMatch,
 			err2,

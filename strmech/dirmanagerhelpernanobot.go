@@ -395,6 +395,7 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 	isNewDir := false
 	isFirstLoop := true
 	dMgrPathDoesExist := false
+	var lenFileInfos int
 
 	if !skipTopLevelDirectory {
 		dTreeCopyStats.TotalDirsScanned++
@@ -518,7 +519,7 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 		}
 
 		fileInfos,
-			_,
+			lenFileInfos,
 			errs2 = dMgrHlprElectron.
 			getFileInfosFromDirectory(
 				&nextDir,
@@ -528,6 +529,20 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 		if len(errs2) != 0 {
 
 			errs = append(errs, errs2...)
+
+			continue
+		}
+
+		if lenFileInfos == 0 {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: dirMgrHelperElectron.getFileInfosFromDirectory()\n"+
+				"returned a zero length array of File Info Objects from:\n"+
+				"nextDir = %v\n",
+				ePrefix.String(),
+				nextDir.absolutePath)
+
+			errs = append(errs, err)
 
 			continue
 		}
