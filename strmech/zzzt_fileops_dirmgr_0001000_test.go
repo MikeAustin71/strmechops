@@ -159,11 +159,11 @@ func TestDirMgr_CopyDirectory_000100(t *testing.T) {
 		return
 	}
 
-	targetDMgr, err := new(DirMgr).New(
+	targetDMgr, fatalErr := new(DirMgr).New(
 		targetDir,
 		ePrefix.XCpy("targetDir"))
 
-	if err != nil {
+	if fatalErr != nil {
 
 		t.Errorf("\n%v\n"+
 			"Test Setup Error returned from DirMgr.New(targetDMgr).\n"+
@@ -171,7 +171,7 @@ func TestDirMgr_CopyDirectory_000100(t *testing.T) {
 			"Error= \n%v\n",
 			funcName,
 			targetDMgr,
-			err.Error())
+			fatalErr.Error())
 
 		return
 	}
@@ -180,11 +180,13 @@ func TestDirMgr_CopyDirectory_000100(t *testing.T) {
 
 	//"../../filesfortest/levelfilesfortest"
 
-	srcDMgr, err := new(DirMgr).New(
+	var srcDMgr DirMgr
+
+	srcDMgr, fatalErr = new(DirMgr).New(
 		srcDir1,
 		ePrefix.XCpy("srcDir1"))
 
-	if err != nil {
+	if fatalErr != nil {
 
 		t.Errorf("\n%v\n"+
 			"Test Setup Error returned from new(DirMgr).New(srcDir1).\n"+
@@ -192,7 +194,7 @@ func TestDirMgr_CopyDirectory_000100(t *testing.T) {
 			"Error=\n%v\n",
 			funcName,
 			srcDir1,
-			err.Error())
+			fatalErr.Error())
 
 		return
 	}
@@ -200,20 +202,27 @@ func TestDirMgr_CopyDirectory_000100(t *testing.T) {
 	fsc := FileSelectionCriteria{}
 
 	var dirCopyStats DirectoryCopyStats
-	var errs []error
+	var nonfatalErrs []error
 
 	dirCopyStats,
-		errs = srcDMgr.CopyDirectory(
+		nonfatalErrs,
+		fatalErr = srcDMgr.CopyDirectory(
 		targetDMgr,
-		fsc, false,
+		fsc,
+		false,
+		true,
+		true,
 		ePrefix.XCpy("targetDMgr"))
 
-	if len(errs) > 0 {
+	if len(nonfatalErrs) > 0 {
 
-		t.Errorf("Error returned from srcDMgr.CopyDirectory(targetDMgr, fsc)\n"+
-			"targetDir='%v'\nErrors Follow:\n\n%v",
+		t.Errorf("\n%v\n"+
+			"Non-Fatal errors returned from srcDMgr.CopyDirectory(targetDMgr, fsc)\n"+
+			"targetDir='%v'\n"+
+			"Errors= \n%v\n",
+			ePrefix.String(),
 			targetDMgr.GetAbsolutePath(),
-			new(StrMech).ConsolidateErrors(errs))
+			new(StrMech).ConsolidateErrors(nonfatalErrs))
 
 		_,
 			_ = fh.DeleteDirPathAll(
@@ -223,6 +232,25 @@ func TestDirMgr_CopyDirectory_000100(t *testing.T) {
 		return
 
 	}
+
+	if fatalErr != nil {
+
+		t.Errorf("\n%v\n"+
+			"Fatal error returned from srcDMgr.CopyDirectory(targetDMgr, fsc)\n"+
+			"targetDir='%v'\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			targetDMgr.GetAbsolutePath(),
+			fatalErr.Error())
+
+		_,
+			_ = fh.DeleteDirPathAll(
+			targetDir,
+			ePrefix)
+
+		return
+	}
+
 	// 5 txt src Files
 	/*
 	   "../../filesfortest/levelfilesfortest/level_0_0_test.txt"
@@ -243,12 +271,12 @@ func TestDirMgr_CopyDirectory_000100(t *testing.T) {
 	var fMgrCollection FileMgrCollection
 
 	fMgrCollection,
-		err = targetDMgr.FindFilesBySelectCriteria(
+		fatalErr = targetDMgr.FindFilesBySelectCriteria(
 		fsc,
 		ePrefix.XCpy(
 			"targetDMgr"))
 
-	if err != nil {
+	if fatalErr != nil {
 
 		t.Errorf("\n%v\n"+
 			"Test Setup Error returned by targetDMgr.FindFilesBySelectCriteria(fsc).\n"+
@@ -256,7 +284,7 @@ func TestDirMgr_CopyDirectory_000100(t *testing.T) {
 			"Error= \n%v\n",
 			funcName,
 			targetDMgr.GetAbsolutePath(),
-			err.Error())
+			fatalErr.Error())
 
 		_,
 			_ = fh.DeleteDirPathAll(
@@ -299,20 +327,20 @@ func TestDirMgr_CopyDirectory_000100(t *testing.T) {
 
 	for i := 0; i < fMgrCollection.GetNumOfFileMgrs(); i++ {
 
-		fMgr, err = fMgrCollection.PeekFileMgrAtIndex(
+		fMgr, fatalErr = fMgrCollection.PeekFileMgrAtIndex(
 			i,
 			ePrefix.XCpy(
 				fmt.Sprintf("fMgrCollection[%v]",
 					i)))
 
-		if err != nil {
+		if fatalErr != nil {
 
 			t.Errorf("\n%v\n"+
 				"Error returned by fMgrCollection.GetFileMgrAtIndex(%v)\n"+
 				"Error=\n%v\n",
 				funcName,
 				i,
-				err.Error())
+				fatalErr.Error())
 
 			_,
 				_ = fh.DeleteDirPathAll(targetDir, nil)

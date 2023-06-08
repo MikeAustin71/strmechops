@@ -385,7 +385,7 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 	fh := FileHelper{}
 	dMgrHlprMolecule := dirMgrHelperMolecule{}
 	dMgrHlprAtom := dirMgrHelperAtom{}
-	dMgrHlprElectron := dirMgrHelperElectron{}
+	dMgrHlprTachyon := new(dirMgrHelperTachyon)
 	var fileInfos []FileInfoPlus
 	var errs2 []error
 	dirCreated := false
@@ -520,7 +520,7 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 
 		fileInfos,
 			lenFileInfos,
-			errs2 = dMgrHlprElectron.
+			errs2 = dMgrHlprTachyon.
 			getFileInfosFromDirectory(
 				&nextDir,
 				"nextDir",
@@ -762,6 +762,195 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 	}
 
 	return dTreeCopyStats, errs
+}
+
+func (dMgrHlprNanobot *dirMgrHelperNanobot) newCopyDirectoryTree(
+	sourceDMgr *DirMgr,
+	targetDMgr *DirMgr,
+	skipTopLevelDirectory bool,
+	copyEmptyDirectories bool,
+	copySymLinkFiles bool,
+	copyOtherNonRegularFiles bool,
+	fileSelectCriteria FileSelectionCriteria,
+	sourceDMgrLabel string,
+	targetDMgrLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	dTreeCopyStats DirTreeCopyStats,
+	nonfatalErrs []error,
+	fatalErr error) {
+
+	if dMgrHlprNanobot.lock == nil {
+		dMgrHlprNanobot.lock = new(sync.Mutex)
+	}
+
+	dMgrHlprNanobot.lock.Lock()
+
+	defer dMgrHlprNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "dirMgrHelperNanobot.newCopyDirectoryTree()"
+
+	nonfatalErrs = make([]error, 0)
+
+	ePrefix,
+		fatalErr = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if fatalErr != nil {
+
+		return dTreeCopyStats, nonfatalErrs, fatalErr
+	}
+
+	if len(sourceDMgrLabel) == 0 {
+
+		sourceDMgrLabel = "sourceDMgr"
+	}
+
+	if len(targetDMgrLabel) == 0 {
+
+		targetDMgrLabel = "targetDMgr"
+	}
+
+	dMgrHlprPreon := new(dirMgrHelperPreon)
+
+	_,
+		_,
+		fatalErr = dMgrHlprPreon.
+		validateDirMgr(
+			sourceDMgr,
+			true, // Path MUST exist on disk
+			sourceDMgrLabel,
+			ePrefix.XCpy(
+				sourceDMgrLabel))
+
+	if fatalErr != nil {
+
+		return dTreeCopyStats, nonfatalErrs, fatalErr
+	}
+
+	if len(targetDMgrLabel) == 0 {
+
+		targetDMgrLabel = "targetDMgr"
+	}
+
+	baseSourceDirLen := len(sourceDMgr.absolutePath)
+
+	var targetPathDoesExist bool
+
+	_,
+		targetPathDoesExist,
+		fatalErr = dMgrHlprPreon.
+		validateDirMgr(
+			targetDMgr,
+			false,
+			targetDMgrLabel,
+			ePrefix)
+
+	if fatalErr != nil {
+
+		return dTreeCopyStats, nonfatalErrs, fatalErr
+	}
+
+	baseTargetDirLen := len(targetDMgr.absolutePath)
+
+	dMgrHlprMolecule := dirMgrHelperMolecule{}
+	var dirCreated bool
+	var err2 error
+
+	if !targetPathDoesExist && copyEmptyDirectories {
+
+		dirCreated,
+			err2 = dMgrHlprMolecule.
+			lowLevelMakeDir(
+				targetDMgr,
+				"targetDMgr",
+				ePrefix.XCpy(
+					"targetDMgr"))
+
+		if err2 != nil {
+
+			fatalErr = fmt.Errorf("%v\n"+
+				"Error occurred while creating 'targetDMgr' Directory!\n"+
+				"targetDMgr= '%v'\n"+
+				"Error= \n%v\n",
+				funcName,
+				targetDMgr.absolutePath,
+				err2.Error())
+
+			return dTreeCopyStats, nonfatalErrs, fatalErr
+		}
+
+		if !dirCreated {
+
+			fatalErr = fmt.Errorf("%v\n"+
+				"Error: Attempted creation of 'targetDMgr' Directory FAILED!\n"+
+				"targetDMgr= '%v'\n"+
+				ePrefix.String(),
+				targetDMgr.absolutePath)
+
+			return dTreeCopyStats, nonfatalErrs, fatalErr
+
+		} else {
+
+			dTreeCopyStats.DirsCreated++
+		}
+	}
+
+	dMgrHlprPlanck := new(dirMgrHelperPlanck)
+	var subDirectories DirMgrCollection
+	var subDirCopyStats DirectoryCopyStats
+	var errs2 []error
+
+	if !skipTopLevelDirectory {
+		dTreeCopyStats.TotalDirsScanned++
+
+		subDirCopyStats,
+			subDirectories,
+			errs2,
+			err2 = dMgrHlprPlanck.
+			copyDirectoryFiles(
+				sourceDMgr,
+				targetDMgr,
+				fileSelectCriteria,
+				copyEmptyDirectories,
+				copySymLinkFiles,
+				copyOtherNonRegularFiles,
+				sourceDMgrLabel,
+				targetDMgrLabel,
+				ePrefix)
+
+		if len(errs2) > 0 {
+
+			nonfatalErrs = append(nonfatalErrs, errs2...)
+
+		}
+
+		if err2 != nil {
+
+			fatalErr = fmt.Errorf("%v\n"+
+				"Fatal Error occurred while copying the\n"+
+				"source directory to the target directory.\n"+
+				"Source Directory %v= %v\n,"+
+				"Target Directory %v= %v\n"+
+				"Error=\n%v\n",
+				funcName,
+				sourceDMgrLabel,
+				sourceDMgr.absolutePath,
+				targetDMgrLabel,
+				targetDMgr.absolutePath,
+				err2.Error())
+
+			return dTreeCopyStats, nonfatalErrs, fatalErr
+		}
+
+		dTreeCopyStats.AddDirCopyStats(
+			subDirCopyStats)
+
+	}
+
 }
 
 // lowLevelDirMgrFieldConfig

@@ -353,7 +353,7 @@ type dirMgrHelperPlanck struct {
 //		of files copied.
 //
 //		type DirectoryCopyStats struct {
-//			DirCreated          uint64
+//			DirsCreated          uint64
 //			TotalFilesProcessed uint64
 //			FilesCopied         uint64
 //			FileBytesCopied     uint64
@@ -362,25 +362,56 @@ type dirMgrHelperPlanck struct {
 //			ComputeError        error
 //		}
 //
-//	errs						[]error
+//	subDirectories				DirMgrCollection
+//
+//		If this method completes successfully, this
+//		method will return an instance of DirMgrCollection
+//		populated with an array of 'DirMgr' objects
+//		identifying the subdirectories specified by
+//		input parameter 'sourceDMgr'.
+//
+//			type DirMgrCollection struct {
+//				dirMgrs []DirMgr
+//			}
+//
+//	nonfatalErrs				[]error
 //
 //		An array of error objects.
 //
 //		If this method completes successfully, the
 //		returned error array is set equal to 'nil'.
 //
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errPrefDto'.
-//	 	The 'errPrefDto' text will be prefixed or
-//	 	attached to the	beginning of the error message.
+//		If non-fatal errors are encountered during
+//		processing, the returned error Type will
+//		encapsulate appropriate error messages.
+//
+//		Non-fatal errors usually involve failure
+//		to copy individual files.
+//
+//		The returned error messages will incorporate
+//		the method chain and text passed by input
+//		parameter, 'errPrefDto'. The 'errPrefDto' text
+//		will be prefixed or attached to the beginning of
+//		the error message.
 //
 //		This error array may contain multiple errors.
 //
 //		An error array may be consolidated into a single
 //		error using method StrMech.ConsolidateErrors()
+//
+//	fatalErr					error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'.
+//
+//		If a fatal error is encountered during
+//		processing, this returned error Type will
+//		encapsulate an appropriate error message. This
+//		returned error message will incorporate the
+//		method chain and text passed by input parameter,
+//		'errPrefDto'. The 'errPrefDto' text will be
+//		prefixed or attached to the	beginning of the error
+//		message.
 func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 	sourceDMgr *DirMgr,
 	targetDMgr *DirMgr,
@@ -393,7 +424,8 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 	errPrefDto *ePref.ErrPrefixDto) (
 	dirCopyStats DirectoryCopyStats,
 	subDirectories DirMgrCollection,
-	errs []error) {
+	nonfatalErrs []error,
+	fatalErr error) {
 
 	if dMgrHlprPlanck.lock == nil {
 		dMgrHlprPlanck.lock = new(sync.Mutex)
@@ -411,16 +443,14 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 		"copyDirectoryFiles()"
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		fatalErr = ePref.ErrPrefixDto{}.NewIEmpty(
 		errPrefDto,
 		funcName,
 		"")
 
-	if err != nil {
+	if fatalErr != nil {
 
-		errs = append(errs, err)
-
-		return dirCopyStats, subDirectories, errs
+		return dirCopyStats, subDirectories, nonfatalErrs, fatalErr
 	}
 
 	subDirectories = new(DirMgrCollection).New()
@@ -434,18 +464,16 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 	_,
 		_,
-		err = dMgrHlprPreon.
+		fatalErr = dMgrHlprPreon.
 		validateDirMgr(
 			sourceDMgr,
 			true,
 			sourceDMgrLabel,
 			ePrefix)
 
-	if err != nil {
+	if fatalErr != nil {
 
-		errs = append(errs, err)
-
-		return dirCopyStats, subDirectories, errs
+		return dirCopyStats, subDirectories, nonfatalErrs, fatalErr
 	}
 
 	if len(targetDMgrLabel) == 0 {
@@ -457,18 +485,16 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 	_,
 		targetPathDoesExist,
-		err = dMgrHlprPreon.
+		fatalErr = dMgrHlprPreon.
 		validateDirMgr(
 			targetDMgr,
 			false,
 			targetDMgrLabel,
 			ePrefix)
 
-	if err != nil {
+	if fatalErr != nil {
 
-		errs = append(errs, err)
-
-		return dirCopyStats, subDirectories, errs
+		return dirCopyStats, subDirectories, nonfatalErrs, fatalErr
 	}
 
 	var dirCreated bool
@@ -478,18 +504,18 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 	if !targetPathDoesExist && copyEmptyDirectories {
 
 		dirCreated,
-			err = dMgrHlprMolecule.lowLevelMakeDir(
+			fatalErr = dMgrHlprMolecule.lowLevelMakeDir(
 			targetDMgr,
 			targetDMgrLabel,
 			ePrefix.XCpy(targetDMgrLabel))
 
-		if err != nil {
-			errs = append(errs, err)
-			return dirCopyStats, subDirectories, errs
+		if fatalErr != nil {
+
+			return dirCopyStats, subDirectories, nonfatalErrs, fatalErr
 		}
 
 		if dirCreated {
-			dirCopyStats.DirCreated++
+			dirCopyStats.DirsCreated++
 		}
 
 		targetPathDoesExist = true
@@ -505,7 +531,8 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 	fileInfos,
 		lenFileInfos,
-		errs2 = new(dirMgrHelperElectron).
+		errs2,
+		fatalErr = new(dirMgrHelperTachyon).
 		getFileInfosFromDirectory(
 			sourceDMgr,
 			sourceDMgrLabel,
@@ -513,23 +540,29 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 	if len(errs2) != 0 {
 
-		errs = append(errs, errs2...)
+		nonfatalErrs = append(nonfatalErrs, errs2...)
 
+	}
+
+	if fatalErr != nil {
+
+		return dirCopyStats, subDirectories, nonfatalErrs, fatalErr
 	}
 
 	if lenFileInfos == 0 {
 
-		err = fmt.Errorf("%v\n"+
-			"Error: dirMgrHelperElectron.getFileInfosFromDirectory()\n"+
+		fatalErr = fmt.Errorf("%v\n"+
+			"Error: The %v directory is EMPTY!\n"+
+			"The copy operation cannot proceed.\n"+
+			"Method dirMgrHelperElectron.getFileInfosFromDirectory()\n"+
 			"returned a zero length array of File Info Objects from:\n"+
 			"%v = %v\n",
 			ePrefix.String(),
 			sourceDMgrLabel,
+			sourceDMgrLabel,
 			sourceDMgr.absolutePath)
 
-		errs = append(errs, err)
-
-		return dirCopyStats, subDirectories, errs
+		return dirCopyStats, subDirectories, nonfatalErrs, fatalErr
 	}
 
 	fh := new(FileHelper)
@@ -549,7 +582,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 			if err2 != nil {
 
-				err = fmt.Errorf("%v\n"+
+				fatalErr = fmt.Errorf("%v\n"+
 					"Error returned adding subdirectory DirMgrCollection!\n"+
 					"Parent Directory = '%v'\n"+
 					"Subdirectory Name= '%v'\n"+
@@ -563,7 +596,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 						nameFileInfo.Name(),
 					err2.Error())
 
-				errs = append(errs, err)
+				return dirCopyStats, subDirectories, nonfatalErrs, fatalErr
 			}
 
 			continue
@@ -597,7 +630,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 					nameFileInfo.Name(),
 					err2.Error())
 
-			errs = append(errs, err)
+			nonfatalErrs = append(nonfatalErrs, err)
 
 			continue
 		}
@@ -624,7 +657,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 					ePrefix)
 
 				if err != nil {
-					err2 = fmt.Errorf("%v\n"+
+					fatalErr = fmt.Errorf("%v\n"+
 						"Error creating target directory!\n"+
 						"%v Directory='%v'\n"+
 						"Error= \n%v\n",
@@ -633,15 +666,13 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 						targetDMgr.absolutePath,
 						err.Error())
 
-					errs = append(errs, err2)
-
-					continue
+					return dirCopyStats, subDirectories, nonfatalErrs, fatalErr
 				}
 
 				targetPathDoesExist = true
 
 				if dirCreated {
-					dirCopyStats.DirCreated++
+					dirCopyStats.DirsCreated++
 				}
 			}
 
@@ -684,7 +715,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 				if err2 != nil {
 
-					err = fmt.Errorf("%v\n"+
+					fatalErr = fmt.Errorf("%v\n"+
 						"Error: Attempted file copy FAILED!\n"+
 						"Source File: %v\n"+
 						"Target File: %v\n"+
@@ -694,11 +725,11 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 						target,
 						err2.Error())
 
-					errs = append(errs, err)
-
 					dirCopyStats.FilesNotCopied++
 
 					dirCopyStats.FileBytesNotCopied += uint64(nameFileInfo.Size())
+
+					return dirCopyStats, subDirectories, nonfatalErrs, fatalErr
 
 				} else {
 
@@ -706,12 +737,63 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 					dirCopyStats.FileBytesCopied += uint64(nameFileInfo.Size())
 				}
+
+			} else {
+
+				dirCopyStats.FilesNotCopied++
+
+				dirCopyStats.FileBytesNotCopied += uint64(nameFileInfo.Size())
 			}
 		}
 	}
 
-	return dirCopyStats, subDirectories, errs
+	return dirCopyStats, subDirectories, nonfatalErrs, fatalErr
 }
+
+/*
+func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
+	targetDMgr *DirMgr,
+	fileSelectCriteria FileSelectionCriteria,
+	copyEmptyDirectories bool,
+	copySymLinkFiles bool,
+	copyOtherNonRegularFiles bool,
+	sourceDMgrLabel string,
+	targetDMgrLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	dirCopyStats DirectoryCopyStats,
+	subDirectories DirMgrCollection,
+	errs []error) {
+
+	if dMgrHlprPlanck.lock == nil {
+		dMgrHlprPlanck.lock = new(sync.Mutex)
+	}
+
+	dMgrHlprPlanck.lock.Lock()
+
+	defer dMgrHlprPlanck.lock.Unlock()
+
+	var err, err2 error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "dirMgrHelper." +
+		"copyDirectoryFiles()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		errs = append(errs, err)
+
+		return dirCopyStats, subDirectories, errs
+	}
+
+}
+*/
 
 // isDirMgrValid
 //

@@ -39,8 +39,25 @@ type DirTreeCopyStats struct {
 	ComputeError        error
 }
 
+func (dTreeCopyStats *DirTreeCopyStats) AddDirCopyStats(
+	dCopyStats DirectoryCopyStats) {
+
+	dTreeCopyStats.DirsCreated += dCopyStats.DirsCreated
+
+	dTreeCopyStats.TotalFilesProcessed += dCopyStats.TotalFilesProcessed
+
+	dTreeCopyStats.FilesCopied += dCopyStats.FilesCopied
+
+	dTreeCopyStats.FileBytesCopied += dCopyStats.FileBytesCopied
+
+	dTreeCopyStats.FilesNotCopied += dCopyStats.FilesNotCopied
+
+	dTreeCopyStats.FileBytesNotCopied += dCopyStats.FileBytesNotCopied
+
+}
+
 type DirectoryCopyStats struct {
-	DirCreated          uint64
+	DirsCreated         uint64
 	TotalFilesProcessed uint64
 	FilesCopied         uint64
 	FileBytesCopied     uint64

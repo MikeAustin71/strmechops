@@ -422,7 +422,7 @@ type DirMgr struct {
 //		of files copied.
 //
 //		type DirectoryCopyStats struct {
-//			DirCreated          uint64
+//			DirsCreated          uint64
 //			TotalFilesProcessed uint64
 //			FilesCopied         uint64
 //			FileBytesCopied     uint64
@@ -431,26 +431,44 @@ type DirMgr struct {
 //			ComputeError        error
 //		}
 //
-//
-//	errs						[]error
+//	nonfatalErrs				[]error
 //
 //		An array of error objects.
 //
 //		If this method completes successfully, the
 //		returned error array is set equal to 'nil'.
 //
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errPrefDto'.
-//	 	The 'errPrefDto' text will be prefixed or
-//	 	attached to the	beginning of the error message.
+//		If non-fatal errors are encountered during
+//		processing, the returned error Type will
+//		encapsulate appropriate error messages.
+//
+//		Non-fatal errors usually involve failure
+//		to copy individual files.
+//
+//		The returned error messages will incorporate
+//		the method chain and text passed by input
+//		parameter, 'errPrefDto'. The 'errPrefDto' text
+//		will be prefixed or attached to the beginning of
+//		the error message.
 //
 //		This error array may contain multiple errors.
 //
 //		An error array may be consolidated into a single
 //		error using method StrMech.ConsolidateErrors()
+//
+//	fatalErr					error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'.
+//
+//		If a fatal error is encountered during
+//		processing, this returned error Type will
+//		encapsulate an appropriate error message. This
+//		returned error message will incorporate the
+//		method chain and text passed by input parameter,
+//		'errPrefDto'. The 'errPrefDto' text will be
+//		prefixed or attached to the	beginning of the error
+//		message.
 func (dMgr *DirMgr) CopyDirectory(
 	targetDMgr DirMgr,
 	fileSelectCriteria FileSelectionCriteria,
@@ -459,7 +477,8 @@ func (dMgr *DirMgr) CopyDirectory(
 	copyOtherNonRegularFiles bool,
 	errorPrefix interface{}) (
 	dirCopyStats DirectoryCopyStats,
-	errs []error) {
+	nonfatalErrs []error,
+	fatalErr error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -470,24 +489,22 @@ func (dMgr *DirMgr) CopyDirectory(
 	defer dMgr.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		fatalErr = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"DirMgr.CopyDirectory()",
 		"")
 
-	if err != nil {
+	if fatalErr != nil {
 
-		errs = append(errs, err)
-
-		return dirCopyStats, errs
+		return dirCopyStats, nonfatalErrs, fatalErr
 	}
 
 	dirCopyStats,
 		_,
-		errs = new(dirMgrHelperPlanck).copyDirectoryFiles(
+		nonfatalErrs,
+		fatalErr = new(dirMgrHelperPlanck).copyDirectoryFiles(
 		dMgr,
 		&targetDMgr,
 		fileSelectCriteria,
@@ -498,7 +515,7 @@ func (dMgr *DirMgr) CopyDirectory(
 		"targetDMgr",
 		ePrefix)
 
-	return dirCopyStats, errs
+	return dirCopyStats, nonfatalErrs, fatalErr
 }
 
 // CopyDirectoryTree
