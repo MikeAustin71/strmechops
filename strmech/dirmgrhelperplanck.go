@@ -563,7 +563,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 					"%v directorySearched='%v'\n"+
 					"fileName='%v'\n"+
 					"Error= \n%v\n",
-					ePrefix.String(),
+					funcName,
 					sourceDMgrLabel,
 					sourceDMgr.absolutePath,
 					nameFileInfo.Name(),
@@ -600,7 +600,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 						"Error creating target directory!\n"+
 						"%v Directory='%v'\n"+
 						"Error= \n%v\n",
-						ePrefix.String(),
+						funcName,
 						targetDMgrLabel,
 						targetDMgr.absolutePath,
 						err.Error())
@@ -646,7 +646,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 				target = targetDMgr.absolutePath +
 					osPathSeparatorStr + nameFileInfo.Name()
 
-				err = dMgrHlprMolecule.lowLevelCopyFile(
+				err2 = dMgrHlprMolecule.lowLevelCopyFile(
 					src,
 					nameFileInfo,
 					target,
@@ -654,7 +654,17 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 					"destinationFile",
 					ePrefix)
 
-				if err != nil {
+				if err2 != nil {
+
+					err = fmt.Errorf("%v\n"+
+						"Error: Attempted file copy FAILED!\n"+
+						"Source File: %v\n"+
+						"Target File: %v\n"+
+						"Error= \n%v\n",
+						funcName,
+						src,
+						target,
+						err2.Error())
 
 					errs = append(errs, err)
 
