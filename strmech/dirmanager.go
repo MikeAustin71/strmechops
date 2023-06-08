@@ -486,6 +486,7 @@ func (dMgr *DirMgr) CopyDirectory(
 	}
 
 	dirCopyStats,
+		_,
 		errs = new(dirMgrHelperPlanck).copyDirectoryFiles(
 		dMgr,
 		&targetDMgr,

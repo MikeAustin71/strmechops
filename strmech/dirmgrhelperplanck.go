@@ -392,6 +392,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 	targetDMgrLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
 	dirCopyStats DirectoryCopyStats,
+	subDirectories DirMgrCollection,
 	errs []error) {
 
 	if dMgrHlprPlanck.lock == nil {
@@ -419,8 +420,10 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 		errs = append(errs, err)
 
-		return dirCopyStats, errs
+		return dirCopyStats, subDirectories, errs
 	}
+
+	subDirectories = new(DirMgrCollection).New()
 
 	if len(sourceDMgrLabel) == 0 {
 
@@ -442,7 +445,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 		errs = append(errs, err)
 
-		return dirCopyStats, errs
+		return dirCopyStats, subDirectories, errs
 	}
 
 	if len(targetDMgrLabel) == 0 {
@@ -465,7 +468,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 		errs = append(errs, err)
 
-		return dirCopyStats, errs
+		return dirCopyStats, subDirectories, errs
 	}
 
 	var dirCreated bool
@@ -482,7 +485,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 		if err != nil {
 			errs = append(errs, err)
-			return dirCopyStats, errs
+			return dirCopyStats, subDirectories, errs
 		}
 
 		if dirCreated {
@@ -526,7 +529,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 		errs = append(errs, err)
 
-		return dirCopyStats, errs
+		return dirCopyStats, subDirectories, errs
 	}
 
 	fh := new(FileHelper)
@@ -536,12 +539,37 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 	for _, nameFileInfo := range fileInfos {
 
 		if nameFileInfo.IsDir() {
-			// We don't care about sub-directories
-			continue
+			// This is a Subdirectory!
 
+			err2 = subDirectories.
+				AddDirMgrByKnownPathDirName(
+					sourceDMgr.absolutePath,
+					nameFileInfo.Name(),
+					ePrefix.XCpy("sourceDMgr+nameFileInfo"))
+
+			if err2 != nil {
+
+				err = fmt.Errorf("%v\n"+
+					"Error returned adding subdirectory DirMgrCollection!\n"+
+					"Parent Directory = '%v'\n"+
+					"Subdirectory Name= '%v'\n"+
+					"Full Subdirectory Path= '%v'\n"+
+					"Error= \n%v\n",
+					funcName,
+					sourceDMgr.absolutePath,
+					nameFileInfo.Name(),
+					sourceDMgr.absolutePath+
+						osPathSeparatorStr+
+						nameFileInfo.Name(),
+					err2.Error())
+
+				errs = append(errs, err)
+			}
+
+			continue
 		}
 
-		// This is a File. Proceed...
+		// This is a File. Proceed to Copy Operation!
 		dirCopyStats.TotalFilesProcessed++
 
 		// This is not a directory. It is a file.
@@ -682,7 +710,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 		}
 	}
 
-	return dirCopyStats, errs
+	return dirCopyStats, subDirectories, errs
 }
 
 // isDirMgrValid
