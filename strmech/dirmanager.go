@@ -52,10 +52,12 @@ type DirMgr struct {
 
 // CopyDirectory
 //
-// Copies files from the directory identified by DirMgr
-// to a target directory. The files to be copied are
-// selected according to file selection criteria
-// specified by input parameter, 'fileSelectCriteria'.
+// Copies files from the directory identified by the
+// current instance of DirMgr to a target directory.
+//
+// The files to be copied are selected according to
+// file selection criteria specified by input parameter,
+// 'fileSelectCriteria'.
 //
 // The selected files are copied by a Copy IO operation.
 // For information on the Copy IO procedure see
@@ -63,15 +65,26 @@ type DirMgr struct {
 //
 //	https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
 //
-// ----------------------------------------------------------------
+// This method copies "regular" files plus certain
+// non-regular files depending on input parameter values
+// supplied by the user.
 //
-// # BE ADVISED
+// In Go programming language, a regular file is a file
+// that contains data in any format that can be read by
+// a user or an application. It is not a directory or a
+// device file.
 //
-// This method ONLY copies files from the current
-// directory identified by 'DirMgr'. It does NOT copy
-// files from subdirectories.
+// Examples of "regular" files include text files, image
+// files and executable files.
 //
-// ----------------------------------------------------------------
+// Examples of non-regular files include directories,
+// device files, named pipes, sockets, and symbolic
+// links.
+//
+// Input parameters 'copyEmptyDirectories',
+// 'copySymLinkFiles', and 'copyOtherNonRegularFiles'
+// allow the users to specify that these non-regular
+// files should be included in the copy operation.
 //
 // If the target directory does not exist and files are
 // located matching the file selection criteria, this
@@ -81,14 +94,76 @@ type DirMgr struct {
 // this method will NOT attempt to create the target
 // directory.
 //
-// This method is optimized to support the copy of large
-// numbers of files.
+// ----------------------------------------------------------------
+//
+// # Definition Of Terms
+//
+//	Regular & Non-Regular Files
+//
+//	In Go programming language, a regular file is a file
+//	that contains data in any format that can be read by
+//	a user or an application. It is not a directory or a
+//	device file.
+//
+//	Non-regular files include directories, device files,
+//	named pipes, sockets, and symbolic links.
+//
+//	https://docs.studygolang.com/src/io/fs/fs.go
+//	https://go.dev/src/os/types.go
+//	https://go.dev/src/os/types.go?s=1237:1275#L31
+//	https://pkg.go.dev/gopkg.in/src-d/go-git.v4/plumbing/filemode
+//	https://www.linode.com/docs/guides/creating-reading-and-writing-files-in-go-a-tutorial/
+//
+//	SymLink Files
+//
+//	In computing, a symbolic link (also symlink or soft
+//	link) is a file whose purpose is to point to a file
+//	or directory (called the "target") by specifying a
+//	path thereto.
+//
+//		https://en.wikipedia.org/wiki/Symbolic_link
+//
+//	It's true that a symlink is a shortcut file. But it's
+//	different from a standard shortcut that, say, a program
+//	installer has placed on your Windows desktop to make the
+//	program easier to run.
+//
+//	Sure, clicking on either type of shortcut opens the
+//	linked object, but what goes on beneath the hood is
+//	different in both cases as we'll see next.
+//
+//	While a standard shortcut points to a certain object,
+//	a symlink makes it appear as if the linked object is
+//	actually there. Your computer and the apps on it will
+//	read the symlink as the target object itself.
+//
+//		https://www.thewindowsclub.com/create-symlinks-in-windows-10
+//		https://www.makeuseof.com/tag/what-is-a-symbolic-link-what-are-its-uses-makeuseof-explains/
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+// (1)	This method ONLY copies files from the current
+//
+//		directory identified by 'DirMgr'. It does NOT
+//		copy files from subdirectories.
+//
+//	(2)	Pay attention to input parameters
+//		'copyEmptyDirectories', 'copySymLinkFiles', and
+//		'copyOtherNonRegularFiles'. The settings for
+//		these parameters will allow user to include or
+//		exclude certain types of non-regular files from
+//		the copy operation.
+//
+//	(3)	This method is optimized to support the copy of
+//		large numbers of files.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	targetDMgr   DirMgr
+//	targetDMgr   					DirMgr
 //
 //		An instance of 'DirMgr' initialized with the
 //		directory path of the target directory to which
@@ -97,7 +172,7 @@ type DirMgr struct {
 //		attempt to create it.
 //
 //
-//	fileSelectCriteria FileSelectionCriteria
+//	fileSelectCriteria 				FileSelectionCriteria
 //
 //		This input parameter should be configured with
 //		the desired file selection criteria. Files
@@ -248,7 +323,7 @@ type DirMgr struct {
 //
 //		------------------------------------------------------------------------
 //
-//	copyEmptyDirectory			bool
+//	copyEmptyDirectories			bool
 //
 //		If set to 'true' the target directory will be
 //		created regardless of whether any files are
@@ -257,7 +332,25 @@ type DirMgr struct {
 //		file selection criteria specified by input
 //		parameter 'fileSelectCriteria'.
 //
-//	errorPrefix					interface{}
+//	copySymLinkFiles				bool
+//
+//		If this parameter is set to 'true', SymLink files
+//		which meet the file selection criteria, will be
+//		included in the copy operation.
+//
+//	copyOtherNonRegularFiles		bool
+//
+//		If this parameter is set to 'true', other
+//		non-regular file types, besides SymLinks and
+//		directories specified above, will be included
+//		in the copy operation if they meet the file
+//		selection criteria.
+//
+//		Examples of other non-regular file types
+//		include device files, named pipes, and sockets.
+//		See the Definition Of Terms section above.
+//
+//	errorPrefix						interface{}
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
@@ -361,7 +454,9 @@ type DirMgr struct {
 func (dMgr *DirMgr) CopyDirectory(
 	targetDMgr DirMgr,
 	fileSelectCriteria FileSelectionCriteria,
-	copyEmptyDirectory bool,
+	copyEmptyDirectories bool,
+	copySymLinkFiles bool,
+	copyOtherNonRegularFiles bool,
 	errorPrefix interface{}) (
 	dirCopyStats DirectoryCopyStats,
 	errs []error) {
@@ -373,8 +468,6 @@ func (dMgr *DirMgr) CopyDirectory(
 	dMgr.lock.Lock()
 
 	defer dMgr.lock.Unlock()
-
-	dMgrHlpr := dirMgrHelper{}
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -393,11 +486,13 @@ func (dMgr *DirMgr) CopyDirectory(
 	}
 
 	dirCopyStats,
-		errs = dMgrHlpr.copyDirectory(
+		errs = new(dirMgrHelperPlanck).copyDirectoryFiles(
 		dMgr,
 		&targetDMgr,
 		fileSelectCriteria,
-		copyEmptyDirectory,
+		copyEmptyDirectories,
+		copySymLinkFiles,
+		copyOtherNonRegularFiles,
 		"dMgr",
 		"targetDMgr",
 		ePrefix)
