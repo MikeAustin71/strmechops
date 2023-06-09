@@ -106,10 +106,17 @@ type dirMgrHelperPlanck struct {
 //
 // # BE ADVISED
 //
-// This method ONLY copies files from the directory
-// identified by 'sourceDMgr' to the directory identified
-// by 'targetDMgr'. It does NOT copy files from
-// subdirectories of 'sourceDMgr'.
+//	(1)	This method ONLY copies files from the directory
+//		identified by 'sourceDMgr' to the directory identified
+//		by 'targetDMgr'. It does NOT copy files from
+//		subdirectories of 'sourceDMgr'.
+//
+//	(2)	If the target directory does not exist, this method
+//		will attempt to create it.
+//
+//	(3)	Files will only be copied if they meet the file
+//		selection criteria specified by input parameter
+//	 	'fileSelectCriteria'.
 //
 // ----------------------------------------------------------------
 //

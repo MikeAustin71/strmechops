@@ -282,6 +282,10 @@ type DirTreeCopyStats struct {
 func (dTreeCopyStats *DirTreeCopyStats) AddDirCopyStats(
 	dCopyStats DirectoryCopyStats) {
 
+	dTreeCopyStats.TotalDirsScanned++
+
+	dTreeCopyStats.DirsCopied++
+
 	dTreeCopyStats.DirsCreated += dCopyStats.DirsCreated
 
 	dTreeCopyStats.TotalFilesProcessed += dCopyStats.TotalFilesProcessed

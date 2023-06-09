@@ -484,10 +484,6 @@ func (dMgrs *DirMgrCollection) AddDirMgrByPathNameStr(
 		return err
 	}
 
-	if dMgrs.dirMgrs == nil {
-		dMgrs.dirMgrs = make([]DirMgr, 0, 100)
-	}
-
 	newDirMgr := DirMgr{}
 
 	var isEmpty bool
@@ -741,6 +737,10 @@ func (dMgrs *DirMgrCollection) AddFileInfo(
 //		Directory Managers Collection maintained by the
 //		current instance of DirMgrCollection.
 //
+//		If the 'dMgrs2' collection of Directory Manager
+//		objects is empty, or has a zero length, this
+//		method will exit and no error will be returned.
+//
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
@@ -860,11 +860,6 @@ func (dMgrs *DirMgrCollection) AddDirMgrCollection(
 	lDmc2 := len(dMgrs2.dirMgrs)
 
 	if lDmc2 == 0 {
-
-		err = fmt.Errorf("%v \n"+
-			"ERROR: Input paramter 'dMgrs2' contains a zero"+
-			"length Directory Managers array (dMgrs2.dirMgrs)\n",
-			ePrefix.String())
 
 		return err
 	}
@@ -2458,10 +2453,11 @@ func (dMgrs *DirMgrCollection) New() DirMgrCollection {
 //		deleted Directory Manager object will be returned
 //		by this method.
 //
-//		If the value of 'idx' is less than zero or
-//		greater than the index value of the last element
-//		in the Directory Manager Collection, an error will
-//		be returned.
+//		If this value is less than zero an error will be
+//		returned.
+//
+//		If 'idx' is exceeds the last index in the collection,
+//		an io.EOF (End-Of-File) error will be returned.
 //
 //	errorPrefix					interface{}
 //
@@ -2909,6 +2905,12 @@ func (dMgrs *DirMgrCollection) PopLastDirMgr(
 //		current instance of DirMgrCollection. A deep copy
 //		of  the Directory Manager object residing at this
 //		index will be returned to the calling function.
+//
+//		If this value is less than zero an error will be
+//		returned.
+//
+//		If 'idx' is exceeds the last index in the collection,
+//		an io.EOF (End-Of-File) error will be returned.
 //
 //	errorPrefix					interface{}
 //

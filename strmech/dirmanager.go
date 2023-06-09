@@ -520,23 +520,109 @@ func (dMgr *DirMgr) CopyDirectory(
 
 // CopyDirectoryTree
 //
-// Copies all selected files in the directory tree to a
-// specified target directory tree. If the target
-// directory tree does not exist, this method will
-// attempt to create it. See the details of target
-// directory tree creation under input parameter
-// 'copyEmptyDirectories'.
+// Copies all selected files in the directory tree
+// defined by the current instance of DirMgr to a
+// specified target directory tree.
+//
+// If the target directory does not exist, this method
+// will attempt to create it.
+//
+// The files to be copied are selected according to
+// file selection criteria specified by input parameter,
+// 'fileSelectCriteria'.
+//
+// The selected files are copied by a Copy IO operation.
+// For information on the Copy IO procedure see
+// FileHelper{}.CopyFileByIo() method and reference:
+//
+//	https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
+//
+// This method copies "regular" files plus certain
+// non-regular files depending on input parameter values
+// supplied by the user.
+//
+// In Go programming language, a regular file is a file
+// that contains data in any format that can be read by
+// a user or an application. It is not a directory or a
+// device file.
+//
+// Examples of "regular" files include text files, image
+// files and executable files.
+//
+// Examples of non-regular files include directories,
+// device files, named pipes, sockets, and symbolic
+// links.
+//
+// Input parameters 'copyEmptyDirectories',
+// 'copySymLinkFiles', and 'copyOtherNonRegularFiles'
+// allow the users to specify that these non-regular
+// files should be included in the copy operation.
+//
+// If the target directory does not exist and files are
+// located matching the file selection criteria, this
+// method will attempt to create the target directory.
+// However, if no files meet the file selection criteria
+// as defined by input parameter,'fileSelectCriteria',
+// this method will NOT attempt to create the target
+// directory.
 //
 // If input parameter 'copyEmptyDirectories' is set to
-// 'true', the entire directory tree will be created and
-// may contain empty directories. If set to false, target
-// directory tree elements will only be created if files
-// meet the selection criteria and are subsequently
-// copied to those target directory tree paths.
+// 'true', the target directory tree will be created
+// regardless of whether it contains files. If this
+// parameter is set to false, target directory tree
+// elements will only be created if files meeting the
+// file selection criteria and are copied to those
+// target directory tree paths.
 //
 // Files eligible for copy to the target directory tree
 // are selected on the basis of file selection criteria
 // specified by input parameter, 'fileSelectCriteria'.
+//
+// ----------------------------------------------------------------
+//
+// # Definition Of Terms
+//
+//	Regular & Non-Regular Files
+//
+//	In Go programming language, a regular file is a file
+//	that contains data in any format that can be read by
+//	a user or an application. It is not a directory or a
+//	device file.
+//
+//	Non-regular files include directories, device files,
+//	named pipes, sockets, and symbolic links.
+//
+//	https://docs.studygolang.com/src/io/fs/fs.go
+//	https://go.dev/src/os/types.go
+//	https://go.dev/src/os/types.go?s=1237:1275#L31
+//	https://pkg.go.dev/gopkg.in/src-d/go-git.v4/plumbing/filemode
+//	https://www.linode.com/docs/guides/creating-reading-and-writing-files-in-go-a-tutorial/
+//
+//	SymLink Files
+//
+//	In computing, a symbolic link (also symlink or soft
+//	link) is a file whose purpose is to point to a file
+//	or directory (called the "target") by specifying a
+//	path thereto.
+//
+//		https://en.wikipedia.org/wiki/Symbolic_link
+//
+//	It's true that a symlink is a shortcut file. But it's
+//	different from a standard shortcut that, say, a program
+//	installer has placed on your Windows desktop to make the
+//	program easier to run.
+//
+//	Sure, clicking on either type of shortcut opens the
+//	linked object, but what goes on beneath the hood is
+//	different in both cases as we'll see next.
+//
+//	While a standard shortcut points to a certain object,
+//	a symlink makes it appear as if the linked object is
+//	actually there. Your computer and the apps on it will
+//	read the symlink as the target object itself.
+//
+//		https://www.thewindowsclub.com/create-symlinks-in-windows-10
+//		https://www.makeuseof.com/tag/what-is-a-symbolic-link-what-are-its-uses-makeuseof-explains/
 //
 // ----------------------------------------------------------------
 //
@@ -552,26 +638,37 @@ func (dMgr *DirMgr) CopyDirectory(
 //
 //	copyEmptyDirectories		bool
 //
-//		If a target directory tree path does not
-//		previously exist, the default behavior is to
-//		create that directory ONLY if files matching the
-//		file selection criteria are identified for that
-//		directory. If no files match the file selection
-//		criteria, the default is to NOT create the target
-//		directory path.
+//		If set to 'true' the target directory will be
+//		created regardless of whether any files are
+//		copied to that directory. Remember that files are
+//		only copied to the target directory if they meet
+//		file selection criteria specified by input
+//		parameter 'fileSelectCriteria'.
 //
-//		If the parameter 'copyEmptyDirectories' is set to
-//		'true' all target directory tree paths will be
-//		created regardless of whether files are copied to
-//		those directories.
+//	copySymLinkFiles				bool
 //
-//	fileSelectCriteria FileSelectionCriteria
+//		If this parameter is set to 'true', SymLink files
+//		which meet the file selection criteria, will be
+//		included in the copy operation.
 //
-//		This input parameter should be configured with
-//		the desired file selection criteria. Files
-//		matching this criteria will be copied to the
-//		directory identified by input parameter,
-//		'targetDir'.
+//	copyOtherNonRegularFiles		bool
+//
+//		If this parameter is set to 'true', other
+//		non-regular file types, besides SymLinks and
+//		directories specified above, will be included
+//		in the copy operation if they meet the file
+//		selection criteria.
+//
+//		Examples of other non-regular file types
+//		include device files, named pipes, and sockets.
+//		See the Definition Of Terms section above.
+//
+//	fileSelectCriteria			FileSelectionCriteria
+//
+//		This input parameter should be configured with the
+//		desired file selection criteria. Files matching
+//		this criteria will be copied  to the directory
+//		identified by input parameter, 'targetDir'.
 //
 //		type FileSelectionCriteria struct {
 //		 FileNamePatterns    []string
@@ -590,11 +687,11 @@ func (dMgr *DirMgr) CopyDirectory(
 //		 	Specifies 'AND' or 'OR' selection mode
 //		}
 //
-//		The FileSelectionCriteria type allows for
-//		configuration of single or multiple file selection
-//		criterion. The 'SelectCriterionMode' can be used to
-//		specify whether the file must match all, or any one,
-//		of the active file selection criterion.
+//	  The FileSelectionCriteria type allows for
+//	  configuration of single or multiple file selection
+//	  criterion. The 'SelectCriterionMode' can be used to
+//	  specify whether the file must match all, or any one,
+//	  of the active file selection criterion.
 //
 //		Elements of the FileSelectionCriteria are described
 //		below:
@@ -615,6 +712,7 @@ func (dMgr *DirMgr) CopyDirectory(
 //				all the strings are empty strings, then this
 //				file search criterion is considered 'Inactive'
 //				or 'Not Set'.
+//
 //
 //			FilesOlderThan		time.Time
 //
@@ -716,36 +814,136 @@ func (dMgr *DirMgr) CopyDirectory(
 //
 //		------------------------------------------------------------------------
 //
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
 // ----------------------------------------------------------------
 //
 // # Return Values
 //
-//	errs						[]error
+//	dTreeCopyStats				DirTreeCopyStats
+//
+//		If this method completes successfully, an
+//		instance of DirTreeCopyStats will be returned
+//		populated with information and statistics related
+//		to the directory tree copy operation.
+//
+//			type DirTreeCopyStats struct {
+//				TotalDirsScanned    uint64
+//				DirsCopied          uint64
+//				DirsCreated         uint64
+//				TotalFilesProcessed uint64
+//				FilesCopied         uint64
+//				FileBytesCopied     uint64
+//				FilesNotCopied      uint64
+//				FileBytesNotCopied  uint64
+//				ComputeError        error
+//			}
+//
+//	nonfatalErrs				[]error
 //
 //		An array of error objects.
 //
 //		If this method completes successfully, the
 //		returned error array is set equal to 'nil'.
 //
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errPrefDto'.
-//	 	The 'errPrefDto' text will be prefixed or
-//	 	attached to the	beginning of the error message.
+//		If non-fatal errors are encountered during
+//		processing, the returned error Type will
+//		encapsulate appropriate error messages.
+//
+//		Non-fatal errors usually involve failure
+//		to copy individual files.
+//
+//		The returned error messages will incorporate
+//		the method chain and text passed by input
+//		parameter, 'errPrefDto'. The 'errPrefDto' text
+//		will be prefixed or attached to the beginning of
+//		the error message.
 //
 //		This error array may contain multiple errors.
 //
 //		An error array may be consolidated into a single
 //		error using method StrMech.ConsolidateErrors()
+//
+//	fatalErr					error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'.
+//
+//		If a fatal error is encountered during
+//		processing, this returned error Type will
+//		encapsulate an appropriate error message. This
+//		returned error message will incorporate the
+//		method chain and text passed by input parameter,
+//		'errPrefDto'. The 'errPrefDto' text will be
+//		prefixed or attached to the	beginning of the error
+//		message.
 func (dMgr *DirMgr) CopyDirectoryTree(
 	targetDMgr DirMgr,
 	copyEmptyDirectories bool,
+	copySymLinkFiles bool,
+	copyOtherNonRegularFiles bool,
 	fileSelectCriteria FileSelectionCriteria,
 	errorPrefix interface{}) (
 	dTreeCopyStats DirTreeCopyStats,
-	errs []error) {
+	nonfatalErrs []error,
+	fatalErr error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -759,32 +957,36 @@ func (dMgr *DirMgr) CopyDirectoryTree(
 	var err error
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		fatalErr = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"DirMgr.CopyDirectoryTree()",
 		"")
 
-	if err != nil {
+	if fatalErr != nil {
 
-		errs = append(errs, err)
+		nonfatalErrs = append(nonfatalErrs, err)
 
-		return dTreeCopyStats, errs
+		return dTreeCopyStats, nonfatalErrs, fatalErr
 	}
 
 	dTreeCopyStats,
-		errs = new(dirMgrHelperNanobot).
+		nonfatalErrs,
+		fatalErr = new(dirMgrHelperNanobot).
 		copyDirectoryTree(
 			dMgr,
 			&targetDMgr,
+			false,
 			copyEmptyDirectories,
-			false, // skipTopLevelDirectory
+			copySymLinkFiles,
+			copyOtherNonRegularFiles,
 			fileSelectCriteria,
 			"dMgr",
 			"targetDMgr",
 			ePrefix)
 
 	return dTreeCopyStats,
-		errs
+		nonfatalErrs,
+		fatalErr
 }
 
 // CopyIn
@@ -1085,11 +1287,30 @@ func (dMgr *DirMgr) CopyOut(
 //
 //	copyEmptyDirectories		bool
 //
-//		If this boolean parameter is set to 'true', any
-//		empty directories in the current DirMgr instance
-//		subdirectory tree will be copied as empty
-//		directories to the target directory tree
-//	 	designated by input parameter 'targetDMgr'.
+//		If set to 'true' the target directory will be
+//		created regardless of whether any files are
+//		copied to that directory. Remember that files are
+//		only copied to the target directory if they meet
+//		file selection criteria specified by input
+//		parameter 'fileSelectCriteria'.
+//
+//	copySymLinkFiles				bool
+//
+//		If this parameter is set to 'true', SymLink files
+//		which meet the file selection criteria, will be
+//		included in the copy operation.
+//
+//	copyOtherNonRegularFiles		bool
+//
+//		If this parameter is set to 'true', other
+//		non-regular file types, besides SymLinks and
+//		directories specified above, will be included
+//		in the copy operation if they meet the file
+//		selection criteria.
+//
+//		Examples of other non-regular file types
+//		include device files, named pipes, and sockets.
+//		See the Definition Of Terms section above.
 //
 //	fileSelectCriteria			FileSelectionCriteria
 //
@@ -1330,25 +1551,54 @@ func (dMgr *DirMgr) CopyOut(
 //				ComputeError        error
 //			}
 //
-//	error
+//	nonfatalErrs				[]error
+//
+//		An array of error objects.
 //
 //		If this method completes successfully, the
+//		returned error array is set equal to 'nil'.
+//
+//		If non-fatal errors are encountered during
+//		processing, the returned error Type will
+//		encapsulate appropriate error messages.
+//
+//		Non-fatal errors usually involve failure
+//		to copy individual files.
+//
+//		The returned error messages will incorporate
+//		the method chain and text passed by input
+//		parameter, 'errPrefDto'. The 'errPrefDto' text
+//		will be prefixed or attached to the beginning of
+//		the error message.
+//
+//		This error array may contain multiple errors.
+//
+//		An error array may be consolidated into a single
+//		error using method StrMech.ConsolidateErrors()
+//
+//	fatalErr					error
+//
+//		If this method completes successfully, this
 //		returned error Type is set equal to 'nil'.
 //
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errorPrefix'.
-//	 	The 'errorPrefix' text will be prefixed or
-//	 	attached to the	beginning of the error message.
+//		If a fatal error is encountered during
+//		processing, this returned error Type will
+//		encapsulate an appropriate error message. This
+//		returned error message will incorporate the
+//		method chain and text passed by input parameter,
+//		'errPrefDto'. The 'errPrefDto' text will be
+//		prefixed or attached to the	beginning of the error
+//		message.
 func (dMgr *DirMgr) CopySubDirectoryTree(
 	targetDMgr DirMgr,
 	copyEmptyDirectories bool,
+	copySymLinkFiles bool,
+	copyOtherNonRegularFiles bool,
 	fileSelectCriteria FileSelectionCriteria,
 	errorPrefix interface{}) (
 	dTreeCopyStats DirTreeCopyStats,
-	errs []error) {
+	nonfatalErrs []error,
+	fatalErr error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -1370,24 +1620,27 @@ func (dMgr *DirMgr) CopySubDirectoryTree(
 
 	if err != nil {
 
-		errs = append(errs, err)
+		nonfatalErrs = append(nonfatalErrs, err)
 
-		return dTreeCopyStats, errs
+		return dTreeCopyStats, nonfatalErrs, fatalErr
 	}
 
 	dTreeCopyStats,
-		errs = new(dirMgrHelperNanobot).
+		nonfatalErrs,
+		fatalErr = new(dirMgrHelperNanobot).
 		copyDirectoryTree(
 			dMgr,
 			&targetDMgr,
-			copyEmptyDirectories,
 			true, // skipTopLevelDirectory
+			copyEmptyDirectories,
+			copySymLinkFiles,
+			copyOtherNonRegularFiles,
 			fileSelectCriteria,
 			"dMgr",
 			"targetDMgr",
 			ePrefix)
 
-	return dTreeCopyStats, errs
+	return dTreeCopyStats, nonfatalErrs, fatalErr
 }
 
 // DeleteAll

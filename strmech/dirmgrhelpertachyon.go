@@ -385,6 +385,8 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getSubdirectories(
 	funcName := "dirMgrHelperAtom." +
 		"getSubdirectories()"
 
+	subdirectories.dirMgrs = make([]DirMgr, 0)
+
 	ePrefix,
 		fatalErr = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
@@ -418,7 +420,6 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getSubdirectories(
 
 	var err2 error
 	var nameDirEntries []os.DirEntry
-	osPathSepStr := string(os.PathSeparator)
 
 	nameDirEntries,
 		err2 = os.ReadDir(dMgr.absolutePath)
@@ -437,8 +438,6 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getSubdirectories(
 
 		return subdirectories, dTreeStats, fatalErr
 	}
-
-	var fInfo os.FileInfo
 
 	dTreeStats,
 		err2 = new(DirectoryStatsDto).
@@ -459,6 +458,13 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getSubdirectories(
 
 		return subdirectories, dTreeStats, fatalErr
 	}
+
+	if len(nameDirEntries) == 0 {
+
+		return subdirectories, dTreeStats, fatalErr
+	}
+
+	var fInfo os.FileInfo
 
 	for _, dirEntry := range nameDirEntries {
 
@@ -489,28 +495,7 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getSubdirectories(
 				AddDirMgrByKnownPathDirName(
 					dMgr.absolutePath,
 					fInfo.Name(),
-					ePrefix.XCpy("dMgr+fInfo"))
-
-			if err2 != nil {
-
-				fatalErr = fmt.Errorf("%v\n"+
-					"Failed to add directory to Subdirectory Collection!\n"+
-					"Error returned by subdirectories.AddDirMgrByKnownPathDirName().\n"+
-					"%v.absolutePath= '%v'\n"+
-					"Subdirectory Name= '%v'\n"+
-					"Full Subdirectory Path= '%v'\n"+
-					"Error= \n%v\n",
-					ePrefix.String(),
-					dMgrLabel,
-					dMgr.absolutePath,
-					fInfo.Name(),
-					dMgr.absolutePath+
-						osPathSepStr+
-						fInfo.Name(),
-					err2.Error())
-
-				return subdirectories, dTreeStats, fatalErr
-			}
+					ePrefix.XCpy("dMgr"))
 
 		} else {
 			// This must be a file

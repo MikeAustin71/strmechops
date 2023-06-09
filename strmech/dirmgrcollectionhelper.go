@@ -3,6 +3,7 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"io"
 	"sync"
 )
 
@@ -341,14 +342,16 @@ func (dMgrColHelper *dirMgrCollectionHelper) newEmptyDMgrCollection() DirMgrColl
 //	idx							int
 //
 //		This integer value specifies the index of the
-//		array element which will be deleted from the File
-//		Manager Collection encapsulated by the instance
-//		of FileMgrCollection passed by input parameter
-//		'fMgrs'.
+//		array element which will be extracted from the
+//		Directory Manager Collection encapsulated by the
+//		instance of DirMgrCollection passed by input
+//		parameter 'directoryMgrs'.
 //
-//		If this value is less than zero or greater than
-//		the last index in the array, an error will be
+//		If this value is less than zero an error will be
 //		returned.
+//
+//		If 'idx' is exceeds the last index in the collection,
+//		an io.EOF (End-Of-File) error will be returned.
 //
 //	deleteIndex					bool
 //
@@ -464,16 +467,8 @@ func (dMgrColHelper *dirMgrCollectionHelper) peekOrPopAtIndex(
 	}
 
 	if idx >= arrayLen {
-		return DirMgr{},
-			fmt.Errorf("%v\n"+
-				"Error: Input Parameter 'idx' is greater than the\n"+
-				" last array index of the Directory Collection array.\n"+
-				"Index Out-Of-Range!\n"+
-				"idx= '%v' "+
-				"Last Array Index= '%v' ",
-				ePrefix.String(),
-				idx,
-				arrayLen-1)
+
+		return DirMgr{}, io.EOF
 	}
 
 	var deepCopyDirMgr DirMgr
