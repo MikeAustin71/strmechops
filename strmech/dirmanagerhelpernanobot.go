@@ -856,100 +856,34 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) newCopyDirectoryTree(
 
 	baseTargetDirLen := len(targetDMgr.absolutePath)
 
-	dMgrHlprMolecule := dirMgrHelperMolecule{}
 	var dirCreated bool
-	var err2 error
 
-	if !targetPathDoesExist && copyEmptyDirectories {
+	var copySubDirectories = new(DirMgrCollection).New()
+	var testDirectories = new(DirMgrCollection).New()
 
-		dirCreated,
-			err2 = dMgrHlprMolecule.
-			lowLevelMakeDir(
-				targetDMgr,
-				"targetDMgr",
-				ePrefix.XCpy(
-					"targetDMgr"))
+	var err error
 
-		if err2 != nil {
+	err = testDirectories.
+		AddDirMgr(
+			*sourceDMgr,
+			ePrefix.XCpy("sourceDMgr"))
 
-			fatalErr = fmt.Errorf("%v\n"+
-				"Error occurred while creating 'targetDMgr' Directory!\n"+
-				"targetDMgr= '%v'\n"+
-				"Error= \n%v\n",
-				funcName,
-				targetDMgr.absolutePath,
-				err2.Error())
+	if err != nil {
 
-			return dTreeCopyStats, nonfatalErrs, fatalErr
-		}
+		fatalErr = fmt.Errorf("%v\n"+
+			"Fatal Error: Failed to add %v to subdirectory collection!\n"+
+			"%v = %v\n"+
+			"Error= \n%v\n",
+			funcName,
+			sourceDMgrLabel,
+			sourceDMgrLabel,
+			sourceDMgr.absolutePath,
+			err.Error())
 
-		if !dirCreated {
-
-			fatalErr = fmt.Errorf("%v\n"+
-				"Error: Attempted creation of 'targetDMgr' Directory FAILED!\n"+
-				"targetDMgr= '%v'\n"+
-				ePrefix.String(),
-				targetDMgr.absolutePath)
-
-			return dTreeCopyStats, nonfatalErrs, fatalErr
-
-		} else {
-
-			dTreeCopyStats.DirsCreated++
-		}
+		return dTreeCopyStats, nonfatalErrs, fatalErr
 	}
 
-	dMgrHlprPlanck := new(dirMgrHelperPlanck)
-	var subDirectories DirMgrCollection
-	var subDirCopyStats DirectoryCopyStats
-	var errs2 []error
-
-	if !skipTopLevelDirectory {
-		dTreeCopyStats.TotalDirsScanned++
-
-		subDirCopyStats,
-			subDirectories,
-			errs2,
-			err2 = dMgrHlprPlanck.
-			copyDirectoryFiles(
-				sourceDMgr,
-				targetDMgr,
-				fileSelectCriteria,
-				copyEmptyDirectories,
-				copySymLinkFiles,
-				copyOtherNonRegularFiles,
-				sourceDMgrLabel,
-				targetDMgrLabel,
-				ePrefix)
-
-		if len(errs2) > 0 {
-
-			nonfatalErrs = append(nonfatalErrs, errs2...)
-
-		}
-
-		if err2 != nil {
-
-			fatalErr = fmt.Errorf("%v\n"+
-				"Fatal Error occurred while copying the\n"+
-				"source directory to the target directory.\n"+
-				"Source Directory %v= %v\n,"+
-				"Target Directory %v= %v\n"+
-				"Error=\n%v\n",
-				funcName,
-				sourceDMgrLabel,
-				sourceDMgr.absolutePath,
-				targetDMgrLabel,
-				targetDMgr.absolutePath,
-				err2.Error())
-
-			return dTreeCopyStats, nonfatalErrs, fatalErr
-		}
-
-		dTreeCopyStats.AddDirCopyStats(
-			subDirCopyStats)
-
-	}
+	var doTestLoop = true
 
 }
 

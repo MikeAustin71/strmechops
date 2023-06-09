@@ -4147,22 +4147,35 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 //		information relating to a specific directory
 //		tree.
 //
-//			type DirectoryStatsDto struct {
-//				numOfFiles    uint64
-//				numOfSubDirs  uint64
-//				numOfBytes    uint64
+//		type DirectoryStatsDto struct {
+//
+//			dMgr DirMgr
+//				Identifies the parent directory associated with
+//				this directory information.
+//
+//			numOfFiles uint64
+//				The number of files (all types) residing
+//				within this directory ('dMgr').
+//
+//			numOfSubDirs uint64
+//				The number of subdirectories residing
+//				within this directory
+//
+//			numOfBytes uint64
+//				The total number of bytes for all files
+//				contained in this directory.
 //				isInitialized bool
-//			}
+//		}
+//
+//		Type DirectoryStatsDto contains public methods
+//		for retrieving the specified directory statistics
+//		and information.
 //
 //		If this method completes successfully, this
 //		returned instance of DirectoryStatsDto will
 //		contain information on files and directories
 //		contained in the directory tree specified by
 //		input parameter 'targetBaseDir'.
-//
-//		Type DirectoryStatsDto contains public methods
-//		for retrieving the specified directory statistics
-//		and information.
 //
 //	errs						[]error
 //

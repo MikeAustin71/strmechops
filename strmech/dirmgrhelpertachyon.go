@@ -247,7 +247,7 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getFileInfosFromDirectory(
 	return fileInfos, lenFileInfos, nonfatalErrs, fatalErr
 }
 
-// getSubdirectoryCollection
+// getSubdirectories
 //
 // This method receives an instance of DirMgr ('dMgr')
 // and proceeds to identify all the subdirectories located
@@ -314,16 +314,42 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getFileInfosFromDirectory(
 //				dirMgrs []DirMgr
 //			}
 //
-//	isDirectoryEmpty			bool
+//	dTreeStats					DirectoryStatsDto
+//
+//		The DirectoryStatsDto structure is used to
+//		accumulate and disseminate statistical
+//		information relating to a specific directory
+//		tree.
+//
+//		type DirectoryStatsDto struct {
+//
+//			dMgr DirMgr
+//				Identifies the parent directory associated with
+//				this directory information.
+//
+//			numOfFiles uint64
+//				The number of files (all types) residing
+//				within this directory ('dMgr').
+//
+//			numOfSubDirs uint64
+//				The number of subdirectories residing
+//				within this directory
+//
+//			numOfBytes uint64
+//				The total number of bytes for all files
+//				contained in this directory.
+//				isInitialized bool
+//		}
+//
+//		Type DirectoryStatsDto contains public methods
+//		for retrieving the specified directory statistics
+//		and information.
 //
 //		If this method completes successfully, this
-//		parameter signals whether the directory specified
-//		by input parameter 'dMgr'.
-//
-//		If this returned boolean parameter is set to true,
-//		it means that the directory specified by 'dMgr' is
-//		completely empty and contains no files or
-//		subdirectories.
+//		returned instance of DirectoryStatsDto will
+//		contain information on files and directories
+//		contained in the directory tree specified by
+//		input parameter 'targetBaseDir'.
 //
 //	fatalErr					error
 //
@@ -338,12 +364,12 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getFileInfosFromDirectory(
 //		'errPrefDto'. The 'errPrefDto' text will be
 //		prefixed or attached to the	beginning of the error
 //		message.
-func (dMgrHlprTachyon *dirMgrHelperTachyon) getSubdirectoryCollection(
+func (dMgrHlprTachyon *dirMgrHelperTachyon) getSubdirectories(
 	dMgr *DirMgr,
 	dMgrLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
-	subDirectories DirMgrCollection,
-	isDirectoryEmpty bool,
+	subdirectories DirMgrCollection,
+	dTreeStats DirectoryStatsDto,
 	fatalErr error) {
 
 	if dMgrHlprTachyon.lock == nil {
@@ -355,10 +381,9 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getSubdirectoryCollection(
 	defer dMgrHlprTachyon.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	isDirectoryEmpty = true
 
 	funcName := "dirMgrHelperAtom." +
-		"getSubdirectoryCollection()"
+		"getSubdirectories()"
 
 	ePrefix,
 		fatalErr = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -368,7 +393,7 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getSubdirectoryCollection(
 
 	if fatalErr != nil {
 
-		return subDirectories, isDirectoryEmpty, fatalErr
+		return subdirectories, dTreeStats, fatalErr
 	}
 
 	if len(dMgrLabel) == 0 {
@@ -388,7 +413,7 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getSubdirectoryCollection(
 
 	if fatalErr != nil {
 
-		return subDirectories, isDirectoryEmpty, fatalErr
+		return subdirectories, dTreeStats, fatalErr
 	}
 
 	var err2 error
@@ -410,43 +435,92 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getSubdirectoryCollection(
 			dMgr.absolutePath,
 			err2.Error())
 
-		return subDirectories, isDirectoryEmpty, fatalErr
+		return subdirectories, dTreeStats, fatalErr
 	}
 
-	subDirectories = new(DirMgrCollection).New()
+	var fInfo os.FileInfo
+
+	dTreeStats,
+		err2 = new(DirectoryStatsDto).
+		New(
+			*dMgr,
+			ePrefix.XCpy("dMgr"))
+
+	if err2 != nil {
+
+		fatalErr = fmt.Errorf("%v\n"+
+			"Error: Failed to create a new instance of DirectoryStatsDto!\n"+
+			"%v.absolutePath='%v'\n"+
+			"Error= \n%v\n",
+			ePrefix.String(),
+			dMgrLabel,
+			dMgr.absolutePath,
+			err2.Error())
+
+		return subdirectories, dTreeStats, fatalErr
+	}
 
 	for _, dirEntry := range nameDirEntries {
 
-		isDirectoryEmpty = false
+		fInfo,
+			err2 = dirEntry.Info()
 
-		if dirEntry.IsDir() {
+		if err2 != nil {
 
-			err2 = subDirectories.
+			fatalErr = fmt.Errorf("%v\n"+
+				"Conversion of Direct Entry to os.FileInfo Failed!\n"+
+				"Error returned by dirEntry.Info().\n"+
+				"%v.absolutePath='%v'\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				dMgrLabel,
+				dMgr.absolutePath,
+				err2.Error())
+
+			return subdirectories, dTreeStats, fatalErr
+		}
+
+		if fInfo.IsDir() {
+
+			dTreeStats.numOfSubDirs++
+			dTreeStats.numOfBytes += uint64(fInfo.Size())
+
+			err2 = subdirectories.
 				AddDirMgrByKnownPathDirName(
 					dMgr.absolutePath,
-					dirEntry.Name(),
-					ePrefix)
+					fInfo.Name(),
+					ePrefix.XCpy("dMgr+fInfo"))
 
 			if err2 != nil {
+
 				fatalErr = fmt.Errorf("%v\n"+
-					"Error returned Adding Subdirectory to collection!\n"+
-					"Parent Path= '%v'\n"+
+					"Failed to add directory to Subdirectory Collection!\n"+
+					"Error returned by subdirectories.AddDirMgrByKnownPathDirName().\n"+
+					"%v.absolutePath= '%v'\n"+
 					"Subdirectory Name= '%v'\n"+
-					"Subdirectory Path= '%v'\n"+
+					"Full Subdirectory Path= '%v'\n"+
 					"Error= \n%v\n",
-					funcName,
+					ePrefix.String(),
+					dMgrLabel,
 					dMgr.absolutePath,
-					dirEntry.Name(),
+					fInfo.Name(),
 					dMgr.absolutePath+
 						osPathSepStr+
-						dirEntry.Name(),
+						fInfo.Name(),
 					err2.Error())
 
-				return subDirectories, isDirectoryEmpty, fatalErr
+				return subdirectories, dTreeStats, fatalErr
 			}
 
+		} else {
+			// This must be a file
+
+			dTreeStats.numOfFiles++
+			dTreeStats.numOfBytes += uint64(fInfo.Size())
+
 		}
+
 	}
 
-	return subDirectories, isDirectoryEmpty, fatalErr
+	return subdirectories, dTreeStats, fatalErr
 }
