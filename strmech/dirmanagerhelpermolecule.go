@@ -43,6 +43,10 @@ type dirMgrHelperMolecule struct {
 //		or top level directory identified by 'dMgr' will
 //		be deleted.
 //
+//		If the directory identified by 'dMgr' does NOT
+//		exist on persistent (drive) storage, an error will
+//		be returned.
+//
 //	dMgrLabel					string
 //
 //		The name or label associated with input parameter
@@ -72,27 +76,54 @@ type dirMgrHelperMolecule struct {
 //
 // # Return Values
 //
-//	errs						[]error
+//	nonfatalErrs				[]error
 //
 //		An array of error objects.
 //
 //		If this method completes successfully, the
 //		returned error array is set equal to 'nil'.
 //
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errPrefDto'.
-//	 	The 'errPrefDto' text will be prefixed or
-//	 	attached to the	beginning of the error message.
+//		If non-fatal errors are encountered during
+//		processing, the returned error Type will
+//		encapsulate appropriate error messages.
+//
+//		Non-fatal errors usually involve processing
+//		failures associated with individual files.
+//
+//		The returned error messages will incorporate
+//		the method chain and text passed by input
+//		parameter, 'errPrefDto'. The 'errPrefDto' text
+//		will be prefixed or attached to the beginning of
+//		the error message.
 //
 //		This error array may contain multiple errors.
+//
+//		An error array may be consolidated into a single
+//		error using method StrMech.ConsolidateErrors()
+//
+//	fatalErr					error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'.
+//
+//		If a fatal error is encountered during
+//		processing, this returned error Type will
+//		encapsulate an appropriate error message. This
+//		returned error message will incorporate the
+//		method chain and text passed by input parameter,
+//		'errPrefDto'. The 'errPrefDto' text will be
+//		prefixed or attached to the	beginning of the error
+//		message.
+//
+//		Fatal errors are returned when the nature of the
+//		processing failure is such that it is no longer
+//		reasonable to continue code execution.
 func (dMgrHlprMolecule *dirMgrHelperMolecule) deleteAllSubDirectories(
 	dMgr *DirMgr,
 	dMgrLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
-	errs []error) {
+	nonfatalErrs []error,
+	fatalErr error) {
 
 	if dMgrHlprMolecule.lock == nil {
 		dMgrHlprMolecule.lock = new(sync.Mutex)
@@ -104,23 +135,19 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) deleteAllSubDirectories(
 
 	funcName := "dirMgrHelper.doesDirectoryExist() "
 
-	errs = make([]error, 0)
+	nonfatalErrs = make([]error, 0)
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	var err error
-
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		fatalErr = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		funcName,
 		"")
 
-	if err != nil {
+	if fatalErr != nil {
 
-		errs = append(errs, err)
-
-		return errs
+		return nonfatalErrs, fatalErr
 	}
 
 	if len(dMgrLabel) == 0 {
@@ -129,53 +156,64 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) deleteAllSubDirectories(
 
 	}
 
+	var dirPathDoesExist bool
+
+	var err2 error
+
 	dirPathDoesExist,
 		_,
-		err := new(dirMgrHelperAtom).doesDirectoryExist(
+		err2 = new(dirMgrHelperAtom).doesDirectoryExist(
 		dMgr,
 		PreProcPathCode.None(),
 		dMgrLabel,
 		ePrefix)
 
-	if err != nil {
+	if err2 != nil {
 
-		errs = append(errs, err)
+		fatalErr = fmt.Errorf("%v\n"+
+			"An error occurred while test the directory path specified"+
+			"by input parameter %v.\n"+
+			"%v Directory Path = %v\n"+
+			"Error=\n%v\n",
+			funcName,
+			dMgrLabel,
+			dMgrLabel,
+			dMgr.absolutePath,
+			err2.Error())
 
-		return errs
+		return nonfatalErrs, fatalErr
 	}
 
 	if !dirPathDoesExist {
 
-		err = fmt.Errorf("%v\n"+
-			"ERROR: %v Directory Path DOES NOT EXIST!\n"+
+		fatalErr = fmt.Errorf("%v\n"+
+			"ERROR: The Directory Path specified by input parameter\n"+
+			"%v DOES NOT EXIST on persistent (drive) storage.\n"+
 			"%v='%v'\n",
 			ePrefix.String(),
 			dMgrLabel,
 			dMgrLabel,
 			dMgr.absolutePath)
 
-		errs = append(errs, err)
-
-		return errs
+		return nonfatalErrs, fatalErr
 	}
 
-	var err2, err3 error
+	var err3 error
+	var dirMgrPtr *os.File
 
-	dirMgrPtr, err := os.Open(dMgr.absolutePath)
+	dirMgrPtr, err2 = os.Open(dMgr.absolutePath)
 
-	if err != nil {
+	if err2 != nil {
 
-		err2 = fmt.Errorf("%v\n"+
+		fatalErr = fmt.Errorf("%v\n"+
 			"Error return by os.Open(dMgr.absolutePath)\n"+
 			"dMgr.absolutePath='%v'\n"+
 			"Error= \n%v\n",
 			ePrefix.String(),
 			dMgr.absolutePath,
-			err.Error())
+			err2.Error())
 
-		errs = append(errs, err2)
-
-		return errs
+		return nonfatalErrs, fatalErr
 	}
 
 	var nameFileInfos []os.FileInfo
@@ -185,14 +223,14 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) deleteAllSubDirectories(
 	osPathSeparatorStr := string(os.PathSeparator)
 
 	for err3 != io.EOF {
-
+		// TODO  Substitute os.ReadDir(dMgr.absolutePath)
 		nameFileInfos, err3 = dirMgrPtr.Readdir(10000)
 
 		if err3 != nil && err3 != io.EOF {
 
 			_ = dirMgrPtr.Close()
 
-			err2 = fmt.Errorf("%v\n"+
+			fatalErr = fmt.Errorf("%v\n"+
 				"Error returned by dirMgrPtr.Readdirnames(10000).\n"+
 				"dMgr.absolutePath='%v'\n"+
 				"Error='%v'\n",
@@ -200,28 +238,26 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) deleteAllSubDirectories(
 				dMgr.absolutePath,
 				err3.Error())
 
-			errs = append(errs, err2)
-
-			return errs
+			return nonfatalErrs, fatalErr
 		}
 
 		for _, nameFInfo := range nameFileInfos {
 
 			if nameFInfo.IsDir() {
 
-				err = os.RemoveAll(dMgr.absolutePath + osPathSeparatorStr + nameFInfo.Name())
+				err2 = os.RemoveAll(dMgr.absolutePath + osPathSeparatorStr + nameFInfo.Name())
 
-				if err != nil {
+				if err2 != nil {
 
-					err2 = fmt.Errorf("%v\n"+
+					err3 = fmt.Errorf("%v\n"+
 						"Error returned by os.RemoveAll(subDir)\n"+
 						"subDir='%v'\n"+
 						"Error= \n%v\n",
 						ePrefix.String(),
 						dMgr.absolutePath+osPathSeparatorStr+nameFInfo.Name(),
-						err.Error())
+						err2.Error())
 
-					errs = append(errs, err2)
+					nonfatalErrs = append(nonfatalErrs, err3)
 
 					continue
 				}
@@ -231,9 +267,9 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) deleteAllSubDirectories(
 
 	if dirMgrPtr != nil {
 
-		err = dirMgrPtr.Close()
+		err3 = dirMgrPtr.Close()
 
-		if err != nil {
+		if err3 != nil {
 
 			err2 = fmt.Errorf("%v\n"+
 				"Error returned by %vPtr.Close().\n"+
@@ -243,13 +279,13 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) deleteAllSubDirectories(
 				dMgrLabel,
 				dMgrLabel,
 				dMgr.absolutePath,
-				err.Error())
+				err3.Error())
 
-			errs = append(errs, err2)
+			nonfatalErrs = append(nonfatalErrs, err2)
 		}
 	}
 
-	return errs
+	return nonfatalErrs, fatalErr
 }
 
 // getValidPathStr

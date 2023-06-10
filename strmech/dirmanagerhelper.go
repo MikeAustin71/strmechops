@@ -5945,9 +5945,17 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 //
 // # IMPORTANT
 //
-// This method will delete the entire directory tree
-// identified by 'dMgr' along with ALL the files in that
-// directory tree.
+//	(1)	This method will delete the entire directory tree
+//		identified by 'dMgr' along with ALL the files in
+//		that directory tree. This operation includes the
+//		top level or parent directory identified by input
+//		parameter 'dMgr'.
+//
+//	(2)	To move the subdirectory tree, thereby excluding
+//		the parent directory identified by 'dMgr' see
+//		method:
+//
+//			dirMgrHelper.moveSubDirectoryTree()
 //
 // ----------------------------------------------------------------
 //
@@ -6041,54 +6049,75 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 //			ComputeError             error
 //		}
 //
-//	errs						[]error
+//	nonfatalErrs				[]error
 //
 //		An array of error objects.
 //
 //		If this method completes successfully, the
 //		returned error array is set equal to 'nil'.
 //
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errPrefDto'.
-//	 	The 'errPrefDto' text will be prefixed or
-//	 	attached to the	beginning of the error message.
+//		If non-fatal errors are encountered during
+//		processing, the returned error Type will
+//		encapsulate appropriate error messages.
+//
+//		Non-fatal errors usually involve processing
+//		failures associated with individual files.
+//
+//		The returned error messages will incorporate
+//		the method chain and text passed by input
+//		parameter, 'errPrefDto'. The 'errPrefDto' text
+//		will be prefixed or attached to the beginning of
+//		the error message.
 //
 //		This error array may contain multiple errors.
 //
 //		An error array may be consolidated into a single
 //		error using method StrMech.ConsolidateErrors()
+//
+//	fatalErr					error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'.
+//
+//		If a fatal error is encountered during
+//		processing, this returned error Type will
+//		encapsulate an appropriate error message. This
+//		returned error message will incorporate the
+//		method chain and text passed by input parameter,
+//		'errPrefDto'. The 'errPrefDto' text will be
+//		prefixed or attached to the	beginning of the error
+//		message.
+//
+//		Fatal errors are returned when the nature of the
+//		processing failure is such that it is no longer
+//		reasonable to continue code execution.
 func (dMgrHlpr *dirMgrHelper) moveDirectoryTree(
 	dMgr *DirMgr,
 	targetDMgr *DirMgr,
 	dMgrLabel string,
 	targetDMgrLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
-	dirMoveStats DirectoryMoveStats, errs []error) {
+	dirMoveStats DirectoryMoveStats,
+	nonfatalErrs []error,
+	fatalErr error) {
 
 	dMgrHlpr.lock.Lock()
 
 	defer dMgrHlpr.lock.Unlock()
-
-	var err error
 
 	var ePrefix *ePref.ErrPrefixDto
 
 	funcName := "dirMgrHelper.moveDirectoryTree()"
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		fatalErr = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		funcName,
 		"")
 
-	if err != nil {
+	if fatalErr != nil {
 
-		errs = append(errs, err)
-
-		return dirMoveStats, errs
+		return dirMoveStats, nonfatalErrs, fatalErr
 	}
 
 	if len(dMgrLabel) == 0 {
@@ -6099,7 +6128,7 @@ func (dMgrHlpr *dirMgrHelper) moveDirectoryTree(
 
 	_,
 		_,
-		err = dMgrHlprPreon.
+		fatalErr = dMgrHlprPreon.
 		validateDirMgr(
 			dMgr,
 			true, // Path MUST exist on disk
@@ -6107,9 +6136,9 @@ func (dMgrHlpr *dirMgrHelper) moveDirectoryTree(
 			ePrefix.XCpy(
 				dMgrLabel))
 
-	if err != nil {
+	if fatalErr != nil {
 
-		return dirMoveStats, errs
+		return dirMoveStats, nonfatalErrs, fatalErr
 	}
 
 	if len(targetDMgrLabel) == 0 {
@@ -6119,7 +6148,7 @@ func (dMgrHlpr *dirMgrHelper) moveDirectoryTree(
 
 	_,
 		_,
-		err = dMgrHlprPreon.
+		fatalErr = dMgrHlprPreon.
 		validateDirMgr(
 			targetDMgr,
 			false, // Path is NOT required to exist on disk
@@ -6127,23 +6156,28 @@ func (dMgrHlpr *dirMgrHelper) moveDirectoryTree(
 			ePrefix.XCpy(
 				targetDMgrLabel))
 
-	if err != nil {
+	if fatalErr != nil {
 
-		return dirMoveStats, errs
+		return dirMoveStats, nonfatalErrs, fatalErr
 	}
 
 	var err2 error
 
 	fileSelectCriteria := FileSelectionCriteria{}
+	var errs2 []error
+	var dTreeCopyStats DirTreeCopyStats
 
 	dTreeCopyStats,
-		errs2 :=
+		errs2,
+		err2 =
 		new(dirMgrHelperNanobot).
 			copyDirectoryTree(
 				dMgr,
 				targetDMgr,
-				true,
-				false,
+				false, // skipTopLevelDirectory
+				true,  // copyEmptyDirectories
+				true,  // copySymLinkFiles
+				true,  // copyOtherNonRegularFiles
 				fileSelectCriteria,
 				dMgrLabel,
 				targetDMgrLabel,
@@ -6151,22 +6185,26 @@ func (dMgrHlpr *dirMgrHelper) moveDirectoryTree(
 
 	if len(errs2) > 0 {
 
-		err = fmt.Errorf("%v\n"+
+		nonfatalErrs = append(nonfatalErrs, errs2...)
+
+	}
+
+	if err2 != nil {
+
+		fatalErr = fmt.Errorf("%v\n"+
 			"Errors occurred while copying directory tree to target directory.\n"+
 			"The source directory WAS NOT DELETED!\n"+
 			"%v Source Directory='%v'\n"+
 			"%v Target Directory='%v'\n"+
-			"Errors Follow:\n",
+			"Fatal Error = \n%v\n",
 			funcName,
 			dMgrLabel,
 			dMgr.absolutePath,
 			targetDMgrLabel,
-			targetDMgr.absolutePath)
+			targetDMgr.absolutePath,
+			err2.Error())
 
-		errs = append(errs, err)
-		errs = append(errs, errs2...)
-
-		return dirMoveStats, errs
+		return dirMoveStats, nonfatalErrs, fatalErr
 	}
 
 	dirMoveStats.TotalDirsProcessed =
@@ -6186,8 +6224,9 @@ func (dMgrHlpr *dirMgrHelper) moveDirectoryTree(
 
 	if dirMoveStats.SourceFilesRemaining > 0 {
 
-		err2 = fmt.Errorf("%v\n"+
-			"Error: Some of the files designated to be moved to the target directory, were NOT copied!\n"+
+		fatalErr = fmt.Errorf("%v\n"+
+			"Error: Some of the files designated to be moved\n"+
+			"to the target directory, were NOT copied!\n"+
 			"Therefore the source directory WILL NOT BE DELETED!\n"+
 			"Number of Files NOT Copied='%v'\n"+
 			"%v Source Directory='%v'\n"+
@@ -6199,23 +6238,21 @@ func (dMgrHlpr *dirMgrHelper) moveDirectoryTree(
 			targetDMgrLabel,
 			targetDMgr.absolutePath)
 
-		errs = append(errs, err2)
-
-		return dirMoveStats, errs
+		return dirMoveStats, nonfatalErrs, fatalErr
 	}
 
 	dirMoveStats.TotalSrcFilesProcessed =
 		dTreeCopyStats.TotalFilesProcessed
 
-	err = new(dirMgrHelperMolecule).
+	err2 = new(dirMgrHelperMolecule).
 		lowLevelDeleteDirectoryAll(
 			dMgr,
 			dMgrLabel,
 			ePrefix)
 
-	if err != nil {
+	if err2 != nil {
 
-		err2 = fmt.Errorf("%v\n"+
+		fatalErr = fmt.Errorf("%v\n"+
 			"Files were copied successfuly to target directory.\n"+
 			"However, errors occurred while deleting the source directory tree.\n"+
 			"%v.absolutePath='%v'\n"+
@@ -6223,9 +6260,9 @@ func (dMgrHlpr *dirMgrHelper) moveDirectoryTree(
 			funcName,
 			dMgrLabel,
 			dMgr.absolutePath,
-			err.Error())
+			err2.Error())
 
-		errs = append(errs, err2)
+		return dirMoveStats, nonfatalErrs, fatalErr
 	}
 
 	dirMoveStats.SourceDirWasDeleted = true
@@ -6236,7 +6273,7 @@ func (dMgrHlpr *dirMgrHelper) moveDirectoryTree(
 	dirMoveStats.SourceFileBytesMoved =
 		dTreeCopyStats.FileBytesCopied
 
-	return dirMoveStats, errs
+	return dirMoveStats, nonfatalErrs, fatalErr
 }
 
 // moveSubDirectoryTree
@@ -6366,70 +6403,79 @@ func (dMgrHlpr *dirMgrHelper) moveDirectoryTree(
 //			ComputeError             error
 //		}
 //
-//	errs						[]error
+//	nonfatalErrs				[]error
 //
 //		An array of error objects.
 //
 //		If this method completes successfully, the
 //		returned error array is set equal to 'nil'.
 //
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errPrefDto'.
-//	 	The 'errPrefDto' text will be prefixed or
-//	 	attached to the	beginning of the error message.
+//		If non-fatal errors are encountered during
+//		processing, the returned error Type will
+//		encapsulate appropriate error messages.
+//
+//		Non-fatal errors usually involve processing
+//		failures associated with individual files.
+//
+//		The returned error messages will incorporate
+//		the method chain and text passed by input
+//		parameter, 'errPrefDto'. The 'errPrefDto' text
+//		will be prefixed or attached to the beginning of
+//		the error message.
 //
 //		This error array may contain multiple errors.
 //
 //		An error array may be consolidated into a single
 //		error using method StrMech.ConsolidateErrors()
+//
+//	fatalErr					error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'.
+//
+//		If a fatal error is encountered during
+//		processing, this returned error Type will
+//		encapsulate an appropriate error message. This
+//		returned error message will incorporate the
+//		method chain and text passed by input parameter,
+//		'errPrefDto'. The 'errPrefDto' text will be
+//		prefixed or attached to the	beginning of the error
+//		message.
+//
+//		Fatal errors are returned when the nature of the
+//		processing failure is such that it is no longer
+//		reasonable to continue code execution.
 func (dMgrHlpr *dirMgrHelper) moveSubDirectoryTree(
 	dMgr *DirMgr,
 	targetDMgr *DirMgr,
 	dMgrLabel string,
 	targetDMgrLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
-	dirMoveStats DirectoryMoveStats, errs []error) {
+	dirMoveStats DirectoryMoveStats,
+	nonfatalErrs []error,
+	fatalErr error) {
 
 	dMgrHlpr.lock.Lock()
 
 	defer dMgrHlpr.lock.Unlock()
-
-	var err error
 
 	var ePrefix *ePref.ErrPrefixDto
 
 	funcName := "dirMgrHelper.moveSubDirectoryTree()"
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		fatalErr = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		funcName,
 		"")
 
-	if err != nil {
+	if fatalErr != nil {
 
-		errs = append(errs, err)
-
-		return dirMoveStats, errs
+		return dirMoveStats, nonfatalErrs, fatalErr
 	}
 
 	if len(dMgrLabel) == 0 {
 		dMgrLabel = "dMgr"
-	}
-
-	if dMgr == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter %v pointer is 'nil'!\n",
-			ePrefix.String(),
-			dMgrLabel)
-
-		errs = append(errs, err)
-
-		return dirMoveStats, errs
 	}
 
 	if len(targetDMgrLabel) == 0 {
@@ -6437,31 +6483,23 @@ func (dMgrHlpr *dirMgrHelper) moveSubDirectoryTree(
 		targetDMgrLabel = "targetDMgr"
 	}
 
-	if targetDMgr == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter %v pointer is 'nil'!\n",
-			ePrefix.String(),
-			targetDMgrLabel)
-
-		errs = append(errs, err)
-
-		return dirMoveStats, errs
-
-	}
-
-	var err2 error
-
 	fileSelectCriteria := FileSelectionCriteria{}
 
+	var dTreeCopyStats DirTreeCopyStats
+	var errs2 []error
+	var err2 error
+
 	dTreeCopyStats,
-		errs2 :=
+		errs2,
+		err2 =
 		new(dirMgrHelperNanobot).
 			copyDirectoryTree(
 				dMgr,
 				targetDMgr,
-				true, // copy empty directories
-				true, // skip top level directory
+				true, // skipTopLevelDirectory
+				true, // copyEmptyDirectories
+				true, // copySymLinkFiles,
+				true, // copyOtherNonRegularFiles
 				fileSelectCriteria,
 				"dMgr",
 				"targetDMgr",
@@ -6469,22 +6507,27 @@ func (dMgrHlpr *dirMgrHelper) moveSubDirectoryTree(
 
 	if len(errs2) > 0 {
 
-		err = fmt.Errorf("%v\n"+
-			"Errors occurred while copying directory tree to target directory.\n"+
+		nonfatalErrs = append(nonfatalErrs, errs2...)
+
+	}
+
+	if err2 != nil {
+
+		fatalErr = fmt.Errorf("%v\n"+
+			"Errors occurred while copying the source directory tree\n"+
+			"to the target directory tree.\n"+
 			"The source directory WAS NOT DELETED!\n"+
 			"%v Source Directory='%v'\n"+
 			"%v Target Directory='%v'\n"+
-			"Errors Follow:\n",
-			ePrefix.String(),
+			"Fatal Error = \n%v\n",
+			funcName,
 			dMgrLabel,
 			dMgr.absolutePath,
 			targetDMgrLabel,
-			targetDMgr.absolutePath)
+			targetDMgr.absolutePath,
+			err2.Error())
 
-		errs = append(errs, err)
-		errs = append(errs, errs2...)
-
-		return dirMoveStats, errs
+		return dirMoveStats, nonfatalErrs, fatalErr
 	}
 
 	dirMoveStats.TotalDirsProcessed =
@@ -6504,26 +6547,28 @@ func (dMgrHlpr *dirMgrHelper) moveSubDirectoryTree(
 
 	if dirMoveStats.SourceFilesRemaining > 0 {
 
-		err2 = fmt.Errorf("%v\n"+
-			"Error: Some of the files designated to be moved to the target directory, were NOT copied!\n"+
+		fatalErr = fmt.Errorf("%v\n"+
+			"Error: Some of the files designated to be moved\n"+
+			"to the target directory, were NOT copied!\n"+
 			"Therefore the source directory WILL NOT BE DELETED!\n"+
 			"Number of Files NOT Copied='%v'\n"+
 			"%v Source Directory='%v'\n"+
-			"%v Target Directory='%v'\n",
+			"%v Target Directory= '%v'\n",
 			ePrefix.String(),
 			dTreeCopyStats.FilesNotCopied,
-			dMgrLabel, dMgr.absolutePath,
-			targetDMgrLabel, targetDMgr.absolutePath)
+			dMgrLabel,
+			dMgr.absolutePath,
+			targetDMgrLabel,
+			targetDMgr.absolutePath)
 
-		errs = append(errs, err2)
-
-		return dirMoveStats, errs
+		return dirMoveStats, nonfatalErrs, fatalErr
 	}
 
 	dirMoveStats.TotalSrcFilesProcessed =
 		dTreeCopyStats.TotalFilesProcessed
 
-	errs2 = new(dirMgrHelperMolecule).
+	errs2,
+		err2 = new(dirMgrHelperMolecule).
 		deleteAllSubDirectories(
 			dMgr,
 			"dMgr",
@@ -6531,9 +6576,18 @@ func (dMgrHlpr *dirMgrHelper) moveSubDirectoryTree(
 
 	if len(errs2) > 0 {
 
-		errs = append(errs, errs2...)
+		nonfatalErrs = append(nonfatalErrs, errs2...)
+	}
 
-		return dirMoveStats, errs
+	if err2 != nil {
+
+		fatalErr = fmt.Errorf("%v\n"+
+			"Fatal Errror returned by dirMgrHelperMolecule.deleteAllSubDirectories()\n"+
+			"Error= \n%v\n",
+			funcName,
+			err2.Error())
+
+		return dirMoveStats, nonfatalErrs, fatalErr
 	}
 
 	dirMoveStats.SourceDirWasDeleted = true
@@ -6544,7 +6598,7 @@ func (dMgrHlpr *dirMgrHelper) moveSubDirectoryTree(
 	dirMoveStats.SourceFileBytesMoved =
 		dTreeCopyStats.FileBytesCopied
 
-	return dirMoveStats, errs
+	return dirMoveStats, nonfatalErrs, fatalErr
 }
 
 // setDirMgrFromKnownPathDirName

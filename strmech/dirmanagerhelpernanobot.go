@@ -1138,8 +1138,8 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 //		processing, the returned error Type will
 //		encapsulate appropriate error messages.
 //
-//		Non-fatal errors usually involve failure
-//		to copy individual files.
+//		Non-fatal errors usually involve processing
+//		failures associated with individual files.
 //
 //		The returned error messages will incorporate
 //		the method chain and text passed by input
@@ -1165,6 +1165,10 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 //		'errPrefDto'. The 'errPrefDto' text will be
 //		prefixed or attached to the	beginning of the error
 //		message.
+//
+//		Fatal errors are returned when the nature of the
+//		processing failure is such that it is no longer
+//		reasonable to continue code execution.
 func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 	sourceDMgr *DirMgr,
 	targetDMgr *DirMgr,
@@ -1190,7 +1194,7 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	funcName := "dirMgrHelperNanobot.newCopyDirectoryTree()"
+	funcName := "dirMgrHelperNanobot.copyDirectoryTree()"
 
 	nonfatalErrs = make([]error, 0)
 
