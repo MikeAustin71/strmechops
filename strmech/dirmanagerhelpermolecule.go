@@ -156,132 +156,65 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) deleteAllSubDirectories(
 
 	}
 
-	var dirPathDoesExist bool
+	_,
+		_,
+		fatalErr = new(dirMgrHelperPreon).
+		validateDirMgr(
+			dMgr,
+			true, // Path Must Exist
+			dMgrLabel,
+			ePrefix.XCpy(
+				dMgrLabel))
+
+	if fatalErr != nil {
+
+		return nonfatalErrs, fatalErr
+	}
 
 	var err2 error
+	var nameDirEntries []os.DirEntry
 
-	dirPathDoesExist,
-		_,
-		err2 = new(dirMgrHelperAtom).doesDirectoryExist(
-		dMgr,
-		PreProcPathCode.None(),
-		dMgrLabel,
-		ePrefix)
+	nameDirEntries,
+		err2 = os.ReadDir(dMgr.absolutePath)
 
 	if err2 != nil {
 
 		fatalErr = fmt.Errorf("%v\n"+
-			"An error occurred while test the directory path specified"+
-			"by input parameter %v.\n"+
-			"%v Directory Path = %v\n"+
-			"Error=\n%v\n",
-			funcName,
-			dMgrLabel,
-			dMgrLabel,
-			dMgr.absolutePath,
-			err2.Error())
-
-		return nonfatalErrs, fatalErr
-	}
-
-	if !dirPathDoesExist {
-
-		fatalErr = fmt.Errorf("%v\n"+
-			"ERROR: The Directory Path specified by input parameter\n"+
-			"%v DOES NOT EXIST on persistent (drive) storage.\n"+
-			"%v='%v'\n",
-			ePrefix.String(),
-			dMgrLabel,
-			dMgrLabel,
-			dMgr.absolutePath)
-
-		return nonfatalErrs, fatalErr
-	}
-
-	var err3 error
-	var dirMgrPtr *os.File
-
-	dirMgrPtr, err2 = os.Open(dMgr.absolutePath)
-
-	if err2 != nil {
-
-		fatalErr = fmt.Errorf("%v\n"+
-			"Error return by os.Open(dMgr.absolutePath)\n"+
-			"dMgr.absolutePath='%v'\n"+
+			"Error returned by os.ReadDir(%v.absolutePath).\n"+
+			"%v.absolutePath='%v'\n"+
 			"Error= \n%v\n",
 			ePrefix.String(),
+			dMgrLabel,
+			dMgrLabel,
 			dMgr.absolutePath,
 			err2.Error())
 
 		return nonfatalErrs, fatalErr
 	}
 
-	var nameFileInfos []os.FileInfo
-
-	err3 = nil
-
 	osPathSeparatorStr := string(os.PathSeparator)
+	var err3 error
 
-	for err3 != io.EOF {
-		// TODO  Substitute os.ReadDir(dMgr.absolutePath)
-		nameFileInfos, err3 = dirMgrPtr.Readdir(10000)
+	for _, nameDirEntry := range nameDirEntries {
 
-		if err3 != nil && err3 != io.EOF {
+		if nameDirEntry.IsDir() {
 
-			_ = dirMgrPtr.Close()
+			err2 = os.RemoveAll(dMgr.absolutePath + osPathSeparatorStr + nameDirEntry.Name())
 
-			fatalErr = fmt.Errorf("%v\n"+
-				"Error returned by dirMgrPtr.Readdirnames(10000).\n"+
-				"dMgr.absolutePath='%v'\n"+
-				"Error='%v'\n",
-				ePrefix.String(),
-				dMgr.absolutePath,
-				err3.Error())
+			if err2 != nil {
 
-			return nonfatalErrs, fatalErr
-		}
+				err3 = fmt.Errorf("%v\n"+
+					"Error returned by os.RemoveAll(subDir)\n"+
+					"subDir='%v'\n"+
+					"Error= \n%v\n",
+					ePrefix.String(),
+					dMgr.absolutePath+osPathSeparatorStr+nameDirEntry.Name(),
+					err2.Error())
 
-		for _, nameFInfo := range nameFileInfos {
+				nonfatalErrs = append(nonfatalErrs, err3)
 
-			if nameFInfo.IsDir() {
-
-				err2 = os.RemoveAll(dMgr.absolutePath + osPathSeparatorStr + nameFInfo.Name())
-
-				if err2 != nil {
-
-					err3 = fmt.Errorf("%v\n"+
-						"Error returned by os.RemoveAll(subDir)\n"+
-						"subDir='%v'\n"+
-						"Error= \n%v\n",
-						ePrefix.String(),
-						dMgr.absolutePath+osPathSeparatorStr+nameFInfo.Name(),
-						err2.Error())
-
-					nonfatalErrs = append(nonfatalErrs, err3)
-
-					continue
-				}
+				continue
 			}
-		}
-	}
-
-	if dirMgrPtr != nil {
-
-		err3 = dirMgrPtr.Close()
-
-		if err3 != nil {
-
-			err2 = fmt.Errorf("%v\n"+
-				"Error returned by %vPtr.Close().\n"+
-				"%v='%v'\n"+
-				"Error='%v'\n",
-				ePrefix.String(),
-				dMgrLabel,
-				dMgrLabel,
-				dMgr.absolutePath,
-				err3.Error())
-
-			nonfatalErrs = append(nonfatalErrs, err2)
 		}
 	}
 

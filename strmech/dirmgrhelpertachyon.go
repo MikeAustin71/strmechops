@@ -200,8 +200,6 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getFileInfosFromDirectory(
 			dMgr.absolutePath,
 			err2.Error())
 
-		nonfatalErrs = append(nonfatalErrs, err)
-
 		return fileInfos, lenFileInfos, nonfatalErrs, fatalErr
 	}
 
