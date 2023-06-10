@@ -84,3 +84,61 @@ func (fsc *FileSelectionCriteria) ArePatternsActive() bool {
 
 	return isActive
 }
+
+// IsSelectionCriteriaActive
+//
+// This method returns a boolean value signaling whether
+// the current instance of FileSelectionCriteria is active
+// and engaged.
+//
+// If the returned boolean value is set to 'true', means
+// that the File Selection Criterion are configured to
+// select a subset of available files.
+//
+// By contrast a return value of 'false' signals that no
+// file selection criteria have been configured meaning
+// that all files will be selected.
+func (fsc *FileSelectionCriteria) IsSelectionCriteriaActive() bool {
+
+	if fsc.lock == nil {
+		fsc.lock = new(sync.Mutex)
+	}
+
+	fsc.lock.Lock()
+
+	defer fsc.lock.Unlock()
+
+	namePatternIsActive := false
+
+	lPats := len(fsc.FileNamePatterns)
+
+	var tempPattern string
+
+	for i := 0; i < lPats; i++ {
+
+		tempPattern =
+			strings.TrimRight(
+				strings.TrimLeft(fsc.FileNamePatterns[i], " "), " ")
+
+		if tempPattern != "" {
+			namePatternIsActive = true
+		}
+	}
+
+	if namePatternIsActive == true {
+
+		return true
+	}
+
+	if !fsc.FilesNewerThan.IsZero() {
+
+		return true
+	}
+
+	if !fsc.FilesOlderThan.IsZero() {
+
+		return true
+	}
+
+	return false
+}

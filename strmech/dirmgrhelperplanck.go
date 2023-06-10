@@ -504,6 +504,9 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 		return dirCopyStats, subDirectories, nonfatalErrs, fatalErr
 	}
 
+	isFileSelectionCriteriaActive :=
+		fileSelectCriteria.IsSelectionCriteriaActive()
+
 	var dirCreated bool
 
 	dMgrHlprMolecule := new(dirMgrHelperMolecule)
@@ -615,31 +618,37 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 		// This is not a directory. It is a file.
 		// Determine if it matches the find file criteria.
 
-		isMatch,
-			err2,
-			_ =
-			fh.FilterFileName(
-				nameFileInfo,
-				fileSelectCriteria,
-				ePrefix.XCpy("nameFileInfo"))
+		if isFileSelectionCriteriaActive == true {
 
-		if err2 != nil {
+			isMatch,
+				err2,
+				_ =
+				fh.FilterFileName(
+					nameFileInfo,
+					fileSelectCriteria,
+					ePrefix.XCpy("nameFileInfo"))
 
-			err =
-				fmt.Errorf("%v\n"+
-					"Error returned by fh.FilterFileName(nameFileInfo, fileSelectCriteria).\n"+
-					"%v directorySearched='%v'\n"+
-					"fileName='%v'\n"+
-					"Error= \n%v\n",
-					funcName,
-					sourceDMgrLabel,
-					sourceDMgr.absolutePath,
-					nameFileInfo.Name(),
-					err2.Error())
+			if err2 != nil {
 
-			nonfatalErrs = append(nonfatalErrs, err)
+				err =
+					fmt.Errorf("%v\n"+
+						"Error returned by fh.FilterFileName(nameFileInfo, fileSelectCriteria).\n"+
+						"%v directorySearched='%v'\n"+
+						"fileName='%v'\n"+
+						"Error= \n%v\n",
+						funcName,
+						sourceDMgrLabel,
+						sourceDMgr.absolutePath,
+						nameFileInfo.Name(),
+						err2.Error())
 
-			continue
+				nonfatalErrs = append(nonfatalErrs, err)
+
+				continue
+			}
+		} else {
+
+			isMatch = true
 		}
 
 		if !isMatch {
