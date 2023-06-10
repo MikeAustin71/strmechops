@@ -2086,25 +2086,52 @@ func (dMgr *DirMgr) DeleteAllFilesInDir(
 //
 // # Return Values
 //
-//	errs						[]error
+//	nonfatalErrs				[]error
 //
-//		An array of errors is returned. If the method
-//		completes successfully with no errors, a
-//		ZERO-length array is returned.
+//		An array of error objects.
 //
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errPrefDto'.
-//	 	The 'errPrefDto' text will be prefixed or
-//	 	attached to the	beginning of the error message.
+//		If this method completes successfully, the
+//		returned error array is set equal to 'nil'.
 //
-//		Remember, this error array may contain multiple
-//		errors.
+//		If non-fatal errors are encountered during
+//		processing, the returned error Type will
+//		encapsulate appropriate error messages.
+//
+//		Non-fatal errors usually involve processing
+//		failures associated with individual files.
+//
+//		The returned error messages will incorporate
+//		the method chain and text passed by input
+//		parameter, 'errPrefDto'. The 'errPrefDto' text
+//		will be prefixed or attached to the beginning of
+//		the error message.
+//
+//		This error array may contain multiple errors.
+//
+//		An error array may be consolidated into a single
+//		error using method StrMech.ConsolidateErrors()
+//
+//	fatalErr					error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'.
+//
+//		If a fatal error is encountered during
+//		processing, this returned error Type will
+//		encapsulate an appropriate error message. This
+//		returned error message will incorporate the
+//		method chain and text passed by input parameter,
+//		'errPrefDto'. The 'errPrefDto' text will be
+//		prefixed or attached to the	beginning of the error
+//		message.
+//
+//		Fatal errors are returned when the nature of the
+//		processing failure is such that it is no longer
+//		reasonable to continue code execution.
 func (dMgr *DirMgr) DeleteAllSubDirectories(
 	errorPrefix interface{}) (
-	errs []error) {
+	nonfatalErrs []error,
+	fatalErr error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -2115,28 +2142,26 @@ func (dMgr *DirMgr) DeleteAllSubDirectories(
 	defer dMgr.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		fatalErr = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"DirMgr.CopyDirectory()",
 		"")
 
-	if err != nil {
+	if fatalErr != nil {
 
-		errs = append(errs, err)
-
-		return errs
+		return nonfatalErrs, fatalErr
 	}
 
-	errs = new(dirMgrHelperMolecule).
+	nonfatalErrs,
+		fatalErr = new(dirMgrHelperMolecule).
 		deleteAllSubDirectories(
 			dMgr,
 			"dMgr",
 			ePrefix)
 
-	return errs
+	return nonfatalErrs, fatalErr
 }
 
 // DeleteDirectoryTreeFiles
@@ -10835,27 +10860,54 @@ func (dMgr *DirMgr) MoveDirectoryTree(
 //			ComputeError             error
 //		}
 //
-//	errs						[]error
+//	nonfatalErrs				[]error
 //
 //		An array of error objects.
 //
 //		If this method completes successfully, the
 //		returned error array is set equal to 'nil'.
 //
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errPrefDto'.
-//	 	The 'errPrefDto' text will be prefixed or
-//	 	attached to the	beginning of the error message.
+//		If non-fatal errors are encountered during
+//		processing, the returned error Type will
+//		encapsulate appropriate error messages.
+//
+//		Non-fatal errors usually involve processing
+//		failures associated with individual files.
+//
+//		The returned error messages will incorporate
+//		the method chain and text passed by input
+//		parameter, 'errPrefDto'. The 'errPrefDto' text
+//		will be prefixed or attached to the beginning of
+//		the error message.
 //
 //		This error array may contain multiple errors.
+//
+//		An error array may be consolidated into a single
+//		error using method StrMech.ConsolidateErrors()
+//
+//	fatalErr					error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'.
+//
+//		If a fatal error is encountered during
+//		processing, this returned error Type will
+//		encapsulate an appropriate error message. This
+//		returned error message will incorporate the
+//		method chain and text passed by input parameter,
+//		'errPrefDto'. The 'errPrefDto' text will be
+//		prefixed or attached to the	beginning of the error
+//		message.
+//
+//		Fatal errors are returned when the nature of the
+//		processing failure is such that it is no longer
+//		reasonable to continue code execution.
 func (dMgr *DirMgr) MoveSubDirectoryTree(
 	targetDMgr DirMgr,
 	errorPrefix interface{}) (
 	dirMoveStats DirectoryMoveStats,
-	errs []error) {
+	nonfatalErrs []error,
+	fatalErr error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -10866,24 +10918,22 @@ func (dMgr *DirMgr) MoveSubDirectoryTree(
 	defer dMgr.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		fatalErr = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"DirMgr."+
 			"MoveSubDirectoryTree()",
 		"")
 
-	if err != nil {
+	if fatalErr != nil {
 
-		errs = append(errs, err)
-
-		return dirMoveStats, errs
+		return dirMoveStats, nonfatalErrs, fatalErr
 	}
 
 	dirMoveStats,
-		errs =
+		nonfatalErrs,
+		fatalErr =
 		new(dirMgrHelper).moveSubDirectoryTree(
 			dMgr,
 			&targetDMgr,
@@ -10891,7 +10941,7 @@ func (dMgr *DirMgr) MoveSubDirectoryTree(
 			"destinationDMgr",
 			ePrefix)
 
-	return dirMoveStats, errs
+	return dirMoveStats, nonfatalErrs, fatalErr
 }
 
 // New
