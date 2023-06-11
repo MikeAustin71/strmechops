@@ -722,6 +722,218 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 	return dTreeCopyStats, nonfatalErrs, fatalErr
 }
 
+// deleteDirectoryTreeFiles
+//
+// Deletes files in a directory tree based on file selection
+// criteria passed as an input parameter.
+func (dMgrHlprNanobot *dirMgrHelperNanobot) deleteDirectoryTreeFiles(
+	targetDMgr *DirMgr,
+	returnDeletedFilesList bool,
+	fileSelectCriteria FileSelectionCriteria,
+	skipTopLevelDirectory bool,
+	deleteSymLinkFiles bool,
+	deleteOtherNonRegularFiles bool,
+	targetDMgrLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	deletedDirTreeFileStats DeleteDirFilesStats,
+	deletedFiles FileMgrCollection,
+	nonfatalErrs []error,
+	fatalErr error) {
+
+	if dMgrHlprNanobot.lock == nil {
+		dMgrHlprNanobot.lock = new(sync.Mutex)
+	}
+
+	dMgrHlprNanobot.lock.Lock()
+
+	defer dMgrHlprNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "dirMgrHelperNanobot.deleteDirectoryTreeFiles()"
+
+	nonfatalErrs = make([]error, 0)
+
+	ePrefix,
+		fatalErr = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if fatalErr != nil {
+
+		return deletedDirTreeFileStats,
+			deletedFiles,
+			nonfatalErrs,
+			fatalErr
+	}
+
+	if len(targetDMgrLabel) == 0 {
+
+		targetDMgrLabel = "targetDMgr"
+	}
+
+	_,
+		_,
+		fatalErr = new(dirMgrHelperPreon).
+		validateDirMgr(
+			targetDMgr,
+			false,
+			targetDMgrLabel,
+			ePrefix.XCpy(targetDMgrLabel))
+
+	if fatalErr != nil {
+
+		return deletedDirTreeFileStats,
+			deletedFiles,
+			nonfatalErrs,
+			fatalErr
+	}
+
+	var targetDirs DirMgrCollection
+	var err2 error
+
+	if !skipTopLevelDirectory {
+
+		err2 = targetDirs.
+			AddDirMgr(
+				*targetDMgr,
+				ePrefix.XCpy(targetDMgrLabel))
+
+		if err2 != nil {
+
+			fatalErr = fmt.Errorf("%v\n"+
+				"Error adding %v to Directory Manager Collection.\n"+
+				"targetDirs.AddDirMgr() returned an error."+
+				"%v Path = %v\n"+
+				"Error=\n%v\n",
+				funcName,
+				targetDMgrLabel,
+				targetDMgrLabel,
+				targetDMgr.absolutePath,
+				err2.Error())
+
+			return deletedDirTreeFileStats,
+				deletedFiles,
+				nonfatalErrs,
+				fatalErr
+		}
+	}
+
+	var subdirectories DirMgrCollection
+
+	subdirectories,
+		_,
+		err2 = new(dirMgrHelperTachyon).
+		getSubdirectories(
+			targetDMgr,
+			targetDMgrLabel,
+			ePrefix.XCpy(targetDMgrLabel))
+
+	if err2 != nil {
+
+		fatalErr = fmt.Errorf("%v\n"+
+			"Error extracting subdirectories from %v parent directory.\n"+
+			"dirMgrHelperTachyon.getSubdirectories() returned an error.\n"+
+			"%v Path = %v\n"+
+			"Error=\n%v\n",
+			funcName,
+			targetDMgrLabel,
+			targetDMgrLabel,
+			targetDMgr.absolutePath,
+			err2.Error())
+
+		return deletedDirTreeFileStats,
+			deletedFiles,
+			nonfatalErrs,
+			fatalErr
+	}
+
+	targetDirs.dirMgrs = append(
+		targetDirs.dirMgrs,
+		subdirectories.dirMgrs...)
+
+	if len(targetDirs.dirMgrs) == 0 {
+
+		return deletedDirTreeFileStats,
+			deletedFiles,
+			nonfatalErrs,
+			fatalErr
+
+	}
+
+	var dMgrHlprPlanck = new(dirMgrHelperPlanck)
+	var deletedDirFileStats DeleteDirFilesStats
+	var deletedSubDirFiles FileMgrCollection
+	var errs2 []error
+
+	for idx, nextTargetDir := range targetDirs.dirMgrs {
+
+		deletedDirFileStats,
+			deletedSubDirFiles,
+			errs2,
+			err2 = dMgrHlprPlanck.
+			deleteDirectoryFiles(
+				&nextTargetDir,
+				returnDeletedFilesList,
+				fileSelectCriteria,
+				deleteSymLinkFiles,
+				deleteOtherNonRegularFiles,
+				"nextTargetDir",
+				ePrefix.XCpy("nextTargetDir"))
+
+		if len(errs2) > 0 {
+
+			nonfatalErrs = append(
+				nonfatalErrs,
+				err2)
+
+		}
+
+		if err2 != nil {
+
+			fatalErr = fmt.Errorf("%v\n"+
+				"Fatal Error occurred while deleting files.\n"+
+				"dMgrHlprPlanck.deleteDirectoryFiles() returned an error.\n"+
+				"nextTargetDir= %v\n"+
+				"Error=\n%v\n",
+				funcName,
+				nextTargetDir.absolutePath,
+				err2.Error())
+
+			return deletedDirTreeFileStats,
+				deletedFiles,
+				nonfatalErrs,
+				fatalErr
+		}
+
+		deletedDirTreeFileStats.
+			AddStats(deletedDirFileStats)
+
+		deletedDirTreeFileStats.TotalSubDirectories =
+			uint64(idx + 1)
+
+		if returnDeletedFilesList {
+
+			deletedFiles.fileMgrs =
+				append(
+					deletedFiles.fileMgrs,
+					deletedSubDirFiles.fileMgrs...)
+
+		}
+	}
+
+	if !skipTopLevelDirectory {
+		deletedDirTreeFileStats.TotalSubDirectories--
+	}
+
+	return deletedDirTreeFileStats,
+		deletedFiles,
+		nonfatalErrs,
+		fatalErr
+
+}
+
 // lowLevelDirMgrFieldConfig
 //
 // Receives an instance of DirMgr and proceeds to
