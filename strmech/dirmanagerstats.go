@@ -320,11 +320,28 @@ type DirectoryCopyStats struct {
 // FilesOlderThan or FilesNewerThan date time parameters
 // which can be used as file selection criteria.
 type DirectoryDeleteFileInfo struct {
-	StartPath                string
-	Directories              DirMgrCollection
-	ErrReturns               []error
+	StartPath string
+	// The starting directory path for the deletion
+	// operation.
+
+	Directories DirMgrCollection
+	// The Directories actively scanned and included in
+	// this file deletion operation.
+
+	ErrReturns []error
+	// This array of errors includes all errors, both fatal
+	// and non-fatal, encountered in the deletion operation.
+	// If a fatal error occurred, it will be the last error
+	// in the array.
+
 	DeleteFileSelectCriteria FileSelectionCriteria
-	DeletedFiles             FileMgrCollection
+	// The File Selection criteria used to select the files
+	// deleted in the file deletion operation.
+
+	DeletedFiles FileMgrCollection
+	// A collection of File Manager (FileMgr) objects
+	// identifying the files that were actually deleted in
+	// the file deletion operation.
 }
 
 type DirectoryMoveStats struct {
@@ -350,4 +367,40 @@ type DeleteDirFilesStats struct {
 	TotalDirsScanned           uint64
 	NumOfDirsWhereFilesDeleted uint64
 	DirectoriesDeleted         uint64
+}
+
+// AddStats
+//
+// Receives another instance of DeleteDirFilesStats and
+// adds those deletion statistics to those contained in
+// the current instance of DeleteDirFilesStats.
+func (delDirFileStats *DeleteDirFilesStats) AddStats(
+	delDirFStats2 DeleteDirFilesStats) {
+
+	delDirFileStats.TotalFilesProcessed +=
+		delDirFStats2.TotalFilesProcessed
+
+	delDirFileStats.FilesDeleted +=
+		delDirFStats2.FilesDeleted
+
+	delDirFileStats.FilesDeletedBytes +=
+		delDirFStats2.FilesDeletedBytes
+
+	delDirFileStats.FilesRemaining +=
+		delDirFStats2.FilesRemaining
+
+	delDirFileStats.FilesRemainingBytes +=
+		delDirFStats2.FilesRemainingBytes
+
+	delDirFileStats.TotalSubDirectories +=
+		delDirFStats2.TotalSubDirectories
+
+	delDirFileStats.TotalDirsScanned +=
+		delDirFStats2.TotalDirsScanned
+
+	delDirFileStats.NumOfDirsWhereFilesDeleted +=
+		delDirFStats2.NumOfDirsWhereFilesDeleted
+
+	delDirFileStats.DirectoriesDeleted +=
+		delDirFStats2.DirectoriesDeleted
 }

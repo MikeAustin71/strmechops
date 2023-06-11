@@ -12,7 +12,7 @@ type SourceCodeComments struct {
 }
 
 // testPrimaryComments
-// dirPtr.Readdirnames(2000)
+//
 // Sample test primary comments. Bla, bla, bla.
 //
 // ----------------------------------------------------------------
@@ -166,6 +166,49 @@ type SourceCodeComments struct {
 //
 //		Remember, this error array may contain multiple
 //		errors.
+//
+//	nonfatalErrs				[]error
+//
+//		An array of error objects.
+//
+//		If this method completes successfully, the
+//		returned error array is set equal to 'nil'.
+//
+//		If non-fatal errors are encountered during
+//		processing, the returned error Type will
+//		encapsulate appropriate error messages.
+//
+//		Non-fatal errors usually involve processing
+//		failures associated with individual files.
+//
+//		The returned error messages will incorporate
+//		the method chain and text passed by input
+//		parameter, 'errPrefDto'. The 'errPrefDto' text
+//		will be prefixed or attached to the beginning of
+//		the error message.
+//
+//		This error array may contain multiple errors.
+//
+//		An error array may be consolidated into a single
+//		error using method StrMech.ConsolidateErrors()
+//
+//	fatalErr					error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'.
+//
+//		If a fatal error is encountered during
+//		processing, this returned error Type will
+//		encapsulate an appropriate error message. This
+//		returned error message will incorporate the
+//		method chain and text passed by input parameter,
+//		'errPrefDto'. The 'errPrefDto' text will be
+//		prefixed or attached to the	beginning of the error
+//		message.
+//
+//		Fatal errors are returned when the nature of the
+//		processing failure is such that it is no longer
+//		reasonable to continue code execution.
 func (srcCodeComments *SourceCodeComments) testPrimaryComments(
 	errorPrefix interface{}) error {
 
@@ -258,6 +301,49 @@ func (srcCodeComments *SourceCodeComments) testPrimaryComments(
 //	 	text passed by input parameter, 'errPrefDto'.
 //	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
+//
+//	nonfatalErrs				[]error
+//
+//		An array of error objects.
+//
+//		If this method completes successfully, the
+//		returned error array is set equal to 'nil'.
+//
+//		If non-fatal errors are encountered during
+//		processing, the returned error Type will
+//		encapsulate appropriate error messages.
+//
+//		Non-fatal errors usually involve processing
+//		failures associated with individual files.
+//
+//		The returned error messages will incorporate
+//		the method chain and text passed by input
+//		parameter, 'errPrefDto'. The 'errPrefDto' text
+//		will be prefixed or attached to the beginning of
+//		the error message.
+//
+//		This error array may contain multiple errors.
+//
+//		An error array may be consolidated into a single
+//		error using method StrMech.ConsolidateErrors()
+//
+//	fatalErr					error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'.
+//
+//		If a fatal error is encountered during
+//		processing, this returned error Type will
+//		encapsulate an appropriate error message. This
+//		returned error message will incorporate the
+//		method chain and text passed by input parameter,
+//		'errPrefDto'. The 'errPrefDto' text will be
+//		prefixed or attached to the	beginning of the error
+//		message.
+//
+//		Fatal errors are returned when the nature of the
+//		processing failure is such that it is no longer
+//		reasonable to continue code execution.
 func (srcCodeComments *SourceCodeComments) testSubsidiaryComments(
 	srcCdeComments *SourceCodeComments,
 	errPrefDto *ePref.ErrPrefixDto) error {

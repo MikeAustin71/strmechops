@@ -14,19 +14,78 @@ type dirMgrHelperTachyon struct {
 // getFileInfosFromDirectory
 //
 // Receives an instance of DirMgr and proceeds to extract
-// os.FileInfo data DirMgr's absolute path.
+// os.FileInfo data describing the files and directories
+// contained in that DirMgr's absolute directory path.
 //
-// Upon completion an array of FileInfoPlus objects is
-// returned containing os.FileInfo information on all files
-// and directories in the DirMgr's absolute path.
+// Upon completion, this method returns an array of
+// FileInfoPlus objects containing os.FileInfo
+// information on files residing in the directory path
+// specified by input parameter 'dMgr'.
 //
 // Type FileInfoPlus implements the os.FileInfo interface.
+//
+// The types of files returned in the collection of
+// FileInfoPlus objects will always include regular files.
+// However, the collection may also include directory
+// entries, SymLinks and other non-regular files. The
+// following input parameters control the types of
+// non-regular files returned by this method:
+//
+//	excludeDirectoryFileInfos
+//	excludeSymLinks
+//	excludeOtherNonRegularFiles
+//
+// ----------------------------------------------------------------
+//
+// # Definition Of Terms
+//
+//	Regular & Non-Regular Files
+//
+//	In Go programming language, a regular file is a file
+//	that contains data in any format that can be read by
+//	a user or an application. It is not a directory or a
+//	device file.
+//
+//	Non-regular files include directories, device files,
+//	named pipes, sockets, and symbolic links.
+//
+//	https://docs.studygolang.com/src/io/fs/fs.go
+//	https://go.dev/src/os/types.go
+//	https://go.dev/src/os/types.go?s=1237:1275#L31
+//	https://pkg.go.dev/gopkg.in/src-d/go-git.v4/plumbing/filemode
+//	https://www.linode.com/docs/guides/creating-reading-and-writing-files-in-go-a-tutorial/
+//
+//	SymLink Files
+//
+//	In computing, a symbolic link (also symlink or soft
+//	link) is a file whose purpose is to point to a file
+//	or directory (called the "target") by specifying a
+//	path thereto.
+//
+//		https://en.wikipedia.org/wiki/Symbolic_link
+//
+//	It's true that a symlink is a shortcut file. But it's
+//	different from a standard shortcut that, say, a program
+//	installer has placed on your Windows desktop to make the
+//	program easier to run.
+//
+//	Sure, clicking on either type of shortcut opens the
+//	linked object, but what goes on beneath the hood is
+//	different in both cases.
+//
+//	While a standard shortcut points to a certain object,
+//	a symlink makes it appear as if the linked object is
+//	actually there. Your computer and the apps on it will
+//	read the symlink as the target object itself.
+//
+//		https://www.thewindowsclub.com/create-symlinks-in-windows-10
+//		https://www.makeuseof.com/tag/what-is-a-symbolic-link-what-are-its-uses-makeuseof-explains/
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	dMgr						*DirMgr
+//	dMgr							*DirMgr
 //
 //		A pointer to an instance of DirMgr. This instance
 //		specifies the absolute directory path which will be
@@ -37,7 +96,29 @@ type dirMgrHelperTachyon struct {
 //		If the directory specified by 'dMgr' does not
 //		exist, an error will be returned.
 //
-//	dMgrLabel					string
+//	excludeDirectoryFileInfos		bool
+//
+//		If this parameter is set to 'true', no directory
+//		entries will be included in the os.FileInfo
+//		information returned by this method ('fileInfos').
+//
+//	excludeSymLinks					bool
+//
+//		If this parameter is set to 'true', no SymLink
+//		files will be included in the os.FileInfo
+//		information returned by this method ('fileInfos').
+//
+//	excludeOtherNonRegularFiles 	bool
+//
+//		If this parameter is set to 'true', no 'Other
+//		Non-Regular' files will be included in the
+//		os.FileInfo information returned by this method
+//		('fileInfos'). Other Non-regular files include
+//		device files, named pipes, and sockets.
+//
+//		See the section on "Definition Of Terms", above.
+//
+//	dMgrLabel						string
 //
 //		The name or label associated with input parameter
 //		'dMgr', which will be used in error messages
@@ -47,7 +128,7 @@ type dirMgrHelperTachyon struct {
 //		string, a default value of "dMgr" will be
 //		automatically applied.
 //
-//	errPrefDto					*ePref.ErrPrefixDto
+//	errPrefDto						*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
 //		which is included in all returned error
@@ -66,13 +147,22 @@ type dirMgrHelperTachyon struct {
 //
 // # Return Values
 //
-//	fileInfos					[]FileInfoPlus
+//	fileInfos						[]FileInfoPlus
 //
 //		If this method completes successfully, this
 //		method will return an array of FileInfoPlus
-//		objects containing os.FileInfo data on all files
-//		and directories contained in the directory path
-//		specified by input parameter 'dMgr'.
+//		objects containing os.FileInfo data on the files
+//		contained in the directory path specified by
+//		input parameter 'dMgr'.
+//
+//		The types of file and directory entries included
+//		will be controlled by the following input
+//		parameters:
+//
+//			excludeDirectoryFileInfos
+//			excludeSymLinks
+//			excludeOtherNonRegularFiles
+//
 //
 //		Type FileInfoPlus implements the os.FileInfo
 //		interface, but provides additional file information
@@ -90,7 +180,7 @@ type dirMgrHelperTachyon struct {
 //			 Sys() interface{}   // underlying data source (can return nil)
 //	 	}
 //
-//	nonfatalErrs				[]error
+//	nonfatalErrs					[]error
 //
 //		An array of error objects.
 //
@@ -115,7 +205,7 @@ type dirMgrHelperTachyon struct {
 //		An error array may be consolidated into a single
 //		error using method StrMech.ConsolidateErrors()
 //
-//	fatalErr					error
+//	fatalErr						error
 //
 //		If this method completes successfully, this
 //		returned error Type is set equal to 'nil'.
@@ -130,6 +220,9 @@ type dirMgrHelperTachyon struct {
 //		message.
 func (dMgrHlprTachyon *dirMgrHelperTachyon) getFileInfosFromDirectory(
 	dMgr *DirMgr,
+	excludeDirectoryFileInfos bool,
+	excludeSymLinks bool,
+	excludeOtherNonRegularFiles bool,
 	dMgrLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
 	fileInfos []FileInfoPlus,
@@ -233,6 +326,23 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getFileInfosFromDirectory(
 				err2.Error())
 
 			nonfatalErrs = append(nonfatalErrs, err)
+
+			continue
+		}
+
+		if osFileInfo.IsDir() && excludeDirectoryFileInfos {
+
+			continue
+		}
+
+		if osFileInfo.Mode()&os.ModeSymlink != 0 &&
+			excludeSymLinks {
+
+			continue
+		}
+
+		if !osFileInfo.Mode().IsRegular() &&
+			excludeOtherNonRegularFiles {
 
 			continue
 		}
