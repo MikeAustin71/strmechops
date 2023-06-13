@@ -5586,25 +5586,44 @@ func (dMgrHlpr *dirMgrHelper) getParentDirMgr(
 //			ComputeError             error
 //		}
 //
-//	errs						[]error
+//	nonfatalErrs				[]error
 //
 //		An array of error objects.
 //
 //		If this method completes successfully, the
 //		returned error array is set equal to 'nil'.
 //
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errPrefDto'.
-//	 	The 'errPrefDto' text will be prefixed or
-//	 	attached to the	beginning of the error message.
+//		If non-fatal errors are encountered during
+//		processing, the returned error Type will
+//		encapsulate appropriate error messages.
+//
+//		Non-fatal errors usually involve failure
+//		to copy individual files.
+//
+//		The returned error messages will incorporate
+//		the method chain and text passed by input
+//		parameter, 'errPrefDto'. The 'errPrefDto' text
+//		will be prefixed or attached to the beginning of
+//		the error message.
 //
 //		This error array may contain multiple errors.
 //
 //		An error array may be consolidated into a single
 //		error using method StrMech.ConsolidateErrors()
+//
+//	fatalErr					error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'.
+//
+//		If a fatal error is encountered during
+//		processing, this returned error Type will
+//		encapsulate an appropriate error message. This
+//		returned error message will incorporate the
+//		method chain and text passed by input parameter,
+//		'errPrefDto'. The 'errPrefDto' text will be
+//		prefixed or attached to the	beginning of the error
+//		message.
 func (dMgrHlpr *dirMgrHelper) moveDirectory(
 	dMgr *DirMgr,
 	targetDMgr *DirMgr,
@@ -5614,7 +5633,8 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 	fileSelectLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
 	dirMoveStats DirectoryMoveStats,
-	errs []error) {
+	nonfatalErrs []error,
+	fatalErr error) {
 
 	if dMgrHlpr.lock == nil {
 		dMgrHlpr.lock = new(sync.Mutex)
@@ -5624,42 +5644,19 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 
 	defer dMgrHlpr.lock.Unlock()
 
-	var err error
-
 	var ePrefix *ePref.ErrPrefixDto
 
 	funcName := "dirMgrHelper.moveDirectory()"
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		fatalErr = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
 		funcName,
 		"")
 
-	if err != nil {
+	if fatalErr != nil {
 
-		errs = append(errs, err)
-
-		return dirMoveStats, errs
-	}
-
-	var dMgrHlprPreon = new(dirMgrHelperPreon)
-
-	_,
-		_,
-		err = dMgrHlprPreon.
-		validateDirMgr(
-			dMgr,
-			true, // Path MUST exist on disk
-			dMgrLabel,
-			ePrefix.XCpy(
-				dMgrLabel))
-
-	if err != nil {
-
-		errs = append(errs, err)
-
-		return dirMoveStats, errs
+		return dirMoveStats, nonfatalErrs, fatalErr
 	}
 
 	if len(targetDMgrLabel) == 0 {
@@ -5667,11 +5664,28 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 		targetDMgrLabel = "targetDMgr"
 	}
 
+	var dMgrHlprPreon = new(dirMgrHelperPreon)
+
+	_,
+		_,
+		fatalErr = dMgrHlprPreon.
+		validateDirMgr(
+			dMgr,
+			true, // Path MUST exist on disk
+			dMgrLabel,
+			ePrefix.XCpy(
+				dMgrLabel))
+
+	if fatalErr != nil {
+
+		return dirMoveStats, nonfatalErrs, fatalErr
+	}
+
 	var targetDMgrPathDoesExist bool
 
 	_,
 		targetDMgrPathDoesExist,
-		err = dMgrHlprPreon.
+		fatalErr = dMgrHlprPreon.
 		validateDirMgr(
 			targetDMgr,
 			false, // Path is NOT required to exist on disk
@@ -5679,11 +5693,9 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 			ePrefix.XCpy(
 				targetDMgrLabel))
 
-	if err != nil {
+	if fatalErr != nil {
 
-		errs = append(errs, err)
-
-		return dirMoveStats, errs
+		return dirMoveStats, nonfatalErrs, fatalErr
 	}
 
 	fh := FileHelper{}
@@ -5695,7 +5707,7 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 
 	if err2 != nil {
 
-		err = fmt.Errorf("%v\n"+
+		fatalErr = fmt.Errorf("%v\n"+
 			"Error returned by os.ReadDir(%v.absolutePath).\n"+
 			"%v.absolutePath='%v'\n"+
 			"Error= \n%v\n",
@@ -5705,9 +5717,7 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 			dMgr.absolutePath,
 			err2.Error())
 
-		errs = append(errs, err)
-
-		return dirMoveStats, errs
+		return dirMoveStats, nonfatalErrs, fatalErr
 	}
 
 	var nameFileInfo os.FileInfo
@@ -5715,6 +5725,7 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 	var src, target string
 	var isMatch, dirCreated bool
 	dMgrHlprMolecule := dirMgrHelperMolecule{}
+	var err error
 
 	for _, nameDirEntry := range nameDirEntries {
 
@@ -5745,23 +5756,7 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 				dMgr.absolutePath+osPathSepStr+nameFileInfo.Name(),
 				err2.Error())
 
-			errs = append(errs, err)
-
-			continue
-		}
-
-		if !nameFileInfo.Mode().IsRegular() {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: File Name is NOT classified as a 'Regular' File!\n"+
-				"%v= '%v'\n"+
-				"fileName= '%v'\n",
-				ePrefix.String(),
-				dMgrLabel,
-				dMgr.absolutePath,
-				dMgr.absolutePath+osPathSepStr+nameFileInfo.Name())
-
-			errs = append(errs, err)
+			nonfatalErrs = append(nonfatalErrs, err)
 
 			continue
 		}
@@ -5791,7 +5786,7 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 					nameFileInfo.Name(),
 					err.Error())
 
-			errs = append(errs, err2)
+			nonfatalErrs = append(nonfatalErrs, err2)
 
 			continue
 		}
@@ -5807,7 +5802,7 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 			if !targetDMgrPathDoesExist {
 
 				dirCreated,
-					err = new(dirMgrHelperMolecule).
+					err = dMgrHlprMolecule.
 					lowLevelMakeDir(
 						targetDMgr,
 						targetDMgrLabel,
@@ -5823,7 +5818,7 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 						targetDMgr.absolutePath,
 						err.Error())
 
-					errs = append(errs, err2)
+					nonfatalErrs = append(nonfatalErrs, err2)
 
 					break
 				}
@@ -5842,7 +5837,7 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 			target = targetDMgr.absolutePath +
 				osPathSepStr + nameDirEntry.Name()
 
-			err = dMgrHlprMolecule.
+			fatalErr = dMgrHlprMolecule.
 				lowLevelCopyFile(
 					src,
 					nameFileInfo,
@@ -5851,20 +5846,16 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 					"destinationFile",
 					ePrefix)
 
-			if err != nil {
+			if fatalErr != nil {
 
-				errs = append(errs, err)
-
-				dirMoveStats.SourceFilesRemaining++
-
-				continue
+				return dirMoveStats, nonfatalErrs, fatalErr
 
 			}
 
 			err = os.Remove(src)
 
 			if err != nil {
-				err2 = fmt.Errorf("%v\n"+
+				fatalErr = fmt.Errorf("%v\n"+
 					"Error occurred after file copy completed during delete operation!\n"+
 					"Error returned by os.Remove(sourceFile)\n"+
 					"sourceFile='%v'\n"+
@@ -5873,11 +5864,7 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 					src,
 					err.Error())
 
-				errs = append(errs, err)
-
-				dirMoveStats.SourceFilesRemaining++
-
-				continue
+				return dirMoveStats, nonfatalErrs, fatalErr
 			}
 
 			dirMoveStats.SourceFilesMoved++
@@ -5904,7 +5891,7 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 			dirMoveStats.SourceFilesMoved,
 			dirMoveStats.SourceFilesRemaining)
 
-		errs = append(errs, err)
+		nonfatalErrs = append(nonfatalErrs, err)
 	}
 
 	// If all the source files have been moved and
@@ -5920,17 +5907,21 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 				ePrefix)
 
 		if err != nil {
-			errs = append(errs, err)
+
+			nonfatalErrs = append(nonfatalErrs, err)
 			dirMoveStats.SourceDirWasDeleted = false
+
 		} else {
+
 			dirMoveStats.SourceDirWasDeleted = true
 			dMgr.doesAbsolutePathExist = false
 			dMgr.doesPathExist = false
 			dMgr.actualDirFileInfo = FileInfoPlus{}
 		}
+
 	}
 
-	return dirMoveStats, errs
+	return dirMoveStats, nonfatalErrs, fatalErr
 }
 
 // moveDirectoryTree

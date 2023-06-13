@@ -71,6 +71,9 @@ type dirMgrHelperNanobot struct {
 //	a user or an application. It is not a directory or a
 //	device file.
 //
+//	Regular files include text files, image files and
+//	executable files.
+//
 //	Non-regular files include directories, device files,
 //	named pipes, sockets, and symbolic links.
 //
@@ -90,13 +93,13 @@ type dirMgrHelperNanobot struct {
 //		https://en.wikipedia.org/wiki/Symbolic_link
 //
 //	It's true that a symlink is a shortcut file. But it's
-//	different from a standard shortcut that, say, a program
-//	installer has placed on your Windows desktop to make the
-//	program easier to run.
+//	different from a standard shortcut that a program
+//	installer might place on your Windows desktop to make
+//	the program easier to run.
 //
-//	Sure, clicking on either type of shortcut opens the
-//	linked object, but what goes on beneath the hood is
-//	different in both cases as we'll see next.
+//	Clicking on either type of shortcut opens the linked
+//	object. However, what goes on beneath the hood is
+//	different in both cases.
 //
 //	While a standard shortcut points to a certain object,
 //	a symlink makes it appear as if the linked object is

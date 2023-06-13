@@ -1335,16 +1335,27 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelDeleteDirectoryAll(
 
 	var err2 error
 
-	if dMgr == nil {
-
-		return fmt.Errorf("%v\n"+
-			"Error: Input parameter %v pointer is 'nil' !\n",
-			ePrefix.String(),
-			dMgrLabel)
-	}
-
 	if len(dMgrLabel) == 0 {
 		dMgrLabel = "dMgr"
+	}
+
+	var dMgrHlprPreon = new(dirMgrHelperPreon)
+
+	var targetDMgrPathDoesExist bool
+
+	_,
+		targetDMgrPathDoesExist,
+		err = dMgrHlprPreon.
+		validateDirMgr(
+			dMgr,
+			false, // Path is NOT required to exist on disk
+			dMgrLabel,
+			ePrefix.XCpy(
+				dMgrLabel))
+
+	if !targetDMgrPathDoesExist {
+
+		return err
 	}
 
 	for i := 0; i < 3; i++ {
@@ -1373,6 +1384,44 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelDeleteDirectoryAll(
 		}
 
 		time.Sleep(50 * time.Millisecond)
+	}
+
+	var dirPathDoesExist bool
+
+	dirPathDoesExist,
+		_,
+		err2 =
+		new(dirMgrHelperAtom).
+			doesDirectoryExist(
+				dMgr,
+				PreProcPathCode.None(),
+				dMgrLabel,
+				ePrefix.XCpy(dMgrLabel))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned while testing for the\n"+
+			"existance of the directory path.\n"+
+			"dirMgrHelperAtom.doesDirectoryExist()\n"+
+			"%v Directory Path= '%v'\n"+
+			"Error= \n%v\n",
+			funcName,
+			dMgrLabel,
+			dMgr.absolutePath,
+			err2.Error())
+
+		return err
+	}
+
+	if dirPathDoesExist {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: FAILED TO DELETE DIRECTORY!!\n"+
+			"Directory Path still exists!\n"+
+			"Directory Path= '%v'\n",
+			ePrefix.String(),
+			dMgr.absolutePath)
 	}
 
 	return err
