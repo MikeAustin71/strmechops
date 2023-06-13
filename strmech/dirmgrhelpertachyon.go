@@ -17,23 +17,60 @@ type dirMgrHelperTachyon struct {
 // os.FileInfo data describing the files and directories
 // contained in that DirMgr's absolute directory path.
 //
+// The os.FileInfo interface is defined as follows:
+//
+//	 	type FileInfo interface {
+//			 Name() string
+//				Base name of the file
+//
+//			 Size() int64
+//			 	Length in bytes for regular files;
+//			 	system-dependent for others
+//
+//			 Mode() FileMode
+//			 	File mode bits
+//
+//			 ModTime() time.Time
+//			 	Modification time
+//
+//			 IsDir() bool
+//			 	Abbreviation for Mode().IsDir()
+//
+//			 Sys() interface{}
+//			 	Underlying data source (can return nil)
+//	 	}
+//
 // Upon completion, this method returns an array of
 // FileInfoPlus objects containing os.FileInfo
 // information on files residing in the directory path
-// specified by input parameter 'dMgr'.
+// specified by input parameter 'dMgr'. Type FileInfoPlus
+// implements the os.FileInfo interface.
 //
-// Type FileInfoPlus implements the os.FileInfo interface.
+// To qualify as a selected file, the file entry must
+// comply with two filters: File Type and File
+// Characteristics.
 //
-// The types of files returned in the collection of
-// FileInfoPlus objects will always include regular files.
-// However, the collection may also include directory
-// entries, SymLinks and other non-regular files. The
-// following input parameters control the types of
-// non-regular files returned by this method:
+// First, the file must comply with the specified File
+// Type criteria. In terms of File Type, files are
+// classified as directories, regular files, SymLink
+// files or other non-regular files. For an explanation
+// of Regular and Non-Regular files, see the Definition
+// of Terms section below.
 //
-//	excludeDirectoryFileInfos
-//	excludeSymLinks
-//	excludeOtherNonRegularFiles
+// Screening criteria for File Type is controlled by the
+// following three input parameters:
+//
+//	getDirectoryFileInfos - bool
+//	getRegularFileInfos - bool
+//	getSymLinksFileInfos - bool
+//	getOtherNonRegularFiles - bool
+//
+// In addition to File Type, selected files must comply
+// with the File Characteristics criteria specified by
+// input parameter, 'fileSelectCriteria'. The File
+// Characteristics Selection criteria allows users to
+// screen files for File Name, File Modification Date and
+// File Mode.
 //
 // ----------------------------------------------------------------
 //
@@ -45,6 +82,9 @@ type dirMgrHelperTachyon struct {
 //	that contains data in any format that can be read by
 //	a user or an application. It is not a directory or a
 //	device file.
+//
+//	Regular files include text files, image files and
+//	executable files.
 //
 //	Non-regular files include directories, device files,
 //	named pipes, sockets, and symbolic links.
@@ -65,12 +105,12 @@ type dirMgrHelperTachyon struct {
 //		https://en.wikipedia.org/wiki/Symbolic_link
 //
 //	It's true that a symlink is a shortcut file. But it's
-//	different from a standard shortcut that, say, a program
-//	installer has placed on your Windows desktop to make the
-//	program easier to run.
+//	different from a standard shortcut that a program
+//	installer might place on your Windows desktop to make
+//	the program easier to run.
 //
-//	Sure, clicking on either type of shortcut opens the
-//	linked object, but what goes on beneath the hood is
+//	Clicking on either type of shortcut opens the linked
+//	object. However, what goes on beneath the hood is
 //	different in both cases.
 //
 //	While a standard shortcut points to a certain object,
@@ -96,27 +136,221 @@ type dirMgrHelperTachyon struct {
 //		If the directory specified by 'dMgr' does not
 //		exist, an error will be returned.
 //
-//	excludeDirectoryFileInfos		bool
+//	getDirectoryFileInfos			bool
 //
-//		If this parameter is set to 'true', no directory
+//		If this parameter is set to 'true', directory
 //		entries will be included in the os.FileInfo
-//		information returned by this method ('fileInfos').
+//		information ('fileInfos') returned by this method.
 //
-//	excludeSymLinks					bool
+//		If input parameters 'getDirectoryFileInfos',
+//		'getRegularFileInfos', 'getSymLinksFileInfos' and
+//		'getOtherNonRegularFileInfos' are all set to
+//		'false', an error will be returned.
 //
-//		If this parameter is set to 'true', no SymLink
-//		files will be included in the os.FileInfo
-//		information returned by this method ('fileInfos').
+//	getRegularFileInfos				bool
 //
-//	excludeOtherNonRegularFiles 	bool
+//		If this parameter is set to 'true', regular files
+//		will be included in the os.FileInfo information
+//		('fileInfos') returned by this method.
 //
-//		If this parameter is set to 'true', no 'Other
-//		Non-Regular' files will be included in the
-//		os.FileInfo information returned by this method
-//		('fileInfos'). Other Non-regular files include
-//		device files, named pipes, and sockets.
+//		Regular Files include text files, image files and
+//		executable files.
 //
-//		See the section on "Definition Of Terms", above.
+//		For an explanation of Regular and Non-Regular
+//		files, see the section on "Definition Of Terms",
+//		above.
+//
+//		If input parameters 'getDirectoryFileInfos',
+//		'getRegularFileInfos', 'getSymLinksFileInfos' and
+//		'getOtherNonRegularFileInfos' are all set to
+//		'false', an error will be returned.
+//
+//	getSymLinksFileInfos			bool
+//
+//		If this parameter is set to 'true', SymLink files
+//		will be included in the os.FileInfo information
+//		('fileInfos') returned by this method.  For an
+//		explanation of SymLink, Regular and Non-Regular
+//		files, see the section on "Definition Of Terms",
+//		above.
+//
+//		If input parameters 'getDirectoryFileInfos',
+//		'getRegularFileInfos', 'getSymLinksFileInfos' and
+//		'getOtherNonRegularFileInfos' are all set to
+//		'false', an error will be returned.
+//
+//	getOtherNonRegularFileInfos		bool
+//
+//		If this parameter is set to 'true', other
+//		Non-Regular files will be included in the
+//		os.FileInfo information ('fileInfos') returned by
+//		this method.
+//
+//		Other Non-regular files include	device files,
+//		named pipes, and sockets. For an explanation of
+//		Regular and Non-Regular files, see the section on
+//		"Definition Of Terms", above.
+//
+//		If input parameters 'getDirectoryFileInfos',
+//		'getRegularFileInfos', 'getSymLinksFileInfos' and
+//		'getOtherNonRegularFileInfos' are all set to
+//		'false', an error will be returned.
+//
+//	fileSelectCriteria				FileSelectionCriteria
+//
+//	  File selection criteria defining file
+//	  characteristics used to screen files in the
+//	  directory specified by input parameter 'dMgr'.
+//
+//	  Files matching these selection criteria, and the
+//	  File Type filter, will be included in the array of
+//	  FileInfoPlus objects containing os.FileInfo
+//	  information returned by this method.
+//
+//		type FileSelectionCriteria struct {
+//		 FileNamePatterns    []string
+//			An array of strings containing File Name Patterns
+//
+//		 FilesOlderThan      time.Time
+//		 	Match files with older modification date times
+//
+//		 FilesNewerThan      time.Time
+//		 	Match files with newer modification date times
+//
+//		 SelectByFileMode    FilePermissionConfig
+//		 	Match file mode (os.FileMode).
+//
+//		 SelectCriterionModeFileSelectCriterionMode
+//		 	Specifies 'AND' or 'OR' selection mode
+//		}
+//
+//	  The FileSelectionCriteria type allows for
+//	  configuration of single or multiple file selection
+//	  criterion. The 'SelectCriterionMode' can be used to
+//	  specify whether the file must match all, or any one,
+//	  of the active file selection criterion.
+//
+//	  Elements of the FileSelectionCriteria are described
+//	  below:
+//
+//			FileNamePatterns		[]string
+//
+//				An array of strings which may define one or more
+//				search patterns. If a file name matches any one
+//				of the search pattern strings, it is deemed to be
+//				a 'match' for the search pattern criterion.
+//
+//				Example Patterns:
+//					FileNamePatterns = []string{"*.log"}
+//					FileNamePatterns = []string{"current*.txt"}
+//					FileNamePatterns = []string{"*.txt", "*.log"}
+//
+//				If this string array has zero length or if
+//				all the strings are empty strings, then this
+//				file search criterion is considered 'Inactive'
+//				or 'Not Set'.
+//
+//
+//			FilesOlderThan		time.Time
+//
+//				This date time type is compared to file
+//				modification date times in order to determine
+//				whether the file is older than the
+//				'FilesOlderThan' file selection criterion. If
+//				the file modification date time is older than
+//				the 'FilesOlderThan' date time, that file is
+//				considered a 'match' for this file selection
+//				criterion.
+//
+//				If the value of 'FilesOlderThan' is set to
+//				time zero, the default value for type
+//				time.Time{}, then this file selection
+//				criterion is considered to be 'Inactive' or
+//				'Not Set'.
+//
+//			FilesNewerThan      time.Time
+//
+//				This date time type is compared to the file
+//				modification date time in order to determine
+//				whether the file is newer than the
+//				'FilesNewerThan' file selection criterion. If
+//				the file modification date time is newer than
+//				the 'FilesNewerThan' date time, that file is
+//				considered a 'match' for this file selection
+//				criterion.
+//
+//				If the value of 'FilesNewerThan' is set to
+//				time zero, the default value for type
+//				time.Time{}, then this file selection
+//				criterion is considered to be 'Inactive' or
+//				'Not Set'.
+//
+//			SelectByFileMode  FilePermissionConfig
+//
+//				Type FilePermissionConfig encapsulates an os.FileMode. The
+//				file selection criterion allows for the selection of files
+//				by File Mode.
+//
+//				File modes are compared to the value of 'SelectByFileMode'.
+//				If the File Mode for a given file is equal to the value of
+//				'SelectByFileMode', that file is considered to be a 'match'
+//				for this file selection criterion. Examples for setting
+//				SelectByFileMode are shown as follows:
+//
+//				fsc := FileSelectionCriteria{}
+//
+//				err = fsc.SelectByFileMode.SetByFileMode(os.FileMode(0666))
+//
+//				err = fsc.SelectByFileMode.SetFileModeByTextCode("-r--r--r--")
+//
+//			SelectCriterionMode FileSelectCriterionMode
+//
+//			This parameter selects the manner in which the file selection
+//			criteria above are applied in determining a 'match' for file
+//			selection purposes. 'SelectCriterionMode' may be set to one of
+//			two constant values:
+//
+//			(1) FileSelectCriterionMode(0).ANDSelect()
+//
+//				File selected if all active selection criteria
+//				are satisfied.
+//
+//				If this constant value is specified for the file selection mode,
+//				then a given file will not be judged as 'selected' unless all
+//				the active selection criterion are satisfied. In other words, if
+//				three active search criterion are provided for 'FileNamePatterns',
+//				'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
+//				selected unless it has satisfied all three criterion in this example.
+//
+//			(2) FileSelectCriterionMode(0).ORSelect()
+//
+//				File selected if any active selection criterion is satisfied.
+//
+//				If this constant value is specified for the file selection mode,
+//				then a given file will be selected if any one of the active file
+//				selection criterion is satisfied. In other words, if three active
+//				search criterion are provided for 'FileNamePatterns', 'FilesOlderThan'
+//				and 'FilesNewerThan', then a file will be selected if it satisfies any
+//				one of the three criterion in this example.
+//
+//		------------------------------------------------------------------------
+//
+//		IMPORTANT:
+//
+//		If all of the file selection criterion in the FileSelectionCriteria
+//		object are 'Inactive' or 'Not Set' (set to their zero or default values),
+//		then all the files processed in the directory tree will be selected.
+//
+//			Example:
+//			  fsc := FileSelectCriterionMode{}
+//
+//		 	In this example, 'fsc' is NOT initialized. Therefore,
+//			all the selection criterion are 'Inactive'. Consequently,
+//			all the files encountered in the target directory during
+//			the search operation will meet the file characteristics
+//			selection criteria.
+//
+//		------------------------------------------------------------------------
 //
 //	dMgrLabel						string
 //
@@ -172,12 +406,24 @@ type dirMgrHelperTachyon struct {
 //		The os.FileInfo interface is defined as follows:
 //
 //	 	type FileInfo interface {
-//			 Name() string       // base name of the file
-//			 Size() int64        // length in bytes for regular files; system-dependent for others
-//			 Mode() FileMode     // file mode bits
-//			 ModTime() time.Time // modification time
-//			 IsDir() bool        // abbreviation for Mode().IsDir()
-//			 Sys() interface{}   // underlying data source (can return nil)
+//			 Name() string
+//				Base name of the file
+//
+//			 Size() int64
+//			 	Length in bytes for regular files;
+//			 	system-dependent for others
+//
+//			 Mode() FileMode
+//			 	File mode bits
+//
+//			 ModTime() time.Time
+//			 	Modification time
+//
+//			 IsDir() bool
+//			 	Abbreviation for Mode().IsDir()
+//
+//			 Sys() interface{}
+//			 	Underlying data source (can return nil)
 //	 	}
 //
 //	nonfatalErrs					[]error
@@ -220,9 +466,11 @@ type dirMgrHelperTachyon struct {
 //		message.
 func (dMgrHlprTachyon *dirMgrHelperTachyon) getFileInfosFromDirectory(
 	dMgr *DirMgr,
-	excludeDirectoryFileInfos bool,
-	excludeSymLinks bool,
-	excludeOtherNonRegularFiles bool,
+	getDirectoryFileInfos bool,
+	getRegularFileInfos bool,
+	getSymLinksFileInfos bool,
+	getOtherNonRegularFileInfos bool,
+	fileSelectCriteria FileSelectionCriteria,
 	dMgrLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
 	fileInfos []FileInfoPlus,
@@ -242,10 +490,12 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getFileInfosFromDirectory(
 
 	var err error
 
+	funcName := "dirMgrHelperElectron.getFileInfosFromDirectory()"
+
 	ePrefix,
 		fatalErr = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"dirMgrHelperElectron.getFileInfosFromDirectory()",
+		funcName,
 		"")
 
 	if err != nil {
@@ -255,7 +505,7 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getFileInfosFromDirectory(
 
 	if len(dMgrLabel) == 0 {
 
-		dMgrLabel = "sourceDMgr"
+		dMgrLabel = "dMgr"
 	}
 
 	var dMgrHlprPreon = new(dirMgrHelperPreon)
@@ -274,6 +524,27 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getFileInfosFromDirectory(
 
 		return fileInfos, lenFileInfos, nonfatalErrs, fatalErr
 	}
+
+	if getDirectoryFileInfos == false &&
+		getRegularFileInfos == false &&
+		getSymLinksFileInfos == false &&
+		getOtherNonRegularFileInfos == false {
+
+		fatalErr = fmt.Errorf("%v\n"+
+			"Fatal Error: File Type filters are conflicted!\n"+
+			"All of the File Type filters are set to 'false'\n"+
+			"This gurantees that NO files will be selected.\n"+
+			"getDirectoryFileInfos == false\n"+
+			"getRegularFileInfos == false\n"+
+			"getSymLinksFileInfos == false\n"+
+			"getOtherNonRegularFileInfos == false\n",
+			ePrefix.String())
+
+		return fileInfos, lenFileInfos, nonfatalErrs, fatalErr
+	}
+
+	isFileSelectionCriteriaActive :=
+		fileSelectCriteria.IsSelectionCriteriaActive()
 
 	var err2 error
 	var nameDirEntries []os.DirEntry
@@ -297,7 +568,9 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getFileInfosFromDirectory(
 	}
 
 	var nameFileInfo os.FileInfo
+
 	osPathSepStr := string(os.PathSeparator)
+
 	fip := FileInfoPlus{}
 
 	lenFileInfos = len(nameDirEntries)
@@ -306,7 +579,15 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getFileInfosFromDirectory(
 
 	var osFileInfo os.FileInfo
 
+	var isFileTypeFilterMatch bool
+
+	var isMatch bool
+
+	var fh = new(FileHelper)
+
 	for i := 0; i < lenFileInfos; i++ {
+
+		isFileTypeFilterMatch = false
 
 		osFileInfo,
 			err2 = nameDirEntries[i].Info()
@@ -330,24 +611,89 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getFileInfosFromDirectory(
 			continue
 		}
 
-		if osFileInfo.IsDir() && excludeDirectoryFileInfos {
+		if osFileInfo.IsDir() && getDirectoryFileInfos {
 
+			isFileTypeFilterMatch = true
+
+		} else if osFileInfo.Mode()&os.ModeSymlink != 0 &&
+			getSymLinksFileInfos {
+
+			isFileTypeFilterMatch = true
+
+		} else if !osFileInfo.Mode().IsRegular() &&
+			getOtherNonRegularFileInfos {
+
+			isFileTypeFilterMatch = true
+
+		} else if osFileInfo.Mode().IsRegular() &&
+			getRegularFileInfos {
+
+			isFileTypeFilterMatch = true
+
+		} else {
+
+			if getOtherNonRegularFileInfos == true {
+
+				isFileTypeFilterMatch = true
+
+			}
+
+		}
+
+		if !isFileTypeFilterMatch {
+			// This file fails the File Type
+			// filter test. Skip it.
 			continue
 		}
 
-		if osFileInfo.Mode()&os.ModeSymlink != 0 &&
-			excludeSymLinks {
+		// MUST BE: This file passes the File
+		// Type filter test. Process it.
 
-			continue
+		if isFileSelectionCriteriaActive == true {
+
+			isMatch,
+				err2,
+				_ =
+				fh.FilterFileName(
+					nameFileInfo,
+					fileSelectCriteria,
+					ePrefix.XCpy("nameFileInfo"))
+
+			if err2 != nil {
+
+				err =
+					fmt.Errorf("%v\n"+
+						"Error returned by fh.FilterFileName(nameFileInfo, fileSelectCriteria).\n"+
+						"%v directorySearched='%v'\n"+
+						"fileName='%v'\n"+
+						"File Path='%v'\n"+
+						"Error= \n%v\n",
+						funcName,
+						dMgrLabel,
+						dMgr.absolutePath,
+						nameFileInfo.Name(),
+						dMgr.absolutePath+
+							osPathSepStr+
+							nameFileInfo.Name(),
+						err2.Error())
+
+				nonfatalErrs = append(nonfatalErrs, err)
+
+				continue
+			}
+
+			if !isMatch {
+				continue
+			}
 		}
 
-		if !osFileInfo.Mode().IsRegular() &&
-			excludeOtherNonRegularFiles {
+		// MUST BE:
+		// isFileSelectionCriteriaActive == FALSE
+		// File Type Filter has already been satisfied.
+		// This file is a hit. Save it to fileInfos.
 
-			continue
-		}
-
-		fileInfos = append(fileInfos, fip.NewFromFileInfo(osFileInfo))
+		fileInfos = append(
+			fileInfos, fip.NewFromFileInfo(osFileInfo))
 	}
 
 	lenFileInfos = len(fileInfos)

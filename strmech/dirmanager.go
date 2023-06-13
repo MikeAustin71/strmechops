@@ -1692,7 +1692,7 @@ func (dMgr *DirMgr) CopySubDirectoryTree(
 //	This method will remove the directory, and all files
 //	in that directory, identified by the current DirMgr
 //	instance. It will also delete all child directories
-//	and files in the directory tree.
+//	and files in the child directory trees.
 //
 // ----------------------------------------------------------------
 //

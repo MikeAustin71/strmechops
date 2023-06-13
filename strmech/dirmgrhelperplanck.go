@@ -18,8 +18,11 @@ type dirMgrHelperPlanck struct {
 // (sourceDMgr) to a target directory (targetDMgr).
 //
 // The files to be copied are selected according to
-// file selection criteria specified by input parameter,
-// 'fileSelectCriteria'.
+// file characteristics selection criteria specified by
+// input parameter, 'fileSelectCriteria'. File
+// Characteristics Selection criteria allows users to
+// screen files for File Name, File Modification Date and
+// File Mode.
 //
 // The selected files are copied by a Copy IO operation.
 // For information on the Copy IO procedure see
@@ -27,9 +30,13 @@ type dirMgrHelperPlanck struct {
 //
 //	https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
 //
-// This method copies "regular" files plus certain
-// non-regular files depending on input parameter values
-// supplied by the user.
+// Files eligible for this copy operation include Regular
+// Files such as text files, image files and executable
+// files. Depending on the configuration of input
+// parameters 'copySymLinkFiles' and
+// 'copyOtherNonRegularFiles' eligible files may include
+// SymLink files and other Non-Regular Files such as
+// device files, named pipes and sockets.
 //
 // In Go programming language, a regular file is a file
 // that contains data in any format that can be read by
@@ -545,9 +552,11 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 		fatalErr = new(dirMgrHelperTachyon).
 		getFileInfosFromDirectory(
 			sourceDMgr,
-			false, // excludeDirectoryFileInfos
-			false, // excludeSymLinks,
-			false, // excludeOtherNonRegularFiles
+			true,  // getDirectoryFileInfos
+			true,  // getRegularFileInfos
+			false, // copySymLinkFiles,
+			false, // copyOtherNonRegularFiles
+			FileSelectionCriteria{},
 			sourceDMgrLabel,
 			ePrefix.XCpy(sourceDMgrLabel))
 
@@ -771,28 +780,40 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 // deleteDirectoryFiles
 //
-//	This method deletes selected files in a single directory.
-//	No subdirectories will be deleted.
+// This method deletes selected files in a single
+// directory. No subdirectories will be deleted.
 //
-// The files to be deleted are selected according to
-// file selection criteria specified by input parameter,
-// 'fileSelectCriteria'.
+// The files to be deleted are selected according to file
+// to two sets of criteria, File Type and File
+// Characteristics.
 //
-// This method deletes "regular" files plus certain
+// First, the file must comply with the specified File
+// Type criteria. In terms of File Type, files are
+// classified as directories, regular files, SymLink
+// files or other non-regular files.
+//
+// This method does NOT delete directories.
+//
+// For an explanation of Regular and Non-Regular files,
+// see the Definition of Terms section below.
+//
+// Screening criteria for File Type is controlled by the
+// following three input parameters:
+//
+//	deleteRegularFiles - bool
+//	deleteSymLinkFiles - bool
+//	deleteOtherNonRegularFiles - bool
+//
+// This method deletes regular files plus certain
 // non-regular files depending on input parameter values
 // supplied by the user.
 //
-// In Go programming language, a regular file is a file
-// that contains data in any format that can be read by
-// a user or an application. It is not a directory or a
-// device file.
-//
-// Examples of "regular" files include text files, image
-// files and executable files.
-//
-// Examples of non-regular files include directories,
-// device files, named pipes, sockets, and symbolic
-// links.
+// In addition to File Type, selected files must comply
+// with the File Characteristics criteria specified by
+// input parameter, 'fileSelectCriteria'. The File
+// Characteristics Selection criteria allows users to
+// screen files for File Name, File Modification Date and
+// File Mode.
 //
 // ----------------------------------------------------------------
 //
@@ -804,6 +825,9 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //	that contains data in any format that can be read by
 //	a user or an application. It is not a directory or a
 //	device file.
+//
+//	Regular files include text files, image files and
+//	executable files.
 //
 //	Non-regular files include directories, device files,
 //	named pipes, sockets, and symbolic links.
@@ -824,13 +848,13 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //		https://en.wikipedia.org/wiki/Symbolic_link
 //
 //	It's true that a symlink is a shortcut file. But it's
-//	different from a standard shortcut that, say, a program
-//	installer has placed on your Windows desktop to make the
-//	program easier to run.
+//	different from a standard shortcut that a program
+//	installer might place on your Windows desktop to make
+//	the program easier to run.
 //
-//	Sure, clicking on either type of shortcut opens the
-//	linked object, but what goes on beneath the hood is
-//	different in both cases as we'll see next.
+//	Clicking on either type of shortcut opens the linked
+//	object. However, what goes on beneath the hood is
+//	different in both cases.
 //
 //	While a standard shortcut points to a certain object,
 //	a symlink makes it appear as if the linked object is
@@ -847,21 +871,29 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //	(1)	This method will delete files in the directory
 //		specified by input parameter 'targetDMgr'. The
 //		files to be deleted must match the File Selection
-//		Criteria passed as input parameter
+//		Characteristics Criteria passed as input parameter
 //		'fileSelectCriteria'.
 //
-//	(2) If the target directory identified by input
+//	(2) In addition to meeting the File Selection
+//		Characteristics requirements specified in paragraph
+//		(1) above, files eligible for deletion must comply
+//		with File Type specifications passed as input
+//		parameters 'deleteRegularFiles',
+//		'deleteSymLinkFiles' and
+//		'deleteOtherNonRegularFiles'.
+//
+//	(3) If the target directory identified by input
 //		parameter 'targetDMgr' contains NO Files
 //		(0 Files), this method will exit and no error
 //		will be returned.
 //
-//	(3) If the target directory identified by input
+//	(4) If the target directory identified by input
 //		parameter 'targetDMgr' contains NO Files
 //		matching the File Selection Criteria specified by
 //		input parameter 'fileSelectCriteria', this method
 //		will exit and no error will be returned.
 //
-//	(4)	This method will NOT delete directories.
+//	(5)	This method will NOT delete directories.
 //
 // ----------------------------------------------------------------
 //
@@ -898,6 +930,52 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //		the instance of FileMgrCollection returned by this
 //		method will always be empty and unpopulated.
 //
+//	deleteRegularFiles			bool
+//
+//		If this parameter is set to 'true', regular files
+//		will be eligible for deletion if they meet the
+//		File Selection criteria specified by input
+//		paramter 'fileSelectCriteria'.
+//
+//		Regular Files include text files, image files and
+//		executable files.
+//
+//		For an explanation of Regular and Non-Regular
+//		files, see the section on "Definition Of Terms",
+//		above.
+//
+//		If 'deleteRegularFiles', 'deleteSymLinkFiles' and
+//		'deleteOtherNonRegularFiles' are all set to
+//		'false', an error will be returned.
+//
+//	deleteSymLinkFiles			bool
+//
+//		If this parameter is set to 'true', SymLink files
+//		which meet the file selection criteria, will be
+//		deleted.
+//
+//		If 'deleteRegularFiles', 'deleteSymLinkFiles' and
+//		'deleteOtherNonRegularFiles' are all set to
+//		'false', an error will be returned.
+//
+//	deleteOtherNonRegularFiles bool
+//
+//		If this parameter is set to 'true', other
+//		non-regular file types, besides SymLinks and
+//		directories, will be deleted if they meet the file
+//		selection criteria.
+//
+//		Examples of other non-regular file types
+//		include device files, named pipes, and sockets.
+//		See the Definition Of Terms section above.
+//
+//		Note:	Although directories are non-regular
+//				files; however, this method WILL NOT
+//				DELETE directories.
+//
+//		If 'deleteRegularFiles', 'deleteSymLinkFiles' and
+//		'deleteOtherNonRegularFiles' are all set to
+//		'false', an error will be returned.
 //
 //	fileSelectCriteria			FileSelectionCriteria
 //
@@ -1050,26 +1128,6 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //
 //		------------------------------------------------------------------------
 //
-//	deleteSymLinkFiles			bool
-//
-//		If this parameter is set to 'true', SymLink files
-//		which meet the file selection criteria, will be
-//		deleted.
-//
-//	deleteOtherNonRegularFiles bool
-//
-//		If this parameter is set to 'true', other
-//		non-regular file types, besides SymLinks and
-//		directories, will be deleted if they meet the file
-//		selection criteria.
-//
-//		Examples of other non-regular file types
-//		include device files, named pipes, and sockets.
-//		See the Definition Of Terms section above.
-//
-//		Note:	Although directories are non-regular files,
-//				this method WILL NOT DELETE directories.
-//
 //	targetDMgrLabel string
 //
 //		The name or label associated with input parameter
@@ -1183,9 +1241,10 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 	targetDMgr *DirMgr,
 	returnDeletedFilesList bool,
-	fileSelectCriteria FileSelectionCriteria,
+	deleteRegularFiles bool,
 	deleteSymLinkFiles bool,
 	deleteOtherNonRegularFiles bool,
+	fileSelectCriteria FileSelectionCriteria,
 	targetDMgrLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
 	deletedDirFileStats DeleteDirFilesStats,
@@ -1225,16 +1284,22 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 		targetDMgrLabel = "targetDMgr"
 	}
 
-	_,
-		_,
-		fatalErr = new(dirMgrHelperPreon).
-		validateDirMgr(
-			targetDMgr,
-			false,
-			targetDMgrLabel,
-			ePrefix.XCpy(targetDMgrLabel))
+	var fileInfos []FileInfoPlus
+	var lenFileInfos int
+	var errs2 []error
 
-	if fatalErr != nil {
+	if deleteRegularFiles == false &&
+		deleteSymLinkFiles == false &&
+		deleteOtherNonRegularFiles == false {
+
+		fatalErr = fmt.Errorf("%v\n"+
+			"Fatal Error: File Type filters are conflicted!\n"+
+			"All of the File Type filters are set to 'false'\n"+
+			"This gurantees that NO files will be selected.\n"+
+			"deleteRegularFiles == false\n"+
+			"deleteSymLinkFiles == false\n"+
+			"deleteOtherNonRegularFiles == false\n",
+			ePrefix.String())
 
 		return deletedDirFileStats,
 			deletedFiles,
@@ -1242,19 +1307,17 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 			fatalErr
 	}
 
-	var fileInfos []FileInfoPlus
-	var lenFileInfos int
-	var errs2 []error
-
 	fileInfos,
 		lenFileInfos,
 		errs2,
 		fatalErr = new(dirMgrHelperTachyon).
 		getFileInfosFromDirectory(
 			targetDMgr,
-			true,                        // excludeDirectoryFileInfos
-			!deleteSymLinkFiles,         // excludeSymLinks
-			!deleteOtherNonRegularFiles, // excludeOtherNonRegularFiles
+			false,                      // getDirectoryFileInfos
+			deleteRegularFiles,         // getRegularFileInfos
+			deleteSymLinkFiles,         // getSymLinksFileInfos
+			deleteOtherNonRegularFiles, // getOtherNonRegularFileInfos
+			fileSelectCriteria,
 			targetDMgrLabel,
 			ePrefix.XCpy(targetDMgrLabel))
 
@@ -1280,14 +1343,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 			fatalErr
 	}
 
-	var isFileSelectionCriteriaActive bool
-
-	isFileSelectionCriteriaActive =
-		fileSelectCriteria.IsSelectionCriteriaActive()
-
-	var isMatch bool
 	var err2 error
-	var fh = new(FileHelper)
 	osPathSepStr := string(os.PathSeparator)
 
 	deletedDirFileStats.TotalDirsScanned = 1
@@ -1297,109 +1353,73 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 		deletedDirFileStats.TotalFilesProcessed++
 
 		// This is not a directory. It is a file.
-		// Determine if it matches the find file criteria.
+		// The file matches the File Characteristics
+		// Criteria and the File Type Criteria
 
-		if isFileSelectionCriteriaActive == true {
+		err2 = os.Remove(targetDMgr.absolutePath + osPathSepStr + nameFileInfo.Name())
 
-			isMatch,
-				err2,
-				_ =
-				fh.FilterFileName(
-					nameFileInfo,
-					fileSelectCriteria,
-					ePrefix.XCpy("nameFileInfo"))
+		if err2 != nil {
+
+			fatalErr = fmt.Errorf("%v\n"+
+				"Error returned by os.Remove(pathFileName).\n"+
+				"pathFileName='%v'\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				targetDMgr.absolutePath+osPathSepStr+nameFileInfo.Name(),
+				err2.Error())
+
+			return deletedDirFileStats,
+				deletedFiles,
+				nonfatalErrs,
+				fatalErr
+		}
+
+		// File successfully deleted
+
+		if returnDeletedFilesList {
+
+			err2 = deletedFiles.AddFileMgrByFileInfo(
+				targetDMgr.absolutePath,
+				nameFileInfo,
+				ePrefix.XCpy("targetDMgr+nameFileInfo"))
 
 			if err2 != nil {
 
-				fatalErr =
-					fmt.Errorf("%v\n"+
-						"Error returned by fh.FilterFileName(nameFileInfo, fileSelectCriteria).\n"+
-						"%v directorySearched='%v'\n"+
-						"fileName='%v'\n"+
-						"Error= \n%v\n",
+				nonfatalErrs = append(
+					nonfatalErrs,
+					fmt.Errorf(
+						"%v\n"+
+							"Non-Fatal Error\n"+
+							"Error from deletedFiles.AddFileMgrByFileInfo()\n"+
+							"%v Directory Path= %v\n"+
+							"File Name = %v\n"+
+							"File Mode = %v\n"+
+							"File Path = %v\n"+
+							"Error= \n%v\n",
 						funcName,
 						targetDMgrLabel,
 						targetDMgr.absolutePath,
 						nameFileInfo.Name(),
-						err2.Error())
+						nameFileInfo.Mode(),
+						targetDMgr.absolutePath+osPathSepStr+nameFileInfo.Name(),
+						err2.Error()))
 
-				return deletedDirFileStats,
-					deletedFiles,
-					nonfatalErrs,
-					fatalErr
+				// This file was NOT deleted.
+
+				deletedDirFileStats.FilesRemaining++
+
+				deletedDirFileStats.FilesRemainingBytes +=
+					uint64(nameFileInfo.Size())
+
+				continue
 			}
-
-		} else {
-
-			isMatch = true
 		}
 
-		if isMatch {
+		deletedDirFileStats.FilesDeleted++
+		deletedDirFileStats.FilesDeletedBytes +=
+			uint64(nameFileInfo.Size())
 
-			err2 = os.Remove(targetDMgr.absolutePath + osPathSepStr + nameFileInfo.Name())
-
-			if err2 != nil {
-
-				fatalErr = fmt.Errorf("%v\n"+
-					"Error returned by os.Remove(pathFileName).\n"+
-					"pathFileName='%v'\n"+
-					"Error= \n%v\n",
-					ePrefix.String(),
-					targetDMgr.absolutePath+osPathSepStr+nameFileInfo.Name(),
-					err2.Error())
-
-				return deletedDirFileStats,
-					deletedFiles,
-					nonfatalErrs,
-					fatalErr
-			}
-
-			// File successfully deleted
-
-			if returnDeletedFilesList {
-
-				err2 = deletedFiles.AddFileMgrByFileInfo(
-					targetDMgr.absolutePath,
-					nameFileInfo,
-					ePrefix.XCpy("targetDMgr+nameFileInfo"))
-
-				if err2 != nil {
-
-					nonfatalErrs = append(
-						nonfatalErrs,
-						fmt.Errorf(
-							"%v\n"+
-								"Non-Fatal Error\n"+
-								"Error from deletedFiles.AddFileMgrByFileInfo()\n"+
-								"%v Directory Path= %v\n"+
-								"File Name = %v\n"+
-								"File Path = %v\n"+
-								"Error= \n%v\n",
-							funcName,
-							targetDMgrLabel,
-							targetDMgr.absolutePath,
-							nameFileInfo.Name(),
-							targetDMgr.absolutePath+osPathSepStr+nameFileInfo.Name(),
-							err2.Error()))
-				}
-			}
-
-			deletedDirFileStats.FilesDeleted++
-			deletedDirFileStats.FilesDeletedBytes +=
-				uint64(nameFileInfo.Size())
-
-			deletedDirFileStats.NumOfDirsWhereFilesDeleted = 1
-
-		} else {
-
-			// File was NOT a Match.
-			// Therefore, it was NOT deleted.
-
-			deletedDirFileStats.FilesRemaining++
-
-			deletedDirFileStats.FilesRemainingBytes +=
-				uint64(nameFileInfo.Size())
-		}
+		deletedDirFileStats.NumOfDirsWhereFilesDeleted = 1
 	}
 
 	return deletedDirFileStats,
