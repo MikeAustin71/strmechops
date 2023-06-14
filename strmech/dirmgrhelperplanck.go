@@ -450,8 +450,9 @@ type dirMgrHelperPlanck struct {
 //		If this method completes successfully, this
 //		method will return an instance of DirMgrCollection
 //		populated with an array of 'DirMgr' objects
-//		identifying the subdirectories specified by
-//		input parameter 'sourceDMgr'.
+//		identifying the subdirectories contained in the
+//		parent directory specified by input parameter
+//		'sourceDMgr'.
 //
 //			type DirMgrCollection struct {
 //				dirMgrs []DirMgr
@@ -535,7 +536,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	funcName := "dirMgrHelper." +
+	funcName := "dirMgrHelperPlanck." +
 		"copyDirectoryFiles()"
 
 	ePrefix,
@@ -1404,7 +1405,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	funcName := "dirMgrHelper." +
+	funcName := "dirMgrHelperPlanck." +
 		"deleteDirectoryFiles()"
 
 	ePrefix,
@@ -1709,4 +1710,151 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) isDirMgrValid(
 	}
 
 	return err
+}
+
+func (dMgrHlprPlanck *dirMgrHelperPlanck) moveDirectoryFiles(
+	sourceDMgr *DirMgr,
+	targetDMgr *DirMgr,
+	returnMovedFilesList bool,
+	deleteEmptySourceDirectory bool,
+	moveRegularFiles bool,
+	moveSymLinkFiles bool,
+	moveOtherNonRegularFiles bool,
+	fileSelectCriteria FileSelectionCriteria,
+	sourceDMgrLabel string,
+	targetDMgrLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	dirMoveStats DirectoryMoveStats,
+	movedFiles FileMgrCollection,
+	nonfatalErrs []error,
+	fatalErr error) {
+
+	if dMgrHlprPlanck.lock == nil {
+		dMgrHlprPlanck.lock = new(sync.Mutex)
+	}
+
+	dMgrHlprPlanck.lock.Lock()
+
+	defer dMgrHlprPlanck.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "dirMgrHelperPlanck." +
+		"moveDirectoryFiles()"
+
+	ePrefix,
+		fatalErr = ePref.ErrPrefixDto{}.NewIEmpty(
+		errPrefDto,
+		funcName,
+		"")
+
+	if fatalErr != nil {
+
+		return dirMoveStats,
+			movedFiles,
+			nonfatalErrs,
+			fatalErr
+	}
+
+	if len(sourceDMgrLabel) == 0 {
+
+		sourceDMgrLabel = "sourceDMgr"
+	}
+
+	dMgrHlprPreon := new(dirMgrHelperPreon)
+
+	_,
+		_,
+		fatalErr = dMgrHlprPreon.
+		validateDirMgr(
+			sourceDMgr,
+			true,
+			sourceDMgrLabel,
+			ePrefix)
+
+	if fatalErr != nil {
+
+		return dirMoveStats,
+			movedFiles,
+			nonfatalErrs,
+			fatalErr
+	}
+
+	if len(targetDMgrLabel) == 0 {
+
+		targetDMgrLabel = "targetDMgr"
+	}
+
+	var targetPathDoesExist bool
+
+	_,
+		targetPathDoesExist,
+		fatalErr = dMgrHlprPreon.
+		validateDirMgr(
+			targetDMgr,
+			false,
+			targetDMgrLabel,
+			ePrefix)
+
+	if fatalErr != nil {
+
+		return dirMoveStats,
+			movedFiles,
+			nonfatalErrs,
+			fatalErr
+	}
+
+	if moveRegularFiles == false &&
+		moveSymLinkFiles == false &&
+		moveOtherNonRegularFiles == false {
+
+		fatalErr = fmt.Errorf("%v\n"+
+			"Fatal Error: File Type filters are conflicted!\n"+
+			"All of the File Type filters are set to 'false'\n"+
+			"This gurantees that NO files will be selected.\n"+
+			"moveRegularFiles == false\n"+
+			"moveSymLinkFiles == false\n"+
+			"moveOtherNonRegularFiles == false\n",
+			ePrefix.String())
+
+		return dirMoveStats,
+			movedFiles,
+			nonfatalErrs,
+			fatalErr
+	}
+
+	isFileSelectionCriteriaActive :=
+		fileSelectCriteria.IsSelectionCriteriaActive()
+
+	osPathSeparatorStr := string(os.PathSeparator)
+	var errs2 []error
+
+	fileInfos,
+		lenFileInfos,
+		errs2,
+		fatalErr = new(dirMgrHelperTachyon).
+		getFileInfosFromDirectory(
+			sourceDMgr,
+			true,                     // getDirectoryFileInfos
+			moveRegularFiles,         // getRegularFileInfos
+			moveSymLinkFiles,         // copySymLinkFiles,
+			moveOtherNonRegularFiles, // copyOtherNonRegularFiles
+			FileSelectionCriteria{},
+			sourceDMgrLabel,
+			ePrefix.XCpy(sourceDMgrLabel))
+
+	if len(errs2) != 0 {
+
+		nonfatalErrs = append(nonfatalErrs, errs2...)
+
+	}
+
+	if fatalErr != nil {
+
+		return dirMoveStats,
+			movedFiles,
+			nonfatalErrs,
+			fatalErr
+	}
+
 }
