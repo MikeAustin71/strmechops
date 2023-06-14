@@ -158,6 +158,20 @@ type dirMgrHelperNanobot struct {
 //		If this target directory does not exist, this
 //		method will attempt to create it.
 //
+//	returnCopiedFilesList			bool
+//
+//		If input parameter 'returnCopiedFilesList' is set
+//		to 'true', this method will return a populated
+//		File Manager Collection documenting all the files
+//		actually included in the directory tree copy
+//		operation.
+//
+//		If input parameter 'returnCopiedFilesList' is set
+//		to 'false', this method will return an empty and
+//		unpopulated instance of FileMgrCollection. This
+//		means that the files actually copied by this
+//		method will NOT be documented.
+//
 //	skipTopLevelDirectory		bool
 //
 //		If this parameter is set to 'true', the top level
@@ -217,10 +231,18 @@ type dirMgrHelperNanobot struct {
 //
 //	fileSelectCriteria			FileSelectionCriteria
 //
-//		This input parameter should be configured with the
-//		desired file selection criteria. Files matching
-//		this criteria will be copied  to the directory
-//		identified by input parameter, 'targetDir'.
+//		In addition to the File Type Selection Criteria,
+//		selected files must conform to the File
+//		Characteristics criteria specified by
+//		'fileSelectCriteria'.
+//
+//		File Characteristics Selection criteria allows
+//		users to screen files for File Name, File
+//		Modification Date and File Mode.
+//
+//		Files matching these selection criteria, and the
+//		File Type filter, will be included in the copy
+//		operation performed by this method.
 //
 //		type FileSelectionCriteria struct {
 //		 FileNamePatterns    []string
@@ -239,14 +261,14 @@ type dirMgrHelperNanobot struct {
 //		 	Specifies 'AND' or 'OR' selection mode
 //		}
 //
-//	  The FileSelectionCriteria type allows for
+//	  The FileSelectionCriteria Type allows for
 //	  configuration of single or multiple file selection
 //	  criterion. The 'SelectCriterionMode' can be used to
 //	  specify whether the file must match all, or any one,
 //	  of the active file selection criterion.
 //
-//		Elements of the FileSelectionCriteria are described
-//		below:
+//	  Elements of the File Characteristics Selection
+//	  Criteria are described below:
 //
 //			FileNamePatterns		[]string
 //
@@ -352,17 +374,18 @@ type dirMgrHelperNanobot struct {
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria object are
-//		'Inactive' or 'Not Set' (set to their zero or default values), then all the
-//		files processed in the directory tree will be selected.
+//		If all of the file selection criterion in the FileSelectionCriteria
+//		object are 'Inactive' or 'Not Set' (set to their zero or default values),
+//		then all the files meeting the File Type requirements in the directory
+//		defined by 'sourceDMgr' will be selected.
 //
 //			Example:
 //			  fsc := FileSelectCriterionMode{}
 //
 //			  In this example, 'fsc' is NOT initialized. Therefore,
 //			  all the selection criterion are 'Inactive'. Consequently,
-//			  all the files encountered in the target directory during
-//			  the search operation will be selected.
+//			  all the files meeting the File Type requirements in the
+//			  directory defined by 'sourceDMgr' will be selected.
 //
 //		------------------------------------------------------------------------
 //
@@ -416,6 +439,21 @@ type dirMgrHelperNanobot struct {
 //				ComputeError        error
 //			}
 //
+//	copiedDirTreeFiles			FileMgrCollection
+//
+//		If input parameter 'returnCopiedFilesList' is set
+//		to 'true', 'copiedDirTreeFiles' will return a
+//		populated File Manager Collection including all
+//		the files actually included in the directory tree
+//		copy operation.
+//
+//		If input parameter 'returnCopiedFilesList' is set
+//		to 'false', 'copiedDirTreeFiles' will return an
+//		empty and unpopulated instance of
+//		FileMgrCollection. This means that the files
+//		actually copied by this method will NOT be
+//		documented.
+//
 //	nonfatalErrs				[]error
 //
 //		An array of error objects.
@@ -461,6 +499,7 @@ type dirMgrHelperNanobot struct {
 func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 	sourceDMgr *DirMgr,
 	targetDMgr *DirMgr,
+	returnCopiedFilesList bool,
 	skipTopLevelDirectory bool,
 	copyEmptyTargetDirectory bool,
 	copyRegularFiles bool,
@@ -471,6 +510,7 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 	targetDMgrLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
 	dTreeCopyStats DirTreeCopyStats,
+	copiedDirTreeFiles FileMgrCollection,
 	nonfatalErrs []error,
 	fatalErr error) {
 
@@ -496,7 +536,10 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 
 	if fatalErr != nil {
 
-		return dTreeCopyStats, nonfatalErrs, fatalErr
+		return dTreeCopyStats,
+			copiedDirTreeFiles,
+			nonfatalErrs,
+			fatalErr
 	}
 
 	if len(sourceDMgrLabel) == 0 {
@@ -523,7 +566,10 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 
 	if fatalErr != nil {
 
-		return dTreeCopyStats, nonfatalErrs, fatalErr
+		return dTreeCopyStats,
+			copiedDirTreeFiles,
+			nonfatalErrs,
+			fatalErr
 	}
 
 	if len(targetDMgrLabel) == 0 {
@@ -544,7 +590,10 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 
 	if fatalErr != nil {
 
-		return dTreeCopyStats, nonfatalErrs, fatalErr
+		return dTreeCopyStats,
+			copiedDirTreeFiles,
+			nonfatalErrs,
+			fatalErr
 	}
 
 	var sourceDirectories = new(DirMgrCollection).New()
@@ -570,7 +619,10 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 				sourceDMgr.absolutePath,
 				err.Error())
 
-			return dTreeCopyStats, nonfatalErrs, fatalErr
+			return dTreeCopyStats,
+				copiedDirTreeFiles,
+				nonfatalErrs,
+				fatalErr
 		}
 
 	}
@@ -599,7 +651,10 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 			sourceDMgr.absolutePath,
 			err.Error())
 
-		return dTreeCopyStats, nonfatalErrs, fatalErr
+		return dTreeCopyStats,
+			copiedDirTreeFiles,
+			nonfatalErrs,
+			fatalErr
 	}
 
 	err = sourceDirectories.
@@ -619,7 +674,10 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 			sourceDMgr.absolutePath,
 			err.Error())
 
-		return dTreeCopyStats, nonfatalErrs, fatalErr
+		return dTreeCopyStats,
+			copiedDirTreeFiles,
+			nonfatalErrs,
+			fatalErr
 	}
 
 	var sourceDirMgr, targetDirMgr DirMgr
@@ -636,12 +694,15 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 			funcName,
 			err.Error())
 
-		return dTreeCopyStats, nonfatalErrs, fatalErr
-
+		return dTreeCopyStats,
+			copiedDirTreeFiles,
+			nonfatalErrs,
+			fatalErr
 	}
 
 	var errs2 []error
 	var err2 error
+	var copiedDirFiles FileMgrCollection
 	var dirCopyStats DirectoryCopyStats
 	dMgrHlprPlanck := new(dirMgrHelperPlanck)
 	loopCount := 1
@@ -673,11 +734,14 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 				sourceDirMgr.absolutePath,
 				err2.Error())
 
-			return dTreeCopyStats, nonfatalErrs, fatalErr
+			return dTreeCopyStats,
+				copiedDirTreeFiles,
+				nonfatalErrs,
+				fatalErr
 		}
 
 		dirCopyStats,
-			_,
+			copiedDirFiles,
 			subdirectories,
 			errs2,
 			err2 = dMgrHlprPlanck.
@@ -711,7 +775,10 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 				targetDirMgr.absolutePath,
 				err2.Error())
 
-			return dTreeCopyStats, nonfatalErrs, fatalErr
+			return dTreeCopyStats,
+				copiedDirTreeFiles,
+				nonfatalErrs,
+				fatalErr
 		}
 
 		if len(errs2) > 0 {
@@ -743,7 +810,25 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 				sourceDMgr.absolutePath,
 				err2.Error())
 
-			return dTreeCopyStats, nonfatalErrs, fatalErr
+			return dTreeCopyStats,
+				copiedDirTreeFiles,
+				nonfatalErrs,
+				fatalErr
+		}
+
+		if returnCopiedFilesList {
+
+			err2 = copiedDirTreeFiles.
+				AddFileMgrCollection(
+					&copiedDirFiles,
+					ePrefix.XCpy("copiedDirFiles"))
+
+			if err2 != nil {
+
+				nonfatalErrs = append(
+					nonfatalErrs, err2)
+			}
+
 		}
 
 		sourceDirMgr, err = sourceDirectories.PopFirstDirMgr(
@@ -760,13 +845,19 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 				loopCount,
 				err.Error())
 
-			return dTreeCopyStats, nonfatalErrs, fatalErr
+			return dTreeCopyStats,
+				copiedDirTreeFiles,
+				nonfatalErrs,
+				fatalErr
 		}
 
 		loopCount++
 	}
 
-	return dTreeCopyStats, nonfatalErrs, fatalErr
+	return dTreeCopyStats,
+		copiedDirTreeFiles,
+		nonfatalErrs,
+		fatalErr
 }
 
 // deleteDirectoryTreeFiles

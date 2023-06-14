@@ -614,6 +614,7 @@ func (dMgr *DirMgr) CopyDirectoryFiles(
 // Copies all selected files in the directory tree
 // defined by the current instance of DirMgr to a
 // specified target directory tree.
+//
 // If the target directory does not exist, this method
 // will attempt to create it.
 //
@@ -711,16 +712,21 @@ func (dMgr *DirMgr) CopyDirectoryFiles(
 // # BE ADVISED
 //
 //	(1)	This method copies ALL THE FILES residing in the
-//		entire the directory tree identified by the
-//		current instance of DirMgr. The files in this
-//		directory tree will be copied to a corresponding
-//		directory tree identified by input parameter
-//		'targetDMgr'.
+//		entire the source directory tree identified by
+//		the current instance of DirMgr. The files in this
+//		source directory tree will be copied to a
+//		corresponding target directory tree identified by
+//		input parameter 'targetDMgr'.
 //
-//	(2)	If a directory in the target directory tree does
-//		not exist, this method will attempt to create it.
+//	(2)	This copy operation INCLUDES the top level or
+//		parent directory specified by the current instance
+//		of DirMgr.
 //
-//	(3)	Files will only be copied if they meet the File
+//	(3)	If a subdirectory in the target directory tree
+//		does not exist, this method will attempt to
+//		create it.
+//
+//	(4)	Files will only be copied if they meet the File
 //		Type criteria and the File Characteristics
 //		Criteria.
 //
@@ -733,6 +739,13 @@ func (dMgr *DirMgr) CopyDirectoryFiles(
 //
 //		File Characteristics Selection criteria are
 //		specified by input parameter 'fileSelectCriteria'.
+//
+//	(5)	To restrict the copy operation to selected files
+//		in the subdirectory tree, thereby EXCLUDING the
+//		source parent directory from copy operation, see
+//		method:
+//
+//			DirMgr.CopySubDirectoryTree()
 //
 // ----------------------------------------------------------------
 //
@@ -747,6 +760,20 @@ func (dMgr *DirMgr) CopyDirectoryFiles(
 //
 //		If this target directory does not exist, this
 //		method will attempt to create it.
+//
+//	returnCopiedFilesList			bool
+//
+//		If input parameter 'returnCopiedFilesList' is set
+//		to 'true', this method will return a populated
+//		File Manager Collection documenting all the files
+//		actually included in the directory tree copy
+//		operation.
+//
+//		If input parameter 'returnCopiedFilesList' is set
+//		to 'false', this method will return an empty and
+//		unpopulated instance of FileMgrCollection. This
+//		means that the files actually copied by this
+//		method will NOT be documented.
 //
 //	skipTopLevelDirectory		bool
 //
@@ -807,10 +834,18 @@ func (dMgr *DirMgr) CopyDirectoryFiles(
 //
 //	fileSelectCriteria			FileSelectionCriteria
 //
-//		This input parameter should be configured with the
-//		desired file selection criteria. Files matching
-//		this criteria will be copied  to the directory
-//		identified by input parameter, 'targetDir'.
+//		In addition to the File Type Selection Criteria,
+//		selected files must conform to the File
+//		Characteristics criteria specified by
+//		'fileSelectCriteria'.
+//
+//		File Characteristics Selection criteria allows
+//		users to screen files for File Name, File
+//		Modification Date and File Mode.
+//
+//		Files matching these selection criteria, and the
+//		File Type filter, will be included in the copy
+//		operation performed by this method.
 //
 //		type FileSelectionCriteria struct {
 //		 FileNamePatterns    []string
@@ -829,14 +864,14 @@ func (dMgr *DirMgr) CopyDirectoryFiles(
 //		 	Specifies 'AND' or 'OR' selection mode
 //		}
 //
-//	  The FileSelectionCriteria type allows for
+//	  The FileSelectionCriteria Type allows for
 //	  configuration of single or multiple file selection
 //	  criterion. The 'SelectCriterionMode' can be used to
 //	  specify whether the file must match all, or any one,
 //	  of the active file selection criterion.
 //
-//		Elements of the FileSelectionCriteria are described
-//		below:
+//	  Elements of the File Characteristics Selection
+//	  Criteria are described below:
 //
 //			FileNamePatterns		[]string
 //
@@ -942,17 +977,18 @@ func (dMgr *DirMgr) CopyDirectoryFiles(
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria object are
-//		'Inactive' or 'Not Set' (set to their zero or default values), then all the
-//		files processed in the directory tree will be selected.
+//		If all of the file selection criterion in the FileSelectionCriteria
+//		object are 'Inactive' or 'Not Set' (set to their zero or default values),
+//		then all the files meeting the File Type requirements in the source
+//		directory will be selected.
 //
 //			Example:
 //			  fsc := FileSelectCriterionMode{}
 //
 //			  In this example, 'fsc' is NOT initialized. Therefore,
 //			  all the selection criterion are 'Inactive'. Consequently,
-//			  all the files encountered in the target directory during
-//			  the search operation will be selected.
+//			  all the files meeting the File Type requirements in the
+//			  source directory will be selected.
 //
 //		------------------------------------------------------------------------
 //
@@ -1038,6 +1074,21 @@ func (dMgr *DirMgr) CopyDirectoryFiles(
 //				ComputeError        error
 //			}
 //
+//	copiedDirTreeFiles			FileMgrCollection
+//
+//		If input parameter 'returnCopiedFilesList' is set
+//		to 'true', 'copiedDirTreeFiles' will return a
+//		populated File Manager Collection including all
+//		the files actually included in the directory tree
+//		copy operation.
+//
+//		If input parameter 'returnCopiedFilesList' is set
+//		to 'false', 'copiedDirTreeFiles' will return an
+//		empty and unpopulated instance of
+//		FileMgrCollection. This means that the files
+//		actually copied by this method will NOT be
+//		documented.
+//
 //	nonfatalErrs				[]error
 //
 //		An array of error objects.
@@ -1083,6 +1134,7 @@ func (dMgr *DirMgr) CopyDirectoryFiles(
 //		reasonable to continue code execution.
 func (dMgr *DirMgr) CopyDirectoryTree(
 	targetDMgr DirMgr,
+	returnCopiedFilesList bool,
 	copyEmptyTargetDirectory bool,
 	copyRegularFiles bool,
 	copySymLinkFiles bool,
@@ -1090,6 +1142,7 @@ func (dMgr *DirMgr) CopyDirectoryTree(
 	fileSelectCriteria FileSelectionCriteria,
 	errorPrefix interface{}) (
 	dTreeCopyStats DirTreeCopyStats,
+	copiedDirTreeFiles FileMgrCollection,
 	nonfatalErrs []error,
 	fatalErr error) {
 
@@ -1114,15 +1167,20 @@ func (dMgr *DirMgr) CopyDirectoryTree(
 
 		nonfatalErrs = append(nonfatalErrs, err)
 
-		return dTreeCopyStats, nonfatalErrs, fatalErr
+		return dTreeCopyStats,
+			copiedDirTreeFiles,
+			nonfatalErrs,
+			fatalErr
 	}
 
 	dTreeCopyStats,
+		copiedDirTreeFiles,
 		nonfatalErrs,
 		fatalErr = new(dirMgrHelperNanobot).
 		copyDirectoryTree(
 			dMgr,
 			&targetDMgr,
+			returnCopiedFilesList,
 			false, // skipTopLevelDirectory
 			copyEmptyTargetDirectory,
 			copyRegularFiles,
@@ -1134,6 +1192,7 @@ func (dMgr *DirMgr) CopyDirectoryTree(
 			ePrefix)
 
 	return dTreeCopyStats,
+		copiedDirTreeFiles,
 		nonfatalErrs,
 		fatalErr
 }
@@ -1425,16 +1484,38 @@ func (dMgr *DirMgr) CopyOut(
 //
 // ----------------------------------------------------------------
 //
-// # IMPORTANT
+// # BE ADVISED
 //
 //	(1)	This method will scan subdirectories for
-//		selected files in the directory tree defined by
-//		the current instance of DirMgr. This scan and
-//		copy operation EXCLUDES the top level or parent
-//		directory specified by the current instance of
-//		DirMgr.
+//		selected files in the source directory tree
+//		defined by the current instance of DirMgr.
+//		The files in this source directory tree will be
+//		copied to a corresponding target directory tree
+//		identified by input parameter 'targetDMgr'.
 //
-//	(2)	To scan and copy selected files in the entire
+//	(2)	This scan and copy operation EXCLUDES the top
+//		level or parent directory specified by the
+//		current instance of DirMgr.
+//
+//	(3)	If a subdirectory in the target directory tree
+//		does not exist, this method will attempt to
+//		create it.
+//
+//	(4)	Files will only be copied if they meet the File
+//		Type criteria and the File Characteristics
+//		Criteria.
+//
+//		File Type criteria are specified by input
+//		parameters:
+//
+//			copyRegularFiles bool
+//			copySymLinkFiles bool
+//			copyOtherNonRegularFiles bool
+//
+//		File Characteristics Selection criteria are
+//		specified by input parameter 'fileSelectCriteria'.
+//
+//	(5)	To scan and copy selected files in the entire
 //		directory tree, thereby INCLUDING the parent
 //		directory in the scan and copy operation, see
 //		method:
@@ -1445,14 +1526,28 @@ func (dMgr *DirMgr) CopyOut(
 //
 // # Input Parameters
 //
-//	targetDMgr					DirMgr
+//	targetDMgr						DirMgr
 //
 //		A concrete instance of DirMgr. This instance
 //		specifies the target directory to which the
 //		contents of the current DirMgr directory tree
 //		will be copied.
 //
-//	copyEmptyDirectories		bool
+//	returnCopiedFilesList			bool
+//
+//		If input parameter 'returnCopiedFilesList' is set
+//		to 'true', this method will return a populated
+//		File Manager Collection documenting all the files
+//		actually included in the directory tree copy
+//		operation.
+//
+//		If input parameter 'returnCopiedFilesList' is set
+//		to 'false', this method will return an empty and
+//		unpopulated instance of FileMgrCollection. This
+//		means that the files actually copied by this
+//		method will NOT be documented.
+//
+//	copyEmptyTargetDirectory		bool
 //
 //		If set to 'true' the target directory will be
 //		created regardless of whether any files are
@@ -1461,11 +1556,34 @@ func (dMgr *DirMgr) CopyOut(
 //		file selection criteria specified by input
 //		parameter 'fileSelectCriteria'.
 //
+//	copyRegularFiles			bool
+//
+//		If this parameter is set to 'true', Regular Files,
+//		which also meet the File Selection Characteristics
+//		criteria (fileSelectCriteria), will be included
+//		in the copy operation.
+//
+//		Regular Files include text files, image files and
+//		executable files.
+//
+//		For an explanation of Regular and Non-Regular
+//		files, see the section on "Definition Of Terms",
+//		above.
+//
+//		If input parameters 'copyRegularFiles',
+//		'copySymLinkFiles' and 'copyOtherNonRegularFiles'
+//		are all set to 'false', an error will be returned.
+//
 //	copySymLinkFiles				bool
 //
-//		If this parameter is set to 'true', SymLink files
-//		which meet the file selection criteria, will be
-//		included in the copy operation.
+//		If this parameter is set to 'true', SymLink Files
+//		which also meet the File Selection Characteristics
+//		criteria (fileSelectCriteria), will be included
+//		in the copy operation.
+//
+//		If input parameters 'copyRegularFiles',
+//		'copySymLinkFiles' and 'copyOtherNonRegularFiles'
+//		are all set to 'false', an error will be returned.
 //
 //	copyOtherNonRegularFiles		bool
 //
@@ -1479,44 +1597,46 @@ func (dMgr *DirMgr) CopyOut(
 //		include device files, named pipes, and sockets.
 //		See the Definition Of Terms section above.
 //
-//	fileSelectCriteria			FileSelectionCriteria
+//	fileSelectCriteria				FileSelectionCriteria
 //
-//		This input parameter should be configured with
-//		the desired file selection criteria. Files
-//		matching this criteria will be copied from the
-//		parent directory identified by the current
-//		instance of DirMgr to the target directory tree
-//		specified by input parameter 'targetDMgr'.
+//		In addition to the File Type Selection Criteria,
+//		selected files must conform to the File
+//		Characteristics criteria specified by
+//		'fileSelectCriteria'.
 //
-//		If file 'fileSelectCriteria' is uninitialized
-//		(FileSelectionCriteria{}), all files residing
-//		in the subdirectory tree defined by the current
-//		DirMgr parent directory will be copied to the
-//		target directory tree.
+//		File Characteristics Selection criteria allows
+//		users to screen files for File Name, File
+//		Modification Date and File Mode.
 //
-//			type FileSelectionCriteria struct {
-//			 FileNamePatterns    []string
-//				An array of strings containing File Name Patterns
+//		Files matching these selection criteria, and the
+//		File Type filter, will be included in the copy
+//		operation performed by this method.
 //
-//			 FilesOlderThan      time.Time
-//			 	Match files with older modification date times
+//		type FileSelectionCriteria struct {
+//		 FileNamePatterns    []string
+//			An array of strings containing File Name Patterns
 //
-//			 FilesNewerThan      time.Time
-//			 	Match files with newer modification date times
+//		 FilesOlderThan      time.Time
+//		 	Match files with older modification date times
 //
-//			 SelectByFileMode    FilePermissionConfig
-//			 	Match file mode (os.FileMode).
+//		 FilesNewerThan      time.Time
+//		 	Match files with newer modification date times
 //
-//			 SelectCriterionModeFileSelectCriterionMode
-//			 	Specifies 'AND' or 'OR' selection mode
-//			}
+//		 SelectByFileMode    FilePermissionConfig
+//		 	Match file mode (os.FileMode).
 //
-//		The FileSelectionCriteria type allows for configuration of single or multiple file
-//		selection criterion. The 'SelectCriterionMode' can be used to specify whether the
-//		file must match all, or any one, of the active file selection criterion.
+//		 SelectCriterionModeFileSelectCriterionMode
+//		 	Specifies 'AND' or 'OR' selection mode
+//		}
 //
-//		Elements of the FileSelectionCriteria are described
-//		below:
+//	  The FileSelectionCriteria Type allows for
+//	  configuration of single or multiple file selection
+//	  criterion. The 'SelectCriterionMode' can be used to
+//	  specify whether the file must match all, or any one,
+//	  of the active file selection criterion.
+//
+//	  Elements of the File Characteristics Selection
+//	  Criteria are described below:
 //
 //			FileNamePatterns		[]string
 //
@@ -1622,21 +1742,22 @@ func (dMgr *DirMgr) CopyOut(
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria object
-//		are 'Inactive' or 'Not Set' (set to their zero or default values), then all
-//		the files processed in the DirMgr subdirectory tree will be selected and
-//		copied to the target directory tree.
+//		If all of the file selection criterion in the FileSelectionCriteria
+//		object are 'Inactive' or 'Not Set' (set to their zero or default values),
+//		then all the files meeting the File Type requirements in the source
+//		directory will be selected.
 //
 //			Example:
 //			  fsc := FileSelectCriterionMode{}
 //
 //			  In this example, 'fsc' is NOT initialized. Therefore,
 //			  all the selection criterion are 'Inactive'. Consequently,
-//			  all the files encountered in the DirMgr subdirectory tree
-//			  during the search operation will be selected and copied
-//			  to the target directory tree.
+//			  all the files meeting the File Type requirements in the
+//			  source directory will be selected.
 //
-//	errorPrefix					interface{}
+//		------------------------------------------------------------------------
+//
+//	errorPrefix						interface{}
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
@@ -1699,7 +1820,7 @@ func (dMgr *DirMgr) CopyOut(
 //
 // # Return Values
 //
-//	dTreeCopyStats				DirTreeCopyStats
+//	dTreeCopyStats					DirTreeCopyStats
 //
 //		If this method completes successfully, an
 //		instance of DirTreeCopyStats will be returned
@@ -1718,7 +1839,22 @@ func (dMgr *DirMgr) CopyOut(
 //				ComputeError        error
 //			}
 //
-//	nonfatalErrs				[]error
+//	copiedDirTreeFiles				FileMgrCollection
+//
+//		If input parameter 'returnCopiedFilesList' is set
+//		to 'true', 'copiedDirTreeFiles' will return a
+//		populated File Manager Collection including all
+//		the files actually included in the directory tree
+//		copy operation.
+//
+//		If input parameter 'returnCopiedFilesList' is set
+//		to 'false', 'copiedDirTreeFiles' will return an
+//		empty and unpopulated instance of
+//		FileMgrCollection. This means that the files
+//		actually copied by this method will NOT be
+//		documented.
+//
+//	nonfatalErrs					[]error
 //
 //		An array of error objects.
 //
@@ -1743,7 +1879,7 @@ func (dMgr *DirMgr) CopyOut(
 //		An error array may be consolidated into a single
 //		error using method StrMech.ConsolidateErrors()
 //
-//	fatalErr					error
+//	fatalErr						error
 //
 //		If this method completes successfully, this
 //		returned error Type is set equal to 'nil'.
@@ -1758,12 +1894,15 @@ func (dMgr *DirMgr) CopyOut(
 //		message.
 func (dMgr *DirMgr) CopySubDirectoryTree(
 	targetDMgr DirMgr,
-	copyEmptyDirectories bool,
+	returnCopiedFilesList bool,
+	copyEmptyTargetDirectory bool,
+	copyRegularFiles bool,
 	copySymLinkFiles bool,
 	copyOtherNonRegularFiles bool,
 	fileSelectCriteria FileSelectionCriteria,
 	errorPrefix interface{}) (
 	dTreeCopyStats DirTreeCopyStats,
+	copiedDirTreeFiles FileMgrCollection,
 	nonfatalErrs []error,
 	fatalErr error) {
 
@@ -1789,17 +1928,23 @@ func (dMgr *DirMgr) CopySubDirectoryTree(
 
 		nonfatalErrs = append(nonfatalErrs, err)
 
-		return dTreeCopyStats, nonfatalErrs, fatalErr
+		return dTreeCopyStats,
+			copiedDirTreeFiles,
+			nonfatalErrs,
+			fatalErr
 	}
 
 	dTreeCopyStats,
+		copiedDirTreeFiles,
 		nonfatalErrs,
 		fatalErr = new(dirMgrHelperNanobot).
 		copyDirectoryTree(
 			dMgr,
 			&targetDMgr,
+			returnCopiedFilesList,
 			true, // skipTopLevelDirectory
-			copyEmptyDirectories,
+			copyEmptyTargetDirectory,
+			copyRegularFiles,
 			copySymLinkFiles,
 			copyOtherNonRegularFiles,
 			fileSelectCriteria,
@@ -1807,7 +1952,10 @@ func (dMgr *DirMgr) CopySubDirectoryTree(
 			"targetDMgr",
 			ePrefix)
 
-	return dTreeCopyStats, nonfatalErrs, fatalErr
+	return dTreeCopyStats,
+		copiedDirTreeFiles,
+		nonfatalErrs,
+		fatalErr
 }
 
 // DeleteAll

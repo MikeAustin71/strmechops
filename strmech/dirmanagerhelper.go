@@ -6174,12 +6174,14 @@ func (dMgrHlpr *dirMgrHelper) moveDirectoryTree(
 	var dTreeCopyStats DirTreeCopyStats
 
 	dTreeCopyStats,
+		_,
 		errs2,
 		err2 =
 		new(dirMgrHelperNanobot).
 			copyDirectoryTree(
 				dMgr,
 				targetDMgr,
+				false, // returnCopiedFilesList
 				false, // skipTopLevelDirectory
 				false, // copyEmptyTargetDirectory
 				true,  // copyRegularFiles
@@ -6497,17 +6499,19 @@ func (dMgrHlpr *dirMgrHelper) moveSubDirectoryTree(
 	var err2 error
 
 	dTreeCopyStats,
+		_,
 		errs2,
 		err2 =
 		new(dirMgrHelperNanobot).
 			copyDirectoryTree(
 				dMgr,
 				targetDMgr,
-				true, // skipTopLevelDirectory
-				true, // copyEmptyDirectories
-				true, // copyRegularFiles
-				true, // copySymLinkFiles,
-				true, // copyOtherNonRegularFiles
+				false, // returnCopiedFilesList
+				true,  // skipTopLevelDirectory
+				true,  // copyEmptyDirectories
+				true,  // copyRegularFiles
+				true,  // copySymLinkFiles,
+				true,  // copyOtherNonRegularFiles
 				fileSelectCriteria,
 				"dMgr",
 				"targetDMgr",

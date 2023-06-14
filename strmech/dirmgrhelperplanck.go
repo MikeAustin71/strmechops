@@ -362,10 +362,10 @@ type dirMgrHelperPlanck struct {
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria object are
-//		'Inactive' or 'Not Set' (set to their zero or default values), then all the
-//		files meeting the File Type requirements in the directory defined by 'dMgr'
-//		will be selected.
+//		If all of the file selection criterion in the FileSelectionCriteria
+//		object are 'Inactive' or 'Not Set' (set to their zero or default values),
+//		then all the files meeting the File Type requirements in the directory
+//		defined by 'sourceDMgr' will be selected.
 //
 //			Example:
 //			  fsc := FileSelectCriterionMode{}
@@ -373,7 +373,7 @@ type dirMgrHelperPlanck struct {
 //			  In this example, 'fsc' is NOT initialized. Therefore,
 //			  all the selection criterion are 'Inactive'. Consequently,
 //			  all the files meeting the File Type requirements in the
-//			  directory defined by 'dMgr' will be selected.
+//			  directory defined by 'sourceDMgr' will be selected.
 //
 //		------------------------------------------------------------------------
 //
@@ -438,7 +438,7 @@ type dirMgrHelperPlanck struct {
 //
 //		If input parameter 'returnCopiedFilesList' is set
 //		to 'true', 'copiedFiles' will return a populated
-//		File Manager Collection including all the files
+//		File Manager Collection documenting all the files
 //		actually included in the copy operation.
 //
 //		If input parameter 'returnCopiedFilesList' is set
