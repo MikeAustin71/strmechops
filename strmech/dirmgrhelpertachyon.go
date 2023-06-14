@@ -50,20 +50,27 @@ type dirMgrHelperTachyon struct {
 // comply with two filters: File Type and File
 // Characteristics.
 //
-// First, the file must comply with the specified File
-// Type criteria. In terms of File Type, files are
-// classified as directories, regular files, SymLink
-// files or other non-regular files. For an explanation
-// of Regular and Non-Regular files, see the Definition
-// of Terms section below.
+// To be eligible for selection, the file must first
+// conform to the specified File Type criteria. In
+// terms of File Type, files are classified as
+// directories, regular files, SymLink files or other
+// non-regular files. For an explanation of Regular and
+// Non-Regular files, see the Definition of Terms section
+// below.
 //
 // Screening criteria for File Type is controlled by the
-// following three input parameters:
+// following four input parameters:
 //
 //	getDirectoryFileInfos - bool
 //	getRegularFileInfos - bool
 //	getSymLinksFileInfos - bool
 //	getOtherNonRegularFiles - bool
+//
+// File Types eligible for this selection operation
+// include Directories, Regular Files such as text files,
+// image files and/ executable files, SymLink files and
+// other Non-Regular Files such as device files, named
+// pipes and sockets.
 //
 // In addition to File Type, selected files must comply
 // with the File Characteristics criteria specified by
@@ -139,8 +146,10 @@ type dirMgrHelperTachyon struct {
 //	getDirectoryFileInfos			bool
 //
 //		If this parameter is set to 'true', directory
-//		entries will be included in the os.FileInfo
-//		information ('fileInfos') returned by this method.
+//		entries which also meet the File Selection
+//		Characteristics criteria (fileSelectCriteria),
+//		will be included in the os.FileInfo information
+//		('fileInfos') returned by this method.
 //
 //		If input parameters 'getDirectoryFileInfos',
 //		'getRegularFileInfos', 'getSymLinksFileInfos' and
@@ -149,7 +158,9 @@ type dirMgrHelperTachyon struct {
 //
 //	getRegularFileInfos				bool
 //
-//		If this parameter is set to 'true', regular files
+//		If this parameter is set to 'true', regular files,
+//		which also meet the File Selection
+//		Characteristics criteria (fileSelectCriteria),
 //		will be included in the os.FileInfo information
 //		('fileInfos') returned by this method.
 //
@@ -167,10 +178,13 @@ type dirMgrHelperTachyon struct {
 //
 //	getSymLinksFileInfos			bool
 //
-//		If this parameter is set to 'true', SymLink files
+//		If this parameter is set to 'true', SymLink files,
+//		which also meet the File Selection
+//		Characteristics criteria (fileSelectCriteria),
 //		will be included in the os.FileInfo information
-//		('fileInfos') returned by this method.  For an
-//		explanation of SymLink, Regular and Non-Regular
+//		('fileInfos') returned by this method.
+//
+//		For an explanation of Regular and Non-Regular
 //		files, see the section on "Definition Of Terms",
 //		above.
 //
@@ -181,8 +195,10 @@ type dirMgrHelperTachyon struct {
 //
 //	getOtherNonRegularFileInfos		bool
 //
-//		If this parameter is set to 'true', other
-//		Non-Regular files will be included in the
+//		If this parameter is set to 'true', Other
+//		Non-Regular files, which also meet the File
+//		Selection Characteristics criteria
+//		(fileSelectCriteria), will be included in the
 //		os.FileInfo information ('fileInfos') returned by
 //		this method.
 //
@@ -198,14 +214,14 @@ type dirMgrHelperTachyon struct {
 //
 //	fileSelectCriteria				FileSelectionCriteria
 //
-//	  File selection criteria defining file
-//	  characteristics used to screen files in the
-//	  directory specified by input parameter 'dMgr'.
+//		In addition to the File Type Selection Criteria,
+//		selected files must conform to the File
+//		Characteristics specified by 'fileSelectCriteria'.
 //
-//	  Files matching these selection criteria, and the
-//	  File Type filter, will be included in the array of
-//	  FileInfoPlus objects containing os.FileInfo
-//	  information returned by this method.
+//		Files matching these selection criteria, and the
+//		File Type filter, will be included in the array of
+//		FileInfoPlus objects containing os.FileInfo
+//		information returned by this method.
 //
 //		type FileSelectionCriteria struct {
 //		 FileNamePatterns    []string

@@ -14,54 +14,48 @@ type dirMgrHelperPlanck struct {
 // copyDirectoryFiles
 //
 // Helper method used by DirMgr. This method copies
-// files from the directory identified by DirMgr object
-// (sourceDMgr) to a target directory (targetDMgr).
+// selected files from the directory identified by DirMgr
+// object (sourceDMgr) to a target directory
+// (targetDMgr).
 //
-// The files to be copied are selected according to
-// file characteristics selection criteria specified by
-// input parameter, 'fileSelectCriteria'. File
-// Characteristics Selection criteria allows users to
-// screen files for File Name, File Modification Date and
-// File Mode.
+// To qualify as a selected file, the file entry must
+// comply with two filters: File Type and File
+// Characteristics.
+//
+// To be eligible for the copy operation, the file must
+// first comply with the specified File Type criteria. In
+// terms of File Type, files are classified as
+// directories, regular files, SymLink files or other
+// non-regular files. Since this method does NOT copy
+// directories, the only allowed file types are Regular
+// Files, SymLink Files and Other Non-Regular Files. For
+// an explanation of Regular and Non-Regular files, see
+// the Definition of Terms section below.
+//
+// Screening criteria for File Type is controlled by the
+// following three input parameters:
+//
+//	copyRegularFiles bool
+//	copySymLinkFiles bool
+//	copyOtherNonRegularFiles bool
+//
+// File Types eligible for this copy operation include
+// Regular Files such as text files, image files and
+// executable files, SymLink files and other Non-Regular
+// Files such as device files, named pipes and sockets.
+//
+// In addition to File Type, selected files must also
+// comply with the File Characteristics criteria
+// specified by input parameter, 'fileSelectCriteria'.
+// The File Characteristics Selection criteria allows
+// users to screen files for File Name, File Modification
+// Date and File Mode.
 //
 // The selected files are copied by a Copy IO operation.
 // For information on the Copy IO procedure see
 // FileHelper{}.CopyFileByIo() method and reference:
 //
 //	https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
-//
-// Files eligible for this copy operation include Regular
-// Files such as text files, image files and executable
-// files. Depending on the configuration of input
-// parameters 'copySymLinkFiles' and
-// 'copyOtherNonRegularFiles' eligible files may include
-// SymLink files and other Non-Regular Files such as
-// device files, named pipes and sockets.
-//
-// In Go programming language, a regular file is a file
-// that contains data in any format that can be read by
-// a user or an application. It is not a directory or a
-// device file.
-//
-// Examples of "regular" files include text files, image
-// files and executable files.
-//
-// Examples of non-regular files include directories,
-// device files, named pipes, sockets, and symbolic
-// links.
-//
-// Input parameters 'copyEmptyDirectories',
-// 'copySymLinkFiles', and 'copyOtherNonRegularFiles'
-// allow the users to specify that these non-regular
-// files should be included in the copy operation.
-//
-// If the target directory does not exist and files are
-// located matching the file selection criteria, this
-// method will attempt to create the target directory.
-// However, if no files meet the file selection criteria
-// as defined by input parameter,'fileSelectCriteria',
-// this method will NOT attempt to create the target
-// directory.
 //
 // ----------------------------------------------------------------
 //
@@ -73,6 +67,9 @@ type dirMgrHelperPlanck struct {
 //	that contains data in any format that can be read by
 //	a user or an application. It is not a directory or a
 //	device file.
+//
+//	Regular files include text files, image files and
+//	executable files.
 //
 //	Non-regular files include directories, device files,
 //	named pipes, sockets, and symbolic links.
@@ -93,13 +90,13 @@ type dirMgrHelperPlanck struct {
 //		https://en.wikipedia.org/wiki/Symbolic_link
 //
 //	It's true that a symlink is a shortcut file. But it's
-//	different from a standard shortcut that, say, a program
-//	installer has placed on your Windows desktop to make the
-//	program easier to run.
+//	different from a standard shortcut that a program
+//	installer might place on your Windows desktop to make
+//	the program easier to run.
 //
-//	Sure, clicking on either type of shortcut opens the
-//	linked object, but what goes on beneath the hood is
-//	different in both cases as we'll see next.
+//	Clicking on either type of shortcut opens the linked
+//	object. However, what goes on beneath the hood is
+//	different in both cases.
 //
 //	While a standard shortcut points to a certain object,
 //	a symlink makes it appear as if the linked object is
@@ -121,9 +118,17 @@ type dirMgrHelperPlanck struct {
 //	(2)	If the target directory does not exist, this method
 //		will attempt to create it.
 //
-//	(3)	Files will only be copied if they meet the file
-//		selection criteria specified by input parameter
-//	 	'fileSelectCriteria'.
+//	(3)	Files will only be copied if they meet the File Type
+//		criteria and the File Characteristics Criteria.
+//
+//		File Type criteria are specified by input parameters:
+//
+//			copyRegularFiles bool
+//			copySymLinkFiles bool
+//			copyOtherNonRegularFiles bool
+//
+//		File Characteristics Selection criteria is specified by
+//		input parameter 'fileSelectCriteria'.
 //
 // ----------------------------------------------------------------
 //
@@ -141,12 +146,91 @@ type dirMgrHelperPlanck struct {
 //		destination directory to which files from
 //		'sourceDMgr' will be copied.
 //
+//	returnCopiedFilesList		bool
+//
+//		If input parameter 'returnCopiedFilesList' is set
+//		to 'true', this method will return a populated
+//		File Manager Collection documenting all the files
+//		actually included in the copy operation.
+//
+//		If input parameter 'returnCopiedFilesList' is set
+//		to 'false', this method will return an empty and
+//		unpopulated instance of FileMgrCollection. This
+//		means that the files actually copied by this
+//		method will NOT be documented.
+//
+//	copyEmptyTargetDirectory	bool
+//
+//		If set to 'true' the target directory will be
+//		created regardless of whether any files are
+//		copied to that directory. Remember that files are
+//		only copied to the target directory if they meet
+//		the File Type and File Characteristics selection
+//		criteria.
+//
+//	copyRegularFiles			bool
+//
+//		If this parameter is set to 'true', Regular Files,
+//		which also meet the File Selection Characteristics
+//		criteria (fileSelectCriteria), will be included
+//		in the copy operation.
+//
+//		Regular Files include text files, image files and
+//		executable files.
+//
+//		For an explanation of Regular and Non-Regular
+//		files, see the section on "Definition Of Terms",
+//		above.
+//
+//		If input parameters 'copyRegularFiles',
+//		'copySymLinkFiles' and 'copyOtherNonRegularFiles'
+//		are all set to 'false', an error will be returned.
+//
+//	copySymLinkFiles			bool
+//
+//		If this parameter is set to 'true', SymLink Files
+//		which also meet the File Selection Characteristics
+//		criteria (fileSelectCriteria), will be included
+//		in the copy operation.
+//
+//		For an explanation of Regular and Non-Regular
+//		files, see the section on "Definition Of Terms",
+//		above.
+//
+//		If input parameters 'copyRegularFiles',
+//		'copySymLinkFiles' and 'copyOtherNonRegularFiles'
+//		are all set to 'false', an error will be returned.
+//
+//	copyOtherNonRegularFiles	bool
+//
+//		If this parameter is set to 'true', Other
+//		Non-Regular Files, which also meet the File
+//		Selection Characteristics criteria
+//		(fileSelectCriteria), will be included in the
+//		copy operation.
+//
+//		Examples of other non-regular file types
+//		include device files, named pipes, and sockets.
+//		See the Definition Of Terms section above.
+//
+//		If input parameters 'copyRegularFiles',
+//		'copySymLinkFiles' and 'copyOtherNonRegularFiles'
+//		are all set to 'false', an error will be returned.
+//
 //	fileSelectCriteria			FileSelectionCriteria
 //
-//	  This input parameter should be configured with the
-//	  desired file selection criteria. Files matching
-//	  this criteria will be copied to the directory
-//	  identified by input parameter, 'targetDir'.
+//		In addition to the File Type Selection Criteria,
+//		selected files must conform to the File
+//		Characteristics criteria specified by
+//		'fileSelectCriteria'.
+//
+//		File Characteristics Selection criteria allows
+//		users to screen files for File Name, File
+//		Modification Date and File Mode.
+//
+//		Files matching these selection criteria, and the
+//		File Type filter, will be included in the copy
+//		operation performed by this method.
 //
 //		type FileSelectionCriteria struct {
 //		 FileNamePatterns    []string
@@ -165,14 +249,14 @@ type dirMgrHelperPlanck struct {
 //		 	Specifies 'AND' or 'OR' selection mode
 //		}
 //
-//	  The FileSelectionCriteria type allows for
+//	  The FileSelectionCriteria Type allows for
 //	  configuration of single or multiple file selection
 //	  criterion. The 'SelectCriterionMode' can be used to
 //	  specify whether the file must match all, or any one,
 //	  of the active file selection criterion.
 //
-//	  Elements of the FileSelectionCriteria are described
-//	  below:
+//	  Elements of the File Characteristics Selection
+//	  Criteria are described below:
 //
 //			FileNamePatterns		[]string
 //
@@ -280,44 +364,18 @@ type dirMgrHelperPlanck struct {
 //
 //		If all of the file selection criterion in the FileSelectionCriteria object are
 //		'Inactive' or 'Not Set' (set to their zero or default values), then all the
-//		files processed in the directory tree will be selected.
+//		files meeting the File Type requirements in the directory defined by 'dMgr'
+//		will be selected.
 //
 //			Example:
 //			  fsc := FileSelectCriterionMode{}
 //
 //			  In this example, 'fsc' is NOT initialized. Therefore,
 //			  all the selection criterion are 'Inactive'. Consequently,
-//			  all the files encountered in the target directory during
-//			  the search operation will be selected.
+//			  all the files meeting the File Type requirements in the
+//			  directory defined by 'dMgr' will be selected.
 //
 //		------------------------------------------------------------------------
-//
-//	copyEmptyDirectories			bool
-//
-//		If set to 'true' the target directory will be
-//		created regardless of whether any files are
-//		copied to that directory. Remember that files are
-//		only copied to the target directory if they meet
-//		file selection criteria specified by input
-//		parameter 'fileSelectCriteria'.
-//
-//	copySymLinkFiles				bool
-//
-//		If this parameter is set to 'true', SymLink files
-//		which meet the file selection criteria, will be
-//		included in the copy operation.
-//
-//	copyOtherNonRegularFiles		bool
-//
-//		If this parameter is set to 'true', other
-//		non-regular file types, besides SymLinks and
-//		directories specified above, will be included
-//		in the copy operation if they meet the file
-//		selection criteria.
-//
-//		Examples of other non-regular file types
-//		include device files, named pipes, and sockets.
-//		See the Definition Of Terms section above.
 //
 //	sourceDMgrLabel				string
 //
@@ -376,6 +434,17 @@ type dirMgrHelperPlanck struct {
 //			ComputeError        error
 //		}
 //
+//	copiedFiles					FileMgrCollection
+//
+//		If input parameter 'returnCopiedFilesList' is set
+//		to 'true', 'copiedFiles' will return a populated
+//		File Manager Collection including all the files
+//		actually included in the copy operation.
+//
+//		If input parameter 'returnCopiedFilesList' is set
+//		to 'false', 'copiedFiles' will return an empty and
+//		unpopulated instance of FileMgrCollection.
+//
 //	subDirectories				DirMgrCollection
 //
 //		If this method completes successfully, this
@@ -399,10 +468,17 @@ type dirMgrHelperPlanck struct {
 //		processing, the returned error Type will
 //		encapsulate appropriate error messages.
 //
-//		Non-fatal errors usually involve failure
-//		to copy individual files.
+//		Non-fatal errors usually involves failures
+//		associated with individual files.
 //
-//		The returned error messages will incorporate
+//		The default behavior for Non-Fatal errors
+//		accumulates these errors and returns them in an
+//		array of errors. However, under the default
+//		behavior, processing continues until a Fatal
+//		Error is encountered or the method completes
+//		processing and exits normally.
+//
+//		Any returned error messages will incorporate
 //		the method chain and text passed by input
 //		parameter, 'errPrefDto'. The 'errPrefDto' text
 //		will be prefixed or attached to the beginning of
@@ -412,6 +488,9 @@ type dirMgrHelperPlanck struct {
 //
 //		An error array may be consolidated into a single
 //		error using method StrMech.ConsolidateErrors()
+//
+//		Upon method completion, be sure to check both
+//		Non-Fatal and Fatal errors.
 //
 //	fatalErr					error
 //
@@ -429,14 +508,17 @@ type dirMgrHelperPlanck struct {
 func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 	sourceDMgr *DirMgr,
 	targetDMgr *DirMgr,
-	fileSelectCriteria FileSelectionCriteria,
-	copyEmptyDirectories bool,
+	returnCopiedFilesList bool,
+	copyEmptyTargetDirectory bool,
+	copyRegularFiles bool,
 	copySymLinkFiles bool,
 	copyOtherNonRegularFiles bool,
+	fileSelectCriteria FileSelectionCriteria,
 	sourceDMgrLabel string,
 	targetDMgrLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
 	dirCopyStats DirectoryCopyStats,
+	copiedFiles FileMgrCollection,
 	subDirectories DirMgrCollection,
 	nonfatalErrs []error,
 	fatalErr error) {
@@ -464,7 +546,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 	if fatalErr != nil {
 
-		return dirCopyStats, subDirectories, nonfatalErrs, fatalErr
+		return dirCopyStats, copiedFiles, subDirectories, nonfatalErrs, fatalErr
 	}
 
 	subDirectories = new(DirMgrCollection).New()
@@ -487,7 +569,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 	if fatalErr != nil {
 
-		return dirCopyStats, subDirectories, nonfatalErrs, fatalErr
+		return dirCopyStats, copiedFiles, subDirectories, nonfatalErrs, fatalErr
 	}
 
 	if len(targetDMgrLabel) == 0 {
@@ -508,7 +590,23 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 	if fatalErr != nil {
 
-		return dirCopyStats, subDirectories, nonfatalErrs, fatalErr
+		return dirCopyStats, copiedFiles, subDirectories, nonfatalErrs, fatalErr
+	}
+
+	if copyRegularFiles == false &&
+		copySymLinkFiles == false &&
+		copyOtherNonRegularFiles == false {
+
+		fatalErr = fmt.Errorf("%v\n"+
+			"Fatal Error: File Type filters are conflicted!\n"+
+			"All of the File Type filters are set to 'false'\n"+
+			"This gurantees that NO files will be selected.\n"+
+			"copyRegularFiles == false\n"+
+			"copySymLinkFiles == false\n"+
+			"copyOtherNonRegularFiles == false\n",
+			ePrefix.String())
+
+		return dirCopyStats, copiedFiles, subDirectories, nonfatalErrs, fatalErr
 	}
 
 	isFileSelectionCriteriaActive :=
@@ -518,7 +616,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 	dMgrHlprMolecule := new(dirMgrHelperMolecule)
 
-	if !targetPathDoesExist && copyEmptyDirectories {
+	if !targetPathDoesExist && copyEmptyTargetDirectory {
 
 		dirCreated,
 			fatalErr = dMgrHlprMolecule.lowLevelMakeDir(
@@ -528,7 +626,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 		if fatalErr != nil {
 
-			return dirCopyStats, subDirectories, nonfatalErrs, fatalErr
+			return dirCopyStats, copiedFiles, subDirectories, nonfatalErrs, fatalErr
 		}
 
 		if dirCreated {
@@ -552,10 +650,10 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 		fatalErr = new(dirMgrHelperTachyon).
 		getFileInfosFromDirectory(
 			sourceDMgr,
-			true,  // getDirectoryFileInfos
-			true,  // getRegularFileInfos
-			false, // copySymLinkFiles,
-			false, // copyOtherNonRegularFiles
+			true,                     // getDirectoryFileInfos
+			copyRegularFiles,         // getRegularFileInfos
+			copySymLinkFiles,         // copySymLinkFiles,
+			copyOtherNonRegularFiles, // copyOtherNonRegularFiles
 			FileSelectionCriteria{},
 			sourceDMgrLabel,
 			ePrefix.XCpy(sourceDMgrLabel))
@@ -568,7 +666,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 	if fatalErr != nil {
 
-		return dirCopyStats, subDirectories, nonfatalErrs, fatalErr
+		return dirCopyStats, copiedFiles, subDirectories, nonfatalErrs, fatalErr
 	}
 
 	if lenFileInfos == 0 {
@@ -584,7 +682,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 			sourceDMgrLabel,
 			sourceDMgr.absolutePath)
 
-		return dirCopyStats, subDirectories, nonfatalErrs, fatalErr
+		return dirCopyStats, copiedFiles, subDirectories, nonfatalErrs, fatalErr
 	}
 
 	var fh = new(FileHelper)
@@ -618,7 +716,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 						nameFileInfo.Name(),
 					err2.Error())
 
-				return dirCopyStats, subDirectories, nonfatalErrs, fatalErr
+				return dirCopyStats, copiedFiles, subDirectories, nonfatalErrs, fatalErr
 			}
 
 			continue
@@ -658,6 +756,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 				continue
 			}
+
 		} else {
 
 			isMatch = true
@@ -694,7 +793,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 						targetDMgr.absolutePath,
 						err.Error())
 
-					return dirCopyStats, subDirectories, nonfatalErrs, fatalErr
+					return dirCopyStats, copiedFiles, subDirectories, nonfatalErrs, fatalErr
 				}
 
 				targetPathDoesExist = true
@@ -708,7 +807,8 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 			fileMode = nameFileInfo.Mode()
 
-			if nameFileInfo.Mode().IsRegular() {
+			if fileMode.IsRegular() &&
+				copyRegularFiles {
 
 				doCopy = true
 
@@ -757,9 +857,41 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 					dirCopyStats.FileBytesNotCopied += uint64(nameFileInfo.Size())
 
-					return dirCopyStats, subDirectories, nonfatalErrs, fatalErr
+					return dirCopyStats, copiedFiles, subDirectories, nonfatalErrs, fatalErr
 
 				} else {
+
+					// The file was successfully copied
+
+					if returnCopiedFilesList {
+
+						err2 = copiedFiles.AddFileMgrByPathFileNameExt(
+							target,
+							ePrefix.XCpy("target"))
+
+						if err2 != nil {
+
+							nonfatalErrs = append(
+								nonfatalErrs,
+								fmt.Errorf(
+									"%v\n"+
+										"Non-Fatal Error\n"+
+										"Error from copiedFiles.AddFileMgrByPathFileNameExt()\n"+
+										"%v Directory Path= %v\n"+
+										"File Name = %v\n"+
+										"File Mode = %v\n"+
+										"File Path = %v\n"+
+										"Error= \n%v\n",
+									funcName,
+									targetDMgrLabel,
+									targetDMgr.absolutePath,
+									nameFileInfo.Name(),
+									nameFileInfo.Mode(),
+									target,
+									err2.Error()))
+						}
+
+					}
 
 					dirCopyStats.FilesCopied++
 
@@ -768,6 +900,8 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 			} else {
 
+				// The file was NOT copied
+
 				dirCopyStats.FilesNotCopied++
 
 				dirCopyStats.FileBytesNotCopied += uint64(nameFileInfo.Size())
@@ -775,7 +909,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 		}
 	}
 
-	return dirCopyStats, subDirectories, nonfatalErrs, fatalErr
+	return dirCopyStats, copiedFiles, subDirectories, nonfatalErrs, fatalErr
 }
 
 // deleteDirectoryFiles
@@ -979,10 +1113,18 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //
 //	fileSelectCriteria			FileSelectionCriteria
 //
-//	  This input parameter should be configured with the
-//	  desired file selection criteria. Files matching
-//	  this criteria will be deleted in the directory
-//	  identified by input parameter, 'targetDMgr'.
+//		In addition to the File Type Selection Criteria,
+//		selected files must conform to the File
+//		Characteristics criteria specified by
+//		'fileSelectCriteria'.
+//
+//		File Characteristics Selection criteria allows
+//		users to screen files for File Name, File
+//		Modification Date and File Mode.
+//
+//		Files matching these selection criteria, and the
+//		File Type filter, will be included in the file
+//		deletion operation performed by this method.
 //
 //		type FileSelectionCriteria struct {
 //		 FileNamePatterns    []string
@@ -1403,15 +1545,6 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 						nameFileInfo.Mode(),
 						targetDMgr.absolutePath+osPathSepStr+nameFileInfo.Name(),
 						err2.Error()))
-
-				// This file was NOT deleted.
-
-				deletedDirFileStats.FilesRemaining++
-
-				deletedDirFileStats.FilesRemainingBytes +=
-					uint64(nameFileInfo.Size())
-
-				continue
 			}
 		}
 

@@ -205,13 +205,16 @@ func TestDirMgr_CopyDirectory_000100(t *testing.T) {
 	var nonfatalErrs []error
 
 	dirCopyStats,
+		_,
 		nonfatalErrs,
 		fatalErr = srcDMgr.CopyDirectoryFiles(
 		targetDMgr,
+		false, // returnCopiedFilesList
+		false, // copyEmptyTargetDirectory
+		true,  // copyRegularFiles
+		true,  // copySymLinkFiles
+		true,  // copyOtherNonRegularFiles
 		fsc,
-		false,
-		true,
-		true,
 		ePrefix.XCpy("targetDMgr"))
 
 	if len(nonfatalErrs) > 0 {

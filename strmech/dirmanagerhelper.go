@@ -6181,7 +6181,8 @@ func (dMgrHlpr *dirMgrHelper) moveDirectoryTree(
 				dMgr,
 				targetDMgr,
 				false, // skipTopLevelDirectory
-				true,  // copyEmptyDirectories
+				false, // copyEmptyTargetDirectory
+				true,  // copyRegularFiles
 				true,  // copySymLinkFiles
 				true,  // copyOtherNonRegularFiles
 				fileSelectCriteria,
@@ -6504,6 +6505,7 @@ func (dMgrHlpr *dirMgrHelper) moveSubDirectoryTree(
 				targetDMgr,
 				true, // skipTopLevelDirectory
 				true, // copyEmptyDirectories
+				true, // copyRegularFiles
 				true, // copySymLinkFiles,
 				true, // copyOtherNonRegularFiles
 				fileSelectCriteria,

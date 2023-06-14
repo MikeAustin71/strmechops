@@ -21,8 +21,38 @@ type dirMgrHelperNanobot struct {
 // If the target directory does not exist, this method
 // will attempt to create it.
 //
-// The files to be copied are selected according to
-// file selection criteria specified by input parameter,
+// To qualify as a selected file, the file entry must
+// comply with two filters: File Type and File
+// Characteristics.
+//
+// To be eligible for the copy operation, the file must
+// first comply with the specified File Type criteria. In
+// terms of File Type, files are classified as
+// directories, regular files, SymLink files or other
+// non-regular files. Since this method does NOT copy
+// directories, the only allowed file types are Regular
+// Files, SymLink Files and Other Non-Regular Files. For
+// an explanation of Regular and Non-Regular files, see
+// the Definition of Terms section below.
+//
+// Screening criteria for File Type is controlled by the
+// following three input parameters:
+//
+//	copyRegularFiles bool
+//	copySymLinkFiles bool
+//	copyOtherNonRegularFiles bool
+//
+// File Types eligible for this copy operation include
+// Regular Files such as text files, image files and
+// executable files, SymLink files and other Non-Regular
+// Files such as device files, named pipes and sockets.
+//
+// In addition to File Type, selected files must also
+// comply with the File Characteristics criteria
+// specified by input parameter, 'fileSelectCriteria'.
+// The File Characteristics Selection criteria allows
+// users to screen files for File Name, File Modification
+// Date and File Mode.
 // 'fileSelectCriteria'.
 //
 // The selected files are copied by a Copy IO operation.
@@ -30,35 +60,6 @@ type dirMgrHelperNanobot struct {
 // FileHelper{}.CopyFileByIo() method and reference:
 //
 //	https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
-//
-// This method copies "regular" files plus certain
-// non-regular files depending on input parameter values
-// supplied by the user.
-//
-// In Go programming language, a regular file is a file
-// that contains data in any format that can be read by
-// a user or an application. It is not a directory or a
-// device file.
-//
-// Examples of "regular" files include text files, image
-// files and executable files.
-//
-// Examples of non-regular files include directories,
-// device files, named pipes, sockets, and symbolic
-// links.
-//
-// Input parameters 'copyEmptyDirectories',
-// 'copySymLinkFiles', and 'copyOtherNonRegularFiles'
-// allow the users to specify that these non-regular
-// files should be included in the copy operation.
-//
-// If the target directory does not exist and files are
-// located matching the file selection criteria, this
-// method will attempt to create the target directory.
-// However, if no files meet the file selection criteria
-// as defined by input parameter,'fileSelectCriteria',
-// this method will NOT attempt to create the target
-// directory.
 //
 // ----------------------------------------------------------------
 //
@@ -113,12 +114,28 @@ type dirMgrHelperNanobot struct {
 //
 // # BE ADVISED
 //
-//	(1)	If the target directory does not exist, this method
-//		will attempt to create it.
+//	(1)	This method copies ALL THE FILES residing in the
+//		entire the directory tree identified by input
+//		parameter 'sourceDMgr' to the directory tree
+//		identified by input parameter 'targetDMgr'.
 //
-//	(2)	Files will only be copied if they meet the file
-//		selection criteria specified by input parameter
-//	 	'fileSelectCriteria'.
+//	(2)	If a directory in the target directory tree does
+//		not exist, this method will attempt to create it.
+//
+//	(3)	Files will only be copied if they meet the File
+//		Type criteria and the File Characteristics
+//		Criteria.
+//
+//		File Type criteria are specified by input
+//		parameters:
+//
+//			copyRegularFiles bool
+//			copySymLinkFiles bool
+//			copyOtherNonRegularFiles bool
+//
+//		File Characteristics Selection criteria are
+//		specified by input parameter
+//		'fileSelectCriteria'.
 //
 // ----------------------------------------------------------------
 //
@@ -148,20 +165,43 @@ type dirMgrHelperNanobot struct {
 //		be copied to the directory tree identified by
 //		input parameter 'targetDMgr'.
 //
-//	copyEmptyDirectories		bool
+//	copyEmptyTargetDirectory	bool
 //
 //		If set to 'true' the target directory will be
 //		created regardless of whether any files are
 //		copied to that directory. Remember that files are
 //		only copied to the target directory if they meet
-//		file selection criteria specified by input
-//		parameter 'fileSelectCriteria'.
+//		the File Type and File Characteristics selection
+//		criteria.
+//
+//	copyRegularFiles			bool
+//
+//		If this parameter is set to 'true', Regular Files,
+//		which also meet the File Selection Characteristics
+//		criteria (fileSelectCriteria), will be included
+//		in the copy operation.
+//
+//		Regular Files include text files, image files and
+//		executable files.
+//
+//		For an explanation of Regular and Non-Regular
+//		files, see the section on "Definition Of Terms",
+//		above.
+//
+//		If input parameters 'copyRegularFiles',
+//		'copySymLinkFiles' and 'copyOtherNonRegularFiles'
+//		are all set to 'false', an error will be returned.
 //
 //	copySymLinkFiles				bool
 //
-//		If this parameter is set to 'true', SymLink files
-//		which meet the file selection criteria, will be
-//		included in the copy operation.
+//		If this parameter is set to 'true', SymLink Files
+//		which also meet the File Selection Characteristics
+//		criteria (fileSelectCriteria), will be included
+//		in the copy operation.
+//
+//		If input parameters 'copyRegularFiles',
+//		'copySymLinkFiles' and 'copyOtherNonRegularFiles'
+//		are all set to 'false', an error will be returned.
 //
 //	copyOtherNonRegularFiles		bool
 //
@@ -422,7 +462,8 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 	sourceDMgr *DirMgr,
 	targetDMgr *DirMgr,
 	skipTopLevelDirectory bool,
-	copyEmptyDirectories bool,
+	copyEmptyTargetDirectory bool,
+	copyRegularFiles bool,
 	copySymLinkFiles bool,
 	copyOtherNonRegularFiles bool,
 	fileSelectCriteria FileSelectionCriteria,
@@ -636,16 +677,19 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 		}
 
 		dirCopyStats,
+			_,
 			subdirectories,
 			errs2,
 			err2 = dMgrHlprPlanck.
 			copyDirectoryFiles(
 				&sourceDirMgr,
 				&targetDirMgr,
-				fileSelectCriteria,
-				copyEmptyDirectories,
+				false, // returnCopiedFilesList
+				copyEmptyTargetDirectory,
+				copyRegularFiles,
 				copySymLinkFiles,
 				copyOtherNonRegularFiles,
+				fileSelectCriteria,
 				"sourceDirMgr",
 				"targetDirMgr",
 				ePrefix)

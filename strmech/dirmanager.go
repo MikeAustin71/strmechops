@@ -55,44 +55,44 @@ type DirMgr struct {
 // Copies files from the directory identified by the
 // current instance of DirMgr to a target directory.
 //
-// The files to be copied are selected according to
-// file selection criteria specified by input parameter,
-// 'fileSelectCriteria'.
+// To qualify as a selected file, the file entry must
+// comply with two filters: File Type and File
+// Characteristics.
+//
+// To be eligible for the copy operation, the file must
+// first comply with the specified File Type criteria. In
+// terms of File Type, files are classified as
+// directories, regular files, SymLink files or other
+// non-regular files. Since this method does NOT copy
+// directories, the only allowed file types are Regular
+// Files, SymLink Files and Other Non-Regular Files. For
+// an explanation of Regular and Non-Regular files, see
+// the Definition of Terms section below.
+//
+// Screening criteria for File Type is controlled by the
+// following three input parameters:
+//
+//	copyRegularFiles bool
+//	copySymLinkFiles bool
+//	copyOtherNonRegularFiles bool
+//
+// File Types eligible for this copy operation include
+// Regular Files such as text files, image files and
+// executable files, SymLink files and other Non-Regular
+// Files such as device files, named pipes and sockets.
+//
+// In addition to File Type, selected files must also
+// comply with the File Characteristics criteria
+// specified by input parameter, 'fileSelectCriteria'.
+// The File Characteristics Selection criteria allows
+// users to screen files for File Name, File Modification
+// Date and File Mode.
 //
 // The selected files are copied by a Copy IO operation.
 // For information on the Copy IO procedure see
 // FileHelper{}.CopyFileByIo() method and reference:
 //
 //	https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
-//
-// This method copies "regular" files plus certain
-// non-regular files depending on input parameter values
-// supplied by the user.
-//
-// In Go programming language, a regular file is a file
-// that contains data in any format that can be read by
-// a user or an application. It is not a directory or a
-// device file.
-//
-// Examples of "regular" files include text files, image
-// files and executable files.
-//
-// Examples of non-regular files include directories,
-// device files, named pipes, sockets, and symbolic
-// links.
-//
-// Input parameters 'copyEmptyDirectories',
-// 'copySymLinkFiles', and 'copyOtherNonRegularFiles'
-// allow the users to specify that these non-regular
-// files should be included in the copy operation.
-//
-// If the target directory does not exist and files are
-// located matching the file selection criteria, this
-// method will attempt to create the target directory.
-// However, if no files meet the file selection criteria
-// as defined by input parameter,'fileSelectCriteria',
-// this method will NOT attempt to create the target
-// directory.
 //
 // ----------------------------------------------------------------
 //
@@ -104,6 +104,9 @@ type DirMgr struct {
 //	that contains data in any format that can be read by
 //	a user or an application. It is not a directory or a
 //	device file.
+//
+//	Regular files include text files, image files and
+//	executable files.
 //
 //	Non-regular files include directories, device files,
 //	named pipes, sockets, and symbolic links.
@@ -124,13 +127,13 @@ type DirMgr struct {
 //		https://en.wikipedia.org/wiki/Symbolic_link
 //
 //	It's true that a symlink is a shortcut file. But it's
-//	different from a standard shortcut that, say, a program
-//	installer has placed on your Windows desktop to make the
-//	program easier to run.
+//	different from a standard shortcut that a program
+//	installer might place on your Windows desktop to make
+//	the program easier to run.
 //
-//	Sure, clicking on either type of shortcut opens the
-//	linked object, but what goes on beneath the hood is
-//	different in both cases as we'll see next.
+//	Clicking on either type of shortcut opens the linked
+//	object. However, what goes on beneath the hood is
+//	different in both cases.
 //
 //	While a standard shortcut points to a certain object,
 //	a symlink makes it appear as if the linked object is
@@ -144,20 +147,26 @@ type DirMgr struct {
 //
 // # BE ADVISED
 //
-// (1)	This method ONLY copies files from the current
+//	(1)	This method ONLY copies files from the top level
+//		or parent directory identified by the current
+//		DirMgr instance to the target directory
+//		identified by 'targetDMgr'. It does NOT copy
+//		files from subdirectories.
 //
-//		directory identified by 'DirMgr'. It does NOT
-//		copy files from subdirectories.
+//	(2)	If the target directory does not exist, this method
+//		will attempt to create it.
 //
-//	(2)	Pay attention to input parameters
-//		'copyEmptyDirectories', 'copySymLinkFiles', and
-//		'copyOtherNonRegularFiles'. The settings for
-//		these parameters will allow user to include or
-//		exclude certain types of non-regular files from
-//		the copy operation.
+//	(3)	Files will only be copied if they meet the File Type
+//		criteria and the File Characteristics Criteria.
 //
-//	(3)	This method is optimized to support the copy of
-//		large numbers of files.
+//		File Type criteria are specified by input parameters:
+//
+//			copyRegularFiles bool
+//			copySymLinkFiles bool
+//			copyOtherNonRegularFiles bool
+//
+//		File Characteristics Selection criteria is specified by
+//		input parameter 'fileSelectCriteria'.
 //
 // ----------------------------------------------------------------
 //
@@ -171,14 +180,91 @@ type DirMgr struct {
 //		directory does not exist, this method will
 //		attempt to create it.
 //
+//	returnCopiedFilesList			bool
+//
+//		If input parameter 'returnCopiedFilesList' is set
+//		to 'true', this method will return a populated
+//		File Manager Collection documenting all the files
+//		actually included in the copy operation.
+//
+//		If input parameter 'returnCopiedFilesList' is set
+//		to 'false', this method will return an empty and
+//		unpopulated instance of FileMgrCollection. This
+//		means that the files actually copied by this
+//		method will NOT be documented.
+//
+//	copyEmptyTargetDirectory		bool
+//
+//		If set to 'true' the target directory will be
+//		created regardless of whether any files are
+//		copied to that directory. Remember that files are
+//		only copied to the target directory if they meet
+//		the File Type and File Characteristics selection
+//		criteria.
+//
+//	copyRegularFiles				bool
+//
+//		If this parameter is set to 'true', Regular Files,
+//		which also meet the File Selection Characteristics
+//		criteria (fileSelectCriteria), will be included
+//		in the copy operation.
+//
+//		Regular Files include text files, image files and
+//		executable files.
+//
+//		For an explanation of Regular and Non-Regular
+//		files, see the section on "Definition Of Terms",
+//		above.
+//
+//		If input parameters 'copyRegularFiles',
+//		'copySymLinkFiles' and 'copyOtherNonRegularFiles'
+//		are all set to 'false', an error will be returned.
+//
+//	copySymLinkFiles				bool
+//
+//		If this parameter is set to 'true', SymLink Files
+//		which also meet the File Selection Characteristics
+//		criteria (fileSelectCriteria), will be included
+//		in the copy operation.
+//
+//		For an explanation of Regular and Non-Regular
+//		files, see the section on "Definition Of Terms",
+//		above.
+//
+//		If input parameters 'copyRegularFiles',
+//		'copySymLinkFiles' and 'copyOtherNonRegularFiles'
+//		are all set to 'false', an error will be returned.
+//
+//	copyOtherNonRegularFiles		bool
+//
+//		If this parameter is set to 'true', Other
+//		Non-Regular Files, which also meet the File
+//		Selection Characteristics criteria
+//		(fileSelectCriteria), will be included in the
+//		copy operation.
+//
+//		Examples of other non-regular file types
+//		include device files, named pipes, and sockets.
+//		See the Definition Of Terms section above.
+//
+//		If input parameters 'copyRegularFiles',
+//		'copySymLinkFiles' and 'copyOtherNonRegularFiles'
+//		are all set to 'false', an error will be returned.
 //
 //	fileSelectCriteria 				FileSelectionCriteria
 //
-//		This input parameter should be configured with
-//		the desired file selection criteria. Files
-//		matching this criteria will be copied to the
-//		directory identified by input parameter,
-//		'targetDir'.
+//		In addition to the File Type Selection Criteria,
+//		selected files must conform to the File
+//		Characteristics criteria specified by
+//		'fileSelectCriteria'.
+//
+//		File Characteristics Selection criteria allows
+//		users to screen files for File Name, File
+//		Modification Date and File Mode.
+//
+//		Files matching these selection criteria, and the
+//		File Type filter, will be included in the copy
+//		operation performed by this method.
 //
 //		type FileSelectionCriteria struct {
 //		 FileNamePatterns    []string
@@ -197,14 +283,14 @@ type DirMgr struct {
 //		 	Specifies 'AND' or 'OR' selection mode
 //		}
 //
-//		The FileSelectionCriteria type allows for
-//		configuration of single or multiple file selection
-//		criterion. The 'SelectCriterionMode' can be used to
-//		specify whether the file must match all, or any one,
-//		of the active file selection criterion.
+//	  The FileSelectionCriteria Type allows for
+//	  configuration of single or multiple file selection
+//	  criterion. The 'SelectCriterionMode' can be used to
+//	  specify whether the file must match all, or any one,
+//	  of the active file selection criterion.
 //
-//		Elements of the FileSelectionCriteria are described
-//		below:
+//	  Elements of the File Characteristics Selection
+//	  Criteria are described below:
 //
 //			FileNamePatterns		[]string
 //
@@ -222,6 +308,7 @@ type DirMgr struct {
 //				all the strings are empty strings, then this
 //				file search criterion is considered 'Inactive'
 //				or 'Not Set'.
+//
 //
 //			FilesOlderThan		time.Time
 //
@@ -311,44 +398,18 @@ type DirMgr struct {
 //
 //		If all of the file selection criterion in the FileSelectionCriteria object are
 //		'Inactive' or 'Not Set' (set to their zero or default values), then all the
-//		files processed in the directory tree will be selected.
+//		files meeting the File Type requirements in the directory defined by 'dMgr'
+//		will be selected.
 //
 //			Example:
 //			  fsc := FileSelectCriterionMode{}
 //
 //			  In this example, 'fsc' is NOT initialized. Therefore,
 //			  all the selection criterion are 'Inactive'. Consequently,
-//			  all the files encountered in the target directory during
-//			  the search operation will be selected.
+//			  all the files meeting the File Type requirements in the
+//			  directory defined by 'dMgr' will be selected.
 //
 //		------------------------------------------------------------------------
-//
-//	copyEmptyDirectories			bool
-//
-//		If set to 'true' the target directory will be
-//		created regardless of whether any files are
-//		copied to that directory. Remember that files are
-//		only copied to the target directory if they meet
-//		file selection criteria specified by input
-//		parameter 'fileSelectCriteria'.
-//
-//	copySymLinkFiles				bool
-//
-//		If this parameter is set to 'true', SymLink files
-//		which meet the file selection criteria, will be
-//		included in the copy operation.
-//
-//	copyOtherNonRegularFiles		bool
-//
-//		If this parameter is set to 'true', other
-//		non-regular file types, besides SymLinks and
-//		directories specified above, will be included
-//		in the copy operation if they meet the file
-//		selection criteria.
-//
-//		Examples of other non-regular file types
-//		include device files, named pipes, and sockets.
-//		See the Definition Of Terms section above.
 //
 //	errorPrefix						interface{}
 //
@@ -431,6 +492,17 @@ type DirMgr struct {
 //			ComputeError        error
 //		}
 //
+//	copiedFiles					FileMgrCollection
+//
+//		If input parameter 'returnCopiedFilesList' is set
+//		to 'true', 'copiedFiles' will return a populated
+//		File Manager Collection including all the files
+//		actually included in the copy operation.
+//
+//		If input parameter 'returnCopiedFilesList' is set
+//		to 'false', 'copiedFiles' will return an empty and
+//		unpopulated instance of FileMgrCollection.
+//
 //	nonfatalErrs				[]error
 //
 //		An array of error objects.
@@ -484,12 +556,15 @@ type DirMgr struct {
 //		Non-Fatal and Fatal errors.
 func (dMgr *DirMgr) CopyDirectoryFiles(
 	targetDMgr DirMgr,
-	fileSelectCriteria FileSelectionCriteria,
-	copyEmptyDirectories bool,
+	returnCopiedFilesList bool,
+	copyEmptyTargetDirectory bool,
+	copyRegularFiles bool,
 	copySymLinkFiles bool,
 	copyOtherNonRegularFiles bool,
+	fileSelectCriteria FileSelectionCriteria,
 	errorPrefix interface{}) (
 	dirCopyStats DirectoryCopyStats,
+	copiedFiles FileMgrCollection,
 	nonfatalErrs []error,
 	fatalErr error) {
 
@@ -511,24 +586,27 @@ func (dMgr *DirMgr) CopyDirectoryFiles(
 
 	if fatalErr != nil {
 
-		return dirCopyStats, nonfatalErrs, fatalErr
+		return dirCopyStats, copiedFiles, nonfatalErrs, fatalErr
 	}
 
 	dirCopyStats,
+		copiedFiles,
 		_,
 		nonfatalErrs,
 		fatalErr = new(dirMgrHelperPlanck).copyDirectoryFiles(
 		dMgr,
 		&targetDMgr,
-		fileSelectCriteria,
-		copyEmptyDirectories,
+		returnCopiedFilesList,
+		copyEmptyTargetDirectory,
+		copyRegularFiles,
 		copySymLinkFiles,
 		copyOtherNonRegularFiles,
+		fileSelectCriteria,
 		"dMgr",
 		"targetDMgr",
 		ePrefix)
 
-	return dirCopyStats, nonfatalErrs, fatalErr
+	return dirCopyStats, copiedFiles, nonfatalErrs, fatalErr
 }
 
 // CopyDirectoryTree
@@ -536,12 +614,41 @@ func (dMgr *DirMgr) CopyDirectoryFiles(
 // Copies all selected files in the directory tree
 // defined by the current instance of DirMgr to a
 // specified target directory tree.
-//
 // If the target directory does not exist, this method
 // will attempt to create it.
 //
-// The files to be copied are selected according to
-// file selection criteria specified by input parameter,
+// To qualify as a selected file, the file entry must
+// comply with two filters: File Type and File
+// Characteristics.
+//
+// To be eligible for the copy operation, the file must
+// first comply with the specified File Type criteria. In
+// terms of File Type, files are classified as
+// directories, regular files, SymLink files or other
+// non-regular files. Since this method does NOT copy
+// directories, the only allowed file types are Regular
+// Files, SymLink Files and Other Non-Regular Files. For
+// an explanation of Regular and Non-Regular files, see
+// the Definition of Terms section below.
+//
+// Screening criteria for File Type is controlled by the
+// following three input parameters:
+//
+//	copyRegularFiles bool
+//	copySymLinkFiles bool
+//	copyOtherNonRegularFiles bool
+//
+// File Types eligible for this copy operation include
+// Regular Files such as text files, image files and
+// executable files, SymLink files and other Non-Regular
+// Files such as device files, named pipes and sockets.
+//
+// In addition to File Type, selected files must also
+// comply with the File Characteristics criteria
+// specified by input parameter, 'fileSelectCriteria'.
+// The File Characteristics Selection criteria allows
+// users to screen files for File Name, File Modification
+// Date and File Mode.
 // 'fileSelectCriteria'.
 //
 // The selected files are copied by a Copy IO operation.
@@ -549,47 +656,6 @@ func (dMgr *DirMgr) CopyDirectoryFiles(
 // FileHelper{}.CopyFileByIo() method and reference:
 //
 //	https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
-//
-// This method copies "regular" files plus certain
-// non-regular files depending on input parameter values
-// supplied by the user.
-//
-// In Go programming language, a regular file is a file
-// that contains data in any format that can be read by
-// a user or an application. It is not a directory or a
-// device file.
-//
-// Examples of "regular" files include text files, image
-// files and executable files.
-//
-// Examples of non-regular files include directories,
-// device files, named pipes, sockets, and symbolic
-// links.
-//
-// Input parameters 'copyEmptyDirectories',
-// 'copySymLinkFiles', and 'copyOtherNonRegularFiles'
-// allow the users to specify that these non-regular
-// files should be included in the copy operation.
-//
-// If the target directory does not exist and files are
-// located matching the file selection criteria, this
-// method will attempt to create the target directory.
-// However, if no files meet the file selection criteria
-// as defined by input parameter,'fileSelectCriteria',
-// this method will NOT attempt to create the target
-// directory.
-//
-// If input parameter 'copyEmptyDirectories' is set to
-// 'true', the target directory tree will be created
-// regardless of whether it contains files. If this
-// parameter is set to false, target directory tree
-// elements will only be created if files meeting the
-// file selection criteria and are copied to those
-// target directory tree paths.
-//
-// Files eligible for copy to the target directory tree
-// are selected on the basis of file selection criteria
-// specified by input parameter, 'fileSelectCriteria'.
 //
 // ----------------------------------------------------------------
 //
@@ -601,6 +667,9 @@ func (dMgr *DirMgr) CopyDirectoryFiles(
 //	that contains data in any format that can be read by
 //	a user or an application. It is not a directory or a
 //	device file.
+//
+//	Regular files include text files, image files and
+//	executable files.
 //
 //	Non-regular files include directories, device files,
 //	named pipes, sockets, and symbolic links.
@@ -621,13 +690,13 @@ func (dMgr *DirMgr) CopyDirectoryFiles(
 //		https://en.wikipedia.org/wiki/Symbolic_link
 //
 //	It's true that a symlink is a shortcut file. But it's
-//	different from a standard shortcut that, say, a program
-//	installer has placed on your Windows desktop to make the
-//	program easier to run.
+//	different from a standard shortcut that a program
+//	installer might place on your Windows desktop to make
+//	the program easier to run.
 //
-//	Sure, clicking on either type of shortcut opens the
-//	linked object, but what goes on beneath the hood is
-//	different in both cases as we'll see next.
+//	Clicking on either type of shortcut opens the linked
+//	object. However, what goes on beneath the hood is
+//	different in both cases.
 //
 //	While a standard shortcut points to a certain object,
 //	a symlink makes it appear as if the linked object is
@@ -639,47 +708,90 @@ func (dMgr *DirMgr) CopyDirectoryFiles(
 //
 // ----------------------------------------------------------------
 //
-// # IMPORTANT
+// # BE ADVISED
 //
-//	(1)	This method will scan all directories for
-//		selected files in the directory tree defined by
-//		the current instance of DirMgr. This scan and
-//		copy operation includes the top level or parent
-//		directory specified by the current instance of
-//		DirMgr.
+//	(1)	This method copies ALL THE FILES residing in the
+//		entire the directory tree identified by the
+//		current instance of DirMgr. The files in this
+//		directory tree will be copied to a corresponding
+//		directory tree identified by input parameter
+//		'targetDMgr'.
 //
-//	(2)	To scan and copy selected file in the subdirectory
-//		tree, thereby excluding the parent directory, see
-//		method:
+//	(2)	If a directory in the target directory tree does
+//		not exist, this method will attempt to create it.
 //
-//			DirMgr.CopySubDirectoryTree()
+//	(3)	Files will only be copied if they meet the File
+//		Type criteria and the File Characteristics
+//		Criteria.
+//
+//		File Type criteria are specified by input
+//		parameters:
+//
+//			copyRegularFiles bool
+//			copySymLinkFiles bool
+//			copyOtherNonRegularFiles bool
+//
+//		File Characteristics Selection criteria are
+//		specified by input parameter 'fileSelectCriteria'.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	targetDMgr					DirMgr
+//	targetDMgr					*DirMgr
 //
-//		An instance of 'DirMgr' initialized with the
-//		directory path of the target directory to which
-//		selected files will be copied. If the target
-//		directory does not exist, this method will
-//		attempt to create it.
+//		A pointer to an instance of DirMgr which
+//		identifies the destination directory tree to
+//		which files will be copied from the directory
+//		tree identified by input parameter 'sourceDMgr'.
 //
-//	copyEmptyDirectories		bool
+//		If this target directory does not exist, this
+//		method will attempt to create it.
+//
+//	skipTopLevelDirectory		bool
+//
+//		If this parameter is set to 'true', the top level
+//		source directory will be skipped, and it will not
+//		be copied to the directory tree identified by
+//		input parameter 'targetDMgr'.
+//
+//	copyEmptyTargetDirectory	bool
 //
 //		If set to 'true' the target directory will be
 //		created regardless of whether any files are
 //		copied to that directory. Remember that files are
 //		only copied to the target directory if they meet
-//		file selection criteria specified by input
-//		parameter 'fileSelectCriteria'.
+//		the File Type and File Characteristics selection
+//		criteria.
+//
+//	copyRegularFiles			bool
+//
+//		If this parameter is set to 'true', Regular Files,
+//		which also meet the File Selection Characteristics
+//		criteria (fileSelectCriteria), will be included
+//		in the copy operation.
+//
+//		Regular Files include text files, image files and
+//		executable files.
+//
+//		For an explanation of Regular and Non-Regular
+//		files, see the section on "Definition Of Terms",
+//		above.
+//
+//		If input parameters 'copyRegularFiles',
+//		'copySymLinkFiles' and 'copyOtherNonRegularFiles'
+//		are all set to 'false', an error will be returned.
 //
 //	copySymLinkFiles				bool
 //
-//		If this parameter is set to 'true', SymLink files
-//		which meet the file selection criteria, will be
-//		included in the copy operation.
+//		If this parameter is set to 'true', SymLink Files
+//		which also meet the File Selection Characteristics
+//		criteria (fileSelectCriteria), will be included
+//		in the copy operation.
+//
+//		If input parameters 'copyRegularFiles',
+//		'copySymLinkFiles' and 'copyOtherNonRegularFiles'
+//		are all set to 'false', an error will be returned.
 //
 //	copyOtherNonRegularFiles		bool
 //
@@ -971,7 +1083,8 @@ func (dMgr *DirMgr) CopyDirectoryFiles(
 //		reasonable to continue code execution.
 func (dMgr *DirMgr) CopyDirectoryTree(
 	targetDMgr DirMgr,
-	copyEmptyDirectories bool,
+	copyEmptyTargetDirectory bool,
+	copyRegularFiles bool,
 	copySymLinkFiles bool,
 	copyOtherNonRegularFiles bool,
 	fileSelectCriteria FileSelectionCriteria,
@@ -1010,8 +1123,9 @@ func (dMgr *DirMgr) CopyDirectoryTree(
 		copyDirectoryTree(
 			dMgr,
 			&targetDMgr,
-			false,
-			copyEmptyDirectories,
+			false, // skipTopLevelDirectory
+			copyEmptyTargetDirectory,
+			copyRegularFiles,
 			copySymLinkFiles,
 			copyOtherNonRegularFiles,
 			fileSelectCriteria,
