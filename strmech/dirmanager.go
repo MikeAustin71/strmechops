@@ -50,7 +50,7 @@ type DirMgr struct {
 	lock                            *sync.Mutex // Used internally to ensure thread safe operations
 }
 
-// CopyDirectory
+// CopyDirectoryFiles
 //
 // Copies files from the directory identified by the
 // current instance of DirMgr to a target directory.
@@ -469,7 +469,7 @@ type DirMgr struct {
 //		'errPrefDto'. The 'errPrefDto' text will be
 //		prefixed or attached to the	beginning of the error
 //		message.
-func (dMgr *DirMgr) CopyDirectory(
+func (dMgr *DirMgr) CopyDirectoryFiles(
 	targetDMgr DirMgr,
 	fileSelectCriteria FileSelectionCriteria,
 	copyEmptyDirectories bool,
@@ -493,7 +493,7 @@ func (dMgr *DirMgr) CopyDirectory(
 	ePrefix,
 		fatalErr = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"DirMgr.CopyDirectory()",
+		"DirMgr.CopyDirectoryFiles()",
 		"")
 
 	if fatalErr != nil {
@@ -2146,7 +2146,7 @@ func (dMgr *DirMgr) DeleteAllSubDirectories(
 	ePrefix,
 		fatalErr = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"DirMgr.CopyDirectory()",
+		"DirMgr.CopyDirectoryFiles()",
 		"")
 
 	if fatalErr != nil {
@@ -10400,6 +10400,29 @@ func (dMgr *DirMgr) MakeDir(
 //
 //		------------------------------------------------------------------------
 //
+//	exitOnNonFatalError			bool
+//
+//		If this parameter is set to 'true', the method
+//		will exit and return when it encounters the first
+//		Non-Fatal error.
+//
+//		This method returns both Non-Fatal errors and
+//		Fatal errors.
+//
+//		Fatal errors immediately terminate processing and
+//		return an error message to the calling function.
+//
+//		The default behavior for Non-Fatal errors
+//		accumulates these errors and returns them in an
+//		array of errors. However, under the default
+//		behavior, processing continues until a Fatal
+//		Error is encountered or the method completes
+//		processing and exits normally.
+//
+//		If parameter 'exitOnNonFatalError' is set to
+//		'true', this method will exit when the first
+//		Non-Fatal error is encountered.
+//
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
@@ -10483,28 +10506,63 @@ func (dMgr *DirMgr) MakeDir(
 //			ComputeError             error
 //		}
 //
-//	errs						[]error
+//	nonfatalErrs				[]error
 //
 //		An array of error objects.
 //
 //		If this method completes successfully, the
 //		returned error array is set equal to 'nil'.
 //
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errPrefDto'.
-//	 	The 'errPrefDto' text will be prefixed or
-//	 	attached to the	beginning of the error message.
+//		If non-fatal errors are encountered during
+//		processing, the returned error Type will
+//		encapsulate appropriate error messages.
+//
+//		Non-fatal errors usually involves failures
+//		associated with individual files.
+//
+//		The default behavior for Non-Fatal errors
+//		accumulates these errors and returns them in an
+//		array of errors. However, under the default
+//		behavior, processing continues until a Fatal
+//		Error is encountered or the method completes
+//		processing and exits normally.
+//
+//		If parameter 'exitOnNonFatalError' is set to
+//		'true', this method will exit when the first
+//		Non-Fatal error is encountered.
+//
+//		Any returned error messages will incorporate
+//		the method chain and text passed by input
+//		parameter, 'errPrefDto'. The 'errPrefDto' text
+//		will be prefixed or attached to the beginning of
+//		the error message.
 //
 //		This error array may contain multiple errors.
+//
+//		An error array may be consolidated into a single
+//		error using method StrMech.ConsolidateErrors()
+//
+//	fatalErr					error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'.
+//
+//		If a fatal error is encountered during
+//		processing, this returned error Type will
+//		encapsulate an appropriate error message. This
+//		returned error message will incorporate the
+//		method chain and text passed by input parameter,
+//		'errPrefDto'. The 'errPrefDto' text will be
+//		prefixed or attached to the	beginning of the error
+//		message.
 func (dMgr *DirMgr) MoveDirectory(
 	targetDMgr DirMgr,
 	fileSelectCriteria FileSelectionCriteria,
+	exitOnNonFatalError bool,
 	errorPrefix interface{}) (
 	dirMoveStats DirectoryMoveStats,
-	errs []error) {
+	nonfatalErrs []error,
+	fatalErr error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -10525,22 +10583,24 @@ func (dMgr *DirMgr) MoveDirectory(
 
 	if err != nil {
 
-		errs = append(errs, err)
+		nonfatalErrs = append(nonfatalErrs, err)
 
-		return dirMoveStats, errs
+		return dirMoveStats, nonfatalErrs, fatalErr
 	}
 
 	dirMoveStats,
-		errs = new(dirMgrHelper).moveDirectory(
+		nonfatalErrs,
+		fatalErr = new(dirMgrHelper).moveDirectory(
 		dMgr,
 		&targetDMgr,
 		fileSelectCriteria,
+		exitOnNonFatalError,
 		"dMgr",
 		"targetDMgr",
 		"fileSelectCriteria",
 		ePrefix)
 
-	return dirMoveStats, errs
+	return dirMoveStats, nonfatalErrs, fatalErr
 }
 
 // MoveDirectoryTree

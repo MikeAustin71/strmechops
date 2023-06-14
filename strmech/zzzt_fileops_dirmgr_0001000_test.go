@@ -206,7 +206,7 @@ func TestDirMgr_CopyDirectory_000100(t *testing.T) {
 
 	dirCopyStats,
 		nonfatalErrs,
-		fatalErr = srcDMgr.CopyDirectory(
+		fatalErr = srcDMgr.CopyDirectoryFiles(
 		targetDMgr,
 		fsc,
 		false,
@@ -217,7 +217,7 @@ func TestDirMgr_CopyDirectory_000100(t *testing.T) {
 	if len(nonfatalErrs) > 0 {
 
 		t.Errorf("\n%v\n"+
-			"Non-Fatal errors returned from srcDMgr.CopyDirectory(targetDMgr, fsc)\n"+
+			"Non-Fatal errors returned from srcDMgr.CopyDirectoryFiles(targetDMgr, fsc)\n"+
 			"targetDir='%v'\n"+
 			"Errors= \n%v\n",
 			ePrefix.String(),
@@ -236,7 +236,7 @@ func TestDirMgr_CopyDirectory_000100(t *testing.T) {
 	if fatalErr != nil {
 
 		t.Errorf("\n%v\n"+
-			"Fatal error returned from srcDMgr.CopyDirectory(targetDMgr, fsc)\n"+
+			"Fatal error returned from srcDMgr.CopyDirectoryFiles(targetDMgr, fsc)\n"+
 			"targetDir='%v'\n"+
 			"Error=\n%v\n",
 			ePrefix.String(),
