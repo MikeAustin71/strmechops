@@ -5513,29 +5513,6 @@ func (dMgrHlpr *dirMgrHelper) getParentDirMgr(
 //
 //		------------------------------------------------------------------------
 //
-//	exitOnNonFatalError			bool
-//
-//		If this parameter is set to 'true', the method
-//		will exit and return when it encounters the first
-//		Non-Fatal error.
-//
-//		This method returns both Non-Fatal errors and
-//		Fatal errors.
-//
-//		Fatal errors immediately terminate processing and
-//		return an error message to the calling function.
-//
-//		The default behavior for Non-Fatal errors
-//		accumulates these errors and returns them in an
-//		array of errors. However, under the default
-//		behavior, processing continues until a Fatal
-//		Error is encountered or the method completes
-//		processing and exits normally.
-//
-//		When 'exitOnNonFatalError' is set to 'true', this
-//		method will exit when the first Non-Fatal error
-//		is encountered.
-//
 //	dMgrLabel					string
 //
 //		The name or label associated with input parameter
@@ -5630,10 +5607,6 @@ func (dMgrHlpr *dirMgrHelper) getParentDirMgr(
 //		Error is encountered or the method completes
 //		processing and exits normally.
 //
-//		If parameter 'exitOnNonFatalError' is set to
-//		'true', this method will exit when the first
-//		Non-Fatal error is encountered.
-//
 //		Any returned error messages will incorporate
 //		the method chain and text passed by input
 //		parameter, 'errPrefDto'. The 'errPrefDto' text
@@ -5644,6 +5617,9 @@ func (dMgrHlpr *dirMgrHelper) getParentDirMgr(
 //
 //		An error array may be consolidated into a single
 //		error using method StrMech.ConsolidateErrors()
+//
+//		Upon method completion, be sure to check both
+//		Non-Fatal and Fatal errors.
 //
 //	fatalErr					error
 //
@@ -5658,11 +5634,13 @@ func (dMgrHlpr *dirMgrHelper) getParentDirMgr(
 //		'errPrefDto'. The 'errPrefDto' text will be
 //		prefixed or attached to the	beginning of the error
 //		message.
+//
+//		Upon method completion, be sure to check both
+//		Non-Fatal and Fatal errors.
 func (dMgrHlpr *dirMgrHelper) moveDirectory(
 	dMgr *DirMgr,
 	targetDMgr *DirMgr,
 	fileSelectCriteria FileSelectionCriteria,
-	exitOnNonFatalError bool,
 	dMgrLabel string,
 	targetDMgrLabel string,
 	fileSelectLabel string,
@@ -5793,10 +5771,6 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 
 			nonfatalErrs = append(nonfatalErrs, err)
 
-			if exitOnNonFatalError {
-				return dirMoveStats, nonfatalErrs, fatalErr
-			}
-
 			continue
 		}
 
@@ -5826,10 +5800,6 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 					err.Error())
 
 			nonfatalErrs = append(nonfatalErrs, err2)
-
-			if exitOnNonFatalError {
-				return dirMoveStats, nonfatalErrs, fatalErr
-			}
 
 			continue
 		}
@@ -5862,10 +5832,6 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 						err.Error())
 
 					nonfatalErrs = append(nonfatalErrs, err2)
-
-					if exitOnNonFatalError {
-						return dirMoveStats, nonfatalErrs, fatalErr
-					}
 
 					break
 				}
@@ -5902,6 +5868,7 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 			err = os.Remove(src)
 
 			if err != nil {
+
 				fatalErr = fmt.Errorf("%v\n"+
 					"Error occurred after file copy completed during delete operation!\n"+
 					"Error returned by os.Remove(sourceFile)\n"+
@@ -5939,10 +5906,6 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 			dirMoveStats.SourceFilesRemaining)
 
 		nonfatalErrs = append(nonfatalErrs, err)
-
-		if exitOnNonFatalError {
-			return dirMoveStats, nonfatalErrs, fatalErr
-		}
 
 	}
 
