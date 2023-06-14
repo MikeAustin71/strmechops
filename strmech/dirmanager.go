@@ -442,8 +442,15 @@ type DirMgr struct {
 //		processing, the returned error Type will
 //		encapsulate appropriate error messages.
 //
-//		Non-fatal errors usually involve failure
-//		to copy individual files.
+//		Non-fatal errors usually involves failures
+//		associated with individual files.
+//
+//		The default behavior for Non-Fatal errors
+//		accumulates these errors and returns them in an
+//		array of errors. However, under the default
+//		behavior, processing continues until a Fatal
+//		Error is encountered or the method completes
+//		processing and exits normally.
 //
 //		The returned error messages will incorporate
 //		the method chain and text passed by input
@@ -455,6 +462,9 @@ type DirMgr struct {
 //
 //		An error array may be consolidated into a single
 //		error using method StrMech.ConsolidateErrors()
+//
+//		Upon method completion, be sure to check both
+//		Non-Fatal and Fatal errors.
 //
 //	fatalErr					error
 //
@@ -469,6 +479,9 @@ type DirMgr struct {
 //		'errPrefDto'. The 'errPrefDto' text will be
 //		prefixed or attached to the	beginning of the error
 //		message.
+//
+//		Upon method completion, be sure to check both
+//		Non-Fatal and Fatal errors.
 func (dMgr *DirMgr) CopyDirectoryFiles(
 	targetDMgr DirMgr,
 	fileSelectCriteria FileSelectionCriteria,
