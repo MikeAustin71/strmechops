@@ -585,7 +585,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 		fatalErr = dMgrHlprPreon.
 		validateDirMgr(
 			targetDMgr,
-			false,
+			false, //pathMustExist
 			targetDMgrLabel,
 			ePrefix)
 

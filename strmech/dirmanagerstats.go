@@ -310,29 +310,40 @@ type DirectoryProfile struct {
 	// directory described by this profile
 	// information.
 
-	DirExistsOnDrive bool
+	DirExistsOnStorageDrive bool
 	// If 'true', this paramter signals
 	// that the directory actually exists on
 	// a storage drive.
 
 	DirTotalFiles uint64
 	// The number of total files, of all types,
-	// residing in the subject directory
+	// residing in the subject directory. This
+	// includes directory entry files, Regular
+	// Files, SymLink Files and Non-Regular
+	// Files.
 
 	DirTotalFileBytes uint64
-	// The size of all files residing in the
-	// subject directory expressed in bytes.
+	// The size of all files, of all types,
+	// residing in the subject directory
+	// expressed in bytes. This includes
+	// directory entry files, Regular Files,
+	// SymLink Files and Non-Regular Files.
 
 	DirSubDirectories uint64
 	// The number of subdirectories residing
-	// within the subject directory.
+	// within the subject directory. This
+
+	DirSubDirectoriesBytes uint64
+	// The total size of all Subdirectory entries
+	// residing in the subject directory expressed
+	// in bytes.
 
 	DirRegularFiles uint64
 	// The number of 'Regular' Files residing
 	// within the subject Directory. Regular
 	// files include text files, image files
-	// and executable files.
-	//	https://www.computerhope.com/jargon/r/regular-file.htm
+	// and executable files. Reference:
+	// https://www.computerhope.com/jargon/r/regular-file.htm
 
 	DirRegularFileBytes uint64
 	// The total size of all 'Regular' files
