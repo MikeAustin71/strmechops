@@ -5837,10 +5837,10 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 				}
 
 				if dirCreated {
-					dirMoveStats.DirsCreated++
+					dirMoveStats.TargetDirsCreated++
 				}
 
-				dirMoveStats.DirsCreated++
+				dirMoveStats.TargetDirsCreated++
 				targetDMgrPathDoesExist = true
 			}
 
@@ -6219,7 +6219,7 @@ func (dMgrHlpr *dirMgrHelper) moveDirectoryTree(
 	dirMoveStats.TotalDirsProcessed =
 		dTreeCopyStats.TotalDirsScanned
 
-	dirMoveStats.DirsCreated =
+	dirMoveStats.TargetDirsCreated =
 		dTreeCopyStats.DirsCreated
 
 	dirMoveStats.NumOfSubDirectories =
@@ -6545,7 +6545,7 @@ func (dMgrHlpr *dirMgrHelper) moveSubDirectoryTree(
 	dirMoveStats.TotalDirsProcessed =
 		dTreeCopyStats.TotalDirsScanned
 
-	dirMoveStats.DirsCreated =
+	dirMoveStats.TargetDirsCreated =
 		dTreeCopyStats.DirsCreated
 
 	dirMoveStats.NumOfSubDirectories =

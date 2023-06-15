@@ -112,6 +112,7 @@ type DirMgr struct {
 //	named pipes, sockets, and symbolic links.
 //
 //	https://docs.studygolang.com/src/io/fs/fs.go
+//	https://www.computerhope.com/jargon/r/regular-file.htm
 //	https://go.dev/src/os/types.go
 //	https://go.dev/src/os/types.go?s=1237:1275#L31
 //	https://pkg.go.dev/gopkg.in/src-d/go-git.v4/plumbing/filemode

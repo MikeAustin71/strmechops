@@ -300,6 +300,70 @@ func (dTreeCopyStats *DirTreeCopyStats) AddDirCopyStats(
 
 }
 
+// DirectoryProfile
+//
+// This structure contains status and statistical
+// information on a single directory.
+type DirectoryProfile struct {
+	DirAbsolutePath string
+	// The absolute directory path for the
+	// directory described by this profile
+	// information.
+
+	DirExistsOnDrive bool
+	// If 'true', this paramter signals
+	// that the directory actually exists on
+	// a storage drive.
+
+	DirTotalFiles uint64
+	// The number of total files, of all types,
+	// residing in the subject directory
+
+	DirTotalFileBytes uint64
+	// The size of all files residing in the
+	// subject directory expressed in bytes.
+
+	DirSubDirectories uint64
+	// The number of subdirectories residing
+	// within the subject directory.
+
+	DirRegularFiles uint64
+	// The number of 'Regular' Files residing
+	// within the subject Directory. Regular
+	// files include text files, image files
+	// and executable files.
+	//	https://www.computerhope.com/jargon/r/regular-file.htm
+
+	DirRegularFileBytes uint64
+	// The total size of all 'Regular' files
+	// residing in the subject directory expressed
+	// in bytes.
+
+	DirSymLinkFiles uint64
+	// The number of SymLink files residing in the
+	// subject directory.
+
+	DirSymLinkFileBytes uint64
+	// The total size of all SymLink files
+	// residing in the subject directory
+	// expressed in bytes.
+
+	DirNonRegularFiles uint64
+	// The total number of Non-Regular files residing
+	// in the subject directory.
+	//
+	// Non-Regular files include directories, device
+	// files, named pipes, sockets, and symbolic links.
+
+	DirNonRegularFileBytes uint64
+	// The total size of all Non-Regular files residing
+	// in the subject directory expressed in bytes.
+
+	ComputeError error
+	// Computational or processing errors will be
+	// recorded through this parameter.
+}
+
 type DirectoryCopyStats struct {
 	DirsCreated         uint64
 	TotalFilesProcessed uint64
@@ -350,8 +414,10 @@ type DirectoryMoveStats struct {
 	SourceFileBytesMoved     uint64
 	SourceFilesRemaining     uint64
 	SourceFileBytesRemaining uint64
+	SourceSubDirsMoved       uint64
+	SourceSubDirsRemaining   uint64
 	TotalDirsProcessed       uint64
-	DirsCreated              uint64
+	TargetDirsCreated        uint64
 	NumOfSubDirectories      uint64
 	SourceDirWasDeleted      bool
 	ComputeError             error

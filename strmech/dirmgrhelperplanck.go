@@ -674,7 +674,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 		fatalErr = fmt.Errorf("%v\n"+
 			"Error: The %v directory is EMPTY!\n"+
-			"The copy operation cannot proceed.\n"+
+			"The copy files operation cannot proceed.\n"+
 			"Method dirMgrHelperElectron.getFileInfosFromDirectory()\n"+
 			"returned a zero length array of File Info Objects from:\n"+
 			"%v = %v\n",
@@ -1828,6 +1828,8 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) moveDirectoryFiles(
 
 	osPathSeparatorStr := string(os.PathSeparator)
 	var errs2 []error
+	var fileInfos []FileInfoPlus
+	var lenFileInfos int
 
 	fileInfos,
 		lenFileInfos,
@@ -1835,7 +1837,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) moveDirectoryFiles(
 		fatalErr = new(dirMgrHelperTachyon).
 		getFileInfosFromDirectory(
 			sourceDMgr,
-			true,                     // getDirectoryFileInfos
+			false,                    // getDirectoryFileInfos
 			moveRegularFiles,         // getRegularFileInfos
 			moveSymLinkFiles,         // copySymLinkFiles,
 			moveOtherNonRegularFiles, // copyOtherNonRegularFiles
@@ -1855,6 +1857,36 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) moveDirectoryFiles(
 			movedFiles,
 			nonfatalErrs,
 			fatalErr
+	}
+
+	if lenFileInfos == 0 {
+
+		fatalErr = fmt.Errorf("%v\n"+
+			"Error: The %v directory is EMPTY!\n"+
+			"The move files operation cannot proceed.\n"+
+			"Method dirMgrHelperElectron.getFileInfosFromDirectory()\n"+
+			"returned a zero length array of File Info Objects from:\n"+
+			"%v = %v\n",
+			ePrefix.String(),
+			sourceDMgrLabel,
+			sourceDMgrLabel,
+			sourceDMgr.absolutePath)
+
+		return dirMoveStats,
+			movedFiles,
+			nonfatalErrs,
+			fatalErr
+	}
+
+	var fh = new(FileHelper)
+	var fileMode os.FileMode
+	var doCopy bool
+	var srcFile, targetFile string
+
+	for _, nameFileInfo := range fileInfos {
+
+		// This is a file
+
 	}
 
 }
