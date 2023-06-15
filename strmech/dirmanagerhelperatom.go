@@ -1267,7 +1267,7 @@ func (dMgrHlprAtom *dirMgrHelperAtom) moveDirectoryFiles(
 
 	funcName := "dirMgrHelperAtom." +
 		"moveDirectoryFiles()"
-
+	//TODO Re-check dirMoveStats total
 	ePrefix,
 		fatalErr = ePref.ErrPrefixDto{}.NewIEmpty(
 		errPrefDto,
