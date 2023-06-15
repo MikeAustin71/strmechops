@@ -224,7 +224,7 @@ type dirMgrHelperPlanck struct {
 //		Characteristics criteria specified by
 //		'fileSelectCriteria'.
 //
-//		File Characteristics Selection criteria allows
+//		File Characteristics Selection criteria allow
 //		users to screen files for File Name, File
 //		Modification Date and File Mode.
 //

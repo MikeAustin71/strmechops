@@ -721,14 +721,527 @@ func (dMgrHlprAtom *dirMgrHelperAtom) lowLevelScreenPathStrForInvalidChars(
 // moveDirectoryFiles
 //
 // This method will 'move' files from a source directory
-// to a target directory. This move operation is
-// accomplished in two steps by first copying the source
-// file to the target directory and then deleting the
-// original source file.
+// to a target directory.
+//
+// This move operation is accomplished in two steps by
+// first copying selected source files to the target
+// directory and then deleting the original source
+// files. The copy step is executed using a Copy IO
+// operation. For information on the Copy IO procedure
+// see FileHelper{}.CopyFileByIo() method and reference:
+//
+//	https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
+//
+// No subdirectories will be included in this move
+// operation. Only source files in a single directory
+// will be moved to the target directory.
+//
+// To qualify as a selected source file eligible for the
+// move operation, a file must comply with two filters:
+// File Type and File Characteristics.
+//
+// To be eligible for the move operation, a source file
+// must first comply with the specified File Type
+// criteria. The File Type Filter classifies artifacts
+// residing in a parent directory as subdirectories,
+// regular files, SymLink files or other non-regular
+// files. Since this method does NOT move subdirectories,
+// the only valid file types are Regular Files, SymLink
+// Files and Other Non-Regular Files. For an explanation
+// of Regular and Non-Regular files, see the Definition
+// of Terms section below.
+//
+// Screening criteria for File Type is controlled by the
+// following three input parameters:
+//
+//	moveRegularFiles bool
+//	moveSymLinkFiles bool
+//	moveOtherNonRegularFiles bool
+//
+// File Types eligible for this move operation therefore
+// include Regular Files such as text files, image files
+// and executable files, SymLink files and other Non-Regular
+// Files such as device files, named pipes and sockets.
+//
+// In addition to File Type, selected files must also
+// comply with the File Characteristics criteria
+// specified by input parameter, 'fileSelectCriteria'.
+// The File Characteristics Selection criteria allows
+// users to screen files for File Name, File Modification
+// Date and File Mode.
+//
+// ----------------------------------------------------------------
+//
+// # Definition Of Terms
+//
+//	Regular & Non-Regular Files
+//
+//	In Go programming language, a regular file is a file
+//	that contains data in any format that can be read by
+//	a user or an application. It is not a directory or a
+//	device file.
+//
+//	Regular files include text files, image files and
+//	executable files.
+//
+//	Non-regular files include directories, device files,
+//	named pipes, sockets, and symbolic links.
+//
+//	https://docs.studygolang.com/src/io/fs/fs.go
+//	https://go.dev/src/os/types.go
+//	https://go.dev/src/os/types.go?s=1237:1275#L31
+//	https://pkg.go.dev/gopkg.in/src-d/go-git.v4/plumbing/filemode
+//	https://www.linode.com/docs/guides/creating-reading-and-writing-files-in-go-a-tutorial/
+//
+//	SymLink Files
+//
+//	In computing, a symbolic link (also symlink or soft
+//	link) is a file whose purpose is to point to a file
+//	or directory (called the "target") by specifying a
+//	path thereto.
+//
+//		https://en.wikipedia.org/wiki/Symbolic_link
+//
+//	It's true that a symlink is a shortcut file. But it's
+//	different from a standard shortcut that a program
+//	installer might place on your Windows desktop to make
+//	the program easier to run.
+//
+//	Clicking on either type of shortcut opens the linked
+//	object. However, what goes on beneath the hood is
+//	different in both cases.
+//
+//	While a standard shortcut points to a certain object,
+//	a symlink makes it appear as if the linked object is
+//	actually there. Your computer and the apps on it will
+//	read the symlink as the target object itself.
+//
+//		https://www.thewindowsclub.com/create-symlinks-in-windows-10
+//		https://www.makeuseof.com/tag/what-is-a-symbolic-link-what-are-its-uses-makeuseof-explains/
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	(1)	This method ONLY moves files from the single
+//		parent directory identified by source directory
+//		'sourceDMgr' to the target directory identified
+//		by 'targetDMgr'.
+//
+//	(2)	This method does NOT move subdirectories residing
+//		in 'sourceDMgr' and therefore, it does NOT move
+//		files residing in subdirectories of 'sourceDMgr'.
+//
+//	(3)	If the target directory does not exist, this method
+//		will attempt to create it.
+//
+//	(4)	Files will only be moved if they meet the File Type
+//		criteria and the File Characteristics Criteria.
+//
+//		File Type criteria are specified by input parameters:
+//
+//			moveRegularFiles bool
+//			moveSymLinkFiles bool
+//			moveOtherNonRegularFiles bool
+//
+//		File Characteristics Selection criteria is specified by
+//		input parameter 'fileSelectCriteria'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	sourceDMgr					*DirMgr
+//
+//		An instance of DirMgr which identifies the source
+//		directory from which files will be moved to a target
+//		directory identified by input parameter 'targetDMgr'.
+//
+//		The move operation is accomplished in two steps.
+//		First, a file is copied from 'sourceDMgr' to
+//		'targetDMgr'. Then, the original file in
+//		'sourceDMgr' is deleted.
+//
+//	targetDMgr					*DirMgr
+//
+//		An instance of DirMgr which identifies the
+//		destination directory to which files from the
+//		directory specified 'sourceDMgr' will be moved.
+//
+//		The move operation is accomplished in two steps.
+//		First, a file is copied from 'sourceDMgr' to
+//		'targetDMgr'. Then, the original file in
+//		'sourceDMgr' is deleted.
+//
+//	returnMovedFilesList		bool
+//
+//		If input parameter 'returnMovedFilesList' is set
+//		to 'true', this method will return a populated
+//		File Manager Collection documenting all the files
+//		actually included in the move operation.
+//
+//		If input parameter 'returnMovedFilesList' is set
+//		to 'false', this method will return an empty and
+//		unpopulated instance of FileMgrCollection. This
+//		means that the files actually moved from the
+//		source directory to the target directory by this
+//		method, will NOT be documented.
+//
+//	copyEmptyTargetDirectory	bool
+//
+//		If set to 'true' the target directory will be
+//		created regardless of whether any files are
+//		selected to be moved to that directory. Remember
+//		that files are only moved to the target directory
+//		if they meet the File Type and File Characteristics
+//		criteria for file selection.
+//
+//	deleteEmptySourceDirectory	bool
+//
+//		This parameter controls whether empty source
+//		directories will be deleted after completion of
+//		the move operation.
+//
+//		If 'deleteEmptySourceDirectory' is set to 'true'
+//		and there are no files or subdirectories
+//		remaining in the source directory (sourceDMgr)
+//		after completion of the move operation, the
+//		source directory will be deleted.
+//
+//		If 'deleteEmptySourceDirectory' is set to
+//		'false', the source directory (sourceDMgr) will
+//		NOT be deleted after completion of the move
+//		operation.
+//
+//	moveRegularFiles			bool
+//
+//		If this parameter is set to 'true', Regular Files,
+//		which also meet the File Selection Characteristics
+//		criteria (fileSelectCriteria), will be included
+//		in the move operation.
+//
+//		Regular Files include text files, image files and
+//		executable files.
+//
+//		For an explanation of Regular and Non-Regular
+//		files, see the section on "Definition Of Terms",
+//		above.
+//
+//		If input parameters 'moveRegularFiles',
+//		'moveSymLinkFiles' and 'moveOtherNonRegularFiles'
+//		are all set to 'false', an error will be returned.
+//
+//	moveSymLinkFiles			bool
+//
+//		If this parameter is set to 'true', SymLink Files
+//		which also meet the File Selection Characteristics
+//		criteria (fileSelectCriteria), will be included
+//		in the move operation.
+//
+//		For an explanation of Regular and Non-Regular
+//		files, see the section on "Definition Of Terms",
+//		above.
+//
+//		If input parameters 'moveRegularFiles',
+//		'moveSymLinkFiles' and 'moveOtherNonRegularFiles'
+//		are all set to 'false', an error will be returned.
+//
+//	moveOtherNonRegularFiles	bool
+//
+//		If this parameter is set to 'true', Other
+//		Non-Regular Files, which also meet the File
+//		Selection Characteristics criteria
+//		(fileSelectCriteria), will be included in the
+//		move operation.
+//
+//		Examples of other non-regular file types
+//		include device files, named pipes, and sockets.
+//		See the Definition Of Terms section above.
+//
+//		If input parameters 'moveRegularFiles',
+//		'moveSymLinkFiles' and 'moveOtherNonRegularFiles'
+//		are all set to 'false', an error will be returned.
+//
+//	fileSelectCriteria			FileSelectionCriteria
+//
+//		In addition to the File Type Selection Criteria,
+//		selected files must conform to the File
+//		Characteristics criteria specified by this
+//		parameter, 'fileSelectCriteria'.
+//
+//		File Characteristics Selection criteria allow
+//		users to screen files for File Name, File
+//		Modification Date and File Mode.
+//
+//		Files matching these selection criteria, and the
+//		File Type filter, will be included in the move
+//		operation performed by this method.
+//
+//		type FileSelectionCriteria struct {
+//		 FileNamePatterns    []string
+//			An array of strings containing File Name Patterns
+//
+//		 FilesOlderThan      time.Time
+//		 	Match files with older modification date times
+//
+//		 FilesNewerThan      time.Time
+//		 	Match files with newer modification date times
+//
+//		 SelectByFileMode    FilePermissionConfig
+//		 	Match file mode (os.FileMode).
+//
+//		 SelectCriterionModeFileSelectCriterionMode
+//		 	Specifies 'AND' or 'OR' selection mode
+//		}
+//
+//	  The FileSelectionCriteria Type allows for
+//	  configuration of single or multiple file selection
+//	  criterion. The 'SelectCriterionMode' can be used to
+//	  specify whether the file must match all, or any one,
+//	  of the active file selection criterion.
+//
+//	  Elements of the File Characteristics Selection
+//	  Criteria are described below:
+//
+//			FileNamePatterns		[]string
+//
+//				An array of strings which may define one or more
+//				search patterns. If a file name matches any one
+//				of the search pattern strings, it is deemed to be
+//				a 'match' for the search pattern criterion.
+//
+//				Example Patterns:
+//					FileNamePatterns = []string{"*.log"}
+//					FileNamePatterns = []string{"current*.txt"}
+//					FileNamePatterns = []string{"*.txt", "*.log"}
+//
+//				If this string array has zero length or if
+//				all the strings are empty strings, then this
+//				file search criterion is considered 'Inactive'
+//				or 'Not Set'.
+//
+//
+//			FilesOlderThan		time.Time
+//
+//				This date time type is compared to file
+//				modification date times in order to determine
+//				whether the file is older than the
+//				'FilesOlderThan' file selection criterion. If
+//				the file modification date time is older than
+//				the 'FilesOlderThan' date time, that file is
+//				considered a 'match' for this file selection
+//				criterion.
+//
+//				If the value of 'FilesOlderThan' is set to
+//				time zero, the default value for type
+//				time.Time{}, then this file selection
+//				criterion is considered to be 'Inactive' or
+//				'Not Set'.
+//
+//			FilesNewerThan      time.Time
+//
+//				This date time type is compared to the file
+//				modification date time in order to determine
+//				whether the file is newer than the
+//				'FilesNewerThan' file selection criterion. If
+//				the file modification date time is newer than
+//				the 'FilesNewerThan' date time, that file is
+//				considered a 'match' for this file selection
+//				criterion.
+//
+//				If the value of 'FilesNewerThan' is set to
+//				time zero, the default value for type
+//				time.Time{}, then this file selection
+//				criterion is considered to be 'Inactive' or
+//				'Not Set'.
+//
+//			SelectByFileMode  FilePermissionConfig
+//
+//				Type FilePermissionConfig encapsulates an os.FileMode. The
+//				file selection criterion allows for the selection of files
+//				by File Mode.
+//
+//				File modes are compared to the value of 'SelectByFileMode'.
+//				If the File Mode for a given file is equal to the value of
+//				'SelectByFileMode', that file is considered to be a 'match'
+//				for this file selection criterion. Examples for setting
+//				SelectByFileMode are shown as follows:
+//
+//				fsc := FileSelectionCriteria{}
+//
+//				err = fsc.SelectByFileMode.SetByFileMode(os.FileMode(0666))
+//
+//				err = fsc.SelectByFileMode.SetFileModeByTextCode("-r--r--r--")
+//
+//			SelectCriterionMode FileSelectCriterionMode
+//
+//			This parameter selects the manner in which the file selection
+//			criteria above are applied in determining a 'match' for file
+//			selection purposes. 'SelectCriterionMode' may be set to one of
+//			two constant values:
+//
+//			(1) FileSelectCriterionMode(0).ANDSelect()
+//
+//				File selected if all active selection criteria
+//				are satisfied.
+//
+//				If this constant value is specified for the file selection mode,
+//				then a given file will not be judged as 'selected' unless all
+//				the active selection criterion are satisfied. In other words, if
+//				three active search criterion are provided for 'FileNamePatterns',
+//				'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
+//				selected unless it has satisfied all three criterion in this example.
+//
+//			(2) FileSelectCriterionMode(0).ORSelect()
+//
+//				File selected if any active selection criterion is satisfied.
+//
+//				If this constant value is specified for the file selection mode,
+//				then a given file will be selected if any one of the active file
+//				selection criterion is satisfied. In other words, if three active
+//				search criterion are provided for 'FileNamePatterns', 'FilesOlderThan'
+//				and 'FilesNewerThan', then a file will be selected if it satisfies any
+//				one of the three criterion in this example.
+//
+//		------------------------------------------------------------------------
+//
+//		IMPORTANT:
+//
+//		If all of the file selection criterion in the FileSelectionCriteria
+//		object are 'Inactive' or 'Not Set' (set to their zero or default values),
+//		then all the files meeting the File Type requirements in the directory
+//		defined by 'sourceDMgr' will be selected.
+//
+//			Example:
+//			  fsc := FileSelectCriterionMode{}
+//
+//			  In this example, 'fsc' is NOT initialized. Therefore,
+//			  all the selection criterion are 'Inactive'. Consequently,
+//			  all the files meeting the File Type requirements in the
+//			  directory defined by 'sourceDMgr' will be selected.
+//
+//		------------------------------------------------------------------------
+//
+//	sourceDMgrLabel				string
+//
+//		The name or label associated with input parameter
+//		'sourceDMgr' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "sourceDMgr" will be
+//		automatically applied.
+//
+//	targetDMgrLabel				string
+//
+//		The name or label associated with input parameter
+//		'targetDMgr' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "targetDMgr" will be
+//		automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	dirMoveStats				DirectoryMoveStats
+//
+//		If this method completes successfully, this
+//		returned instance of DirectoryMoveStats will be
+//		populated with statistics and information
+//		describing details of the move operation
+//		performed by this method.
+//
+//		type DirectoryMoveStats struct {
+//			TotalSrcFilesProcessed   uint64
+//			SourceFilesMoved         uint64
+//			SourceFileBytesMoved     uint64
+//			SourceFilesRemaining     uint64
+//			SourceFileBytesRemaining uint64
+//			SourceSubDirsMoved       uint64
+//			SourceSubDirsRemaining   uint64
+//			TotalDirsProcessed       uint64
+//			TargetDirsCreated        uint64
+//			NumOfSubDirectories      uint64
+//			SourceDirWasDeleted      bool
+//			ComputeError             error
+//		}
+//
+//	movedFiles					FileMgrCollection
+//
+//		If input parameter 'returnMovedFilesList' is set
+//		to 'true', 'movedFiles' will return a populated
+//		File Manager Collection documenting all the files
+//		actually included in this move operation.
+//
+//		If input parameter 'returnMovedFilesList' is set
+//		to 'false', 'movedFiles' will return an empty and
+//		unpopulated instance of FileMgrCollection.
+//
+//	nonfatalErrs				[]error
+//
+//		An array of error objects.
+//
+//		If this method completes successfully, the
+//		returned error array is set equal to 'nil'.
+//
+//		If non-fatal errors are encountered during
+//		processing, the returned error Type will
+//		encapsulate appropriate error messages.
+//
+//		Non-fatal errors usually involve processing
+//		failures associated with individual files.
+//
+//		The returned error messages will incorporate
+//		the method chain and text passed by input
+//		parameter, 'errPrefDto'. The 'errPrefDto' text
+//		will be prefixed or attached to the beginning of
+//		the error message.
+//
+//		This error array may contain multiple errors.
+//
+//		An error array may be consolidated into a single
+//		error using method StrMech.ConsolidateErrors()
+//
+//	fatalErr					error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'.
+//
+//		If a fatal error is encountered during
+//		processing, this returned error Type will
+//		encapsulate an appropriate error message. This
+//		returned error message will incorporate the
+//		method chain and text passed by input parameter,
+//		'errPrefDto'. The 'errPrefDto' text will be
+//		prefixed or attached to the	beginning of the error
+//		message.
+//
+//		Fatal errors are returned when the nature of the
+//		processing failure is such that it is no longer
+//		reasonable to continue code execution.
 func (dMgrHlprAtom *dirMgrHelperAtom) moveDirectoryFiles(
 	sourceDMgr *DirMgr,
 	targetDMgr *DirMgr,
 	returnMovedFilesList bool,
+	copyEmptyTargetDirectory bool,
 	deleteEmptySourceDirectory bool,
 	moveRegularFiles bool,
 	moveSymLinkFiles bool,
@@ -836,13 +1349,46 @@ func (dMgrHlprAtom *dirMgrHelperAtom) moveDirectoryFiles(
 			fatalErr
 	}
 
+	var err2 error
+	dMgrHlprMolecule := dirMgrHelperMolecule{}
+
+	if !targetPathDoesExist &&
+		copyEmptyTargetDirectory {
+
+		targetPathDoesExist,
+			err2 = dMgrHlprMolecule.
+			lowLevelMakeDir(
+				targetDMgr,
+				targetDMgrLabel,
+				ePrefix)
+
+		if err2 != nil {
+
+			fatalErr = fmt.Errorf("%v\n"+
+				"Error creating target directory!\n"+
+				"copyEmptyTargetDirectory == true\n"+
+				"%v Directory='%v'\n"+
+				"Error= \n%v\n",
+				funcName,
+				targetDMgrLabel,
+				targetDMgr.absolutePath,
+				err2.Error())
+
+			return dirMoveStats,
+				movedFiles,
+				nonfatalErrs,
+				fatalErr
+		}
+
+	}
+
 	isFileSelectionCriteriaActive :=
 		fileSelectCriteria.IsSelectionCriteriaActive()
 
-	var errs2 []error
 	var fileInfos []FileInfoPlus
 	var lenFileInfos int
 	var dMgrHlprTachyon = new(dirMgrHelperTachyon)
+	var errs2 []error
 
 	fileInfos,
 		lenFileInfos,
@@ -894,8 +1440,6 @@ func (dMgrHlprAtom *dirMgrHelperAtom) moveDirectoryFiles(
 	var fh = new(FileHelper)
 	var isMatch bool
 	var srcFile, targetFile string
-	var err2 error
-	dMgrHlprMolecule := dirMgrHelperMolecule{}
 
 	osPathSepStr := string(os.PathSeparator)
 
