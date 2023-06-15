@@ -10462,53 +10462,142 @@ func (dMgr *DirMgr) MakeDir(
 	return err
 }
 
-// MoveDirectory
+// MoveDirectoryFiles
 //
-// Moves files from the source directory identified by
-// DirMgr to a target directory. The 'move' operation is
-// accomplished in three steps. First, the files to be
-// copied are selected according to file selection
-// criteria specified by input parameter,
-// 'fileSelectCriteria'.
+// This method will 'move' selected files from a source
+// directory to a target directory.
 //
-// Second, the selected files are copied to target
-// directory identified by the input parameter,
-// 'targetDir'. Finally, after verifying the copy, the
-// files are deleted from the source directory (DirMgr).
+// This move operation is accomplished in two steps by
+// first copying selected source files to the target
+// directory and then deleting the original source
+// files. The copy step is executed using a Copy IO
+// operation. For information on the Copy IO procedure
+// see FileHelper{}.CopyFileByIo() method and reference:
 //
-// If, at the conclusion of the 'move' operation, there
-// are no files or subdirectories remaining in the source
-// directory (DirMgr), the source directory will be
-// deleted.
-//
-// The selected files are copied using Copy IO operation.
-// For information on the Copy IO procedure reference:
-//
-//	FileHelper{}.CopyFileByIo() method
 //	https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
 //
-// If the target directory does not previously exist,
-// this method will attempt to create the target
-// directory, provided, that files are selected for
-// movement to that directory. If no files match the file
-// selection criteria, the target directory will NOT be
-// created.
+// No subdirectories will be included in this move
+// operation. Only source files in a single directory
+// will be moved to the target directory.
 //
-// NOTE: This method ONLY moves files from the current
-// directory identified by 'DirMgr'. It does NOT move
-// files from subdirectories.
+// To qualify as a selected source file eligible for the
+// move operation, a file must comply with two filters:
+// File Type and File Characteristics.
 //
-// This method is optimized to support the movement of
-// large numbers of files.
+// To be eligible for the move operation, a source file
+// must first comply with the specified File Type
+// criteria. The File Type Filter classifies artifacts
+// residing in a parent directory as subdirectories,
+// regular files, SymLink files or other non-regular
+// files. Since this method does NOT move subdirectories,
+// the only valid file types are Regular Files, SymLink
+// Files and Other Non-Regular Files. For an explanation
+// of Regular and Non-Regular files, see the Definition
+// of Terms section below.
+//
+// Screening criteria for File Type is controlled by the
+// following three input parameters:
+//
+//	moveRegularFiles bool
+//	moveSymLinkFiles bool
+//	moveOtherNonRegularFiles bool
+//
+// File Types eligible for this move operation therefore
+// include Regular Files such as text files, image files
+// and executable files, SymLink files and other Non-Regular
+// Files such as device files, named pipes and sockets.
+//
+// In addition to File Type, selected files must also
+// comply with the File Characteristics criteria
+// specified by input parameter, 'fileSelectCriteria'.
+// The File Characteristics Selection criteria allows
+// users to screen files for File Name, File Modification
+// Date and File Mode.
 //
 // ----------------------------------------------------------------
 //
-// # IMPORTANT
+// # Definition Of Terms
 //
-// This method will delete files in the current DirMgr
-// path.  If all files have been moved out of the
-// directory and there are no sub-Directories remaining,
-// the DirMgr directory will likewise be deleted.
+//	Regular & Non-Regular Files
+//
+//	In Go programming language, a regular file is a file
+//	that contains data in any format that can be read by
+//	a user or an application. It is not a directory or a
+//	device file.
+//
+//	Regular files include text files, image files and
+//	executable files.
+//
+//	Non-regular files include directories, device files,
+//	named pipes, sockets, and symbolic links.
+//
+//	https://docs.studygolang.com/src/io/fs/fs.go
+//	https://go.dev/src/os/types.go
+//	https://go.dev/src/os/types.go?s=1237:1275#L31
+//	https://pkg.go.dev/gopkg.in/src-d/go-git.v4/plumbing/filemode
+//	https://www.linode.com/docs/guides/creating-reading-and-writing-files-in-go-a-tutorial/
+//
+//	SymLink Files
+//
+//	In computing, a symbolic link (also symlink or soft
+//	link) is a file whose purpose is to point to a file
+//	or directory (called the "target") by specifying a
+//	path thereto.
+//
+//		https://en.wikipedia.org/wiki/Symbolic_link
+//
+//	It's true that a symlink is a shortcut file. But it's
+//	different from a standard shortcut that a program
+//	installer might place on your Windows desktop to make
+//	the program easier to run.
+//
+//	Clicking on either type of shortcut opens the linked
+//	object. However, what goes on beneath the hood is
+//	different in both cases.
+//
+//	While a standard shortcut points to a certain object,
+//	a symlink makes it appear as if the linked object is
+//	actually there. Your computer and the apps on it will
+//	read the symlink as the target object itself.
+//
+//		https://www.thewindowsclub.com/create-symlinks-in-windows-10
+//		https://www.makeuseof.com/tag/what-is-a-symbolic-link-what-are-its-uses-makeuseof-explains/
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	(1)	This method ONLY moves files from the single
+//		parent source directory identified by the
+//		current	instance of DirMgr. These selected source
+//		files are moved to the target directory
+//		identified by input parameter 'targetDMgr'.
+//
+//	(2)	This method does NOT move subdirectories residing
+//		in parent source directory identified by the
+//		current DirMgr instance. Therefore, it NEVER
+//		moves files residing in subdirectories of the
+//		parent directory identified by the current DirMgr
+//		instance.
+//
+//	(3)	If the target directory does not exist, this method
+//		will attempt to create it.
+//
+//	(4)	Files will only be moved if they meet the File Type
+//		criteria and the File Characteristics Criteria.
+//
+//		File Type criteria are specified by input parameters:
+//
+//			moveRegularFiles bool
+//			moveSymLinkFiles bool
+//			moveOtherNonRegularFiles bool
+//
+//		File Characteristics criteria are specified by
+//		input parameter 'fileSelectCriteria'.
+//
+//		Files will NOT be selected for the move operation
+//		unless they satisfy both the File Type and File
+//		Characteristics filters.
 //
 // ----------------------------------------------------------------
 //
@@ -10522,41 +10611,137 @@ func (dMgr *DirMgr) MakeDir(
 //		directory does not exist, this method will
 //		attempt to create it.
 //
+//	returnMovedFilesList		bool
+//
+//		If input parameter 'returnMovedFilesList' is set
+//		to 'true', this method will return a populated
+//		File Manager Collection documenting all the files
+//		actually included in the move operation.
+//
+//		If input parameter 'returnMovedFilesList' is set
+//		to 'false', this method will return an empty and
+//		unpopulated instance of FileMgrCollection. This
+//		means that the files actually moved from the
+//		source directory to the target directory by this
+//		method, will NOT be documented.
+//
+//	copyEmptyTargetDirectory	bool
+//
+//		If set to 'true' the target directory will be
+//		created regardless of whether any files are
+//		selected to be moved to that directory. Remember
+//		that files are only moved to the target directory
+//		if they meet the File Type and File Characteristics
+//		criteria for file selection.
+//
+//	deleteEmptySourceDirectory	bool
+//
+//		This parameter controls whether empty source
+//		directories will be deleted after completion of
+//		the move operation.
+//
+//		If 'deleteEmptySourceDirectory' is set to 'true'
+//		and there are no files or subdirectories
+//		remaining in the source directory (sourceDMgr)
+//		after completion of the move operation, the
+//		source directory will be deleted.
+//
+//		If 'deleteEmptySourceDirectory' is set to
+//		'false', the source directory (sourceDMgr) will
+//		NOT be deleted after completion of the move
+//		operation.
+//
+//	moveRegularFiles			bool
+//
+//		If this parameter is set to 'true', Regular Files,
+//		which also meet the File Selection Characteristics
+//		criteria (fileSelectCriteria), will be included
+//		in the move operation.
+//
+//		Regular Files include text files, image files and
+//		executable files.
+//
+//		For an explanation of Regular and Non-Regular
+//		files, see the section on "Definition Of Terms",
+//		above.
+//
+//		If input parameters 'moveRegularFiles',
+//		'moveSymLinkFiles' and 'moveOtherNonRegularFiles'
+//		are all set to 'false', an error will be returned.
+//
+//	moveSymLinkFiles			bool
+//
+//		If this parameter is set to 'true', SymLink Files
+//		which also meet the File Selection Characteristics
+//		criteria (fileSelectCriteria), will be included
+//		in the move operation.
+//
+//		For an explanation of Regular and Non-Regular
+//		files, see the section on "Definition Of Terms",
+//		above.
+//
+//		If input parameters 'moveRegularFiles',
+//		'moveSymLinkFiles' and 'moveOtherNonRegularFiles'
+//		are all set to 'false', an error will be returned.
+//
+//	moveOtherNonRegularFiles	bool
+//
+//		If this parameter is set to 'true', Other
+//		Non-Regular Files, which also meet the File
+//		Selection Characteristics criteria
+//		(fileSelectCriteria), will be included in the
+//		move operation.
+//
+//		Examples of other non-regular file types
+//		include device files, named pipes, and sockets.
+//		See the Definition Of Terms section above.
+//
+//		If input parameters 'moveRegularFiles',
+//		'moveSymLinkFiles' and 'moveOtherNonRegularFiles'
+//		are all set to 'false', an error will be returned.
+//
 //	fileSelectCriteria			FileSelectionCriteria
 //
-//		This input parameter should be configured with
-//		the desired file selection criteria. Files
-//		matching this criteria will be moved from the
-//		current DirMgr path to the directory identified
-//		by input parameter, 'targetDir'.
+//		In addition to the File Type Selection Criteria,
+//		selected files must conform to the File
+//		Characteristics criteria specified by this
+//		parameter, 'fileSelectCriteria'.
 //
-//			type FileSelectionCriteria struct {
-//			 FileNamePatterns    []string
-//				An array of strings containing File Name Patterns
+//		File Characteristics Selection criteria allow
+//		users to screen files for File Name, File
+//		Modification Date and File Mode.
 //
-//			 FilesOlderThan      time.Time
-//			 	Match files with older modification date times
+//		Files matching these selection criteria, and the
+//		File Type filter, will be included in the move
+//		operation performed by this method.
 //
-//			 FilesNewerThan      time.Time
-//			 	Match files with newer modification date times
+//		type FileSelectionCriteria struct {
+//		 FileNamePatterns    []string
+//			An array of strings containing File Name Patterns
 //
-//			 SelectByFileMode    FilePermissionConfig
-//			 	Match file mode (os.FileMode).
+//		 FilesOlderThan      time.Time
+//		 	Match files with older modification date times
 //
-//			 SelectCriterionModeFileSelectCriterionMode
-//			 	Specifies 'AND' or 'OR' selection mode
-//			}
+//		 FilesNewerThan      time.Time
+//		 	Match files with newer modification date times
 //
-//		The FileSelectionCriteria type allows for
-//		configuration of single or multiple file selection
-//		criterion. The 'SelectCriterionMode' can be used to
-//		specify whether the file must match all, or any one,
-//		of the active file selection criterion.
+//		 SelectByFileMode    FilePermissionConfig
+//		 	Match file mode (os.FileMode).
 //
-//		Elements of the FileSelectionCriteria are described
-//		below:
+//		 SelectCriterionModeFileSelectCriterionMode
+//		 	Specifies 'AND' or 'OR' selection mode
+//		}
 //
-//			FileNamePatterns	[]string
+//	  The FileSelectionCriteria Type allows for
+//	  configuration of single or multiple file selection
+//	  criterion. The 'SelectCriterionMode' can be used to
+//	  specify whether the file must match all, or any one,
+//	  of the active file selection criterion.
+//
+//	  Elements of the File Characteristics Selection
+//	  Criteria are described below:
+//
+//			FileNamePatterns		[]string
 //
 //				An array of strings which may define one or more
 //				search patterns. If a file name matches any one
@@ -10608,7 +10793,7 @@ func (dMgr *DirMgr) MakeDir(
 //				criterion is considered to be 'Inactive' or
 //				'Not Set'.
 //
-//			SelectByFileMode	FilePermissionConfig
+//			SelectByFileMode  FilePermissionConfig
 //
 //				Type FilePermissionConfig encapsulates an os.FileMode. The
 //				file selection criterion allows for the selection of files
@@ -10660,19 +10845,18 @@ func (dMgr *DirMgr) MakeDir(
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria object are
-//		'Inactive' or 'Not Set' (set to their zero or default values), then all the
-//		files processed in the directory tree will be selected and moved
-//		to the target directory.
+//		If all of the file selection criterion in the FileSelectionCriteria
+//		object are 'Inactive' or 'Not Set' (set to their zero or default values),
+//		then all the files meeting the File Type requirements in the directory
+//		defined by 'sourceDMgr' will be selected.
 //
 //			Example:
 //			  fsc := FileSelectCriterionMode{}
 //
 //			  In this example, 'fsc' is NOT initialized. Therefore,
 //			  all the selection criterion are 'Inactive'. Consequently,
-//			  all the files encountered in the target directory during
-//			  the search operation will be selected and moved
-//			  to the target directory.
+//			  all the files meeting the File Type requirements in the
+//			  directory defined by 'sourceDMgr' will be selected.
 //
 //		------------------------------------------------------------------------
 //
@@ -10754,7 +10938,7 @@ func (dMgr *DirMgr) MakeDir(
 //			SourceFileBytesRemaining uint64
 //			TotalDirsProcessed       uint64
 //			DirsCreated              uint64
-//			SourceOriginalSubDirectories      uint64
+//			SourceOriginalSubDirs      uint64
 //			SourceDirWasDeleted      bool
 //			ComputeError             error
 //		}
@@ -10810,11 +10994,18 @@ func (dMgr *DirMgr) MakeDir(
 //
 //		Upon method completion, be sure to check both
 //		Non-Fatal and Fatal errors.
-func (dMgr *DirMgr) MoveDirectory(
+func (dMgr *DirMgr) MoveDirectoryFiles(
 	targetDMgr DirMgr,
+	returnMovedFilesList bool,
+	copyEmptyTargetDirectory bool,
+	deleteEmptySourceDirectory bool,
+	moveRegularFiles bool,
+	moveSymLinkFiles bool,
+	moveOtherNonRegularFiles bool,
 	fileSelectCriteria FileSelectionCriteria,
 	errorPrefix interface{}) (
 	dirMoveStats DirectoryMoveStats,
+	movedFiles FileMgrCollection,
 	nonfatalErrs []error,
 	fatalErr error) {
 
@@ -10832,28 +11023,35 @@ func (dMgr *DirMgr) MoveDirectory(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"DirMgr.MoveDirectory()",
+		"DirMgr.MoveDirectoryFiles()",
 		"")
 
 	if err != nil {
 
 		nonfatalErrs = append(nonfatalErrs, err)
 
-		return dirMoveStats, nonfatalErrs, fatalErr
+		return dirMoveStats, movedFiles, nonfatalErrs, fatalErr
 	}
 
 	dirMoveStats,
+		movedFiles,
 		nonfatalErrs,
-		fatalErr = new(dirMgrHelper).moveDirectory(
-		dMgr,
-		&targetDMgr,
-		fileSelectCriteria,
-		"dMgr",
-		"targetDMgr",
-		"fileSelectCriteria",
-		ePrefix)
+		fatalErr = new(dirMgrHelperAtom).
+		moveDirectoryFiles(
+			dMgr,
+			&targetDMgr,
+			returnMovedFilesList,
+			copyEmptyTargetDirectory,
+			deleteEmptySourceDirectory,
+			moveRegularFiles,
+			moveSymLinkFiles,
+			moveOtherNonRegularFiles,
+			fileSelectCriteria,
+			"dMgr",
+			"targetDMgr",
+			ePrefix)
 
-	return dirMoveStats, nonfatalErrs, fatalErr
+	return dirMoveStats, movedFiles, nonfatalErrs, fatalErr
 }
 
 // MoveDirectoryTree
@@ -10970,7 +11168,7 @@ func (dMgr *DirMgr) MoveDirectory(
 //			SourceFileBytesRemaining uint64
 //			TotalDirsProcessed       uint64
 //			DirsCreated              uint64
-//			SourceOriginalSubDirectories      uint64
+//			SourceOriginalSubDirs      uint64
 //			SourceDirWasDeleted      bool
 //			ComputeError             error
 //		}
@@ -11168,7 +11366,7 @@ func (dMgr *DirMgr) MoveDirectoryTree(
 //			SourceFileBytesRemaining uint64
 //			TotalDirsProcessed       uint64
 //			DirsCreated              uint64
-//			SourceOriginalSubDirectories      uint64
+//			SourceOriginalSubDirs      uint64
 //			SourceDirWasDeleted      bool
 //			ComputeError             error
 //		}

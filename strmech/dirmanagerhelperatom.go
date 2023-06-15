@@ -720,8 +720,8 @@ func (dMgrHlprAtom *dirMgrHelperAtom) lowLevelScreenPathStrForInvalidChars(
 
 // moveDirectoryFiles
 //
-// This method will 'move' files from a source directory
-// to a target directory.
+// This method will 'move' selected files from a source
+// directory to a target directory.
 //
 // This move operation is accomplished in two steps by
 // first copying selected source files to the target
@@ -1179,7 +1179,7 @@ func (dMgrHlprAtom *dirMgrHelperAtom) lowLevelScreenPathStrForInvalidChars(
 //			SourceSubDirsRemaining   uint64
 //			TotalDirsProcessed       uint64
 //			TargetDirsCreated        uint64
-//			SourceOriginalSubDirectories      uint64
+//			SourceOriginalSubDirs      uint64
 //			SourceDirWasDeleted      bool
 //			ComputeError             error
 //		}
@@ -1649,7 +1649,7 @@ func (dMgrHlprAtom *dirMgrHelperAtom) moveDirectoryFiles(
 		dirMoveStats.SourceSubDirsRemaining =
 			dirProfile.DirSubDirectories
 
-		dirMoveStats.SourceOriginalSubDirectories =
+		dirMoveStats.SourceOriginalSubDirs =
 			dirProfile.DirSubDirectories
 
 		if dirProfile.DirExistsOnStorageDrive &&

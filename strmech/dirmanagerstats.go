@@ -420,18 +420,18 @@ type DirectoryDeleteFileInfo struct {
 }
 
 type DirectoryMoveStats struct {
-	TotalSrcFilesProcessed       uint64
-	SourceFilesMoved             uint64
-	SourceFileBytesMoved         uint64
-	SourceFilesRemaining         uint64
-	SourceFileBytesRemaining     uint64
-	SourceSubDirsMoved           uint64
-	SourceSubDirsRemaining       uint64
-	TotalDirsProcessed           uint64
-	TargetDirsCreated            uint64
-	SourceOriginalSubDirectories uint64
-	SourceDirWasDeleted          bool
-	ComputeError                 error
+	TotalSrcFilesProcessed   uint64
+	SourceFilesMoved         uint64
+	SourceFileBytesMoved     uint64
+	SourceFilesRemaining     uint64
+	SourceFileBytesRemaining uint64
+	SourceSubDirsMoved       uint64
+	SourceSubDirsRemaining   uint64
+	TotalDirsProcessed       uint64
+	TargetDirsCreated        uint64
+	SourceOriginalSubDirs    uint64
+	SourceDirWasDeleted      bool
+	ComputeError             error
 }
 
 type DeleteDirFilesStats struct {
