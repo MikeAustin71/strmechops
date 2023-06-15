@@ -717,3 +717,410 @@ func (dMgrHlprAtom *dirMgrHelperAtom) lowLevelScreenPathStrForInvalidChars(
 
 	return validPathStr, validPathStrLength, err
 }
+
+// moveDirectoryFiles
+//
+// This method will 'move' files from a source directory
+// to a target directory. This move operation is
+// accomplished in two steps by first copying the source
+// file to the target directory and then deleting the
+// original source file.
+func (dMgrHlprAtom *dirMgrHelperAtom) moveDirectoryFiles(
+	sourceDMgr *DirMgr,
+	targetDMgr *DirMgr,
+	returnMovedFilesList bool,
+	deleteEmptySourceDirectory bool,
+	moveRegularFiles bool,
+	moveSymLinkFiles bool,
+	moveOtherNonRegularFiles bool,
+	fileSelectCriteria FileSelectionCriteria,
+	sourceDMgrLabel string,
+	targetDMgrLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	dirMoveStats DirectoryMoveStats,
+	movedFiles FileMgrCollection,
+	nonfatalErrs []error,
+	fatalErr error) {
+
+	if dMgrHlprAtom.lock == nil {
+		dMgrHlprAtom.lock = new(sync.Mutex)
+	}
+
+	dMgrHlprAtom.lock.Lock()
+
+	defer dMgrHlprAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "dirMgrHelperAtom." +
+		"moveDirectoryFiles()"
+
+	ePrefix,
+		fatalErr = ePref.ErrPrefixDto{}.NewIEmpty(
+		errPrefDto,
+		funcName,
+		"")
+
+	if fatalErr != nil {
+
+		return dirMoveStats,
+			movedFiles,
+			nonfatalErrs,
+			fatalErr
+	}
+
+	if len(sourceDMgrLabel) == 0 {
+
+		sourceDMgrLabel = "sourceDMgr"
+	}
+
+	dMgrHlprPreon := new(dirMgrHelperPreon)
+
+	_,
+		_,
+		fatalErr = dMgrHlprPreon.
+		validateDirMgr(
+			sourceDMgr,
+			true,
+			sourceDMgrLabel,
+			ePrefix)
+
+	if fatalErr != nil {
+
+		return dirMoveStats,
+			movedFiles,
+			nonfatalErrs,
+			fatalErr
+	}
+
+	if len(targetDMgrLabel) == 0 {
+
+		targetDMgrLabel = "targetDMgr"
+	}
+
+	var targetPathDoesExist bool
+
+	_,
+		targetPathDoesExist,
+		fatalErr = dMgrHlprPreon.
+		validateDirMgr(
+			targetDMgr,
+			false,
+			targetDMgrLabel,
+			ePrefix)
+
+	if fatalErr != nil {
+
+		return dirMoveStats,
+			movedFiles,
+			nonfatalErrs,
+			fatalErr
+	}
+
+	if moveRegularFiles == false &&
+		moveSymLinkFiles == false &&
+		moveOtherNonRegularFiles == false {
+
+		fatalErr = fmt.Errorf("%v\n"+
+			"Fatal Error: File Type filters are conflicted!\n"+
+			"All of the File Type filters are set to 'false'\n"+
+			"This gurantees that NO files will be selected.\n"+
+			"moveRegularFiles == false\n"+
+			"moveSymLinkFiles == false\n"+
+			"moveOtherNonRegularFiles == false\n",
+			ePrefix.String())
+
+		return dirMoveStats,
+			movedFiles,
+			nonfatalErrs,
+			fatalErr
+	}
+
+	isFileSelectionCriteriaActive :=
+		fileSelectCriteria.IsSelectionCriteriaActive()
+
+	var errs2 []error
+	var fileInfos []FileInfoPlus
+	var lenFileInfos int
+	var dMgrHlprTachyon = new(dirMgrHelperTachyon)
+
+	fileInfos,
+		lenFileInfos,
+		errs2,
+		fatalErr = dMgrHlprTachyon.
+		getFileInfosFromDirectory(
+			sourceDMgr,
+			false,                    // getDirectoryFileInfos
+			moveRegularFiles,         // getRegularFileInfos
+			moveSymLinkFiles,         // copySymLinkFiles,
+			moveOtherNonRegularFiles, // copyOtherNonRegularFiles
+			FileSelectionCriteria{},
+			sourceDMgrLabel,
+			ePrefix.XCpy(sourceDMgrLabel))
+
+	if len(errs2) != 0 {
+
+		nonfatalErrs = append(nonfatalErrs, errs2...)
+
+	}
+
+	if fatalErr != nil {
+
+		return dirMoveStats,
+			movedFiles,
+			nonfatalErrs,
+			fatalErr
+	}
+
+	if lenFileInfos == 0 {
+
+		fatalErr = fmt.Errorf("%v\n"+
+			"Error: The %v source directory is EMPTY!\n"+
+			"The move files operation cannot proceed.\n"+
+			"Method dirMgrHelperElectron.getFileInfosFromDirectory()\n"+
+			"returned a zero length array of File Info Objects from:\n"+
+			"%v = %v\n",
+			ePrefix.String(),
+			sourceDMgrLabel,
+			sourceDMgrLabel,
+			sourceDMgr.absolutePath)
+
+		return dirMoveStats,
+			movedFiles,
+			nonfatalErrs,
+			fatalErr
+	}
+
+	var fh = new(FileHelper)
+	var isMatch bool
+	var srcFile, targetFile string
+	var err2 error
+	dMgrHlprMolecule := dirMgrHelperMolecule{}
+
+	osPathSepStr := string(os.PathSeparator)
+
+	for _, nameFileInfo := range fileInfos {
+
+		dirMoveStats.TotalSrcFilesProcessed++
+
+		// nameFileInfo is an os.FileInfo
+
+		if isFileSelectionCriteriaActive == true {
+
+			isMatch,
+				err2,
+				_ =
+				fh.FilterFileName(
+					nameFileInfo,
+					fileSelectCriteria,
+					ePrefix.XCpy("nameFileInfo"))
+
+			if err2 != nil {
+
+				fatalErr =
+					fmt.Errorf("%v\n"+
+						"Error returned by fh.FilterFileName(nameFileInfo, fileSelectCriteria).\n"+
+						"%v directory= '%v'\n"+
+						"fileName= '%v'\n"+
+						"Error= \n%v\n",
+						funcName,
+						sourceDMgrLabel,
+						sourceDMgr.absolutePath,
+						nameFileInfo.Name(),
+						err2.Error())
+
+				return dirMoveStats,
+					movedFiles,
+					nonfatalErrs,
+					fatalErr
+			}
+
+		} else {
+
+			isMatch = true
+		}
+
+		if !isMatch {
+
+			dirMoveStats.SourceFilesRemaining++
+			continue
+
+		} else {
+			// We have a Match!
+
+			if !targetPathDoesExist {
+
+				targetPathDoesExist,
+					err2 = dMgrHlprMolecule.
+					lowLevelMakeDir(
+						targetDMgr,
+						targetDMgrLabel,
+						ePrefix)
+
+				if err2 != nil {
+
+					fatalErr = fmt.Errorf("%v\n"+
+						"Error creating target directory!\n"+
+						"%v Directory='%v'\n"+
+						"Error= \n%v\n",
+						funcName,
+						targetDMgrLabel,
+						targetDMgr.absolutePath,
+						err2.Error())
+
+					return dirMoveStats,
+						movedFiles,
+						nonfatalErrs,
+						fatalErr
+				}
+
+			}
+
+			srcFile = sourceDMgr.absolutePath +
+				osPathSepStr + nameFileInfo.Name()
+
+			targetFile = targetDMgr.absolutePath +
+				osPathSepStr + nameFileInfo.Name()
+
+			err2 = dMgrHlprMolecule.
+				lowLevelCopyFile(
+					srcFile,
+					nameFileInfo,
+					targetFile,
+					"sourceFile",
+					"destinationFile",
+					ePrefix)
+
+			if err2 != nil {
+
+				fatalErr = fmt.Errorf("%v\n"+
+					"Error copying source file to target directory!\n"+
+					"%v Directory='%v'\n"+
+					"%v Directory='%v'\n"+
+					"Source File='%v\n"+
+					"Target File='%v'\n"+
+					"Error= \n%v\n",
+					funcName,
+					sourceDMgrLabel,
+					sourceDMgr.absolutePath,
+					targetDMgrLabel,
+					targetDMgr.absolutePath,
+					srcFile,
+					targetFile,
+					err2.Error())
+
+				return dirMoveStats,
+					movedFiles,
+					nonfatalErrs,
+					fatalErr
+			}
+
+			err2 = os.Remove(srcFile)
+
+			if err2 != nil {
+
+				fatalErr = fmt.Errorf("%v\n"+
+					"Error occurred after file copy completed during the\n"+
+					"delete source file operation!\n"+
+					"Error returned by os.Remove(sourceFile)\n"+
+					"sourceFile='%v'\n"+
+					"Error= \n%v\n",
+					ePrefix.String(),
+					srcFile,
+					err2.Error())
+
+				return dirMoveStats,
+					movedFiles,
+					nonfatalErrs,
+					fatalErr
+			}
+
+			dirMoveStats.SourceFilesMoved++
+
+			if returnMovedFilesList {
+
+				err2 = movedFiles.AddFileMgrByDirFileNameExt(
+					*sourceDMgr,
+					nameFileInfo.Name(),
+					ePrefix)
+
+				if err2 != nil {
+					nonfatalErrs =
+						append(nonfatalErrs, err2)
+				}
+			}
+		}
+
+	}
+
+	fileInfos = nil
+
+	if deleteEmptySourceDirectory {
+
+		var dirProfile DirectoryProfile
+
+		_,
+			dirProfile,
+			err2 = dMgrHlprTachyon.
+			getDirectoryProfile(
+				sourceDMgr,
+				sourceDMgrLabel,
+				ePrefix)
+
+		if err2 != nil {
+
+			fatalErr = fmt.Errorf("%v\n"+
+				"Error occurred reading the %v Source Directory\n"+
+				"Profile after the move operation was completed.\n"+
+				"Error returned by dirMgrHelperTachyon.getDirectoryProfile()\n"+
+				"%v Directory = '%v'\n"+
+				"Error= \n%v\n",
+				funcName,
+				sourceDMgrLabel,
+				sourceDMgrLabel,
+				sourceDMgr.absolutePath,
+				err2.Error())
+
+			return dirMoveStats,
+				movedFiles,
+				nonfatalErrs,
+				fatalErr
+
+		}
+
+		if dirProfile.DirExistsOnStorageDrive &&
+			dirProfile.DirTotalFiles == 0 &&
+			dirProfile.DirSubDirectories == 0 &&
+			dirProfile.DirRegularFiles == 0 &&
+			dirProfile.DirSymLinkFiles == 0 &&
+			dirProfile.DirNonRegularFiles == 0 {
+			// The source directory is empty
+
+			err2 = dMgrHlprMolecule.
+				lowLevelDeleteDirectoryAll(
+					sourceDMgr,
+					sourceDMgrLabel,
+					ePrefix)
+
+			fatalErr = fmt.Errorf("%v\n"+
+				"Error occurred deleting the %v Source Directory\n"+
+				"The %v Directory Profile showed 'Empty' with zero files remaining.\n"+
+				"Error returned by dMgrHlprMolecule.lowLevelDeleteDirectoryAll()\n"+
+				"%v Directory = '%v'\n"+
+				"Error= \n%v\n",
+				funcName,
+				sourceDMgrLabel,
+				sourceDMgrLabel,
+				sourceDMgrLabel,
+				sourceDMgr.absolutePath,
+				err2.Error())
+
+		}
+
+	}
+
+	return dirMoveStats,
+		movedFiles,
+		nonfatalErrs,
+		fatalErr
+}

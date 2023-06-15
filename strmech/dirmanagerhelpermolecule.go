@@ -1024,17 +1024,6 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 			dstLabel)
 	}
 
-	if !srcFInfo.Mode().IsRegular() {
-
-		return fmt.Errorf("%v\n"+
-			"Error: %v is a Non-Regular File and cannot be copied!\n"+
-			"%v='%v'\n",
-			ePrefix.String(),
-			srcLabel,
-			srcLabel,
-			srcFile)
-	}
-
 	// First, open the source file
 	inSrcPtr, err := os.Open(srcFile)
 
