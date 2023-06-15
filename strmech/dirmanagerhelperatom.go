@@ -1179,7 +1179,7 @@ func (dMgrHlprAtom *dirMgrHelperAtom) lowLevelScreenPathStrForInvalidChars(
 //			SourceSubDirsRemaining   uint64
 //			TotalDirsProcessed       uint64
 //			TargetDirsCreated        uint64
-//			NumOfSubDirectories      uint64
+//			SourceOriginalSubDirectories      uint64
 //			SourceDirWasDeleted      bool
 //			ComputeError             error
 //		}
@@ -1267,7 +1267,7 @@ func (dMgrHlprAtom *dirMgrHelperAtom) moveDirectoryFiles(
 
 	funcName := "dirMgrHelperAtom." +
 		"moveDirectoryFiles()"
-	//TODO Re-check dirMoveStats total
+
 	ePrefix,
 		fatalErr = ePref.ErrPrefixDto{}.NewIEmpty(
 		errPrefDto,
@@ -1380,6 +1380,7 @@ func (dMgrHlprAtom *dirMgrHelperAtom) moveDirectoryFiles(
 				fatalErr
 		}
 
+		dirMoveStats.TargetDirsCreated++
 	}
 
 	isFileSelectionCriteriaActive :=
@@ -1443,6 +1444,8 @@ func (dMgrHlprAtom *dirMgrHelperAtom) moveDirectoryFiles(
 
 	osPathSepStr := string(os.PathSeparator)
 
+	dirMoveStats.TotalDirsProcessed = 1
+
 	for _, nameFileInfo := range fileInfos {
 
 		dirMoveStats.TotalSrcFilesProcessed++
@@ -1486,7 +1489,6 @@ func (dMgrHlprAtom *dirMgrHelperAtom) moveDirectoryFiles(
 
 		if !isMatch {
 
-			dirMoveStats.SourceFilesRemaining++
 			continue
 
 		} else {
@@ -1580,6 +1582,8 @@ func (dMgrHlprAtom *dirMgrHelperAtom) moveDirectoryFiles(
 			}
 
 			dirMoveStats.SourceFilesMoved++
+			dirMoveStats.SourceFileBytesMoved +=
+				uint64(nameFileInfo.Size())
 
 			if returnMovedFilesList {
 
@@ -1631,6 +1635,22 @@ func (dMgrHlprAtom *dirMgrHelperAtom) moveDirectoryFiles(
 				fatalErr
 
 		}
+
+		dirMoveStats.SourceFilesRemaining =
+			dirProfile.DirRegularFiles +
+				dirProfile.DirSymLinkFiles +
+				dirProfile.DirNonRegularFiles
+
+		dirMoveStats.SourceFileBytesRemaining =
+			dirProfile.DirRegularFileBytes +
+				dirProfile.DirSymLinkFileBytes +
+				dirProfile.DirNonRegularFileBytes
+
+		dirMoveStats.SourceSubDirsRemaining =
+			dirProfile.DirSubDirectories
+
+		dirMoveStats.SourceOriginalSubDirectories =
+			dirProfile.DirSubDirectories
 
 		if dirProfile.DirExistsOnStorageDrive &&
 			dirProfile.DirTotalFiles == 0 &&

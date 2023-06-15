@@ -10754,7 +10754,7 @@ func (dMgr *DirMgr) MakeDir(
 //			SourceFileBytesRemaining uint64
 //			TotalDirsProcessed       uint64
 //			DirsCreated              uint64
-//			NumOfSubDirectories      uint64
+//			SourceOriginalSubDirectories      uint64
 //			SourceDirWasDeleted      bool
 //			ComputeError             error
 //		}
@@ -10970,7 +10970,7 @@ func (dMgr *DirMgr) MoveDirectory(
 //			SourceFileBytesRemaining uint64
 //			TotalDirsProcessed       uint64
 //			DirsCreated              uint64
-//			NumOfSubDirectories      uint64
+//			SourceOriginalSubDirectories      uint64
 //			SourceDirWasDeleted      bool
 //			ComputeError             error
 //		}
@@ -11168,7 +11168,7 @@ func (dMgr *DirMgr) MoveDirectoryTree(
 //			SourceFileBytesRemaining uint64
 //			TotalDirsProcessed       uint64
 //			DirsCreated              uint64
-//			NumOfSubDirectories      uint64
+//			SourceOriginalSubDirectories      uint64
 //			SourceDirWasDeleted      bool
 //			ComputeError             error
 //		}

@@ -5581,7 +5581,7 @@ func (dMgrHlpr *dirMgrHelper) getParentDirMgr(
 //			SourceFileBytesRemaining uint64
 //			TotalDirsProcessed       uint64
 //			DirsCreated              uint64
-//			NumOfSubDirectories      uint64
+//			SourceOriginalSubDirectories      uint64
 //			SourceDirWasDeleted      bool
 //			ComputeError             error
 //		}
@@ -5744,7 +5744,7 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 
 		if nameDirEntry.IsDir() {
 			// This is a directory.
-			dirMoveStats.NumOfSubDirectories++
+			dirMoveStats.SourceOriginalSubDirectories++
 			continue
 
 		}
@@ -5913,7 +5913,7 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 	// there are no subdirectories, DELETE the
 	// directory (dMgr).
 	if dirMoveStats.SourceFilesRemaining == 0 &&
-		dirMoveStats.NumOfSubDirectories == 0 {
+		dirMoveStats.SourceOriginalSubDirectories == 0 {
 
 		err = dMgrHlprMolecule.
 			lowLevelDeleteDirectoryAll(
@@ -6050,7 +6050,7 @@ func (dMgrHlpr *dirMgrHelper) moveDirectory(
 //			SourceFileBytesRemaining uint64
 //			TotalDirsProcessed       uint64
 //			DirsCreated              uint64
-//			NumOfSubDirectories      uint64
+//			SourceOriginalSubDirectories      uint64
 //			SourceDirWasDeleted      bool
 //			ComputeError             error
 //		}
@@ -6222,7 +6222,7 @@ func (dMgrHlpr *dirMgrHelper) moveDirectoryTree(
 	dirMoveStats.TargetDirsCreated =
 		dTreeCopyStats.DirsCreated
 
-	dirMoveStats.NumOfSubDirectories =
+	dirMoveStats.SourceOriginalSubDirectories =
 		dTreeCopyStats.TotalDirsScanned - 1
 
 	dirMoveStats.SourceFilesRemaining =
@@ -6407,7 +6407,7 @@ func (dMgrHlpr *dirMgrHelper) moveDirectoryTree(
 //			SourceFileBytesRemaining uint64
 //			TotalDirsProcessed       uint64
 //			DirsCreated              uint64
-//			NumOfSubDirectories      uint64
+//			SourceOriginalSubDirectories      uint64
 //			SourceDirWasDeleted      bool
 //			ComputeError             error
 //		}
@@ -6548,7 +6548,7 @@ func (dMgrHlpr *dirMgrHelper) moveSubDirectoryTree(
 	dirMoveStats.TargetDirsCreated =
 		dTreeCopyStats.DirsCreated
 
-	dirMoveStats.NumOfSubDirectories =
+	dirMoveStats.SourceOriginalSubDirectories =
 		dTreeCopyStats.TotalDirsScanned
 
 	dirMoveStats.SourceFilesRemaining =
