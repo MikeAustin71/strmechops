@@ -1061,9 +1061,24 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getFileInfosFromDirectory(
 //
 // # BE ADVISED
 //
-//	This method will only identify, document and return
-//	subdirectories located in the top level or parent
-//	directory identified by input parameter 'dMgr'.
+//	(1)	This method will only identify, document and
+//		return subdirectories located in the top level or
+//		parent directory identified by input parameter
+//		'dMgr'.
+//
+//	(2) The top level or parent directory specified by
+//		input parameter 'dMgr' will NOT be included in
+//		the Directory Manager collection returned by this
+//		method ('subDirectories').
+//
+//	(3)	Directory entries for the current directory (".")
+//		and the parent directory ("..") will be skipped.
+//		These directory entries will not be added or
+//		included in the subdirectories collection
+//		('subDirectories'). Likewise, these two directory
+//		entries will NOT be included in the subdirectory
+//		profile and statistical information returned by
+//		this method ('dirProfile').
 //
 // ----------------------------------------------------------------
 //
@@ -1095,6 +1110,15 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getFileInfosFromDirectory(
 //			type DirMgrCollection struct {
 //				dirMgrs []DirMgr
 //			}
+//
+//		Directory entries for the current directory (".")
+//		and the parent directory ("..") will be skipped.
+//		These directory entries will not be added or
+//		included in the subdirectories collection
+//		('subDirectories'). Likewise, these two directory
+//		entries will NOT be included in the subdirectory
+//		profile and statistical information returned by
+//		this method ('dirProfile').
 //
 //	dMgrLabel					string
 //
@@ -1250,6 +1274,15 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getSubdirectories(
 		return dirProfile, err
 	}
 
+	if subDirectories == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'subDirectories' is a 'nil' pointer!\n",
+			ePrefix.String())
+
+		return dirProfile, err
+	}
+
 	if len(dMgrLabel) == 0 {
 
 		dMgrLabel = "dMgr"
@@ -1324,6 +1357,14 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getSubdirectories(
 		}
 
 		if fInfo.IsDir() {
+
+			if fInfo.Name() == "." ||
+				fInfo.Name() == ".." {
+
+				// Skip the current directory and
+				// the parent directory entries.
+				continue
+			}
 
 			dirProfile.DirSubDirectories++
 			dirProfile.DirSubDirectoriesBytes +=

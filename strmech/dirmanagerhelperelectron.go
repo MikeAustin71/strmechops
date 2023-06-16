@@ -295,6 +295,28 @@ func (dMgrHlprElectron *dirMgrHelperElectron) isPathStringEmptyOrBlank(
 //
 // ----------------------------------------------------------------
 //
+// # BE ADVISED
+//
+//	(1)	This method will identify, document and return
+//		subdirectories located in the entire directory
+//		tree identified by input parameter 'dMgr'.
+//
+//	(2) The top level or parent directory specified by
+//		input parameter 'dMgr' will NOT be included in
+//		the Directory Manager collection returned by this
+//		method ('subDirectories').
+//
+//	(3)	Directory entries for the current directory (".")
+//		and the parent directory ("..") will be skipped.
+//		These directory entries will not be added or
+//		included in the subdirectories collection
+//		('subDirectories'). Likewise, these two directory
+//		entries will NOT be included in the subdirectory
+//		profile and statistical information returned by
+//		this method ('dirTreeProfile').
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	dMgr						*DirMgr
@@ -325,6 +347,15 @@ func (dMgrHlprElectron *dirMgrHelperElectron) isPathStringEmptyOrBlank(
 //			type DirMgrCollection struct {
 //				dirMgrs []DirMgr
 //			}
+//
+//		Directory entries for the current directory (".")
+//		and the parent directory ("..") will be skipped.
+//		These directory entries will not be added or
+//		included in the subdirectories collection
+//		('subDirectories'). Likewise, these two directory
+//		entries will NOT be included in the subdirectory
+//		profile and statistical information returned by
+//		this method ('dirTreeProfile').
 //
 //	dMgrLabel					string
 //
@@ -359,13 +390,9 @@ func (dMgrHlprElectron *dirMgrHelperElectron) isPathStringEmptyOrBlank(
 //
 //		If this method completes successfully, this
 //		returned instance of DirectoryProfile will be
-//		populated with profile and statistical
-//		information on the directory tree identified by
-//		input parameter 'dMgr'.
-//
-//		The information presented here represents an
-//		accumulation of all files and subdirectories
-//		in the directory tree.
+//		populated with cumulative profile and statistical
+//		information on the entire directory tree defined
+//		by input parameter 'dMgr'.
 //
 //		type DirectoryProfile struct {
 //
@@ -380,18 +407,18 @@ func (dMgrHlprElectron *dirMgrHelperElectron) isPathStringEmptyOrBlank(
 //				a storage drive.
 //
 //			DirTotalFiles uint64
-//				The number of total files, residing in
-//				the subject directory. This includes
-//				Regular Files, SymLink Files and
-//				Non-Regular Files. It does NOT include
-//				directory entry files.
+//				The number of total files, of all types,
+//				residing in the subject directory. This
+//				includes directory entry files, Regular
+//				Files, SymLink Files and Non-Regular
+//				Files.
 //
 //			DirTotalFileBytes uint64
-//				The size of all files, residing in the
-//				subject directory expressed in bytes.
-//				This includes Regular Files, SymLink Files
-//				and Non-Regular Files. It does NOT include
-//				directory entry files.
+//				The size of all files, of all types,
+//				residing in the subject directory
+//				expressed in bytes. This includes
+//				directory entry files, Regular Files,
+//				SymLink Files and Non-Regular Files.
 //
 //			DirSubDirectories uint64
 //				The number of subdirectories residing
@@ -453,8 +480,8 @@ func (dMgrHlprElectron *dirMgrHelperElectron) isPathStringEmptyOrBlank(
 //		the beginning of the error message.
 func (dMgrHlprElectron *dirMgrHelperElectron) getAllSubDirsInDirTree(
 	dMgr *DirMgr,
-	dirPathLabel string,
-	subDirsInTree *DirMgrCollection,
+	subDirectories *DirMgrCollection,
+	dMgrLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
 	dirTreeProfile DirectoryProfile,
 	err error) {
@@ -482,10 +509,134 @@ func (dMgrHlprElectron *dirMgrHelperElectron) getAllSubDirsInDirTree(
 		return dirTreeProfile, err
 	}
 
-	if len(dirPathLabel) == 0 {
-		dirPathLabel = "DirMgr"
+	if subDirectories == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'subDirectories' is a 'nil' pointer!\n",
+			ePrefix.String())
+
+		return dirTreeProfile, err
 	}
 
+	if len(dMgrLabel) == 0 {
+		dMgrLabel = "dMgr"
+	}
+
+	_,
+		_,
+		err = new(dirMgrHelperPreon).
+		validateDirMgr(
+			dMgr,
+			true, // Path MUST exist on disk
+			dMgrLabel,
+			ePrefix.XCpy(
+				dMgrLabel))
+
+	if err != nil {
+
+		return dirTreeProfile, err
+	}
+
+	dirTreeProfile.DirAbsolutePath =
+		dMgr.absolutePath
+
+	dirTreeProfile.DirExistsOnStorageDrive =
+		true
+
+	originalLenOfSubDirsCol := len(subDirectories.dirMgrs)
+
+	var dirProfile DirectoryProfile
+	var dMgrHlprTachyon = new(dirMgrHelperTachyon)
+
+	dirProfile,
+		err = dMgrHlprTachyon.
+		getSubdirectories(
+			dMgr,
+			subDirectories,
+			dMgrLabel,
+			ePrefix.XCpy(dMgrLabel))
+
+	if err != nil {
+
+		return dirTreeProfile, err
+	}
+
+	if len(subDirectories.dirMgrs) <= originalLenOfSubDirsCol {
+		// There are no subdirectories
+
+		return dirTreeProfile, err
+	}
+
+	dirTreeProfile.
+		AddDirProfileStats(dirProfile)
+
+	var idx = 0
+
+	if originalLenOfSubDirsCol <= 0 {
+
+		idx = 0
+
+	} else {
+
+		idx = originalLenOfSubDirsCol
+	}
+
+	var subDirDMgr DirMgr
+	var dMgrColHelper = new(dirMgrCollectionHelper)
+	var errStatus ArrayColErrorStatus
+
+	for idx >= 0 {
+
+		// This is a peek operation
+		subDirDMgr,
+			errStatus = dMgrColHelper.
+			peekOrPopAtIndex(
+				subDirectories,
+				idx,
+				false, // deleteIndex
+				ePrefix)
+
+		if errStatus.ProcessingError != nil {
+
+			if errStatus.IsIndexOutOfBounds == true {
+
+				idx = -1
+
+				break
+			}
+
+			err = fmt.Errorf("%v\n"+
+				"Error occurred while extracting DirMgr from 'subDirectories'.\n"+
+				"dirMgrCollectionHelper.peekOrPopAtIndex(subDirectories,index)\n"+
+				"index= %v\n"+
+				"Error= \n%v\n",
+				funcName,
+				idx,
+				errStatus.ProcessingError.Error())
+
+			return dirTreeProfile, err
+		}
+
+		dirProfile,
+			err = dMgrHlprTachyon.
+			getSubdirectories(
+				&subDirDMgr,
+				subDirectories,
+				"subDirDMgr",
+				ePrefix.XCpy("subDirDMgr"))
+
+		if err != nil {
+
+			return dirTreeProfile, err
+		}
+
+		dirTreeProfile.
+			AddDirProfileStats(dirProfile)
+
+		idx++
+	}
+
+	return dirTreeProfile, errStatus.ProcessingError
 }
 
 // lowLevelDoesDirectoryExist

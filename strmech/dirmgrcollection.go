@@ -1290,8 +1290,10 @@ func (dMgrs *DirMgrCollection) DeleteAtIndex(
 		return err
 	}
 
+	var errStatus ArrayColErrorStatus
+
 	_,
-		err = new(dirMgrCollectionHelper).
+		errStatus = new(dirMgrCollectionHelper).
 		peekOrPopAtIndex(
 			dMgrs,
 			idx,
@@ -1299,7 +1301,7 @@ func (dMgrs *DirMgrCollection) DeleteAtIndex(
 			ePrefix.XCpy(
 				"dMgrs"))
 
-	return err
+	return errStatus.ProcessingError
 }
 
 //	Empty
@@ -2057,23 +2059,76 @@ func (dMgrs *DirMgrCollection) GetDirMgrArray(
 //		Manager Collection array index value 'idx' will
 //		be returned.
 //
-//	error
+//	ArrayColErrorStatus
 //
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
+//		This structure provides detailed error
+//		information related to the completion of this
+//		method. This structure is designed to convey
+//		error status for operations involving arrays
+//		or collections of objects
 //
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errorPrefix'.
+//		type ArrayColErrorStatus struct {
+//
+//			IsProcessingError bool
+//				When set to 'true', this parameter signals
+//				that an error was encountered during a
+//				routine array or object collection
+//				processing operation. In this case an
+//				appropriate error message describing the
+//				error will be recorded in data element
+//				'ProcessingError'.
+//
+//			IsIndexOutOfBounds bool
+//				When set to 'true', this parameter signals
+//				that the index value used to access the array
+//				or object collection was less than zero or
+//				greater than the last index in the
+//				array/collection.
+//
+//			IsArrayCollectionEmpty bool
+//				When set to 'true', this parameter signals
+//				that array or objects collections is empty.
+//
+//			IsErrorFree bool
+//				When set to 'true', this parameter signals that
+//				no errors were encountered in the most recent
+//				array or collection operation. This also means
+//				that data element 'ProcessingError' is set to
+//				'nil'.
+//
+//			ProcessingError	error
+//				If no errors were encountered in the most recent
+//				array or object collection processing operation,
+//				this error parameter will be set to nil.
+//
+//				If errors are encountered during an array or
+//				object collection processing operation, this
+//				error Type will encapsulate an appropriate error
+//				message.
+//		}
+//
+//		If this method completes successfully,
+//		ArrayColErrorStatus.IsErrorFree will
+//		be set to 'true'. In addition,
+//		ArrayColErrorStatus.ProcessingError will
+//		be set to 'nil'.
+//
+//		If errors are encountered during processing,
+//		ArrayColErrorStatus.IsErrorFree will
+//		be set to 'false'. In addition,
+//		ArrayColErrorStatus.ProcessingError will
+//		encapsulate an appropriate error message.
+//		This returned error message will incorporate
+//		the method chain and text passed by input
+//		parameter, 'errorPrefix'.
+//
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (dMgrs *DirMgrCollection) GetDirMgrAtIndex(
 	idx int,
 	errorPrefix interface{}) (
 	*DirMgr,
-	error) {
+	ArrayColErrorStatus) {
 
 	if dMgrs.lock == nil {
 		dMgrs.lock = new(sync.Mutex)
@@ -2084,19 +2139,24 @@ func (dMgrs *DirMgrCollection) GetDirMgrAtIndex(
 	defer dMgrs.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
+
+	var errStatus ArrayColErrorStatus
 
 	funcName := "DirMgrCollection." +
 		"GetDirMgrAtIndex()"
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		funcName,
-		"")
+		errStatus.ProcessingError =
+		ePref.ErrPrefixDto{}.NewIEmpty(
+			errorPrefix,
+			funcName,
+			"")
 
-	if err != nil {
-		return &DirMgr{}, err
+	if errStatus.ProcessingError != nil {
+
+		errStatus.IsProcessingError = true
+
+		return &DirMgr{}, errStatus
 	}
 
 	if dMgrs.dirMgrs == nil {
@@ -2106,27 +2166,49 @@ func (dMgrs *DirMgrCollection) GetDirMgrAtIndex(
 	arrayLen := len(dMgrs.dirMgrs)
 
 	if arrayLen == 0 {
-		return &DirMgr{},
+
+		errStatus.IsArrayCollectionEmpty = true
+
+		errStatus.ProcessingError =
 			fmt.Errorf("%v\n"+
 				"Error: This Directory Manager Collection ('DirMgrCollection') is EMPTY!\n",
 				ePrefix.String())
+
+		return &DirMgr{}, errStatus
 	}
 
-	if idx < 0 || idx >= arrayLen {
+	if idx < 0 {
 
-		return &DirMgr{},
+		errStatus.IsIndexOutOfBounds = true
+
+		errStatus.ProcessingError =
 			fmt.Errorf("%v\n"+
 				"Error: The input parameter, 'idx', is OUT OF RANGE!\n"+
 				"idx='%v'\n"+
-				"The minimum index is '0'. "+
+				"The minimum index is '0'. \n",
+				ePrefix.String(),
+				idx)
+
+		return &DirMgr{}, errStatus
+	}
+
+	if idx >= arrayLen {
+
+		errStatus.IsIndexOutOfBounds = true
+
+		errStatus.ProcessingError =
+			fmt.Errorf("%v\n"+
+				"Error: The input parameter, 'idx', is OUT OF RANGE!\n"+
+				"idx='%v'\n"+
 				"The maximum index is '%v'. ",
 				ePrefix.String(),
 				idx,
 				arrayLen-1)
 
+		return &DirMgr{}, errStatus
 	}
 
-	return &dMgrs.dirMgrs[idx], err
+	return &dMgrs.dirMgrs[idx], errStatus
 }
 
 // GetNumOfDirs
@@ -2433,13 +2515,9 @@ func (dMgrs *DirMgrCollection) New() DirMgrCollection {
 // Directory Manager Collection array has a length which
 // is one less than the starting array length.
 //
-// If this method is called on an empty Directory Manager
-// Collection (i.e. length of array dMgrs.dirMgrs = 0),
-// an error will be returned.
-//
-// If this method is called with and index ('idx') value
-// greater than the last index in the collection, an
-// error will be returned.
+// If an error is encountered, detailed error status
+// information will be configured in the
+// ArrayColErrorStatus instance returned by this method.
 //
 // ----------------------------------------------------------------
 //
@@ -2454,10 +2532,11 @@ func (dMgrs *DirMgrCollection) New() DirMgrCollection {
 //		by this method.
 //
 //		If this value is less than zero an error will be
-//		returned.
+//		returned through ArrayColErrorStatus.
 //
-//		If 'idx' is exceeds the last index in the collection,
-//		an io.EOF (End-Of-File) error will be returned.
+//		If this value is greater than the last index in
+//		the collection array, an error will be returned
+//		through ArrayColErrorStatus.
 //
 //	errorPrefix					interface{}
 //
@@ -2528,23 +2607,76 @@ func (dMgrs *DirMgrCollection) New() DirMgrCollection {
 //		the Directory Manager objected deleted from the
 //		Directory Manager Collection will be returned.
 //
-//	error
+//	ArrayColErrorStatus
 //
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
+//		This structure provides detailed error
+//		information related to the completion of this
+//		method. This structure is designed to convey
+//		error status for operations involving arrays
+//		or collections of objects
 //
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errorPrefix'.
+//		type ArrayColErrorStatus struct {
+//
+//			IsProcessingError bool
+//				When set to 'true', this parameter signals
+//				that an error was encountered during a
+//				routine array or object collection
+//				processing operation. In this case an
+//				appropriate error message describing the
+//				error will be recorded in data element
+//				'ProcessingError'.
+//
+//			IsIndexOutOfBounds bool
+//				When set to 'true', this parameter signals
+//				that the index value used to access the array
+//				or object collection was less than zero or
+//				greater than the last index in the
+//				array/collection.
+//
+//			IsArrayCollectionEmpty bool
+//				When set to 'true', this parameter signals
+//				that array or objects collections is empty.
+//
+//			IsErrorFree bool
+//				When set to 'true', this parameter signals that
+//				no errors were encountered in the most recent
+//				array or collection operation. This also means
+//				that data element 'ProcessingError' is set to
+//				'nil'.
+//
+//			ProcessingError	error
+//				If no errors were encountered in the most recent
+//				array or object collection processing operation,
+//				this error parameter will be set to nil.
+//
+//				If errors are encountered during an array or
+//				object collection processing operation, this
+//				error Type will encapsulate an appropriate error
+//				message.
+//		}
+//
+//		If this method completes successfully,
+//		ArrayColErrorStatus.IsErrorFree will
+//		be set to 'true'. In addition,
+//		ArrayColErrorStatus.ProcessingError will
+//		be set to 'nil'.
+//
+//		If errors are encountered during processing,
+//		ArrayColErrorStatus.IsErrorFree will
+//		be set to 'false'. In addition,
+//		ArrayColErrorStatus.ProcessingError will
+//		encapsulate an appropriate error message.
+//		This returned error message will incorporate
+//		the method chain and text passed by input
+//		parameter, 'errorPrefix'.
+//
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (dMgrs *DirMgrCollection) PopDirMgrAtIndex(
 	idx int,
 	errorPrefix interface{}) (
 	DirMgr,
-	error) {
+	ArrayColErrorStatus) {
 
 	if dMgrs.lock == nil {
 		dMgrs.lock = new(sync.Mutex)
@@ -2555,17 +2687,22 @@ func (dMgrs *DirMgrCollection) PopDirMgrAtIndex(
 	defer dMgrs.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
+
+	var errStatus ArrayColErrorStatus
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"DirMgrCollection."+
-			"PopDirMgrAtIndex()",
-		"")
+		errStatus.ProcessingError =
+		ePref.ErrPrefixDto{}.NewIEmpty(
+			errorPrefix,
+			"DirMgrCollection."+
+				"PopDirMgrAtIndex()",
+			"")
 
-	if err != nil {
-		return DirMgr{}, err
+	if errStatus.ProcessingError != nil {
+
+		errStatus.IsProcessingError = true
+
+		return DirMgr{}, errStatus
 	}
 
 	return new(dirMgrCollectionHelper).
@@ -2590,7 +2727,9 @@ func (dMgrs *DirMgrCollection) PopDirMgrAtIndex(
 //
 // If this method is called on an empty Director Manager
 // Collection (i.e. length of array dMgrs.dirMgrs = 0),
-// an error will be returned.
+// detailed error status information will be configured
+// in the ArrayColErrorStatus instance returned by this
+// method.
 //
 // After the successful completion of this method, the
 // Directory Manager Collection array has a length which
@@ -2672,22 +2811,75 @@ func (dMgrs *DirMgrCollection) PopDirMgrAtIndex(
 //		array index = 0) will be returned through this
 //		parameter.
 //
-//	error
+//	ArrayColErrorStatus
 //
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
+//		This structure provides detailed error
+//		information related to the completion of this
+//		method. This structure is designed to convey
+//		error status for operations involving arrays
+//		or collections of objects
 //
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errorPrefix'.
+//		type ArrayColErrorStatus struct {
+//
+//			IsProcessingError bool
+//				When set to 'true', this parameter signals
+//				that an error was encountered during a
+//				routine array or object collection
+//				processing operation. In this case an
+//				appropriate error message describing the
+//				error will be recorded in data element
+//				'ProcessingError'.
+//
+//			IsIndexOutOfBounds bool
+//				When set to 'true', this parameter signals
+//				that the index value used to access the array
+//				or object collection was less than zero or
+//				greater than the last index in the
+//				array/collection.
+//
+//			IsArrayCollectionEmpty bool
+//				When set to 'true', this parameter signals
+//				that array or objects collections is empty.
+//
+//			IsErrorFree bool
+//				When set to 'true', this parameter signals that
+//				no errors were encountered in the most recent
+//				array or collection operation. This also means
+//				that data element 'ProcessingError' is set to
+//				'nil'.
+//
+//			ProcessingError	error
+//				If no errors were encountered in the most recent
+//				array or object collection processing operation,
+//				this error parameter will be set to nil.
+//
+//				If errors are encountered during an array or
+//				object collection processing operation, this
+//				error Type will encapsulate an appropriate error
+//				message.
+//		}
+//
+//		If this method completes successfully,
+//		ArrayColErrorStatus.IsErrorFree will
+//		be set to 'true'. In addition,
+//		ArrayColErrorStatus.ProcessingError will
+//		be set to 'nil'.
+//
+//		If errors are encountered during processing,
+//		ArrayColErrorStatus.IsErrorFree will
+//		be set to 'false'. In addition,
+//		ArrayColErrorStatus.ProcessingError will
+//		encapsulate an appropriate error message.
+//		This returned error message will incorporate
+//		the method chain and text passed by input
+//		parameter, 'errorPrefix'.
+//
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (dMgrs *DirMgrCollection) PopFirstDirMgr(
 	errorPrefix interface{}) (
 	DirMgr,
-	error) {
+	ArrayColErrorStatus) {
 
 	if dMgrs.lock == nil {
 		dMgrs.lock = new(sync.Mutex)
@@ -2698,17 +2890,22 @@ func (dMgrs *DirMgrCollection) PopFirstDirMgr(
 	defer dMgrs.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
+
+	var errStatus ArrayColErrorStatus
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"DirMgrCollection."+
-			"PopFirstDirMgr()",
-		"")
+		errStatus.ProcessingError =
+		ePref.ErrPrefixDto{}.NewIEmpty(
+			errorPrefix,
+			"DirMgrCollection."+
+				"PopFirstDirMgr()",
+			"")
 
-	if err != nil {
-		return DirMgr{}, err
+	if errStatus.ProcessingError != nil {
+
+		errStatus.IsProcessingError = true
+
+		return DirMgr{}, errStatus
 	}
 
 	return new(dirMgrCollectionHelper).
@@ -2729,9 +2926,9 @@ func (dMgrs *DirMgrCollection) PopFirstDirMgr(
 // array position of the Directory Manager Collection
 // ('DirMgrCollection') array (dMgrs.dirMgrs[length-1]).
 //
-// If this method is called on an empty Director Manager
-// Collection (i.e. length of array dMgrs.dirMgrs = 0),
-// an error will be returned.
+// If an error is encountered, detailed error status
+// information will be configured in the
+// ArrayColErrorStatus instance returned by this method.
 //
 // At the successful completion of this method, the
 // Directory Manager Collection array will have a length
@@ -2813,22 +3010,75 @@ func (dMgrs *DirMgrCollection) PopFirstDirMgr(
 //		(dMgrs.dirMgrs[length-1]) will be returned
 //		through this parameter.
 //
-//	error
+//	ArrayColErrorStatus
 //
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
+//		This structure provides detailed error
+//		information related to the completion of this
+//		method. This structure is designed to convey
+//		error status for operations involving arrays
+//		or collections of objects
 //
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errorPrefix'.
+//		type ArrayColErrorStatus struct {
+//
+//			IsProcessingError bool
+//				When set to 'true', this parameter signals
+//				that an error was encountered during a
+//				routine array or object collection
+//				processing operation. In this case an
+//				appropriate error message describing the
+//				error will be recorded in data element
+//				'ProcessingError'.
+//
+//			IsIndexOutOfBounds bool
+//				When set to 'true', this parameter signals
+//				that the index value used to access the array
+//				or object collection was less than zero or
+//				greater than the last index in the
+//				array/collection.
+//
+//			IsArrayCollectionEmpty bool
+//				When set to 'true', this parameter signals
+//				that array or objects collections is empty.
+//
+//			IsErrorFree bool
+//				When set to 'true', this parameter signals that
+//				no errors were encountered in the most recent
+//				array or collection operation. This also means
+//				that data element 'ProcessingError' is set to
+//				'nil'.
+//
+//			ProcessingError	error
+//				If no errors were encountered in the most recent
+//				array or object collection processing operation,
+//				this error parameter will be set to nil.
+//
+//				If errors are encountered during an array or
+//				object collection processing operation, this
+//				error Type will encapsulate an appropriate error
+//				message.
+//		}
+//
+//		If this method completes successfully,
+//		ArrayColErrorStatus.IsErrorFree will
+//		be set to 'true'. In addition,
+//		ArrayColErrorStatus.ProcessingError will
+//		be set to 'nil'.
+//
+//		If errors are encountered during processing,
+//		ArrayColErrorStatus.IsErrorFree will
+//		be set to 'false'. In addition,
+//		ArrayColErrorStatus.ProcessingError will
+//		encapsulate an appropriate error message.
+//		This returned error message will incorporate
+//		the method chain and text passed by input
+//		parameter, 'errorPrefix'.
+//
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (dMgrs *DirMgrCollection) PopLastDirMgr(
 	errorPrefix interface{}) (
 	DirMgr,
-	error) {
+	ArrayColErrorStatus) {
 
 	if dMgrs.lock == nil {
 		dMgrs.lock = new(sync.Mutex)
@@ -2839,30 +3089,39 @@ func (dMgrs *DirMgrCollection) PopLastDirMgr(
 	defer dMgrs.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
+
+	var errStatus ArrayColErrorStatus
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"DirMgrCollection."+
-			"PopLastDirMgr()",
-		"")
+		errStatus.ProcessingError =
+		ePref.ErrPrefixDto{}.NewIEmpty(
+			errorPrefix,
+			"DirMgrCollection."+
+				"PopLastDirMgr()",
+			"")
 
-	if err != nil {
-		return DirMgr{}, err
+	if errStatus.ProcessingError != nil {
+
+		errStatus.IsProcessingError = true
+
+		return DirMgr{}, errStatus
 	}
 
-	lastArrayIndex := len(dMgrs.dirMgrs)
+	var lastArrayIndex = len(dMgrs.dirMgrs)
 
 	if lastArrayIndex == 0 {
 
-		return DirMgr{},
+		errStatus.IsArrayCollectionEmpty = true
+
+		errStatus.ProcessingError =
 			fmt.Errorf("%v\n"+
 				"Error: The Director Managers Collection\n"+
 				"for the current DirMgrCollection instance\n"+
 				"is EMPTY. The Collection array has an array\n"+
 				"length of Zero.\n",
 				ePrefix.String())
+
+		return DirMgr{}, errStatus
 	}
 
 	lastArrayIndex--
@@ -2893,6 +3152,10 @@ func (dMgrs *DirMgrCollection) PopLastDirMgr(
 // At the completion of this method, the length of the
 // current Directory Manager Collection
 // ('DirMgrCollection') array will remain unchanged.
+//
+// If an error is encountered, detailed error status
+// information will be configured in the
+// ArrayColErrorStatus instance returned by this method.
 //
 // ----------------------------------------------------------------
 //
@@ -2983,23 +3246,76 @@ func (dMgrs *DirMgrCollection) PopLastDirMgr(
 //		Collection will be returned through this
 //		parameter.
 //
-//	error
+//	ArrayColErrorStatus
 //
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
+//		This structure provides detailed error
+//		information related to the completion of this
+//		method. This structure is designed to convey
+//		error status for operations involving arrays
+//		or collections of objects
 //
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errorPrefix'.
+//		type ArrayColErrorStatus struct {
+//
+//			IsProcessingError bool
+//				When set to 'true', this parameter signals
+//				that an error was encountered during a
+//				routine array or object collection
+//				processing operation. In this case an
+//				appropriate error message describing the
+//				error will be recorded in data element
+//				'ProcessingError'.
+//
+//			IsIndexOutOfBounds bool
+//				When set to 'true', this parameter signals
+//				that the index value used to access the array
+//				or object collection was less than zero or
+//				greater than the last index in the
+//				array/collection.
+//
+//			IsArrayCollectionEmpty bool
+//				When set to 'true', this parameter signals
+//				that array or objects collections is empty.
+//
+//			IsErrorFree bool
+//				When set to 'true', this parameter signals that
+//				no errors were encountered in the most recent
+//				array or collection operation. This also means
+//				that data element 'ProcessingError' is set to
+//				'nil'.
+//
+//			ProcessingError	error
+//				If no errors were encountered in the most recent
+//				array or object collection processing operation,
+//				this error parameter will be set to nil.
+//
+//				If errors are encountered during an array or
+//				object collection processing operation, this
+//				error Type will encapsulate an appropriate error
+//				message.
+//		}
+//
+//		If this method completes successfully,
+//		ArrayColErrorStatus.IsErrorFree will
+//		be set to 'true'. In addition,
+//		ArrayColErrorStatus.ProcessingError will
+//		be set to 'nil'.
+//
+//		If errors are encountered during processing,
+//		ArrayColErrorStatus.IsErrorFree will
+//		be set to 'false'. In addition,
+//		ArrayColErrorStatus.ProcessingError will
+//		encapsulate an appropriate error message.
+//		This returned error message will incorporate
+//		the method chain and text passed by input
+//		parameter, 'errorPrefix'.
+//
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (dMgrs *DirMgrCollection) PeekDirMgrAtIndex(
 	idx int,
 	errorPrefix interface{}) (
 	DirMgr,
-	error) {
+	ArrayColErrorStatus) {
 
 	if dMgrs.lock == nil {
 		dMgrs.lock = new(sync.Mutex)
@@ -3010,17 +3326,19 @@ func (dMgrs *DirMgrCollection) PeekDirMgrAtIndex(
 	defer dMgrs.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
+
+	var errStatus ArrayColErrorStatus
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"DirMgrCollection."+
-			"PeekDirMgrAtIndex()",
-		"")
+		errStatus.ProcessingError =
+		ePref.ErrPrefixDto{}.NewIEmpty(
+			errorPrefix,
+			"DirMgrCollection."+
+				"PeekDirMgrAtIndex()",
+			"")
 
-	if err != nil {
-		return DirMgr{}, err
+	if errStatus.ProcessingError != nil {
+		return DirMgr{}, errStatus
 	}
 
 	return new(dirMgrCollectionHelper).
@@ -3048,6 +3366,10 @@ func (dMgrs *DirMgrCollection) PeekDirMgrAtIndex(
 // At the completion of this method, the length of the
 // Directory Manager Collection array
 // ('DirMgrCollection') array will remain unchanged.
+//
+// If an error is encountered, detailed error status
+// information will be configured in the
+// ArrayColErrorStatus instance returned by this method.
 //
 // ----------------------------------------------------------------
 //
@@ -3123,22 +3445,75 @@ func (dMgrs *DirMgrCollection) PeekDirMgrAtIndex(
 //		current Directory Manager Collection will be
 //		returned through this parameter.
 //
-//	error
+//	ArrayColErrorStatus
 //
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
+//		This structure provides detailed error
+//		information related to the completion of this
+//		method. This structure is designed to convey
+//		error status for operations involving arrays
+//		or collections of objects
 //
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errorPrefix'.
+//		type ArrayColErrorStatus struct {
+//
+//			IsProcessingError bool
+//				When set to 'true', this parameter signals
+//				that an error was encountered during a
+//				routine array or object collection
+//				processing operation. In this case an
+//				appropriate error message describing the
+//				error will be recorded in data element
+//				'ProcessingError'.
+//
+//			IsIndexOutOfBounds bool
+//				When set to 'true', this parameter signals
+//				that the index value used to access the array
+//				or object collection was less than zero or
+//				greater than the last index in the
+//				array/collection.
+//
+//			IsArrayCollectionEmpty bool
+//				When set to 'true', this parameter signals
+//				that array or objects collections is empty.
+//
+//			IsErrorFree bool
+//				When set to 'true', this parameter signals that
+//				no errors were encountered in the most recent
+//				array or collection operation. This also means
+//				that data element 'ProcessingError' is set to
+//				'nil'.
+//
+//			ProcessingError	error
+//				If no errors were encountered in the most recent
+//				array or object collection processing operation,
+//				this error parameter will be set to nil.
+//
+//				If errors are encountered during an array or
+//				object collection processing operation, this
+//				error Type will encapsulate an appropriate error
+//				message.
+//		}
+//
+//		If this method completes successfully,
+//		ArrayColErrorStatus.IsErrorFree will
+//		be set to 'true'. In addition,
+//		ArrayColErrorStatus.ProcessingError will
+//		be set to 'nil'.
+//
+//		If errors are encountered during processing,
+//		ArrayColErrorStatus.IsErrorFree will
+//		be set to 'false'. In addition,
+//		ArrayColErrorStatus.ProcessingError will
+//		encapsulate an appropriate error message.
+//		This returned error message will incorporate
+//		the method chain and text passed by input
+//		parameter, 'errorPrefix'.
+//
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (dMgrs *DirMgrCollection) PeekFirstDirMgr(
 	errorPrefix interface{}) (
 	DirMgr,
-	error) {
+	ArrayColErrorStatus) {
 
 	if dMgrs.lock == nil {
 		dMgrs.lock = new(sync.Mutex)
@@ -3149,17 +3524,21 @@ func (dMgrs *DirMgrCollection) PeekFirstDirMgr(
 	defer dMgrs.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
+	var errStatus ArrayColErrorStatus
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"DirMgrCollection."+
-			"PeekFirstDirMgr()",
-		"")
+		errStatus.ProcessingError =
+		ePref.ErrPrefixDto{}.NewIEmpty(
+			errorPrefix,
+			"DirMgrCollection."+
+				"PeekFirstDirMgr()",
+			"")
 
-	if err != nil {
-		return DirMgr{}, err
+	if errStatus.ProcessingError != nil {
+
+		errStatus.IsProcessingError = true
+
+		return DirMgr{}, errStatus
 	}
 
 	return new(dirMgrCollectionHelper).
@@ -3185,6 +3564,10 @@ func (dMgrs *DirMgrCollection) PeekFirstDirMgr(
 // At the completion of this method, the length of the
 // current Directory Manager Collection array
 // ('DirMgrCollection') will remain unchanged.
+//
+// If an error is encountered, detailed error status
+// information will be configured in the
+// ArrayColErrorStatus instance returned by this method.
 //
 // ----------------------------------------------------------------
 //
@@ -3260,22 +3643,75 @@ func (dMgrs *DirMgrCollection) PeekFirstDirMgr(
 //		current Directory Manager Collection will be
 //		returned through this parameter.
 //
-//	error
+//	ArrayColErrorStatus
 //
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
+//		This structure provides detailed error
+//		information related to the completion of this
+//		method. This structure is designed to convey
+//		error status for operations involving arrays
+//		or collections of objects
 //
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errorPrefix'.
+//		type ArrayColErrorStatus struct {
+//
+//			IsProcessingError bool
+//				When set to 'true', this parameter signals
+//				that an error was encountered during a
+//				routine array or object collection
+//				processing operation. In this case an
+//				appropriate error message describing the
+//				error will be recorded in data element
+//				'ProcessingError'.
+//
+//			IsIndexOutOfBounds bool
+//				When set to 'true', this parameter signals
+//				that the index value used to access the array
+//				or object collection was less than zero or
+//				greater than the last index in the
+//				array/collection.
+//
+//			IsArrayCollectionEmpty bool
+//				When set to 'true', this parameter signals
+//				that array or objects collections is empty.
+//
+//			IsErrorFree bool
+//				When set to 'true', this parameter signals that
+//				no errors were encountered in the most recent
+//				array or collection operation. This also means
+//				that data element 'ProcessingError' is set to
+//				'nil'.
+//
+//			ProcessingError	error
+//				If no errors were encountered in the most recent
+//				array or object collection processing operation,
+//				this error parameter will be set to nil.
+//
+//				If errors are encountered during an array or
+//				object collection processing operation, this
+//				error Type will encapsulate an appropriate error
+//				message.
+//		}
+//
+//		If this method completes successfully,
+//		ArrayColErrorStatus.IsErrorFree will
+//		be set to 'true'. In addition,
+//		ArrayColErrorStatus.ProcessingError will
+//		be set to 'nil'.
+//
+//		If errors are encountered during processing,
+//		ArrayColErrorStatus.IsErrorFree will
+//		be set to 'false'. In addition,
+//		ArrayColErrorStatus.ProcessingError will
+//		encapsulate an appropriate error message.
+//		This returned error message will incorporate
+//		the method chain and text passed by input
+//		parameter, 'errorPrefix'.
+//
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (dMgrs *DirMgrCollection) PeekLastDirMgr(
 	errorPrefix interface{}) (
 	DirMgr,
-	error) {
+	ArrayColErrorStatus) {
 
 	if dMgrs.lock == nil {
 		dMgrs.lock = new(sync.Mutex)
@@ -3286,20 +3722,40 @@ func (dMgrs *DirMgrCollection) PeekLastDirMgr(
 	defer dMgrs.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
+
+	var errStatus ArrayColErrorStatus
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"DirMgrCollection."+
-			"PeekLastDirMgr()",
-		"")
+		errStatus.ProcessingError =
+		ePref.ErrPrefixDto{}.NewIEmpty(
+			errorPrefix,
+			"DirMgrCollection."+
+				"PeekLastDirMgr()",
+			"")
 
-	if err != nil {
-		return DirMgr{}, err
+	if errStatus.ProcessingError != nil {
+
+		errStatus.IsProcessingError = true
+
+		return DirMgr{}, errStatus
 	}
 
 	lastArrayIndex := len(dMgrs.dirMgrs)
+
+	if lastArrayIndex == 0 {
+
+		errStatus.IsArrayCollectionEmpty = true
+
+		errStatus.ProcessingError =
+			fmt.Errorf("%v\n"+
+				"Error: The Director Managers Collection\n"+
+				"for the current DirMgrCollection instance\n"+
+				"is EMPTY. The Collection array has an array\n"+
+				"length of Zero.\n",
+				ePrefix.String())
+
+		return DirMgr{}, errStatus
+	}
 
 	lastArrayIndex--
 

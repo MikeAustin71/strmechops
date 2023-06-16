@@ -209,6 +209,63 @@ type SourceCodeComments struct {
 //		Fatal errors are returned when the nature of the
 //		processing failure is such that it is no longer
 //		reasonable to continue code execution.
+//
+//	ArrayColErrorStatus
+//
+//		This structure provides detailed error
+//		information related to the completion of this
+//		method. This structure is designed to convey
+//		error status for operations involving arrays
+//		or collections of objects
+//
+//		type ArrayColErrorStatus struct {
+//
+//			IsIndexOutOfBounds bool
+//				When set to 'true', this parameter signals
+//				that the index value used to access the array
+//				or object collection was less than zero or
+//				greater than the last index in the
+//				array/collection.
+//
+//			IsArrayCollectionEmpty bool
+//				When set to 'true', this parameter signals
+//				that array or objects collections is empty.
+//
+//			IsErrorFree bool
+//				When set to 'true', this parameter signals that
+//				no errors were encountered in the most recent
+//				array or collection operation. This also means
+//				that data element 'ProcessingError' is set to
+//				'nil'.
+//
+//			ProcessingError	error
+//				If no errors were encountered in the most recent
+//				array or object collection processing operation,
+//				this error parameter will be set to nil.
+//
+//				If errors are encountered during an array or
+//				object collection processing operation, this
+//				error Type will encapsulate an appropriate error
+//				message.
+//		}
+//
+//		If this method completes successfully,
+//		ArrayColErrorStatus.IsErrorFree will
+//		be set to 'true'. In addition,
+//		ArrayColErrorStatus.ProcessingError will
+//		be set to 'nil'.
+//
+//		If errors are encountered during processing,
+//		ArrayColErrorStatus.IsErrorFree will
+//		be set to 'false'. In addition,
+//		ArrayColErrorStatus.ProcessingError will
+//		encapsulate an appropriate error message.
+//		This returned error message will incorporate
+//		the method chain and text passed by input
+//		parameter, 'errorPrefix'.
+//
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (srcCodeComments *SourceCodeComments) testPrimaryComments(
 	errorPrefix interface{}) error {
 

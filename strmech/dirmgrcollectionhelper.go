@@ -3,7 +3,6 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
-	"io"
 	"sync"
 )
 
@@ -384,23 +383,76 @@ func (dMgrColHelper *dirMgrCollectionHelper) newEmptyDMgrCollection() DirMgrColl
 //
 // # Return Values
 //
-//	FileMgr
+//	DirMgr
 //
 //		If this method completes successfully without
-//		error, a deep copy of the File Manager object
-//		residing at array index 'idx' will be returned
-//		through this parameter.
+//		error, a deep copy of the Directory Manager
+//		object residing at array index 'idx' will be
+//		returned through this parameter.
 //
-//	error
+//	ArrayColErrorStatus
 //
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
+//		This structure provides detailed error
+//		information related to the completion of this
+//		method. This structure is designed to convey
+//		error status for operations involving arrays
+//		or collections of objects
 //
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errorPrefix'.
+//		type ArrayColErrorStatus struct {
+//
+//			IsProcessingError bool
+//				When set to 'true', this parameter signals
+//				that an error was encountered during a
+//				routine array or object collection
+//				processing operation. In this case an
+//				appropriate error message describing the
+//				error will be recorded in data element
+//				'ProcessingError'.
+//
+//			IsIndexOutOfBounds bool
+//				When set to 'true', this parameter signals
+//				that the index value used to access the array
+//				or object collection was less than zero or
+//				greater than the last index in the
+//				array/collection.
+//
+//			IsArrayCollectionEmpty bool
+//				When set to 'true', this parameter signals
+//				that array or objects collections is empty.
+//
+//			IsErrorFree bool
+//				When set to 'true', this parameter signals that
+//				no errors were encountered in the most recent
+//				array or collection operation. This also means
+//				that data element 'ProcessingError' is set to
+//				'nil'.
+//
+//			ProcessingError	error
+//				If no errors were encountered in the most recent
+//				array or object collection processing operation,
+//				this error parameter will be set to nil.
+//
+//				If errors are encountered during an array or
+//				object collection processing operation, this
+//				error Type will encapsulate an appropriate error
+//				message.
+//		}
+//
+//		If this method completes successfully,
+//		ArrayColErrorStatus.IsErrorFree will
+//		be set to 'true'. In addition,
+//		ArrayColErrorStatus.ProcessingError will
+//		be set to 'nil'.
+//
+//		If errors are encountered during processing,
+//		ArrayColErrorStatus.IsErrorFree will
+//		be set to 'false'. In addition,
+//		ArrayColErrorStatus.ProcessingError will
+//		encapsulate an appropriate error message.
+//		This returned error message will incorporate
+//		the method chain and text passed by input
+//		parameter, 'errorPrefix'.
+//
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (dMgrColHelper *dirMgrCollectionHelper) peekOrPopAtIndex(
@@ -409,7 +461,7 @@ func (dMgrColHelper *dirMgrCollectionHelper) peekOrPopAtIndex(
 	deleteIndex bool,
 	errPrefDto *ePref.ErrPrefixDto) (
 	DirMgr,
-	error) {
+	ArrayColErrorStatus) {
 
 	if dMgrColHelper.lock == nil {
 		dMgrColHelper.lock = new(sync.Mutex)
@@ -421,27 +473,36 @@ func (dMgrColHelper *dirMgrCollectionHelper) peekOrPopAtIndex(
 
 	var ePrefix *ePref.ErrPrefixDto
 
+	var errStatus ArrayColErrorStatus
+
 	var err error
 
 	funcName := "dirMgrCollectionHelper.peekOrPopAtIndex()"
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		funcName,
-		"")
+		errStatus.ProcessingError =
+		ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+			errPrefDto,
+			funcName,
+			"")
 
-	if err != nil {
-		return DirMgr{}, err
+	if errStatus.ProcessingError != nil {
+
+		errStatus.IsProcessingError = true
+
+		return DirMgr{}, errStatus
 	}
 
 	if directoryMgrs == nil {
 
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'directoryMgrs' is a nil pointer!\n",
-			ePrefix.String())
+		errStatus.IsProcessingError = true
 
-		return DirMgr{}, err
+		errStatus.ProcessingError =
+			fmt.Errorf("%v\n"+
+				"Error: Input parameter 'directoryMgrs' is a nil pointer!\n",
+				ePrefix.String())
+
+		return DirMgr{}, errStatus
 	}
 
 	if directoryMgrs.dirMgrs == nil {
@@ -451,36 +512,60 @@ func (dMgrColHelper *dirMgrCollectionHelper) peekOrPopAtIndex(
 	arrayLen := len(directoryMgrs.dirMgrs)
 
 	if arrayLen == 0 {
-		return DirMgr{},
+
+		errStatus.IsArrayCollectionEmpty = true
+
+		errStatus.ProcessingError =
 			fmt.Errorf("%v\n"+
 				"Error: The Directory Manager Collection array encapsulated by 'directoryMgrs' is EMPTY!\n",
 				ePrefix.String())
+
+		return DirMgr{}, errStatus
 	}
 
 	if idx < 0 {
-		return DirMgr{},
+
+		errStatus.IsIndexOutOfBounds = true
+
+		errStatus.ProcessingError =
 			fmt.Errorf("%v"+
 				"Error: Input Parameter 'idx' is less than zero. "+
 				"Index Out-Of-Range! idx='%v'",
 				ePrefix.String(),
 				idx)
+
+		return DirMgr{}, errStatus
 	}
 
 	if idx >= arrayLen {
 
-		return DirMgr{}, io.EOF
+		errStatus.IsIndexOutOfBounds = true
+
+		errStatus.ProcessingError =
+			fmt.Errorf("%v"+
+				"Error: Input Parameter 'idx' is greater than the\n"+
+				"last index in the Directory Manager Collection array.\n"+
+				"Index Out-Of-Range! idx='%v'",
+				ePrefix.String(),
+				idx)
+
+		return DirMgr{}, errStatus
 	}
 
 	var deepCopyDirMgr DirMgr
 
 	deepCopyDirMgr,
-		err = directoryMgrs.dirMgrs[idx].CopyOut(
-		ePrefix.XCpy(fmt.Sprintf(
-			"directoryMgrs.directoryMgrs[%v]",
-			idx)))
+		err =
+		directoryMgrs.dirMgrs[idx].CopyOut(
+			ePrefix.XCpy(fmt.Sprintf(
+				"directoryMgrs.directoryMgrs[%v]",
+				idx)))
 
 	if err != nil {
-		return DirMgr{},
+
+		errStatus.IsProcessingError = true
+
+		errStatus.ProcessingError =
 			fmt.Errorf("%v\n"+
 				"Error: directoryMgrs.dirMgrs[%v].CopyOut()\n"+
 				"directoryMgrs.dirMgrs index = '%v'\n"+
@@ -492,10 +577,15 @@ func (dMgrColHelper *dirMgrCollectionHelper) peekOrPopAtIndex(
 				idx,
 				directoryMgrs.dirMgrs[idx].absolutePath,
 				err.Error())
+
+		return DirMgr{}, errStatus
 	}
 
 	if deleteIndex == false {
-		return deepCopyDirMgr, err
+
+		errStatus.IsErrorFree = true
+
+		return deepCopyDirMgr, errStatus
 	}
 
 	// deleteIndex == true
@@ -519,5 +609,7 @@ func (dMgrColHelper *dirMgrCollectionHelper) peekOrPopAtIndex(
 			append(directoryMgrs.dirMgrs[0:idx], directoryMgrs.dirMgrs[idx+1:]...)
 	}
 
-	return deepCopyDirMgr, err
+	errStatus.IsErrorFree = true
+
+	return deepCopyDirMgr, errStatus
 }
