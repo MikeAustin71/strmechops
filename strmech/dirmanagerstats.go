@@ -10,20 +10,34 @@ import (
 //
 // This type is used to accumulate and disseminate
 // information and statistics on a directory tree.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	To properly initialize an instance of
+//	DirectoryStatsDto, call method:
+//		DirectoryStatsDto.New()
 type DirectoryStatsDto struct {
 	dMgr DirMgr
 	// Identifies the parent directory associated with
 	// this directory information.
+
 	numOfFiles uint64
 	// The number of files (all types) residing
 	// within this directory ('dMgr').
+
 	numOfSubDirs uint64
 	// The number of subdirectories residing
 	// within this directory
+
 	numOfBytes uint64
 	// The total number of bytes for all files
 	// contained in this directory.
+
 	isInitialized bool
+	// Signals whether this instance of
+	// has been properly initialized.
 
 	lock *sync.Mutex
 }
@@ -316,18 +330,18 @@ type DirectoryProfile struct {
 	// a storage drive.
 
 	DirTotalFiles uint64
-	// The number of total files, of all types,
-	// residing in the subject directory. This
-	// includes directory entry files, Regular
-	// Files, SymLink Files and Non-Regular
-	// Files.
+	// The number of total files residing in
+	// the subject directory. This includes
+	// Regular Files, SymLink Files and
+	// Non-Regular Files. It does NOT include
+	// directory entry files.
 
 	DirTotalFileBytes uint64
-	// The size of all files, of all types,
-	// residing in the subject directory
-	// expressed in bytes. This includes
-	// directory entry files, Regular Files,
-	// SymLink Files and Non-Regular Files.
+	// The size of all files residing in the
+	// subject directory expressed in bytes.
+	// This includes Regular Files, SymLink
+	// Files and Non-Regular Files. It does
+	// NOT include directory entry files.
 
 	DirSubDirectories uint64
 	// The number of subdirectories residing
@@ -373,6 +387,52 @@ type DirectoryProfile struct {
 	ComputeError error
 	// Computational or processing errors will be
 	// recorded through this parameter.
+
+	lock *sync.Mutex
+}
+
+func (dirProfile *DirectoryProfile) AddDirProfileStats(
+	incomingDirProfile DirectoryProfile) {
+
+	if dirProfile.lock == nil {
+		dirProfile.lock = new(sync.Mutex)
+	}
+
+	dirProfile.lock.Lock()
+
+	defer dirProfile.lock.Unlock()
+
+	dirProfile.DirTotalFiles +=
+		incomingDirProfile.DirTotalFiles
+
+	dirProfile.DirTotalFileBytes +=
+		incomingDirProfile.DirTotalFileBytes
+
+	dirProfile.DirSubDirectories +=
+		incomingDirProfile.DirSubDirectories
+
+	dirProfile.DirSubDirectoriesBytes +=
+		incomingDirProfile.DirSubDirectoriesBytes
+
+	dirProfile.DirRegularFiles +=
+		incomingDirProfile.DirRegularFiles
+
+	dirProfile.DirRegularFileBytes +=
+		incomingDirProfile.DirRegularFileBytes
+
+	dirProfile.DirSymLinkFiles +=
+		incomingDirProfile.DirSymLinkFiles
+
+	dirProfile.DirSymLinkFileBytes +=
+		incomingDirProfile.DirSymLinkFileBytes
+
+	dirProfile.DirNonRegularFiles +=
+		incomingDirProfile.DirNonRegularFiles
+
+	dirProfile.DirNonRegularFileBytes +=
+		incomingDirProfile.DirNonRegularFileBytes
+
+	return
 }
 
 type DirectoryCopyStats struct {
