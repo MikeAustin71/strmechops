@@ -613,13 +613,11 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 	isFileSelectionCriteriaActive :=
 		fileSelectCriteria.IsSelectionCriteriaActive()
 
-	var dirCreated bool
-
 	dMgrHlprMolecule := new(dirMgrHelperMolecule)
 
 	if !targetPathDoesExist && copyEmptyTargetDirectory {
 
-		dirCreated,
+		targetPathDoesExist,
 			fatalErr = dMgrHlprMolecule.lowLevelMakeDir(
 			targetDMgr,
 			targetDMgrLabel,
@@ -630,7 +628,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 			return dirCopyStats, copiedFiles, subDirectories, nonfatalErrs, fatalErr
 		}
 
-		if dirCreated {
+		if targetPathDoesExist {
 			dirCopyStats.DirsCreated++
 		}
 
@@ -694,6 +692,12 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 		if nameFileInfo.IsDir() {
 			// This is a Subdirectory!
+
+			if nameFileInfo.Name() == "." ||
+				nameFileInfo.Name() == ".." {
+
+				continue
+			}
 
 			err2 = subDirectories.
 				AddDirMgrByKnownPathDirName(
@@ -765,6 +769,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 		if !isMatch {
 			// File DOES NOT Match Selection Criteria
+
 			dirCopyStats.FilesNotCopied++
 
 			dirCopyStats.FileBytesNotCopied += uint64(nameFileInfo.Size())
@@ -778,7 +783,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 			// Create Directory if needed
 			if !targetPathDoesExist {
 
-				dirCreated,
+				targetPathDoesExist,
 					err = dMgrHlprMolecule.lowLevelMakeDir(
 					targetDMgr,
 					"targetDMgr",
@@ -797,9 +802,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 					return dirCopyStats, copiedFiles, subDirectories, nonfatalErrs, fatalErr
 				}
 
-				targetPathDoesExist = true
-
-				if dirCreated {
+				if targetPathDoesExist == true {
 					dirCopyStats.DirsCreated++
 				}
 			}
@@ -856,7 +859,8 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 					dirCopyStats.FilesNotCopied++
 
-					dirCopyStats.FileBytesNotCopied += uint64(nameFileInfo.Size())
+					dirCopyStats.FileBytesNotCopied +=
+						uint64(nameFileInfo.Size())
 
 					return dirCopyStats, copiedFiles, subDirectories, nonfatalErrs, fatalErr
 
