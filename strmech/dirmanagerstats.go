@@ -436,13 +436,39 @@ func (dirProfile *DirectoryProfile) AddDirProfileStats(
 }
 
 type DirectoryCopyStats struct {
-	DirsCreated         uint64
+	DirsCreated uint64
+	// The number of new directories created.
+
 	TotalFilesProcessed uint64
-	FilesCopied         uint64
-	FileBytesCopied     uint64
-	FilesNotCopied      uint64
-	FileBytesNotCopied  uint64
-	ComputeError        error
+	// The total number of files processed.
+	// Does NOT include directory entries.
+
+	FilesCopied uint64
+	// The number of files copied. Does
+	// NOT include directory entries.
+
+	FileBytesCopied uint64
+	// The number of file bytes copied.
+
+	FilesNotCopied uint64
+	// The number of files NOT copied.
+	// Does NOT include directory entries.
+	//
+	FileBytesNotCopied uint64
+	// The number of bytes associated with
+	// files processed but NOT copied. Does
+	// NOT include directory entries.
+
+	SubDirsDocumented uint64
+	// The number of subdirectories identified
+	// and returned in a Directory Manager
+	// Collection. Does NOT include the parent
+	// directory. Subdirectories are only
+	// documented if requested.
+
+	ComputeError error
+	// Errors related to computations or
+	// conflicted category counts.
 }
 
 // DirectoryDeleteFileInfo - structure used

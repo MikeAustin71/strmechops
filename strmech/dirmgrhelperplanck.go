@@ -159,6 +159,19 @@ type dirMgrHelperPlanck struct {
 //		means that the files actually copied by this
 //		method will NOT be documented.
 //
+//	returnSubDirsList			bool
+//
+//		If input parameter 'returnSubDirsList' is set
+//		to 'true', this method will create DirMgr objects
+//		for each subdirectory in the parent directory,
+//		and add them to Subdirectory collection passed as
+//		input parameter 'subDirectories'.
+//
+//		If input parameter 'returnCopiedFilesList' is set
+//		to 'false', no subdirectories will be added to
+//		Directory Manager Collection (DirMgrCollection)
+//		passed as input parameter 'subDirectories'.
+//
 //	copyEmptyTargetDirectory	bool
 //
 //		If set to 'true' the target directory will be
@@ -397,6 +410,54 @@ type dirMgrHelperPlanck struct {
 //		string, a default value of "targetDMgr" will be
 //		automatically applied.
 //
+//	subDirectories				*DirMgrCollection
+//
+//		A pointer to an instance of DirMgrCollection
+//		which encapsulates an array of Directory Manager
+//		(DirMgr) objects.
+//
+//		If input parameter 'returnSubDirsList' is set to
+//		'true', all subdirectories residing the parent
+//		directory defined by input parameter 'sourceDMgr'
+//		will be added as new DirMgr objects to the
+//		'subDirectories' Directory Manager Collection.
+//
+//		Directory entries for the current directory (".")
+//		and the parent directory ("..") will be skipped
+//		and will NOT be added to the 'subDirectories'
+//		Directory Manager Collection.
+//
+//			type DirMgrCollection struct {
+//				dirMgrs []DirMgr
+//			}
+//
+//		Directory entries for the current directory (".")
+//		and the parent directory ("..") will be skipped and
+//		will NOT be added to the 'subDirectories' Directory
+//		Manager Collection.
+//
+//		If input parameter 'returnSubDirsList' is set to
+//		'false', no subdirectories will be added to this
+//		Directory Manager Collection.
+//
+//	copiedFiles					*FileMgrCollection
+//
+//		A pointer to an instance of FileMgrCollection
+//		which encapsulates an array of File Manager
+//		(FileMgr) objects.
+//
+//		If input parameter 'returnCopiedFilesList' is
+//		set to 'true', all files actually copied to the
+//		target directory defined by input parameter
+//		'targetDMgr' will be added as new FileMgr objects
+//		to the 'copiedFiles' File Manager Collection.
+//		Effectively, this provides a list documenting the
+//		files actually copied to the target directory.
+//
+//		If input parameter 'returnCopiedFilesList' is set
+//		to 'false', no files will be added to this File
+//		Manager collection.
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -433,30 +494,6 @@ type dirMgrHelperPlanck struct {
 //			FileBytesNotCopied  uint64
 //			ComputeError        error
 //		}
-//
-//	copiedFiles					FileMgrCollection
-//
-//		If input parameter 'returnCopiedFilesList' is set
-//		to 'true', 'copiedFiles' will return a populated
-//		File Manager Collection documenting all the files
-//		actually included in the copy operation.
-//
-//		If input parameter 'returnCopiedFilesList' is set
-//		to 'false', 'copiedFiles' will return an empty and
-//		unpopulated instance of FileMgrCollection.
-//
-//	subDirectories				DirMgrCollection
-//
-//		If this method completes successfully, this
-//		method will return an instance of DirMgrCollection
-//		populated with an array of 'DirMgr' objects
-//		identifying the subdirectories contained in the
-//		parent directory specified by input parameter
-//		'sourceDMgr'.
-//
-//			type DirMgrCollection struct {
-//				dirMgrs []DirMgr
-//			}
 //
 //	nonfatalErrs				[]error
 //
@@ -510,6 +547,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 	sourceDMgr *DirMgr,
 	targetDMgr *DirMgr,
 	returnCopiedFilesList bool,
+	returnSubDirsList bool,
 	copyEmptyTargetDirectory bool,
 	copyRegularFiles bool,
 	copySymLinkFiles bool,
@@ -517,10 +555,10 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 	fileSelectCriteria FileSelectionCriteria,
 	sourceDMgrLabel string,
 	targetDMgrLabel string,
+	subDirectories *DirMgrCollection,
+	copiedFiles *FileMgrCollection,
 	errPrefDto *ePref.ErrPrefixDto) (
 	dirCopyStats DirectoryCopyStats,
-	copiedFiles FileMgrCollection,
-	subDirectories DirMgrCollection,
 	nonfatalErrs []error,
 	fatalErr error) {
 
@@ -547,10 +585,38 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 	if fatalErr != nil {
 
-		return dirCopyStats, copiedFiles, subDirectories, nonfatalErrs, fatalErr
+		return dirCopyStats, nonfatalErrs, fatalErr
 	}
 
-	subDirectories = new(DirMgrCollection).New()
+	if returnCopiedFilesList == true &&
+		copiedFiles == nil {
+
+		fatalErr = fmt.Errorf("%v\n"+
+			"Error: Input parameters 'returnCopiedFilesList'\n"+
+			"and 'copiedFiles' are conflicted.\n"+
+			"'returnCopiedFilesList' is set to 'true'; however\n"+
+			"the 'copiedFiles' pointer is 'nil'.\n"+
+			"Provide a valid pointer to a 'copiedFiles'\n"+
+			"File Manager Collection (FileMgrCollection)!\n",
+			ePrefix.String())
+
+		return dirCopyStats, nonfatalErrs, fatalErr
+	}
+
+	if returnSubDirsList == true &&
+		subDirectories == nil {
+
+		fatalErr = fmt.Errorf("%v\n"+
+			"Error: Input parameters 'returnSubDirsList'\n"+
+			"and 'subDirectories' are conflicted.\n"+
+			"'returnSubDirsList' is set to 'true'; however\n"+
+			"the 'subDirectories' pointer is 'nil'.\n"+
+			"Provide a valid pointer to a 'subDirectories'\n"+
+			"Directory Manager Collection (DirMgrCollection)!\n",
+			ePrefix.String())
+
+		return dirCopyStats, nonfatalErrs, fatalErr
+	}
 
 	if len(sourceDMgrLabel) == 0 {
 
@@ -570,7 +636,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 	if fatalErr != nil {
 
-		return dirCopyStats, copiedFiles, subDirectories, nonfatalErrs, fatalErr
+		return dirCopyStats, nonfatalErrs, fatalErr
 	}
 
 	if len(targetDMgrLabel) == 0 {
@@ -591,7 +657,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 	if fatalErr != nil {
 
-		return dirCopyStats, copiedFiles, subDirectories, nonfatalErrs, fatalErr
+		return dirCopyStats, nonfatalErrs, fatalErr
 	}
 
 	if copyRegularFiles == false &&
@@ -607,7 +673,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 			"copyOtherNonRegularFiles == false\n",
 			ePrefix.String())
 
-		return dirCopyStats, copiedFiles, subDirectories, nonfatalErrs, fatalErr
+		return dirCopyStats, nonfatalErrs, fatalErr
 	}
 
 	isFileSelectionCriteriaActive :=
@@ -625,7 +691,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 		if fatalErr != nil {
 
-			return dirCopyStats, copiedFiles, subDirectories, nonfatalErrs, fatalErr
+			return dirCopyStats, nonfatalErrs, fatalErr
 		}
 
 		if targetPathDoesExist {
@@ -643,13 +709,17 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 	var lenFileInfos int
 	var errs2 []error
 
+	// If returnSubDirsList is false
+	// no subdirectory entries will be
+	// returned.
+
 	fileInfos,
 		lenFileInfos,
 		errs2,
 		fatalErr = new(dirMgrHelperTachyon).
 		getFileInfosFromDirectory(
 			sourceDMgr,
-			true,                     // getDirectoryFileInfos
+			returnSubDirsList,        // getDirectoryFileInfos
 			copyRegularFiles,         // getRegularFileInfos
 			copySymLinkFiles,         // copySymLinkFiles,
 			copyOtherNonRegularFiles, // copyOtherNonRegularFiles
@@ -665,7 +735,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 	if fatalErr != nil {
 
-		return dirCopyStats, copiedFiles, subDirectories, nonfatalErrs, fatalErr
+		return dirCopyStats, nonfatalErrs, fatalErr
 	}
 
 	if lenFileInfos == 0 {
@@ -681,7 +751,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 			sourceDMgrLabel,
 			sourceDMgr.absolutePath)
 
-		return dirCopyStats, copiedFiles, subDirectories, nonfatalErrs, fatalErr
+		return dirCopyStats, nonfatalErrs, fatalErr
 	}
 
 	var fh = new(FileHelper)
@@ -690,7 +760,8 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 
 	for _, nameFileInfo := range fileInfos {
 
-		if nameFileInfo.IsDir() {
+		if returnSubDirsList &&
+			nameFileInfo.IsDir() {
 			// This is a Subdirectory!
 
 			if nameFileInfo.Name() == "." ||
@@ -721,8 +792,10 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 						nameFileInfo.Name(),
 					err2.Error())
 
-				return dirCopyStats, copiedFiles, subDirectories, nonfatalErrs, fatalErr
+				return dirCopyStats, nonfatalErrs, fatalErr
 			}
+
+			dirCopyStats.SubDirsDocumented++
 
 			continue
 		}
@@ -799,7 +872,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 						targetDMgr.absolutePath,
 						err.Error())
 
-					return dirCopyStats, copiedFiles, subDirectories, nonfatalErrs, fatalErr
+					return dirCopyStats, nonfatalErrs, fatalErr
 				}
 
 				if targetPathDoesExist == true {
@@ -862,7 +935,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 					dirCopyStats.FileBytesNotCopied +=
 						uint64(nameFileInfo.Size())
 
-					return dirCopyStats, copiedFiles, subDirectories, nonfatalErrs, fatalErr
+					return dirCopyStats, nonfatalErrs, fatalErr
 
 				} else {
 
@@ -914,7 +987,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 		}
 	}
 
-	return dirCopyStats, copiedFiles, subDirectories, nonfatalErrs, fatalErr
+	return dirCopyStats, nonfatalErrs, fatalErr
 }
 
 // deleteDirectoryFiles
