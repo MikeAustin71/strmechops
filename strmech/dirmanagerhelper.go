@@ -3,7 +3,6 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
-	"io"
 	"os"
 	pf "path/filepath"
 	"strings"
@@ -865,6 +864,8 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeInfo(
 
 	var nameDirEntries []os.DirEntry
 
+	var errStatus ArrayColErrorStatus
+
 	for i := 0; i < dTreeCnt; i++ {
 
 		if i == 0 {
@@ -877,7 +878,7 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeInfo(
 		}
 
 		nextDir,
-			err = deleteTreeInfo.Directories.
+			errStatus = deleteTreeInfo.Directories.
 			GetDirMgrAtIndex(
 				i,
 				ePrefix.XCpy(
@@ -885,8 +886,12 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeInfo(
 						"deleteTreeInfo.Directories idx=%v",
 						i)))
 
-		if err != nil {
-			errs = append(errs, err)
+		if errStatus.ProcessingError != nil {
+
+			errs = append(errs,
+				fmt.Errorf("%v",
+					errStatus.ProcessingError.Error()))
+
 			continue
 		}
 
@@ -1501,6 +1506,8 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 	var nameDirEntries []os.DirEntry
 	var nameFileInfo os.FileInfo
 
+	var errStatus ArrayColErrorStatus
+
 	for !mainLoopIsDone {
 
 		if isFirstLoop {
@@ -1511,21 +1518,23 @@ func (dMgrHlpr *dirMgrHelper) deleteDirectoryTreeStats(
 		}
 
 		nextDir,
-			err = dirs.PopFirstDirMgr(ePrefix.XCpy(
-			"dirs"))
+			errStatus = dirs.
+			PopFirstDirMgr(ePrefix.XCpy(
+				"dirs"))
 
-		if err != nil && err == io.EOF {
+		if errStatus.ProcessingError != nil &&
+			errStatus.IsIndexOutOfBounds == true {
 
 			mainLoopIsDone = true
 			break
 
-		} else if err != nil {
+		} else if errStatus.ProcessingError != nil {
 
 			err2 = fmt.Errorf("%v\n"+
 				"Error returned by dirs.PopFirstDirMgr().\n"+
 				"Error='%v'\n",
 				ePrefix.String(),
-				err.Error())
+				errStatus.ProcessingError.Error())
 
 			errs = append(errs, err2)
 
@@ -3858,6 +3867,8 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 	var nameDirEntries []os.DirEntry
 	var nameFileInfo os.FileInfo
 
+	var errStatus = ArrayColErrorStatus{}
+
 	for i := 0; i < dTreeCnt; i++ {
 
 		if i == 0 {
@@ -3867,7 +3878,7 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 		}
 
 		nextDir,
-			err = new(dirMgrCollectionHelper).
+			errStatus = new(dirMgrCollectionHelper).
 			peekOrPopAtIndex(
 				&dTreeInfo.Directories,
 				i,
@@ -3877,8 +3888,12 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeFiles(
 						"dMgrs[%v]",
 						i)))
 
-		if err != nil {
-			errs = append(errs, err)
+		if errStatus.ProcessingError != nil {
+
+			errs = append(errs,
+				fmt.Errorf("%v",
+					errStatus.ProcessingError.Error()))
+
 			continue
 		}
 
@@ -4275,6 +4290,8 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeStats(
 		return dTreeStats, errs
 	}
 
+	var errStatus = ArrayColErrorStatus{}
+
 	for !mainLoopIsDone {
 
 		if isFirstLoop {
@@ -4285,21 +4302,22 @@ func (dMgrHlpr *dirMgrHelper) findDirectoryTreeStats(
 		}
 
 		nextDir,
-			err = dirs.PopFirstDirMgr(ePrefix.XCpy(
+			errStatus = dirs.PopFirstDirMgr(ePrefix.XCpy(
 			"dirs"))
 
-		if err != nil && err == io.EOF {
+		if errStatus.ProcessingError != nil &&
+			errStatus.IsIndexOutOfBounds == true {
 
 			mainLoopIsDone = true
 			break
 
-		} else if err != nil {
+		} else if errStatus.ProcessingError != nil {
 
 			err2 = fmt.Errorf("%v\n"+
 				"Error returned by dirs.PopFirstDirMgr().\n"+
 				"Error= \n%v\n",
 				ePrefix.String(),
-				err.Error())
+				errStatus.ProcessingError.Error())
 
 			errs = append(errs, err2)
 
