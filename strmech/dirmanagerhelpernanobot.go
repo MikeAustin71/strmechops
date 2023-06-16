@@ -3,7 +3,6 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
-	"io"
 	"os"
 	"strings"
 	"sync"
@@ -629,11 +628,11 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 
 	var subdirectories DirMgrCollection
 
-	subdirectories,
-		_,
+	_,
 		err = new(dirMgrHelperTachyon).
 		getSubdirectories(
 			sourceDMgr,
+			&sourceDirectories,
 			sourceDMgrLabel,
 			ePrefix)
 
@@ -657,42 +656,24 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 			fatalErr
 	}
 
-	err = sourceDirectories.
-		AddDirMgrCollection(
-			&subdirectories,
-			ePrefix.XCpy("subdirectories"))
-
-	if err != nil {
-
-		fatalErr = fmt.Errorf("%v\n"+
-			"Failed to add subdirectories to sourceDirectories Collection!\n"+
-			"Error returned by sourceDirectories.AddDirMgrCollection(subdirectories).\n"+
-			"%v = %v\n"+
-			"Error= \n%v\n",
-			funcName,
-			sourceDMgrLabel,
-			sourceDMgr.absolutePath,
-			err.Error())
-
-		return dTreeCopyStats,
-			copiedDirTreeFiles,
-			nonfatalErrs,
-			fatalErr
-	}
-
 	var sourceDirMgr, targetDirMgr DirMgr
 
-	sourceDirMgr, err = sourceDirectories.PopFirstDirMgr(
-		ePrefix.XCpy("sourceDirectories"))
+	var errStatus ArrayColErrorStatus
 
-	if err != nil {
+	sourceDirMgr,
+		errStatus = sourceDirectories.
+		PopFirstDirMgr(
+			ePrefix.XCpy(
+				"sourceDirectories"))
+
+	if errStatus.ProcessingError != nil {
 
 		fatalErr = fmt.Errorf("%v\n"+
 			"Failed to extract first 'sourceDirMgr' from source directories collection!\n"+
 			"Error returned by sourceDirectories.PopFirstDirMgr().\n"+
 			"Error= \n%v\n",
 			funcName,
-			err.Error())
+			errStatus.ProcessingError.Error())
 
 		return dTreeCopyStats,
 			copiedDirTreeFiles,
@@ -831,10 +812,14 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 
 		}
 
-		sourceDirMgr, err = sourceDirectories.PopFirstDirMgr(
-			ePrefix.XCpy("sourceDirectories"))
+		sourceDirMgr,
+			errStatus = sourceDirectories.
+			PopFirstDirMgr(
+				ePrefix.XCpy(
+					"sourceDirectories"))
 
-		if err != nil && err != io.EOF {
+		if errStatus.ProcessingError != nil &&
+			errStatus.IsIndexOutOfBounds != true {
 
 			fatalErr = fmt.Errorf("%v\n"+
 				"Failed to extract 'sourceDirMgr' from source directories collection!\n"+
@@ -843,7 +828,7 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 				"Error= \n%v\n",
 				funcName,
 				loopCount,
-				err.Error())
+				errStatus.ProcessingError.Error())
 
 			return dTreeCopyStats,
 				copiedDirTreeFiles,
@@ -1423,14 +1408,11 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) deleteDirectoryTreeFiles(
 				fatalErr
 		}
 	}
-
-	var subdirectories DirMgrCollection
-
-	subdirectories,
-		_,
+	_,
 		err2 = new(dirMgrHelperTachyon).
 		getSubdirectories(
 			targetDMgr,
+			&targetDirs,
 			targetDMgrLabel,
 			ePrefix.XCpy(targetDMgrLabel))
 
@@ -1453,12 +1435,9 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) deleteDirectoryTreeFiles(
 			fatalErr
 	}
 
-	targetDirs.dirMgrs = append(
-		targetDirs.dirMgrs,
-		subdirectories.dirMgrs...)
-
 	if len(targetDirs.dirMgrs) == 0 {
 
+		// There are no subdirectories
 		return deletedDirTreeFileStats,
 			deletedFiles,
 			nonfatalErrs,
