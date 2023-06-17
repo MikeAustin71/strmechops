@@ -439,11 +439,6 @@ type dirMgrHelperPlanck struct {
 //				dirMgrs []DirMgr
 //			}
 //
-//		Directory entries for the current directory (".")
-//		and the parent directory ("..") will be skipped and
-//		will NOT be added to the 'subDirectories' Directory
-//		Manager Collection.
-//
 //		If input parameter 'returnSubDirsList' is set to
 //		'false', no subdirectories will be added to this
 //		Directory Manager Collection.
