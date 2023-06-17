@@ -75,6 +75,7 @@ type dirMgrHelperPlanck struct {
 //	named pipes, sockets, and symbolic links.
 //
 //	https://docs.studygolang.com/src/io/fs/fs.go
+//	https://www.computerhope.com/jargon/r/regular-file.htm
 //	https://go.dev/src/os/types.go
 //	https://go.dev/src/os/types.go?s=1237:1275#L31
 //	https://pkg.go.dev/gopkg.in/src-d/go-git.v4/plumbing/filemode
@@ -108,17 +109,21 @@ type dirMgrHelperPlanck struct {
 //
 // ----------------------------------------------------------------
 //
-// # BE ADVISED
+// # IMPORTANT
 //
-//	(1)	This method ONLY copies files from the directory
-//		identified by 'sourceDMgr' to the directory identified
-//		by 'targetDMgr'. It does NOT copy files from
-//		subdirectories of 'sourceDMgr'.
+//	(1)	This method ONLY copies files from the parent
+//		directory identified by 'sourceDMgr' to the
+//		parent directory identified by 'targetDMgr'.
 //
-//	(2)	If the target directory does not exist, this method
+//	(2) No files in subdirectories of 'sourceDMgr 'will
+//		be copied. Only files in the top level or parent
+//		directory defined by input parameter 'sourceDMgr'
+//		are eligible for the copy operation.
+//
+//	(3)	If the target directory does not exist, this method
 //		will attempt to create it.
 //
-//	(3)	Files will only be copied if they meet the File Type
+//	(4)	Files will only be copied if they meet the File Type
 //		criteria and the File Characteristics Criteria.
 //
 //		File Type criteria are specified by input parameters:
@@ -130,11 +135,11 @@ type dirMgrHelperPlanck struct {
 //		File Characteristics Selection criteria is specified by
 //		input parameter 'fileSelectCriteria'.
 //
-//	(4) If input parameter 'returnCopiedFilesList' is set
+//	(5) If input parameter 'returnCopiedFilesList' is set
 //		to 'false', input parameter ('copiedFiles') can be
 //		set to nil.
 //
-//	(5)	If input parameter 'returnSubDirsList' is set to
+//	(6)	If input parameter 'returnSubDirsList' is set to
 //		'false', input parameter ('subDirectories') can
 //		be set to nil.
 //
@@ -167,18 +172,29 @@ type dirMgrHelperPlanck struct {
 //		means that the files actually copied by this
 //		method will NOT be documented.
 //
+//		If 'returnCopiedFilesList' is set to false, input
+//		parameter 'copiedFiles' may safely be set to
+//		'nil'.
+//
 //	returnSubDirsList			bool
 //
 //		If this parameter is set to 'true', this method
 //		will create DirMgr objects for each subdirectory
 //		in the parent directory ('sourceDMgr'), and add
 //		them to the Directory Manager Collection passed
-//		as input parameter 'subDirectories'.
+//		as input parameter 'subDirectories'. Only
+//		subdirectories residing in the top level or
+//		parent directory defined by 'targetDMgr' will be
+//		included.
 //
 //		If 'returnSubDirsList' is set to 'false', no
 //		subdirectories will be added to the Directory
 //		Manager Collection (DirMgrCollection) passed as
 //		input parameter 'subDirectories'.
+//
+//		If 'returnSubDirsList' is set to false,
+//		input parameter 'subDirectories' may safely be set
+//		to 'nil'.
 //
 //	copyEmptyTargetDirectory	bool
 //
@@ -191,10 +207,10 @@ type dirMgrHelperPlanck struct {
 //
 //	copyRegularFiles			bool
 //
-//		If this parameter is set to 'true', Regular Files,
-//		which also meet the File Selection Characteristics
-//		criteria (fileSelectCriteria), will be included
-//		in the copy operation.
+//		If this parameter is set to 'true', Regular
+//		Files, which also meet the File Selection
+//		Characteristics criteria (fileSelectCriteria),
+//		will be included in the copy operation.
 //
 //		Regular Files include text files, image files and
 //		executable files.
@@ -425,10 +441,15 @@ type dirMgrHelperPlanck struct {
 //		(DirMgr) objects.
 //
 //		If input parameter 'returnSubDirsList' is set to
-//		'true', all subdirectories residing the parent
-//		directory defined by input parameter 'sourceDMgr'
-//		will be added as new DirMgr objects to the
-//		'subDirectories' Directory Manager Collection.
+//		'true', all subdirectories residing in the top
+//		level or parent directory defined by input
+//		parameter 'targetDMgr' will be added as new
+//		DirMgr objects to the 'subDirectories' Directory
+//		Manager Collection. Subdirectories residing in
+//		subdirectories below the top level or parent
+//		directory ('targetDMgr'), will not be added to
+//		the Directory Manager Collection
+//		('subDirectories').
 //
 //		Directory entries for the current directory (".")
 //		and the parent directory ("..") will be skipped
@@ -444,8 +465,8 @@ type dirMgrHelperPlanck struct {
 //		Directory Manager Collection.
 //
 //		If input parameter 'returnSubDirsList' is set
-//		to 'false', this parameter ('subDirectories') can be
-//		set to nil.
+//		to 'false', this parameter ('subDirectories') may
+//		safely be set to 'nil'.
 //
 //	copiedFiles					*FileMgrCollection
 //
@@ -790,7 +811,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 			if err2 != nil {
 
 				fatalErr = fmt.Errorf("%v\n"+
-					"Error returned adding subdirectory DirMgrCollection!\n"+
+					"Error returned adding subdirectory to DirMgrCollection!\n"+
 					"Parent Directory = '%v'\n"+
 					"Subdirectory Name= '%v'\n"+
 					"Full Subdirectory Path= '%v'\n"+
@@ -1004,7 +1025,11 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 // deleteDirectoryFiles
 //
 // This method deletes selected files in a single
-// directory. No subdirectories will be deleted.
+// directory.
+//
+// No files in subdirectories will be deleted. Only files
+// in the top level or parent directory defined by input
+// parameter 'targetDMgr' are eligible for deletion.
 //
 // The files to be deleted are selected according to file
 // to two sets of criteria, File Type and File
@@ -1056,6 +1081,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //	named pipes, sockets, and symbolic links.
 //
 //	https://docs.studygolang.com/src/io/fs/fs.go
+//	https://www.computerhope.com/jargon/r/regular-file.htm
 //	https://go.dev/src/os/types.go
 //	https://go.dev/src/os/types.go?s=1237:1275#L31
 //	https://pkg.go.dev/gopkg.in/src-d/go-git.v4/plumbing/filemode
@@ -1094,29 +1120,49 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //	(1)	This method will delete files in the directory
 //		specified by input parameter 'targetDMgr'. The
 //		files to be deleted must match the File Selection
-//		Characteristics Criteria passed as input parameter
-//		'fileSelectCriteria'.
+//		Characteristics Criteria passed as input
+//		parameter 'fileSelectCriteria'.
 //
 //	(2) In addition to meeting the File Selection
-//		Characteristics requirements specified in paragraph
-//		(1) above, files eligible for deletion must comply
-//		with File Type specifications passed as input
-//		parameters 'deleteRegularFiles',
+//		Characteristics requirements specified in
+//		paragraph (1) above, files eligible for deletion
+//		must comply with File Type specifications passed
+//		as input parameters 'deleteRegularFiles',
 //		'deleteSymLinkFiles' and
 //		'deleteOtherNonRegularFiles'.
 //
 //	(3) If the target directory identified by input
 //		parameter 'targetDMgr' contains NO Files
-//		(0 Files), this method will exit and no error
+//		meeting the (1) File Selection Characteristics
+//		Criteria and the (2) File Type Selection
+//		Criteria, this method will exit, and no error
 //		will be returned.
 //
 //	(4) If the target directory identified by input
+//		parameter 'targetDMgr' contains NO Files
+//		(0 Files), this method will exit, and no error
+//		will be returned.
+//
+//	(5) If the target directory identified by input
 //		parameter 'targetDMgr' contains NO Files
 //		matching the File Selection Criteria specified by
 //		input parameter 'fileSelectCriteria', this method
 //		will exit and no error will be returned.
 //
-//	(5)	This method will NOT delete directories.
+//	(6)	This method will NOT delete directories.
+//
+//	(7) No files in subdirectories will be deleted. Only
+//		files in the top level or parent directory
+//		defined by input parameter 'targetDMgr' are
+//		eligible for deletion.
+//
+//	(8) If input parameter 'returnDeletedFilesList' is
+//		set to 'false', input parameter ('deletedFiles')
+//		can be set to nil.
+//
+//	(9)	If input parameter 'returnSubDirsList' is set to
+//		'false', input parameter ('subDirectories') can
+//		be set to nil.
 //
 // ----------------------------------------------------------------
 //
@@ -1150,8 +1196,14 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //		file deletion operation.
 //
 //		If 'returnDeletedFilesList' is set to 'false',
-//		the instance of FileMgrCollection returned by this
-//		method will always be empty and unpopulated.
+//		the instance of FileMgrCollection returned by
+//		this method will always be empty and unpopulated.
+//		This means that the files actually deleted by
+//		this method will NOT be documented.
+//
+//		If 'returnDeletedFilesList' is set to false,
+//		input parameter 'deletedFiles' may safely be set
+//		to 'nil'.
 //
 //	returnSubDirsList			bool
 //
@@ -1159,19 +1211,26 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //		will create DirMgr objects for each subdirectory
 //		in the parent directory ('targetDMgr'), and add
 //		them to the Directory Manager Collection passed
-//		as input parameter 'subDirectories'.
+//		as input parameter 'subDirectories'. Only
+//		subdirectories residing in the top level or
+//		parent directory defined by 'targetDMgr' will be
+//		included.
 //
 //		If 'returnSubDirsList' is set to 'false', no
 //		subdirectories will be added to the Directory
 //		Manager Collection (DirMgrCollection) passed as
 //		input parameter 'subDirectories'.
 //
+//		If 'returnSubDirsList' is set to false,
+//		input parameter 'subDirectories' may safely be set
+//		to 'nil'.
+//
 //	deleteRegularFiles			bool
 //
 //		If this parameter is set to 'true', regular files
 //		will be eligible for deletion if they meet the
 //		File Selection criteria specified by input
-//		paramter 'fileSelectCriteria'.
+//		parameter 'fileSelectCriteria'.
 //
 //		Regular Files include text files, image files and
 //		executable files.
@@ -1187,8 +1246,12 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //	deleteSymLinkFiles			bool
 //
 //		If this parameter is set to 'true', SymLink files
-//		which meet the file selection criteria, will be
+//		which meet the file selection criteria specified
+//		by input parameter 'fileSelectCriteria', will be
 //		deleted.
+//
+//		Reference the section on "Definition Of Terms",
+//		above, for a discussion of SymLink files.
 //
 //		If 'deleteRegularFiles', 'deleteSymLinkFiles' and
 //		'deleteOtherNonRegularFiles' are all set to
@@ -1206,8 +1269,8 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //		See the Definition Of Terms section above.
 //
 //		Note:	Although directories are non-regular
-//				files; however, this method WILL NOT
-//				DELETE directories.
+//				files, this method WILL NEVER DELETE
+//				directories.
 //
 //		If 'deleteRegularFiles', 'deleteSymLinkFiles' and
 //		'deleteOtherNonRegularFiles' are all set to
@@ -1219,6 +1282,10 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //		selected files must conform to the File
 //		Characteristics criteria specified by
 //		'fileSelectCriteria'.
+//
+//		Failure to comply with File Characteristics
+//		Selection criteria ('fileSelectCriteria') means
+//		that the subject file will NOT be deleted.
 //
 //		File Characteristics Selection criteria allows
 //		users to screen files for File Name, File
@@ -1359,8 +1426,8 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //		IMPORTANT:
 //
 //		If all of the file selection criterion in the FileSelectionCriteria object
-//		are 'Inactive' or 'Not Set' (set to their zero or default values), then all
-//		the files processed in the target directory will be selected and deleted.
+//		are 'Inactive' or 'Not Set' (set to their zero or default values), then ALL
+//		THE FILES processed in the target directory will be selected and DELETED.
 //
 //			Example:
 //			  fsc := FileSelectCriterionMode{}
@@ -1389,10 +1456,15 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //		(DirMgr) objects.
 //
 //		If input parameter 'returnSubDirsList' is set to
-//		'true', all subdirectories residing the parent
-//		directory defined by input parameter 'targetDMgr'
-//		will be added as new DirMgr objects to the
-//		'subDirectories' Directory Manager Collection.
+//		'true', all subdirectories residing in the top
+//		level or parent directory defined by input
+//		parameter 'targetDMgr' will be added as new
+//		DirMgr objects to the 'subDirectories' Directory
+//		Manager Collection. Subdirectories residing in
+//		subdirectories below the top level or parent
+//		directory ('targetDMgr'), will not be added to
+//		the Directory Manager Collection
+//		('subDirectories').
 //
 //		Directory entries for the current directory (".")
 //		and the parent directory ("..") will be skipped
@@ -1408,19 +1480,31 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //		Directory Manager Collection.
 //
 //		If input parameter 'returnSubDirsList' is set
-//		to 'false', this parameter ('subDirectories') can be
-//		set to nil.
+//		to 'false', this parameter ('subDirectories') may
+//		safely be set to 'nil'.
 //
 //	deletedFiles				*FileMgrCollection
 //
-//		If this method completes successfully and input
-//		paramter 'returnDeletedFilesList' is set to
-//		'true', 'deletedFiles' will return a collection
-//		of File Manager objects identifying all the
-//		files actually deleted. Again, this return
-//		parameter will ONLY be populated when input
-//		parameter 'returnDeletedFilesList' is set to
-//		'true'.
+//		A pointer to an instance of FileMgrCollection
+//		which encapsulates an array of File Manager
+//		(FileMgr) objects.
+//
+//		If input parameter 'returnDeletedFilesList' is
+//		set to 'true', all files actually deleted in the
+//		target directory defined by input parameter
+//		'targetDMgr' will be added as new FileMgr objects
+//		to the 'copiedFiles' File Manager Collection.
+//		Effectively, this provides a list documenting the
+//		files actually deleted to the target directory.
+//
+//		If input parameter 'returnDeletedFilesList' is
+//		set to 'false', no files will be added to this
+//		File Manager collection. This means that no
+//		documentation of deleted files will be provided.
+//
+//		If input parameter 'returnDeletedFilesList' is
+//		set to 'false', this input parameter
+//		('deletedFiles') may safely be set to 'nil'.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -1449,17 +1533,59 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //		operation. This information includes the number
 //		of files deleted.
 //
-//			type DeleteDirFilesStats struct {
-//				TotalFilesProcessed        uint64
-//				FilesDeleted               uint64
-//				FilesDeletedBytes          uint64
-//				FilesRemaining             uint64
-//				FilesRemainingBytes        uint64
-//				TotalSubDirectories        uint64
-//				TotalDirsScanned           uint64
-//				NumOfDirsWhereFilesDeleted uint64
-//				DirectoriesDeleted         uint64
-//			}
+//		type DeleteDirFilesStats struct {
+//			TotalFilesProcessed        uint64
+//				The total number of files processed.
+//				Does NOT include directory entries.
+//
+//			FilesDeleted               uint64
+//				The number of files deleted. Does
+//				NOT include directory entries.
+//
+//			FilesDeletedBytes          uint64
+//				The number of file bytes deleted.
+//				Does NOT include directory entries.
+//
+//			FilesRemaining             uint64
+//				The number of files processed, but
+//				NOT deleted. Does NOT include directory
+//				entries.
+//
+//			FilesRemainingBytes        uint64
+//				The number of bytes associated with
+//				files processed but NOT copied. Does
+//				NOT include directory entries.
+//
+//			TotalSubDirectories        uint64
+//				Total SubDirectories processed
+//
+//			TotalDirsScanned           uint64
+//				Total Directories Scanned.
+//
+//			NumOfDirsWhereFilesDeleted uint64
+//				The number of parent directories and
+//				subdirectories where files were deleted.
+//
+//			DirectoriesDeleted         uint64
+//				The number of directories deleted.
+//
+//			SubDirsDocumented          uint64
+//				The number of subdirectories identified
+//				and returned in a Directory Manager
+//				Collection. Does NOT include the parent
+//				directory. Subdirectories are only
+//				documented if requested. This computation
+//				value is therefore optional.
+//
+//			DeletedFilesDocumented		uint64
+//				The number of deleted files documented
+//				through addition to a returned File
+//				Manager Collection
+//
+//			ComputeErrors []error
+//				An array of errors associated with the
+//				calculation of these statistics.
+//		}
 //
 //	nonfatalErrs				[]error
 //
@@ -1620,7 +1746,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 		fatalErr = new(dirMgrHelperTachyon).
 		getFileInfosFromDirectory(
 			targetDMgr,
-			false,                      // getDirectoryFileInfos
+			returnSubDirsList,          // getDirectoryFileInfos
 			deleteRegularFiles,         // getRegularFileInfos
 			deleteSymLinkFiles,         // getSymLinksFileInfos
 			deleteOtherNonRegularFiles, // getOtherNonRegularFileInfos
@@ -1643,6 +1769,8 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 
 	if lenFileInfos == 0 {
 
+		// No files are eligible
+		// for deletion
 		return deletedDirFileStats,
 			nonfatalErrs,
 			fatalErr
@@ -1654,6 +1782,47 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 	deletedDirFileStats.TotalDirsScanned = 1
 
 	for _, nameFileInfo := range fileInfos {
+
+		if returnSubDirsList &&
+			nameFileInfo.IsDir() {
+
+			// This is a Subdirectory!
+
+			if nameFileInfo.Name() == "." ||
+				nameFileInfo.Name() == ".." {
+
+				continue
+			}
+
+			err2 = subDirectories.
+				AddDirMgrByKnownPathDirName(
+					targetDMgr.absolutePath,
+					nameFileInfo.Name(),
+					ePrefix.XCpy("targetDMgr+nameFileInfo"))
+
+			if err2 != nil {
+
+				fatalErr = fmt.Errorf("%v\n"+
+					"Error returned adding subdirectory to DirMgrCollection!\n"+
+					"Parent Directory = '%v'\n"+
+					"Subdirectory Name= '%v'\n"+
+					"Full Subdirectory Path= '%v'\n"+
+					"Error= \n%v\n",
+					funcName,
+					targetDMgr.absolutePath,
+					nameFileInfo.Name(),
+					targetDMgr.absolutePath+
+						osPathSepStr+
+						nameFileInfo.Name(),
+					err2.Error())
+
+				return deletedDirFileStats, nonfatalErrs, fatalErr
+			}
+
+			deletedDirFileStats.SubDirsDocumented++
+
+			continue
+		}
 
 		deletedDirFileStats.TotalFilesProcessed++
 
@@ -1708,6 +1877,8 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 						targetDMgr.absolutePath+osPathSepStr+nameFileInfo.Name(),
 						err2.Error()))
 			}
+
+			deletedDirFileStats.DeletedFilesDocumented++
 		}
 
 		deletedDirFileStats.FilesDeleted++

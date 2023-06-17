@@ -146,37 +146,37 @@ type DirMgr struct {
 //
 // ----------------------------------------------------------------
 //
-// # BE ADVISED
+// # IMPORTANT
 //
-//	(1)	This method ONLY copies files from the top level
-//		or parent directory identified by the current
-//		DirMgr instance to the target directory
-//		identified by 'targetDMgr'. It does NOT copy
-//		files from subdirectories.
+//	(1)	This method ONLY copies files from the parent
+//		directory identified by 'sourceDMgr' to the
+//		parent directory identified by 'targetDMgr'.
 //
-//	(2)	If the target directory does not exist, this
-//		method will attempt to create it.
+//	(2) No files in subdirectories of 'sourceDMgr 'will
+//		be copied. Only files in the top level or parent
+//		directory defined by input parameter 'sourceDMgr'
+//		are eligible for the copy operation.
 //
-//	(3)	Files will only be copied if they meet the File
-//		Type criteria and the File Characteristics
-//		Criteria.
+//	(3)	If the target directory does not exist, this method
+//		will attempt to create it.
 //
-//		File Type criteria are specified by input
-//		parameters:
+//	(4)	Files will only be copied if they meet the File Type
+//		criteria and the File Characteristics Criteria.
+//
+//		File Type criteria are specified by input parameters:
 //
 //			copyRegularFiles bool
 //			copySymLinkFiles bool
 //			copyOtherNonRegularFiles bool
 //
-//		File Characteristics Selection criteria is
-//		specified by input parameter 'fileSelectCriteria'.
+//		File Characteristics Selection criteria is specified by
+//		input parameter 'fileSelectCriteria'.
 //
-//
-//	(4) If input parameter 'returnCopiedFilesList' is set
+//	(5) If input parameter 'returnCopiedFilesList' is set
 //		to 'false', input parameter ('copiedFiles') can be
 //		set to nil.
 //
-//	(5)	If input parameter 'returnSubDirsList' is set to
+//	(6)	If input parameter 'returnSubDirsList' is set to
 //		'false', input parameter ('subDirectories') can
 //		be set to nil.
 //
@@ -206,8 +206,8 @@ type DirMgr struct {
 //		method will NOT be documented.
 //
 //		If input parameter 'returnCopiedFilesList' is set
-//		to 'false', input parameter ('copiedFiles') can be
-//		set to nil.
+//		to 'false', input parameter ('copiedFiles') may
+//		safely be set to 'nil'.
 //
 //	returnSubDirsList			bool
 //
@@ -223,8 +223,8 @@ type DirMgr struct {
 //		passed as input parameter 'subDirectories'.
 //
 //		If input parameter 'returnSubDirsList' is set to
-//		'false', input parameter ('subDirectories') can
-//		be set to nil.
+//		'false', input parameter ('subDirectories') may
+//		safely be set to 'nil'.
 //
 //	copyEmptyTargetDirectory		bool
 //

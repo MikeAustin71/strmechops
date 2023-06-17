@@ -488,11 +488,13 @@ type DirectoryCopyStats struct {
 
 	FileBytesCopied uint64
 	// The number of file bytes copied.
+	// Does NOT include directory entries.
 
 	FilesNotCopied uint64
-	// The number of files NOT copied.
-	// Does NOT include directory entries.
-	//
+	// The number of files processed, but
+	// NOT copied. Does NOT include directory
+	// entries.
+
 	FileBytesNotCopied uint64
 	// The number of bytes associated with
 	// files processed but NOT copied. Does
@@ -504,11 +506,11 @@ type DirectoryCopyStats struct {
 	// Collection. Does NOT include the parent
 	// directory. Subdirectories are only
 	// documented if requested. This computation
-	// is therefore optional.
+	// value is therefore optional.
 
-	ComputeError error
-	// Errors related to computations or
-	// conflicted category counts.
+	ComputeErrors []error
+	// An array of errors associated with the
+	// calculation of these statistics.
 }
 
 // DirectoryDeleteFileInfo - structure used
@@ -561,15 +563,57 @@ type DirectoryMoveStats struct {
 }
 
 type DeleteDirFilesStats struct {
-	TotalFilesProcessed        uint64
-	FilesDeleted               uint64
-	FilesDeletedBytes          uint64
-	FilesRemaining             uint64
-	FilesRemainingBytes        uint64
-	TotalSubDirectories        uint64
-	TotalDirsScanned           uint64
+	TotalFilesProcessed uint64
+	// The total number of files processed.
+	// Does NOT include directory entries.
+
+	FilesDeleted uint64
+	// The number of files deleted. Does
+	// NOT include directory entries.
+
+	FilesDeletedBytes uint64
+	// The number of file bytes deleted.
+	// Does NOT include directory entries.
+
+	FilesRemaining uint64
+	// The number of files processed, but
+	// NOT deleted. Does NOT include directory
+	// entries.
+
+	FilesRemainingBytes uint64
+	// The number of bytes associated with
+	// files processed but NOT copied. Does
+	// NOT include directory entries.
+
+	TotalSubDirectories uint64
+	// Total SubDirectories processed
+
+	TotalDirsScanned uint64
+	// Total Directories Scanned.
+
 	NumOfDirsWhereFilesDeleted uint64
-	DirectoriesDeleted         uint64
+	// The number of parent directories and
+	// subdirectories where files were deleted.
+
+	DirectoriesDeleted uint64
+	// The number of directories deleted.
+
+	SubDirsDocumented uint64
+	// The number of subdirectories identified
+	// and returned in a Directory Manager
+	// Collection. Does NOT include the parent
+	// directory. Subdirectories are only
+	// documented if requested. This computation
+	// value is therefore optional.
+
+	DeletedFilesDocumented uint64
+	// The number of deleted files documented
+	// through addition to a returned File
+	// Manager Collection
+
+	ComputeErrors []error
+	// An array of errors associated with the
+	// calculation of these statistics.
 }
 
 // AddStats
