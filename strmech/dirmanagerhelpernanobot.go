@@ -626,11 +626,9 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 
 	}
 
-	var subdirectories DirMgrCollection
-
 	_,
-		err = new(dirMgrHelperTachyon).
-		getSubdirectories(
+		err = new(dirMgrHelperElectron).
+		getAllSubDirsInDirTree(
 			sourceDMgr,
 			&sourceDirectories,
 			sourceDMgrLabel,
@@ -640,7 +638,8 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 
 		fatalErr = fmt.Errorf("%v\n"+
 			"Failed to extract subdirectories from %v!\n"+
-			"Error returned by dirMgrHelperTachyongetSubdirectories(%v).\n"+
+			"Error returned by dirMgrHelperElectron."+
+			"getAllSubDirsInDirTree(%v).\n"+
 			"%v = %v\n"+
 			"Error= \n%v\n",
 			funcName,
@@ -656,24 +655,7 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 			fatalErr
 	}
 
-	var sourceDirMgr, targetDirMgr DirMgr
-
-	var errStatus ArrayColErrorStatus
-
-	sourceDirMgr,
-		errStatus = sourceDirectories.
-		PopFirstDirMgr(
-			ePrefix.XCpy(
-				"sourceDirectories"))
-
-	if errStatus.ProcessingError != nil {
-
-		fatalErr = fmt.Errorf("%v\n"+
-			"Failed to extract first 'sourceDirMgr' from source directories collection!\n"+
-			"Error returned by sourceDirectories.PopFirstDirMgr().\n"+
-			"Error= \n%v\n",
-			funcName,
-			errStatus.ProcessingError.Error())
+	if len(sourceDirectories.dirMgrs) == 0 {
 
 		return dTreeCopyStats,
 			copiedDirTreeFiles,
@@ -681,14 +663,49 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 			fatalErr
 	}
 
+	var sourceDirMgr, targetDirMgr DirMgr
+
+	var errStatus ArrayColErrorStatus
+
 	var errs2 []error
 	var err2 error
 	var copiedDirFiles FileMgrCollection
 	var dirCopyStats DirectoryCopyStats
 	dMgrHlprPlanck := new(dirMgrHelperPlanck)
-	loopCount := 1
+	cycleCount := 0
 
-	for err == nil {
+	for cycleCount > -1 {
+
+		cycleCount++
+
+		sourceDirMgr,
+			errStatus = sourceDirectories.
+			PopFirstDirMgr(
+				ePrefix.XCpy(
+					"sourceDirectories"))
+
+		if errStatus.ProcessingError != nil {
+
+			if errStatus.IsArrayCollectionEmpty {
+
+				cycleCount = -1
+
+				break
+
+			}
+
+			fatalErr = fmt.Errorf("%v\n"+
+				"Failed to extract first 'sourceDirMgr' from source directories collection!\n"+
+				"Error returned by sourceDirectories.PopFirstDirMgr().\n"+
+				"Error= \n%v\n",
+				funcName,
+				errStatus.ProcessingError.Error())
+
+			return dTreeCopyStats,
+				copiedDirTreeFiles,
+				nonfatalErrs,
+				fatalErr
+		}
 
 		targetDirMgr,
 			err2 = new(DirMgr).New(
@@ -707,7 +724,7 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 				"New Source Directory= %v\n"+
 				"Error= \n%v\n",
 				funcName,
-				loopCount,
+				cycleCount,
 				sourceDMgrLabel,
 				sourceDMgr.absolutePath,
 				targetDMgrLabel,
@@ -722,14 +739,13 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 		}
 
 		dirCopyStats,
-			copiedDirFiles,
-			subdirectories,
 			errs2,
 			err2 = dMgrHlprPlanck.
 			copyDirectoryFiles(
 				&sourceDirMgr,
 				&targetDirMgr,
-				false, // returnCopiedFilesList
+				returnCopiedFilesList, // returnCopiedFilesList
+				true,                  // returnSubDirsList
 				copyEmptyTargetDirectory,
 				copyRegularFiles,
 				copySymLinkFiles,
@@ -737,6 +753,8 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 				fileSelectCriteria,
 				"sourceDirMgr",
 				"targetDirMgr",
+				&sourceDirectories,
+				&copiedDirFiles,
 				ePrefix)
 
 		if err2 != nil {
@@ -749,7 +767,7 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 				"%v = %v"+
 				"Error= \n%v\n",
 				funcName,
-				loopCount,
+				cycleCount,
 				"sourceDirMgr",
 				sourceDirMgr.absolutePath,
 				"targetDirMgr",
@@ -772,31 +790,6 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 
 		dTreeCopyStats.AddDirCopyStats(dirCopyStats)
 
-		err2 = sourceDirectories.
-			AddDirMgrCollection(
-				&subdirectories,
-				ePrefix.XCpy("subdirectories"))
-
-		if err2 != nil {
-
-			fatalErr = fmt.Errorf("%v\n"+
-				"Failed to add subdirectories to sourceDirectories Collection!\n"+
-				"Loop Count= %v\n"+
-				"Error returned by sourceDirectories.AddDirMgrCollection(subdirectories).\n"+
-				"%v = %v\n"+
-				"Error= \n%v\n",
-				funcName,
-				loopCount,
-				sourceDMgrLabel,
-				sourceDMgr.absolutePath,
-				err2.Error())
-
-			return dTreeCopyStats,
-				copiedDirTreeFiles,
-				nonfatalErrs,
-				fatalErr
-		}
-
 		if returnCopiedFilesList {
 
 			err2 = copiedDirTreeFiles.
@@ -811,32 +804,6 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 			}
 
 		}
-
-		sourceDirMgr,
-			errStatus = sourceDirectories.
-			PopFirstDirMgr(
-				ePrefix.XCpy(
-					"sourceDirectories"))
-
-		if errStatus.ProcessingError != nil &&
-			errStatus.IsIndexOutOfBounds != true {
-
-			fatalErr = fmt.Errorf("%v\n"+
-				"Failed to extract 'sourceDirMgr' from source directories collection!\n"+
-				"Loop Count= %v\n"+
-				"Error returned by sourceDirectories.PopFirstDirMgr().\n"+
-				"Error= \n%v\n",
-				funcName,
-				loopCount,
-				errStatus.ProcessingError.Error())
-
-			return dTreeCopyStats,
-				copiedDirTreeFiles,
-				nonfatalErrs,
-				fatalErr
-		}
-
-		loopCount++
 	}
 
 	return dTreeCopyStats,

@@ -130,6 +130,14 @@ type dirMgrHelperPlanck struct {
 //		File Characteristics Selection criteria is specified by
 //		input parameter 'fileSelectCriteria'.
 //
+//	(4) If input parameter 'returnCopiedFilesList' is set
+//		to 'false', input parameter ('copiedFiles') can be
+//		set to nil.
+//
+//	(5)	If input parameter 'returnSubDirsList' is set to
+//		'false', input parameter ('subDirectories') can
+//		be set to nil.
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -440,6 +448,10 @@ type dirMgrHelperPlanck struct {
 //		'false', no subdirectories will be added to this
 //		Directory Manager Collection.
 //
+//		If input parameter 'returnSubDirsList' is set
+//		to 'false', this parameter ('subDirectories') can be
+//		set to nil.
+//
 //	copiedFiles					*FileMgrCollection
 //
 //		A pointer to an instance of FileMgrCollection
@@ -457,6 +469,10 @@ type dirMgrHelperPlanck struct {
 //		If input parameter 'returnCopiedFilesList' is set
 //		to 'false', no files will be added to this File
 //		Manager collection.
+//
+//		If input parameter 'returnCopiedFilesList' is set
+//		to 'false', this parameter ('copiedFiles') can be
+//		set to nil.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //

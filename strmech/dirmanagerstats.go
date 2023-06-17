@@ -282,15 +282,51 @@ func (dirStats *DirectoryStatsDto) SetIsInitialized(
 }
 
 type DirTreeCopyStats struct {
-	TotalDirsScanned    uint64
-	DirsCopied          uint64
-	DirsCreated         uint64
+	TotalDirsScanned uint64
+	// The total number of directories scanned
+	// during the current directory tree copy
+	// operation.
+
+	DirsCopied uint64
+	// The number of directories copied.
+
+	DirsCreated uint64
+	// The number of target directories created.
+
 	TotalFilesProcessed uint64
-	FilesCopied         uint64
-	FileBytesCopied     uint64
-	FilesNotCopied      uint64
-	FileBytesNotCopied  uint64
-	ComputeError        error
+	// The total number of files processed during
+	// the directory tree copy operation.
+
+	FilesCopied uint64
+	// The total number of files copied to the
+	// target directory tree during the directory
+	// tree copy operation.
+
+	FileBytesCopied uint64
+	// The total number of file bytes copied to the
+	// target directory tree during the directory
+	// tree copy operation.
+
+	FilesNotCopied uint64
+	// The total number of files scanned and
+	// processed, but NOT copied to the target
+	// directory tree during the directory tree
+	// copy operation.
+
+	FileBytesNotCopied uint64
+	// The total number of bytes associated with
+	// files scanned and processed, but NOT copied
+	// to the target directory tree during the
+	// directory tree copy operation.
+
+	SubDirs uint64
+	// The total number of subdirectories identified
+	// during the directory tree copy operation. This
+	// does NOT include the parent directory.
+
+	ComputeError error
+	// Errors related to computations or
+	// conflicted category counts.
 }
 
 func (dTreeCopyStats *DirTreeCopyStats) AddDirCopyStats(
@@ -311,6 +347,9 @@ func (dTreeCopyStats *DirTreeCopyStats) AddDirCopyStats(
 	dTreeCopyStats.FilesNotCopied += dCopyStats.FilesNotCopied
 
 	dTreeCopyStats.FileBytesNotCopied += dCopyStats.FileBytesNotCopied
+
+	dTreeCopyStats.SubDirs +=
+		dCopyStats.SubDirsDocumented
 
 }
 
@@ -464,7 +503,8 @@ type DirectoryCopyStats struct {
 	// and returned in a Directory Manager
 	// Collection. Does NOT include the parent
 	// directory. Subdirectories are only
-	// documented if requested.
+	// documented if requested. This computation
+	// is therefore optional.
 
 	ComputeError error
 	// Errors related to computations or

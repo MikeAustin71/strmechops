@@ -154,20 +154,31 @@ type DirMgr struct {
 //		identified by 'targetDMgr'. It does NOT copy
 //		files from subdirectories.
 //
-//	(2)	If the target directory does not exist, this method
-//		will attempt to create it.
+//	(2)	If the target directory does not exist, this
+//		method will attempt to create it.
 //
-//	(3)	Files will only be copied if they meet the File Type
-//		criteria and the File Characteristics Criteria.
+//	(3)	Files will only be copied if they meet the File
+//		Type criteria and the File Characteristics
+//		Criteria.
 //
-//		File Type criteria are specified by input parameters:
+//		File Type criteria are specified by input
+//		parameters:
 //
 //			copyRegularFiles bool
 //			copySymLinkFiles bool
 //			copyOtherNonRegularFiles bool
 //
-//		File Characteristics Selection criteria is specified by
-//		input parameter 'fileSelectCriteria'.
+//		File Characteristics Selection criteria is
+//		specified by input parameter 'fileSelectCriteria'.
+//
+//
+//	(4) If input parameter 'returnCopiedFilesList' is set
+//		to 'false', input parameter ('copiedFiles') can be
+//		set to nil.
+//
+//	(5)	If input parameter 'returnSubDirsList' is set to
+//		'false', input parameter ('subDirectories') can
+//		be set to nil.
 //
 // ----------------------------------------------------------------
 //
@@ -193,6 +204,27 @@ type DirMgr struct {
 //		unpopulated instance of FileMgrCollection. This
 //		means that the files actually copied by this
 //		method will NOT be documented.
+//
+//		If input parameter 'returnCopiedFilesList' is set
+//		to 'false', input parameter ('copiedFiles') can be
+//		set to nil.
+//
+//	returnSubDirsList			bool
+//
+//		If input parameter 'returnSubDirsList' is set
+//		to 'true', this method will create DirMgr objects
+//		for each subdirectory in the parent directory,
+//		and add them to Subdirectory collection passed as
+//		input parameter 'subDirectories'.
+//
+//		If input parameter 'returnCopiedFilesList' is set
+//		to 'false', no subdirectories will be added to
+//		Directory Manager Collection (DirMgrCollection)
+//		passed as input parameter 'subDirectories'.
+//
+//		If input parameter 'returnSubDirsList' is set to
+//		'false', input parameter ('subDirectories') can
+//		be set to nil.
 //
 //	copyEmptyTargetDirectory		bool
 //
@@ -412,6 +444,62 @@ type DirMgr struct {
 //
 //		------------------------------------------------------------------------
 //
+//	subDirectories				*DirMgrCollection
+//
+//		A pointer to an instance of DirMgrCollection
+//		which encapsulates an array of Directory Manager
+//		(DirMgr) objects.
+//
+//		If input parameter 'returnSubDirsList' is set to
+//		'true', all subdirectories residing the parent
+//		directory defined by input parameter 'sourceDMgr'
+//		will be added as new DirMgr objects to the
+//		'subDirectories' Directory Manager Collection.
+//
+//		Directory entries for the current directory (".")
+//		and the parent directory ("..") will be skipped
+//		and will NOT be added to the 'subDirectories'
+//		Directory Manager Collection.
+//
+//			type DirMgrCollection struct {
+//				dirMgrs []DirMgr
+//			}
+//
+//		Directory entries for the current directory (".")
+//		and the parent directory ("..") will be skipped and
+//		will NOT be added to the 'subDirectories' Directory
+//		Manager Collection.
+//
+//		If input parameter 'returnSubDirsList' is set to
+//		'false', no subdirectories will be added to this
+//		Directory Manager Collection.
+//
+//		If input parameter 'returnSubDirsList' is set to
+//		'false', this parameter ('subDirectories') can be
+//		set to nil.
+//
+//	copiedFiles					*FileMgrCollection
+//
+//		A pointer to an instance of FileMgrCollection
+//		which encapsulates an array of File Manager
+//		(FileMgr) objects.
+//
+//		If input parameter 'returnCopiedFilesList' is
+//		set to 'true', all files actually copied to the
+//		target directory defined by input parameter
+//		'targetDMgr' will be added as new FileMgr objects
+//		to the 'copiedFiles' File Manager Collection.
+//		Effectively, this provides a list documenting the
+//		files actually copied to the target directory.
+//
+//		If input parameter 'returnCopiedFilesList' is set
+//		to 'false', no files will be added to this File
+//		Manager collection.
+//
+//		If input parameter 'returnCopiedFilesList' is set
+//		to 'false', this parameter ('copiedFiles') can be
+//		set to nil.
+//
 //	errorPrefix						interface{}
 //
 //		This object encapsulates error prefix text which
@@ -493,17 +581,6 @@ type DirMgr struct {
 //			ComputeError        error
 //		}
 //
-//	copiedFiles					FileMgrCollection
-//
-//		If input parameter 'returnCopiedFilesList' is set
-//		to 'true', 'copiedFiles' will return a populated
-//		File Manager Collection including all the files
-//		actually included in the copy operation.
-//
-//		If input parameter 'returnCopiedFilesList' is set
-//		to 'false', 'copiedFiles' will return an empty and
-//		unpopulated instance of FileMgrCollection.
-//
 //	nonfatalErrs				[]error
 //
 //		An array of error objects.
@@ -558,14 +635,16 @@ type DirMgr struct {
 func (dMgr *DirMgr) CopyDirectoryFiles(
 	targetDMgr DirMgr,
 	returnCopiedFilesList bool,
+	returnSubDirsList bool,
 	copyEmptyTargetDirectory bool,
 	copyRegularFiles bool,
 	copySymLinkFiles bool,
 	copyOtherNonRegularFiles bool,
 	fileSelectCriteria FileSelectionCriteria,
+	subDirectories *DirMgrCollection,
+	copiedFiles *FileMgrCollection,
 	errorPrefix interface{}) (
 	dirCopyStats DirectoryCopyStats,
-	copiedFiles FileMgrCollection,
 	nonfatalErrs []error,
 	fatalErr error) {
 
@@ -587,17 +666,14 @@ func (dMgr *DirMgr) CopyDirectoryFiles(
 
 	if fatalErr != nil {
 
-		return dirCopyStats, copiedFiles, nonfatalErrs, fatalErr
+		return dirCopyStats, nonfatalErrs, fatalErr
 	}
 
-	dirCopyStats,
-		copiedFiles,
-		_,
-		nonfatalErrs,
-		fatalErr = new(dirMgrHelperPlanck).copyDirectoryFiles(
+	return new(dirMgrHelperPlanck).copyDirectoryFiles(
 		dMgr,
 		&targetDMgr,
 		returnCopiedFilesList,
+		returnSubDirsList,
 		copyEmptyTargetDirectory,
 		copyRegularFiles,
 		copySymLinkFiles,
@@ -605,9 +681,9 @@ func (dMgr *DirMgr) CopyDirectoryFiles(
 		fileSelectCriteria,
 		"dMgr",
 		"targetDMgr",
+		subDirectories,
+		copiedFiles,
 		ePrefix)
-
-	return dirCopyStats, copiedFiles, nonfatalErrs, fatalErr
 }
 
 // CopyDirectoryTree
