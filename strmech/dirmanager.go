@@ -9621,9 +9621,10 @@ func (dMgr *DirMgr) GetPathWithSeparator() string {
 //		error, this parameter will return the number
 //		of subdirectories located in the directory tree
 //		defined by the current instance of DirMgr. This
-//		value also represents the number of subdirectories
-//		added to the Directory Manager collection passed
-//		as input parameter 'subDirectories'.
+//		uint64 value also represents the number of
+//		subdirectories added to the Directory Manager
+//		Collection passed as input parameter
+//		'subDirectories'.
 //
 //	err							error
 //
@@ -9817,9 +9818,10 @@ func (dMgr *DirMgr) GetSubdirectoriesDirTree(
 //		error, this parameter will return the number
 //		of subdirectories located in the parent directory
 //		defined by the current instance of DirMgr. This
-//		value also represents the number of subdirectories
-//		added to the Directory Manager collection passed
-//		as input parameter 'subDirectories'.
+//		uint64 value also represents the number of
+//		subdirectories added to the Directory Manager
+//		Collection passed as input parameter
+//		'subDirectories'.
 //
 //	err							error
 //

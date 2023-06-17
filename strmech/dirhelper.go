@@ -220,20 +220,20 @@ func (dHlpr *DirHelper) GetDirectoryProfile(
 // GetSubdirectoriesDirTree
 //
 // This method scans and identifies all the
-// subdirectories in the entire directory tree
-// defined by the current instance of DirMgr.
-// Subdirectories located in this directory tree are
-// returned to the user by means of a Directory Manager
-// Collection (DirMgrCollection) passed as input
-// parameter 'subDirectories'.
+// subdirectories in the entire directory tree defined by
+// input parameter 'directoryPath'. Subdirectories
+// located in this directory tree are returned to the
+// user by means of a Directory Manager Collection
+// (DirMgrCollection) passed as input parameter
+// 'subDirectories'.
 //
 // ----------------------------------------------------------------
 //
 // # BE ADVISED
 //
 //	(1)	All subdirectories residing in all levels of the
-//		directory tree defined by the current instance of
-//		DirMgr will be added and returned in the
+//		directory tree defined by input parameter
+//		'directoryPath' will be added and returned in the
 //		Directory Manager Collection passed as input
 //		parameter 'subDirectories'.
 //
@@ -243,11 +243,11 @@ func (dHlpr *DirHelper) GetDirectoryProfile(
 //		NOT be added to the 'subDirectories' Directory
 //		Manager Collection.
 //
-//	(3)	For a collection of subdirectories residing in the
-//		top level or parent directory specified by the
-//		current DirMgr instance, see method:
+//	(3)	For a collection of subdirectories residing in
+//		the top level or parent directory specified by
+//		a directory path, see method:
 //
-//			DirMgr.GetSubdirectoriesParentDir
+//			DirHelper.GetSubdirectoriesParentDir
 //
 // ----------------------------------------------------------------
 //
@@ -468,7 +468,7 @@ func (dHlpr *DirHelper) GetSubdirectoriesDirTree(
 //
 // This method scans and identifies all the
 // subdirectories in the top level or parent directory
-// specified by the current instance of DirMgr. These
+// specified by input parameter 'directoryPath'. These
 // subdirectories are returned to the user by means of
 // a Directory Manager Collection (DirMgrCollection)
 // passed as input parameter 'subDirectories'.
@@ -478,25 +478,49 @@ func (dHlpr *DirHelper) GetSubdirectoriesDirTree(
 // # BE ADVISED
 //
 //	(1)	Only the subdirectories residing in the single
-//		parent directory defined by the current instance
-//		of DirMgr will be added and returned in the
+//		parent directory defined by input parameter
+//		'directoryPath' will be added and returned in the
 //		Directory Manager Collection passed as input
 //		parameter 'subDirectories'.
 //
-//	(2)	While scanning for subdirectories, Directory entries
-//		for the current directory (".") and the parent directory
-//		("..") will be skipped and will NOT be added to the
-//		'subDirectories' Directory Manager Collection.
+//		The search for subdirectories will NOT extend to
+//		the directory tree below the 'directoryPath'
+//		parent directory.
+//
+//	(2)	While scanning for subdirectories, Directory
+//		entries for the current directory (".") and the
+//		parent directory ("..") will be skipped and will
+//		NOT be added to the 'subDirectories' Directory
+//		Manager Collection.
 //
 //	(3)	For a collection of all subdirectories in the
-//		directory tree specified by the current instance
-//		of DirMgr, see method:
+//		directory tree specified by a directory path, see
+//		method:
 //
-//			DirMgr.GetSubdirectoriesDirTree
+//			DirHelper.GetSubdirectoriesDirTree
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
+//
+//	directoryPath				string
+//
+//		This string defines a directory path. This path
+//		will be treated as a top level or parent
+//		directory. Subdirectories residing in this single
+//		parent directory will be added and returned to
+//		the user by means of the Directory Manager
+//		Collection passed as input parameter
+//		'subDirectories'.
+//
+//		The search for subdirectories is limited
+//		exclusively to this	parent directory and
+//		does NOT extend to lower levels of the
+//		directory tree.
+//
+//		If this directory path does not exist on an
+//		attached storage drive, an error will be
+//		returned.
 //
 //	subDirectories				*DirMgrCollection
 //
@@ -505,11 +529,11 @@ func (dHlpr *DirHelper) GetSubdirectoriesDirTree(
 //		(DirMgr) objects.
 //
 //		This method will scan the top level or parent
-//		directory defined by the current DirMgr instance.
-//		Any subdirectories found in this parent directory
-//		will be configured as Directory Manager (DirMgr)
-//		objects and added to this Directory Manager
-//		Collection ('subDirectories').
+//		directory defined by the input parameter
+//		'directoryPath'. Any subdirectories found in this
+//		parent directory will be configured as Directory
+//		Manager (DirMgr) objects and added to this
+//		Directory Manager Collection ('subDirectories').
 //
 //		Directory entries for the current directory (".")
 //		and the parent directory ("..") will be skipped
@@ -588,10 +612,11 @@ func (dHlpr *DirHelper) GetSubdirectoriesDirTree(
 //		If this method completes successfully, without
 //		error, this parameter will return the number
 //		of subdirectories located in the parent directory
-//		defined by the current instance of DirMgr. This
-//		value also represents the number of subdirectories
-//		added to the Directory Manager collection passed
-//		as input parameter 'subDirectories'.
+//		defined by the input parameter 'directoryPath'.
+//		This uint64 value also represents the number of
+//		subdirectories added to the Directory Manager
+//		Collection passed as input parameter
+//		'subDirectories'.
 //
 //	err							error
 //
