@@ -6,7 +6,7 @@ import (
 	"sync"
 )
 
-type dirHelper struct {
+type DirHelper struct {
 	lock *sync.Mutex
 }
 
@@ -157,7 +157,7 @@ type dirHelper struct {
 //	 	text passed by input parameter, 'errPrefDto'.
 //	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (dHlpr *dirHelper) GetDirectoryProfile(
+func (dHlpr *DirHelper) GetDirectoryProfile(
 	directoryPath string,
 	errorPrefix interface{}) (
 	directoryPathDoesExist bool,
@@ -174,7 +174,7 @@ func (dHlpr *dirHelper) GetDirectoryProfile(
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	funcName := "dirHelper." +
+	funcName := "DirHelper." +
 		"GetDirectoryProfile()"
 
 	ePrefix,
@@ -215,4 +215,482 @@ func (dHlpr *dirHelper) GetDirectoryProfile(
 			ePrefix.XCpy("directoryPath->dMgr"))
 
 	return directoryPathDoesExist, dirProfile, err
+}
+
+// GetSubdirectoriesDirTree
+//
+// This method scans and identifies all the
+// subdirectories in the entire directory tree
+// defined by the current instance of DirMgr.
+// Subdirectories located in this directory tree are
+// returned to the user by means of a Directory Manager
+// Collection (DirMgrCollection) passed as input
+// parameter 'subDirectories'.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	(1)	All subdirectories residing in all levels of the
+//		directory tree defined by the current instance of
+//		DirMgr will be added and returned in the
+//		Directory Manager Collection passed as input
+//		parameter 'subDirectories'.
+//
+//	(2)	While scanning for subdirectories, Directory
+//		entries for the current directory (".") and the
+//		parent directory ("..") will be skipped and will
+//		NOT be added to the 'subDirectories' Directory
+//		Manager Collection.
+//
+//	(3)	For a collection of subdirectories residing in the
+//		top level or parent directory specified by the
+//		current DirMgr instance, see method:
+//
+//			DirMgr.GetSubdirectoriesParentDir
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	directoryPath				string
+//
+//		This string defines a directory path. This path
+//		will be treated as a directory tree. All
+//		subdirectories residing in this directory tree
+//		will be added and returned to the user by means
+//		of the Directory Manager Collection passed as
+//		input parameter 'subDirectories'.
+//
+//		If this directory path does not exist on an
+//		attached storage drive, an error will be
+//		returned.
+//
+//	subDirectories				*DirMgrCollection
+//
+//		A pointer to an instance of DirMgrCollection
+//		which encapsulates an array of Directory Manager
+//		(DirMgr) objects.
+//
+//		This method will scan the entire directory tree
+//		defined by input parameter 'directoryPath'.	All
+//		subdirectories found in this directory tree will
+//		be configured as Directory Manager (DirMgr)
+//		objects and added to this Directory Manager
+//		Collection ('subDirectories').
+//
+//		Directory entries for the current directory (".")
+//		and the parent directory ("..") will be skipped
+//		and will NOT be added to the 'subDirectories'
+//		Directory Manager Collection.
+//
+//			type DirMgrCollection struct {
+//				dirMgrs []DirMgr
+//			}
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numOfSubdirectories			uint64
+//
+//		If this method completes successfully without
+//		error, this parameter will return the number
+//		of subdirectories located in the directory tree
+//		defined by input parameter 'directoryPath'. This
+//		uint64 value also represents the number of
+//		subdirectories added to the Directory Manager
+//		Collection passed as input parameter
+//		'subDirectories'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (dHlpr *DirHelper) GetSubdirectoriesDirTree(
+	directoryPath string,
+	subDirectories *DirMgrCollection,
+	errorPrefix interface{}) (
+	numOfSubdirectories uint64,
+	err error) {
+
+	if dHlpr.lock == nil {
+		dHlpr.lock = new(sync.Mutex)
+	}
+
+	dHlpr.lock.Lock()
+
+	defer dHlpr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "DirHelper." +
+		"GetSubdirectoriesDirTree()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return numOfSubdirectories, err
+	}
+
+	var dMgr DirMgr
+	var err2 error
+
+	dMgr,
+		err2 = new(DirMgr).New(
+		directoryPath,
+		ePrefix.XCpy("dMgr<-directoryPath"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input paramter 'directoryPath' is invalid!\n"+
+			"'directoryPath' is NOT a valid directory path!\n"+
+			"Error= \n%v\n",
+			funcName,
+			err2.Error())
+
+		return numOfSubdirectories, err
+	}
+
+	if subDirectories == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'subDirectories' is invalid!\n"+
+			"'subDirectories' is a nil pointer.\n",
+			ePrefix.String())
+
+		return numOfSubdirectories, err
+	}
+
+	if !dMgr.DoesDirectoryExist() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input paramter 'directoryPath' is invalid!\n"+
+			"'directoryPath' does NOT exist on an attached\n"+
+			"storage drive.\n",
+			ePrefix.String())
+
+		return numOfSubdirectories, err
+
+	}
+
+	var dirProfile DirectoryProfile
+
+	dirProfile,
+		err = new(dirMgrHelperElectron).
+		getAllSubDirsInDirTree(
+			&dMgr,
+			subDirectories,
+			"dMgr",
+			ePrefix)
+
+	if err == nil {
+		numOfSubdirectories =
+			dirProfile.DirSubDirectories
+	}
+
+	return numOfSubdirectories, err
+}
+
+// GetSubdirectoriesParentDir
+//
+// This method scans and identifies all the
+// subdirectories in the top level or parent directory
+// specified by the current instance of DirMgr. These
+// subdirectories are returned to the user by means of
+// a Directory Manager Collection (DirMgrCollection)
+// passed as input parameter 'subDirectories'.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	(1)	Only the subdirectories residing in the single
+//		parent directory defined by the current instance
+//		of DirMgr will be added and returned in the
+//		Directory Manager Collection passed as input
+//		parameter 'subDirectories'.
+//
+//	(2)	While scanning for subdirectories, Directory entries
+//		for the current directory (".") and the parent directory
+//		("..") will be skipped and will NOT be added to the
+//		'subDirectories' Directory Manager Collection.
+//
+//	(3)	For a collection of all subdirectories in the
+//		directory tree specified by the current instance
+//		of DirMgr, see method:
+//
+//			DirMgr.GetSubdirectoriesDirTree
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	subDirectories				*DirMgrCollection
+//
+//		A pointer to an instance of DirMgrCollection
+//		which encapsulates an array of Directory Manager
+//		(DirMgr) objects.
+//
+//		This method will scan the top level or parent
+//		directory defined by the current DirMgr instance.
+//		Any subdirectories found in this parent directory
+//		will be configured as Directory Manager (DirMgr)
+//		objects and added to this Directory Manager
+//		Collection ('subDirectories').
+//
+//		Directory entries for the current directory (".")
+//		and the parent directory ("..") will be skipped
+//		and will NOT be added to the 'subDirectories'
+//		Directory Manager Collection.
+//
+//			type DirMgrCollection struct {
+//				dirMgrs []DirMgr
+//			}
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numOfSubdirectories			uint64
+//
+//		If this method completes successfully, without
+//		error, this parameter will return the number
+//		of subdirectories located in the parent directory
+//		defined by the current instance of DirMgr. This
+//		value also represents the number of subdirectories
+//		added to the Directory Manager collection passed
+//		as input parameter 'subDirectories'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (dHlpr *DirHelper) GetSubdirectoriesParentDir(
+	directoryPath string,
+	subDirectories *DirMgrCollection,
+	errorPrefix interface{}) (
+	numOfSubdirectories uint64,
+	err error) {
+
+	if dHlpr.lock == nil {
+		dHlpr.lock = new(sync.Mutex)
+	}
+
+	dHlpr.lock.Lock()
+
+	defer dHlpr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "DirHelper." +
+		"GetSubdirectoriesParentDir()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return numOfSubdirectories, err
+	}
+
+	var dMgr DirMgr
+	var err2 error
+
+	dMgr,
+		err2 = new(DirMgr).New(
+		directoryPath,
+		ePrefix.XCpy("dMgr<-directoryPath"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input paramter 'directoryPath' is invalid!\n"+
+			"'directoryPath' is NOT a valid directory path!\n"+
+			"Error= \n%v\n",
+			funcName,
+			err2.Error())
+
+		return numOfSubdirectories, err
+	}
+
+	if subDirectories == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'subDirectories' is invalid!\n"+
+			"'subDirectories' is a nil pointer.\n",
+			ePrefix.String())
+
+		return numOfSubdirectories, err
+	}
+
+	if !dMgr.DoesDirectoryExist() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input paramter 'directoryPath' is invalid!\n"+
+			"'directoryPath' does NOT exist on an attached\n"+
+			"storage drive.\n",
+			ePrefix.String())
+
+		return numOfSubdirectories, err
+
+	}
+
+	var dirProfile DirectoryProfile
+
+	dirProfile,
+		err = new(dirMgrHelperTachyon).
+		getSubdirectories(
+			&dMgr,
+			subDirectories,
+			"dMgr",
+			ePrefix)
+
+	if err == nil {
+		numOfSubdirectories =
+			dirProfile.DirSubDirectories
+	}
+
+	return numOfSubdirectories, err
 }
