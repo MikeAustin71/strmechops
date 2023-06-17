@@ -711,7 +711,7 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 			err2 = new(DirMgr).New(
 			targetDMgr.absolutePath+
 				sourceDirMgr.absolutePath[baseSourceDirLen:],
-			ePrefix.XCpy("targetDirMgr<-"))
+			ePrefix.XCpy("targetDirMgr<-sourceDirMgr"))
 
 		if err2 != nil {
 

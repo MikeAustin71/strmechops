@@ -169,16 +169,16 @@ type dirMgrHelperPlanck struct {
 //
 //	returnSubDirsList			bool
 //
-//		If input parameter 'returnSubDirsList' is set
-//		to 'true', this method will create DirMgr objects
-//		for each subdirectory in the parent directory,
-//		and add them to Subdirectory collection passed as
-//		input parameter 'subDirectories'.
+//		If this parameter is set to 'true', this method
+//		will create DirMgr objects for each subdirectory
+//		in the parent directory ('sourceDMgr'), and add
+//		them to the Directory Manager Collection passed
+//		as input parameter 'subDirectories'.
 //
-//		If input parameter 'returnCopiedFilesList' is set
-//		to 'false', no subdirectories will be added to
-//		Directory Manager Collection (DirMgrCollection)
-//		passed as input parameter 'subDirectories'.
+//		If 'returnSubDirsList' is set to 'false', no
+//		subdirectories will be added to the Directory
+//		Manager Collection (DirMgrCollection) passed as
+//		input parameter 'subDirectories'.
 //
 //	copyEmptyTargetDirectory	bool
 //
@@ -1153,6 +1153,19 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //		the instance of FileMgrCollection returned by this
 //		method will always be empty and unpopulated.
 //
+//	returnSubDirsList			bool
+//
+//		If this parameter is set to 'true', this method
+//		will create DirMgr objects for each subdirectory
+//		in the parent directory ('targetDMgr'), and add
+//		them to the Directory Manager Collection passed
+//		as input parameter 'subDirectories'.
+//
+//		If 'returnSubDirsList' is set to 'false', no
+//		subdirectories will be added to the Directory
+//		Manager Collection (DirMgrCollection) passed as
+//		input parameter 'subDirectories'.
+//
 //	deleteRegularFiles			bool
 //
 //		If this parameter is set to 'true', regular files
@@ -1369,6 +1382,46 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //		string, a default value of "targetDMgr" will be
 //		automatically applied.
 //
+//	subDirectories				*DirMgrCollection
+//
+//		A pointer to an instance of DirMgrCollection
+//		which encapsulates an array of Directory Manager
+//		(DirMgr) objects.
+//
+//		If input parameter 'returnSubDirsList' is set to
+//		'true', all subdirectories residing the parent
+//		directory defined by input parameter 'targetDMgr'
+//		will be added as new DirMgr objects to the
+//		'subDirectories' Directory Manager Collection.
+//
+//		Directory entries for the current directory (".")
+//		and the parent directory ("..") will be skipped
+//		and will NOT be added to the 'subDirectories'
+//		Directory Manager Collection.
+//
+//			type DirMgrCollection struct {
+//				dirMgrs []DirMgr
+//			}
+//
+//		If input parameter 'returnSubDirsList' is set to
+//		'false', no subdirectories will be added to this
+//		Directory Manager Collection.
+//
+//		If input parameter 'returnSubDirsList' is set
+//		to 'false', this parameter ('subDirectories') can be
+//		set to nil.
+//
+//	deletedFiles				*FileMgrCollection
+//
+//		If this method completes successfully and input
+//		paramter 'returnDeletedFilesList' is set to
+//		'true', 'deletedFiles' will return a collection
+//		of File Manager objects identifying all the
+//		files actually deleted. Again, this return
+//		parameter will ONLY be populated when input
+//		parameter 'returnDeletedFilesList' is set to
+//		'true'.
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -1407,17 +1460,6 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //				NumOfDirsWhereFilesDeleted uint64
 //				DirectoriesDeleted         uint64
 //			}
-//
-//	deletedFiles				FileMgrCollection
-//
-//		If this method completes successfully and input
-//		paramter 'returnDeletedFilesList' is set to
-//		'true', 'deletedFiles' will return a collection
-//		of File Manager objects identifying all the
-//		files actually deleted. Again, this return
-//		parameter will ONLY be populated when input
-//		parameter 'returnDeletedFilesList' is set to
-//		'true'.
 //
 //	nonfatalErrs				[]error
 //
@@ -1472,14 +1514,16 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 	targetDMgr *DirMgr,
 	returnDeletedFilesList bool,
+	returnSubDirsList bool,
 	deleteRegularFiles bool,
 	deleteSymLinkFiles bool,
 	deleteOtherNonRegularFiles bool,
 	fileSelectCriteria FileSelectionCriteria,
 	targetDMgrLabel string,
+	subDirectories *DirMgrCollection,
+	deletedFiles *FileMgrCollection,
 	errPrefDto *ePref.ErrPrefixDto) (
 	deletedDirFileStats DeleteDirFilesStats,
-	deletedFiles FileMgrCollection,
 	nonfatalErrs []error,
 	fatalErr error) {
 
@@ -1505,7 +1549,6 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 	if fatalErr != nil {
 
 		return deletedDirFileStats,
-			deletedFiles,
 			nonfatalErrs,
 			fatalErr
 	}
@@ -1533,7 +1576,40 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 			ePrefix.String())
 
 		return deletedDirFileStats,
-			deletedFiles,
+			nonfatalErrs,
+			fatalErr
+	}
+
+	if returnDeletedFilesList == true &&
+		deletedFiles == nil {
+
+		fatalErr = fmt.Errorf("%v\n"+
+			"Error: Input parameters 'returnDeletedFilesList'\n"+
+			"and 'deletedFiles' are conflicted.\n"+
+			"'returnDeletedFilesList' is set to 'true'; however\n"+
+			"the 'deletedFiles' pointer is 'nil'.\n"+
+			"Provide a valid pointer to a 'deletedFiles'\n"+
+			"File Manager Collection (FileMgrCollection)!\n",
+			ePrefix.String())
+
+		return deletedDirFileStats,
+			nonfatalErrs,
+			fatalErr
+	}
+
+	if returnSubDirsList == true &&
+		subDirectories == nil {
+
+		fatalErr = fmt.Errorf("%v\n"+
+			"Error: Input parameters 'returnSubDirsList'\n"+
+			"and 'subDirectories' are conflicted.\n"+
+			"'returnSubDirsList' is set to 'true'; however\n"+
+			"the 'subDirectories' pointer is 'nil'.\n"+
+			"Provide a valid pointer to a 'subDirectories'\n"+
+			"Directory Manager Collection (DirMgrCollection)!\n",
+			ePrefix.String())
+
+		return deletedDirFileStats,
 			nonfatalErrs,
 			fatalErr
 	}
@@ -1561,7 +1637,6 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 	if fatalErr != nil {
 
 		return deletedDirFileStats,
-			deletedFiles,
 			nonfatalErrs,
 			fatalErr
 	}
@@ -1569,7 +1644,6 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 	if lenFileInfos == 0 {
 
 		return deletedDirFileStats,
-			deletedFiles,
 			nonfatalErrs,
 			fatalErr
 	}
@@ -1600,7 +1674,6 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 				err2.Error())
 
 			return deletedDirFileStats,
-				deletedFiles,
 				nonfatalErrs,
 				fatalErr
 		}
@@ -1645,7 +1718,6 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 	}
 
 	return deletedDirFileStats,
-		deletedFiles,
 		nonfatalErrs,
 		fatalErr
 }
