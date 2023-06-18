@@ -1280,7 +1280,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //
 //	returnDeletedFilesList		bool
 //
-//		If this parameter is set to 'true', the return
+//		If this parameter is set to 'true', the input
 //		parameter 'deletedFiles' will be returned as a
 //		populated instance of File Manager Collection
 //		(FileMgrCollection). This collection will contain
@@ -1289,10 +1289,11 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //		file deletion operation.
 //
 //		If 'returnDeletedFilesList' is set to 'false',
-//		the instance of FileMgrCollection returned by
-//		this method will always be empty and unpopulated.
-//		This means that the files actually deleted by
-//		this method will NOT be documented.
+//		input parameter 'deletedFiles' will be returned
+//		instance of File Manager Collection	will always
+//		be empty and unpopulated. This means that the
+//		files actually deleted by this method will NOT
+//		be documented.
 //
 //		If 'returnDeletedFilesList' is set to false,
 //		input parameter 'deletedFiles' may safely be set
@@ -1587,14 +1588,15 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //		set to 'true', all files actually deleted in the
 //		target directory defined by input parameter
 //		'targetDMgr' will be added as new FileMgr objects
-//		to the 'copiedFiles' File Manager Collection.
+//		to the 'deletedFiles' File Manager Collection.
 //		Effectively, this provides a list documenting the
 //		files actually deleted to the target directory.
 //
 //		If input parameter 'returnDeletedFilesList' is
 //		set to 'false', no files will be added to this
-//		File Manager collection. This means that no
-//		documentation of deleted files will be provided.
+//		File Manager collection ('deletedFiles'). This
+//		means that no documentation of deleted files will
+//		be provided.
 //
 //		If input parameter 'returnDeletedFilesList' is
 //		set to 'false', this input parameter

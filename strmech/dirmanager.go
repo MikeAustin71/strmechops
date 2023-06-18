@@ -2218,7 +2218,7 @@ func (dMgr *DirMgr) DeleteAll(
 //
 // ----------------------------------------------------------------
 //
-// # WARNING
+// # IMPORTANT
 //
 // This method deletes all the files in the directory
 // identified by the current instance of DirMgr.
@@ -2228,12 +2228,53 @@ func (dMgr *DirMgr) DeleteAll(
 // Subdirectories are NOT deleted and files in
 // subdirectories are NOT deleted.
 //
-// Reference:
-// https://stackoverflow.com/questions/33450980/golang-remove-all-contents-of-a-directory
-//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
+//
+//	returnDeletedFilesList		bool
+//
+//		If this parameter is set to 'true', the return
+//		parameter 'deletedFiles' will be returned as a
+//		populated instance of File Manager Collection
+//		(FileMgrCollection). This collection will contain
+//		an array of File Manager (FileMgr) objects
+//		identifying all the files deleted in the current
+//		file deletion operation.
+//
+//		If 'returnDeletedFilesList' is set to 'false',
+//		the instance of FileMgrCollection returned by
+//		this method will always be empty and unpopulated.
+//		This means that the files actually deleted by
+//		this method will NOT be documented.
+//
+//		If 'returnDeletedFilesList' is set to false,
+//		input parameter 'deletedFiles' may safely be set
+//		to 'nil'.
+//
+//	deletedFiles				*FileMgrCollection
+//
+//		A pointer to an instance of FileMgrCollection
+//		which encapsulates an array of File Manager
+//		(FileMgr) objects.
+//
+//		If input parameter 'returnDeletedFilesList' is
+//		set to 'true', all files actually deleted in the
+//		target directory defined by input parameter
+//		'targetDMgr' will be added as new FileMgr objects
+//		to the 'deletedFiles' File Manager Collection.
+//		Effectively, this provides a list documenting the
+//		files actually deleted to the target directory.
+//
+//		If input parameter 'returnDeletedFilesList' is
+//		set to 'false', no files will be added to this
+//		File Manager collection ('deletedFiles'). This
+//		means that no documentation of deleted files will
+//		be provided.
+//
+//		If input parameter 'returnDeletedFilesList' is
+//		set to 'false', this input parameter
+//		('deletedFiles') may safely be set to 'nil'.
 //
 //	errorPrefix					interface{}
 //
@@ -2306,38 +2347,117 @@ func (dMgr *DirMgr) DeleteAll(
 //		operation. This information includes the number
 //		of files deleted.
 //
-//			type DeleteDirFilesStats struct {
-//				TotalFilesProcessed        uint64
-//				FilesDeleted               uint64
-//				FilesDeletedBytes          uint64
-//				FilesRemaining             uint64
-//				FilesRemainingBytes        uint64
-//				TotalSubDirectories        uint64
-//				TotalDirsScanned           uint64
-//				NumOfDirsWhereFilesDeleted uint64
-//				DirectoriesDeleted         uint64
-//			}
+//		type DeleteDirFilesStats struct {
+//			TotalFilesProcessed        uint64
+//				The total number of files processed.
+//				Does NOT include directory entries.
 //
-//	errs						[]error
+//			FilesDeleted               uint64
+//				The number of files deleted. Does
+//				NOT include directory entries.
 //
-//		An array of errors is returned. If the method
-//		completes successfully with no errors, a
-//		ZERO-length array is returned.
+//			FilesDeletedBytes          uint64
+//				The number of file bytes deleted.
+//				Does NOT include directory entries.
 //
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errPrefDto'.
-//	 	The 'errPrefDto' text will be prefixed or
-//	 	attached to the	beginning of the error message.
+//			FilesRemaining             uint64
+//				The number of files processed, but
+//				NOT deleted. Does NOT include directory
+//				entries.
 //
-//		Remember, this error array may contain multiple
-//		errors.
+//			FilesRemainingBytes        uint64
+//				The number of bytes associated with
+//				files processed but NOT copied. Does
+//				NOT include directory entries.
+//
+//			TotalSubDirectories        uint64
+//				Total SubDirectories processed
+//
+//			TotalDirsScanned           uint64
+//				Total Directories Scanned.
+//
+//			NumOfDirsWhereFilesDeleted uint64
+//				The number of parent directories and
+//				subdirectories where files were deleted.
+//
+//			DirectoriesDeleted         uint64
+//				The number of directories deleted.
+//
+//			SubDirsDocumented          uint64
+//				The number of subdirectories identified
+//				and returned in a Directory Manager
+//				Collection. Does NOT include the parent
+//				directory. Subdirectories are only
+//				documented if requested. This computation
+//				value is therefore optional.
+//
+//			DeletedFilesDocumented		uint64
+//				The number of deleted files documented
+//				through addition to a returned File
+//				Manager Collection
+//
+//			Errors []error
+//				An array of errors associated with the
+//				calculation of these statistics.
+//		}
+//
+//	nonfatalErrs				[]error
+//
+//		An array of error objects.
+//
+//		If this method completes successfully, the
+//		returned error array is set equal to 'nil'.
+//
+//		If non-fatal errors are encountered during
+//		processing, the returned error Type will
+//		encapsulate appropriate error messages.
+//
+//		Non-fatal errors usually involve processing
+//		failures associated with individual files.
+//
+//		If a file which meets the selection criteria
+//		fails to delete, the error is classified as
+//		a "Fatal" error.
+//
+//		The returned error messages will incorporate
+//		the method chain and text passed by input
+//		parameter, 'errPrefDto'. The 'errPrefDto' text
+//		will be prefixed or attached to the beginning of
+//		the error message.
+//
+//		This error array may contain multiple errors.
+//
+//		An error array may be consolidated into a single
+//		error using method StrMech.ConsolidateErrors()
+//
+//	fatalErr					error
+//
+//		If this method completes successfully, this
+//		returned error Type is set equal to 'nil'.
+//
+//		If a fatal error is encountered during
+//		processing, this returned error Type will
+//		encapsulate an appropriate error message. This
+//		returned error message will incorporate the
+//		method chain and text passed by input parameter,
+//		'errPrefDto'. The 'errPrefDto' text will be
+//		prefixed or attached to the	beginning of the error
+//		message.
+//
+//		Fatal errors are returned when the nature of the
+//		processing failure is such that it is no longer
+//		reasonable to continue code execution.
+//
+//		If a file which meets the selection criteria
+//		fails to delete, the error is classified as
+//		a "Fatal" error.
 func (dMgr *DirMgr) DeleteAllFilesInDir(
+	returnDeletedFilesList bool,
+	deletedFiles *FileMgrCollection,
 	errorPrefix interface{}) (
 	deleteDirStats DeleteDirFilesStats,
-	errs []error) {
+	nonfatalErrs []error,
+	fatalErr error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -2348,30 +2468,36 @@ func (dMgr *DirMgr) DeleteAllFilesInDir(
 	defer dMgr.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		fatalErr = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"FilePermissionConfig."+
-			"GetEntryTypeComponent()",
+		"DirMgr."+
+			"DeleteAllFilesInDir()",
 		"")
 
-	if err != nil {
+	if fatalErr != nil {
 
-		errs = append(errs, err)
-
-		return deleteDirStats, errs
+		return deleteDirStats, nonfatalErrs, fatalErr
 	}
 
 	deleteDirStats,
-		errs = new(dirMgrHelper).
-		deleteAllFilesInDirectory(
+		nonfatalErrs,
+		fatalErr = new(dirMgrHelperPlanck).
+		deleteDirectoryFiles(
 			dMgr,
+			returnDeletedFilesList,
+			false,                   // returnSubDirsList
+			true,                    // deleteRegularFiles
+			true,                    // deleteSymLinkFiles
+			true,                    // deleteOtherNonRegularFiles
+			FileSelectionCriteria{}, // Select All Files
 			"dMgr",
+			nil,          // subDirectories
+			deletedFiles, // deletedFiles
 			ePrefix)
 
-	return deleteDirStats, errs
+	return deleteDirStats, nonfatalErrs, fatalErr
 }
 
 // DeleteAllSubDirectories
