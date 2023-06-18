@@ -324,9 +324,22 @@ type DirTreeCopyStats struct {
 	// during the directory tree copy operation. This
 	// does NOT include the parent directory.
 
-	ComputeError error
-	// Errors related to computations or
-	// conflicted category counts.
+	SubDirsDocumented uint64
+	// The number of subdirectories identified
+	// and returned in a Directory Manager
+	// Collection. Does NOT include the parent
+	// directory. Subdirectories are only
+	// documented if requested. This computation
+	// value is therefore optional.
+
+	CopiedFilesDocumented uint64
+	// The number of copied files documented
+	// by adding a File Manager object to a
+	// returned File Manager Collection.
+
+	Errors []error
+	// An array of errors associated with the
+	// calculation of these statistics.
 }
 
 func (dTreeCopyStats *DirTreeCopyStats) AddDirCopyStats(
@@ -349,7 +362,20 @@ func (dTreeCopyStats *DirTreeCopyStats) AddDirCopyStats(
 	dTreeCopyStats.FileBytesNotCopied += dCopyStats.FileBytesNotCopied
 
 	dTreeCopyStats.SubDirs +=
+		dCopyStats.SubDirs
+
+	dTreeCopyStats.SubDirsDocumented +=
 		dCopyStats.SubDirsDocumented
+
+	dTreeCopyStats.CopiedFilesDocumented +=
+		dCopyStats.CopiedFilesDocumented
+
+	if len(dCopyStats.Errors) > 0 {
+
+		dTreeCopyStats.Errors = append(
+			dTreeCopyStats.Errors,
+			dCopyStats.Errors...)
+	}
 
 }
 
@@ -474,6 +500,13 @@ func (dirProfile *DirectoryProfile) AddDirProfileStats(
 	return
 }
 
+// DirectoryCopyStats
+//
+// The data elements in this structure are used
+// to accumulate statistics and information
+// related to files copied from a single source
+// directory to a single destination or target
+// directory.
 type DirectoryCopyStats struct {
 	DirsCreated uint64
 	// The number of new directories created.
@@ -500,6 +533,11 @@ type DirectoryCopyStats struct {
 	// files processed but NOT copied. Does
 	// NOT include directory entries.
 
+	SubDirs uint64
+	// The total number of subdirectories identified
+	// during the directory tree copy operation. This
+	// does NOT include the parent directory.
+
 	SubDirsDocumented uint64
 	// The number of subdirectories identified
 	// and returned in a Directory Manager
@@ -508,7 +546,12 @@ type DirectoryCopyStats struct {
 	// documented if requested. This computation
 	// value is therefore optional.
 
-	ComputeErrors []error
+	CopiedFilesDocumented uint64
+	// The number of copied files documented
+	// by adding a File Manager object to a
+	// returned File Manager Collection.
+
+	Errors []error
 	// An array of errors associated with the
 	// calculation of these statistics.
 }
@@ -562,6 +605,12 @@ type DirectoryMoveStats struct {
 	ComputeError             error
 }
 
+// DeleteDirFilesStats
+//
+// The data elements in this structure are used
+// to accumulate statistics and information
+// related to the deletion of files from a single
+// target directory.
 type DeleteDirFilesStats struct {
 	TotalFilesProcessed uint64
 	// The total number of files processed.
@@ -608,10 +657,10 @@ type DeleteDirFilesStats struct {
 
 	DeletedFilesDocumented uint64
 	// The number of deleted files documented
-	// through addition to a returned File
-	// Manager Collection
+	// by adding a File Manager object to a
+	// returned File Manager Collection.
 
-	ComputeErrors []error
+	Errors []error
 	// An array of errors associated with the
 	// calculation of these statistics.
 }
@@ -650,4 +699,19 @@ func (delDirFileStats *DeleteDirFilesStats) AddStats(
 
 	delDirFileStats.DirectoriesDeleted +=
 		delDirFStats2.DirectoriesDeleted
+
+	delDirFileStats.SubDirsDocumented +=
+		delDirFStats2.SubDirsDocumented
+
+	delDirFileStats.DeletedFilesDocumented +=
+		delDirFStats2.DeletedFilesDocumented
+
+	if len(delDirFStats2.Errors) > 0 {
+
+		delDirFileStats.Errors =
+			append(delDirFileStats.Errors,
+				delDirFStats2.Errors...)
+
+	}
+
 }

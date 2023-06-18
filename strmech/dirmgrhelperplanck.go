@@ -962,16 +962,15 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 						target,
 						err2.Error())
 
-					dirCopyStats.FilesNotCopied++
-
-					dirCopyStats.FileBytesNotCopied +=
-						uint64(nameFileInfo.Size())
-
 					return dirCopyStats, nonfatalErrs, fatalErr
 
 				} else {
 
 					// The file was successfully copied
+
+					dirCopyStats.FilesCopied++
+
+					dirCopyStats.FileBytesCopied += uint64(nameFileInfo.Size())
 
 					if returnCopiedFilesList {
 
@@ -999,13 +998,16 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 									nameFileInfo.Mode(),
 									target,
 									err2.Error()))
+						} else {
+							// err2 == nil
+							// Successfully added File Manager
+							// for copied file to File Manager
+							// Collection
+							dirCopyStats.CopiedFilesDocumented++
+
 						}
 
 					}
-
-					dirCopyStats.FilesCopied++
-
-					dirCopyStats.FileBytesCopied += uint64(nameFileInfo.Size())
 				}
 
 			} else {
@@ -1017,6 +1019,56 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 				dirCopyStats.FileBytesNotCopied += uint64(nameFileInfo.Size())
 			}
 		}
+	}
+
+	var checkTotals uint64
+
+	checkTotals = dirCopyStats.FilesCopied +
+		dirCopyStats.FilesNotCopied
+
+	if checkTotals != dirCopyStats.TotalFilesProcessed {
+
+		err2 = fmt.Errorf("%v\n"+
+			"Copied Files Computation Error\n"+
+			"Total Files Processed is NOT equal to\n"+
+			"the sum of Files Copied plus Files Not Copied.\n"+
+			"dirCopyStats.TotalFilesProcessed= '%v'\n"+
+			"Sum of Files Copied + Files Not Copied = '%v'"+
+			"dirCopyStats.FilesCopied = '%v'\n"+
+			"dirCopyStats.FilesNotCopied = '%v'\n"+
+			"Target Deletion Directory= '%v'\n",
+			ePrefix.String(),
+			dirCopyStats.TotalFilesProcessed,
+			checkTotals,
+			dirCopyStats.FilesCopied,
+			dirCopyStats.FilesNotCopied,
+			targetDMgr.absolutePath)
+
+		dirCopyStats.Errors =
+			append(dirCopyStats.Errors,
+				err2)
+	}
+
+	if returnCopiedFilesList &&
+		dirCopyStats.FilesCopied !=
+			dirCopyStats.CopiedFilesDocumented {
+
+		err2 = fmt.Errorf("%v\n"+
+			"Copied Files Computation Error\n"+
+			"The number of documented file copys in\n"+
+			"the 'copiedFiles' File Manager Collection\n"+
+			"does NOT match the number of files copied.\n"+
+			"dirCopyStats.FilesCopied = '%v'\n"+
+			"dirCopyStats.CopiedFilesDocumented = '%v'\n"+
+			"Target Deletion Directory= '%v'\n",
+			ePrefix.String(),
+			dirCopyStats.FilesCopied,
+			dirCopyStats.CopiedFilesDocumented,
+			targetDMgr.absolutePath)
+
+		dirCopyStats.Errors =
+			append(dirCopyStats.Errors,
+				err2)
 	}
 
 	return dirCopyStats, nonfatalErrs, fatalErr
@@ -1582,7 +1634,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //				through addition to a returned File
 //				Manager Collection
 //
-//			ComputeErrors []error
+//			Errors []error
 //				An array of errors associated with the
 //				calculation of these statistics.
 //		}
@@ -1740,6 +1792,8 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 			fatalErr
 	}
 
+	deletedDirFileStats.TotalDirsScanned = 1
+
 	fileInfos,
 		lenFileInfos,
 		errs2,
@@ -1778,8 +1832,6 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 
 	var err2 error
 	osPathSepStr := string(os.PathSeparator)
-
-	deletedDirFileStats.TotalDirsScanned = 1
 
 	for _, nameFileInfo := range fileInfos {
 
@@ -1876,9 +1928,10 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 						nameFileInfo.Mode(),
 						targetDMgr.absolutePath+osPathSepStr+nameFileInfo.Name(),
 						err2.Error()))
-			}
+			} else {
 
-			deletedDirFileStats.DeletedFilesDocumented++
+				deletedDirFileStats.DeletedFilesDocumented++
+			}
 		}
 
 		deletedDirFileStats.FilesDeleted++
@@ -1886,6 +1939,62 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 			uint64(nameFileInfo.Size())
 
 		deletedDirFileStats.NumOfDirsWhereFilesDeleted = 1
+	}
+
+	if deletedDirFileStats.FilesDeleted > 0 {
+
+		deletedDirFileStats.NumOfDirsWhereFilesDeleted = 1
+
+	}
+
+	var checkTotals uint64
+
+	checkTotals = deletedDirFileStats.FilesDeleted +
+		deletedDirFileStats.FilesRemaining
+
+	if checkTotals != deletedDirFileStats.TotalFilesProcessed {
+
+		err2 = fmt.Errorf("%v\n"+
+			"Deleted Files Computation Error\n"+
+			"Total Files Processed is NOT equal to\n"+
+			"the sum of Files Deleted plus Files Remaining.\n"+
+			"deletedDirFileStats.TotalFilesProcessed= '%v'\n"+
+			"Sum of Files Deleted + Files Remaining = '%v'"+
+			"deletedDirFileStats.FilesDeleted = '%v'\n"+
+			"deletedDirFileStats.FilesRemaining = '%v'\n"+
+			"Target Deletion Directory= '%v'\n",
+			ePrefix.String(),
+			deletedDirFileStats.TotalFilesProcessed,
+			checkTotals,
+			deletedDirFileStats.FilesDeleted,
+			deletedDirFileStats.FilesRemaining,
+			targetDMgr.absolutePath)
+
+		deletedDirFileStats.Errors =
+			append(deletedDirFileStats.Errors,
+				err2)
+	}
+
+	if returnDeletedFilesList &&
+		deletedDirFileStats.FilesDeleted !=
+			deletedDirFileStats.DeletedFilesDocumented {
+
+		err2 = fmt.Errorf("%v\n"+
+			"Deleted Files Computation Error\n"+
+			"The number of documented file deletions in\n"+
+			"the 'deletedFiles' File Manager Collection\n"+
+			"does NOT match the number of files deleted.\n"+
+			"deletedDirFileStats.FilesDeleted = '%v'\n"+
+			"deletedDirFileStats.DeletedFilesDocumented = '%v'\n"+
+			"Target Deletion Directory= '%v'\n",
+			ePrefix.String(),
+			deletedDirFileStats.FilesDeleted,
+			deletedDirFileStats.DeletedFilesDocumented,
+			targetDMgr.absolutePath)
+
+		deletedDirFileStats.Errors =
+			append(deletedDirFileStats.Errors,
+				err2)
 	}
 
 	return deletedDirFileStats,
