@@ -1667,6 +1667,207 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) deleteDirectoryTreeFiles(
 		fatalErr
 }
 
+// deleteAllSubDirectories
+//
+// The directory identified by the input parameter 'dMgr'
+// is treated as the parent directory.
+//
+// This method will proceed to delete all directories and
+// files which are subsidiary to the parent directory,
+// or top level directory, identified by 'dMgr'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+// All subdirectories and files which are subordinate to
+// the parent or top level directory identified by 'dMgr'
+// will be deleted.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dMgr						*DirMgr
+//
+//		A pointer to an instance of DirMgr. All
+//		subdirectories and files subsidiary to the parent
+//		or top level directory identified by 'dMgr' will
+//		be deleted.
+//
+//		If the directory identified by 'dMgr' does NOT
+//		exist on persistent (drive) storage, an error will
+//		be returned.
+//
+//	dMgrLabel					string
+//
+//		The name or label associated with input parameter
+//		'dMgr' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "dMgr" will be
+//		automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (dMgrHlprNanobot *dirMgrHelperNanobot) deleteAllSubDirectories(
+	dMgr *DirMgr,
+	returnDeletedSubDirs bool,
+	deletedSubDirs *DirMgrCollection,
+	dMgrLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if dMgrHlprNanobot.lock == nil {
+		dMgrHlprNanobot.lock = new(sync.Mutex)
+	}
+
+	dMgrHlprNanobot.lock.Lock()
+
+	defer dMgrHlprNanobot.lock.Unlock()
+
+	funcName := "dirMgrHelperNanobot.deleteAllSubDirectories() "
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return err
+	}
+
+	if len(dMgrLabel) == 0 {
+
+		dMgrLabel = "dMgr"
+
+	}
+
+	if returnDeletedSubDirs == true &&
+		deletedSubDirs == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameters 'returnDeletedSubDirs'\n"+
+			"and 'deletedSubDirs' are conflicted!\n"+
+			"'returnDeletedSubDirs' is set to 'true', but\n"+
+			"'deletedSubDirs' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	_,
+		_,
+		err = new(dirMgrHelperPreon).
+		validateDirMgr(
+			dMgr,
+			true, // Path Must Exist
+			dMgrLabel,
+			ePrefix.XCpy(
+				dMgrLabel))
+
+	if err != nil {
+
+		return err
+	}
+
+	var targetSubDirs DirMgrCollection
+
+	_,
+		err = new(dirMgrHelperTachyon).
+		getSubdirectories(
+			dMgr,
+			&targetSubDirs,
+			dMgrLabel,
+			ePrefix)
+
+	if err != nil {
+
+		return err
+	}
+
+	lenSubDirs := len(targetSubDirs.dirMgrs)
+
+	if lenSubDirs == 0 {
+
+		return err
+	}
+
+	var err2 error
+	var dMgrHlprMolecule = new(dirMgrHelperMolecule)
+
+	for i := 0; i < lenSubDirs; i++ {
+
+		err2 = dMgrHlprMolecule.
+			lowLevelDeleteDirectoryAll(
+				&targetSubDirs.dirMgrs[i],
+				fmt.Sprintf("targetSubDirs.dirMgrs[%v]",
+					i),
+				ePrefix)
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error occurred while deleting target subdirectory.\n"+
+				"dirMgrHelperMolecule.lowLevelDeleteDirectoryAll(targetSubDirs.dirMgrs[%v])\n"+
+				"targetSubDirs.dirMgrs[%v]= '%v'\n"+
+				"Error=\n%v\n",
+				funcName,
+				i,
+				i,
+				targetSubDirs.dirMgrs[i].absolutePath,
+				err2.Error())
+
+			return err
+		}
+
+	}
+
+	if returnDeletedSubDirs == true {
+
+		err = deletedSubDirs.AddDirMgrCollection(
+			&targetSubDirs,
+			ePrefix.XCpy("targetSubDirs"))
+
+	}
+
+	return err
+}
+
 // lowLevelDirMgrFieldConfig
 //
 // Receives an instance of DirMgr and proceeds to

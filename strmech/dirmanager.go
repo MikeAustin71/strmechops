@@ -2653,9 +2653,10 @@ func (dMgr *DirMgr) DeleteAllFilesInDir(
 //		processing failure is such that it is no longer
 //		reasonable to continue code execution.
 func (dMgr *DirMgr) DeleteAllSubDirectories(
+	returnDeletedSubDirs bool,
+	deletedSubDirs *DirMgrCollection,
 	errorPrefix interface{}) (
-	nonfatalErrs []error,
-	fatalErr error) {
+	err error) {
 
 	if dMgr.lock == nil {
 		dMgr.lock = new(sync.Mutex)
@@ -2668,24 +2669,25 @@ func (dMgr *DirMgr) DeleteAllSubDirectories(
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
-		fatalErr = ePref.ErrPrefixDto{}.NewIEmpty(
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"DirMgr.CopyDirectoryFiles()",
 		"")
 
-	if fatalErr != nil {
+	if err != nil {
 
-		return nonfatalErrs, fatalErr
+		return err
 	}
 
-	nonfatalErrs,
-		fatalErr = new(dirMgrHelperMolecule).
+	err = new(dirMgrHelperNanobot).
 		deleteAllSubDirectories(
 			dMgr,
+			returnDeletedSubDirs,
+			deletedSubDirs,
 			"dMgr",
 			ePrefix)
 
-	return nonfatalErrs, fatalErr
+	return err
 }
 
 // DeleteDirectoryTreeFiles
