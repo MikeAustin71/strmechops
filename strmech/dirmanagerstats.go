@@ -281,6 +281,12 @@ func (dirStats *DirectoryStatsDto) SetIsInitialized(
 	return
 }
 
+// DirTreeCopyStats
+//
+// The data elements in this structure are used
+// to accumulate statistics and information
+// related to a file copy operation performed on
+// source and destination directory trees.
 type DirTreeCopyStats struct {
 	TotalDirsScanned uint64
 	// The total number of directories scanned
@@ -292,6 +298,11 @@ type DirTreeCopyStats struct {
 
 	DirsCreated uint64
 	// The number of target directories created.
+
+	TotalSubDirs uint64
+	// The total number of subdirectories identified
+	// during the directory tree copy operation. This
+	// does NOT include the parent directory.
 
 	TotalFilesProcessed uint64
 	// The total number of files processed during
@@ -318,11 +329,6 @@ type DirTreeCopyStats struct {
 	// files scanned and processed, but NOT copied
 	// to the target directory tree during the
 	// directory tree copy operation.
-
-	SubDirs uint64
-	// The total number of subdirectories identified
-	// during the directory tree copy operation. This
-	// does NOT include the parent directory.
 
 	SubDirsDocumented uint64
 	// The number of subdirectories identified
@@ -360,9 +366,6 @@ func (dTreeCopyStats *DirTreeCopyStats) AddDirCopyStats(
 	dTreeCopyStats.FilesNotCopied += dCopyStats.FilesNotCopied
 
 	dTreeCopyStats.FileBytesNotCopied += dCopyStats.FileBytesNotCopied
-
-	dTreeCopyStats.SubDirs +=
-		dCopyStats.SubDirs
 
 	dTreeCopyStats.SubDirsDocumented +=
 		dCopyStats.SubDirsDocumented

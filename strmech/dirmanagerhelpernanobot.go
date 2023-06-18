@@ -421,22 +421,77 @@ type dirMgrHelperNanobot struct {
 //
 //	dTreeCopyStats				DirTreeCopyStats
 //
-//		If this method completes successfully, an
-//		instance of DirTreeCopyStats will be returned
-//		populated with information and statistics related
-//		to the directory tree copy operation.
+//		If this method completes successfully, this
+//		return parameter will be populated with
+//		information and statistics on the file copy
+//		operation. This information includes the number
+//		of files actually copied.
 //
-//			type DirTreeCopyStats struct {
-//				TotalDirsScanned    uint64
-//				DirsCopied          uint64
-//				DirsCreated         uint64
-//				TotalFilesProcessed uint64
-//				FilesCopied         uint64
-//				FileBytesCopied     uint64
-//				FilesNotCopied      uint64
-//				FileBytesNotCopied  uint64
-//				ComputeError        error
-//			}
+//		The data elements in this structure are used
+//		to accumulate statistics and information
+//		related to a file copy operation performed on
+//		source and destination directory trees.
+//
+//		type DirTreeCopyStats struct {
+//			TotalDirsScanned uint64
+//				The total number of directories scanned
+//				during the current directory tree copy
+//				operation.
+//
+//			DirsCopied uint64
+//				The number of directories copied.
+//
+//			DirsCreated uint64
+//				The number of target directories created.
+//
+//			TotalFilesProcessed uint64
+//				The total number of files processed during
+//				the directory tree copy operation.
+//
+//			FilesCopied uint64
+//				The total number of files copied to the
+//				target directory tree during the directory
+//				tree copy operation.
+//
+//			FileBytesCopied uint64
+//				The total number of file bytes copied to the
+//				target directory tree during the directory
+//				tree copy operation.
+//
+//			FilesNotCopied uint64
+//				The total number of files scanned and
+//				processed, but NOT copied to the target
+//				directory tree during the directory tree
+//				copy operation.
+//
+//			FileBytesNotCopied uint64
+//				The total number of bytes associated with
+//				files scanned and processed, but NOT copied
+//				to the target directory tree during the
+//				directory tree copy operation.
+//
+//			SubDirs uint64
+//				The total number of subdirectories identified
+//				during the directory tree copy operation. This
+//				does NOT include the parent directory.
+//
+//			SubDirsDocumented uint64
+//				The number of subdirectories identified
+//				and returned in a Directory Manager
+//				Collection. Does NOT include the parent
+//				directory. Subdirectories are only
+//				documented if requested. This computation
+//				value is therefore optional.
+//
+//			CopiedFilesDocumented uint64
+//				The number of copied files documented
+//				by adding a File Manager object to a
+//				returned File Manager Collection.
+//
+//			Errors []error
+//				An array of errors associated with the
+//				calculation of these statistics.
+//		}
 //
 //	copiedDirTreeFiles			FileMgrCollection
 //
@@ -663,6 +718,18 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 			fatalErr
 	}
 
+	if skipTopLevelDirectory == true {
+
+		dTreeCopyStats.TotalSubDirs =
+			uint64(len(sourceDirectories.dirMgrs))
+
+	} else {
+
+		dTreeCopyStats.TotalSubDirs =
+			uint64(len(sourceDirectories.dirMgrs)) - 1
+
+	}
+
 	var sourceDirMgr, targetDirMgr DirMgr
 
 	var errStatus ArrayColErrorStatus
@@ -695,10 +762,12 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 			}
 
 			fatalErr = fmt.Errorf("%v\n"+
-				"Failed to extract first 'sourceDirMgr' from source directories collection!\n"+
+				"Failed to extract 'sourceDirMgr' from source directories collection!\n"+
 				"Error returned by sourceDirectories.PopFirstDirMgr().\n"+
+				"cycleCount= '%v'\n"+
 				"Error= \n%v\n",
 				funcName,
+				cycleCount,
 				errStatus.ProcessingError.Error())
 
 			return dTreeCopyStats,
@@ -745,7 +814,7 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 				&sourceDirMgr,
 				&targetDirMgr,
 				returnCopiedFilesList, // returnCopiedFilesList
-				true,                  // returnSubDirsList
+				false,                 // returnSubDirsList
 				copyEmptyTargetDirectory,
 				copyRegularFiles,
 				copySymLinkFiles,
@@ -869,6 +938,7 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 //	named pipes, sockets, and symbolic links.
 //
 //	https://docs.studygolang.com/src/io/fs/fs.go
+//	https://www.computerhope.com/jargon/r/regular-file.htm
 //	https://go.dev/src/os/types.go
 //	https://go.dev/src/os/types.go?s=1237:1275#L31
 //	https://pkg.go.dev/gopkg.in/src-d/go-git.v4/plumbing/filemode
@@ -911,23 +981,23 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 //		as input parameter 'fileSelectCriteria'.
 //
 //	(2) In addition to meeting the File Selection
-//		Characteristics requirements specified in paragraph
+//		Characteristics Criteria specified in paragraph
 //		(1) above, files eligible for deletion must comply
-//		with File Type specifications passed as input
-//		parameters 'deleteRegularFiles',
-//		'deleteSymLinkFiles' and
+//		with File Type Criteria passed as input parameters
+//		'deleteRegularFiles', 'deleteSymLinkFiles' and
 //		'deleteOtherNonRegularFiles'.
 //
-//	(3) If the target directory identified by input
+//	(3) If the target directory tree identified by input
+//		parameter 'targetDMgr' contains NO Files
+//		meeting the (1) File Selection Characteristics
+//		Criteria and the (2) File Type Selection
+//		Criteria, this method will exit, and no error
+//		will be returned.
+//
+//	(4) If the target directory tree identified by input
 //		parameter 'targetDMgr' contains NO Files
 //		(0 Files), this method will exit and no error
 //		will be returned.
-//
-//	(4) If the target directory identified by input
-//		parameter 'targetDMgr' contains NO Files
-//		matching the File Selection Criteria specified by
-//		input parameter 'fileSelectCriteria', this method
-//		will exit and no error will be returned.
 //
 //	(5)	This method will NOT delete directories.
 //
@@ -960,11 +1030,14 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 //		(FileMgrCollection). This collection will contain
 //		an array of File Manager (FileMgr) objects
 //		identifying all the files deleted in the current
-//		file deletion operation.
+//		file deletion operation for the designated target
+//		directory tree.
 //
 //		If 'returnDeletedFilesList' is set to 'false',
-//		the instance of FileMgrCollection returned by this
-//		method will always be empty and unpopulated.
+//		the instance of FileMgrCollection returned by
+//		this method will always be empty and unpopulated.
+//		This means that the files actually deleted by
+//		this method will NOT be documented.
 //
 //	skipTopLevelDirectory		bool
 //
@@ -1022,10 +1095,23 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 //
 //	fileSelectCriteria			FileSelectionCriteria
 //
-//	  This input parameter should be configured with the
-//	  desired file selection criteria. Files matching
-//	  this criteria will be deleted in the directory
-//	  identified by input parameter, 'targetDMgr'.
+//		In addition to the File Type Selection Criteria,
+//		selected files must conform to the File
+//		Characteristics Criteria specified by this
+//		parameter, 'fileSelectCriteria'.
+//
+//		Failure to comply with File Characteristics
+//		Selection Criteria ('fileSelectCriteria') means
+//		that the subject file will NOT be deleted.
+//
+//		File Characteristics Selection criteria allows
+//		users to screen files for File Name, File
+//		Modification Date and File Mode.
+//
+//		Files matching these File Characteristics
+//		Selection Criteria, and the File Type filter,
+//		will be included in the file deletion operation
+//		performed by this method.
 //
 //		type FileSelectionCriteria struct {
 //		 FileNamePatterns    []string
@@ -1208,17 +1294,65 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 //		operation. This information includes the number
 //		of files deleted.
 //
-//			type DeleteDirFilesStats struct {
-//				TotalFilesProcessed        uint64
-//				FilesDeleted               uint64
-//				FilesDeletedBytes          uint64
-//				FilesRemaining             uint64
-//				FilesRemainingBytes        uint64
-//				TotalSubDirectories        uint64
-//				TotalDirsScanned           uint64
-//				NumOfDirsWhereFilesDeleted uint64
-//				DirectoriesDeleted         uint64
-//			}
+//		The data elements in the DeleteDirFilesStats
+//		structure are used to accumulate statistics and
+//		information related to the deletion of files from
+//		a target directory tree.
+//
+//		type DeleteDirFilesStats struct {
+//
+//			TotalFilesProcessed uint64
+//				The total number of files processed.
+//				Does NOT include directory entries.
+//
+//			FilesDeleted uint64
+//				The number of files deleted. Does
+//				NOT include directory entries.
+//
+//			FilesDeletedBytes uint64
+//				The number of file bytes deleted.
+//				Does NOT include directory entries.
+//
+//			FilesRemaining uint64
+//				The number of files processed, but
+//				NOT deleted. Does NOT include directory
+//				entries.
+//
+//			FilesRemainingBytes uint64
+//				The number of bytes associated with
+//				files processed but NOT copied. Does
+//				NOT include directory entries.
+//
+//			TotalSubDirectories uint64
+//				Total SubDirectories processed
+//
+//			TotalDirsScanned uint64
+//				Total Directories Scanned.
+//
+//			NumOfDirsWhereFilesDeleted uint64
+//				The number of parent directories and
+//				subdirectories where files were deleted.
+//
+//			DirectoriesDeleted uint64
+//				The number of directories deleted.
+//
+//			SubDirsDocumented uint64
+//				The number of subdirectories identified
+//				and returned in a Directory Manager
+//				Collection. Does NOT include the parent
+//				directory. Subdirectories are only
+//				documented if requested. This computation
+//				value is therefore optional.
+//
+//			DeletedFilesDocumented uint64
+//				The number of deleted files documented
+//				by adding a File Manager object to a
+//				returned File Manager Collection.
+//
+//			Errors []error
+//				An array of errors associated with the
+//				calculation of these statistics.
+//		}
 //
 //	deletedFiles				FileMgrCollection
 //
@@ -1376,8 +1510,8 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) deleteDirectoryTreeFiles(
 		}
 	}
 	_,
-		err2 = new(dirMgrHelperTachyon).
-		getSubdirectories(
+		err2 = new(dirMgrHelperElectron).
+		getAllSubDirsInDirTree(
 			targetDMgr,
 			&targetDirs,
 			targetDMgrLabel,
@@ -1412,25 +1546,79 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) deleteDirectoryTreeFiles(
 
 	}
 
+	if skipTopLevelDirectory == true {
+
+		deletedDirTreeFileStats.TotalSubDirectories =
+			uint64(len(targetDirs.dirMgrs))
+
+	} else {
+
+		deletedDirTreeFileStats.TotalSubDirectories =
+			uint64(len(targetDirs.dirMgrs)) - 1
+
+	}
+
 	var dMgrHlprPlanck = new(dirMgrHelperPlanck)
 	var deletedDirFileStats DeleteDirFilesStats
 	var deletedSubDirFiles FileMgrCollection
 	var errs2 []error
+	var nextTargetDir DirMgr
 
-	for idx, nextTargetDir := range targetDirs.dirMgrs {
+	var cycleCount = 0
+
+	var errStatus ArrayColErrorStatus
+
+	// idx, nextTargetDir := range targetDirs.dirMgrs
+	for cycleCount > -1 {
+
+		cycleCount++
+
+		nextTargetDir,
+			errStatus = targetDirs.
+			PopFirstDirMgr(
+				ePrefix.XCpy(
+					"targetDirs"))
+
+		if errStatus.ProcessingError != nil {
+
+			if errStatus.IsArrayCollectionEmpty {
+
+				cycleCount = -1
+
+				break
+
+			}
+
+			fatalErr = fmt.Errorf("%v\n"+
+				"Failed to extract first 'nextTargetDir' from target\n"+
+				"directories collection (targetDirs)!\n"+
+				"cycleCount= '%v'\n"+
+				"Error returned by sourceDirectories.PopFirstDirMgr().\n"+
+				"Error= \n%v\n",
+				funcName,
+				cycleCount,
+				errStatus.ProcessingError.Error())
+
+			return deletedDirTreeFileStats,
+				deletedFiles,
+				nonfatalErrs,
+				fatalErr
+		}
 
 		deletedDirFileStats,
-			deletedSubDirFiles,
 			errs2,
 			err2 = dMgrHlprPlanck.
 			deleteDirectoryFiles(
 				&nextTargetDir,
+				returnDeletedFilesList,
+				false, // returnSubDirsList
 				deleteRegularFiles,
 				deleteSymLinkFiles,
 				deleteOtherNonRegularFiles,
-				returnDeletedFilesList,
 				fileSelectCriteria,
 				"nextTargetDir",
+				&targetDirs,
+				&deletedFiles,
 				ePrefix.XCpy("nextTargetDir"))
 
 		if len(errs2) > 0 {
@@ -1447,9 +1635,11 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) deleteDirectoryTreeFiles(
 				"Fatal Error occurred while deleting files.\n"+
 				"dMgrHlprPlanck.deleteDirectoryFiles() returned an error.\n"+
 				"nextTargetDir= %v\n"+
+				"cycleCount= '%v'\n"+
 				"Error=\n%v\n",
 				funcName,
 				nextTargetDir.absolutePath,
+				cycleCount,
 				err2.Error())
 
 			return deletedDirTreeFileStats,
@@ -1461,9 +1651,6 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) deleteDirectoryTreeFiles(
 		deletedDirTreeFileStats.
 			AddStats(deletedDirFileStats)
 
-		deletedDirTreeFileStats.TotalSubDirectories =
-			uint64(idx + 1)
-
 		if returnDeletedFilesList {
 
 			deletedFiles.fileMgrs =
@@ -1474,15 +1661,10 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) deleteDirectoryTreeFiles(
 		}
 	}
 
-	if !skipTopLevelDirectory {
-		deletedDirTreeFileStats.TotalSubDirectories--
-	}
-
 	return deletedDirTreeFileStats,
 		deletedFiles,
 		nonfatalErrs,
 		fatalErr
-
 }
 
 // lowLevelDirMgrFieldConfig

@@ -160,25 +160,27 @@ type DirMgr struct {
 //	(3)	If the target directory does not exist, this method
 //		will attempt to create it.
 //
-//	(4)	Files will only be copied if they meet the File Type
-//		criteria and the File Characteristics Criteria.
+//	(4)	Files will only be copied if they meet the File
+//		Type Criteria and the File Characteristics
+//		Criteria.
 //
-//		File Type criteria are specified by input parameters:
+//		File Type criteria are specified by input
+//		parameters:
 //
 //			copyRegularFiles bool
 //			copySymLinkFiles bool
 //			copyOtherNonRegularFiles bool
 //
-//		File Characteristics Selection criteria is specified by
-//		input parameter 'fileSelectCriteria'.
+//		File Characteristics Selection criteria is
+//		specified by input parameter 'fileSelectCriteria'.
 //
 //	(5) If input parameter 'returnCopiedFilesList' is set
-//		to 'false', input parameter ('copiedFiles') can be
-//		set to nil.
+//		to 'false', input parameter ('copiedFiles') may
+//		safely be set to 'nil'.
 //
 //	(6)	If input parameter 'returnSubDirsList' is set to
-//		'false', input parameter ('subDirectories') can
-//		be set to nil.
+//		'false', input parameter ('subDirectories') may
+//		safely be set to 'nil'.
 //
 // ----------------------------------------------------------------
 //
@@ -205,26 +207,29 @@ type DirMgr struct {
 //		means that the files actually copied by this
 //		method will NOT be documented.
 //
-//		If input parameter 'returnCopiedFilesList' is set
-//		to 'false', input parameter ('copiedFiles') may
-//		safely be set to 'nil'.
+//		If 'returnCopiedFilesList' is set to false, input
+//		parameter 'copiedFiles' may safely be set to
+//		'nil'.
 //
 //	returnSubDirsList			bool
 //
-//		If input parameter 'returnSubDirsList' is set
-//		to 'true', this method will create DirMgr objects
-//		for each subdirectory in the parent directory,
-//		and add them to Subdirectory collection passed as
+//		If this parameter is set to 'true', this method
+//		will create DirMgr objects for each subdirectory
+//		in the parent directory ('sourceDMgr'), and add
+//		them to the Directory Manager Collection passed
+//		as input parameter 'subDirectories'. Only
+//		subdirectories residing in the top level or
+//		parent directory defined by 'targetDMgr' will be
+//		included.
+//
+//		If 'returnSubDirsList' is set to 'false', no
+//		subdirectories will be added to the Directory
+//		Manager Collection (DirMgrCollection) passed as
 //		input parameter 'subDirectories'.
 //
-//		If input parameter 'returnCopiedFilesList' is set
-//		to 'false', no subdirectories will be added to
-//		Directory Manager Collection (DirMgrCollection)
-//		passed as input parameter 'subDirectories'.
-//
-//		If input parameter 'returnSubDirsList' is set to
-//		'false', input parameter ('subDirectories') may
-//		safely be set to 'nil'.
+//		If 'returnSubDirsList' is set to false,
+//		input parameter 'subDirectories' may safely be set
+//		to 'nil'.
 //
 //	copyEmptyTargetDirectory		bool
 //
@@ -291,7 +296,7 @@ type DirMgr struct {
 //		Characteristics criteria specified by
 //		'fileSelectCriteria'.
 //
-//		File Characteristics Selection criteria allows
+//		File Characteristics Selection criteria allow
 //		users to screen files for File Name, File
 //		Modification Date and File Mode.
 //
@@ -429,10 +434,10 @@ type DirMgr struct {
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria object are
-//		'Inactive' or 'Not Set' (set to their zero or default values), then all the
-//		files meeting the File Type requirements in the directory defined by 'dMgr'
-//		will be selected.
+//		If all of the file selection criterion in the FileSelectionCriteria
+//		object are 'Inactive' or 'Not Set' (set to their zero or default
+//		values), then all the files meeting the File Type requirements in the
+//		directory defined by the current DirMgr instance will be selected.
 //
 //			Example:
 //			  fsc := FileSelectCriterionMode{}
@@ -440,7 +445,8 @@ type DirMgr struct {
 //			  In this example, 'fsc' is NOT initialized. Therefore,
 //			  all the selection criterion are 'Inactive'. Consequently,
 //			  all the files meeting the File Type requirements in the
-//			  directory defined by 'dMgr' will be selected.
+//			  directory defined by the current DirMgr instance will be
+//			  selected.
 //
 //		------------------------------------------------------------------------
 //
@@ -465,18 +471,13 @@ type DirMgr struct {
 //				dirMgrs []DirMgr
 //			}
 //
-//		Directory entries for the current directory (".")
-//		and the parent directory ("..") will be skipped and
-//		will NOT be added to the 'subDirectories' Directory
-//		Manager Collection.
-//
 //		If input parameter 'returnSubDirsList' is set to
 //		'false', no subdirectories will be added to this
 //		Directory Manager Collection.
 //
-//		If input parameter 'returnSubDirsList' is set to
-//		'false', this parameter ('subDirectories') can be
-//		set to nil.
+//		If input parameter 'returnSubDirsList' is set
+//		to 'false', this parameter ('subDirectories') may
+//		safely be set to 'nil'.
 //
 //	copiedFiles					*FileMgrCollection
 //
@@ -571,14 +572,59 @@ type DirMgr struct {
 //		operation. This information includes the number
 //		of files copied.
 //
+//		The data elements in this structure are used
+//		to accumulate statistics and information
+//		related to files copied from a single source
+//		directory to a single destination or target
+//		directory.
+//
 //		type DirectoryCopyStats struct {
-//			DirsCreated          uint64
+//			DirsCreated uint64
+//				The number of new directories created.
+//
 //			TotalFilesProcessed uint64
-//			FilesCopied         uint64
-//			FileBytesCopied     uint64
-//			FilesNotCopied      uint64
-//			FileBytesNotCopied  uint64
-//			ComputeError        error
+//				The total number of files processed.
+//				Does NOT include directory entries.
+//
+//			FilesCopied uint64
+//				The number of files copied. Does
+//				NOT include directory entries.
+//
+//			FileBytesCopied uint64
+//				The number of file bytes copied.
+//				Does NOT include directory entries.
+//
+//			FilesNotCopied uint64
+//				The number of files processed, but
+//				NOT copied. Does NOT include directory
+//				entries.
+//
+//			FileBytesNotCopied uint64
+//				The number of bytes associated with
+//				files processed but NOT copied. Does
+//				NOT include directory entries.
+//
+//			SubDirs uint64
+//				The total number of subdirectories identified
+//				during the directory tree copy operation. This
+//				does NOT include the parent directory.
+//
+//			SubDirsDocumented uint64
+//				The number of subdirectories identified
+//				and returned in a Directory Manager
+//				Collection. Does NOT include the parent
+//				directory. Subdirectories are only
+//				documented if requested. This computation
+//				value is therefore optional.
+//
+//			CopiedFilesDocumented uint64
+//				The number of copied files documented
+//				by adding a File Manager object to a
+//				returned File Manager Collection.
+//
+//			Errors []error
+//				An array of errors associated with the
+//				calculation of these statistics.
 //		}
 //
 //	nonfatalErrs				[]error

@@ -123,25 +123,27 @@ type dirMgrHelperPlanck struct {
 //	(3)	If the target directory does not exist, this method
 //		will attempt to create it.
 //
-//	(4)	Files will only be copied if they meet the File Type
-//		criteria and the File Characteristics Criteria.
+//	(4)	Files will only be copied if they meet the File
+//		Type Criteria and the File Characteristics
+//		Criteria.
 //
-//		File Type criteria are specified by input parameters:
+//		File Type criteria are specified by input
+//		parameters:
 //
 //			copyRegularFiles bool
 //			copySymLinkFiles bool
 //			copyOtherNonRegularFiles bool
 //
-//		File Characteristics Selection criteria is specified by
-//		input parameter 'fileSelectCriteria'.
+//		File Characteristics Selection criteria is
+//		specified by input parameter 'fileSelectCriteria'.
 //
 //	(5) If input parameter 'returnCopiedFilesList' is set
-//		to 'false', input parameter ('copiedFiles') can be
-//		set to nil.
+//		to 'false', input parameter ('copiedFiles') may
+//		safely be set to 'nil'.
 //
 //	(6)	If input parameter 'returnSubDirsList' is set to
-//		'false', input parameter ('subDirectories') can
-//		be set to nil.
+//		'false', input parameter ('subDirectories') may
+//		safely be set to 'nil'.
 //
 // ----------------------------------------------------------------
 //
@@ -517,14 +519,59 @@ type dirMgrHelperPlanck struct {
 //		operation. This information includes the number
 //		of files copied.
 //
+//		The data elements in this structure are used
+//		to accumulate statistics and information
+//		related to files copied from a single source
+//		directory to a single destination or target
+//		directory.
+//
 //		type DirectoryCopyStats struct {
-//			DirsCreated          uint64
+//			DirsCreated uint64
+//				The number of new directories created.
+//
 //			TotalFilesProcessed uint64
-//			FilesCopied         uint64
-//			FileBytesCopied     uint64
-//			FilesNotCopied      uint64
-//			FileBytesNotCopied  uint64
-//			ComputeError        error
+//				The total number of files processed.
+//				Does NOT include directory entries.
+//
+//			FilesCopied uint64
+//				The number of files copied. Does
+//				NOT include directory entries.
+//
+//			FileBytesCopied uint64
+//				The number of file bytes copied.
+//				Does NOT include directory entries.
+//
+//			FilesNotCopied uint64
+//				The number of files processed, but
+//				NOT copied. Does NOT include directory
+//				entries.
+//
+//			FileBytesNotCopied uint64
+//				The number of bytes associated with
+//				files processed but NOT copied. Does
+//				NOT include directory entries.
+//
+//			SubDirs uint64
+//				The total number of subdirectories identified
+//				during the directory tree copy operation. This
+//				does NOT include the parent directory.
+//
+//			SubDirsDocumented uint64
+//				The number of subdirectories identified
+//				and returned in a Directory Manager
+//				Collection. Does NOT include the parent
+//				directory. Subdirectories are only
+//				documented if requested. This computation
+//				value is therefore optional.
+//
+//			CopiedFilesDocumented uint64
+//				The number of copied files documented
+//				by adding a File Manager object to a
+//				returned File Manager Collection.
+//
+//			Errors []error
+//				An array of errors associated with the
+//				calculation of these statistics.
 //		}
 //
 //	nonfatalErrs				[]error
@@ -1195,24 +1242,18 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //		(0 Files), this method will exit, and no error
 //		will be returned.
 //
-//	(5) If the target directory identified by input
-//		parameter 'targetDMgr' contains NO Files
-//		matching the File Selection Criteria specified by
-//		input parameter 'fileSelectCriteria', this method
-//		will exit and no error will be returned.
+//	(5)	This method will NOT delete directories.
 //
-//	(6)	This method will NOT delete directories.
-//
-//	(7) No files in subdirectories will be deleted. Only
+//	(6) No files in subdirectories will be deleted. Only
 //		files in the top level or parent directory
 //		defined by input parameter 'targetDMgr' are
 //		eligible for deletion.
 //
-//	(8) If input parameter 'returnDeletedFilesList' is
+//	(7) If input parameter 'returnDeletedFilesList' is
 //		set to 'false', input parameter ('deletedFiles')
 //		can be set to nil.
 //
-//	(9)	If input parameter 'returnSubDirsList' is set to
+//	(8)	If input parameter 'returnSubDirsList' is set to
 //		'false', input parameter ('subDirectories') can
 //		be set to nil.
 //
@@ -1332,20 +1373,21 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //
 //		In addition to the File Type Selection Criteria,
 //		selected files must conform to the File
-//		Characteristics criteria specified by
-//		'fileSelectCriteria'.
+//		Characteristics Criteria specified by this
+//		parameter, 'fileSelectCriteria'.
 //
 //		Failure to comply with File Characteristics
-//		Selection criteria ('fileSelectCriteria') means
+//		Selection Criteria ('fileSelectCriteria') means
 //		that the subject file will NOT be deleted.
 //
 //		File Characteristics Selection criteria allows
 //		users to screen files for File Name, File
 //		Modification Date and File Mode.
 //
-//		Files matching these selection criteria, and the
-//		File Type filter, will be included in the file
-//		deletion operation performed by this method.
+//		Files matching these File Characteristics
+//		Selection Criteria, and the File Type filter,
+//		will be included in the file deletion operation
+//		performed by this method.
 //
 //		type FileSelectionCriteria struct {
 //		 FileNamePatterns    []string
