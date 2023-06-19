@@ -5659,17 +5659,13 @@ func (dMgrHlpr *dirMgrHelper) moveSubDirectoryTree(
 	dirMoveStats.TotalSrcFilesProcessed =
 		dTreeCopyStats.TotalFilesProcessed
 
-	errs2,
-		err2 = new(dirMgrHelperMolecule).
+	err2 = new(dirMgrHelperNanobot).
 		deleteAllSubDirectories(
 			dMgr,
+			false, // returnDeletedSubDirs
+			nil,   // deletedSubDirs
 			"dMgr",
 			ePrefix)
-
-	if len(errs2) > 0 {
-
-		nonfatalErrs = append(nonfatalErrs, errs2...)
-	}
 
 	if err2 != nil {
 

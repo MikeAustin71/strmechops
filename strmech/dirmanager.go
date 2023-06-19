@@ -8,21 +8,6 @@ import (
 	"sync"
 )
 
-/*
-  This source code file contains type 'DirMgr' .
-
-  The Source Repository for this source code file is :
-    https://github.com/MikeAustin71/pathfileopsgo.git
-
-  Dependencies:
-  -------------
-
-  Types 'DirMgr' depends on types, 'FileHelper' and 'FileMgr'
-  which are contained in source	code files, 'filehelper.go'
-  and 'filemanager.go' located in this directory.
-
-*/
-
 // DirMgr - This type and its associated methods are used to
 // manage directories, directory trees and directory permissions.
 //
@@ -2671,7 +2656,7 @@ func (dMgr *DirMgr) DeleteAllSubDirectories(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"DirMgr.CopyDirectoryFiles()",
+		"DirMgr.DeleteAllSubDirectories()",
 		"")
 
 	if err != nil {
@@ -10220,7 +10205,7 @@ func (dMgr *DirMgr) GetSubdirectoriesParentDir(
 	var dirProfile DirectoryProfile
 
 	dirProfile,
-		err = new(dirMgrHelperTachyon).
+		err = new(dirMgrHelperPreon).
 		getSubdirectories(
 			dMgr,
 			subDirectories,

@@ -546,10 +546,10 @@ func (dMgrHlprElectron *dirMgrHelperElectron) getAllSubDirsInDirTree(
 	originalLenOfSubDirsCol := len(subDirectories.dirMgrs)
 
 	var dirProfile DirectoryProfile
-	var dMgrHlprTachyon = new(dirMgrHelperTachyon)
+	var dMgrHlprPreon = new(dirMgrHelperPreon)
 
 	dirProfile,
-		err = dMgrHlprTachyon.
+		err = dMgrHlprPreon.
 		getSubdirectories(
 			dMgr,
 			subDirectories,
@@ -618,7 +618,7 @@ func (dMgrHlprElectron *dirMgrHelperElectron) getAllSubDirsInDirTree(
 		}
 
 		dirProfile,
-			err = dMgrHlprTachyon.
+			err = dMgrHlprPreon.
 			getSubdirectories(
 				&subDirDMgr,
 				subDirectories,

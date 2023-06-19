@@ -1699,6 +1699,10 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) deleteDirectoryTreeFiles(
 //		exist on persistent (drive) storage, an error will
 //		be returned.
 //
+//	returnDeletedSubDirs		bool
+//
+//	deletedSubDirs				*DirMgrCollection
+//
 //	dMgrLabel					string
 //
 //		The name or label associated with input parameter

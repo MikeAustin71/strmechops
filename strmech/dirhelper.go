@@ -705,7 +705,7 @@ func (dHlpr *DirHelper) GetSubdirectoriesParentDir(
 	var dirProfile DirectoryProfile
 
 	dirProfile,
-		err = new(dirMgrHelperTachyon).
+		err = new(dirMgrHelperPreon).
 		getSubdirectories(
 			&dMgr,
 			subDirectories,
