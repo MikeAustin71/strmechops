@@ -1388,14 +1388,13 @@ func (dMgrHlprAtom *dirMgrHelperAtom) moveDirectoryFiles(
 
 	var fileInfos []FileInfoPlus
 	var lenFileInfos int
-	var dMgrHlprTachyon = new(dirMgrHelperTachyon)
 	var errs2 []error
 
 	fileInfos,
 		lenFileInfos,
 		errs2,
-		fatalErr = dMgrHlprTachyon.
-		getFileInfosFromDirectory(
+		fatalErr = dMgrHlprMolecule.
+		lowLevelGetFileInfosFromDir(
 			sourceDMgr,
 			false,                    // getDirectoryFileInfos
 			moveRegularFiles,         // getRegularFileInfos
@@ -1424,7 +1423,7 @@ func (dMgrHlprAtom *dirMgrHelperAtom) moveDirectoryFiles(
 		fatalErr = fmt.Errorf("%v\n"+
 			"Error: The %v source directory is EMPTY!\n"+
 			"The move files operation cannot proceed.\n"+
-			"Method dirMgrHelperElectron.getFileInfosFromDirectory()\n"+
+			"Method dirMgrHelperElectron.lowLevelGetFileInfosFromDir()\n"+
 			"returned a zero length array of File Info Objects from:\n"+
 			"%v = %v\n",
 			ePrefix.String(),
@@ -1609,7 +1608,7 @@ func (dMgrHlprAtom *dirMgrHelperAtom) moveDirectoryFiles(
 
 		_,
 			dirProfile,
-			err2 = dMgrHlprTachyon.
+			err2 = new(dirMgrHelperTachyon).
 			getDirectoryProfile(
 				sourceDMgr,
 				sourceDMgrLabel,

@@ -243,7 +243,9 @@ type dirMgrHelperPlanck struct {
 //
 //		If input parameters 'copyRegularFiles',
 //		'copySymLinkFiles' and 'copyOtherNonRegularFiles'
-//		are all set to 'false', an error will be returned.
+//		are all set to 'false', these parameters will be
+//		classified as conflicted, and an error will be
+//		returned.
 //
 //	copySymLinkFiles			bool
 //
@@ -258,7 +260,9 @@ type dirMgrHelperPlanck struct {
 //
 //		If input parameters 'copyRegularFiles',
 //		'copySymLinkFiles' and 'copyOtherNonRegularFiles'
-//		are all set to 'false', an error will be returned.
+//		are all set to 'false', these parameters will be
+//		classified as conflicted, and an error will be
+//		returned.
 //
 //	copyOtherNonRegularFiles	bool
 //
@@ -274,7 +278,9 @@ type dirMgrHelperPlanck struct {
 //
 //		If input parameters 'copyRegularFiles',
 //		'copySymLinkFiles' and 'copyOtherNonRegularFiles'
-//		are all set to 'false', an error will be returned.
+//		are all set to 'false', these parameters will be
+//		classified as conflicted, and an error will be
+//		returned.
 //
 //	fileSelectCriteria			FileSelectionCriteria
 //
@@ -729,7 +735,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 		fatalErr = dMgrHlprPreon.
 		validateDirMgr(
 			sourceDMgr,
-			true,
+			true, //pathMustExist
 			sourceDMgrLabel,
 			ePrefix)
 
@@ -815,8 +821,8 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 	fileInfos,
 		lenFileInfos,
 		errs2,
-		fatalErr = new(dirMgrHelperTachyon).
-		getFileInfosFromDirectory(
+		fatalErr = new(dirMgrHelperMolecule).
+		lowLevelGetFileInfosFromDir(
 			sourceDMgr,
 			returnSubDirsList,        // getDirectoryFileInfos
 			copyRegularFiles,         // getRegularFileInfos
@@ -842,7 +848,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 		fatalErr = fmt.Errorf("%v\n"+
 			"Error: The %v directory is EMPTY!\n"+
 			"The copy files operation cannot proceed.\n"+
-			"Method dirMgrHelperElectron.getFileInfosFromDirectory()\n"+
+			"Method dirMgrHelperElectron.lowLevelGetFileInfosFromDir()\n"+
 			"returned a zero length array of File Info Objects from:\n"+
 			"%v = %v\n",
 			ePrefix.String(),
@@ -1878,8 +1884,8 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 	fileInfos,
 		lenFileInfos,
 		errs2,
-		fatalErr = new(dirMgrHelperTachyon).
-		getFileInfosFromDirectory(
+		fatalErr = new(dirMgrHelperMolecule).
+		lowLevelGetFileInfosFromDir(
 			targetDMgr,
 			returnSubDirsList,          // getDirectoryFileInfos
 			deleteRegularFiles,         // getRegularFileInfos
