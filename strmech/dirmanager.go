@@ -133,39 +133,59 @@ type DirMgr struct {
 //
 // # IMPORTANT
 //
-//	(1)	This method ONLY copies files from the parent
-//		directory identified by 'sourceDMgr' to the
-//		parent directory identified by 'targetDMgr'.
+//	(1)	This method ONLY selects and copies files from
+//		the parent directory identified by 'sourceDMgr'
+//		to the parent directory identified by
+//		'targetDMgr'.
 //
 //	(2) No files in subdirectories of 'sourceDMgr 'will
 //		be copied. Only files in the top level or parent
 //		directory defined by input parameter 'sourceDMgr'
 //		are eligible for the copy operation.
 //
-//	(3)	If the target directory does not exist, this method
-//		will attempt to create it.
+//	(3)	If the target directory does not exist, this
+//		method will attempt to create it.
 //
-//	(4)	Files will only be copied if they meet the File
-//		Type Criteria and the File Characteristics
-//		Criteria.
+//	(4)	Files selected for the copy operation are
+//		required to match two sets of selection criteria,
+//		File Type Selection Criteria and File
+//		Characteristics Selection Criteria.
 //
-//		File Type criteria are specified by input
-//		parameters:
+//	(5) File Type Selection Criteria specifications are
+//		passed as input parameters 'copyRegularFiles',
+//		'copySymLinkFiles' and 'copyOtherNonRegularFiles'.
+//		For an explanation of Regular and Non-Regular
+//		files, see the section on Definition of Terms,
+//		above.
 //
-//			copyRegularFiles bool
-//			copySymLinkFiles bool
-//			copyOtherNonRegularFiles bool
+//	(6) File Characteristics Selection Criteria are user
+//		specified selection requirements passed as input
+//		parameter 'fileSelectCriteria'. This file
+//		selection criteria allows users to screen files
+//		for File Name, File Modification Date and File
+//		Mode.
 //
-//		File Characteristics Selection criteria is
-//		specified by input parameter 'fileSelectCriteria'.
+//	(7) If the source directory identified by input
+//		parameter 'sourceDMgr' contains NO Files meeting
+//		(1) the File Type Selection Criteria and (2) the
+//		File Characteristics Selection Criteria, this
+//		method will exit, no files will be copied to the
+//		target directory ('targetDMgr') and no error will
+//		be returned.
 //
-//	(5) If input parameter 'returnCopiedFilesList' is set
+//	(8) If the source directory identified by input
+//		parameter 'sourceDMgr' contains NO Files
+//		whatsoever (0 Files), this method will exit, no
+//		files will be copied to the target directory
+//		('targetDMgr') and no error will be returned.
+//
+//	(9) If input parameter 'returnCopiedFilesList' is set
 //		to 'false', input parameter ('copiedFiles') may
 //		safely be set to 'nil'.
 //
-//	(6)	If input parameter 'returnSubDirsList' is set to
-//		'false', input parameter ('subDirectories') may
-//		safely be set to 'nil'.
+//	(10) If input parameter 'returnSubDirsList' is set to
+//		 'false', input parameter ('subDirectories') may
+//		 safely be set to 'nil'.
 //
 // ----------------------------------------------------------------
 //

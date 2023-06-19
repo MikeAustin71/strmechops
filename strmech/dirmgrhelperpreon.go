@@ -11,6 +11,179 @@ type dirMgrHelperPreon struct {
 	lock *sync.Mutex
 }
 
+// getFilesInDir
+//
+// This method scans a designated directory and returns
+// information on selected files as a File Manager
+// Collection passed as input parameter 'filesInDir'.
+//
+// Files selected for addition to the File Manager
+// Collection must satisfy two sets of criteria, File
+// Type and File Characteristics.
+//
+// To qualify for selection, the file must first comply
+// with the specified File Type criteria. In terms of
+// File Type, files are classified as directories,
+// regular files, SymLink files or other non-regular
+// files.
+//
+// Since this method does NOT process directories, the
+// only valid File Types eligible for selection are
+// regular files, SymLink files or other non-regular
+// files.
+//
+// For an explanation of Regular and Non-Regular files,
+// see the Definition of Terms section below.
+//
+// Screening criteria for File Type is controlled by the
+// following three input parameters:
+//
+//	getRegularFiles - bool
+//	getSymLinksFiles - bool
+//	getOtherNonRegularFiles - bool
+//
+// In addition to File Type, selected files must comply
+// with the second set of file selection criteria, File
+// Characteristics. File Characteristics Selection
+// Criteria is specified by input parameter,
+// 'fileSelectCriteria'. This file selection criteria
+// allows users to screen files for File Name, File
+// Modification Date and File Mode.
+//
+// ----------------------------------------------------------------
+//
+// # Definition Of Terms
+//
+//	Regular & Non-Regular Files
+//
+//	In Go programming language, a regular file is a file
+//	that contains data in any format that can be read by
+//	a user or an application. It is not a directory or a
+//	device file.
+//
+//	Regular files include text files, image files and
+//	executable files.
+//
+//	Non-regular files include directories, device files,
+//	named pipes, sockets, and symbolic links.
+//
+//	https://docs.studygolang.com/src/io/fs/fs.go
+//	https://www.computerhope.com/jargon/r/regular-file.htm
+//	https://go.dev/src/os/types.go
+//	https://go.dev/src/os/types.go?s=1237:1275#L31
+//	https://pkg.go.dev/gopkg.in/src-d/go-git.v4/plumbing/filemode
+//	https://www.linode.com/docs/guides/creating-reading-and-writing-files-in-go-a-tutorial/
+//
+//	SymLink Files
+//
+//	In computing, a symbolic link (also symlink or soft
+//	link) is a file whose purpose is to point to a file
+//	or directory (called the "target") by specifying a
+//	path thereto.
+//
+//		https://en.wikipedia.org/wiki/Symbolic_link
+//
+//	It's true that a symlink is a shortcut file. But it's
+//	different from a standard shortcut that a program
+//	installer might place on your Windows desktop to make
+//	the program easier to run.
+//
+//	Clicking on either type of shortcut opens the linked
+//	object. However, what goes on beneath the hood is
+//	different in both cases.
+//
+//	While a standard shortcut points to a certain object,
+//	a symlink makes it appear as if the linked object is
+//	actually there. Your computer and the apps on it will
+//	read the symlink as the target object itself.
+//
+//		https://www.thewindowsclub.com/create-symlinks-in-windows-10
+//		https://www.makeuseof.com/tag/what-is-a-symbolic-link-what-are-its-uses-makeuseof-explains/
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method will select and return information on
+//		files in the directory specified by input
+//		parameter 'targetDMgr'. No subdirectories will be
+//		searched for eligible files. Only the top level
+//		or parent directory identified by 'targetDMgr'
+//		will be searched for eligible files.
+//
+//	(2)	The files to be selected are required to match
+//		two sets of selection criteria, File Type
+//		Selection Criteria and File Characteristics
+//		Selection Criteria.
+//
+//	(3) File Type Selection Criteria specifications are
+//		passed as input parameters 'getRegularFiles',
+//		'getSymLinksFiles' and 'getOtherNonRegularFiles'.
+//		For an explanation of Regular and Non-Regular
+//		files, see the section on Definition of Terms,
+//		above.
+//
+//	(4) File Characteristics Selection Criteria are user
+//		specified selection requirements passed as input
+//		parameter 'fileSelectCriteria'. This file
+//		selection criteria allows users to screen files
+//		for File Name, File Modification Date and File
+//		Mode.
+//
+//	(5) If the target directory identified by input
+//		parameter 'targetDMgr' contains NO Files meeting
+//		(1) the File Type Selection Criteria and (2) the
+//		File Characteristics Selection Criteria, this
+//		method will exit, no files will be added to the
+//		'filesInDir' File Manager Collection and no error
+//		will be returned.
+//
+//	(6) If the target directory identified by input
+//		parameter 'targetDMgr' contains NO Files
+//		whatsoever (0 Files), this method will exit, no
+//		files will be added to the 'filesInDir' File
+//		Manager Collection and no error will be returned.
+//
+//	(7)	This method will NOT return file information on
+//		subdirectories.
+func (dMgrHlprPreon *dirMgrHelperPreon) getFilesInDir(
+	targetDMgr *DirMgr,
+	getRegularFiles bool,
+	getSymLinksFiles bool,
+	getOtherNonRegularFiles bool,
+	fileSelectCriteria FileSelectionCriteria,
+	filesInDir *FileMgrCollection,
+	targetDMgrLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	dirProfile DirectoryProfile,
+	err error) {
+
+	if dMgrHlprPreon.lock == nil {
+		dMgrHlprPreon.lock = new(sync.Mutex)
+	}
+
+	dMgrHlprPreon.lock.Lock()
+
+	defer dMgrHlprPreon.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "dirMgrHelperPreon." +
+		"getSubdirectories()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return dirProfile, err
+	}
+
+}
+
 // getSubdirectories
 //
 // This method receives an instance of DirMgr ('dMgr')

@@ -111,39 +111,59 @@ type dirMgrHelperPlanck struct {
 //
 // # IMPORTANT
 //
-//	(1)	This method ONLY copies files from the parent
-//		directory identified by 'sourceDMgr' to the
-//		parent directory identified by 'targetDMgr'.
+//	(1)	This method ONLY selects and copies files from
+//		the parent directory identified by 'sourceDMgr'
+//		to the parent directory identified by
+//		'targetDMgr'.
 //
 //	(2) No files in subdirectories of 'sourceDMgr 'will
 //		be copied. Only files in the top level or parent
 //		directory defined by input parameter 'sourceDMgr'
 //		are eligible for the copy operation.
 //
-//	(3)	If the target directory does not exist, this method
-//		will attempt to create it.
+//	(3)	If the target directory does not exist, this
+//		method will attempt to create it.
 //
-//	(4)	Files will only be copied if they meet the File
-//		Type Criteria and the File Characteristics
-//		Criteria.
+//	(4)	Files selected for the copy operation are
+//		required to match two sets of selection criteria,
+//		File Type Selection Criteria and File
+//		Characteristics Selection Criteria.
 //
-//		File Type criteria are specified by input
-//		parameters:
+//	(5) File Type Selection Criteria specifications are
+//		passed as input parameters 'copyRegularFiles',
+//		'copySymLinkFiles' and 'copyOtherNonRegularFiles'.
+//		For an explanation of Regular and Non-Regular
+//		files, see the section on Definition of Terms,
+//		above.
 //
-//			copyRegularFiles bool
-//			copySymLinkFiles bool
-//			copyOtherNonRegularFiles bool
+//	(6) File Characteristics Selection Criteria are user
+//		specified selection requirements passed as input
+//		parameter 'fileSelectCriteria'. This file
+//		selection criteria allows users to screen files
+//		for File Name, File Modification Date and File
+//		Mode.
 //
-//		File Characteristics Selection criteria is
-//		specified by input parameter 'fileSelectCriteria'.
+//	(7) If the source directory identified by input
+//		parameter 'sourceDMgr' contains NO Files meeting
+//		(1) the File Type Selection Criteria and (2) the
+//		File Characteristics Selection Criteria, this
+//		method will exit, no files will be copied to the
+//		target directory ('targetDMgr') and no error will
+//		be returned.
 //
-//	(5) If input parameter 'returnCopiedFilesList' is set
+//	(8) If the source directory identified by input
+//		parameter 'sourceDMgr' contains NO Files
+//		whatsoever (0 Files), this method will exit, no
+//		files will be copied to the target directory
+//		('targetDMgr') and no error will be returned.
+//
+//	(9) If input parameter 'returnCopiedFilesList' is set
 //		to 'false', input parameter ('copiedFiles') may
 //		safely be set to 'nil'.
 //
-//	(6)	If input parameter 'returnSubDirsList' is set to
-//		'false', input parameter ('subDirectories') may
-//		safely be set to 'nil'.
+//	(10) If input parameter 'returnSubDirsList' is set to
+//		 'false', input parameter ('subDirectories') may
+//		 safely be set to 'nil'.
 //
 // ----------------------------------------------------------------
 //
@@ -1134,12 +1154,16 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 // to two sets of criteria, File Type and File
 // Characteristics.
 //
-// First, the file must comply with the specified File
-// Type criteria. In terms of File Type, files are
-// classified as directories, regular files, SymLink
-// files or other non-regular files.
+// To qualify for selection, the file must first comply
+// with the specified File Type criteria. In terms of
+// File Type, files are classified as directories,
+// regular files, SymLink files or other non-regular
+// files.
 //
-// This method does NOT delete directories.
+// Since this method does NOT delete directories, the
+// only valid File Types eligible for selection are
+// regular files, SymLink files or other non-regular
+// files.
 //
 // For an explanation of Regular and Non-Regular files,
 // see the Definition of Terms section below.
@@ -1151,16 +1175,13 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //	deleteSymLinkFiles - bool
 //	deleteOtherNonRegularFiles - bool
 //
-// This method deletes regular files plus certain
-// non-regular files depending on input parameter values
-// supplied by the user.
-//
 // In addition to File Type, selected files must comply
-// with the File Characteristics criteria specified by
-// input parameter, 'fileSelectCriteria'. The File
-// Characteristics Selection criteria allows users to
-// screen files for File Name, File Modification Date and
-// File Mode.
+// with the second set of file selection criteria, File
+// Characteristics. File Characteristics Selection
+// Criteria is specified by input parameter,
+// 'fileSelectCriteria'. The File  Characteristics
+// Selection Criteria allows users to screen files for
+// File Name, File Modification Date and File Mode.
 //
 // ----------------------------------------------------------------
 //
@@ -1216,46 +1237,62 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //
 // # IMPORTANT
 //
-//	(1)	This method will delete files in the directory
-//		specified by input parameter 'targetDMgr'. The
-//		files to be deleted must match the File Selection
-//		Characteristics Criteria passed as input
-//		parameter 'fileSelectCriteria'.
+//	(1)	This method will select and delete files in the
+//		directory specified by input parameter
+//		'targetDMgr'. No files will be deleted in
+//		subdirectories of 'targetDMgr'. Only the top
+//		level or parent directory identified by
+//		'targetDMgr' will be searched for files eligible
+//		for deletion.
 //
-//	(2) In addition to meeting the File Selection
-//		Characteristics requirements specified in
-//		paragraph (1) above, files eligible for deletion
-//		must comply with File Type specifications passed
-//		as input parameters 'deleteRegularFiles',
+//	(2)	The files selected for deletion are required to
+//		match two sets of selection criteria, File Type
+//		Selection Criteria and File Characteristics
+//		Selection Criteria.
+//
+//	(3) File Type Selection Criteria specifications are
+//		passed as input parameters 'deleteRegularFiles',
 //		'deleteSymLinkFiles' and
-//		'deleteOtherNonRegularFiles'.
+//		'deleteOtherNonRegularFiles'. For an explanation
+//		of Regular and Non-Regular files, see the section
+//		on Definition of Terms,	above.
 //
-//	(3) If the target directory identified by input
+//	(4) File Characteristics Selection Criteria are user
+//		specified selection requirements passed as input
+//		parameter 'fileSelectCriteria'. This file
+//		selection criteria allows users to screen files
+//		for File Name, File Modification Date and File
+//		Mode.
+//
+//	(5) If the target directory identified by input
 //		parameter 'targetDMgr' contains NO Files
-//		meeting the (1) File Selection Characteristics
-//		Criteria and the (2) File Type Selection
-//		Criteria, this method will exit, and no error
-//		will be returned.
+//		meeting (1) the File Type Selection
+//		Criteria and (2) the File Selection
+//		Characteristics Criteria, this method will exit,
+//		no files will be deleted and no error will be
+//		returned.
 //
-//	(4) If the target directory identified by input
+//	(6) If the target directory identified by input
 //		parameter 'targetDMgr' contains NO Files
-//		(0 Files), this method will exit, and no error
-//		will be returned.
+//		whatsoever (0 Files), this method will exit, no
+//		files will be deleted and no error will be
+//		returned.
 //
-//	(5)	This method will NOT delete directories.
+//	(7)	This method will NOT delete directories or
+//		subdirectories.
 //
-//	(6) No files in subdirectories will be deleted. Only
+//	(8) No files in subdirectories will be deleted. Only
 //		files in the top level or parent directory
 //		defined by input parameter 'targetDMgr' are
 //		eligible for deletion.
 //
-//	(7) If input parameter 'returnDeletedFilesList' is
+//	(9) If input parameter 'returnDeletedFilesList' is
 //		set to 'false', input parameter ('deletedFiles')
 //		can be set to nil.
 //
-//	(8)	If input parameter 'returnSubDirsList' is set to
-//		'false', input parameter ('subDirectories') can
-//		be set to nil.
+//	(10) If input parameter 'returnSubDirsList' is set to
+//		 'false', input parameter ('subDirectories') can
+//		 be set to nil.
 //
 // ----------------------------------------------------------------
 //
