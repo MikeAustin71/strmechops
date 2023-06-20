@@ -310,20 +310,30 @@ type DirMgr struct {
 //		operation performed by this method.
 //
 //		type FileSelectionCriteria struct {
-//		 FileNamePatterns    []string
-//			An array of strings containing File Name Patterns
 //
-//		 FilesOlderThan      time.Time
-//		 	Match files with older modification date times
+//			FileNamePatterns    []string
+//				An array of strings containing File Name Patterns
 //
-//		 FilesNewerThan      time.Time
-//		 	Match files with newer modification date times
+//			FilesOlderThan      time.Time
+//				Match files with older modification date times
 //
-//		 SelectByFileMode    FilePermissionConfig
-//		 	Match file mode (os.FileMode).
+//			FilesNewerThan      time.Time
+//				Match files with newer modification date times
 //
-//		 SelectCriterionModeFileSelectCriterionMode
-//		 	Specifies 'AND' or 'OR' selection mode
+//			RegularExp			*regexp.Regexp
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
+//
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
+//
+//			SelectByFileMode    FilePermissionConfig
+//				Match file mode (os.FileMode).
+//
+//			SelectCriterionModeFileSelectCriterionMode
+//				Specifies 'AND' or 'OR' selection mode
 //		}
 //
 //	  The FileSelectionCriteria Type allows for
@@ -387,7 +397,17 @@ type DirMgr struct {
 //				criterion is considered to be 'Inactive' or
 //				'Not Set'.
 //
-//			SelectByFileMode  FilePermissionConfig
+//			RegularExp			*regexp.Regexp
+//
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
+//
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
+//
+//			SelectByFileMode	FilePermissionConfig
 //
 //				Type FilePermissionConfig encapsulates an os.FileMode. The
 //				file selection criterion allows for the selection of files
@@ -985,6 +1005,16 @@ func (dMgr *DirMgr) CopyDirectoryFiles(
 //		 FilesNewerThan      time.Time
 //		 	Match files with newer modification date times
 //
+//		RegularExp			*regexp.Regexp
+//
+//			Used to select file names with regular
+//			expressions. If this parameter is NOT
+//			equal to nil, file names will be
+//			analyzed using MatchString().
+//
+//			Example:
+//				RegularExp.MatchString("someFileName.txt")
+//
 //		 SelectByFileMode    FilePermissionConfig
 //		 	Match file mode (os.FileMode).
 //
@@ -1052,6 +1082,16 @@ func (dMgr *DirMgr) CopyDirectoryFiles(
 //				time.Time{}, then this file selection
 //				criterion is considered to be 'Inactive' or
 //				'Not Set'.
+//
+//			RegularExp			*regexp.Regexp
+//
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
+//
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
 //
 //			SelectByFileMode  FilePermissionConfig
 //
@@ -1750,6 +1790,15 @@ func (dMgr *DirMgr) CopyOut(
 //		 FilesNewerThan      time.Time
 //		 	Match files with newer modification date times
 //
+//		RegularExp			*regexp.Regexp
+//			Used to select file names with regular
+//			expressions. If this parameter is NOT
+//			equal to nil, file names will be
+//			analyzed using MatchString().
+//
+//			Example:
+//				RegularExp.MatchString("someFileName.txt")
+//
 //		 SelectByFileMode    FilePermissionConfig
 //		 	Match file mode (os.FileMode).
 //
@@ -1818,7 +1867,17 @@ func (dMgr *DirMgr) CopyOut(
 //				criterion is considered to be 'Inactive' or
 //				'Not Set'.
 //
-//			SelectByFileMode  FilePermissionConfig
+//			RegularExp			*regexp.Regexp
+//
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
+//
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
+//
+//			SelectByFileMode	FilePermissionConfig
 //
 //				Type FilePermissionConfig encapsulates an os.FileMode. The
 //				file selection criterion allows for the selection of files
@@ -2760,20 +2819,30 @@ func (dMgr *DirMgr) DeleteAllSubDirectories(
 //		subdirectories WILL BE DELETED.
 //
 //			type FileSelectionCriteria struct {
-//			 FileNamePatterns    []string
-//				An array of strings containing File Name Patterns
 //
-//			 FilesOlderThan      time.Time
-//			 	Match files with older modification date times
+//				FileNamePatterns    []string
+//					An array of strings containing File Name Patterns
 //
-//			 FilesNewerThan      time.Time
-//			 	Match files with newer modification date times
+//				FilesOlderThan      time.Time
+//					Match files with older modification date times
 //
-//			 SelectByFileMode    FilePermissionConfig
-//			 	Match file mode (os.FileMode).
+//				FilesNewerThan      time.Time
+//					Match files with newer modification date times
 //
-//			 SelectCriterionModeFileSelectCriterionMode
-//			 	Specifies 'AND' or 'OR' selection mode
+//				RegularExp			*regexp.Regexp
+//					Used to select file names with regular
+//					expressions. If this parameter is NOT
+//					equal to nil, file names will be
+//					analyzed using MatchString().
+//
+//					Example:
+//						RegularExp.MatchString("someFileName.txt")
+//
+//				SelectByFileMode    FilePermissionConfig
+//					Match file mode (os.FileMode).
+//
+//				SelectCriterionModeFileSelectCriterionMode
+//					Specifies 'AND' or 'OR' selection mode
 //			}
 //
 //		The FileSelectionCriteria type allows for configuration of single or multiple file
@@ -2835,7 +2904,17 @@ func (dMgr *DirMgr) DeleteAllSubDirectories(
 //				criterion is considered to be 'Inactive' or
 //				'Not Set'.
 //
-//			SelectByFileMode  FilePermissionConfig
+//			RegularExp			*regexp.Regexp
+//
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
+//
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
+//
+//			SelectByFileMode	FilePermissionConfig
 //
 //				Type FilePermissionConfig encapsulates an os.FileMode. The
 //				file selection criterion allows for the selection of files
@@ -3302,22 +3381,31 @@ func (dMgr *DirMgr) DeleteFilesByNamePattern(
 //		the current DirMgr parent directory WILL BE
 //		DELETED.
 //
-//			type FileSelectionCriteria struct {
-//			 FileNamePatterns    []string
+//		type FileSelectionCriteria struct {
+//			FileNamePatterns    []string
 //				An array of strings containing File Name Patterns
 //
-//			 FilesOlderThan      time.Time
-//			 	Match files with older modification date times
+//			FilesOlderThan      time.Time
+//				Match files with older modification date times
 //
-//			 FilesNewerThan      time.Time
-//			 	Match files with newer modification date times
+//			FilesNewerThan      time.Time
+//				Match files with newer modification date times
 //
-//			 SelectByFileMode    FilePermissionConfig
-//			 	Match file mode (os.FileMode).
+//			RegularExp			*regexp.Regexp
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
 //
-//			 SelectCriterionModeFileSelectCriterionMode
-//			 	Specifies 'AND' or 'OR' selection mode
-//			}
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
+//
+//			SelectByFileMode    FilePermissionConfig
+//				Match file mode (os.FileMode).
+//
+//			SelectCriterionModeFileSelectCriterionMode
+//				Specifies 'AND' or 'OR' selection mode
+//		}
 //
 //		The FileSelectionCriteria type allows for configuration of single or multiple file
 //		selection criterion. The 'SelectCriterionMode' can be used to specify whether the
@@ -3378,7 +3466,17 @@ func (dMgr *DirMgr) DeleteFilesByNamePattern(
 //				criterion is considered to be 'Inactive' or
 //				'Not Set'.
 //
-//			SelectByFileMode  FilePermissionConfig
+//			RegularExp			*regexp.Regexp
+//
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
+//
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
+//
+//			SelectByFileMode	FilePermissionConfig
 //
 //				Type FilePermissionConfig encapsulates an os.FileMode. The
 //				file selection criterion allows for the selection of files
@@ -3652,22 +3750,31 @@ func (dMgr *DirMgr) DeleteFilesBySelectionCriteria(
 //		subdirectory tree will be searched, and all files
 //		within those directories WILL BE DELETED.
 //
-//			type FileSelectionCriteria struct {
-//			 FileNamePatterns    []string
+//		type FileSelectionCriteria struct {
+//			FileNamePatterns    []string
 //				An array of strings containing File Name Patterns
 //
-//			 FilesOlderThan      time.Time
-//			 	Match files with older modification date times
+//			FilesOlderThan      time.Time
+//				Match files with older modification date times
 //
-//			 FilesNewerThan      time.Time
-//			 	Match files with newer modification date times
+//			FilesNewerThan      time.Time
+//				Match files with newer modification date times
 //
-//			 SelectByFileMode    FilePermissionConfig
-//			 	Match file mode (os.FileMode).
+//			RegularExp			*regexp.Regexp
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
 //
-//			 SelectCriterionModeFileSelectCriterionMode
-//			 	Specifies 'AND' or 'OR' selection mode
-//			}
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
+//
+//			SelectByFileMode    FilePermissionConfig
+//				Match file mode (os.FileMode).
+//
+//			SelectCriterionModeFileSelectCriterionMode
+//				Specifies 'AND' or 'OR' selection mode
+//		}
 //
 //		The FileSelectionCriteria type allows for configuration of single or multiple file
 //		selection criterion. The 'SelectCriterionMode' can be used to specify whether the
@@ -3728,7 +3835,17 @@ func (dMgr *DirMgr) DeleteFilesBySelectionCriteria(
 //				criterion is considered to be 'Inactive' or
 //				'Not Set'.
 //
-//			SelectByFileMode  FilePermissionConfig
+//			RegularExp			*regexp.Regexp
+//
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
+//
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
+//
+//			SelectByFileMode	FilePermissionConfig
 //
 //				Type FilePermissionConfig encapsulates an os.FileMode. The
 //				file selection criterion allows for the selection of files
@@ -3979,22 +4096,31 @@ func (dMgr *DirMgr) DeleteSubDirectoryTreeFiles(
 //		the current DirMgr parent directory plus all
 //		subdirectories WILL BE DELETED.
 //
-//			type FileSelectionCriteria struct {
-//			 FileNamePatterns    []string
+//		type FileSelectionCriteria struct {
+//			FileNamePatterns    []string
 //				An array of strings containing File Name Patterns
 //
-//			 FilesOlderThan      time.Time
-//			 	Match files with older modification date times
+//			FilesOlderThan      time.Time
+//				Match files with older modification date times
 //
-//			 FilesNewerThan      time.Time
-//			 	Match files with newer modification date times
+//			FilesNewerThan      time.Time
+//				Match files with newer modification date times
 //
-//			 SelectByFileMode    FilePermissionConfig
-//			 	Match file mode (os.FileMode).
+//			RegularExp			*regexp.Regexp
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
 //
-//			 SelectCriterionModeFileSelectCriterionMode
-//			 	Specifies 'AND' or 'OR' selection mode
-//			}
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
+//
+//			SelectByFileMode    FilePermissionConfig
+//				Match file mode (os.FileMode).
+//
+//			SelectCriterionModeFileSelectCriterionMode
+//				Specifies 'AND' or 'OR' selection mode
+//		}
 //
 //		The FileSelectionCriteria type allows for configuration of single or multiple file
 //		selection criterion. The 'SelectCriterionMode' can be used to specify whether the
@@ -4055,7 +4181,17 @@ func (dMgr *DirMgr) DeleteSubDirectoryTreeFiles(
 //				criterion is considered to be 'Inactive' or
 //				'Not Set'.
 //
-//			SelectByFileMode  FilePermissionConfig
+//			RegularExp			*regexp.Regexp
+//
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
+//
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
+//
+//			SelectByFileMode	FilePermissionConfig
 //
 //				Type FilePermissionConfig encapsulates an os.FileMode. The
 //				file selection criterion allows for the selection of files
@@ -4945,22 +5081,32 @@ func (dMgr *DirMgr) EqualPaths(dMgr2 *DirMgr) bool {
 //		subject to the specified File Operations
 //		(fileOps).
 //
-//			type FileSelectionCriteria struct {
-//			 FileNamePatterns    []string
+//		type FileSelectionCriteria struct {
+//
+//			FileNamePatterns    []string
 //				An array of strings containing File Name Patterns
 //
-//			 FilesOlderThan      time.Time
-//			 	Match files with older modification date times
+//			FilesOlderThan      time.Time
+//				Match files with older modification date times
 //
-//			 FilesNewerThan      time.Time
-//			 	Match files with newer modification date times
+//			FilesNewerThan      time.Time
+//				Match files with newer modification date times
 //
-//			 SelectByFileMode    FilePermissionConfig
-//			 	Match file mode (os.FileMode).
+//			RegularExp			*regexp.Regexp
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
 //
-//			 SelectCriterionModeFileSelectCriterionMode
-//			 	Specifies 'AND' or 'OR' selection mode
-//			}
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
+//
+//			SelectByFileMode    FilePermissionConfig
+//				Match file mode (os.FileMode).
+//
+//			SelectCriterionModeFileSelectCriterionMode
+//				Specifies 'AND' or 'OR' selection mode
+//		}
 //
 //		The FileSelectionCriteria type allows for configuration of single or multiple file
 //		selection criterion. The 'SelectCriterionMode' can be used to specify whether the
@@ -5020,6 +5166,16 @@ func (dMgr *DirMgr) EqualPaths(dMgr2 *DirMgr) bool {
 //				time.Time{}, then this file selection
 //				criterion is considered to be 'Inactive' or
 //				'Not Set'.
+//
+//			RegularExp			*regexp.Regexp
+//
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
+//
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
 //
 //			SelectByFileMode  FilePermissionConfig
 //
@@ -5361,22 +5517,32 @@ func (dMgr *DirMgr) ExecuteDirectoryFileOps(
 //		File Operations (fileOps) will be performed on
 //		all these selected files.
 //
-//			type FileSelectionCriteria struct {
-//			 FileNamePatterns    []string
+//		type FileSelectionCriteria struct {
+//
+//			FileNamePatterns    []string
 //				An array of strings containing File Name Patterns
 //
-//			 FilesOlderThan      time.Time
-//			 	Match files with older modification date times
+//			FilesOlderThan      time.Time
+//				Match files with older modification date times
 //
-//			 FilesNewerThan      time.Time
-//			 	Match files with newer modification date times
+//			FilesNewerThan      time.Time
+//				Match files with newer modification date times
 //
-//			 SelectByFileMode    FilePermissionConfig
-//			 	Match file mode (os.FileMode).
+//			RegularExp			*regexp.Regexp
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
 //
-//			 SelectCriterionModeFileSelectCriterionMode
-//			 	Specifies 'AND' or 'OR' selection mode
-//			}
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
+//
+//			SelectByFileMode    FilePermissionConfig
+//				Match file mode (os.FileMode).
+//
+//			SelectCriterionModeFileSelectCriterionMode
+//				Specifies 'AND' or 'OR' selection mode
+//		}
 //
 //		The FileSelectionCriteria type allows for configuration of single
 //		or multiple file selection criterion. The 'SelectCriterionMode' can
@@ -5437,6 +5603,16 @@ func (dMgr *DirMgr) ExecuteDirectoryFileOps(
 //				time.Time{}, then this file selection
 //				criterion is considered to be 'Inactive' or
 //				'Not Set'.
+//
+//			RegularExp			*regexp.Regexp
+//
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
+//
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
 //
 //			SelectByFileMode  FilePermissionConfig
 //
@@ -5772,23 +5948,32 @@ func (dMgr *DirMgr) ExecuteDirectoryTreeOps(
 //	  desired file selection criteria. Files matching
 //	  this criteria will be returned as 'Found Files'.
 //
-//			type FileSelectionCriteria struct {
+//		type FileSelectionCriteria struct {
 //
-//			 FileNamePatterns    []string
+//			FileNamePatterns    []string
 //				An array of strings containing File Name Patterns
 //
-//			 FilesOlderThan      time.Time
-//			 	Match files with older modification date times
+//			FilesOlderThan      time.Time
+//				Match files with older modification date times
 //
-//			 FilesNewerThan      time.Time
-//			 	Match files with newer modification date times
+//			FilesNewerThan      time.Time
+//				Match files with newer modification date times
 //
-//			 SelectByFileMode    FilePermissionConfig
-//			 	Match file mode (os.FileMode).
+//			RegularExp			*regexp.Regexp
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
 //
-//			 SelectCriterionModeFileSelectCriterionMode
-//			 	Specifies 'AND' or 'OR' selection mode
-//			}
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
+//
+//			SelectByFileMode    FilePermissionConfig
+//				Match file mode (os.FileMode).
+//
+//			SelectCriterionModeFileSelectCriterionMode
+//				Specifies 'AND' or 'OR' selection mode
+//		}
 //
 //		The FileSelectionCriteria type allows for configuration of single or multiple file
 //		selection criterion. The 'SelectCriterionMode' can be used to specify whether the
@@ -5848,6 +6033,16 @@ func (dMgr *DirMgr) ExecuteDirectoryTreeOps(
 //				time.Time{}, then this file selection
 //				criterion is considered to be 'Inactive' or
 //				'Not Set'.
+//
+//			RegularExp			*regexp.Regexp
+//
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
+//
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
 //
 //			SelectByFileMode  FilePermissionConfig
 //
@@ -6282,23 +6477,32 @@ func (dMgr *DirMgr) FindFilesByNamePattern(
 //	  This input parameter should be configured with the
 //	  desired file selection criteria. Files matching
 //	  this criteria will be returned as 'Found Files'.
+//		type FileSelectionCriteria struct {
 //
-//			type FileSelectionCriteria struct {
-//			 FileNamePatterns    []string
+//			FileNamePatterns    []string
 //				An array of strings containing File Name Patterns
 //
-//			 FilesOlderThan      time.Time
-//			 	Match files with older modification date times
+//			FilesOlderThan      time.Time
+//				Match files with older modification date times
 //
-//			 FilesNewerThan      time.Time
-//			 	Match files with newer modification date times
+//			FilesNewerThan      time.Time
+//				Match files with newer modification date times
 //
-//			 SelectByFileMode    FilePermissionConfig
-//			 	Match file mode (os.FileMode).
+//			RegularExp			*regexp.Regexp
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
 //
-//			 SelectCriterionModeFileSelectCriterionMode
-//			 	Specifies 'AND' or 'OR' selection mode
-//			}
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
+//
+//			SelectByFileMode    FilePermissionConfig
+//				Match file mode (os.FileMode).
+//
+//			SelectCriterionModeFileSelectCriterionMode
+//				Specifies 'AND' or 'OR' selection mode
+//		}
 //
 //		The FileSelectionCriteria type allows for configuration of single or multiple file
 //		selection criterion. The 'SelectCriterionMode' can be used to specify whether the
@@ -6358,6 +6562,16 @@ func (dMgr *DirMgr) FindFilesByNamePattern(
 //				time.Time{}, then this file selection
 //				criterion is considered to be 'Inactive' or
 //				'Not Set'.
+//
+//			RegularExp			*regexp.Regexp
+//
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
+//
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
 //
 //			SelectByFileMode  FilePermissionConfig
 //
@@ -6618,23 +6832,32 @@ func (dMgr *DirMgr) FindFilesBySelectCriteria(
 //		matching this criteria will be returned as
 //		'Found Files'.
 //
-//			type FileSelectionCriteria struct {
+//		type FileSelectionCriteria struct {
 //
-//			 FileNamePatterns    []string
+//			FileNamePatterns    []string
 //				An array of strings containing File Name Patterns
 //
-//			 FilesOlderThan      time.Time
-//			 	Match files with older modification date times
+//			FilesOlderThan      time.Time
+//				Match files with older modification date times
 //
-//			 FilesNewerThan      time.Time
-//			 	Match files with newer modification date times
+//			FilesNewerThan      time.Time
+//				Match files with newer modification date times
 //
-//			 SelectByFileMode    FilePermissionConfig
-//			 	Match file mode (os.FileMode).
+//			RegularExp			*regexp.Regexp
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
 //
-//			 SelectCriterionModeFileSelectCriterionMode
-//			 	Specifies 'AND' or 'OR' selection mode
-//			}
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
+//
+//			SelectByFileMode    FilePermissionConfig
+//				Match file mode (os.FileMode).
+//
+//			SelectCriterionModeFileSelectCriterionMode
+//				Specifies 'AND' or 'OR' selection mode
+//		}
 //
 //		The FileSelectionCriteria type allows for configuration of single or multiple file
 //		selection criterion. The 'SelectCriterionMode' can be used to specify whether the
@@ -6688,6 +6911,16 @@ func (dMgr *DirMgr) FindFilesBySelectCriteria(
 //				the 'FilesNewerThan' date time, that file is
 //				considered a 'match' for this file selection
 //				criterion.
+//
+//			RegularExp			*regexp.Regexp
+//
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
+//
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
 //
 //				If the value of 'FilesNewerThan' is set to
 //				time zero, the default value for type
@@ -6986,23 +7219,32 @@ func (dMgr *DirMgr) FindWalkDirFiles(
 //		matching this criteria will be returned as
 //		'Found Files'.
 //
-//			type FileSelectionCriteria struct {
+//		type FileSelectionCriteria struct {
 //
-//			 FileNamePatterns    []string
+//			FileNamePatterns    []string
 //				An array of strings containing File Name Patterns
 //
-//			 FilesOlderThan      time.Time
-//			 	Match files with older modification date times
+//			FilesOlderThan      time.Time
+//				Match files with older modification date times
 //
-//			 FilesNewerThan      time.Time
-//			 	Match files with newer modification date times
+//			FilesNewerThan      time.Time
+//				Match files with newer modification date times
 //
-//			 SelectByFileMode    FilePermissionConfig
-//			 	Match file mode (os.FileMode).
+//			RegularExp			*regexp.Regexp
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
 //
-//			 SelectCriterionModeFileSelectCriterionMode
-//			 	Specifies 'AND' or 'OR' selection mode
-//			}
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
+//
+//			SelectByFileMode    FilePermissionConfig
+//				Match file mode (os.FileMode).
+//
+//			SelectCriterionModeFileSelectCriterionMode
+//				Specifies 'AND' or 'OR' selection mode
+//		}
 //
 //		The FileSelectionCriteria type allows for configuration of single or multiple file
 //		selection criterion. The 'SelectCriterionMode' can be used to specify whether the
@@ -7062,6 +7304,16 @@ func (dMgr *DirMgr) FindWalkDirFiles(
 //				time.Time{}, then this file selection
 //				criterion is considered to be 'Inactive' or
 //				'Not Set'.
+//
+//			RegularExp			*regexp.Regexp
+//
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
+//
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
 //
 //			SelectByFileMode  FilePermissionConfig
 //
@@ -11497,20 +11749,30 @@ func (dMgr *DirMgr) MakeDir(
 //		operation performed by this method.
 //
 //		type FileSelectionCriteria struct {
-//		 FileNamePatterns    []string
-//			An array of strings containing File Name Patterns
 //
-//		 FilesOlderThan      time.Time
-//		 	Match files with older modification date times
+//			FileNamePatterns    []string
+//				An array of strings containing File Name Patterns
 //
-//		 FilesNewerThan      time.Time
-//		 	Match files with newer modification date times
+//			FilesOlderThan      time.Time
+//				Match files with older modification date times
 //
-//		 SelectByFileMode    FilePermissionConfig
-//		 	Match file mode (os.FileMode).
+//			FilesNewerThan      time.Time
+//				Match files with newer modification date times
 //
-//		 SelectCriterionModeFileSelectCriterionMode
-//		 	Specifies 'AND' or 'OR' selection mode
+//			RegularExp			*regexp.Regexp
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
+//
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
+//
+//			SelectByFileMode    FilePermissionConfig
+//				Match file mode (os.FileMode).
+//
+//			SelectCriterionModeFileSelectCriterionMode
+//				Specifies 'AND' or 'OR' selection mode
 //		}
 //
 //	  The FileSelectionCriteria Type allows for
@@ -11573,6 +11835,16 @@ func (dMgr *DirMgr) MakeDir(
 //				time.Time{}, then this file selection
 //				criterion is considered to be 'Inactive' or
 //				'Not Set'.
+//
+//			RegularExp			*regexp.Regexp
+//
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
+//
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
 //
 //			SelectByFileMode  FilePermissionConfig
 //

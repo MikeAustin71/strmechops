@@ -1560,22 +1560,32 @@ func (fMgrs *FileMgrCollection) DeleteAtIndex(
 //		'startPath' will be searched, and all files
 //		within those directories WILL BE DELETED.
 //
-//			type FileSelectionCriteria struct {
-//			 FileNamePatterns    []string
+//		type FileSelectionCriteria struct {
+//
+//			FileNamePatterns    []string
 //				An array of strings containing File Name Patterns
 //
-//			 FilesOlderThan      time.Time
-//			 	Match files with older modification date times
+//			FilesOlderThan      time.Time
+//				Match files with older modification date times
 //
-//			 FilesNewerThan      time.Time
-//			 	Match files with newer modification date times
+//			FilesNewerThan      time.Time
+//				Match files with newer modification date times
 //
-//			 SelectByFileMode    FilePermissionConfig
-//			 	Match file mode (os.FileMode).
+//			RegularExp			*regexp.Regexp
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
 //
-//			 SelectCriterionModeFileSelectCriterionMode
-//			 	Specifies 'AND' or 'OR' selection mode
-//			}
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
+//
+//			SelectByFileMode    FilePermissionConfig
+//				Match file mode (os.FileMode).
+//
+//			SelectCriterionModeFileSelectCriterionMode
+//				Specifies 'AND' or 'OR' selection mode
+//		}
 //
 //		The FileSelectionCriteria type allows for configuration of single or multiple file
 //		selection criterion. The 'SelectCriterionMode' can be used to specify whether the
@@ -1635,6 +1645,16 @@ func (fMgrs *FileMgrCollection) DeleteAtIndex(
 //				time.Time{}, then this file selection
 //				criterion is considered to be 'Inactive' or
 //				'Not Set'.
+//
+//			RegularExp			*regexp.Regexp
+//
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
+//
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
 //
 //			SelectByFileMode  FilePermissionConfig
 //

@@ -321,7 +321,17 @@ type dirMgrHelperNanobot struct {
 //				criterion is considered to be 'Inactive' or
 //				'Not Set'.
 //
-//			SelectByFileMode  FilePermissionConfig
+//			RegularExp			*regexp.Regexp
+//
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
+//
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
+//
+//			SelectByFileMode  	FilePermissionConfig
 //
 //				Type FilePermissionConfig encapsulates an os.FileMode. The
 //				file selection criterion allows for the selection of files
@@ -339,7 +349,7 @@ type dirMgrHelperNanobot struct {
 //
 //				err = fsc.SelectByFileMode.SetFileModeByTextCode("-r--r--r--")
 //
-//			SelectCriterionMode FileSelectCriterionMode
+//			SelectCriterionMode	FileSelectCriterionMode
 //
 //			This parameter selects the manner in which the file selection
 //			criteria above are applied in determining a 'match' for file
@@ -1191,7 +1201,17 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 //				criterion is considered to be 'Inactive' or
 //				'Not Set'.
 //
-//			SelectByFileMode  FilePermissionConfig
+//			RegularExp			*regexp.Regexp
+//
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
+//
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
+//
+//			SelectByFileMode	FilePermissionConfig
 //
 //				Type FilePermissionConfig encapsulates an os.FileMode. The
 //				file selection criterion allows for the selection of files

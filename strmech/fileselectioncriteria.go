@@ -1,19 +1,24 @@
 package strmech
 
 import (
+	"regexp"
 	"strings"
 	"sync"
 	"time"
 )
 
-// FileSelectionCriteria - Used is selecting file names. These
+// FileSelectionCriteria - Used is selecting files. These
 // data fields specify the criterion used to determine if a
 // file should be selected for some type of operation.
-// Example: find files or delete files operations
+// Examples include operations involving:
+//
+//	Find files, Copy files
+//	or Delete files.
 type FileSelectionCriteria struct {
 	FileNamePatterns []string
-	// A string array containing one or/ more file matching
-	// patterns. Example '*.txt' '*.log' 'common*.*'
+	// A string array containing one or/ more file name
+	// matching  patterns.
+	// Examples: '*.txt' '*.log' 'common*.*'
 
 	FilesOlderThan time.Time
 	// Used to select files with a  modification less than
@@ -22,6 +27,13 @@ type FileSelectionCriteria struct {
 	FilesNewerThan time.Time
 	// Used to select files with a modification greater than
 	// this date time.
+
+	RegularExp *regexp.Regexp
+	// Used to select file names with regular expressions.
+	// If this parameter is NOT equal to nil, file names will
+	// be analyzed using MatchString().
+	//
+	// Example: RegularExp.MatchString("someFileName.txt")
 
 	SelectByFileMode FilePermissionConfig
 	// Used to select files with equivalent os.FileMode values.
@@ -56,7 +68,7 @@ type FileSelectionCriteria struct {
 	//		Select a file if only ONE of the selection
 	//		criterion are satisfied.
 	//
-	// These examples use the longer, format syntax.
+	// These examples use the longer, formal syntax.
 	//
 	// FileSelectCriterionMode(0).None()
 	// FileSelectCriterionMode(0).ANDSelect()
