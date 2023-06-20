@@ -11,18 +11,23 @@ import (
 // file should be selected for some type of operation.
 // Example: find files or delete files operations
 type FileSelectionCriteria struct {
-	// FileNamePatterns - a string array containing one or more file matching
-	// patterns. Example '*.txt' '*.log' 'common*.*'
 	FileNamePatterns []string
+	// A string array containing one or/ more file matching
+	// patterns. Example '*.txt' '*.log' 'common*.*'
 
-	// FilesOlderThan - Used to select files with a modification less than this date time
 	FilesOlderThan time.Time
+	// Used to select files with a  modification less than
+	// this date time.
 
-	// FilesNewerThan - // Used to select files with a modification greater than this date time
 	FilesNewerThan time.Time
+	// Used to select files with a modification greater than
+	// this date time.
 
-	// SelectByFileMode - Used to select files with equivalent os.FileMode values.
-	// To select by File Mode, set the FilePermissionCfg type to the desired value
+	SelectByFileMode FilePermissionConfig
+	// Used to select files with equivalent os.FileMode values.
+	// To select by File Mode, set the FilePermissionCfg type
+	// to the desired value.
+	//
 	//  Examples:
 	//    fsc := FileSelectionCriteria{}
 	//
@@ -30,21 +35,34 @@ type FileSelectionCriteria struct {
 	//    err = fsc.SelectByFileMode.SetFileModeByTextCode("-r--r--r--")
 	//
 	// Note: os.FileMode is an uint32 type.
-	SelectByFileMode FilePermissionConfig
 
-	// SelectCriterionMode - Can be one of three values:
+	SelectCriterionMode FileSelectCriterionMode
+	// An enumeration consisting of methods which return an
+	// integer value. The method names constitute the enumeration.
 	//
-	// FileSelectMode.None()      = No Operation - No File Select Criterion
-	//                                   mode selected
+	// SelectCriterionMode can be one of three values:
 	//
-	// FileSelectMode.ANDSelect() = select a file only if ALL
-	//                                   the selection criterion are satisfied.
+	// This examples uses the abbreviated syntax.
 	//
-	// FileSelectMode.ORSelect()  = select a file if only ONE
-	//                                   of the selection criterion are satisfied.
+	//	FileSelectMode.None()
+	//		No Operation - No File Select Criterion
+	//		mode selected.
+	//
+	//	FileSelectMode.ANDSelect()
+	//		Select a file only if ALL the selection
+	//		criterion are satisfied.
+	//
+	//	FileSelectMode.ORSelect()
+	//		Select a file if only ONE of the selection
+	//		criterion are satisfied.
+	//
+	// These examples use the longer, format syntax.
+	//
+	// FileSelectCriterionMode(0).None()
+	// FileSelectCriterionMode(0).ANDSelect()
+	// FileSelectCriterionMode(0).ORSelect()
 	//
 	// SEE TYPE 'FileSelectCriterionMode'
-	SelectCriterionMode FileSelectCriterionMode
 
 	lock *sync.Mutex
 }
