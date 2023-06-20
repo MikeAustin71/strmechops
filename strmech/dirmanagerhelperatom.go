@@ -1181,7 +1181,7 @@ func (dMgrHlprAtom *dirMgrHelperAtom) lowLevelScreenPathStrForInvalidChars(
 //			TargetDirsCreated        uint64
 //			SourceOriginalSubDirs      uint64
 //			SourceDirWasDeleted      bool
-//			ComputeError             error
+//			Errors             error
 //		}
 //
 //	movedFiles					FileMgrCollection

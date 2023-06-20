@@ -145,7 +145,7 @@ type dirMgrHelperTachyon struct {
 //				The total size of all Non-Regular files residing
 //				in the subject directory expressed in bytes.
 //
-//			ComputeError error
+//			Errors error
 //				Computational or processing errors will be
 //				recorded through this parameter.
 //		}
@@ -332,8 +332,10 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getDirectoryProfile(
 			checkTotalFiles,
 			dirProfile.DirTotalFiles)
 
-		dirProfile.ComputeError = fmt.Errorf("%v",
-			err.Error())
+		dirProfile.Errors = append(
+			dirProfile.Errors,
+			fmt.Errorf("%v",
+				err.Error()))
 	}
 
 	return directoryPathDoesExist, dirProfile, err

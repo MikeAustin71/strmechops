@@ -1199,7 +1199,7 @@ func (dMgr *DirMgr) CopyDirectoryFiles(
 //				FileBytesCopied     uint64
 //				FilesNotCopied      uint64
 //				FileBytesNotCopied  uint64
-//				ComputeError        error
+//				Errors        error
 //			}
 //
 //	copiedDirTreeFiles			FileMgrCollection
@@ -1964,7 +1964,7 @@ func (dMgr *DirMgr) CopyOut(
 //				FileBytesCopied     uint64
 //				FilesNotCopied      uint64
 //				FileBytesNotCopied  uint64
-//				ComputeError        error
+//				Errors        error
 //			}
 //
 //	copiedDirTreeFiles				FileMgrCollection
@@ -7984,7 +7984,7 @@ func (dMgr *DirMgr) GetAbsolutePathWithSeparatorLc() string {
 //				The total size of all Non-Regular files residing
 //				in the subject directory expressed in bytes.
 //
-//			ComputeError error
+//			Errors error
 //				Computational or processing errors will be
 //				recorded through this parameter.
 //		}
@@ -11742,7 +11742,7 @@ func (dMgr *DirMgr) MakeDir(
 //			DirsCreated              uint64
 //			SourceOriginalSubDirs      uint64
 //			SourceDirWasDeleted      bool
-//			ComputeError             error
+//			Errors             error
 //		}
 //
 //	nonfatalErrs				[]error
@@ -11972,7 +11972,7 @@ func (dMgr *DirMgr) MoveDirectoryFiles(
 //			DirsCreated              uint64
 //			SourceOriginalSubDirs      uint64
 //			SourceDirWasDeleted      bool
-//			ComputeError             error
+//			Errors             error
 //		}
 //
 //	nonfatalErrs				[]error
@@ -12170,7 +12170,7 @@ func (dMgr *DirMgr) MoveDirectoryTree(
 //			DirsCreated              uint64
 //			SourceOriginalSubDirs      uint64
 //			SourceDirWasDeleted      bool
-//			ComputeError             error
+//			Errors             error
 //		}
 //
 //	nonfatalErrs				[]error

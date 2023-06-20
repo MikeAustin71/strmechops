@@ -452,9 +452,9 @@ type DirectoryProfile struct {
 	// The total size of all Non-Regular files residing
 	// in the subject directory expressed in bytes.
 
-	ComputeError error
-	// Computational or processing errors will be
-	// recorded through this parameter.
+	Errors []error
+	// An array of errors associated with the
+	// calculation of these statistics.
 
 	lock *sync.Mutex
 }

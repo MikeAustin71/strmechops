@@ -5132,7 +5132,7 @@ func (dMgrHlpr *dirMgrHelper) getParentDirMgr(
 //			DirsCreated              uint64
 //			SourceOriginalSubDirs      uint64
 //			SourceDirWasDeleted      bool
-//			ComputeError             error
+//			Errors             error
 //		}
 //
 //	nonfatalErrs				[]error
@@ -5489,7 +5489,7 @@ func (dMgrHlpr *dirMgrHelper) moveDirectoryTree(
 //			DirsCreated              uint64
 //			SourceOriginalSubDirs      uint64
 //			SourceDirWasDeleted      bool
-//			ComputeError             error
+//			Errors             error
 //		}
 //
 //	nonfatalErrs				[]error
