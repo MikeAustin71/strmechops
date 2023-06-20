@@ -828,7 +828,8 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 			copyRegularFiles,         // getRegularFileInfos
 			copySymLinkFiles,         // copySymLinkFiles,
 			copyOtherNonRegularFiles, // copyOtherNonRegularFiles
-			FileSelectionCriteria{},
+			FileSelectionCriteria{},  // subdirectorySelectCharacteristics
+			FileSelectionCriteria{},  // fileSelectCharacteristics
 			sourceDMgrLabel,
 			ePrefix.XCpy(sourceDMgrLabel))
 
@@ -1891,6 +1892,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 			deleteRegularFiles,         // getRegularFileInfos
 			deleteSymLinkFiles,         // getSymLinksFileInfos
 			deleteOtherNonRegularFiles, // getOtherNonRegularFileInfos
+			FileSelectionCriteria{},    // subdirectorySelectCharacteristics
 			fileSelectCriteria,
 			targetDMgrLabel,
 			ePrefix.XCpy(targetDMgrLabel))

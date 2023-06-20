@@ -1400,7 +1400,8 @@ func (dMgrHlprAtom *dirMgrHelperAtom) moveDirectoryFiles(
 			moveRegularFiles,         // getRegularFileInfos
 			moveSymLinkFiles,         // copySymLinkFiles,
 			moveOtherNonRegularFiles, // copyOtherNonRegularFiles
-			FileSelectionCriteria{},
+			FileSelectionCriteria{},  // subdirectorySelectCharacteristics
+			FileSelectionCriteria{},  // fileSelectCharacteristics
 			sourceDMgrLabel,
 			ePrefix.XCpy(sourceDMgrLabel))
 

@@ -1014,10 +1014,10 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 // lowLevelGetFileInfosFromDir
 //
 // Receives an instance of DirMgr ('dMgr') and proceeds
-// to extract os.FileInfo data describing the files and
-// directories contained in that DirMgr's absolute
-// directory path. The results are returned to the
-// calling function as an array of os.FileInfo objects.
+// to extract os.FileInfo data describing selected
+// subdirectories and files contained in that DirMgr's
+// absolute directory path. The results are returned to
+// the user as an array of os.FileInfo objects.
 //
 // This is a low level method. It is therefore assumed
 // that input parameter 'dMgr' (DirMgr) has been
@@ -1026,7 +1026,9 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 // ensuring that the directory path currently exists on
 // an attached storage drive.
 //
-// The os.FileInfo interface is defined as follows:
+// This method returns os.FileInfo objects describing
+// selected subdirectories and files. The os.FileInfo
+// interface is defined as follows:
 //
 //	 	type FileInfo interface {
 //			 Name() string
@@ -1051,38 +1053,57 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 //
 // Upon completion, this method returns an array of
 // FileInfoPlus objects containing os.FileInfo
-// information on files residing in the directory path
-// specified by input parameter 'dMgr'. Type FileInfoPlus
-// implements the os.FileInfo interface.
+// information on selected subdirectories and files
+// residing in the directory path specified by input
+// parameter 'dMgr'. Type FileInfoPlus implements the
+// os.FileInfo interface, but provides additional
+// information on the subject subdirectory or file.
+//
+// To qualify for selection and inclusion in the returned
+// array of os.FileInfo objects, items residing in the
+// 'dMgr' target directory are divided into two classes,
+// subdirectories and files. Subdirectories are standard
+// directory entries. Files are defined as all artifacts
+// residing in the target directory which are not
+// subdirectories.
+//
+// To qualify as a selected subdirectory, the
+// subdirectory must satisfy two filters. First, input
+// parameter 'getSubdirectoryFileInfos' must be set to
+// 'true'. Second, the subdirectory must satisfy the
+// Directory Characteristics Selection Criteria specified
+// by input parameter, 'subdirectorySelectCharacteristics'.
+// If both of these filter requirements are satisfied, the
+// subdirectory will be added to, and returned by, the
+// os.FileInfo array, 'fileInfos'.
 //
 // To qualify as a selected file, the file entry must
-// comply with two filters: File Type and File
-// Characteristics.
+// also comply with two filters: File Type and File
+// Characteristics. Remember that files are defined as
+// all artifacts residing in the target directory which
+// are not subdirectories.
 //
-// To be eligible for selection, the file must first
-// comply with the specified File Type criteria. In
+// To be eligible for file selection, the file entry must
+// first comply with the specified File Type criteria. In
 // terms of File Type, files are classified as
-// directories, regular files, SymLink files or other
-// non-regular files.
+// regular files, SymLink files or other non-regular files.
 //
 // Screening criteria for File Type is controlled by the
 // following three input parameters:
 //
-//	getDirectoryFileInfos - bool
 //	getRegularFileInfos - bool
 //	getSymLinksFileInfos - bool
 //	getOtherNonRegularFiles - bool
 //
-// File Types eligible for selection include Directories,
-// Regular Files such as text files, image files and
-// executable files, SymLink files and other Non-Regular
-// Files such as device files, named pipes and sockets.
+// File Types eligible for selection include Regular
+// Files such as text files, image files and executable
+// files, SymLink files and other Non-Regular Files such
+// as device files, named pipes and sockets.
 //
 // In addition to File Type, selected files,
-// NOT directories, must also comply with the File
-// Characteristics criteria specified by input parameter,
-// 'fileSelectCriteria'. Directories are NOT subject
-// to the Files Selection Criteria requirement.
+// must also comply with the File Characteristics
+// Selection Criteria specified by input parameter,
+// 'fileSelectCharacteristics'.
 //
 // The File Characteristics Selection criteria allows
 // users to screen files for File Name, File Modification
@@ -1143,46 +1164,55 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 // # IMPORTANT
 //
 //	(1)	This is a low level method. It is therefore
-//		assumed that input parameter 'dMgr' (DirMgr) has
-//		been validated by the calling function. Calling
-//		functions are therefore responsible for
-//		validating 'dMgr' and ensuring that this absolute
-//		directory path currently exists on an attached
-//		storage drive.
+//		assumed that input parameter 'dMgr' (DirMgr) was
+//		previously validated by the calling function.
+//		Calling	functions are responsible for validating
+//		'dMgr' and ensuring that this absolute directory
+//		path currently exists on an attached storage
+//		drive.
 //
-//	(2)	Except for Directories, Files selected for
-//		inclusion in the returned os.FileInfo array
-//		are required to match two sets of selection
-//		criteria, File Type Selection Criteria and File
-//		Characteristics Selection Criteria.
+//	(2)	To qualify as a selected subdirectory, the
+//		subdirectory must satisfy two filters. First,
+//		input parameter 'getSubdirectoryFileInfos' must
+//		be set to 'true'. Second, the subdirectory must
+//		satisfy the Directory Characteristics Selection
+//		Criteria specified by input parameter,
+//		'subdirectorySelectCharacteristics'. If both of
+//		these filter requirements are satisfied, the
+//		subdirectory will be added to, and returned by,
+//		the os.FileInfo array, 'fileInfos'.
 //
-//	(3) File Type Selection Criteria specifications are
-//		passed as input parameters 'getDirectoryFileInfos',
-//		'getRegularFileInfos', 'getSymLinksFileInfos' and
-//		'getOtherNonRegularFiles'. For an explanation of
-//		Regular and Non-Regular files, see the section on
-//		Definition of Terms, above.
+//	(3) All artifacts located in the target directory
+//		defined by input parameter 'dMgr', which are not
+//		subdirectories, are treated as files. To qualify
+//		as a selected file, the file entry must comply
+//		with two filters: File Type and File
+//		Characteristics.
 //
-//	(4) Directories are NOT subject to File Characteristics
-//		Selection Requirements.
+//		File Type Selection Criteria is controlled and
+//		specified by three input parameters:
 //
-//	(6) File Characteristics Selection Criteria are user
-//		specified selection requirements passed as input
-//		parameter 'fileSelectCriteria'. This file
-//		selection criteria allows users to screen files
-//		for File Name, File Modification Date and File
-//		Mode.
+//			getRegularFileInfos - bool
+//			getSymLinksFileInfos - bool
+//			getOtherNonRegularFiles - bool
 //
+//		File Characteristics Selection Criteria is
+//		specified by input parameter
+//		'fileSelectCharacteristics'.
 //
-//	(2) If the directory identified by input parameter
-//		'dMgr' contains NO Files meeting (1) the File
-//		Type Selection Criteria and (2) the File
-//		Characteristics Selection Criteria, this method
-//		will exit, no files will be included in the
-//		returned os.FileInfo array, and no error will
-//		be returned.
+//		If both of these filter requirements are
+//		satisfied, the subject file will be added to, and
+//		returned by, the os.FileInfo array, 'fileInfos'.
 //
-//	(3) If the directory identified by input parameter
+//	(4) If the directory identified by input parameter
+//		'dMgr' contains NO Subdirectories or Files
+//		meeting (1) the File Type Selection Criteria and
+//		(2) the File Characteristics Selection Criteria,
+//		this method will exit, no files will be included
+//		in the returned os.FileInfo array, and no error
+//		will be returned.
+//
+//	(5) If the directory identified by input parameter
 //		'dMgr' contains NO Files whatsoever (0 Files),
 //		this method will exit, no files will be included
 //		in the returned os.FileInfo array, and no error
@@ -1192,7 +1222,7 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 //
 // # Input Parameters
 //
-//	dMgr							*DirMgr
+//	dMgr								*DirMgr
 //
 //		A pointer to an instance of DirMgr. This instance
 //		specifies the absolute directory path which will
@@ -1209,25 +1239,25 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 //		exist on an attached storage drive, errors
 //		will be returned.
 //
-//	getDirectoryFileInfos			bool
+//	getSubdirectoryFileInfos			bool
 //
 //		If this parameter is set to 'true', directory
 //		entries which also meet the File Selection
-//		Characteristics criteria (fileSelectCriteria),
+//		Characteristics criteria (fileSelectCharacteristics),
 //		will be included in the os.FileInfo information
 //		('fileInfos') returned by this method.
 //
-//		If input parameters 'getDirectoryFileInfos',
+//		If input parameters 'getSubdirectoryFileInfos',
 //		'getRegularFileInfos', 'getSymLinksFileInfos' and
 //		'getOtherNonRegularFileInfos' are all set to
 //		'false', they are classified as conflicted and an
 //		error will be returned.
 //
-//	getRegularFileInfos				bool
+//	getRegularFileInfos					bool
 //
 //		If this parameter is set to 'true', regular files,
 //		which also meet the File Selection
-//		Characteristics criteria (fileSelectCriteria),
+//		Characteristics criteria (fileSelectCharacteristics),
 //		will be included in the os.FileInfo information
 //		('fileInfos') returned by this method.
 //
@@ -1238,17 +1268,17 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 //		files, see the section on "Definition Of Terms",
 //		above.
 //
-//		If input parameters 'getDirectoryFileInfos',
+//		If input parameters 'getSubdirectoryFileInfos',
 //		'getRegularFileInfos', 'getSymLinksFileInfos' and
 //		'getOtherNonRegularFileInfos' are all set to
 //		'false', they are classified as conflicted and an
 //		error will be returned.
 //
-//	getSymLinksFileInfos			bool
+//	getSymLinksFileInfos				bool
 //
 //		If this parameter is set to 'true', SymLink files,
 //		which also meet the File Selection
-//		Characteristics criteria (fileSelectCriteria),
+//		Characteristics criteria (fileSelectCharacteristics),
 //		will be included in the os.FileInfo information
 //		('fileInfos') returned by this method.
 //
@@ -1256,18 +1286,18 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 //		files, see the section on "Definition Of Terms",
 //		above.
 //
-//		If input parameters 'getDirectoryFileInfos',
+//		If input parameters 'getSubdirectoryFileInfos',
 //		'getRegularFileInfos', 'getSymLinksFileInfos' and
 //		'getOtherNonRegularFileInfos' are all set to
 //		'false', they are classified as conflicted and an
 //		error will be returned.
 //
-//	getOtherNonRegularFileInfos		bool
+//	getOtherNonRegularFileInfos			bool
 //
 //		If this parameter is set to 'true', Other
 //		Non-Regular files, which also meet the File
 //		Selection Characteristics criteria
-//		(fileSelectCriteria), will be included in the
+//		(fileSelectCharacteristics), will be included in the
 //		os.FileInfo information ('fileInfos') returned by
 //		this method.
 //
@@ -1276,41 +1306,47 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 //		Regular and Non-Regular files, see the section on
 //		"Definition Of Terms", above.
 //
-//		If input parameters 'getDirectoryFileInfos',
+//		If input parameters 'getSubdirectoryFileInfos',
 //		'getRegularFileInfos', 'getSymLinksFileInfos' and
 //		'getOtherNonRegularFileInfos' are all set to
 //		'false', they are classified as conflicted and an
 //		error will be returned.
 //
-//	directorySelectCriteria			FileSelectionCriteria
+//	subdirectorySelectCharacteristics	FileSelectionCriteria
 //
 //		In addition to the File Type Selection Criteria,
-//		selected directories must conform to the File
+//		selected subdirectories must conform to the File
 //		Characteristics Selection Criteria specified by
 //		directorySelectCriteria.
 //
 //		Directory Files matching this selection criteria,
 //		and the	File Type filter specified by input
-//		parameter 'getDirectoryFileInfos', will be
+//		parameter 'getSubdirectoryFileInfos', will be
 //		included in the array of os.FileInfo objects
 //		returned by	this method.
-//
-//		For a detailed explanation of the File
-//		Characteristics Criteria specifications offered
-//		by Type FileSelectionCriteria, see the
-//		documentation for 'fileSelectCriteria', below.
 //
 //		Remember that setting 'directorySelectCriteria'
 //		to an empty instance of FileSelectionCriteria will
 //		ensure that all directories are selected.
 //
+//			Example:
+//			subdirectorySelectCharacteristics =
+//				FileSelectionCriteria{}
 //
-//	fileSelectCriteria				FileSelectionCriteria
+//			This ensures that all subdirectories will satisfy
+//			the Directory Characteristics Selection Criteria.
+//
+//		For a detailed explanation of the File Characteristics
+//		Criteria specifications offered by Type
+//		FileSelectionCriteria, see the documentation for
+//		'fileSelectCharacteristics', below.
+//
+//	fileSelectCharacteristics			FileSelectionCriteria
 //
 //		In addition to the File Type Selection Criteria,
 //		selected files must conform to the File
 //		Characteristics Criteria specified by
-//		'fileSelectCriteria'.
+//		'fileSelectCharacteristics'.
 //
 //		Files matching these selection criteria, and the
 //		File Type filter, will be included in the array of
@@ -1464,7 +1500,7 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 //
 //		------------------------------------------------------------------------
 //
-//	dMgrLabel						string
+//	dMgrLabel							string
 //
 //		The name or label associated with input parameter
 //		'dMgr', which will be used in error messages
@@ -1474,7 +1510,7 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 //		string, a default value of "dMgr" will be
 //		automatically applied.
 //
-//	errPrefDto						*ePref.ErrPrefixDto
+//	errPrefDto							*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
 //		which is included in all returned error
@@ -1493,26 +1529,15 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 //
 // # Return Values
 //
-//	fileInfos						[]FileInfoPlus
+//	fileInfos							[]FileInfoPlus
 //
 //		If this method completes successfully, this
 //		method will return an array of FileInfoPlus
-//		objects containing os.FileInfo data on the files
-//		contained in the directory path specified by
-//		input parameter 'dMgr' which meet the File Type
-//		and File Characteristics Selection Criteria.
-//
-//		File Type Criteria are controlled by the
-//		following input	parameters:
-//
-//			getDirectoryFileInfos
-//			getRegularFileInfos
-//			getSymLinksFileInfos
-//			getOtherNonRegularFiles
-//
-//		File Characteristics Selection Criteria is
-//		specified by input parameter
-//		'fileSelectCriteria'.
+//		objects containing os.FileInfo data on the
+//		subdirectories and files contained in the
+//		directory path specified by input parameter
+//		'dMgr' which meet the File Type and File
+//		Characteristics Selection Criteria.
 //
 //		The returned Type, FileInfoPlus, implements the
 //		os.FileInfo interface, but provides additional
@@ -1542,13 +1567,13 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 //			 	Underlying data source (can return nil)
 //	 	}
 //
-//	lenFileInfos					int
+//	lenFileInfos						int
 //
 //		This returned integer value specifies the length
 //		of the array of os.FileInfo objects, returned as
 //		'fileInfos'.
 //
-//	nonfatalErrs					[]error
+//	nonfatalErrs						[]error
 //
 //		An array of error objects.
 //
@@ -1573,7 +1598,7 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 //		An error array may be consolidated into a single
 //		error using method StrMech.ConsolidateErrors()
 //
-//	fatalErr						error
+//	fatalErr							error
 //
 //		If this method completes successfully, this
 //		returned error Type is set equal to 'nil'.
@@ -1588,12 +1613,12 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 //		message.
 func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelGetFileInfosFromDir(
 	dMgr *DirMgr,
-	getDirectoryFileInfos bool,
+	getSubdirectoryFileInfos bool,
 	getRegularFileInfos bool,
 	getSymLinksFileInfos bool,
 	getOtherNonRegularFileInfos bool,
-	directorySelectCriteria FileSelectionCriteria,
-	fileSelectCriteria FileSelectionCriteria,
+	subdirectorySelectCharacteristics FileSelectionCriteria,
+	fileSelectCharacteristics FileSelectionCriteria,
 	dMgrLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
 	fileInfos []FileInfoPlus,
@@ -1644,7 +1669,7 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelGetFileInfosFromDir(
 		return fileInfos, lenFileInfos, nonfatalErrs, fatalErr
 	}
 
-	if getDirectoryFileInfos == false &&
+	if getSubdirectoryFileInfos == false &&
 		getRegularFileInfos == false &&
 		getSymLinksFileInfos == false &&
 		getOtherNonRegularFileInfos == false {
@@ -1653,7 +1678,7 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelGetFileInfosFromDir(
 			"Fatal Error: File Type filters are conflicted!\n"+
 			"All of the File Type filters are set to 'false'\n"+
 			"This gurantees that NO files will be selected.\n"+
-			"getDirectoryFileInfos == false\n"+
+			"getSubdirectoryFileInfos == false\n"+
 			"getRegularFileInfos == false\n"+
 			"getSymLinksFileInfos == false\n"+
 			"getOtherNonRegularFileInfos == false\n",
@@ -1664,8 +1689,7 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelGetFileInfosFromDir(
 
 	var isSelectAllFileTypes = false
 
-	if getDirectoryFileInfos == true &&
-		getRegularFileInfos == true &&
+	if getRegularFileInfos == true &&
 		getSymLinksFileInfos == true &&
 		getOtherNonRegularFileInfos == true {
 
@@ -1673,11 +1697,11 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelGetFileInfosFromDir(
 
 	}
 
-	isDirSelectionCriteriaActive :=
-		directorySelectCriteria.IsSelectionCriteriaActive()
+	isSubdirectorySelectionCriteriaActive :=
+		subdirectorySelectCharacteristics.IsSelectionCriteriaActive()
 
 	isFileSelectionCriteriaActive :=
-		fileSelectCriteria.IsSelectionCriteriaActive()
+		fileSelectCharacteristics.IsSelectionCriteriaActive()
 
 	var err2 error
 	var nameDirEntries []os.DirEntry
@@ -1715,15 +1739,13 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelGetFileInfosFromDir(
 
 	var osFInfo os.FileInfo
 
-	var isFileTypeFilterMatch bool
+	var isFileTypeMatch bool
 
-	var isMatch bool
+	var isFileCharacteristicsMatch bool
 
 	var fh = new(FileHelper)
 
 	for i := 0; i < lenFileInfos; i++ {
-
-		isFileTypeFilterMatch = false
 
 		osFInfo,
 			err2 = nameDirEntries[i].Info()
@@ -1747,75 +1769,132 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelGetFileInfosFromDir(
 			continue
 		}
 
-		if osFInfo.IsDir() &&
-			getDirectoryFileInfos {
+		isFileTypeMatch = false
+		isFileCharacteristicsMatch = false
 
-			// This is a directory
+		if osFInfo.IsDir() {
+
+			if !getSubdirectoryFileInfos {
+				// The user did NOT request
+				// subdirectories!
+				continue
+			}
+
+			// This is a subdirectory. Subdirectories
+			// have been requested by the user.
 			// Does it meet File Characteristics
 			// Criteria?
 
+			if isSubdirectorySelectionCriteriaActive == false {
+
+				isFileCharacteristicsMatch = true
+
+			} else {
+				// Directory File Characteristics Filter
+				// is ACTIVE!
+
+				isFileCharacteristicsMatch,
+					err2,
+					_ =
+					fh.FilterFileName(
+						osFInfo,
+						subdirectorySelectCharacteristics,
+						ePrefix.XCpy("osFInfo-Directory"))
+
+				if err2 != nil {
+
+					err =
+						fmt.Errorf("%v\n"+
+							"Error returned by fh.FilterFileName(osFInfo, fileSelectCharacteristics).\n"+
+							"%v directorySearched='%v'\n"+
+							"Directory Name='%v'\n"+
+							"Directory Path='%v'\n"+
+							"Error= \n%v\n",
+							funcName,
+							dMgrLabel,
+							dMgr.absolutePath,
+							osFInfo.Name(),
+							dMgr.absolutePath+
+								osPathSepStr+
+								osFInfo.Name(),
+							err2.Error())
+
+					nonfatalErrs = append(nonfatalErrs, err)
+
+					continue
+				}
+
+			}
+
+			if isFileCharacteristicsMatch {
+
+				fileInfos = append(
+					fileInfos, fip.NewFromFileInfo(osFInfo))
+
+			}
+
+			continue
 		}
+
+		// This is a file. NOT a subdirectory!
 
 		if isSelectAllFileTypes == true {
 
-			isFileTypeFilterMatch = true
-
-		} else if osFInfo.IsDir() && getDirectoryFileInfos {
-
-			isFileTypeFilterMatch = true
+			isFileTypeMatch = true
 
 		} else if osFInfo.Mode()&os.ModeSymlink != 0 &&
 			getSymLinksFileInfos {
 
-			isFileTypeFilterMatch = true
+			isFileTypeMatch = true
 
 		} else if !osFInfo.Mode().IsRegular() &&
 			getOtherNonRegularFileInfos {
 
-			isFileTypeFilterMatch = true
+			isFileTypeMatch = true
 
 		} else if osFInfo.Mode().IsRegular() &&
 			getRegularFileInfos {
 
-			isFileTypeFilterMatch = true
+			isFileTypeMatch = true
 
 		} else {
 
 			if getOtherNonRegularFileInfos == true {
 
-				isFileTypeFilterMatch = true
+				isFileTypeMatch = true
 
 			} else {
 
-				isFileTypeFilterMatch = false
+				isFileTypeMatch = false
 			}
 
 		}
 
-		if !isFileTypeFilterMatch {
+		if !isFileTypeMatch {
 			// This file fails the File Type
 			// filter test. Skip it.
 			continue
 		}
 
 		// MUST BE: This file passes the File
-		// Type filter test. Process it.
+		// Type filter test. Continue Processing.
+		// Test for File Characteristics Filter.
 
 		if isFileSelectionCriteriaActive == true {
 
-			isMatch,
+			isFileCharacteristicsMatch,
 				err2,
 				_ =
 				fh.FilterFileName(
 					osFInfo,
-					fileSelectCriteria,
+					fileSelectCharacteristics,
 					ePrefix.XCpy("nameFileInfo"))
 
 			if err2 != nil {
 
 				err =
 					fmt.Errorf("%v\n"+
-						"Error returned by fh.FilterFileName(nameFileInfo, fileSelectCriteria).\n"+
+						"Error returned by fh.FilterFileName(nameFileInfo, fileSelectCharacteristics).\n"+
 						"%v directorySearched='%v'\n"+
 						"fileName='%v'\n"+
 						"File Path='%v'\n"+
@@ -1834,18 +1913,17 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelGetFileInfosFromDir(
 				continue
 			}
 
-			if !isMatch {
-				continue
-			}
+		} else {
+
+			// isFileSelectionCriteriaActive == false
+			isFileCharacteristicsMatch = true
 		}
 
-		// MUST BE:
-		// isFileSelectionCriteriaActive == FALSE
-		// File Type Filter has already been satisfied.
-		// This file is a hit. Save it to fileInfos.
+		if isFileCharacteristicsMatch == true {
 
-		fileInfos = append(
-			fileInfos, fip.NewFromFileInfo(osFInfo))
+			fileInfos = append(
+				fileInfos, fip.NewFromFileInfo(osFInfo))
+		}
 	}
 
 	lenFileInfos = len(fileInfos)
