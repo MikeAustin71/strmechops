@@ -165,10 +165,10 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 // regular files, SymLink files or other non-regular
 // files.
 //
-// Since this method does NOT process directories, the
-// only valid File Types eligible for selection are
-// regular files, SymLink files or other non-regular
-// files.
+// Since this method does NOT process or return
+// subdirectories. The only valid File Types eligible
+// for selection are regular files, SymLink files or
+// other non-regular files.
 //
 // For an explanation of Regular and Non-Regular files,
 // see the Definition of Terms section below.
@@ -379,20 +379,30 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 //		'filesInDir'.
 //
 //		type FileSelectionCriteria struct {
-//		 FileNamePatterns    []string
-//			An array of strings containing File Name Patterns
 //
-//		 FilesOlderThan      time.Time
-//		 	Match files with older modification date times
+//			FileNamePatterns    []string
+//				An array of strings containing File Name Patterns
 //
-//		 FilesNewerThan      time.Time
-//		 	Match files with newer modification date times
+//			FilesOlderThan      time.Time
+//				Match files with older modification date times
 //
-//		 SelectByFileMode    FilePermissionConfig
-//		 	Match file mode (os.FileMode).
+//			FilesNewerThan      time.Time
+//				Match files with newer modification date times
 //
-//		 SelectCriterionModeFileSelectCriterionMode
-//		 	Specifies 'AND' or 'OR' selection mode
+//			RegularExp			*regexp.Regexp
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
+//
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
+//
+//			SelectByFileMode    FilePermissionConfig
+//				Match file mode (os.FileMode).
+//
+//			SelectCriterionModeFileSelectCriterionMode
+//				Specifies 'AND' or 'OR' selection mode
 //		}
 //
 //	  The FileSelectionCriteria Type allows for
@@ -455,6 +465,16 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 //				time.Time{}, then this file selection
 //				criterion is considered to be 'Inactive' or
 //				'Not Set'.
+//
+//			RegularExp			*regexp.Regexp
+//
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
+//
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
 //
 //			SelectByFileMode  FilePermissionConfig
 //
@@ -595,7 +615,7 @@ func (dMgrHlprBoson *dirMgrHelperBoson) getFilesInDir(
 	errPrefDto *ePref.ErrPrefixDto) (
 	numOfFilesLocated uint64,
 	err error) {
-
+	// TODO - Fix errors on dirMgrHelperBoson.getFilesInDir()
 	if dMgrHlprBoson.lock == nil {
 		dMgrHlprBoson.lock = new(sync.Mutex)
 	}

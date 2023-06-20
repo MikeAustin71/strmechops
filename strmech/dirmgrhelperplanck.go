@@ -298,20 +298,30 @@ type dirMgrHelperPlanck struct {
 //		operation performed by this method.
 //
 //		type FileSelectionCriteria struct {
-//		 FileNamePatterns    []string
-//			An array of strings containing File Name Patterns
 //
-//		 FilesOlderThan      time.Time
-//		 	Match files with older modification date times
+//			FileNamePatterns    []string
+//				An array of strings containing File Name Patterns
 //
-//		 FilesNewerThan      time.Time
-//		 	Match files with newer modification date times
+//			FilesOlderThan      time.Time
+//				Match files with older modification date times
 //
-//		 SelectByFileMode    FilePermissionConfig
-//		 	Match file mode (os.FileMode).
+//			FilesNewerThan      time.Time
+//				Match files with newer modification date times
 //
-//		 SelectCriterionModeFileSelectCriterionMode
-//		 	Specifies 'AND' or 'OR' selection mode
+//			RegularExp			*regexp.Regexp
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
+//
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
+//
+//			SelectByFileMode    FilePermissionConfig
+//				Match file mode (os.FileMode).
+//
+//			SelectCriterionModeFileSelectCriterionMode
+//				Specifies 'AND' or 'OR' selection mode
 //		}
 //
 //	  The FileSelectionCriteria Type allows for
@@ -374,6 +384,16 @@ type dirMgrHelperPlanck struct {
 //				time.Time{}, then this file selection
 //				criterion is considered to be 'Inactive' or
 //				'Not Set'.
+//
+//			RegularExp			*regexp.Regexp
+//
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
+//
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
 //
 //			SelectByFileMode  FilePermissionConfig
 //
@@ -1442,21 +1462,31 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //		will be included in the file deletion operation
 //		performed by this method.
 //
-//		type FileSelectionCriteria struct {
-//		 FileNamePatterns    []string
-//			An array of strings containing File Name Patterns
+// /		type FileSelectionCriteria struct {
 //
-//		 FilesOlderThan      time.Time
-//		 	Match files with older modification date times
+//			FileNamePatterns    []string
+//				An array of strings containing File Name Patterns
 //
-//		 FilesNewerThan      time.Time
-//		 	Match files with newer modification date times
+//			FilesOlderThan      time.Time
+//				Match files with older modification date times
 //
-//		 SelectByFileMode    FilePermissionConfig
-//		 	Match file mode (os.FileMode).
+//			FilesNewerThan      time.Time
+//				Match files with newer modification date times
 //
-//		 SelectCriterionModeFileSelectCriterionMode
-//		 	Specifies 'AND' or 'OR' selection mode
+//			RegularExp			*regexp.Regexp
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
+//
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
+//
+//			SelectByFileMode    FilePermissionConfig
+//				Match file mode (os.FileMode).
+//
+//			SelectCriterionModeFileSelectCriterionMode
+//				Specifies 'AND' or 'OR' selection mode
 //		}
 //
 //	  The FileSelectionCriteria type allows for
@@ -1519,6 +1549,16 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //				time.Time{}, then this file selection
 //				criterion is considered to be 'Inactive' or
 //				'Not Set'.
+//
+//			RegularExp			*regexp.Regexp
+//
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
+//
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
 //
 //			SelectByFileMode  FilePermissionConfig
 //
