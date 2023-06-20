@@ -1397,6 +1397,8 @@ func (dMgrHlprAtom *dirMgrHelperAtom) moveDirectoryFiles(
 		lowLevelGetFileInfosFromDir(
 			sourceDMgr,
 			false,                    // getDirectoryFileInfos
+			false,                    // includeSubDirCurrenDirOneDot
+			false,                    // includeSubDirParentDirTwoDots
 			moveRegularFiles,         // getRegularFileInfos
 			moveSymLinkFiles,         // copySymLinkFiles,
 			moveOtherNonRegularFiles, // copyOtherNonRegularFiles

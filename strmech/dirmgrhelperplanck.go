@@ -825,6 +825,8 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 		lowLevelGetFileInfosFromDir(
 			sourceDMgr,
 			returnSubDirsList,        // getDirectoryFileInfos
+			false,                    // includeSubDirCurrenDirOneDot
+			false,                    // includeSubDirParentDirTwoDots
 			copyRegularFiles,         // getRegularFileInfos
 			copySymLinkFiles,         // copySymLinkFiles,
 			copyOtherNonRegularFiles, // copyOtherNonRegularFiles
@@ -1353,6 +1355,12 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //		subdirectories residing in the top level or
 //		parent directory defined by 'targetDMgr' will be
 //		included.
+//
+//		If 'returnSubDirsList' is set to 'true', the
+//		current directory entry (".") and the parent
+//		directory entry ("..") will NOT be returned
+//		in the 'subDirectories' Directory Manager
+//		Collection.
 //
 //		If 'returnSubDirsList' is set to 'false', no
 //		subdirectories will be added to the Directory
@@ -1889,6 +1897,8 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 		lowLevelGetFileInfosFromDir(
 			targetDMgr,
 			returnSubDirsList,          // getDirectoryFileInfos
+			false,                      // includeSubDirCurrenDirOneDot
+			false,                      // includeSubDirParentDirTwoDots
 			deleteRegularFiles,         // getRegularFileInfos
 			deleteSymLinkFiles,         // getSymLinksFileInfos
 			deleteOtherNonRegularFiles, // getOtherNonRegularFileInfos

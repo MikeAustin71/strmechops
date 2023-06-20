@@ -1075,7 +1075,11 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 // by input parameter, 'subdirectorySelectCharacteristics'.
 // If both of these filter requirements are satisfied, the
 // subdirectory will be added to, and returned by, the
-// os.FileInfo array, 'fileInfos'.
+// os.FileInfo array, 'fileInfos'. Be advised that users
+// can control behavior for current directories (".") and
+// parent directories ("..") with input parameters
+// 'includeSubDirCurrenDirOneDot' and
+// 'includeSubDirParentDirTwoDots'.
 //
 // To qualify as a selected file, the file entry must
 // also comply with two filters: File Type and File
@@ -1180,7 +1184,11 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 //		'subdirectorySelectCharacteristics'. If both of
 //		these filter requirements are satisfied, the
 //		subdirectory will be added to, and returned by,
-//		the os.FileInfo array, 'fileInfos'.
+//		the os.FileInfo array, 'fileInfos'. Be advised
+//		that users can control behavior for current
+//		directories (".") and parent directories ("..")
+//		with input parameters 'includeSubDirCurrenDirOneDot'
+//		and 'includeSubDirParentDirTwoDots'.
 //
 //	(3) All artifacts located in the target directory
 //		defined by input parameter 'dMgr', which are not
@@ -1252,6 +1260,28 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 //		'getOtherNonRegularFileInfos' are all set to
 //		'false', they are classified as conflicted and an
 //		error will be returned.
+//
+//	includeSubDirCurrenDirOneDot		bool
+//
+//		This parameter is only used, if input parameter
+//		'getSubdirectoryFileInfos' is set to 'true'.
+//
+//		When this parameter, 'includeSubDirCurrenDirOneDot',
+//		is set to 'true' and input parameter
+//		getSubdirectoryFileInfos' is set to 'true', the current
+//		directory, designated by a single dot ('.'), will be
+//		included in the returned array of os.FileInfo objects.
+//
+//	includeSubDirParentDirTwoDots 		bool
+//
+//		This parameter is only used, if input parameter
+//		'getSubdirectoryFileInfos' is set to 'true'.
+//
+//		When this parameter, 'includeSubDirParentDirTwoDots',
+//		is set to 'true' and input parameter
+//		'getSubdirectoryFileInfos' is set to 'true', the parent
+//		directory, designated by a two dots ('..'), will be
+//		included in the returned array of os.FileInfo objects.
 //
 //	getRegularFileInfos					bool
 //
@@ -1614,6 +1644,8 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelGetFileInfosFromDir(
 	dMgr *DirMgr,
 	getSubdirectoryFileInfos bool,
+	includeSubDirCurrenDirOneDot bool,
+	includeSubDirParentDirTwoDots bool,
 	getRegularFileInfos bool,
 	getSymLinksFileInfos bool,
 	getOtherNonRegularFileInfos bool,
@@ -1724,10 +1756,6 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelGetFileInfosFromDir(
 		return fileInfos, lenFileInfos, nonfatalErrs, fatalErr
 	}
 
-	osPathSepStr := string(os.PathSeparator)
-
-	fip := FileInfoPlus{}
-
 	lenFileInfos = len(nameDirEntries)
 
 	if lenFileInfos == 0 {
@@ -1735,9 +1763,11 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelGetFileInfosFromDir(
 		return fileInfos, lenFileInfos, nonfatalErrs, fatalErr
 	}
 
-	fileInfos = make([]FileInfoPlus, lenFileInfos)
-
 	var osFInfo os.FileInfo
+
+	fip := FileInfoPlus{}
+
+	osPathSepStr := string(os.PathSeparator)
 
 	var isFileTypeMatch bool
 
@@ -1777,6 +1807,32 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelGetFileInfosFromDir(
 			if !getSubdirectoryFileInfos {
 				// The user did NOT request
 				// subdirectories!
+				continue
+			}
+
+			// Process Current Directory Entry
+			if osFInfo.Name() == "." {
+
+				if includeSubDirCurrenDirOneDot == true {
+
+					fileInfos = append(
+						fileInfos, fip.NewFromFileInfo(osFInfo))
+
+				}
+
+				continue
+			}
+
+			// Process Parent Directory Entry
+			if osFInfo.Name() == ".." {
+
+				if includeSubDirParentDirTwoDots == true {
+
+					fileInfos = append(
+						fileInfos, fip.NewFromFileInfo(osFInfo))
+
+				}
+
 				continue
 			}
 
