@@ -1509,6 +1509,7 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) deleteDirectoryTreeFiles(
 				fatalErr
 		}
 	}
+
 	_,
 		err2 = new(dirMgrHelperElectron).
 		getAllSubDirsInDirTree(
@@ -1812,7 +1813,7 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) deleteAllSubDirectories(
 	var targetSubDirs DirMgrCollection
 
 	_,
-		err = new(dirMgrHelperTachyon).
+		err = new(dirMgrHelperPreon).
 		getSubdirectories(
 			dMgr,
 			&targetSubDirs,

@@ -115,85 +115,12 @@ type dirMgrHelperPreon struct {
 //
 // # Return Values
 //
-//	dirProfile					DirectoryProfile
+//	numOfSubDirsReturned		int
 //
-//		If this method completes successfully, this
-//		returned instance of DirectoryProfile will be
-//		populated with profile and statistical
-//		information on the parent directory identified by
-//		input parameter 'dMgr'.
-//
-//		type DirectoryProfile struct {
-//
-//			DirAbsolutePath string
-//				The absolute directory path for the
-//				directory described by this profile
-//				information.
-//
-//			DirExistsOnStorageDrive bool
-//				If 'true', this paramter signals
-//				that the directory actually exists on
-//				a storage drive.
-//
-//			DirTotalFiles uint64
-//				The number of total files, of all types,
-//				residing in the subject directory. This
-//				includes directory entry files, Regular
-//				Files, SymLink Files and Non-Regular
-//				Files.
-//
-//			DirTotalFileBytes uint64
-//				The size of all files, of all types,
-//				residing in the subject directory
-//				expressed in bytes. This includes
-//				directory entry files, Regular Files,
-//				SymLink Files and Non-Regular Files.
-//
-//			DirSubDirectories uint64
-//				The number of subdirectories residing
-//				within the subject directory. This
-//
-//			DirSubDirectoriesBytes uint64
-//				The total size of all Subdirectory entries
-//				residing in the subject directory expressed
-//				in bytes.
-//
-//			DirRegularFiles uint64
-//				The number of 'Regular' Files residing
-//				within the subject Directory. Regular
-//				files include text files, image files
-//				and executable files. Reference:
-//				https://www.computerhope.com/jargon/r/regular-file.htm
-//
-//			DirRegularFileBytes uint64
-//				The total size of all 'Regular' files
-//				residing in the subject directory expressed
-//				in bytes.
-//
-//			DirSymLinkFiles uint64
-//				The number of SymLink files residing in the
-//				subject directory.
-//
-//			DirSymLinkFileBytes uint64
-//				The total size of all SymLink files
-//				residing in the subject directory
-//				expressed in bytes.
-//
-//			DirNonRegularFiles uint64
-//				The total number of Non-Regular files residing
-//				in the subject directory.
-//
-//				Non-Regular files include directories, device
-//				files, named pipes, sockets, and symbolic links.
-//
-//			DirNonRegularFileBytes uint64
-//				The total size of all Non-Regular files residing
-//				in the subject directory expressed in bytes.
-//
-//			Errors error
-//				Computational or processing errors will be
-//				recorded through this parameter.
-//		}
+//		This integer value returns the number of
+//		subdirectories added by this method to the
+//		Directory Manager Collection passed as
+//		input parameter.
 //
 //	err							error
 //
@@ -213,7 +140,7 @@ func (dMgrHlprPreon *dirMgrHelperPreon) getSubdirectories(
 	subDirectories *DirMgrCollection,
 	dMgrLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
-	dirProfile DirectoryProfile,
+	numOfSubDirsReturned int,
 	err error) {
 
 	if dMgrHlprPreon.lock == nil {
@@ -237,7 +164,7 @@ func (dMgrHlprPreon *dirMgrHelperPreon) getSubdirectories(
 
 	if err != nil {
 
-		return dirProfile, err
+		return numOfSubDirsReturned, err
 	}
 
 	if subDirectories == nil {
@@ -246,7 +173,7 @@ func (dMgrHlprPreon *dirMgrHelperPreon) getSubdirectories(
 			"Error: Input parameter 'subDirectories' is a 'nil' pointer!\n",
 			ePrefix.String())
 
-		return dirProfile, err
+		return numOfSubDirsReturned, err
 	}
 
 	if len(dMgrLabel) == 0 {
@@ -266,80 +193,66 @@ func (dMgrHlprPreon *dirMgrHelperPreon) getSubdirectories(
 
 	if err != nil {
 
-		return dirProfile, err
+		return numOfSubDirsReturned, err
 	}
 
-	dirProfile.DirAbsolutePath = dMgr.absolutePath
-	dirProfile.DirExistsOnStorageDrive = true
+	var fileInfos []FileInfoPlus
+	var lenFileInfos int
+	var nonFatalErrs []error
+	var fatalErr, err2 error
 
-	var err2 error
-	var nameDirEntries []os.DirEntry
-
-	nameDirEntries,
-		err2 = os.ReadDir(dMgr.absolutePath)
+	fileInfos,
+		lenFileInfos,
+		nonFatalErrs,
+		err2 = new(dirMgrHelperMolecule).
+		lowLevelGetFileInfosFromDir(
+			dMgr,
+			true,                    // getSubdirectoryFileInfos
+			false,                   // includeSubDirCurrenDirOneDot
+			false,                   // includeSubDirParentDirTwoDots
+			false,                   // getRegularFileInfos
+			false,                   // getSymLinksFileInfos
+			false,                   // getOtherNonRegularFileInfos
+			FileSelectionCriteria{}, // subdirectorySelectCharacteristics
+			FileSelectionCriteria{}, // fileSelectCharacteristics
+			dMgrLabel,
+			ePrefix)
 
 	if err2 != nil {
 
-		err = fmt.Errorf("%v\n"+
-			"Error returned by os.ReadDir(%v.absolutePath).\n"+
-			"%v.absolutePath='%v'\n"+
+		fatalErr = fmt.Errorf("%v\n"+
+			"Error occurred while selecting subdirectories.\n"+
+			"%v Absolute Path= '%v'\n"+
 			"Error= \n%v\n",
-			ePrefix.String(),
-			dMgrLabel,
+			funcName,
 			dMgrLabel,
 			dMgr.absolutePath,
 			err2.Error())
 
-		return dirProfile, err
+		nonFatalErrs = append(
+			nonFatalErrs, fatalErr)
+
+		err = new(StrMech).ConsolidateErrors(nonFatalErrs)
+
+		return numOfSubDirsReturned, err
+
 	}
 
-	if len(nameDirEntries) == 0 {
+	if lenFileInfos == 0 {
 
-		return dirProfile, err
+		return numOfSubDirsReturned, err
 	}
 
 	osPathSepStr := string(os.PathSeparator)
 
-	var fInfo os.FileInfo
+	for i := 0; i < lenFileInfos; i++ {
 
-	for _, dirEntry := range nameDirEntries {
-
-		fInfo,
-			err2 = dirEntry.Info()
-
-		if err2 != nil {
-
-			err = fmt.Errorf("%v\n"+
-				"Conversion of Direct Entry to os.FileInfo Failed!\n"+
-				"Error returned by dirEntry.Info().\n"+
-				"%v.absolutePath='%v'\n"+
-				"Error= \n%v\n",
-				ePrefix.String(),
-				dMgrLabel,
-				dMgr.absolutePath,
-				err2.Error())
-
-			return dirProfile, err
-		}
-
-		if fInfo.IsDir() {
-
-			if fInfo.Name() == "." ||
-				fInfo.Name() == ".." {
-
-				// Skip the current directory and
-				// the parent directory entries.
-				continue
-			}
-
-			dirProfile.DirSubDirectories++
-			dirProfile.DirSubDirectoriesBytes +=
-				uint64(fInfo.Size())
+		if fileInfos[i].IsDir() {
 
 			err2 = subDirectories.
 				AddDirMgrByKnownPathDirName(
 					dMgr.absolutePath,
-					fInfo.Name(),
+					fileInfos[i].Name(),
 					ePrefix.XCpy(
 						"subDirectories<-dMgr"))
 
@@ -351,85 +264,26 @@ func (dMgrHlprPreon *dirMgrHelperPreon) getSubdirectories(
 					"%v Absolute Path= '%v'\n"+
 					"Subdirectory Name= '%v'\n"+
 					"Subdirectory Path= '%v'\n"+
+					"Index= '%v'\n"+
 					"Error=\n%v\n",
 					funcName,
 					dMgrLabel,
 					dMgr.absolutePath,
-					fInfo.Name(),
+					fileInfos[i].Name(),
 					dMgr.absolutePath+
 						osPathSepStr+
-						fInfo.Name(),
+						fileInfos[i].Name(),
+					i,
 					err2.Error())
 
-				return dirProfile, err
+				return numOfSubDirsReturned, err
 			}
 
-		} else {
-			// This must be a file
-			if fInfo.Mode().IsRegular() {
-
-				dirProfile.DirTotalFiles++
-				dirProfile.DirTotalFileBytes +=
-					uint64(fInfo.Size())
-
-				dirProfile.DirRegularFiles++
-				dirProfile.DirRegularFileBytes +=
-					uint64(fInfo.Size())
-
-			} else if fInfo.Mode()&os.ModeSymlink != 0 {
-
-				dirProfile.DirTotalFiles++
-				dirProfile.DirTotalFileBytes +=
-					uint64(fInfo.Size())
-
-				dirProfile.DirSymLinkFiles++
-				dirProfile.DirSymLinkFileBytes +=
-					uint64(fInfo.Size())
-
-			} else {
-
-				dirProfile.DirTotalFiles++
-				dirProfile.DirTotalFileBytes +=
-					uint64(fInfo.Size())
-
-				dirProfile.DirNonRegularFiles++
-				dirProfile.DirNonRegularFileBytes +=
-					uint64(fInfo.Size())
-
-			}
+			numOfSubDirsReturned++
 		}
-
 	}
 
-	var checkTotalFiles uint64
-
-	checkTotalFiles =
-		dirProfile.DirRegularFiles +
-			dirProfile.DirSymLinkFiles +
-			dirProfile.DirNonRegularFiles
-
-	if dirProfile.DirTotalFiles !=
-		checkTotalFiles {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: The Total Number of Files Processed"+
-			"does NOT equal the sum of file type categories.\n"+
-			"dirProfile.DirSubDirectories +\n"+
-			"dirProfile.DirRegularFiles +\n"+
-			"dirProfile.DirSymLinkFiles +\n"+
-			"dirProfile.DirNonRegularFiles = %v\n"+
-			"The Total Number of files Processed = %v\n",
-			ePrefix.String(),
-			checkTotalFiles,
-			dirProfile.DirTotalFiles)
-
-		dirProfile.Errors = append(
-			dirProfile.Errors,
-			fmt.Errorf("%v",
-				err.Error()))
-	}
-
-	return dirProfile, err
+	return numOfSubDirsReturned, err
 }
 
 // validateDirMgr

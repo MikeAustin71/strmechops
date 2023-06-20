@@ -9965,16 +9965,12 @@ func (dMgr *DirMgr) GetPathWithSeparator() string {
 //
 // # Return Values
 //
-//	numOfSubdirectories			uint64
+//	numOfSubdirectories			int
 //
 //		If this method completes successfully without
 //		error, this parameter will return the number
 //		of subdirectories located in the directory tree
-//		defined by the current instance of DirMgr. This
-//		uint64 value also represents the number of
-//		subdirectories added to the Directory Manager
-//		Collection passed as input parameter
-//		'subDirectories'.
+//		defined by the current instance of DirMgr.
 //
 //	err							error
 //
@@ -9991,7 +9987,7 @@ func (dMgr *DirMgr) GetPathWithSeparator() string {
 func (dMgr *DirMgr) GetSubdirectoriesDirTree(
 	subDirectories *DirMgrCollection,
 	errorPrefix interface{}) (
-	numOfSubdirectories uint64,
+	numOfSubdirectories int,
 	err error) {
 
 	if dMgr.lock == nil {
@@ -10025,20 +10021,13 @@ func (dMgr *DirMgr) GetSubdirectoriesDirTree(
 		return numOfSubdirectories, err
 	}
 
-	var dirProfile DirectoryProfile
-
-	dirProfile,
+	numOfSubdirectories,
 		err = new(dirMgrHelperElectron).
 		getAllSubDirsInDirTree(
 			dMgr,
 			subDirectories,
 			"dMgr",
 			ePrefix)
-
-	if err == nil {
-		numOfSubdirectories =
-			dirProfile.DirSubDirectories
-	}
 
 	return numOfSubdirectories, err
 }
@@ -10162,13 +10151,10 @@ func (dMgr *DirMgr) GetSubdirectoriesDirTree(
 //
 // # Return Values
 //
-//	numOfSubdirectories			uint64
+//	numOfSubdirectories			int
 //
-//		If this method completes successfully, without
-//		error, this parameter will return the number
-//		of subdirectories located in the parent directory
-//		defined by the current instance of DirMgr. This
-//		uint64 value also represents the number of
+//		If this method completes successfully, this
+//		integer value represents the number of
 //		subdirectories added to the Directory Manager
 //		Collection passed as input parameter
 //		'subDirectories'.
@@ -10188,7 +10174,7 @@ func (dMgr *DirMgr) GetSubdirectoriesDirTree(
 func (dMgr *DirMgr) GetSubdirectoriesParentDir(
 	subDirectories *DirMgrCollection,
 	errorPrefix interface{}) (
-	numOfSubdirectories uint64,
+	numOfSubdirectories int,
 	err error) {
 
 	if dMgr.lock == nil {
@@ -10222,20 +10208,13 @@ func (dMgr *DirMgr) GetSubdirectoriesParentDir(
 		return numOfSubdirectories, err
 	}
 
-	var dirProfile DirectoryProfile
-
-	dirProfile,
+	numOfSubdirectories,
 		err = new(dirMgrHelperPreon).
 		getSubdirectories(
 			dMgr,
 			subDirectories,
 			"dMgr",
 			ePrefix)
-
-	if err == nil {
-		numOfSubdirectories =
-			dirProfile.DirSubDirectories
-	}
 
 	return numOfSubdirectories, err
 }

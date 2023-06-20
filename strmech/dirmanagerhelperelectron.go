@@ -386,85 +386,13 @@ func (dMgrHlprElectron *dirMgrHelperElectron) isPathStringEmptyOrBlank(
 //
 // # Return Values
 //
-//	dirTreeProfile				DirectoryProfile
+//	numOfSubdirectories			int
 //
 //		If this method completes successfully, this
-//		returned instance of DirectoryProfile will be
-//		populated with cumulative profile and statistical
-//		information on the entire directory tree defined
-//		by input parameter 'dMgr'.
-//
-//		type DirectoryProfile struct {
-//
-//			DirAbsolutePath string
-//				The absolute directory path for the
-//				directory described by this profile
-//				information.
-//
-//			DirExistsOnStorageDrive bool
-//				If 'true', this paramter signals
-//				that the directory actually exists on
-//				a storage drive.
-//
-//			DirTotalFiles uint64
-//				The number of total files, of all types,
-//				residing in the subject directory. This
-//				includes directory entry files, Regular
-//				Files, SymLink Files and Non-Regular
-//				Files.
-//
-//			DirTotalFileBytes uint64
-//				The size of all files, of all types,
-//				residing in the subject directory
-//				expressed in bytes. This includes
-//				directory entry files, Regular Files,
-//				SymLink Files and Non-Regular Files.
-//
-//			DirSubDirectories uint64
-//				The number of subdirectories residing
-//				within the subject directory. This
-//
-//			DirSubDirectoriesBytes uint64
-//				The total size of all Subdirectory entries
-//				residing in the subject directory expressed
-//				in bytes.
-//
-//			DirRegularFiles uint64
-//				The number of 'Regular' Files residing
-//				within the subject Directory. Regular
-//				files include text files, image files
-//				and executable files. Reference:
-//				https://www.computerhope.com/jargon/r/regular-file.htm
-//
-//			DirRegularFileBytes uint64
-//				The total size of all 'Regular' files
-//				residing in the subject directory expressed
-//				in bytes.
-//
-//			DirSymLinkFiles uint64
-//				The number of SymLink files residing in the
-//				subject directory.
-//
-//			DirSymLinkFileBytes uint64
-//				The total size of all SymLink files
-//				residing in the subject directory
-//				expressed in bytes.
-//
-//			DirNonRegularFiles uint64
-//				The total number of Non-Regular files residing
-//				in the subject directory.
-//
-//				Non-Regular files include directories, device
-//				files, named pipes, sockets, and symbolic links.
-//
-//			DirNonRegularFileBytes uint64
-//				The total size of all Non-Regular files residing
-//				in the subject directory expressed in bytes.
-//
-//			Errors error
-//				Computational or processing errors will be
-//				recorded through this parameter.
-//		}
+//		integer value represents the number of
+//		subdirectories added to the Directory Manager
+//		Collection passed as input parameter
+//		'subDirectories'.
 //
 //	err							error
 //
@@ -483,7 +411,7 @@ func (dMgrHlprElectron *dirMgrHelperElectron) getAllSubDirsInDirTree(
 	subDirectories *DirMgrCollection,
 	dMgrLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
-	dirTreeProfile DirectoryProfile,
+	numOfSubdirectories int,
 	err error) {
 
 	if dMgrHlprElectron.lock == nil {
@@ -506,7 +434,7 @@ func (dMgrHlprElectron *dirMgrHelperElectron) getAllSubDirsInDirTree(
 		"")
 
 	if err != nil {
-		return dirTreeProfile, err
+		return numOfSubdirectories, err
 	}
 
 	if subDirectories == nil {
@@ -515,7 +443,7 @@ func (dMgrHlprElectron *dirMgrHelperElectron) getAllSubDirsInDirTree(
 			"Error: Input parameter 'subDirectories' is a 'nil' pointer!\n",
 			ePrefix.String())
 
-		return dirTreeProfile, err
+		return numOfSubdirectories, err
 	}
 
 	if len(dMgrLabel) == 0 {
@@ -534,21 +462,14 @@ func (dMgrHlprElectron *dirMgrHelperElectron) getAllSubDirsInDirTree(
 
 	if err != nil {
 
-		return dirTreeProfile, err
+		return numOfSubdirectories, err
 	}
 
-	dirTreeProfile.DirAbsolutePath =
-		dMgr.absolutePath
-
-	dirTreeProfile.DirExistsOnStorageDrive =
-		true
-
-	originalLenOfSubDirsCol := len(subDirectories.dirMgrs)
-
-	var dirProfile DirectoryProfile
 	var dMgrHlprPreon = new(dirMgrHelperPreon)
 
-	dirProfile,
+	originalSubDirsLen := len(subDirectories.dirMgrs)
+
+	numOfSubdirectories,
 		err = dMgrHlprPreon.
 		getSubdirectories(
 			dMgr,
@@ -558,32 +479,26 @@ func (dMgrHlprElectron *dirMgrHelperElectron) getAllSubDirsInDirTree(
 
 	if err != nil {
 
-		return dirTreeProfile, err
+		return numOfSubdirectories, err
 	}
 
-	if len(subDirectories.dirMgrs) <= originalLenOfSubDirsCol {
-		// There are no subdirectories
+	if numOfSubdirectories == 0 {
 
-		return dirTreeProfile, err
+		return numOfSubdirectories, err
+
 	}
-
-	dirTreeProfile.
-		AddDirProfileStats(dirProfile)
 
 	var idx = 0
 
-	if originalLenOfSubDirsCol <= 0 {
+	if originalSubDirsLen > 0 {
 
-		idx = 0
-
-	} else {
-
-		idx = originalLenOfSubDirsCol
+		idx = originalSubDirsLen
 	}
 
 	var subDirDMgr DirMgr
 	var dMgrColHelper = new(dirMgrCollectionHelper)
 	var errStatus ArrayColErrorStatus
+	numOfSubdirectories = 0
 
 	for idx >= 0 {
 
@@ -614,10 +529,12 @@ func (dMgrHlprElectron *dirMgrHelperElectron) getAllSubDirsInDirTree(
 				idx,
 				errStatus.ProcessingError.Error())
 
-			return dirTreeProfile, err
+			return numOfSubdirectories, err
 		}
 
-		dirProfile,
+		numOfSubdirectories++
+
+		_,
 			err = dMgrHlprPreon.
 			getSubdirectories(
 				&subDirDMgr,
@@ -627,16 +544,13 @@ func (dMgrHlprElectron *dirMgrHelperElectron) getAllSubDirsInDirTree(
 
 		if err != nil {
 
-			return dirTreeProfile, err
+			return numOfSubdirectories, err
 		}
-
-		dirTreeProfile.
-			AddDirProfileStats(dirProfile)
 
 		idx++
 	}
 
-	return dirTreeProfile, errStatus.ProcessingError
+	return numOfSubdirectories, errStatus.ProcessingError
 }
 
 // lowLevelDoesDirectoryExist
