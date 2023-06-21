@@ -151,26 +151,26 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 
 // getSubDirsFilesInDir
 //
-// This method scans a single directory path designated
-// by input parameter 'dMgr' and returns information on
-// selected subdirectories and selected files. The
-// selected subdirectories are returned through a
-// Directory Manager Collection passed as input parameter
-// 'subDirsInDir'. The selected files are returned
-// through a File Manager Collection passed as input
-// parameter 'filesInDir'.
+// This method scans a single target directory path
+// designated by input parameter 'targetDMgr' and returns
+// information on selected subdirectories and selected
+// files. The selected subdirectories are returned
+// through a Directory Manager Collection passed as input
+// parameter 'subDirsInDir'. The selected files are
+// returned through a File Manager Collection passed as
+// input parameter 'filesInDir'.
 //
 // To qualify for selection and inclusion in the returned
 // Directory and File Manager Collections, items residing
-// in the 'dMgr' target directory are divided into two
-// classes, subdirectories and files. Subdirectories are
-// standard directory entries. Files are defined as all
-// artifacts residing in the target directory which are
-// not subdirectories.
+// in the 'targetDMgr' target directory are divided into
+// two classes, subdirectories and files. Subdirectories
+// are standard directory entries. Files are defined as
+// all artifacts residing in the target directory which
+// are not subdirectories.
 //
 // To qualify as a selected subdirectory, the
 // subdirectory must satisfy two filters. First, input
-// parameter 'getSubdirectoryFileInfos' must be set to
+// parameter 'getSubdirectories' must be set to
 // 'true'. Second, the subdirectory must satisfy the
 // Directory Characteristics Selection Criteria specified
 // by input parameter, 'subDirSelectCharacteristics'. If
@@ -212,7 +212,8 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 //
 // The File Characteristics Selection criteria allows
 // users to screen files for File Name, File Modification
-// Date and File Mode.
+// Date and File Mode. File Name selections can be based
+// on pattern matches or regular expression matches.
 //
 // ----------------------------------------------------------------
 //
@@ -269,47 +270,62 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 // # IMPORTANT
 //
 //	(1)	This method will select and return information on
-//		files in the directory specified by input
-//		parameter 'targetDMgr'. No subdirectories will be
-//		searched for eligible files. Only the top level
-//		or parent directory identified by 'targetDMgr'
-//		will be searched for eligible files.
+//		subdirectories and files in the target directory
+//	 	specified by input parameter 'targetDMgr'. No
+//	 	subdirectories will be searched for eligible
+//	 	files. Only the top level or parent directory
+//	 	identified by 'targetDMgr' will be searched for
+//	 	eligible subdirectories and files.
 //
-//	(2)	The files to be selected are required to match
-//		two sets of selection criteria, File Type
-//		Selection Criteria and File Characteristics
-//		Selection Criteria.
+//	(2) Selected subdirectories are required to fulfill
+//		two requirements.
 //
-//	(3) File Type Selection Criteria specifications are
+//		First, to select subdirectories, input parameter
+//		'getSubdirectories' must be set to 'true'.
+//
+//		Second, subdirectories must conform to the
+//		Directory Characteristics Selection Criteria
+//		specified by input parameter
+//		'subDirSelectCharacteristics'. This subdirectory
+//		selection criteria allows users to screen
+//	 	subdirectories for Name, Modification Date and
+//	 	File Mode. Subdirectory Name selections can be
+//	 	configured for pattern matches or regular
+//	 	expression matches.
+//
+//	(3)	Selected files are required to match two sets
+//		of selection criteria, File Type and File
+//		Characteristics	Selection Criteria.
+//
+//		File Type Selection Criteria specifications are
 //		passed as input parameters 'getRegularFiles',
 //		'getSymLinksFiles' and 'getOtherNonRegularFiles'.
 //		For an explanation of Regular and Non-Regular
 //		files, see the section on "Definition of Terms",
 //		above.
 //
-//	(4) File Characteristics Selection Criteria are user
+//		File Characteristics Selection Criteria are user
 //		specified selection requirements passed as input
 //		parameter 'fileSelectCriteria'. This file
 //		selection criteria allows users to screen files
 //		for File Name, File Modification Date and File
-//		Mode.
+//		Mode. File Name selections can be based on
+//		pattern matches or regular expression matches.
+//
+//	(4) If the target directory identified by input
+//		parameter 'targetDMgr' contains NO subdirectories
+//		or files matching the Type and Characteristics
+//		selection criteria, this method will exit, no
+//		subdirectories or files will be added to the
+//		Directory Manager or File Manager Collections,
+//		and no error will be returned.
 //
 //	(5) If the target directory identified by input
-//		parameter 'targetDMgr' contains NO Files meeting
-//		(1) the File Type Selection Criteria and (2) the
-//		File Characteristics Selection Criteria, this
-//		method will exit, no files will be added to the
-//		'filesInDir' File Manager Collection and no error
-//		will be returned.
-//
-//	(6) If the target directory identified by input
 //		parameter 'targetDMgr' contains NO Files
 //		whatsoever (0 Files), this method will exit, no
-//		files will be added to the 'filesInDir' File
-//		Manager Collection and no error will be returned.
-//
-//	(7)	This method will NOT return file information on
-//		subdirectories.
+//		subdirectories or files will be added to the
+//		Directory Manager or File Manager Collections,
+//		and no error will be returned.
 //
 // ----------------------------------------------------------------
 //
@@ -318,13 +334,58 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 //	targetDMgr					*DirMgr
 //
 //		An instance of DirMgr which identifies the
-//		target directory for a file search to return
-//		information of selected files. Information on
-//		files in this directory matching the specified
-//		File Type and File Characteristics selection
-//		criteria will be returned as File Manager objects
-//		in a File Manager Collection passed as
-//		'filesInDir'.
+//		target directory where the search for
+//		subdirectories and/or files will be conducted.
+//		Information on subdirectories and files in this
+//		directory matching the required selection
+//		criteria will be returned in Directory Manager
+//		and File Manager Collections.
+//
+//	getSubdirectories			bool
+//
+//		If this parameter is set to 'true', directory
+//		entries which also meet the Directory Selection
+//		Characteristics criteria (subDirSelectCharacteristics),
+//		will be stored and returned in the Directory Manager
+//		Collection passed as input parameter 'subDirsInDir'.
+//
+//		If input parameters 'getSubdirectories',
+//		'getRegularFiles', 'getSymLinksFiles' and
+//		'getOtherNonRegularFiles' are all set to 'false',
+//		these parameters will be classified as conflicted
+//		and an error will be returned.
+//
+//	includeSubDirCurrenDirOneDot		bool
+//
+//		This parameter is only used, if input parameter
+//		'getSubdirectories' is set to 'true'.
+//
+//		All directories include an os.FileInfo entry for
+//		the current directory. The current directory name
+//		is always denoted as single dot ('.').
+//
+//		When this parameter, 'includeSubDirCurrenDirOneDot',
+//		is set to 'true' and input parameter
+//		getSubdirectories' is set to 'true', the current
+//		directory, designated as a single dot ('.'), will be
+//		added to the Directory Manager Collection passed as
+//		input parameter 'subDirsInDir'.
+//
+//	includeSubDirParentDirTwoDots 		bool
+//
+//		This parameter is only used, if input parameter
+//		'getSubdirectories' is set to 'true'.
+//
+//		All directories include an os.FileInfo entry for
+//		the parent directory. The parent directory name
+//		is always denoted as two dots ('..').
+//
+//		When this parameter, 'includeSubDirParentDirTwoDots',
+//		is set to 'true' and input parameter
+//		getSubdirectories' is set to 'true', the parent
+//		directory, designated as two dots ('..'), will be
+//		added to the Directory Manager Collection passed as
+//		input parameter 'subDirsInDir'.
 //
 //	getRegularFiles				bool
 //
@@ -333,7 +394,7 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 //		selection criteria ('fileSelectCriteria'), will
 //		be included in the file information returned
 //		through the File Manager Collection passed as
-//		 input parameter 'filesInDir'.
+//		input parameter 'filesInDir'.
 //
 //		Regular Files include text files, image files and
 //		executable files.
@@ -342,11 +403,11 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 //		files, see the section on "Definition Of Terms",
 //		above.
 //
-//		If input parameters 'getRegularFiles',
-//		'getSymLinksFiles' and 'getOtherNonRegularFiles'
-//		are all set to 'false', these parameters will be
-//		classified as conflicted and an error will be
-//		returned.
+//		If input parameters 'getSubdirectories',
+//		'getRegularFiles', 'getSymLinksFiles' and
+//		'getOtherNonRegularFiles' are all set to 'false',
+//		these parameters will be classified as conflicted
+//		and an error will be returned.
 //
 //	getSymLinksFiles			bool
 //
@@ -361,11 +422,11 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 //		files, see the section on "Definition Of Terms",
 //		above.
 //
-//		If input parameters 'getRegularFiles',
-//		'getSymLinksFiles' and 'getOtherNonRegularFiles'
-//		are all set to 'false', these parameters will be
-//		classified as conflicted and an error will be
-//		returned.
+//		If input parameters 'getSubdirectories',
+//		'getRegularFiles', 'getSymLinksFiles' and
+//		'getOtherNonRegularFiles' are all set to 'false',
+//		these parameters will be classified as conflicted
+//		and an error will be returned.
 //
 //	getOtherNonRegularFiles		bool
 //
@@ -381,11 +442,46 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 //		include device files, named pipes, and sockets.
 //		See the Definition Of Terms section above.
 //
-//		If input parameters 'getRegularFiles',
-//		'getSymLinksFiles' and 'getOtherNonRegularFiles'
-//		are all set to 'false', these parameters will be
-//		classified as conflicted and an error will be
-//		returned.
+//		If input parameters 'getSubdirectories',
+//		'getRegularFiles', 'getSymLinksFiles' and
+//		'getOtherNonRegularFiles' are all set to 'false',
+//		these parameters will be classified as conflicted
+//		and an error will be returned.
+//
+//	subDirSelectCharacteristics FileSelectionCriteria
+//
+//		In addition to the File Type Selection Criteria,
+//		selected subdirectories must conform to the File
+//		Characteristics Selection Criteria specified by
+//		directorySelectCriteria.
+//
+//		This subdirectory selection criteria allows users
+//		to screen subdirectories for Name, Modification
+//		Date and File Mode. Subdirectory Name selections
+//		can be configured for pattern matches or regular
+//		expression matches.
+//
+//		Directory os.FileIno files matching this
+//		selection criteria, and the filter specified by
+//		input parameter 'getSubdirectories', will be
+//		included in the array of os.FileInfo objects
+//		returned by	this method.
+//
+//		Remember that setting 'subDirSelectCharacteristics'
+//		to an empty instance of FileSelectionCriteria will
+//		ensure that all subdirectories are selected.
+//
+//			Example:
+//			subDirSelectCharacteristics =
+//				FileSelectionCriteria{}
+//
+//			This ensures that all subdirectories will satisfy
+//			the Directory Characteristics Selection Criteria.
+//
+//		For a detailed explanation of the File Characteristics
+//		Criteria specifications offered by Type
+//		FileSelectionCriteria, see the documentation for
+//		'fileSelectCriteria', below.
 //
 //	fileSelectCriteria			FileSelectionCriteria
 //
@@ -396,7 +492,9 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 //
 //		File Characteristics Selection Criteria allow
 //		users to screen files for File Name, File
-//		Modification Date and File Mode.
+//		Modification Date and File Mode. File Name
+//		selections can be configured for pattern matches
+//		or regular expression matches.
 //
 //		Files matching these selection criteria, and the
 //		File Type filter, will be included in the file
@@ -569,6 +667,19 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 //
 //		------------------------------------------------------------------------
 //
+//	subDirsInDir				*DirMgrCollection
+//
+//		A pointer to an instance of DirMgrCollection
+//		which encapsulates an array of Directory
+//		Manager (DirMgr) objects.
+//
+//		Information on subdirectories in the directory
+//		defined by input parameter 'targetDMgr' which
+//		match the specified Type and Characteristics
+//		Selection Criteria will be converted to Directory
+//		Manager (DirMgr) objects and added to this
+//		Directory Manager Collection (DirMgrCollection).
+//
 //	filesInDir					*FileMgrCollection
 //
 //		A pointer to an instance of FileMgrCollection
@@ -611,7 +722,14 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 //
 // # Return Values
 //
-//	numOfFilesLocated			uint64
+//	numOfSubDirsLocated			int
+//
+//		If this method completes successfully, this
+//		parameter will return number of subdirectories
+//		selected for addition to the Directory Manager
+//		Collection passed as input parameter 'subDirsInDir'.
+//
+//	numOfFilesLocated			int
 //
 //		If this method completes successfully, this
 //		parameter will return number of files selected
@@ -632,7 +750,7 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 //	 	attached to the	beginning of the error message.
 func (dMgrHlprBoson *dirMgrHelperBoson) getSubDirsFilesInDir(
 	targetDMgr *DirMgr,
-	getSubdirectoryFileInfos bool,
+	getSubdirectories bool,
 	includeSubDirCurrenDirOneDot bool,
 	includeSubDirParentDirTwoDots bool,
 	getRegularFiles bool,
@@ -644,7 +762,8 @@ func (dMgrHlprBoson *dirMgrHelperBoson) getSubDirsFilesInDir(
 	filesInDir *FileMgrCollection,
 	targetDMgrLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
-	numOfFilesLocated uint64,
+	numOfSubDirsLocated int,
+	numOfFilesLocated int,
 	err error) {
 	// TODO - Fix errors on dirMgrHelperBoson.getFilesInDir()
 	if dMgrHlprBoson.lock == nil {
@@ -668,7 +787,7 @@ func (dMgrHlprBoson *dirMgrHelperBoson) getSubDirsFilesInDir(
 
 	if err != nil {
 
-		return numOfFilesLocated, err
+		return numOfSubDirsLocated, numOfFilesLocated, err
 	}
 
 	if len(targetDMgrLabel) == 0 {
@@ -687,10 +806,11 @@ func (dMgrHlprBoson *dirMgrHelperBoson) getSubDirsFilesInDir(
 
 	if err != nil {
 
-		return numOfFilesLocated, err
+		return numOfSubDirsLocated, numOfFilesLocated, err
 	}
 
-	if getRegularFiles == false &&
+	if getSubdirectories == false &&
+		getRegularFiles == false &&
 		getSymLinksFiles == false &&
 		getOtherNonRegularFiles == false {
 
@@ -698,29 +818,145 @@ func (dMgrHlprBoson *dirMgrHelperBoson) getSubDirsFilesInDir(
 			"Fatal Error: File Type filters are conflicted!\n"+
 			"All of the File Type filters are set to 'false'\n"+
 			"This gurantees that NO files will be selected.\n"+
+			"getSubdirectories == false"+
 			"getRegularFiles == false\n"+
 			"getSymLinksFiles == false\n"+
 			"getOtherNonRegularFiles == false\n",
 			ePrefix.String())
 
-		return numOfFilesLocated, err
+		return numOfSubDirsLocated, numOfFilesLocated, err
 	}
 
-	var isAllFileTypesSelected = false
+	if subDirsInDir == nil &&
+		getSubdirectories == true {
 
-	if getRegularFiles == true &&
-		getSymLinksFiles == true &&
-		getOtherNonRegularFiles == true {
+		err = fmt.Errorf("%v\n"+
+			"Error: Subdirectories were requested, but\n"+
+			"Directory Manager Collection 'subDirsInDir'\n"+
+			"is a 'nil' pointer. 'subDirsInDir' is invalid!\n",
+			ePrefix.String())
 
-		isAllFileTypesSelected = true
+		return numOfSubDirsLocated, numOfFilesLocated, err
 	}
 
-	isFileSelectionCriteriaActive :=
-		fileSelectCriteria.IsSelectionCriteriaActive()
+	if filesInDir == nil {
+
+		if getRegularFiles == true ||
+			getSymLinksFiles == true ||
+			getOtherNonRegularFiles == true {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Files were requested, but File Manager\n"+
+				"Collection 'filesInDir is a 'nil' pointer.\n"+
+				"'filesInDir' is invalid!\n"+
+				"getRegularFiles= '%v'\n"+
+				"getSymLinksFiles= '%v'\n"+
+				"getOtherNonRegularFiles= '%v'\n",
+				getRegularFiles,
+				getSymLinksFiles,
+				getOtherNonRegularFiles,
+				ePrefix.String())
+
+			return numOfSubDirsLocated, numOfFilesLocated, err
+
+		}
+	}
 
 	osPathSepStr := string(os.PathSeparator)
+	var fileInfos []FileInfoPlus
+	var lenFileInfos int
+	var errs2 []error
+	var fatalErr error
 
-	var err2 error
+	fileInfos,
+		lenFileInfos,
+		errs2,
+		fatalErr = new(dirMgrHelperMolecule).
+		lowLevelGetFileInfosFromDir(
+			targetDMgr,
+			getSubdirectories,             // getDirectoryFileInfos
+			includeSubDirCurrenDirOneDot,  // includeSubDirCurrenDirOneDot
+			includeSubDirParentDirTwoDots, // includeSubDirParentDirTwoDots
+			getRegularFiles,               // getRegularFileInfos
+			getSymLinksFiles,              // getSymLinksFileInfos
+			getOtherNonRegularFiles,       // getOtherNonRegularFileInfos
+			subDirSelectCharacteristics,   // subdirectorySelectCharacteristics
+			fileSelectCriteria,            // fileSelectCharacteristics
+			targetDMgrLabel,
+			ePrefix.XCpy(targetDMgrLabel))
+
+	if len(errs2) > 0 {
+
+		if fatalErr != nil {
+
+			errs2 = append(
+				errs2, fatalErr)
+		}
+
+		err = new(StrMech).ConsolidateErrors(errs2)
+
+		return numOfSubDirsLocated, numOfFilesLocated, err
+	}
+
+	if fatalErr != nil {
+
+		err = fmt.Errorf("%v"+
+			"Error returned from lowLevelGetFileInfosFromDir()\n"+
+			"Error= \n%v\n",
+			funcName,
+			fatalErr.Error())
+
+		return numOfSubDirsLocated, numOfFilesLocated, err
+	}
+
+	if lenFileInfos == 0 {
+		// No files matching select criteria were
+		// found in the directory.
+		return numOfSubDirsLocated, numOfFilesLocated, err
+	}
+
+	for i := 0; i < lenFileInfos; i++ {
+
+		if fileInfos[i].IsDir() {
+
+			fatalErr = subDirsInDir.AddFileInfo(
+				targetDMgr.absolutePath,
+				fileInfos[i],
+				ePrefix.XCpy("Dir targetDMgr:fileInfos[i]"))
+
+			if fatalErr != nil {
+
+				err = fmt.Errorf("%v\n"+
+					"Error returned by subDirsInDir.AddFileInfo()\n"+
+					"targetDMgr Path= '%v'\n"+
+					"SubDirectory Name= '%v'\n"+
+					"SubDirectory Path= '%v'\n"+
+					"Index= fileInfos[%v]\n"+
+					"Error=\n%v\n",
+					funcName,
+					targetDMgr.absolutePath,
+					fileInfos[i].Name(),
+					targetDMgr.absolutePath+
+						osPathSepStr+
+						fileInfos[i].Name(),
+					i,
+					fatalErr.Error())
+
+				return numOfSubDirsLocated, numOfFilesLocated, err
+			}
+
+			numOfSubDirsLocated++
+
+			continue
+		}
+
+		// Must be a file
+		fatalErr = filesInDir.AddFileMgrByFileInfo(
+			targetDMgr.absolutePath,
+			fileInfos[i],
+			ePrefix.XCpy("File targetDMgr: fileInfos[i]"))
+	}
+
 	var nameDirEntries []os.DirEntry
 
 	nameDirEntries,

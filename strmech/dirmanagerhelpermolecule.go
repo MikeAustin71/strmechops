@@ -1111,7 +1111,8 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 //
 // The File Characteristics Selection criteria allows
 // users to screen files for File Name, File Modification
-// Date and File Mode.
+// Date and File Mode. File Name selections can be based
+// on pattern matches or regular expression matches.
 //
 // ----------------------------------------------------------------
 //
@@ -1250,26 +1251,24 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 //	getSubdirectoryFileInfos			bool
 //
 //		If this parameter is set to 'true', directory
-//		entries which also meet the File Selection
-//		Characteristics criteria (fileSelectCharacteristics),
+//		entries which also meet the Directory Selection
+//		Characteristics criteria (subDirSelectCharacteristics),
 //		will be included in the os.FileInfo information
 //		('fileInfos') returned by this method.
-//
-//		If input parameters 'getSubdirectoryFileInfos',
-//		'getRegularFileInfos', 'getSymLinksFileInfos' and
-//		'getOtherNonRegularFileInfos' are all set to
-//		'false', they are classified as conflicted and an
-//		error will be returned.
 //
 //	includeSubDirCurrenDirOneDot		bool
 //
 //		This parameter is only used, if input parameter
 //		'getSubdirectoryFileInfos' is set to 'true'.
 //
+//		All directories include an os.FileInfo entry for
+//		the current directory. The current directory name
+//		is always denoted as single dot ('.').
+//
 //		When this parameter, 'includeSubDirCurrenDirOneDot',
 //		is set to 'true' and input parameter
 //		getSubdirectoryFileInfos' is set to 'true', the current
-//		directory, designated by a single dot ('.'), will be
+//		directory, designated as a single dot ('.'), will be
 //		included in the returned array of os.FileInfo objects.
 //
 //	includeSubDirParentDirTwoDots 		bool
@@ -1277,10 +1276,14 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 //		This parameter is only used, if input parameter
 //		'getSubdirectoryFileInfos' is set to 'true'.
 //
+//		All directories include an os.FileInfo entry for
+//		the parent directory. The parent directory name
+//		is always denoted as two dots ('..').
+//
 //		When this parameter, 'includeSubDirParentDirTwoDots',
 //		is set to 'true' and input parameter
 //		'getSubdirectoryFileInfos' is set to 'true', the parent
-//		directory, designated by a two dots ('..'), will be
+//		directory, designated as two dots ('..'), will be
 //		included in the returned array of os.FileInfo objects.
 //
 //	getRegularFileInfos					bool
@@ -1357,7 +1360,7 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 //
 //		Remember that setting 'directorySelectCriteria'
 //		to an empty instance of FileSelectionCriteria will
-//		ensure that all directories are selected.
+//		ensure that all subdirectories are selected.
 //
 //			Example:
 //			subdirectorySelectCharacteristics =
