@@ -1332,6 +1332,14 @@ func (fHelperAtom *fileHelperAtom) filterFileName(
 		return isMatchedFile, msgError, lowLevelErr
 	}
 
+	var isRegexSet, isRegexMatch bool
+
+	isRegexSet,
+		isRegexMatch = fHelperElectron.
+		searchFileRegexMatch(
+			fileInfo,
+			fileSelectionCriteria)
+
 	isFileOlderThanSet,
 		isFileOlderThanMatch := fHelperElectron.
 		searchFileOlderThan(
@@ -1395,6 +1403,7 @@ func (fHelperAtom *fileHelperAtom) filterFileName(
 
 	// If no file selection criterion are set, then always select the file
 	if !isPatternSet &&
+		!isRegexSet &&
 		!isFileOlderThanSet &&
 		!isFileNewerThanSet &&
 		!isFileModeSearchSet {
@@ -1409,6 +1418,13 @@ func (fHelperAtom *fileHelperAtom) filterFileName(
 	if fileSelectionCriteria.SelectCriterionMode == FileSelectMode.ANDSelect() {
 
 		if isPatternSet && !isPatternMatch {
+
+			isMatchedFile = false
+
+			return isMatchedFile, msgError, lowLevelErr
+		}
+
+		if isRegexSet && !isRegexMatch {
 
 			isMatchedFile = false
 
@@ -1447,6 +1463,13 @@ func (fHelperAtom *fileHelperAtom) filterFileName(
 	// classify the file as matched.
 
 	if isPatternSet && isPatternMatch {
+
+		isMatchedFile = true
+
+		return isMatchedFile, msgError, lowLevelErr
+	}
+
+	if isRegexSet && isRegexMatch {
 
 		isMatchedFile = true
 

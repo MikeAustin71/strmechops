@@ -160,6 +160,11 @@ func (fsc *FileSelectionCriteria) IsSelectionCriteriaActive() bool {
 		return true
 	}
 
+	if fsc.RegularExp != nil {
+
+		return true
+	}
+
 	if !fsc.FilesNewerThan.IsZero() {
 
 		return true
