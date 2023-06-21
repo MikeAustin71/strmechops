@@ -1073,11 +1073,11 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 // 'true'. Second, the subdirectory must satisfy the
 // Directory Characteristics Selection Criteria specified
 // by input parameter, 'subdirectorySelectCharacteristics'.
-// If both of these filter requirements are satisfied, the
-// subdirectory will be added to, and returned by, the
-// os.FileInfo array, 'fileInfos'. Be advised that users
-// can control behavior for current directories (".") and
-// parent directories ("..") with input parameters
+// If both of these filter requirements are satisfied,
+// the subdirectory will be added to, and returned by,
+// the os.FileInfo array, 'fileInfos'. Be advised that
+// users control behavior for current directories (".")
+// and parent directories ("..") with input parameters
 // 'includeSubDirCurrenDirOneDot' and
 // 'includeSubDirParentDirTwoDots'.
 //
@@ -1342,7 +1342,7 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 //		'false', they are classified as conflicted and an
 //		error will be returned.
 //
-//	subdirectorySelectCharacteristics	FileSelectionCriteria
+//	subDirSelectCharacteristics			FileSelectionCriteria
 //
 //		In addition to the File Type Selection Criteria,
 //		selected subdirectories must conform to the File
@@ -1669,7 +1669,7 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelGetFileInfosFromDir(
 	getRegularFileInfos bool,
 	getSymLinksFileInfos bool,
 	getOtherNonRegularFileInfos bool,
-	subdirectorySelectCharacteristics FileSelectionCriteria,
+	subDirSelectCharacteristics FileSelectionCriteria,
 	fileSelectCharacteristics FileSelectionCriteria,
 	dMgrLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -1750,7 +1750,7 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelGetFileInfosFromDir(
 	}
 
 	isSubdirectorySelectionCriteriaActive :=
-		subdirectorySelectCharacteristics.IsSelectionCriteriaActive()
+		subDirSelectCharacteristics.IsSelectionCriteriaActive()
 
 	isFileSelectionCriteriaActive :=
 		fileSelectCharacteristics.IsSelectionCriteriaActive()
@@ -1874,7 +1874,7 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelGetFileInfosFromDir(
 					_ =
 					fh.FilterFileName(
 						osFInfo,
-						subdirectorySelectCharacteristics,
+						subDirSelectCharacteristics,
 						ePrefix.XCpy("osFInfo-Directory"))
 
 				if err2 != nil {

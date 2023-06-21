@@ -149,29 +149,49 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 	return err
 }
 
-// getFilesInDir
+// getSubDirsFilesInDir
 //
-// This method scans a designated directory and returns
-// information on selected files through a File Manager
-// Collection passed as input parameter 'filesInDir'.
+// This method scans a single directory path designated
+// by input parameter 'dMgr' and returns information on
+// selected subdirectories and selected files. The
+// selected subdirectories are returned through a
+// Directory Manager Collection passed as input parameter
+// 'subDirsInDir'. The selected files are returned
+// through a File Manager Collection passed as input
+// parameter 'filesInDir'.
 //
-// Files selected for addition to the File Manager
-// Collection must satisfy two sets of criteria, File
-// Type and File Characteristics.
+// To qualify for selection and inclusion in the returned
+// Directory and File Manager Collections, items residing
+// in the 'dMgr' target directory are divided into two
+// classes, subdirectories and files. Subdirectories are
+// standard directory entries. Files are defined as all
+// artifacts residing in the target directory which are
+// not subdirectories.
 //
-// To qualify for selection, the file must first comply
-// with the specified File Type criteria. In terms of
-// File Type, files are classified as directories,
-// regular files, SymLink files or other non-regular
-// files.
+// To qualify as a selected subdirectory, the
+// subdirectory must satisfy two filters. First, input
+// parameter 'getSubdirectoryFileInfos' must be set to
+// 'true'. Second, the subdirectory must satisfy the
+// Directory Characteristics Selection Criteria specified
+// by input parameter, 'subDirSelectCharacteristics'. If
+// both of these filter requirements are satisfied, the
+// subdirectory will be added to, and returned by, the
+// 'subDirsInDir' Directory Manager Collection. Be
+// advised that users control the behavior for current
+// directories (".") and parent directories ("..") with
+// input parameters 'includeSubDirCurrenDirOneDot' and
+// 'includeSubDirParentDirTwoDots'.
 //
-// Since this method does NOT process or return
-// subdirectories. The only valid File Types eligible
-// for selection are regular files, SymLink files or
-// other non-regular files.
+// To qualify as a selected file, the file entry must
+// also comply with two filters: File Type and File
+// Characteristics Selection Criteria. Remember that
+// files are defined as all artifacts residing in the
+// target directory which are not subdirectories.
 //
-// For an explanation of Regular and Non-Regular files,
-// see the Definition of Terms section below.
+// To be eligible for file selection, the file entry must
+// first comply with the specified File Type criteria. In
+// terms of File Type, files are classified as
+// regular files, SymLink files or other non-regular files.
 //
 // Screening criteria for File Type is controlled by the
 // following three input parameters:
@@ -180,13 +200,19 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 //	getSymLinksFiles - bool
 //	getOtherNonRegularFiles - bool
 //
-// In addition to File Type, selected files must comply
-// with the second set of file selection criteria, File
-// Characteristics. File Characteristics Selection
-// Criteria is specified by input parameter,
-// 'fileSelectCriteria'. This file selection criteria
-// allows users to screen files for File Name, File
-// Modification Date and File Mode.
+// File Types eligible for selection include Regular
+// Files such as text files, image files and executable
+// files, SymLink files and other Non-Regular Files such
+// as device files, named pipes and sockets.
+//
+// In addition to File Type, selected files,
+// must also comply with the File Characteristics
+// Selection Criteria specified by input parameter,
+// 'fileSelectCharacteristics'.
+//
+// The File Characteristics Selection criteria allows
+// users to screen files for File Name, File Modification
+// Date and File Mode.
 //
 // ----------------------------------------------------------------
 //
@@ -604,12 +630,17 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (dMgrHlprBoson *dirMgrHelperBoson) getFilesInDir(
+func (dMgrHlprBoson *dirMgrHelperBoson) getSubDirsFilesInDir(
 	targetDMgr *DirMgr,
+	getSubdirectoryFileInfos bool,
+	includeSubDirCurrenDirOneDot bool,
+	includeSubDirParentDirTwoDots bool,
 	getRegularFiles bool,
 	getSymLinksFiles bool,
 	getOtherNonRegularFiles bool,
+	subDirSelectCharacteristics FileSelectionCriteria,
 	fileSelectCriteria FileSelectionCriteria,
+	subDirsInDir *DirMgrCollection,
 	filesInDir *FileMgrCollection,
 	targetDMgrLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
