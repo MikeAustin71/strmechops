@@ -327,7 +327,12 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 //		Directory Manager or File Manager Collections,
 //		and no error will be returned.
 //
-//	(6)	If input parameter 'getSubdirectories' is set to
+//	(6) If the target directory identified by input
+//		parameter 'targetDMgr' does NOT exist on an
+//		attached storage drive, an error will be
+//		returned.
+//
+//	(7)	If input parameter 'getSubdirectories' is set to
 //		'true' and input parameter 'subDirsInDir' is set
 //		to 'nil', an error will be returned.
 //
@@ -336,7 +341,7 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 //		safely configured as 'nil', and no error will
 //		be returned.
 //
-//	(7)	If any file type input parameters (
+//	(8)	If any file type input parameters (
 //		'getRegularFiles', 'getSymLinksFiles' or
 //		'getOtherNonRegularFiles') are set to
 //		'true', and input parameter 'filesInDir' is set
@@ -362,6 +367,10 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 //		directory matching the required selection
 //		criteria will be returned in Directory Manager
 //		and File Manager Collections.
+//
+//		If this target directory path does not currently
+//		exist on an attached storage drive, an error will
+//		be returned.
 //
 //	getSubdirectories			bool
 //
@@ -483,11 +492,11 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 //		can be configured for pattern matches or regular
 //		expression matches.
 //
-//		Directory os.FileIno files matching this
+//		Directory os.FileIno entries matching this
 //		selection criteria, and the filter specified by
 //		input parameter 'getSubdirectories', will be
-//		included in the array of os.FileInfo objects
-//		returned by	this method.
+//		included in the Directory Manager Collection
+//		returned by input parameter 'subDirsInDir'.
 //
 //		Remember that setting 'subDirSelectCharacteristics'
 //		to an empty instance of FileSelectionCriteria will
@@ -551,14 +560,14 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 //				Specifies 'AND' or 'OR' selection mode
 //		}
 //
-//	  The FileSelectionCriteria Type allows for
-//	  configuration of single or multiple file selection
-//	  criterion. The 'SelectCriterionMode' can be used to
-//	  specify whether the file must match all, or any one,
-//	  of the active file selection criterion.
+//		The FileSelectionCriteria Type allows for
+//		configuration of single or multiple file selection
+//		criterion. The 'SelectCriterionMode' can be used to
+//		specify whether the file must match all, or any one,
+//		of the active file selection criterion.
 //
-//	  Elements of the File Characteristics Selection
-//	  Criteria are described below:
+//		Elements of the File Characteristics Selection
+//		Criteria are described below:
 //
 //			FileNamePatterns		[]string
 //
@@ -809,7 +818,7 @@ func (dMgrHlprBoson *dirMgrHelperBoson) getSubDirsFilesInDir(
 	numOfSubDirsLocated int,
 	numOfFilesLocated int,
 	err error) {
-	// TODO - Fix errors on dirMgrHelperBoson.getFilesInDir()
+
 	if dMgrHlprBoson.lock == nil {
 		dMgrHlprBoson.lock = new(sync.Mutex)
 	}
@@ -821,7 +830,7 @@ func (dMgrHlprBoson *dirMgrHelperBoson) getSubDirsFilesInDir(
 	var ePrefix *ePref.ErrPrefixDto
 
 	funcName := "dirMgrHelperBoson." +
-		"getFilesInDir()"
+		"getSubDirsFilesInDir()"
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(

@@ -10303,12 +10303,7 @@ func (dMgr *DirMgr) GetSubdirectoriesDirTree(
 //		Directory Manager Collection passed as input
 //		parameter 'subDirectories'.
 //
-//	(2)	While scanning for subdirectories, Directory entries
-//		for the current directory (".") and the parent directory
-//		("..") will be skipped and will NOT be added to the
-//		'subDirectories' Directory Manager Collection.
-//
-//	(3)	For a collection of all subdirectories in the
+//	(2)	For a collection of all subdirectories in the
 //		directory tree specified by the current instance
 //		of DirMgr, see method:
 //
@@ -10317,6 +10312,31 @@ func (dMgr *DirMgr) GetSubdirectoriesDirTree(
 // ----------------------------------------------------------------
 //
 // # Input Parameters
+//
+//	includeSubDirCurrenDirOneDot	bool
+//
+//		All directories automatically include an
+//		os.FileInfo entry for the current directory. The
+//		current directory name is always denoted as
+//		single dot ('.').
+//
+//		When this parameter, 'includeSubDirCurrenDirOneDot',
+//		is set to 'true', the current directory, designated
+//		as a single dot ('.'), will be added to the Directory
+//		Manager Collection passed as input parameter
+//		'subDirectories'.
+//
+//	includeSubDirParentDirTwoDots	bool
+//
+//		All directories include an os.FileInfo entry for
+//		the parent directory. The parent directory name
+//		is always denoted as two dots ('..').
+//
+//		When this parameter, 'includeSubDirParentDirTwoDots',
+//		is set to 'true', the parent directory, designated
+//		as two dots ('..'), will be added to the Directory
+//		Manager Collection passed as input parameter
+//		'subDirectories'.
 //
 //	subDirectories				*DirMgrCollection
 //
@@ -10424,6 +10444,8 @@ func (dMgr *DirMgr) GetSubdirectoriesDirTree(
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (dMgr *DirMgr) GetSubdirectoriesParentDir(
+	includeSubDirCurrenDirOneDot bool,
+	includeSubDirParentDirTwoDots bool,
 	subDirectories *DirMgrCollection,
 	errorPrefix interface{}) (
 	numOfSubdirectories int,
@@ -10461,12 +10483,22 @@ func (dMgr *DirMgr) GetSubdirectoriesParentDir(
 	}
 
 	numOfSubdirectories,
-		err = new(dirMgrHelperPreon).
-		getSubdirectories(
+		_,
+		err = new(dirMgrHelperBoson).
+		getSubDirsFilesInDir(
 			dMgr,
-			subDirectories,
+			true, // getSubdirectories
+			includeSubDirCurrenDirOneDot,
+			includeSubDirParentDirTwoDots,
+			false,                   // getRegularFiles
+			false,                   // getSymLinksFiles
+			false,                   // getOtherNonRegularFiles
+			FileSelectionCriteria{}, // subDirSelectCharacteristics
+			FileSelectionCriteria{}, // fileSelectCriteria
+			subDirectories,          // fileSelectCriteria
+			nil,                     // filesInDir
 			"dMgr",
-			ePrefix)
+			ePrefix.XCpy("dMgr"))
 
 	return numOfSubdirectories, err
 }
