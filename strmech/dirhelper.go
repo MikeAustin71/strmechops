@@ -1246,14 +1246,14 @@ func (dHlpr *DirHelper) GetSubdirectoriesParentDir(
 			true, // getSubdirectories
 			includeSubDirCurrenDirOneDot,
 			includeSubDirParentDirTwoDots,
-			false, // getRegularFiles
-			false, // getSymLinksFiles
-			false, // getOtherNonRegularFiles
-			subDirSelectCharacteristics,
-			FileSelectionCriteria{}, // fileSelectCriteria
-			subDirsInDir,            // fileSelectCriteria
-			nil,                     // filesInDir
-			"dMgr",
+			false,                       // getRegularFiles
+			false,                       // getSymLinksFiles
+			false,                       // getOtherNonRegularFiles
+			subDirSelectCharacteristics, // subDirSelectCharacteristics
+			FileSelectionCriteria{},     // fileSelectCriteria
+			subDirsInDir,                // subDirsInDir
+			nil,                         // filesInDir
+			"dMgr",                      // targetDMgrLabel
 			ePrefix.XCpy("dMgr"))
 
 	return numOfSubdirectories, err

@@ -702,10 +702,20 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 	}
 
 	_,
+		_,
 		err = new(dirMgrHelperElectron).
-		getAllSubDirsInDirTree(
+		getSubDirsFilesInDirTree(
 			sourceDMgr,
-			&sourceDirectories,
+			true,                    // getSubdirectories
+			false,                   // includeSubDirCurrenDirOneDot
+			false,                   // includeSubDirParentDirTwoDots
+			false,                   // getRegularFiles
+			false,                   // getSymLinksFiles
+			false,                   // getOtherNonRegularFiles
+			FileSelectionCriteria{}, // subDirSelectCharacteristics
+			FileSelectionCriteria{}, // fileSelectCriteria
+			&sourceDirectories,      // subDirsInDir
+			nil,                     // filesInDir
 			sourceDMgrLabel,
 			ePrefix)
 
@@ -1551,12 +1561,22 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) deleteDirectoryTreeFiles(
 	}
 
 	_,
+		_,
 		err2 = new(dirMgrHelperElectron).
-		getAllSubDirsInDirTree(
+		getSubDirsFilesInDirTree(
 			targetDMgr,
-			&targetDirs,
+			true,                    // getSubdirectories
+			false,                   // includeSubDirCurrenDirOneDot
+			false,                   // includeSubDirParentDirTwoDots
+			false,                   // getRegularFiles
+			false,                   // getSymLinksFiles
+			false,                   // getOtherNonRegularFiles
+			FileSelectionCriteria{}, // subDirSelectCharacteristics
+			FileSelectionCriteria{}, // fileSelectCriteria
+			&targetDirs,             // subDirsInDir
+			nil,                     // filesInDir
 			targetDMgrLabel,
-			ePrefix.XCpy(targetDMgrLabel))
+			ePrefix)
 
 	if err2 != nil {
 
@@ -1851,14 +1871,23 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) deleteAllSubDirectories(
 	}
 
 	var targetSubDirs DirMgrCollection
-
 	_,
-		err = new(dirMgrHelperPreon).
-		getSubdirectories(
+		_,
+		err = new(dirMgrHelperBoson).
+		getSubDirsFilesInDir(
 			dMgr,
-			&targetSubDirs,
-			dMgrLabel,
-			ePrefix)
+			true,                    // getSubdirectories
+			false,                   // includeSubDirCurrenDirOneDot
+			false,                   // includeSubDirParentDirTwoDots
+			false,                   // getRegularFiles
+			false,                   // getSymLinksFiles
+			false,                   // getOtherNonRegularFiles
+			FileSelectionCriteria{}, // subDirSelectCharacteristics
+			FileSelectionCriteria{}, // fileSelectCriteria
+			&targetSubDirs,          // subDirsInDir
+			nil,                     // filesInDir
+			dMgrLabel,               // targetDMgrLabel
+			ePrefix.XCpy(dMgrLabel))
 
 	if err != nil {
 
