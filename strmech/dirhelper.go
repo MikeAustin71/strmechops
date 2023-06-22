@@ -492,7 +492,7 @@ func (dHlpr *DirHelper) GetSubdirectoriesDirTree(
 //
 // # Input Parameters
 //
-//	directoryPath				string
+//	directoryPath					string
 //
 //		This string defines a directory path. This path
 //		will be treated as a top level or parent
@@ -511,7 +511,222 @@ func (dHlpr *DirHelper) GetSubdirectoriesDirTree(
 //		attached storage drive, an error will be
 //		returned.
 //
-//	subDirectories				*DirMgrCollection
+//	includeSubDirCurrenDirOneDot	bool
+//
+//		All directories automatically include an
+//		os.FileInfo entry for the current directory. The
+//		current directory name is always denoted as
+//		single dot ('.').
+//
+//		When this parameter, 'includeSubDirCurrenDirOneDot',
+//		is set to 'true', the current directory, designated
+//		as a single dot ('.'), will be added to the Directory
+//		Manager Collection passed as input parameter
+//		'subDirectories'.
+//
+//	includeSubDirParentDirTwoDots	bool
+//
+//		All directories include an os.FileInfo entry for
+//		the parent directory. The parent directory name
+//		is always denoted as two dots ('..').
+//
+//		When this parameter, 'includeSubDirParentDirTwoDots',
+//		is set to 'true', the parent directory, designated
+//		as two dots ('..'), will be added to the Directory
+//		Manager Collection passed as input parameter
+//		'subDirectories'.
+//
+//	subDirSelectCharacteristics		FileSelectionCriteria,
+//
+//		This subdirectory selection criteria allows users
+//		to screen subdirectories for Name, Modification
+//		Date and File Mode. Subdirectory Name selections
+//		can be configured for pattern matches or regular
+//		expression matches.
+//
+//		Directory os.FileIno files matching this
+//		selection criteria, and the filter specified by
+//		input parameter 'getSubdirectories', will be
+//		included in the array of os.FileInfo objects
+//		returned by	this method.
+//
+//		Remember that setting 'subDirSelectCharacteristics'
+//		to an empty instance of FileSelectionCriteria will
+//		ensure that all subdirectories are selected.
+//
+//			Example:
+//			subDirSelectCharacteristics =
+//				FileSelectionCriteria{}
+//
+//			This ensures that all subdirectories will satisfy
+//			the Directory Characteristics Selection Criteria.
+//
+//		type FileSelectionCriteria struct {
+//
+//			FileNamePatterns    []string
+//				An array of strings containing File Name Patterns
+//
+//			FilesOlderThan      time.Time
+//				Match files with older modification date times
+//
+//			FilesNewerThan      time.Time
+//				Match files with newer modification date times
+//
+//			RegularExp			*regexp.Regexp
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
+//
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
+//
+//			SelectByFileMode    FilePermissionConfig
+//				Match file mode (os.FileMode).
+//
+//			SelectCriterionModeFileSelectCriterionMode
+//				Specifies 'AND' or 'OR' selection mode
+//		}
+//
+//	  The FileSelectionCriteria Type allows for
+//	  configuration of single or multiple file selection
+//	  criterion. The 'SelectCriterionMode' can be used to
+//	  specify whether the file must match all, or any one,
+//	  of the active file selection criterion.
+//
+//	  Elements of the File Characteristics Selection
+//	  Criteria are described below:
+//
+//			FileNamePatterns		[]string
+//
+//				An array of strings which may define one or more
+//				search patterns. If a file name matches any one
+//				of the search pattern strings, it is deemed to be
+//				a 'match' for the search pattern criterion.
+//
+//				Example Patterns:
+//					FileNamePatterns = []string{"*.log"}
+//					FileNamePatterns = []string{"current*.txt"}
+//					FileNamePatterns = []string{"*.txt", "*.log"}
+//
+//				If this string array has zero length or if
+//				all the strings are empty strings, then this
+//				file search criterion is considered 'Inactive'
+//				or 'Not Set'.
+//
+//
+//			FilesOlderThan		time.Time
+//
+//				This date time type is compared to file
+//				modification date times in order to determine
+//				whether the file is older than the
+//				'FilesOlderThan' file selection criterion. If
+//				the file modification date time is older than
+//				the 'FilesOlderThan' date time, that file is
+//				considered a 'match' for this file selection
+//				criterion.
+//
+//				If the value of 'FilesOlderThan' is set to
+//				time zero, the default value for type
+//				time.Time{}, then this file selection
+//				criterion is considered to be 'Inactive' or
+//				'Not Set'.
+//
+//			FilesNewerThan      time.Time
+//
+//				This date time type is compared to the file
+//				modification date time in order to determine
+//				whether the file is newer than the
+//				'FilesNewerThan' file selection criterion. If
+//				the file modification date time is newer than
+//				the 'FilesNewerThan' date time, that file is
+//				considered a 'match' for this file selection
+//				criterion.
+//
+//				If the value of 'FilesNewerThan' is set to
+//				time zero, the default value for type
+//				time.Time{}, then this file selection
+//				criterion is considered to be 'Inactive' or
+//				'Not Set'.
+//
+//			RegularExp			*regexp.Regexp
+//
+//				Used to select file names with regular
+//				expressions. If this parameter is NOT
+//				equal to nil, file names will be
+//				analyzed using MatchString().
+//
+//				Example:
+//					RegularExp.MatchString("someFileName.txt")
+//
+//			SelectByFileMode  FilePermissionConfig
+//
+//				Type FilePermissionConfig encapsulates an os.FileMode. The
+//				file selection criterion allows for the selection of files
+//				by File Mode.
+//
+//				File modes are compared to the value of 'SelectByFileMode'.
+//				If the File Mode for a given file is equal to the value of
+//				'SelectByFileMode', that file is considered to be a 'match'
+//				for this file selection criterion. Examples for setting
+//				SelectByFileMode are shown as follows:
+//
+//				fsc := FileSelectionCriteria{}
+//
+//				err = fsc.SelectByFileMode.SetByFileMode(os.FileMode(0666))
+//
+//				err = fsc.SelectByFileMode.SetFileModeByTextCode("-r--r--r--")
+//
+//			SelectCriterionMode FileSelectCriterionMode
+//
+//			This parameter selects the manner in which the file selection
+//			criteria above are applied in determining a 'match' for file
+//			selection purposes. 'SelectCriterionMode' may be set to one of
+//			two constant values:
+//
+//			(1) FileSelectCriterionMode(0).ANDSelect()
+//
+//				File selected if all active selection criteria
+//				are satisfied.
+//
+//				If this constant value is specified for the file selection mode,
+//				then a given file will not be judged as 'selected' unless all
+//				the active selection criterion are satisfied. In other words, if
+//				three active search criterion are provided for 'FileNamePatterns',
+//				'FilesOlderThan' and 'FilesNewerThan', then a file will NOT be
+//				selected unless it has satisfied all three criterion in this example.
+//
+//			(2) FileSelectCriterionMode(0).ORSelect()
+//
+//				File selected if any active selection criterion is satisfied.
+//
+//				If this constant value is specified for the file selection mode,
+//				then a given file will be selected if any one of the active file
+//				selection criterion is satisfied. In other words, if three active
+//				search criterion are provided for 'FileNamePatterns', 'FilesOlderThan'
+//				and 'FilesNewerThan', then a file will be selected if it satisfies any
+//				one of the three criterion in this example.
+//
+//		------------------------------------------------------------------------
+//
+//		IMPORTANT:
+//
+//		If all of the file selection criterion in the FileSelectionCriteria
+//		object are 'Inactive' or 'Not Set' (set to their zero or default values),
+//		then all the files meeting the File Type requirements in the directory
+//		defined by 'targetDMgr' will be selected.
+//
+//			Example:
+//			  fsc := FileSelectCriterionMode{}
+//
+//			  In this example, 'fsc' is NOT initialized. Therefore,
+//			  all the selection criterion are 'Inactive'. Consequently,
+//			  all the files meeting the File Type requirements in the
+//			  directory defined by 'targetDMgr' will be selected.
+//
+//		------------------------------------------------------------------------
+//
+//	subDirectories					*DirMgrCollection
 //
 //		A pointer to an instance of DirMgrCollection
 //		which encapsulates an array of Directory Manager
@@ -533,7 +748,7 @@ func (dHlpr *DirHelper) GetSubdirectoriesDirTree(
 //				dirMgrs []DirMgr
 //			}
 //
-//	errorPrefix					interface{}
+//	errorPrefix						interface{}
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
@@ -596,7 +811,7 @@ func (dHlpr *DirHelper) GetSubdirectoriesDirTree(
 //
 // # Return Values
 //
-//	numOfSubdirectories			int
+//	numOfSubdirectories				int
 //
 //		If this method completes successfully, this
 //		integer value represents the number of
@@ -604,7 +819,7 @@ func (dHlpr *DirHelper) GetSubdirectoriesDirTree(
 //		Collection passed as input parameter
 //		'subDirectories'.
 //
-//	err							error
+//	err								error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -618,6 +833,9 @@ func (dHlpr *DirHelper) GetSubdirectoriesDirTree(
 //	 	attached to the	beginning of the error message.
 func (dHlpr *DirHelper) GetSubdirectoriesParentDir(
 	directoryPath string,
+	includeSubDirCurrenDirOneDot bool,
+	includeSubDirParentDirTwoDots bool,
+	subDirSelectCharacteristics FileSelectionCriteria,
 	subDirectories *DirMgrCollection,
 	errorPrefix interface{}) (
 	numOfSubdirectories int,
@@ -689,12 +907,22 @@ func (dHlpr *DirHelper) GetSubdirectoriesParentDir(
 	}
 
 	numOfSubdirectories,
-		err = new(dirMgrHelperPreon).
-		getSubdirectories(
+		_,
+		err = new(dirMgrHelperBoson).
+		getSubDirsFilesInDir(
 			&dMgr,
-			subDirectories,
+			true, // getSubdirectories
+			includeSubDirCurrenDirOneDot,
+			includeSubDirParentDirTwoDots,
+			false, // getRegularFiles
+			false, // getSymLinksFiles
+			false, // getOtherNonRegularFiles
+			subDirSelectCharacteristics,
+			FileSelectionCriteria{}, //
+			subDirectories,          // fileSelectCriteria
+			nil,                     // filesInDir
 			"dMgr",
-			ePrefix)
+			ePrefix.XCpy("dMgr"))
 
 	return numOfSubdirectories, err
 }

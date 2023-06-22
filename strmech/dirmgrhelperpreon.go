@@ -138,6 +138,9 @@ type dirMgrHelperPreon struct {
 func (dMgrHlprPreon *dirMgrHelperPreon) getSubdirectories(
 	dMgr *DirMgr,
 	subDirectories *DirMgrCollection,
+	includeSubDirCurrenDirOneDot bool,
+	includeSubDirParentDirTwoDots bool,
+	subDirSelectCharacteristics FileSelectionCriteria,
 	dMgrLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
 	numOfSubDirsReturned int,
