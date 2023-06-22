@@ -327,6 +327,28 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 //		Directory Manager or File Manager Collections,
 //		and no error will be returned.
 //
+//	(6)	If input parameter 'getSubdirectories' is set to
+//		'true' and input parameter 'subDirsInDir' is set
+//		to 'nil', an error will be returned.
+//
+//		If input parameter 'getSubdirectories' is set to
+//		'false', input parameter 'subDirsInDir' may be
+//		safely configured as 'nil', and no error will
+//		be returned.
+//
+//	(7)	If any file type input parameters (
+//		'getRegularFiles', 'getSymLinksFiles' or
+//		'getOtherNonRegularFiles') are set to
+//		'true', and input parameter 'filesInDir' is set
+//		to 'nil', an error will be returned.
+//
+//		If all file type input parameters (
+//		'getRegularFiles', 'getSymLinksFiles' or
+//		'getOtherNonRegularFiles') are set to
+//		'false', input parameter 'filesInDir' may be
+//		safely configured as 'nil', and no error will be
+//		returned.
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -680,6 +702,15 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 //		Manager (DirMgr) objects and added to this
 //		Directory Manager Collection (DirMgrCollection).
 //
+//		If input parameter 'getSubdirectories' is set to
+//		'true' and this input parameter, 'subDirsInDir',
+//		is set to 'nil', an error will be returned.
+//
+//		If input parameter 'getSubdirectories' is set to
+//		'false', input parameter 'subDirsInDir' may be
+//		safely configured as 'nil' and no error will
+//		be returned.
+//
 //	filesInDir					*FileMgrCollection
 //
 //		A pointer to an instance of FileMgrCollection
@@ -692,6 +723,19 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 //		Selection Criteria will be converted to File
 //		Manager (FileMgr) objects and added to this File
 //		Manager	Collection (FileMgrCollection).
+//
+//		If any file type input parameters (
+//		'getRegularFiles', 'getSymLinksFiles' or
+//		'getOtherNonRegularFiles') are set to
+//		'true', and this input parameter, 'filesInDir',
+//		is set to 'nil', an error will be returned.
+//
+//		If all file type input parameters (
+//		'getRegularFiles', 'getSymLinksFiles' or
+//		'getOtherNonRegularFiles') are set to
+//		'false', input parameter 'filesInDir' may be
+//		safely configured as 'nil', and no error will be
+//		returned.
 //
 //	targetDMgrLabel				string
 //
@@ -817,7 +861,8 @@ func (dMgrHlprBoson *dirMgrHelperBoson) getSubDirsFilesInDir(
 		err = fmt.Errorf("%v\n"+
 			"Fatal Error: File Type filters are conflicted!\n"+
 			"All of the File Type filters are set to 'false'\n"+
-			"This gurantees that NO files will be selected.\n"+
+			"This gurantees that NO subdirectories or files\n"+
+			"will be selected.\n"+
 			"getSubdirectories == false"+
 			"getRegularFiles == false\n"+
 			"getSymLinksFiles == false\n"+
@@ -927,7 +972,9 @@ func (dMgrHlprBoson *dirMgrHelperBoson) getSubDirsFilesInDir(
 			if fatalErr != nil {
 
 				err = fmt.Errorf("%v\n"+
-					"Error returned by subDirsInDir.AddFileInfo()\n"+
+					"Error occurred while adding Directory\n"+
+					"to Directory Manager Collection!\n"+
+					"subDirsInDir.AddFileInfo()\n"+
 					"targetDMgr Path= '%v'\n"+
 					"SubDirectory Name= '%v'\n"+
 					"SubDirectory Path= '%v'\n"+
@@ -955,52 +1002,33 @@ func (dMgrHlprBoson *dirMgrHelperBoson) getSubDirsFilesInDir(
 			targetDMgr.absolutePath,
 			fileInfos[i],
 			ePrefix.XCpy("File targetDMgr: fileInfos[i]"))
-	}
 
-	var nameDirEntries []os.DirEntry
-
-	nameDirEntries,
-		err2 = os.ReadDir(targetDMgr.absolutePath)
-
-	var osFInfo os.FileInfo
-
-	lenDirInfos := len(nameDirEntries)
-
-	if lenDirInfos == 0 {
-
-		return numOfFilesLocated, err
-	}
-
-	var isFileTypeFilterMatch bool
-	var isFileCharacteristicsMatch bool
-
-	for i := 0; i < lenDirInfos; i++ {
-
-		isFileTypeFilterMatch = false
-		isFileCharacteristicsMatch = false
-
-		osFInfo,
-			err2 = nameDirEntries[i].Info()
-
-		if err2 != nil {
+		if fatalErr != nil {
 
 			err = fmt.Errorf("%v\n"+
-				"Error: Error Returned by nameDirEntry.Info().\n"+
-				"The conversion of DirEntry to os.FileInfo Failed."+
-				"%v= '%v'\n"+
-				"FileName= '%v'\n"+
-				"Index= %v"+
-				"Error= \n%v\n",
-				ePrefix.String(),
+				"Error occurred while adding os.FileInfo object\n"+
+				"to the File Manager Collection!\n"+
+				"filesInDir.AddFileMgrByFileInfo()\n"+
+				"Target Directory '%v' = '%v'"+
+				"fileInfos[%v].Name = '%v'\n"+
+				"File Name = '%v'\n"+
+				"Error = \n%v\n",
+				funcName,
 				targetDMgrLabel,
 				targetDMgr.absolutePath,
-				targetDMgr.absolutePath+osPathSepStr+nameDirEntries[i].Name(),
 				i,
-				err2.Error())
+				fileInfos[i].Name(),
+				targetDMgr.absolutePath+
+					osPathSepStr+
+					fileInfos[i].Name(),
+				fatalErr.Error())
+
+			return numOfSubDirsLocated, numOfFilesLocated, err
 
 		}
 
+		numOfFilesLocated++
 	}
 
-	return numOfFilesLocated, err
+	return numOfSubDirsLocated, numOfFilesLocated, err
 }
