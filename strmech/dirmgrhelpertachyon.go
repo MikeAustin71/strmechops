@@ -61,7 +61,7 @@ type dirMgrHelperTachyon struct {
 //
 //	fileSelectCharacteristics	FileSelectionCriteria
 //
-//		Files selected for description in the directory
+//		Files selected for inclusion in the directory
 //		profile statistics must conform to the File
 //		Characteristics Criteria specified by this input
 //		parameter, 'fileSelectCharacteristics'.
@@ -304,6 +304,13 @@ type dirMgrHelperTachyon struct {
 //				that the directory actually exists on
 //				a storage drive.
 //
+//			ParentDirIsIncludedInStats bool
+//				If this parameter is set to 'true', it
+//				signals that the directory statistics and
+//				information provided by this instance of
+//				DirectoryProfile includes metrics from
+//				the parent directory.
+//
 //			DirTotalFiles				uint64
 //				The number of total files, of all types,
 //				residing in the subject directory. This
@@ -326,6 +333,26 @@ type dirMgrHelperTachyon struct {
 //				The total size of all Subdirectory entries
 //				residing in the subject directory expressed
 //				in bytes.
+//
+//			SubDirsIncludeCurrentDirOneDot bool
+//				All directories include an os.FileInfo entry for
+//				the current directory. The current directory name
+//				is always denoted as single dot ('.').
+//
+//				When data element, 'SubDirsIncludeCurrentDirOneDot',
+//				is set to 'true', the one dot current directory ('.')
+//				will be included in the directory profile information
+//				and counted as a separate subdirectory.
+//
+//			SubDirsIncludeParentDirTwoDot bool
+//				All directories include an os.FileInfo entry for
+//				the parent directory. The parent directory name
+//				is always denoted as two dots ('..').
+//
+//				When data element, 'SubDirsIncludeParentDirTwoDot',
+//				is set to 'true', the two dot ('..') parent directory,
+//				will be included in the directory profile information
+//				and counted as a separate subdirectory.
 //
 //			DirRegularFiles				uint64
 //				The number of 'Regular' Files residing
@@ -426,12 +453,6 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getDirectoryProfile(
 		return directoryPathDoesExist, dirProfile, err
 	}
 
-	dirProfile.SubDirsIncludeCurrentDirOneDot =
-		includeSubDirCurrenDirOneDot
-
-	dirProfile.SubDirsIncludeParentDirTwoDot =
-		includeSubDirParentDirTwoDots
-
 	_,
 		directoryPathDoesExist,
 		err = new(dirMgrHelperPreon).
@@ -445,6 +466,12 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getDirectoryProfile(
 
 		return directoryPathDoesExist, dirProfile, err
 	}
+
+	dirProfile.SubDirsIncludeCurrentDirOneDot =
+		includeSubDirCurrenDirOneDot
+
+	dirProfile.SubDirsIncludeParentDirTwoDot =
+		includeSubDirParentDirTwoDots
 
 	dirProfile.DirExistsOnStorageDrive =
 		directoryPathDoesExist
