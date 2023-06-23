@@ -2465,6 +2465,90 @@ func (dMgr *DirMgr) DeleteAll(
 //				calculation of these statistics.
 //		}
 //
+//	remainingTargetDirStats		DirectoryProfile
+//
+//		Returns an instance of DirectoryProfile
+//		containing statistics and information on the
+//		target directory ('') after completion of the
+//		file deletion operation.
+//
+//		type DirectoryProfile struct {
+//			DirAbsolutePath string
+//				The absolute directory path for the
+//				directory described by this profile
+//				information.
+//
+//			DirManager DirMgr
+//				An instance of DirMgr encapsulating the
+//				Directory Path and associated parameters
+//				for the directory described by this profile
+//				information.
+//
+//			DirExistsOnStorageDrive bool
+//				If 'true', this paramter signals
+//				that the directory actually exists on
+//				a storage drive.
+//
+//			DirTotalFiles uint64
+//				The number of total files residing in
+//				the subject directory. This includes
+//				Regular Files, SymLink Files and
+//				Non-Regular Files. It does NOT include
+//				directory entry files.
+//
+//			DirTotalFileBytes uint64
+//				The size of all files residing in the
+//				subject directory expressed in bytes.
+//				This includes Regular Files, SymLink
+//				Files and Non-Regular Files. It does
+//				NOT include directory entry files.
+//
+//			DirSubDirectories uint64
+//				The number of subdirectories residing
+//				within the subject directory. This
+//
+//			DirSubDirectoriesBytes uint64
+//				The total size of all Subdirectory entries
+//				residing in the subject directory expressed
+//				in bytes.
+//
+//			DirRegularFiles uint64
+//				The number of 'Regular' Files residing
+//				within the subject Directory. Regular
+//				files include text files, image files
+//				and executable files. Reference:
+//				https://www.computerhope.com/jargon/r/regular-file.htm
+//
+//			DirRegularFileBytes uint64
+//				The total size of all 'Regular' files
+//				residing in the subject directory expressed
+//				in bytes.
+//
+//			DirSymLinkFiles uint64
+//				The number of SymLink files residing in the
+//				subject directory.
+//
+//			DirSymLinkFileBytes uint64
+//				The total size of all SymLink files
+//				residing in the subject directory
+//				expressed in bytes.
+//
+//			DirNonRegularFiles uint64
+//				The total number of Non-Regular files residing
+//				in the subject directory.
+//
+//				Non-Regular files include directories, device
+//				files, named pipes, sockets, and symbolic links.
+//
+//			DirNonRegularFileBytes uint64
+//				The total size of all Non-Regular files residing
+//				in the subject directory expressed in bytes.
+//
+//			Errors []error
+//				An array of errors associated with the
+//				calculation of these statistics.
+//		}
+//
 //	nonfatalErrs				[]error
 //
 //		An array of error objects.
@@ -2520,6 +2604,7 @@ func (dMgr *DirMgr) DeleteAllFilesInDir(
 	deletedFiles *FileMgrCollection,
 	errorPrefix interface{}) (
 	deleteDirStats DeleteDirFilesStats,
+	remainingTargetDirStats DirectoryProfile,
 	nonfatalErrs []error,
 	fatalErr error) {
 
@@ -2542,10 +2627,14 @@ func (dMgr *DirMgr) DeleteAllFilesInDir(
 
 	if fatalErr != nil {
 
-		return deleteDirStats, nonfatalErrs, fatalErr
+		return deleteDirStats,
+			remainingTargetDirStats,
+			nonfatalErrs,
+			fatalErr
 	}
 
 	deleteDirStats,
+		remainingTargetDirStats,
 		nonfatalErrs,
 		fatalErr = new(dirMgrHelperPlanck).
 		deleteDirectoryFiles(
@@ -2561,7 +2650,10 @@ func (dMgr *DirMgr) DeleteAllFilesInDir(
 			deletedFiles, // deletedFiles
 			ePrefix)
 
-	return deleteDirStats, nonfatalErrs, fatalErr
+	return deleteDirStats,
+		remainingTargetDirStats,
+		nonfatalErrs,
+		fatalErr
 }
 
 // DeleteAllSubDirectories

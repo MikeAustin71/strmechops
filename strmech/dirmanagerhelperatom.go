@@ -1748,9 +1748,11 @@ func (dMgrHlprAtom *dirMgrHelperAtom) moveDirectoryFiles(
 
 	fileInfos = nil
 
+	var dMgrHlprTachyon = new(dirMgrHelperTachyon)
+
 	_,
 		remainingSourceDirStats,
-		err2 = new(dirMgrHelperTachyon).
+		err2 = dMgrHlprTachyon.
 		getDirectoryProfile(
 			sourceDMgr,
 			false,                   // includeSubDirCurrenDirOneDot
@@ -1845,7 +1847,7 @@ func (dMgrHlprAtom *dirMgrHelperAtom) moveDirectoryFiles(
 		// Successfully Deleted.
 		_,
 			remainingSourceDirStats,
-			err2 = new(dirMgrHelperTachyon).
+			err2 = dMgrHlprTachyon.
 			getDirectoryProfile(
 				sourceDMgr,
 				false,                   // includeSubDirCurrenDirOneDot

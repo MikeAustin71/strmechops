@@ -1775,6 +1775,90 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //				calculation of these statistics.
 //		}
 //
+//	remainingTargetDirStats		DirectoryProfile
+//
+//		Returns an instance of DirectoryProfile
+//		containing statistics and information on the
+//		target directory ('') after completion of the
+//		file deletion operation.
+//
+//		type DirectoryProfile struct {
+//			DirAbsolutePath string
+//				The absolute directory path for the
+//				directory described by this profile
+//				information.
+//
+//			DirManager DirMgr
+//				An instance of DirMgr encapsulating the
+//				Directory Path and associated parameters
+//				for the directory described by this profile
+//				information.
+//
+//			DirExistsOnStorageDrive bool
+//				If 'true', this paramter signals
+//				that the directory actually exists on
+//				a storage drive.
+//
+//			DirTotalFiles uint64
+//				The number of total files residing in
+//				the subject directory. This includes
+//				Regular Files, SymLink Files and
+//				Non-Regular Files. It does NOT include
+//				directory entry files.
+//
+//			DirTotalFileBytes uint64
+//				The size of all files residing in the
+//				subject directory expressed in bytes.
+//				This includes Regular Files, SymLink
+//				Files and Non-Regular Files. It does
+//				NOT include directory entry files.
+//
+//			DirSubDirectories uint64
+//				The number of subdirectories residing
+//				within the subject directory. This
+//
+//			DirSubDirectoriesBytes uint64
+//				The total size of all Subdirectory entries
+//				residing in the subject directory expressed
+//				in bytes.
+//
+//			DirRegularFiles uint64
+//				The number of 'Regular' Files residing
+//				within the subject Directory. Regular
+//				files include text files, image files
+//				and executable files. Reference:
+//				https://www.computerhope.com/jargon/r/regular-file.htm
+//
+//			DirRegularFileBytes uint64
+//				The total size of all 'Regular' files
+//				residing in the subject directory expressed
+//				in bytes.
+//
+//			DirSymLinkFiles uint64
+//				The number of SymLink files residing in the
+//				subject directory.
+//
+//			DirSymLinkFileBytes uint64
+//				The total size of all SymLink files
+//				residing in the subject directory
+//				expressed in bytes.
+//
+//			DirNonRegularFiles uint64
+//				The total number of Non-Regular files residing
+//				in the subject directory.
+//
+//				Non-Regular files include directories, device
+//				files, named pipes, sockets, and symbolic links.
+//
+//			DirNonRegularFileBytes uint64
+//				The total size of all Non-Regular files residing
+//				in the subject directory expressed in bytes.
+//
+//			Errors []error
+//				An array of errors associated with the
+//				calculation of these statistics.
+//		}
+//
 //	nonfatalErrs				[]error
 //
 //		An array of error objects.
@@ -1838,6 +1922,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 	deletedFiles *FileMgrCollection,
 	errPrefDto *ePref.ErrPrefixDto) (
 	deletedDirFileStats DeleteDirFilesStats,
+	remainingTargetDirStats DirectoryProfile,
 	nonfatalErrs []error,
 	fatalErr error) {
 
@@ -1863,6 +1948,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 	if fatalErr != nil {
 
 		return deletedDirFileStats,
+			remainingTargetDirStats,
 			nonfatalErrs,
 			fatalErr
 	}
@@ -1890,6 +1976,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 			ePrefix.String())
 
 		return deletedDirFileStats,
+			remainingTargetDirStats,
 			nonfatalErrs,
 			fatalErr
 	}
@@ -1907,6 +1994,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 			ePrefix.String())
 
 		return deletedDirFileStats,
+			remainingTargetDirStats,
 			nonfatalErrs,
 			fatalErr
 	}
@@ -1924,6 +2012,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 			ePrefix.String())
 
 		return deletedDirFileStats,
+			remainingTargetDirStats,
 			nonfatalErrs,
 			fatalErr
 	}
@@ -1956,6 +2045,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 	if fatalErr != nil {
 
 		return deletedDirFileStats,
+			remainingTargetDirStats,
 			nonfatalErrs,
 			fatalErr
 	}
@@ -1964,7 +2054,9 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 
 		// No files are eligible
 		// for deletion
+
 		return deletedDirFileStats,
+			remainingTargetDirStats,
 			nonfatalErrs,
 			fatalErr
 	}
@@ -2007,7 +2099,10 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 						nameFileInfo.Name(),
 					err2.Error())
 
-				return deletedDirFileStats, nonfatalErrs, fatalErr
+				return deletedDirFileStats,
+					remainingTargetDirStats,
+					nonfatalErrs,
+					fatalErr
 			}
 
 			deletedDirFileStats.SubDirsDocumented++
@@ -2021,7 +2116,10 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 		// The file matches the File Characteristics
 		// Criteria and the File Type Criteria
 
-		err2 = os.Remove(targetDMgr.absolutePath + osPathSepStr + nameFileInfo.Name())
+		err2 = os.Remove(
+			targetDMgr.absolutePath +
+				osPathSepStr +
+				nameFileInfo.Name())
 
 		if err2 != nil {
 
@@ -2034,6 +2132,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 				err2.Error())
 
 			return deletedDirFileStats,
+				remainingTargetDirStats,
 				nonfatalErrs,
 				fatalErr
 		}
@@ -2136,7 +2235,34 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) deleteDirectoryFiles(
 				err2)
 	}
 
+	_,
+		remainingTargetDirStats,
+		err2 = new(dirMgrHelperTachyon).
+		getDirectoryProfile(
+			targetDMgr,
+			false,                   // includeSubDirCurrenDirOneDot
+			false,                   // includeSubDirParentDirTwoDots
+			FileSelectionCriteria{}, // fileSelectCharacteristics
+			targetDMgrLabel,
+			ePrefix)
+
+	if err2 != nil {
+
+		fatalErr = fmt.Errorf("%v\n"+
+			"Error occurred reading the %v Target Directory\n"+
+			"Profile after the file deletion operation completed.\n"+
+			"Error returned by dirMgrHelperTachyon.getDirectoryProfile()\n"+
+			"%v Directory = '%v'\n"+
+			"Error= \n%v\n",
+			funcName,
+			targetDMgrLabel,
+			targetDMgrLabel,
+			targetDMgr.absolutePath,
+			err2.Error())
+	}
+
 	return deletedDirFileStats,
+		remainingTargetDirStats,
 		nonfatalErrs,
 		fatalErr
 }
