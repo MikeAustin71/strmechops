@@ -1783,16 +1783,23 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //		file deletion operation.
 //
 //		type DirectoryProfile struct {
-//			DirAbsolutePath string
+//			ParentDirAbsolutePath string
 //				The absolute directory path for the
 //				directory described by this profile
 //				information.
 //
-//			DirManager DirMgr
+//			ParentDirManager DirMgr
 //				An instance of DirMgr encapsulating the
 //				Directory Path and associated parameters
 //				for the directory described by this profile
 //				information.
+//
+//			ParentDirIsIncludedInStats bool
+//				If this parameter is set to 'true', it
+//				signals that the directory statistics and
+//				information provided by this instance of
+//				DirectoryProfile includes metrics from
+//				the parent directory.
 //
 //			DirExistsOnStorageDrive bool
 //				If 'true', this paramter signals
@@ -1821,6 +1828,26 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //				The total size of all Subdirectory entries
 //				residing in the subject directory expressed
 //				in bytes.
+//
+//			SubDirsIncludeCurrentDirOneDot bool
+//				All directories include an os.FileInfo entry for
+//				the current directory. The current directory name
+//				is always denoted as single dot ('.').
+//
+//				When data element, 'SubDirsIncludeCurrentDirOneDot',
+//				is set to 'true', the one dot current directory ('.')
+//				will be included in the directory profile information
+//				and counted as a separate subdirectory.
+//
+//			SubDirsIncludeParentDirTwoDot bool
+//				All directories include an os.FileInfo entry for
+//				the parent directory. The parent directory name
+//				is always denoted as two dots ('..').
+//
+//				When data element, 'SubDirsIncludeParentDirTwoDot',
+//				is set to 'true', the two dot ('..') parent directory,
+//				will be included in the directory profile information
+//				and counted as a separate subdirectory.
 //
 //			DirRegularFiles uint64
 //				The number of 'Regular' Files residing

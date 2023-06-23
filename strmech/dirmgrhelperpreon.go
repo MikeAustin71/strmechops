@@ -10,6 +10,66 @@ type dirMgrHelperPreon struct {
 	lock *sync.Mutex
 }
 
+func (dMgrHlprPreon *dirMgrHelperPreon) getDirectoryTreeProfile(
+	dMgr *DirMgr,
+	skipTopLevelDirectory bool,
+	includeSubDirCurrenDirOneDot bool,
+	includeSubDirParentDirTwoDots bool,
+	fileSelectCharacteristics FileSelectionCriteria,
+	dMgrLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	directoryPathDoesExist bool,
+	dirProfile DirectoryProfile,
+	err error) {
+
+	if dMgrHlprPreon.lock == nil {
+		dMgrHlprPreon.lock = new(sync.Mutex)
+	}
+
+	dMgrHlprPreon.lock.Lock()
+
+	defer dMgrHlprPreon.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "dirMgrHelperPreon." +
+		"getDirectoryTreeProfile()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return directoryPathDoesExist, dirProfile, err
+	}
+
+	if len(dMgrLabel) == 0 {
+
+		dMgrLabel = "dMgr"
+
+	}
+
+	_,
+		_,
+		err = new(dirMgrHelperPreon).
+		validateDirMgr(
+			dMgr,
+			true, // pathMustExist
+			dMgrLabel,
+			ePrefix)
+
+	if err != nil {
+
+		return directoryPathDoesExist, dirProfile, err
+	}
+
+	var subDirsInDir DirMgrCollection
+
+}
+
 // validateDirMgr
 //
 // This method performs a comprehensive analysis to

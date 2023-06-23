@@ -288,12 +288,12 @@ type dirMgrHelperTachyon struct {
 //
 //		type DirectoryProfile struct {
 //
-//			DirAbsolutePath 			string
+//			ParentDirAbsolutePath 			string
 //				The absolute directory path for the
 //				directory described by this profile
 //				information.
 //
-//			DirManager					DirMgr
+//			ParentDirManager					DirMgr
 //				An instance of DirMgr encapsulating the
 //				Directory Path and associated parameters
 //				for the directory described by this profile
@@ -425,6 +425,12 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getDirectoryProfile(
 
 		return directoryPathDoesExist, dirProfile, err
 	}
+
+	dirProfile.SubDirsIncludeCurrentDirOneDot =
+		includeSubDirCurrenDirOneDot
+
+	dirProfile.SubDirsIncludeParentDirTwoDot =
+		includeSubDirParentDirTwoDots
 
 	_,
 		directoryPathDoesExist,
