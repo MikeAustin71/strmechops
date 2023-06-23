@@ -1046,16 +1046,12 @@ func (dMgrHlprElectron *dirMgrHelperElectron) getSubDirsFilesInDirTree(
 		return numOfSubDirsLocated, numOfFilesLocated, err
 	}
 
-	if subDirsInDir == nil {
-
-		subDirsInDir = new(DirMgrCollection)
-
-		subDirSelectCharacteristics = FileSelectionCriteria{}
-	}
-
 	var idx = 0
 
-	idx = len(subDirsInDir.dirMgrs)
+	if subDirsInDir != nil {
+
+		idx = len(subDirsInDir.dirMgrs)
+	}
 
 	var dMgrHlprBoson = new(dirMgrHelperBoson)
 
@@ -1091,13 +1087,16 @@ func (dMgrHlprElectron *dirMgrHelperElectron) getSubDirsFilesInDirTree(
 		return numOfSubDirsLocated, numOfFilesLocated, err
 	}
 
-	var doLoop = true
 	var subDirDMgr DirMgr
 	var newNumOfSubDirsLocated, newNumOfFilesLocated int
 	var dMgrColHelper = new(dirMgrCollectionHelper)
 	var errStatus ArrayColErrorStatus
 
-	for doLoop == true {
+	idx--
+
+	for idx > -2 {
+
+		idx++
 
 		// This is a peek operation
 		subDirDMgr,
@@ -1112,7 +1111,7 @@ func (dMgrHlprElectron *dirMgrHelperElectron) getSubDirsFilesInDirTree(
 
 			if errStatus.IsIndexOutOfBounds == true {
 
-				doLoop = false
+				idx = -2
 
 				break
 			}
