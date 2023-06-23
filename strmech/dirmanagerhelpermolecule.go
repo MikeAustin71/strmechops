@@ -1386,6 +1386,12 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 //		FileInfoPlus objects containing os.FileInfo
 //		information returned by this method.
 //
+//		File Characteristics Criteria allow the user to
+//		screen files based on File Name, File
+//		Modification Date and File Mode. In addition,
+//		users have the option to filter File Names using
+//		pattern matches or regular expressions.
+//
 //		type FileSelectionCriteria struct {
 //
 //			FileNamePatterns    []string
@@ -1413,14 +1419,14 @@ func (dMgrHlprMolecule *dirMgrHelperMolecule) lowLevelCopyFile(
 //				Specifies 'AND' or 'OR' selection mode
 //		}
 //
-//	  The FileSelectionCriteria type allows for
-//	  configuration of single or multiple file selection
-//	  criterion. The 'SelectCriterionMode' can be used to
-//	  specify whether the file must match all, or any one,
-//	  of the active file selection criterion.
+//		The FileSelectionCriteria type allows for
+//		configuration of single or multiple file selection
+//		criterion. The 'SelectCriterionMode' can be used to
+//		specify whether the file must match all, or any one,
+//		of the active file selection criterion.
 //
-//	  Elements of the FileSelectionCriteria are described
-//	  below:
+//		Elements of the FileSelectionCriteria are described
+//		below:
 //
 //			FileNamePatterns		[]string
 //

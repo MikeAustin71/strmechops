@@ -11699,22 +11699,46 @@ func (dMgr *DirMgr) MakeDir(
 //		if they meet the File Type and File Characteristics
 //		criteria for file selection.
 //
-//	deleteEmptySourceDirectory	bool
+//	deleteSourceDirIfEmpty		bool
 //
 //		This parameter controls whether empty source
 //		directories will be deleted after completion of
 //		the move operation.
 //
-//		If 'deleteEmptySourceDirectory' is set to 'true'
+//		Bear in mind this parameter may be overridden by
+//		input parameter 'deleteSourceDirAlways'. If
+//		'deleteSourceDirAlways' is set to 'true', the
+//		source directory will be deleted after 'move'
+//		operation and this parameter,
+//		'deleteSourceDirIfEmpty', will be ignored.
+//
+//		If 'deleteSourceDirAlways' is set to 'false' and
+//		'deleteEmptySourceDirectory' is set to 'true'
 //		and there are no files or subdirectories
 //		remaining in the source directory (sourceDMgr)
 //		after completion of the move operation, the
 //		source directory will be deleted.
 //
-//		If 'deleteEmptySourceDirectory' is set to
-//		'false', the source directory (sourceDMgr) will
-//		NOT be deleted after completion of the move
-//		operation.
+//		If 'deleteSourceDirAlways' is set to 'false' and
+//		'deleteEmptySourceDirectory' is set to 'false',
+//		the source directory (sourceDMgr) will NOT be
+//		deleted after completion of the move operation.
+//
+//	deleteSourceDirAlways		bool
+//
+//		If this parameter is set to 'true', the source
+//		directory (sourceDMgr) will always be deleted
+//		after a successful 'move' operation, regardless
+//		of whether files and subdirectories still remain
+//		in the source directory. If 'deleteSourceDirAlways'
+//		is set to 'true', it overrides the setting for
+//		input parameter 'deleteSourceDirIfEmpty'.
+//
+//		If this parameter is set to 'false', the source
+//		directory will only be deleted after the 'move'
+//		operation if input parameter 'deleteSourceDirIfEmpty'
+//		is set to 'true' and the source directory is empty.
+//		Otherwise, the source directory will NOT be deleted.
 //
 //	moveRegularFiles			bool
 //
@@ -12028,6 +12052,92 @@ func (dMgr *DirMgr) MakeDir(
 //			Errors             error
 //		}
 //
+//	remainingSourceDirStats		DirectoryProfile
+//
+//		This returned instance of DirectoryProfile
+//		contains statistics and information on the source
+//		directory 'sourceDMgr' after completion of the
+//		move operation. Any files or subdirectories
+//		remaining in the source directory after the
+//		move operation, will be documented here.
+//
+//		type DirectoryProfile struct {
+//			DirAbsolutePath string
+//				The absolute directory path for the
+//				directory described by this profile
+//				information.
+//
+//			DirManager DirMgr
+//				An instance of DirMgr encapsulating the
+//				Directory Path and associated parameters
+//				for the directory described by this profile
+//				information.
+//
+//			DirExistsOnStorageDrive bool
+//				If 'true', this paramter signals
+//				that the directory actually exists on
+//				a storage drive.
+//
+//			DirTotalFiles uint64
+//				The number of total files residing in
+//				the subject directory. This includes
+//				Regular Files, SymLink Files and
+//				Non-Regular Files. It does NOT include
+//				directory entry files.
+//
+//			DirTotalFileBytes uint64
+//				The size of all files residing in the
+//				subject directory expressed in bytes.
+//				This includes Regular Files, SymLink
+//				Files and Non-Regular Files. It does
+//				NOT include directory entry files.
+//
+//			DirSubDirectories uint64
+//				The number of subdirectories residing
+//				within the subject directory. This
+//
+//			DirSubDirectoriesBytes uint64
+//				The total size of all Subdirectory entries
+//				residing in the subject directory expressed
+//				in bytes.
+//
+//			DirRegularFiles uint64
+//				The number of 'Regular' Files residing
+//				within the subject Directory. Regular
+//				files include text files, image files
+//				and executable files. Reference:
+//				https://www.computerhope.com/jargon/r/regular-file.htm
+//
+//			DirRegularFileBytes uint64
+//				The total size of all 'Regular' files
+//				residing in the subject directory expressed
+//				in bytes.
+//
+//			DirSymLinkFiles uint64
+//				The number of SymLink files residing in the
+//				subject directory.
+//
+//			DirSymLinkFileBytes uint64
+//				The total size of all SymLink files
+//				residing in the subject directory
+//				expressed in bytes.
+//
+//			DirNonRegularFiles uint64
+//				The total number of Non-Regular files residing
+//				in the subject directory.
+//
+//				Non-Regular files include directories, device
+//				files, named pipes, sockets, and symbolic links.
+//
+//			DirNonRegularFileBytes uint64
+//				The total size of all Non-Regular files residing
+//				in the subject directory expressed in bytes.
+//
+//			Errors []error
+//				An array of errors associated with the
+//				calculation of these statistics.
+//		}
+//
 //	nonfatalErrs				[]error
 //
 //		An array of error objects.
@@ -12084,6 +12194,7 @@ func (dMgr *DirMgr) MoveDirectoryFiles(
 	returnMovedFilesList bool,
 	copyEmptyTargetDirectory bool,
 	deleteEmptySourceDirectory bool,
+	deleteSourceDirAlways bool,
 	moveRegularFiles bool,
 	moveSymLinkFiles bool,
 	moveOtherNonRegularFiles bool,
@@ -12091,6 +12202,7 @@ func (dMgr *DirMgr) MoveDirectoryFiles(
 	errorPrefix interface{}) (
 	dirMoveStats DirectoryMoveStats,
 	movedFiles FileMgrCollection,
+	remainingSourceDirStats DirectoryProfile,
 	nonfatalErrs []error,
 	fatalErr error) {
 
@@ -12115,11 +12227,16 @@ func (dMgr *DirMgr) MoveDirectoryFiles(
 
 		nonfatalErrs = append(nonfatalErrs, err)
 
-		return dirMoveStats, movedFiles, nonfatalErrs, fatalErr
+		return dirMoveStats,
+			movedFiles,
+			remainingSourceDirStats,
+			nonfatalErrs,
+			fatalErr
 	}
 
 	dirMoveStats,
 		movedFiles,
+		remainingSourceDirStats,
 		nonfatalErrs,
 		fatalErr = new(dirMgrHelperAtom).
 		moveDirectoryFiles(
@@ -12128,6 +12245,7 @@ func (dMgr *DirMgr) MoveDirectoryFiles(
 			returnMovedFilesList,
 			copyEmptyTargetDirectory,
 			deleteEmptySourceDirectory,
+			deleteSourceDirAlways,
 			moveRegularFiles,
 			moveSymLinkFiles,
 			moveOtherNonRegularFiles,
@@ -12136,7 +12254,11 @@ func (dMgr *DirMgr) MoveDirectoryFiles(
 			"targetDMgr",
 			ePrefix)
 
-	return dirMoveStats, movedFiles, nonfatalErrs, fatalErr
+	return dirMoveStats,
+		movedFiles,
+		remainingSourceDirStats,
+		nonfatalErrs,
+		fatalErr
 }
 
 // MoveDirectoryTree

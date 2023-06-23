@@ -392,6 +392,12 @@ type DirectoryProfile struct {
 	// directory described by this profile
 	// information.
 
+	DirManager DirMgr
+	// An instance of DirMgr encapsulating the
+	// Directory Path and associated parameters
+	// for the directory described by this profile
+	// information.
+
 	DirExistsOnStorageDrive bool
 	// If 'true', this paramter signals
 	// that the directory actually exists on
@@ -501,6 +507,378 @@ func (dirProfile *DirectoryProfile) AddDirProfileStats(
 		incomingDirProfile.DirNonRegularFileBytes
 
 	return
+}
+
+// SetDirMgr
+//
+// Receives an instance of Directory Manager (DirMgr) and
+// proceeds to the set the DirectoryProfile profile
+// member variables:
+//
+//	DirectoryProfile.DirManager
+//	DirectoryProfile.DirAbsolutePath
+//
+// Receives a string containing a directory path and proceeds
+// to convert that path to an absolute directory path before
+// configuring the DirectoryProfile profile
+// member variables:
+//
+//	DirectoryProfile.DirManager
+//	DirectoryProfile.DirAbsolutePath
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dMgr						*DirMgr
+//
+//		A pointer to an instance of Directory Manager
+//		(DirMgr). The directory path information
+//		contained in this instance will be used to the
+//		set the following DirectoryProfile profile member
+//		variables:
+//
+//			DirectoryProfile.DirManager
+//			DirectoryProfile.DirAbsolutePath
+//
+//	dMgrLabel					string
+//
+//		The name or label associated with input parameter
+//		'dMgr', which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "dMgr" will be
+//		automatically applied.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (dirProfile *DirectoryProfile) SetDirMgr(
+	dMgr *DirMgr,
+	dMgrLabel string,
+	errorPrefix interface{}) error {
+
+	if dirProfile.lock == nil {
+		dirProfile.lock = new(sync.Mutex)
+	}
+
+	dirProfile.lock.Lock()
+
+	defer dirProfile.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	funcName := "DirectoryProfile.SetDirMgr()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(dMgrLabel) == 0 {
+		dMgrLabel = "dMgr"
+	}
+
+	if dMgr == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is a nil pointer.\n",
+			ePrefix.String(),
+			dMgrLabel,
+			dMgrLabel)
+
+		return err
+	}
+
+	err = new(dirMgrHelperBoson).copyDirMgrs(
+		&dirProfile.DirManager,
+		dMgr,
+		ePrefix.XCpy(
+			"dirProfile.DirManager<-dMgr"))
+
+	if err != nil {
+
+		return fmt.Errorf("%v\n"+
+			"Error occurred while copying %v Directory Manager"+
+			"to Directory Profile.\n"+
+			"new(dirMgrHelperBoson).copyDirMgrs()\n"+
+			"%v Absolute Path = '%v'\n"+
+			"Error = \n%v\n",
+			funcName,
+			dMgrLabel,
+			dMgrLabel,
+			dMgr.absolutePath,
+			err.Error())
+	}
+
+	dirProfile.DirAbsolutePath =
+		dirProfile.DirManager.absolutePath
+
+	return err
+}
+
+// SetDirPath
+//
+// Receives a string containing a directory path and proceeds
+// to convert that path to an absolute directory path before
+// configuring the DirectoryProfile profile
+// member variables:
+//
+//	DirectoryProfile.DirManager
+//	DirectoryProfile.DirAbsolutePath
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	dirPath						string
+//
+//		This string contains a directory path which will
+//		be converted to an absolute directory path before
+//		configuring the following DirectoryProfile
+//		profile member variables:
+//
+//			DirectoryProfile.DirManager
+//			DirectoryProfile.DirAbsolutePath
+//
+//	dirPathLabel				string
+//
+//		The name or label associated with input parameter
+//		'dirPath', which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "dirPath" will be
+//		automatically applied.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (dirProfile *DirectoryProfile) SetDirPath(
+	dirPath string,
+	dirPathLabel string,
+	errorPrefix interface{}) error {
+
+	if dirProfile.lock == nil {
+		dirProfile.lock = new(sync.Mutex)
+	}
+
+	dirProfile.lock.Lock()
+
+	defer dirProfile.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	funcName := "DirectoryProfile.SetDirMgr()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(dirPathLabel) == 0 {
+		dirPathLabel = "dirPath"
+	}
+
+	if len(dirPath) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is empty with a zero (0) string length.\n",
+			ePrefix.String(),
+			dirPathLabel,
+			dirPathLabel)
+
+		return err
+	}
+
+	isEmpty,
+		err := new(dirMgrHelperNanobot).
+		setDirMgr(
+			&dirProfile.DirManager,
+			dirPath,
+			"dirProfile.DirManager",
+			dirPathLabel,
+			ePrefix)
+
+	if err != nil {
+		return err
+	}
+
+	if isEmpty {
+
+		err = fmt.Errorf("%v"+
+			"ERROR: %v returned an EMPTY DirMgr\n"+
+			"pathStr='%v'\n",
+			ePrefix.String(),
+			dirPathLabel,
+			dirPath)
+
+		return err
+	}
+
+	dirProfile.DirAbsolutePath =
+		dirProfile.DirManager.absolutePath
+
+	return err
 }
 
 // DirectoryCopyStats
