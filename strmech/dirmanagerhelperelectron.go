@@ -1015,37 +1015,6 @@ func (dMgrHlprElectron *dirMgrHelperElectron) getSubDirsFilesInDirTree(
 		return numOfSubDirsLocated, numOfFilesLocated, err
 	}
 
-	if getSubdirectories == false &&
-		getRegularFiles == false &&
-		getSymLinksFiles == false &&
-		getOtherNonRegularFiles == false {
-
-		err = fmt.Errorf("%v\n"+
-			"Fatal Error: File Type filters are conflicted!\n"+
-			"All of the File Type filters are set to 'false'\n"+
-			"This gurantees that NO subdirectories or files\n"+
-			"will be selected.\n"+
-			"getSubdirectories == false"+
-			"getRegularFiles == false\n"+
-			"getSymLinksFiles == false\n"+
-			"getOtherNonRegularFiles == false\n",
-			ePrefix.String())
-
-		return numOfSubDirsLocated, numOfFilesLocated, err
-	}
-
-	if subDirsInDir == nil &&
-		getSubdirectories == true {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Subdirectories were requested, but\n"+
-			"Directory Manager Collection 'subDirsInDir'\n"+
-			"is a 'nil' pointer. 'subDirsInDir' is invalid!\n",
-			ePrefix.String())
-
-		return numOfSubDirsLocated, numOfFilesLocated, err
-	}
-
 	var idx = 0
 
 	if subDirsInDir != nil {
@@ -1086,6 +1055,8 @@ func (dMgrHlprElectron *dirMgrHelperElectron) getSubDirsFilesInDirTree(
 
 		return numOfSubDirsLocated, numOfFilesLocated, err
 	}
+
+	// Subdirectories were located.
 
 	var subDirDMgr DirMgr
 	var newNumOfSubDirsLocated, newNumOfFilesLocated int
