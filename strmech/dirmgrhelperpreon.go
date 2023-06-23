@@ -53,7 +53,7 @@ func (dMgrHlprPreon *dirMgrHelperPreon) getDirectoryTreeProfile(
 	}
 
 	_,
-		_,
+		directoryPathDoesExist,
 		err = new(dirMgrHelperPreon).
 		validateDirMgr(
 			dMgr,
@@ -68,6 +68,121 @@ func (dMgrHlprPreon *dirMgrHelperPreon) getDirectoryTreeProfile(
 
 	var subDirsInDir DirMgrCollection
 
+	if !skipTopLevelDirectory {
+
+		err = subDirsInDir.AddDirMgr(
+			*dMgr,
+			ePrefix.XCpy(
+				"subDirsInDir<-dMgr"))
+
+		if err != nil {
+			return directoryPathDoesExist, dirProfile, err
+		}
+	}
+
+	err = dirProfile.SetDirMgr(
+		dMgr,
+		dMgrLabel,
+		ePrefix)
+
+	if err != nil {
+		return directoryPathDoesExist, dirProfile, err
+	}
+
+	dirProfile.SubDirsIncludeCurrentDirOneDot =
+		includeSubDirCurrenDirOneDot
+
+	dirProfile.SubDirsIncludeParentDirTwoDot =
+		includeSubDirParentDirTwoDots
+
+	var numOfSubDirsLocated int
+
+	numOfSubDirsLocated,
+		_,
+		err = new(dirMgrHelperElectron).
+		getSubDirsFilesInDirTree(
+			dMgr,
+			true, // getSubdirectories
+			includeSubDirCurrenDirOneDot,
+			includeSubDirParentDirTwoDots,
+			false,                   // getRegularFiles
+			false,                   // getSymLinksFiles
+			false,                   // getOtherNonRegularFiles
+			FileSelectionCriteria{}, // subDirSelectCharacteristics,
+			FileSelectionCriteria{}, // fileSelectCriteria
+			&subDirsInDir,
+			nil,
+			"dMgr",
+			ePrefix)
+
+	if err != nil {
+		return directoryPathDoesExist, dirProfile, err
+	}
+
+	if skipTopLevelDirectory &&
+		numOfSubDirsLocated == 0 {
+
+		return directoryPathDoesExist, dirProfile, err
+	}
+
+	var newDirProfile DirectoryProfile
+	var dMgrColHelper = new(dirMgrCollectionHelper)
+	var idx = -1
+	var errStatus ArrayColErrorStatus
+	var subDirDMgr DirMgr
+
+	for idx > -2 {
+
+		idx++
+
+		// This is a peek operation
+		subDirDMgr,
+			errStatus = dMgrColHelper.
+			peekOrPopAtIndex(
+				&subDirsInDir,
+				idx,
+				false, // deleteIndex
+				ePrefix)
+
+		if errStatus.ProcessingError != nil {
+
+			if errStatus.IsIndexOutOfBounds == true {
+
+				idx = -10
+
+				break
+			}
+
+			err = fmt.Errorf("%v\n"+
+				"Error occurred while extracting DirMgr from 'subDirectories'.\n"+
+				"dirMgrCollectionHelper.peekOrPopAtIndex(subDirectories,index)\n"+
+				"index= %v\n"+
+				"Error= \n%v\n",
+				funcName,
+				idx,
+				errStatus.ProcessingError.Error())
+
+			return directoryPathDoesExist, dirProfile, err
+		}
+
+		directoryPathDoesExist,
+			newDirProfile,
+			err = new(dirMgrHelperTachyon).
+			getDirectoryProfile(
+				&subDirDMgr,
+				includeSubDirCurrenDirOneDot,
+				includeSubDirParentDirTwoDots,
+				fileSelectCharacteristics,
+				"dMgr",
+				ePrefix.XCpy("subDirDMgr"))
+
+		dirProfile.AddDirProfileStats(
+			newDirProfile)
+	}
+
+	subDirsInDir.Empty()
+
+	return directoryPathDoesExist, dirProfile, err
 }
 
 // validateDirMgr

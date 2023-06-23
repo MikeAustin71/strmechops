@@ -296,7 +296,13 @@ func (dMgrHlprElectron *dirMgrHelperElectron) isPathStringEmptyOrBlank(
 // parent directory and all subdirectories in the
 // directory tree will be scanned to identify and return
 // subdirectories and/or files matching the specified
-// selection criteria.
+// selection criteria. Selected subdirectories will be
+// returned in a Directory Manager Collection while
+// selected files will be returned in a File Manager
+// Collection.
+//
+// The parent directory 'targetDMgr' will NOT be
+// returned with selected subdirectories.
 //
 // To qualify for selection and inclusion in the returned
 // Directory and File Manager Collections, items residing
@@ -1009,13 +1015,47 @@ func (dMgrHlprElectron *dirMgrHelperElectron) getSubDirsFilesInDirTree(
 		return numOfSubDirsLocated, numOfFilesLocated, err
 	}
 
+	if getSubdirectories == false &&
+		getRegularFiles == false &&
+		getSymLinksFiles == false &&
+		getOtherNonRegularFiles == false {
+
+		err = fmt.Errorf("%v\n"+
+			"Fatal Error: File Type filters are conflicted!\n"+
+			"All of the File Type filters are set to 'false'\n"+
+			"This gurantees that NO subdirectories or files\n"+
+			"will be selected.\n"+
+			"getSubdirectories == false"+
+			"getRegularFiles == false\n"+
+			"getSymLinksFiles == false\n"+
+			"getOtherNonRegularFiles == false\n",
+			ePrefix.String())
+
+		return numOfSubDirsLocated, numOfFilesLocated, err
+	}
+
+	if subDirsInDir == nil &&
+		getSubdirectories == true {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Subdirectories were requested, but\n"+
+			"Directory Manager Collection 'subDirsInDir'\n"+
+			"is a 'nil' pointer. 'subDirsInDir' is invalid!\n",
+			ePrefix.String())
+
+		return numOfSubDirsLocated, numOfFilesLocated, err
+	}
+
+	if subDirsInDir == nil {
+
+		subDirsInDir = new(DirMgrCollection)
+
+		subDirSelectCharacteristics = FileSelectionCriteria{}
+	}
+
 	var idx = 0
 
-	if subDirsInDir != nil {
-
-		idx = len(subDirsInDir.dirMgrs)
-
-	}
+	idx = len(subDirsInDir.dirMgrs)
 
 	var dMgrHlprBoson = new(dirMgrHelperBoson)
 
@@ -1024,7 +1064,7 @@ func (dMgrHlprElectron *dirMgrHelperElectron) getSubDirsFilesInDirTree(
 		err = dMgrHlprBoson.
 		getSubDirsFilesInDir(
 			targetDMgr,
-			getSubdirectories,
+			true,
 			includeSubDirCurrenDirOneDot,
 			includeSubDirParentDirTwoDots,
 			getRegularFiles,

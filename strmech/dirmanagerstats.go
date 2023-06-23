@@ -533,6 +533,10 @@ func (dirProfile *DirectoryProfile) AddDirProfileStats(
 	dirProfile.DirNonRegularFileBytes +=
 		incomingDirProfile.DirNonRegularFileBytes
 
+	dirProfile.Errors = append(
+		dirProfile.Errors,
+		incomingDirProfile.Errors...)
+
 	return
 }
 
