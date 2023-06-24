@@ -324,7 +324,7 @@ func (dMgrHlprElectron *dirMgrHelperElectron) isPathStringEmptyOrBlank(
 // Characteristics Selection Criteria specified by input
 // parameter, 'subDirSelectCharacteristics'. This
 // parameter is of Type FileSelectionCriteria and allows
-// users to screen and select subdirectories  by Name,
+// users to screen and select subdirectories by Name,
 // Directory Modification Date and Mode. Directory Name
 // selections can be based on pattern matches or regular
 // expression matches.
@@ -336,7 +336,7 @@ func (dMgrHlprElectron *dirMgrHelperElectron) isPathStringEmptyOrBlank(
 //
 // Be advised that users control the behavior for current
 // directories (".") and parent directories ("..") with
-// input parameters 'includeSubDirCurrenDirOneDot' and
+// input parameters 'includeSubDirCurrentDirOneDot' and
 // 'includeSubDirParentDirTwoDots'.
 //
 //	File Screening and Selection
@@ -439,8 +439,8 @@ func (dMgrHlprElectron *dirMgrHelperElectron) isPathStringEmptyOrBlank(
 //		will be searched for eligible subdirectories
 //		and/or files.
 //
-//	(2) Selected subdirectories are required to fulfill
-//		two requirements.
+//	(2) Selected subdirectories must fulfill two
+//		requirements.
 //
 //		First, to select subdirectories, input parameter
 //		'getSubdirectories' must be set to 'true'.
@@ -548,7 +548,7 @@ func (dMgrHlprElectron *dirMgrHelperElectron) isPathStringEmptyOrBlank(
 //		these parameters will be classified as conflicted
 //		and an error will be returned.
 //
-//	includeSubDirCurrenDirOneDot		bool
+//	includeSubDirCurrentDirOneDot		bool
 //
 //		This parameter is only used, if input parameter
 //		'getSubdirectories' is set to 'true'.
@@ -557,7 +557,7 @@ func (dMgrHlprElectron *dirMgrHelperElectron) isPathStringEmptyOrBlank(
 //		the current directory. The current directory name
 //		is always denoted as single dot ('.').
 //
-//		When this parameter, 'includeSubDirCurrenDirOneDot',
+//		When this parameter, 'includeSubDirCurrentDirOneDot',
 //		is set to 'true' and input parameter
 //		getSubdirectories' is set to 'true', the current
 //		directory, designated as a single dot ('.'), will be
@@ -643,10 +643,11 @@ func (dMgrHlprElectron *dirMgrHelperElectron) isPathStringEmptyOrBlank(
 //
 //	subDirSelectCharacteristics FileSelectionCriteria
 //
-//		In addition to the File Type Selection Criteria,
-//		selected subdirectories must conform to the File
+//		In addition to input parameter
+//		'getSubdirectories' being set to 'true', selected
+//		subdirectories must conform to the Subdirectory
 //		Characteristics Selection Criteria specified by
-//		directorySelectCriteria.
+//		this parameter, 'subDirSelectCharacteristics'.
 //
 //		This subdirectory selection criteria allows users
 //		to screen subdirectories for Name, Modification
@@ -668,13 +669,14 @@ func (dMgrHlprElectron *dirMgrHelperElectron) isPathStringEmptyOrBlank(
 //			subDirSelectCharacteristics =
 //				FileSelectionCriteria{}
 //
-//			This ensures that all subdirectories will satisfy
-//			the Directory Characteristics Selection Criteria.
+//			This ensures that all subdirectories will
+//			satisfy the Subdirectory Characteristics
+//			Selection Criteria.
 //
-//		For a detailed explanation of the File Characteristics
-//		Criteria specifications offered by Type
-//		FileSelectionCriteria, see the documentation for
-//		'fileSelectCriteria', below.
+//		For a detailed explanation of the Subdirectory
+//		Characteristics Criteria specifications offered
+//		by Type FileSelectionCriteria, see the
+//		documentation for 'fileSelectCriteria', below.
 //
 //	fileSelectCriteria			FileSelectionCriteria
 //
@@ -860,6 +862,7 @@ func (dMgrHlprElectron *dirMgrHelperElectron) isPathStringEmptyOrBlank(
 //
 //			------------------------------------------------------------------------
 //
+//
 //	subDirsInDir				*DirMgrCollection
 //
 //		A pointer to an instance of DirMgrCollection
@@ -966,7 +969,7 @@ func (dMgrHlprElectron *dirMgrHelperElectron) isPathStringEmptyOrBlank(
 func (dMgrHlprElectron *dirMgrHelperElectron) getSubDirsFilesInDirTree(
 	targetDMgr *DirMgr,
 	getSubdirectories bool,
-	includeSubDirCurrenDirOneDot bool,
+	includeSubDirCurrentDirOneDot bool,
 	includeSubDirParentDirTwoDots bool,
 	getRegularFiles bool,
 	getSymLinksFiles bool,
@@ -1030,7 +1033,7 @@ func (dMgrHlprElectron *dirMgrHelperElectron) getSubDirsFilesInDirTree(
 		getSubDirsFilesInDir(
 			targetDMgr,
 			true,
-			includeSubDirCurrenDirOneDot,
+			includeSubDirCurrentDirOneDot,
 			includeSubDirParentDirTwoDots,
 			getRegularFiles,
 			getSymLinksFiles,
@@ -1105,7 +1108,7 @@ func (dMgrHlprElectron *dirMgrHelperElectron) getSubDirsFilesInDirTree(
 			getSubDirsFilesInDir(
 				&subDirDMgr,
 				getSubdirectories,
-				includeSubDirCurrenDirOneDot,
+				includeSubDirCurrentDirOneDot,
 				includeSubDirParentDirTwoDots,
 				getRegularFiles,
 				getSymLinksFiles,

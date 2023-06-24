@@ -179,7 +179,7 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 // 'subDirsInDir' Directory Manager Collection. Be
 // advised that users control the behavior for current
 // directories (".") and parent directories ("..") with
-// input parameters 'includeSubDirCurrenDirOneDot' and
+// input parameters 'includeSubDirCurrentDirOneDot' and
 // 'includeSubDirParentDirTwoDots'.
 //
 // To qualify as a selected file, the file entry must
@@ -386,7 +386,7 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 //		these parameters will be classified as conflicted
 //		and an error will be returned.
 //
-//	includeSubDirCurrenDirOneDot		bool
+//	includeSubDirCurrentDirOneDot		bool
 //
 //		This parameter is only used, if input parameter
 //		'getSubdirectories' is set to 'true'.
@@ -395,7 +395,7 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 //		the current directory. The current directory name
 //		is always denoted as single dot ('.').
 //
-//		When this parameter, 'includeSubDirCurrenDirOneDot',
+//		When this parameter, 'includeSubDirCurrentDirOneDot',
 //		is set to 'true' and input parameter
 //		getSubdirectories' is set to 'true', the current
 //		directory, designated as a single dot ('.'), will be
@@ -481,10 +481,11 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 //
 //	subDirSelectCharacteristics FileSelectionCriteria
 //
-//		In addition to the File Type Selection Criteria,
-//		selected subdirectories must conform to the File
+//		In addition to input parameter
+//		'getSubdirectories' being set to 'true', selected
+//		subdirectories must conform to the Subdirectory
 //		Characteristics Selection Criteria specified by
-//		directorySelectCriteria.
+//		this parameter, 'subDirSelectCharacteristics'.
 //
 //		This subdirectory selection criteria allows users
 //		to screen subdirectories for Name, Modification
@@ -506,13 +507,14 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 //			subDirSelectCharacteristics =
 //				FileSelectionCriteria{}
 //
-//			This ensures that all subdirectories will satisfy
-//			the Directory Characteristics Selection Criteria.
+//			This ensures that all subdirectories will
+//			satisfy the Subdirectory Characteristics
+//			Selection Criteria.
 //
-//		For a detailed explanation of the File Characteristics
-//		Criteria specifications offered by Type
-//		FileSelectionCriteria, see the documentation for
-//		'fileSelectCriteria', below.
+//		For a detailed explanation of the Subdirectory
+//		Characteristics Criteria specifications offered
+//		by Type FileSelectionCriteria, see the
+//		documentation for 'fileSelectCriteria', below.
 //
 //	fileSelectCriteria			FileSelectionCriteria
 //
@@ -804,7 +806,7 @@ func (dMgrHlprBoson *dirMgrHelperBoson) copyDirMgrs(
 func (dMgrHlprBoson *dirMgrHelperBoson) getSubDirsFilesInDir(
 	targetDMgr *DirMgr,
 	getSubdirectories bool,
-	includeSubDirCurrenDirOneDot bool,
+	includeSubDirCurrentDirOneDot bool,
 	includeSubDirParentDirTwoDots bool,
 	getRegularFiles bool,
 	getSymLinksFiles bool,
@@ -929,7 +931,7 @@ func (dMgrHlprBoson *dirMgrHelperBoson) getSubDirsFilesInDir(
 		lowLevelGetFileInfosFromDir(
 			targetDMgr,
 			getSubdirectories,             // getDirectoryFileInfos
-			includeSubDirCurrenDirOneDot,  // includeSubDirCurrenDirOneDot
+			includeSubDirCurrentDirOneDot, // includeSubDirCurrentDirOneDot
 			includeSubDirParentDirTwoDots, // includeSubDirParentDirTwoDots
 			getRegularFiles,               // getRegularFileInfos
 			getSymLinksFiles,              // getSymLinksFileInfos
