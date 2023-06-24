@@ -6080,7 +6080,7 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrFromKnownPathDirName(
 	}
 
 	isEmpty,
-		err = new(dirMgrHelperNanobot).
+		err = new(dirMgrHelperMolecule).
 		lowLevelDirMgrFieldConfig(
 			dMgr,
 			validPathDto,
@@ -6325,7 +6325,7 @@ func (dMgrHlpr *dirMgrHelper) setDirMgrWithPathDirectoryName(
 	}
 
 	isEmpty,
-		err = new(dirMgrHelperNanobot).
+		err = new(dirMgrHelperMolecule).
 		lowLevelDirMgrFieldConfig(
 			dMgr,
 			validPathDto,
