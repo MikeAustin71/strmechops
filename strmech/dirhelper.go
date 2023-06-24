@@ -2091,13 +2091,21 @@ func (dHlpr *DirHelper) GetSubdirectoriesParentDir(
 
 // GetSubDirsFilesInDirTree
 //
-// Returns selected subdirectories and/or files in an
-// entire directory tree defined by the parent directory
-// input parameter 'directoryPath'. This means that the
-// parent directory and all subdirectories in the
-// directory tree will be scanned to identify and return
-// subdirectories and/or files matching the specified
-// selection criteria. Selected subdirectories will be
+// This method performs a directory tree search for
+// selected subdirectories and/or files.
+//
+// Input parameter configuration is complex, but the
+// tradeoff offers users granular control over
+// subdirectory and/or file search operations.
+//
+// This search operation scans for selected
+// subdirectories and/or files in a directory tree
+// defined by input parameter 'directoryPath'. This
+// means that the parent directory and all
+// subdirectories in the directory tree will be
+// scanned to identify and return subdirectories
+// and/or files matching the specified selection
+// criteria. Selected subdirectories will be
 // returned in a Directory Manager Collection while
 // selected files will be returned in a File Manager
 // Collection.
@@ -2290,12 +2298,9 @@ func (dHlpr *DirHelper) GetSubdirectoriesParentDir(
 //		File Manager Collection ('filesLocated').
 //
 //	(7) If the target directory identified by input
-//		parameter 'directoryPath' contains NO subdirectories
-//		or files matching the Type and Characteristics
-//		selection criteria, this method will exit, no
-//		subdirectories and/or files will be returned in
-//		the Directory Manager or File Manager
-//		Collections, and no error will be returned.
+//		parameter 'directoryPath' does NOT exist on an
+//		attached storage drive, an error will be
+//		returned.
 //
 //	(8) If the target directory identified by input
 //		parameter 'directoryPath' contains NO Files
@@ -2305,9 +2310,12 @@ func (dHlpr *DirHelper) GetSubdirectoriesParentDir(
 //		and no error will be returned.
 //
 //	(9) If the target directory identified by input
-//		parameter 'directoryPath' does NOT exist on an
-//		attached storage drive, an error will be
-//		returned.
+//		parameter 'directoryPath' contains NO subdirectories
+//		or files matching the Type and Characteristics
+//		selection criteria, this method will exit, no
+//		subdirectories and/or files will be returned in
+//		the Directory Manager or File Manager
+//		Collections, and no error will be returned.
 //
 //	(10) If input parameters 'getSubdirectories'
 //		'getRegularFiles', 'getSymLinksFiles' and
@@ -2318,13 +2326,13 @@ func (dHlpr *DirHelper) GetSubdirectoriesParentDir(
 //
 // # Input Parameters
 //
-//	directoryPath				string
+//	directoryPath						string
 //
 //		This string defines a directory path. This path
 //		will be treated as the target directory tree for
 //		the search operation designed to return
 //		subdirectories and/or files. All subdirectories
-//		and/or files which reside in this directory tree
+//		and/or files, which reside in this directory tree,
 //		and meet the specified selection criteria will
 //		be returned to the user by means of the Directory
 //		Manager ('directoriesLocated') and File Manager
@@ -2334,14 +2342,14 @@ func (dHlpr *DirHelper) GetSubdirectoriesParentDir(
 //		attached storage drive, an error will be
 //		returned.
 //
-//	getSubdirectories			bool
+//	getSubdirectories					bool
 //
 //		If this parameter is set to 'true', directory
-//		entries which also meet the Directory Selection
-//		Characteristics criteria (subDirSelectCharacteristics),
-//		will be stored and returned in the Directory
-//		Manager Collection passed as input parameter
-//		'directoriesLocated'.
+//		entries which also meet the Subdirectory
+//		Characteristics Selection Criteria
+//		(subDirSelectCharacteristics), will be stored and
+//		returned in the Directory Manager Collection
+//		passed as input parameter 'directoriesLocated'.
 //
 //		If input parameters 'getSubdirectories',
 //		'getRegularFiles', 'getSymLinksFiles' and
@@ -2399,14 +2407,14 @@ func (dHlpr *DirHelper) GetSubdirectoriesParentDir(
 //		added to the Directory Manager Collection passed as
 //		input parameter 'directoriesLocated'.
 //
-//	getRegularFiles				bool
+//	getRegularFiles						bool
 //
 //		If this parameter is set to 'true', Regular
 //		Files, which also meet the File Characteristics
 //		selection criteria ('fileSelectCriteria'), will
 //		be included in the file information returned
 //		through the File Manager Collection passed as
-//		input parameter 'filesInDir'.
+//		input parameter 'filesLocated'.
 //
 //		Regular Files include text files, image files and
 //		executable files.
@@ -2421,14 +2429,14 @@ func (dHlpr *DirHelper) GetSubdirectoriesParentDir(
 //		these parameters will be classified as conflicted
 //		and an error will be returned.
 //
-//	getSymLinksFiles			bool
+//	getSymLinksFiles					bool
 //
 //		If this parameter is set to 'true', SymLink Files
 //		which also meet the File Characteristics selection
 //		criteria ('fileSelectCriteria'), will be included
 //		in the file information returned through the File
 //		Manager Collection passed as input parameter
-//		'filesInDir'.
+//		'filesLocated'.
 //
 //		For an explanation of Regular and Non-Regular
 //		files, see the section on "Definition Of Terms",
@@ -2440,7 +2448,7 @@ func (dHlpr *DirHelper) GetSubdirectoriesParentDir(
 //		these parameters will be classified as conflicted
 //		and an error will be returned.
 //
-//	getOtherNonRegularFiles		bool
+//	getOtherNonRegularFiles				bool
 //
 //		If this parameter is set to 'true', Other
 //		Non-Regular Files, which also meet the File
@@ -2448,7 +2456,7 @@ func (dHlpr *DirHelper) GetSubdirectoriesParentDir(
 //		('fileSelectCriteria'), will be included in the
 //		file information returned through the File
 //		Manager Collection passed as input parameter
-//		'filesInDir'.
+//		'filesLocated'.
 //
 //		Examples of other non-regular file types
 //		include device files, named pipes, and sockets.
@@ -2460,19 +2468,20 @@ func (dHlpr *DirHelper) GetSubdirectoriesParentDir(
 //		these parameters will be classified as conflicted
 //		and an error will be returned.
 //
-//	subDirSelectCharacteristics FileSelectionCriteria
+//	subDirSelectCharacteristics			FileSelectionCriteria
 //
-//		In addition to input parameter
-//		'getSubdirectories' being set to 'true', selected
-//		subdirectories must conform to the Subdirectory
-//		Characteristics Selection Criteria specified by
-//		this parameter, 'subDirSelectCharacteristics'.
+//		In addition to input parameter 'getSubdirectories'
+//		being set to 'true', selected subdirectories must
+//		conform to the Subdirectory Characteristics
+//		Selection Criteria specified by this parameter,
+//		'subDirSelectCharacteristics'.
 //
-//		This subdirectory selection criteria allows users
-//		to screen subdirectories for Name, Modification
-//		Date and File Mode. Subdirectory Name selections
-//		can be configured for pattern matches or regular
-//		expression matches.
+//		This Subdirectory Characteristics Selection
+//		Criteria allows users to screen subdirectories
+//		for Name, Modification Date and File Mode.
+//		Subdirectory Name selections can be configured
+//		for pattern matches or regular expression
+//		matches.
 //
 //		When 'getSubdirectories' is set to 'true',
 //		Directory os.FileIno entries matching this
@@ -2480,10 +2489,9 @@ func (dHlpr *DirHelper) GetSubdirectoriesParentDir(
 //		Directory Manager Collection returned by
 //		parameter 'directoriesLocated'.
 //
-//		Remember that setting
-//		'subDirSelectCharacteristics' to an empty
-//		instance of FileSelectionCriteria will ensure
-//		that all subdirectories are selected.
+//		Remember that setting 'subDirSelectCharacteristics'
+//		to an empty instance of FileSelectionCriteria
+//		will ensure that all subdirectories are selected.
 //
 //			Example:
 //			subDirSelectCharacteristics =
@@ -2498,7 +2506,7 @@ func (dHlpr *DirHelper) GetSubdirectoriesParentDir(
 //		Type FileSelectionCriteria, see the documentation
 //		for 'fileSelectCriteria', below.
 //
-//	fileSelectCriteria			FileSelectionCriteria
+//	fileSelectCriteria					FileSelectionCriteria
 //
 //		In addition to the File Type Selection Criteria,
 //		selected files must conform to the File
@@ -2514,8 +2522,7 @@ func (dHlpr *DirHelper) GetSubdirectoriesParentDir(
 //		Files matching these selection criteria, and the
 //		File Type filter, will be included in the file
 //		information returned through the File Manager
-//		Collection passed as input parameter
-//		'filesInDir'.
+//		'filesLocated'.
 //
 //		type FileSelectionCriteria struct {
 //
@@ -2670,7 +2677,7 @@ func (dHlpr *DirHelper) GetSubdirectoriesParentDir(
 //			If all of the file selection criterion in the FileSelectionCriteria
 //			object are 'Inactive' or 'Not Set' (set to their zero or default values),
 //			then all the files meeting the File Type requirements in the directory
-//			defined by 'directoriesLocated' will be selected.
+//			defined by 'directoryPath' will be selected.
 //
 //				Example:
 //				  fsc := FileSelectCriterionMode{}
@@ -2678,81 +2685,77 @@ func (dHlpr *DirHelper) GetSubdirectoriesParentDir(
 //				  In this example, 'fsc' is NOT initialized. Therefore,
 //				  all the selection criterion are 'Inactive'. Consequently,
 //				  all the files meeting the File Type requirements in the
-//				  directory defined by 'directoriesLocated' will be selected.
+//				  directory defined by 'directoryPath' will be selected.
 //
 //			------------------------------------------------------------------------
 //
-//	directoriesLocated				*DirMgrCollection
-//
-//		A pointer to an instance of DirMgrCollection
-//		which encapsulates an array of Directory
-//		Manager (DirMgr) objects.
-//
-//		Information on subdirectories in the directory
-//		defined by input parameter 'directoriesLocated' which
-//		match the specified Type and Characteristics
-//		Selection Criteria will be converted to Directory
-//		Manager (DirMgr) objects and added to this
-//		Directory Manager Collection (DirMgrCollection).
-//
-//		If input parameter 'getSubdirectories' is set to
-//		'true' and this input parameter, 'directoriesLocated',
-//		is set to 'nil', an error will be returned.
-//
-//		If input parameter 'getSubdirectories' is set to
-//		'false', input parameter 'directoriesLocated' may be
-//		safely configured as 'nil' and no error will
-//		be returned.
-//
-//	filesInDir					*FileMgrCollection
-//
-//		A pointer to an instance of FileMgrCollection
-//		which encapsulates an array of File Manager
-//		(FileMgr) objects.
-//
-//		Information on files in the directory defined by
-//		input parameter 'directoriesLocated' which match the
-//		specified File Type and File Characteristics
-//		Selection Criteria will be converted to File
-//		Manager (FileMgr) objects and added to this File
-//		Manager	Collection (FileMgrCollection).
-//
-//		If any file type input parameters (
-//		'getRegularFiles', 'getSymLinksFiles' or
-//		'getOtherNonRegularFiles') are set to
-//		'true', and this input parameter, 'filesInDir',
-//		is set to 'nil', an error will be returned.
-//
-//		If all file type input parameters (
-//		'getRegularFiles', 'getSymLinksFiles' or
-//		'getOtherNonRegularFiles') are set to
-//		'false', input parameter 'filesInDir' may be
-//		safely configured as 'nil', and no error will be
-//		returned.
-//
-//	directoriesLocatedLabel				string
+//	directoryPathLabel			string
 //
 //		The name or label associated with input parameter
-//		'directoriesLocated' which will be used in error messages
+//		'directoryPath' which will be used in error messages
 //		returned by this method.
 //
 //		If this parameter is submitted as an empty
-//		string, a default value of "directoriesLocated" will be
+//		string, a default value of "directoryPath" will be
 //		automatically applied.
 //
-//	errPrefDto					*ePref.ErrPrefixDto
+//	errorPrefix					interface{}
 //
-//		This object encapsulates an error prefix string
-//		which is included in all returned error
-//		messages. Usually, it contains the name of the
-//		calling method or methods listed as a function
-//		chain.
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
 //
 //		If no error prefix information is needed, set
 //		this parameter to 'nil'.
 //
-//		Type ErrPrefixDto is included in the 'errpref'
-//		software package:
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
 //			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
@@ -2770,8 +2773,35 @@ func (dHlpr *DirHelper) GetSubdirectoriesParentDir(
 //
 //		When set to 'true' this parameter signals that
 //		the parent directory is included in
-//		'numOfDirectoriesLocated' and the returned
-//		Directory Manager Collection 'directoriesLocated'.
+//		'numOfDirectoriesLocated' total and in the
+//		returned Directory Manager Collection
+//		'directoriesLocated'.
+//
+//	directoriesLocated					*DirMgrCollection
+//
+//		An instance of DirMgrCollection which
+//		encapsulates an array of Directory Manager
+//		(DirMgr) objects.
+//
+//		When input parameter 'getSubdirectories' is set
+//		to 'true', information on subdirectories in the
+//		directory tree defined by input parameter
+//		'directoryPath', which also match the specified
+//		Subdirectory Characteristics Selection Criteria,
+//		will be converted to Directory Manager (DirMgr)
+//		objects and added to this returned instance of
+//		Directory Manager Collection ('directoriesLocated').
+//
+//		When input parameters 'getSubdirectories' and
+//		'includeParentDirectory' are set to 'true', the
+//		parent directory defined by input parameter
+//		'directoryPath' will be included as the first
+//		data element in this returned Directory Manager
+//		Collection ('directoriesLocated').
+//
+//		If input parameter 'getSubdirectories' is set to
+//		'false', 'directoriesLocated' will return an empty
+//		Directory Manager Collection.
 //
 //	numOfFilesLocated			int
 //
@@ -2780,29 +2810,31 @@ func (dHlpr *DirHelper) GetSubdirectoriesParentDir(
 //		and returned in the File Manager Collection
 //		'filesLocated'.
 //
-//	directoriesLocated			*DirMgrCollection
+//	filesLocated						FileMgrCollection
 //
-//		A pointer to an instance of DirMgrCollection
-//		which encapsulates an array of Directory
-//		Manager (DirMgr) objects.
+//		An instance of FileMgrCollection which
+//		encapsulates an array of File Manager (FileMgr)
+//		objects.
 //
-//		Information on subdirectories in the directory
-//		tree defined by input parameter 'directoryPath'
-//		which match the specified Subdirectory
-//		Characteristics Selection Criteria will be
-//		returned by this Directory Manager Collection.
-//
-//	filesLocated				*FileMgrCollection
-//
-//		A pointer to an instance of FileMgrCollection
-//		which encapsulates an array of File Manager
-//		(FileMgr) objects.
-//
-//		Information on files in the directory tree
-//		defined by input parameter 'directoryPath'
+//		Information on files in the parent directory
+//		tree defined by input parameter 'directoriesLocated',
 //		which match the specified File Type and File
-//		Characteristics Selection Criteria will be
-//		returned by this File Manager Collection.
+//		Characteristics Selection Criteria, will be
+//		converted to File Manager (FileMgr) objects and
+//		returned as elements of this File Manager
+//		Collection ('filesLocated').
+//
+//		If all File Type input parameters 'getRegularFiles',
+//		'getSymLinksFiles' and 'getOtherNonRegularFiles'
+//		are set to 'false', 'filesLocated' will return an
+//		empty File Manager Collection.
+//
+//		If one or more of File Type input parameters
+//		'getRegularFiles', 'getSymLinksFiles' and
+//		'getOtherNonRegularFiles' are set to 'true', and
+//		no files (zero files) meet the File Characteristics
+//		Selection Criteria, 'filesLocated' will return an
+//		empty File Manager Collection.
 //
 //	err							error
 //
@@ -2827,13 +2859,121 @@ func (dHlpr *DirHelper) GetSubDirsFilesInDirTree(
 	getOtherNonRegularFiles bool,
 	subDirSelectCharacteristics FileSelectionCriteria,
 	fileSelectCriteria FileSelectionCriteria,
-	targetDMgrLabel string,
+	directoryPathLabel string,
 	errorPrefix interface{}) (
 	numOfDirectoriesLocated int,
 	isParentDirectoryIncluded bool,
-	directoriesLocated *DirMgrCollection,
+	directoriesLocated DirMgrCollection,
 	numOfFilesLocated int,
-	filesLocated *FileMgrCollection,
+	filesLocated FileMgrCollection,
 	err error) {
+
+	if dHlpr.lock == nil {
+		dHlpr.lock = new(sync.Mutex)
+	}
+
+	dHlpr.lock.Lock()
+
+	defer dHlpr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "DirHelper." +
+		"GetDirectoryProfile()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return numOfDirectoriesLocated,
+			isParentDirectoryIncluded,
+			directoriesLocated,
+			numOfFilesLocated,
+			filesLocated,
+			err
+	}
+
+	var dMgr DirMgr
+	var err2 error
+
+	dMgr,
+		err2 = new(DirMgr).New(
+		directoryPath,
+		ePrefix.XCpy("dMgr<-directoryPath"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: directoryPath is NOT a valid directory path!\n"+
+			"Error= \n%v\n",
+			funcName,
+			err2.Error())
+
+		return numOfDirectoriesLocated,
+			isParentDirectoryIncluded,
+			directoriesLocated,
+			numOfFilesLocated,
+			filesLocated,
+			err
+	}
+
+	err2 = directoriesLocated.AddDirMgr(
+		dMgr,
+		"dMgr")
+
+	if err2 == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error occurred while adding %v parent directory to\n"+
+			"the 'directoriesLocated' Directory Manager Collection.\n"+
+			"directoriesLocated.AddDirMgr(%v)"+
+			"Error= \n%v\n",
+			funcName,
+			directoryPathLabel,
+			directoryPathLabel,
+			err2.Error())
+
+		return numOfDirectoriesLocated,
+			isParentDirectoryIncluded,
+			directoriesLocated,
+			numOfFilesLocated,
+			filesLocated,
+			err
+	}
+
+	numOfDirectoriesLocated,
+		numOfFilesLocated,
+		err = new(dirMgrHelperElectron).
+		getSubDirsFilesInDirTree(
+			&dMgr,
+			getSubdirectories,
+			includeSubDirCurrentDirOneDot,
+			includeSubDirParentDirTwoDots,
+			getRegularFiles,
+			getSymLinksFiles,
+			getOtherNonRegularFiles,
+			subDirSelectCharacteristics,
+			fileSelectCriteria,
+			&directoriesLocated,
+			&filesLocated,
+			directoryPathLabel,
+			ePrefix)
+
+	if getSubdirectories &&
+		includeParentDirectory {
+
+		numOfDirectoriesLocated++
+	}
+
+	return numOfDirectoriesLocated,
+		isParentDirectoryIncluded,
+		directoriesLocated,
+		numOfFilesLocated,
+		filesLocated,
+		err
 
 }
