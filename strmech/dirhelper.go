@@ -810,6 +810,13 @@ func (dHlpr *DirHelper) GetDirectoryProfile(
 //		entire directory tree defined by input parameter
 //		'directoryPath'.
 //
+//		If 'skipTopLevelDirectory' is set to false,
+//		this returned Directory Profile will include
+//		the parent directory defined by 'targetDMgr'.
+//		Conversely, if 'skipTopLevelDirectory', the
+//		statistics will only include the subdirectories
+//		below 'targetDMgr'.
+//
 //		type DirectoryProfile struct {
 //
 //			ParentDirAbsolutePath 			string
