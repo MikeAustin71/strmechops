@@ -704,9 +704,11 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddTitleLineDateTimeFmtDt
 //			"2006-01-02 15:04:05.000000000 -0700 MST".
 //
 //		Example Formats:
+//
 //		 Example 1:
-//		  dateTimeFormat =
+//		 dateTimeFormat =
 //		   "2006-01-02 15:04:05.000000000 -0700 MST"
+//
 //		 Result =
 //		   "2021-10-21 14:19:03.000000000 -0500 CDT"
 //
@@ -716,6 +718,13 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddTitleLineDateTimeFmtDt
 //
 //		   Result =
 //		    "Thursday October 21, 2021 14:19:03.000000000 -0500 CDT"
+//
+//		 Example 3:
+//		  dateTimeFormat =
+//		   "Monday 2006-01-02 15:04:05.000000000 -0700 MST"
+//
+//		 Result =
+//		   "Monday 2021-10-21 14:19:03.000000000 -0500 CDT"
 //
 //	errorPrefix					interface{}
 //

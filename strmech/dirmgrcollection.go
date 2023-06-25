@@ -4,6 +4,7 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"os"
+	"strings"
 	"sync"
 )
 
@@ -2264,6 +2265,187 @@ func (dMgrs *DirMgrCollection) GetNumOfDirs() int {
 	defer dMgrs.lock.Unlock()
 
 	return len(dMgrs.dirMgrs)
+}
+
+// GetTextListingAbsPath
+//
+// Receives a pointer to a string builder and adds a text
+// listing of the all directory paths in the Directory
+// Manager Collection array encapsulated by the current
+// DirMgrCollection instance.
+//
+// The returned Text Listing will include a title segment
+// and a simple listing of all directory paths in the
+// current Directory Manager Collection. The directory
+// paths will be listed as absolute paths.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	leftMargin					string
+//
+//		This string serves as the left margin for all
+//		text lines.
+//
+//	rightMargin					string
+//
+//		This string serves as the right margin for all
+//		text lines.
+//
+//
+//	maxLineLength				int
+//
+//		This integer value defines the maximum line
+//		length for all text lines.
+//
+//	solidLineChar				rune
+//
+//		This single character will be used to construct
+//		'line-breaks' after the title line. Examples:
+//			'-'	"----------------------------"
+//			'='	"============================"
+//			'*'	"****************************"
+//
+//
+//	titleLine					string
+//
+//		The text in this string will be formatted as the
+//		title for the text listing display.
+//
+//	addDateTimeLine				bool
+//
+//		When set to 'true' a text line will be added for
+//		current date and time expressed as a local time
+//		value.
+//
+//	strBuilder					*strings.Builder
+//
+//		A pointer to an instance of strings.Builder.
+//		The text listing for directory absolute paths
+//		will be added to this instance of
+//		strings.Builder.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (dMgrs *DirMgrCollection) GetTextListingAbsPath(
+	leftMargin string,
+	rightMargin string,
+	maxLineLength int,
+	solidLineChar rune,
+	titleLine string,
+	addDateTimeLine bool,
+	strBuilder *strings.Builder,
+	errorPrefix interface{}) error {
+
+	if dMgrs.lock == nil {
+		dMgrs.lock = new(sync.Mutex)
+	}
+
+	dMgrs.lock.Lock()
+
+	defer dMgrs.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	funcName := "DirMgrCollection." +
+		"GetTextListingAbsPath()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(dirMgrCollectionHelper).
+		fmtTextListingAbsPath(
+			dMgrs,
+			leftMargin,
+			rightMargin,
+			maxLineLength,
+			solidLineChar,
+			titleLine,
+			addDateTimeLine,
+			strBuilder,
+			ePrefix.XCpy("<-dMgrs"))
 }
 
 // InsertDirMgrAtIndex
