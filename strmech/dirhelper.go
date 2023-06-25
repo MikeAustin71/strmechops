@@ -2102,7 +2102,7 @@ func (dHlpr *DirHelper) GetSubdirectoriesParentDir(
 // parent directory, instead of a directory tree, see
 // method:
 //
-//	DirHelper.GetSubDirsFilesInParentDirectory()
+//	DirHelper.GetSubDirsFilesInParentDir()
 //
 // This search operation scans for selected
 // subdirectories and/or files in a directory tree
@@ -2984,7 +2984,7 @@ func (dHlpr *DirHelper) GetSubDirsFilesInDirTree(
 
 }
 
-// GetSubDirsFilesInParentDirectory
+// GetSubDirsFilesInParentDir
 //
 // This method searches for selected subdirectories
 // and/or files in a single directory. This is NOT a
@@ -3748,7 +3748,7 @@ func (dHlpr *DirHelper) GetSubDirsFilesInDirTree(
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (dHlpr *DirHelper) GetSubDirsFilesInParentDirectory(
+func (dHlpr *DirHelper) GetSubDirsFilesInParentDir(
 	directoryPath string,
 	getSubdirectories bool,
 	includeParentDirectory bool,
@@ -3779,7 +3779,7 @@ func (dHlpr *DirHelper) GetSubDirsFilesInParentDirectory(
 	var ePrefix *ePref.ErrPrefixDto
 
 	funcName := "DirHelper." +
-		"GetSubDirsFilesInParentDirectory()"
+		"GetSubDirsFilesInParentDir()"
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
