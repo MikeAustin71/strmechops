@@ -4215,6 +4215,9 @@ func (txtTitleMarqueeDtoNanobot *textLineTitleMarqueeDtoNanobot) addTitleLineLab
 //		Zero, one or more objects may be passed through
 //		this input parameter.
 //
+//		If an empty string is passed through this
+//		parameter, an error will be returned.
+//
 //		If one or more objects are passed through this
 //		parameter, they must be convertable to one of the
 //		following types:
@@ -4354,7 +4357,29 @@ func (txtTitleMarqueeDtoNanobot *textLineTitleMarqueeDtoNanobot) configureBasicT
 		RightMarginStr: standardTitleRightMargin,
 	}
 
+	var testStr string
+	var ok bool
+
 	for idx, titleLineObj := range titleLines {
+
+		testStr, ok = titleLineObj.(string)
+
+		if ok {
+
+			if new(strMechQuark).
+				isEmptyOrWhiteSpace(testStr) {
+
+				return fmt.Errorf("%v\n"+
+					"Error: Input parameter 'titleLines' is invalid!\n"+
+					"One of the title lines is empy or consists\n"+
+					"entirely of white space. Check 'titleLines' #%v\n"+
+					"otherwise identified as 'titleLines' index %v\n",
+					idx+1,
+					idx,
+					ePrefix.String())
+			}
+
+		}
 
 		txtLabelDto.FieldContents = titleLineObj
 

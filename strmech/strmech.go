@@ -3896,7 +3896,7 @@ func (sMech *StrMech) IsEmptyOrWhiteSpace(targetStr string) bool {
 
 	defer sMech.stringDataMutex.Unlock()
 
-	return strMechQuark{}.ptr().isEmptyOrWhiteSpace(targetStr)
+	return new(strMechQuark).isEmptyOrWhiteSpace(targetStr)
 }
 
 // IsTargetRunesIndex - Receives a host rune array and a starting
