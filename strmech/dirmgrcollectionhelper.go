@@ -488,7 +488,7 @@ func (dMgrColHelper *dirMgrCollectionHelper) fmtTextListingAbsPath(
 			maxLineLength,
 			string(solidLineChar),
 			ePrefix.XCpy("titleMarquee<-"),
-			titleLine,
+			titleLine+"\n",
 			fmt.Sprintf(
 				"Number of Directories: %v\n",
 				lenDMgrCol))

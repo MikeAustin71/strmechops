@@ -3106,6 +3106,9 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) IsValidInstanceError(
 //		Zero, one or more objects may be passed through
 //		this input parameter.
 //
+//		If an empty string is passed through this
+//		parameter, an error will be returned.
+//
 //		If one or more objects are passed through this
 //		parameter, they must be convertable to one of the
 //		following types:
