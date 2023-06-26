@@ -371,7 +371,7 @@ func (dMgrColHelper *dirMgrCollectionHelper) fmtTextListingAbsPath(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"dirMgrCollectionHelper.fmtTextListingAbsPath()",
+		"dirMgrCollectionHelper.fmtTextListingAllFiles()",
 		"")
 
 	if err != nil {
