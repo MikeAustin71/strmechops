@@ -15,7 +15,7 @@ type MainNumStrTest006 struct {
 func (mainNumStrTest006 MainNumStrTest006) BigFloatDto03() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"mainNumStrTest006.BigFloatDto03()",
+		"MainNumStrTest006.BigFloatDto03()",
 		"")
 
 	breakStr := strings.Repeat("=", 50)

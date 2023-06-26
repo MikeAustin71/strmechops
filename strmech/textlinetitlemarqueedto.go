@@ -3188,7 +3188,7 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) NewBasicTitleMarqueeDto(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"TextLineTitleMarqueeDto."+
-			"CopyIn()",
+			"NewBasicTitleMarqueeDto()",
 		"")
 
 	if err != nil {
@@ -3217,7 +3217,7 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) NewBasicTitleMarqueeDto(
 		testValidityOfTitleMarqueeDto(
 			&newTextLineTitleMarqueeDto,
 			ePrefix.XCpy(
-				"newTextLineTitleMarqueeDto"))
+				"configured newTextLineTitleMarqueeDto"))
 
 	return newTextLineTitleMarqueeDto, err
 }
@@ -4133,11 +4133,9 @@ func (txtTitleMarqueeDtoNanobot *textLineTitleMarqueeDtoNanobot) addTitleLineLab
 //	txtTitleMarqueeDto 			*TextLineTitleMarqueeDto
 //
 //		A pointer to an instance of TextLineTitleMarqueeDto.
-//		No data elements in this instance will be modified.
 //
-//		The internal member data elements contained in this
-//		instance will be analyzed to determine if they are
-//		valid in all respects.
+//		All data elements in this instance will be configured
+//		with new values based on the following input parameters.
 //
 //	standardSolidLineLeftMargin		string
 //
@@ -4290,29 +4288,60 @@ func (txtTitleMarqueeDtoNanobot *textLineTitleMarqueeDtoNanobot) configureBasicT
 		return err
 	}
 
+	if txtTitleMarqueeDto == nil {
+
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter 'txtTitleMarqueeDto' is invalid!\n"+
+			"'txtTitleMarqueeDto' is a nil pointer.\n",
+			ePrefix.String())
+
+	}
+
 	standardFieldLen := standardMaxLineLen -
 		1 -
 		len(standardTitleLeftMargin) -
 		len(standardTitleRightMargin)
 
-	txtTitleMarqueeDto = &TextLineTitleMarqueeDto{
-		StandardSolidLineLeftMargin:  standardSolidLineLeftMargin,
-		StandardSolidLineRightMargin: standardSolidLineRightMargin,
-		StandardTitleLeftMargin:      standardTitleLeftMargin,
-		StandardTitleRightMargin:     standardTitleRightMargin,
-		StandardMaxLineLen:           standardMaxLineLen,
-		StandardTextFieldLen:         standardFieldLen,
-		StandardTextJustification:    TxtJustify.Center(),
-		NumLeadingBlankLines:         1,
-		LeadingSolidLineChar:         solidLineChar,
-		NumLeadingSolidLines:         1,
-		NumTopTitleBlankLines:        1,
-		TitleLines:                   TextLineSpecLinesCollection{},
-		NumBottomTitleBlankLines:     1,
-		TrailingSolidLineChar:        solidLineChar,
-		NumTrailingSolidLines:        1,
-		NumTrailingBlankLines:        1,
-	}
+	txtTitleMarqueeDto.StandardSolidLineLeftMargin =
+		standardSolidLineLeftMargin
+
+	txtTitleMarqueeDto.StandardSolidLineRightMargin =
+		standardSolidLineRightMargin
+
+	txtTitleMarqueeDto.StandardTitleLeftMargin =
+		standardTitleLeftMargin
+
+	txtTitleMarqueeDto.StandardTitleRightMargin =
+		standardTitleRightMargin
+
+	txtTitleMarqueeDto.StandardMaxLineLen =
+		standardMaxLineLen
+
+	txtTitleMarqueeDto.StandardTextFieldLen =
+		standardFieldLen
+
+	txtTitleMarqueeDto.StandardTextJustification =
+		TxtJustify.Center()
+
+	txtTitleMarqueeDto.NumLeadingBlankLines = 1
+
+	txtTitleMarqueeDto.LeadingSolidLineChar =
+		solidLineChar
+
+	txtTitleMarqueeDto.NumLeadingSolidLines = 1
+
+	txtTitleMarqueeDto.NumTopTitleBlankLines = 1
+
+	txtTitleMarqueeDto.TitleLines =
+		TextLineSpecLinesCollection{}
+
+	txtTitleMarqueeDto.NumBottomTitleBlankLines = 1
+
+	txtTitleMarqueeDto.TrailingSolidLineChar = solidLineChar
+
+	txtTitleMarqueeDto.NumTrailingSolidLines = 1
+
+	txtTitleMarqueeDto.NumTrailingBlankLines = 1
 
 	txtLabelDto := TextFieldFormatDtoLabel{
 		LeftMarginStr:  standardTitleLeftMargin,

@@ -300,7 +300,8 @@ func (dMgrColHelper *dirMgrCollectionHelper) equalDMgrCollections(
 //	maxLineLength				int
 //
 //		This integer value defines the maximum line
-//		length for all text lines.
+//		length for all text lines. If this value is
+//		less than 10, an error will be returned.
 //
 //	solidLineChar				rune
 //
@@ -396,6 +397,17 @@ func (dMgrColHelper *dirMgrCollectionHelper) fmtTextListingAbsPath(
 
 	}
 
+	if maxLineLength < 10 {
+
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter 'maxLineLength' is invalid!\n"+
+			"'maxLineLength' is less than '10'.\n"+
+			"'maxLineLength' = %v\n",
+			ePrefix.String(),
+			maxLineLength)
+
+	}
+
 	if maxLineLength > 1999 {
 
 		return fmt.Errorf("%v\n"+
@@ -476,7 +488,10 @@ func (dMgrColHelper *dirMgrCollectionHelper) fmtTextListingAbsPath(
 			maxLineLength,
 			string(solidLineChar),
 			ePrefix.XCpy("titleMarquee<-"),
-			titleLine)
+			titleLine,
+			fmt.Sprintf(
+				"Number of Directories: %v\n",
+				lenDMgrCol))
 
 	if err != nil {
 		return err

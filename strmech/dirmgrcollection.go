@@ -2297,7 +2297,8 @@ func (dMgrs *DirMgrCollection) GetNumOfDirs() int {
 //	maxLineLength				int
 //
 //		This integer value defines the maximum line
-//		length for all text lines.
+//		length for all text lines. If this value is
+//		less than 10, an error will be returned.
 //
 //	solidLineChar				rune
 //
