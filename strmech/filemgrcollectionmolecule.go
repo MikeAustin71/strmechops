@@ -233,7 +233,7 @@ func (fMgrColMolecule *FileMgrCollectionMolecule) fmtTextListingAllFiles(
 			maxLineLength,
 			string(solidLineChar),
 			ePrefix.XCpy("titleMarquee<-"),
-			titleLine,
+			titleLine+"\n",
 			fmt.Sprintf(
 				"Number of Files: %v\n",
 				lenFMgrCol))
