@@ -701,7 +701,8 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 		false,
 		"",
 		-1,
-		false)
+		false,
+		" ")
 
 	err = txtFormatCol.SetStdFormatParamsLine1Col(
 		"",
@@ -781,7 +782,8 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 		false,
 		"",
 		-1,
-		false)
+		false,
+		" ")
 
 	// Trailing Blank Line
 	txtFormatCol.AddLineBlank(
@@ -1672,7 +1674,8 @@ exitMethodTrailer:
 		false,
 		"",
 		-1,
-		false)
+		false,
+		" ")
 
 	// Title # 1
 	err = txtFormatCol.AddLine1Col(
@@ -1721,7 +1724,8 @@ exitMethodTrailer:
 		false,
 		"",
 		-1,
-		false)
+		false,
+		" ")
 
 	// Blank Line
 	txtFormatCol.AddLineBlank(

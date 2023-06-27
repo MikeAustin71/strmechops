@@ -24,6 +24,9 @@ type TextUtility struct {
 //
 //		TextUtility.BuildOneColTrailingMarquee()
 //
+// Other alternatives for creating Tile Marquees are
+// provided by Type, 'TextLineTitleMarqueeDto'
+//
 // ----------------------------------------------------------------
 //
 //	# Input Parameters
@@ -375,7 +378,8 @@ func (txtUtility *TextUtility) BuildOneColLeadingMarquee(
 			false,
 			"",
 			-1,
-			false)
+			false,
+			" ")
 	}
 
 	// Title Line 1
@@ -426,7 +430,8 @@ func (txtUtility *TextUtility) BuildOneColLeadingMarquee(
 			false,
 			"",
 			-1,
-			false)
+			false,
+			" ")
 	}
 
 	if addTrailingBlankLine == true {
@@ -459,6 +464,9 @@ func (txtUtility *TextUtility) BuildOneColLeadingMarquee(
 //	call to method:
 //
 //		TextUtility.BuildOneColLeadingMarquee()
+//
+// Other alternatives for creating Tile Marquees are
+// provided by Type, 'TextLineTitleMarqueeDto'
 //
 // ----------------------------------------------------------------
 //
@@ -801,7 +809,8 @@ func (txtUtility *TextUtility) BuildOneColTrailingMarquee(
 			false,
 			"",
 			-1,
-			false)
+			false,
+			" ")
 
 	}
 
@@ -838,7 +847,8 @@ func (txtUtility *TextUtility) BuildOneColTrailingMarquee(
 			false,
 			"",
 			-1,
-			false)
+			false,
+			" ")
 
 	}
 

@@ -473,7 +473,8 @@ func (mTest02 MainTest02) StrMechRead01() {
 		false,
 		"",
 		-1,
-		false)
+		false,
+		" ")
 
 	// Title # 1
 	err = txtFormatCol.AddLine1Col(
@@ -543,7 +544,8 @@ func (mTest02 MainTest02) StrMechRead01() {
 		false,
 		"",
 		-1,
-		false)
+		false,
+		" ")
 
 	// Blank Line
 	txtStrBuilder := strmech.TextStrBuilder{}

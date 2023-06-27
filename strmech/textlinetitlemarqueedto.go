@@ -16,6 +16,12 @@ import (
 //
 // This type is compatible with and used by type
 // TextLineSpecTitleMarquee
+//
+// For other alternatives in creating Tile Marquees, see
+// methods:
+//
+//	TextUtility.BuildOneColTrailingMarquee()
+//	TextUtility.BuildOneColTrailingMarquee()
 type TextLineTitleMarqueeDto struct {
 	StandardSolidLineLeftMargin string
 	//	The standard left margin characters applied
