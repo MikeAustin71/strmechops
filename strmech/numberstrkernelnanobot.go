@@ -541,6 +541,7 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 		"",
 		maxLineLen,
 		true,
+		" ",
 		true,
 		ePrefix.XCpy(
 			"Set 2-Column Params Integer Digits"))
