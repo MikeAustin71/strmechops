@@ -6,6 +6,7 @@ import (
 	"sync"
 )
 
+// TODO - Fix this. It should be private
 type FileOperationsAtom struct {
 	lock *sync.Mutex
 }

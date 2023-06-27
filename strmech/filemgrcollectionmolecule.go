@@ -271,7 +271,7 @@ func (fMgrColMolecule *FileMgrCollectionMolecule) fmtTextListingAllFiles(
 			TxtJustify.Left(),
 			rightMargin,
 			false,
-			"\n",
+			"",
 			maxLineLength,
 			true,
 			ePrefix)
@@ -285,7 +285,7 @@ func (fMgrColMolecule *FileMgrCollectionMolecule) fmtTextListingAllFiles(
 		extraMargin := "  "
 		err = txtFormatCol.AddLine1Col(
 			extraMargin+
-				"The Directory Manager Collection is Empty!",
+				"The File Manager Collection is Empty!",
 			ePrefix)
 
 		if err != nil {
@@ -294,7 +294,7 @@ func (fMgrColMolecule *FileMgrCollectionMolecule) fmtTextListingAllFiles(
 
 		err = txtFormatCol.AddLine1Col(
 			extraMargin+
-				"There are zero Directory Manager Objects in the Collection!",
+				"There are zero File Manager Objects in the Collection!",
 			ePrefix)
 
 		if err != nil {
@@ -319,7 +319,7 @@ func (fMgrColMolecule *FileMgrCollectionMolecule) fmtTextListingAllFiles(
 		}
 	}
 
-	txtFormatCol.AddLineBlank(2, "")
+	txtFormatCol.AddLineBlank(1, "")
 
 	err = txtFormatCol.BuildText(
 		strBuilder,
