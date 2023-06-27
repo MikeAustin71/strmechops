@@ -711,7 +711,7 @@ func (txtFieldLabel *TextFieldSpecLabel) GetFormattedStrLength() int {
 		"")
 
 	formattedTextStr,
-		err := textSpecificationMolecule{}.ptr().
+		err := new(textSpecificationMolecule).
 		getFormattedText(
 			txtFieldLabel.textLabel,
 			txtFieldLabel.fieldLen,
@@ -869,7 +869,7 @@ func (txtFieldLabel *TextFieldSpecLabel) GetFormattedText(
 		return "", err
 	}
 
-	return textSpecificationMolecule{}.ptr().
+	return new(textSpecificationMolecule).
 		getFormattedText(
 			txtFieldLabel.textLabel,
 			txtFieldLabel.fieldLen,
@@ -962,7 +962,7 @@ func (txtFieldLabel *TextFieldSpecLabel) GetTextLabelRunes() []rune {
 	var newTextLabelRunes []rune
 
 	err :=
-		strMechPreon{}.ptr().copyRuneArrays(
+		new(strMechPreon).copyRuneArrays(
 			&newTextLabelRunes,
 			&txtFieldLabel.textLabel,
 			true,
@@ -1010,7 +1010,7 @@ func (txtFieldLabel *TextFieldSpecLabel) IsValidInstance() (
 	defer txtFieldLabel.lock.Unlock()
 
 	isValid,
-		_ = textFieldSpecLabelAtom{}.ptr().
+		_ = new(textFieldSpecLabelAtom).
 		isValidTextFieldLabel(
 			txtFieldLabel,
 			nil)
@@ -1112,7 +1112,7 @@ func (txtFieldLabel *TextFieldSpecLabel) IsValidInstanceError(
 	}
 
 	_,
-		err = textFieldSpecLabelAtom{}.ptr().
+		err = new(textFieldSpecLabelAtom).
 		isValidTextFieldLabel(
 			txtFieldLabel,
 			ePrefix)
@@ -1399,7 +1399,7 @@ func (txtFieldLabel TextFieldSpecLabel) NewPtrTextLabel(
 		return &newTextLabel, err
 	}
 
-	err = textFieldSpecLabelNanobot{}.ptr().
+	err = new(textFieldSpecLabelNanobot).
 		setTextFieldLabel(
 			&newTextLabel,
 			[]rune(textLabel),
@@ -1604,7 +1604,7 @@ func (txtFieldLabel TextFieldSpecLabel) NewPtrTextLabelRunes(
 		return &newTextLabel, err
 	}
 
-	err = textFieldSpecLabelNanobot{}.ptr().
+	err = new(textFieldSpecLabelNanobot).
 		setTextFieldLabel(
 			&newTextLabel,
 			textLabelChars,
@@ -1804,7 +1804,7 @@ func (txtFieldLabel TextFieldSpecLabel) NewTextLabel(
 		return newTextLabel, err
 	}
 
-	err = textFieldSpecLabelNanobot{}.ptr().
+	err = new(textFieldSpecLabelNanobot).
 		setTextFieldLabel(
 			&newTextLabel,
 			[]rune(textLabel),
@@ -2009,7 +2009,7 @@ func (txtFieldLabel TextFieldSpecLabel) NewTextLabelRunes(
 		return newTextLabel, err
 	}
 
-	err = textFieldSpecLabelNanobot{}.ptr().
+	err = new(textFieldSpecLabelNanobot).
 		setTextFieldLabel(
 			&newTextLabel,
 			textLabelChars,
@@ -2193,7 +2193,7 @@ func (txtFieldLabel *TextFieldSpecLabel) Read(
 		var formattedText string
 
 		formattedText,
-			err = textSpecificationMolecule{}.ptr().
+			err = new(textSpecificationMolecule).
 			getFormattedText(
 				txtFieldLabel.textLabel,
 				txtFieldLabel.fieldLen,
@@ -2220,7 +2220,7 @@ func (txtFieldLabel *TextFieldSpecLabel) Read(
 	}
 
 	n,
-		err = textSpecificationAtom{}.ptr().
+		err = new(textSpecificationAtom).
 		readBytes(
 			txtFieldLabel.textLineReader,
 			p,
@@ -2413,7 +2413,7 @@ func (txtFieldLabel *TextFieldSpecLabel) SetFieldLength(
 	}
 
 	err =
-		textFieldSpecLabelElectron{}.ptr().
+		new(textFieldSpecLabelElectron).
 			isFieldLengthValid(
 				fieldLen,
 				ePrefix.XCpy(
@@ -2918,7 +2918,7 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabel(
 		return err
 	}
 
-	return textFieldSpecLabelNanobot{}.ptr().
+	return new(textFieldSpecLabelNanobot).
 		setTextFieldLabel(
 			txtFieldLabel,
 			[]rune(textLabel),
@@ -3102,7 +3102,7 @@ func (txtFieldLabel *TextFieldSpecLabel) SetTextLabelRunes(
 		return err
 	}
 
-	return textFieldSpecLabelNanobot{}.ptr().
+	return new(textFieldSpecLabelNanobot).
 		setTextFieldLabel(
 			txtFieldLabel,
 			textLabelChars,
@@ -3308,7 +3308,7 @@ func (txtFieldLabel TextFieldSpecLabel) String() string {
 		"")
 
 	result,
-		err := textSpecificationMolecule{}.ptr().
+		err := new(textSpecificationMolecule).
 		getFormattedText(
 			txtFieldLabel.textLabel,
 			txtFieldLabel.fieldLen,
@@ -3447,7 +3447,7 @@ func (txtFieldLabel *TextFieldSpecLabel) TextBuilder(
 	var formattedTxtStr string
 
 	formattedTxtStr,
-		err = textSpecificationMolecule{}.ptr().
+		err = new(textSpecificationMolecule).
 		getFormattedText(
 			txtFieldLabel.textLabel,
 			txtFieldLabel.fieldLen,

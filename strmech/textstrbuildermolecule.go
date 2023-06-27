@@ -29,7 +29,6 @@ type textStrBuilderParamsDto struct {
 
 // textStrBuilderMolecule - Provides helper methods for type
 // TextStrBuilder.
-//
 type textStrBuilderMolecule struct {
 	lock *sync.Mutex
 }
@@ -92,7 +91,7 @@ func (txtBuilderMolecule *textStrBuilderMolecule) buildFieldDateTimeWithDto(
 
 	if len(dateTimeFormat) == 0 {
 		dateTimeFormat =
-			textSpecificationMolecule{}.ptr().
+			new(textSpecificationMolecule).
 				getDefaultDateTimeFormat()
 	}
 
@@ -730,7 +729,7 @@ func (txtBuilderMolecule *textStrBuilderMolecule) buildLineColumnsWithDto(
 
 	var txtBuilderParams textStrBuilderParamsDto
 
-	defaultDateTimeFormat := textSpecificationMolecule{}.ptr().
+	defaultDateTimeFormat := new(textSpecificationMolecule).
 		getDefaultDateTimeFormat()
 
 	for i := 0; i < numOfTextFields; i++ {

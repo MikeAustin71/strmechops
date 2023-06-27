@@ -1726,7 +1726,7 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 	var fieldTextStr string
 
 	fieldTextStr,
-		err = textSpecificationAtom{}.ptr().
+		err = new(textSpecificationAtom).
 		convertParamEmptyInterfaceToString(
 			fieldText,
 			"fieldText",
