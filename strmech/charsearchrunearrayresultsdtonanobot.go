@@ -696,6 +696,7 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 		"",
 		maxLineLen,
 		true,
+		" ",
 		ePrefix.XCpy(
 			"Set 2-Column Params"))
 

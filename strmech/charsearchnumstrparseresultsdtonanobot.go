@@ -446,6 +446,7 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 		"",
 		maxLineLen,
 		true,
+		" ",
 		ePrefix.XCpy(
 			"Set 2-Column Params"))
 

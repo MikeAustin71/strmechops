@@ -619,6 +619,7 @@ func (searchTestInputParmsNanobot *charSearchTestInputParametersDtoNanobot) getP
 		"",
 		maxLineLen,
 		true,
+		" ",
 		ePrefix.XCpy(
 			"Set 2-Column Params"))
 

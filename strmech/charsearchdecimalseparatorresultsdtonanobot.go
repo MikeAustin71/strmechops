@@ -701,6 +701,7 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 		"",
 		maxLineLen,
 		true,
+		" ",
 		ePrefix.XCpy(
 			"Set 2-Column Params"))
 
