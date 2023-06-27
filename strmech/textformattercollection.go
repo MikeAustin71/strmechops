@@ -1208,109 +1208,120 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldDateTimeInputDto(
 //
 // ----------------------------------------------------------------
 //
-// Input Parameters
+//	Input Parameters
 //
-//	leftMarginStr              string
-//	   - The contents of this string will be used as the left
-//	     margin for the Text Filler Field.
+//	leftMarginStr				string
 //
-//	     If no left margin is required, set 'leftMarginStr' to a
-//	     zero length or empty string, and no left margin will be
-//	     created.
+//		The contents of this string will be used as the left
+//		margin for the Text Filler Field.
 //
+//		If no left margin is required, set 'leftMarginStr' to a
+//		zero length or empty string, and no left margin will be
+//		created.
 //
-//	fillerCharacters           string
-//	   - A string containing the text characters which will be
-//	     included in the Text Filler Field. The final Text Filler
-//	     Field will be constructed from the filler characters
-//	     repeated one or more times as specified by the
-//	     'fillerCharsRepeatCount' parameter.
+//	fillerCharacters			string
 //
-//	      Text Field Filler Length =
-//	        Length of fillerCharacters X fillerCharsRepeatCount
+//		A string containing the text characters which will be
+//		included in the Text Filler Field. The final Text Filler
+//		Field will be constructed from the filler characters
+//		repeated one or more times as specified by the
+//		'fillerCharsRepeatCount' parameter.
 //
-//	        Example #1: FillerCharacters = "-*"
-//	                    FillerCharsRepeatCount = 3
-//	                    Final Text Filler Field = "-*-*-*"
+//		 Text Field Filler Length =
+//		   Length of fillerCharacters X fillerCharsRepeatCount
 //
-//	        Example #2: FillerCharacters = "-"
-//	                    FillerCharsRepeatCount = 3
-//	                    Final Text Filler Field = "---"
+//		   Example #1: FillerCharacters = "-*"
+//		               FillerCharsRepeatCount = 3
+//		               Final Text Filler Field = "-*-*-*"
 //
+//		   Example #2: FillerCharacters = "-"
+//		               FillerCharsRepeatCount = 3
+//		               Final Text Filler Field = "---"
 //
-//	fillerCharsRepeatCount     int
-//	     Controls the number of times 'fillerCharacters' is
-//	     repeated when constructing the final Text Filler Field.
-//	     The actual length of the string which will populate the
-//	     completed Text Filler Field is equal to the length of
-//	     'fillerCharacters' times the value of
-//	     'fillerCharsRepeatCount'.
+//	fillerCharsRepeatCount		int
 //
-//	      Text Field Filler Length =
-//	        Length of fillerCharacters X fillerCharsRepeatCount
+//		Controls the number of times 'fillerCharacters' is
+//		repeated when constructing the final Text Filler Field.
+//		The actual length of the string which will populate the
+//		completed Text Filler Field is equal to the length of
+//		'fillerCharacters' times the value of
+//		'fillerCharsRepeatCount'.
 //
-//	        Example #1: fillerCharacters = "-*"
-//	                    fillerRepeatCount = 3
-//	                    Final Text Filler Field = "-*-*-*"
+//		 Text Field Filler Length =
+//		   Length of fillerCharacters X fillerCharsRepeatCount
 //
-//	        Example #2: fillerCharacters = "-"
-//	                    fillerRepeatCount = 3
-//	                    Final Text Filler Field = "---"
+//		   Example #1: fillerCharacters = "-*"
+//		               fillerRepeatCount = 3
+//		               Final Text Filler Field = "-*-*-*"
 //
-//	     If 'fillerCharsRepeatCount' has a value less than one (1)
-//	     or greater than one-million (1,000,000), an error will be
-//	     generated when attempting to format text.
+//		   Example #2: fillerCharacters = "-"
+//		               fillerRepeatCount = 3
+//		               Final Text Filler Field = "---"
 //
+//		If 'fillerCharsRepeatCount' has a value less than one (1)
+//		or greater than one-million (1,000,000), an error will be
+//		generated when attempting to format text.
 //
-//	lineTerminator             string
-//	   - This string holds the character or characters which will
-//	     be used to terminate the formatted text thereby converting
-//	     this text element into a valid line of text.
+//	lineTerminator				string
 //
-//	     If a text line is required, setting this string to include
-//	     a new line character ('\n') will ensure that the text line
-//	     consists of the text label field and no other text
-//	     elements. Any string of text characters will be accepted
-//	     for this parameter.
+//		This string holds the character or characters which will
+//		be used to terminate the formatted text thereby converting
+//		this text element into a valid line of text.
 //
-//	     Again, the most common usage sets this string to a new
-//	     line character ("\n").
+//		If a text line is required, setting this string to include
+//		a new line character ('\n') will ensure that the text line
+//		consists of the text label field and no other text
+//		elements. Any string of text characters will be accepted
+//		for this parameter.
 //
-//	     If Line Termination is NOT required, set 'lineTerminator'
-//	     to a zero length or empty string and no line termination
-//	     characters will be created.
+//		Again, the most common usage sets this string to a new
+//		line character ("\n").
 //
+//		If Line Termination is NOT required, set 'lineTerminator'
+//		to a zero length or empty string and no line termination
+//		characters will be created.
 //
-//	maxLineLength              int
-//	   - The maximum length of the line on which this label text
-//	     will be presented.
+//	maxLineLength				int
 //
-//	     Set this parameter to minus one (-1) to specify an
-//	     unlimited line length for this text line.
+//		The maximum length of the line on which this label text
+//		will be presented.
 //
-//	     'maxLineLength' is used in conjunction with parameter
-//	     'turnAutoLineLengthBreaksOn' to automatically place text
-//	     fields on separate text lines when that text exceeds the
-//	     maximum text line length ('maxLineLength'). Therefore,
-//	     paramter 'turnAutoLineLengthBreaksOn' controls whether
-//	     automatic line breaks using 'maxLineLength' will be
-//	     applied.
+//		Set this parameter to minus one (-1) to specify an
+//		unlimited line length for this text line.
 //
-//	     If the value of 'maxLineLength' is less than zero (0), it
-//	     will be automatically converted to minus one (-1).
+//		'maxLineLength' is used in conjunction with parameter
+//		'turnAutoLineLengthBreaksOn' to automatically place text
+//		fields on separate text lines when that text exceeds the
+//		maximum text line length ('maxLineLength'). Therefore,
+//		paramter 'turnAutoLineLengthBreaksOn' controls whether
+//		automatic line breaks using 'maxLineLength' will be
+//		applied.
 //
+//		If the value of 'maxLineLength' is less than zero (0), it
+//		will be automatically converted to minus one (-1).
 //
-//	turnAutoLineLengthBreaksOn bool
-//	   - This parameter controls whether text lines which exceed
-//	     the maximum line length ('maxLineLength') are broken up
-//	     and presented on the following line.
+//	turnAutoLineLengthBreaksOn	bool
 //
-//	     To apply automatic line breaking at the maximum line
-//	     length, set the value of this parameter to 'true'.
+//		This parameter controls whether text lines which exceed
+//		the maximum line length ('maxLineLength') are broken up
+//		and presented on the following line.
+//
+//		To apply automatic line breaking at the maximum line
+//		length, set the value of this parameter to 'true'.
+//
+//	multiLineLeftMarginStr		string
+//
+//		The left margin used when a text string exceeds the
+//		maximum line length and is separated into multiple text
+//		lines. This left margin is applied to the second and
+//		all subsequent lines of a multi-line text display. This
+//		parameter is only valid when 'TurnAutoLineLengthBreaksOn'
+//		is set to 'true' and the initial text string exceeds the
+//		maximum line length.
 //
 // ----------------------------------------------------------------
 //
-// Return Values
+//	Return Values
 //
 //	NONE
 func (txtFmtCollection *TextFormatterCollection) AddFieldFiller(
@@ -1320,7 +1331,8 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldFiller(
 	rightMarginStr string,
 	lineTerminator string,
 	maxLineLength int,
-	turnAutoLineLengthBreaksOn bool) {
+	turnAutoLineLengthBreaksOn bool,
+	multiLineLeftMarginStr string) {
 
 	if txtFmtCollection.lock == nil {
 		txtFmtCollection.lock = new(sync.Mutex)
@@ -1346,6 +1358,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldFiller(
 			LineTerminator:             lineTerminator,
 			MaxLineLength:              maxLineLength,
 			TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
+			MultiLineLeftMarginStr:     multiLineLeftMarginStr,
 			lock:                       nil,
 		},
 		Label:               TextFieldLabelDto{},
