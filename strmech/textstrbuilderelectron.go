@@ -618,6 +618,7 @@ func (txtBuilderElectron *textStrBuilderElectron) writeText(
 	rightMarginStr string,
 	lineTerminatorStr string,
 	turnAutoLineBreaksOn bool,
+	multiLineLeftMarginStr string,
 	errPrefDto *ePref.ErrPrefixDto) (
 	newCurrentLineLength int,
 	lastWriteWasLineTerminator bool,
@@ -661,6 +662,10 @@ func (txtBuilderElectron *textStrBuilderElectron) writeText(
 			err
 	}
 
+	if len(multiLineLeftMarginStr) == 0 {
+		multiLineLeftMarginStr = leftMarginStr
+	}
+
 	lenTextStr := len(textStr)
 
 	if lenTextStr == 0 {
@@ -679,7 +684,7 @@ func (txtBuilderElectron *textStrBuilderElectron) writeText(
 		lenLineTerminatorStr == 0 {
 
 		lineTerminatorStr = "\n"
-		lenLineTerminatorStr = 1
+		lenLineTerminatorStr = len(lineTerminatorStr)
 	}
 
 	if turnAutoLineBreaksOn == false {
@@ -862,6 +867,9 @@ func (txtBuilderElectron *textStrBuilderElectron) writeText(
 					lastWriteWasLineTerminator,
 					err
 			}
+
+			textStr = multiLineLeftMarginStr + textStr
+			lenTextStr = len(textStr)
 
 			strBuilder.WriteString(
 				writeTextStr + lineTerminatorStr)

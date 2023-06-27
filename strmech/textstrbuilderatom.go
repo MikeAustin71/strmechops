@@ -8,7 +8,6 @@ import (
 
 // textStrBuilderAtom - Provides helper methods for type
 // TextStrBuilder.
-//
 type textStrBuilderAtom struct {
 	lock *sync.Mutex
 }
@@ -183,6 +182,7 @@ func (txtBuilderAtom *textStrBuilderAtom) preBuildScreening(
 			textParams.rightMarginStr,
 			textParams.lineTerminatorStr,
 			textParams.turnAutoLineLengthBreaksOn,
+			textParams.multiLineLeftMarginStr,
 			ePrefix.XCpy(
 				fmt.Sprintf("%v",
 					textParams.sourceTag)))

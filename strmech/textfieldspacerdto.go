@@ -118,6 +118,15 @@ type TextFieldSpacerDto struct {
 	// beyond the maximum line length 'MaxLineLength' will be
 	// formatted as a separate line of text on the following line.
 
+	MultiLineLeftMarginStr string
+	// The left margin used when a text string exceeds the
+	// maximum line length and is separated into multiple text
+	// lines. This left margin is applied to the second and
+	// all subsequent lines of a multi-line text display. This
+	// parameter is only valid when 'TurnAutoLineLengthBreaksOn'
+	// is set to 'true' and the initial text string exceeds the
+	// maximum line length.
+
 	lock *sync.Mutex
 }
 
@@ -168,7 +177,7 @@ func (txtSpacerDto *TextFieldSpacerDto) CopyIn(
 
 	defer txtSpacerDto.lock.Unlock()
 
-	_ = textFieldSpacerDtoNanobot{}.ptr().copy(
+	_ = new(textFieldSpacerDtoNanobot).copy(
 		txtSpacerDto,
 		&incomingTxtSpacerDto,
 		nil)
@@ -206,7 +215,7 @@ func (txtSpacerDto *TextFieldSpacerDto) CopyOut() (
 
 	defer txtSpacerDto.lock.Unlock()
 
-	_ = textFieldSpacerDtoNanobot{}.ptr().copy(
+	_ = new(textFieldSpacerDtoNanobot).copy(
 		&deepCopyTxtSpacerDto,
 		txtSpacerDto,
 		nil)
@@ -260,6 +269,8 @@ func (txtSpacerDto *TextFieldSpacerDto) Empty() {
 	txtSpacerDto.MaxLineLength = -99
 
 	txtSpacerDto.TurnAutoLineLengthBreaksOn = false
+
+	txtSpacerDto.MultiLineLeftMarginStr = ""
 
 	txtSpacerDto.lock.Unlock()
 
@@ -354,6 +365,12 @@ func (txtSpacerDto *TextFieldSpacerDto) Equal(
 		return false
 	}
 
+	if txtSpacerDto.MultiLineLeftMarginStr !=
+		incomingTxtSpacerDto.MultiLineLeftMarginStr {
+
+		return false
+	}
+
 	return true
 }
 
@@ -435,22 +452,8 @@ func (txtSpacerDtoNanobot *textFieldSpacerDtoNanobot) copy(
 	destinationTxtSpacerDto.TurnAutoLineLengthBreaksOn =
 		sourceTxtSpacerDto.TurnAutoLineLengthBreaksOn
 
+	destinationTxtSpacerDto.MultiLineLeftMarginStr =
+		sourceTxtSpacerDto.MultiLineLeftMarginStr
+
 	return err
-}
-
-// ptr - Returns a pointer to a new instance of
-// textFieldSpacerDtoNanobot.
-func (txtSpacerDtoNanobot textFieldSpacerDtoNanobot) ptr() *textFieldSpacerDtoNanobot {
-
-	if txtSpacerDtoNanobot.lock == nil {
-		txtSpacerDtoNanobot.lock = new(sync.Mutex)
-	}
-
-	txtSpacerDtoNanobot.lock.Lock()
-
-	defer txtSpacerDtoNanobot.lock.Unlock()
-
-	return &textFieldSpacerDtoNanobot{
-		lock: new(sync.Mutex),
-	}
 }

@@ -143,6 +143,15 @@ type TextFieldFillerDto struct {
 	// To apply automatic line breaking at the maximum line length,
 	// set the value of this parameter to 'true'.
 
+	MultiLineLeftMarginStr string
+	// The left margin used when a text string exceeds the
+	// maximum line length and is separated into multiple text
+	// lines. This left margin is applied to the second and
+	// all subsequent lines of a multi-line text display. This
+	// parameter is only valid when 'TurnAutoLineLengthBreaksOn'
+	// is set to 'true' and the initial text string exceeds the
+	// maximum line length.
+
 	lock *sync.Mutex
 }
 
@@ -193,7 +202,7 @@ func (txtFillerDto *TextFieldFillerDto) CopyIn(
 
 	defer txtFillerDto.lock.Unlock()
 
-	_ = textFieldFillerDtoNanobot{}.ptr().copy(
+	_ = new(textFieldFillerDtoNanobot).copy(
 		txtFillerDto,
 		&incomingTxtFillerDto,
 		nil)
@@ -231,7 +240,7 @@ func (txtFillerDto *TextFieldFillerDto) CopyOut() (
 
 	defer txtFillerDto.lock.Unlock()
 
-	_ = textFieldFillerDtoNanobot{}.ptr().copy(
+	_ = new(textFieldFillerDtoNanobot).copy(
 		&deepCopyTxtFillerDto,
 		txtFillerDto,
 		nil)
@@ -287,6 +296,8 @@ func (txtFillerDto *TextFieldFillerDto) Empty() {
 	txtFillerDto.MaxLineLength = -99
 
 	txtFillerDto.TurnAutoLineLengthBreaksOn = false
+
+	txtFillerDto.MultiLineLeftMarginStr = ""
 
 	txtFillerDto.lock.Unlock()
 
@@ -386,6 +397,12 @@ func (txtFillerDto *TextFieldFillerDto) Equal(
 		return false
 	}
 
+	if txtFillerDto.MultiLineLeftMarginStr !=
+		incomingTxtFillerDto.MultiLineLeftMarginStr {
+
+		return false
+	}
+
 	return true
 }
 
@@ -470,22 +487,8 @@ func (txtFillerDtoNanobot *textFieldFillerDtoNanobot) copy(
 	destinationTxtFillerDto.TurnAutoLineLengthBreaksOn =
 		sourceTxtFillerDto.TurnAutoLineLengthBreaksOn
 
+	destinationTxtFillerDto.MultiLineLeftMarginStr =
+		sourceTxtFillerDto.MultiLineLeftMarginStr
+
 	return err
-}
-
-// ptr - Returns a pointer to a new instance of
-// textFieldFillerDtoNanobot.
-func (txtFillerDtoNanobot textFieldFillerDtoNanobot) ptr() *textFieldFillerDtoNanobot {
-
-	if txtFillerDtoNanobot.lock == nil {
-		txtFillerDtoNanobot.lock = new(sync.Mutex)
-	}
-
-	txtFillerDtoNanobot.lock.Lock()
-
-	defer txtFillerDtoNanobot.lock.Unlock()
-
-	return &textFieldFillerDtoNanobot{
-		lock: new(sync.Mutex),
-	}
 }

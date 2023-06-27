@@ -177,6 +177,15 @@ type TextFieldLabelDto struct {
 	// To apply automatic line breaking at the maximum line length,
 	// set the value of this parameter to 'true'.
 
+	MultiLineLeftMarginStr string
+	// The left margin used when a text string exceeds the
+	// maximum line length and is separated into multiple text
+	// lines. This left margin is applied to the second and
+	// all subsequent lines of a multi-line text display. This
+	// parameter is only valid when 'TurnAutoLineLengthBreaksOn'
+	// is set to 'true' and the initial text string exceeds the
+	// maximum line length.
+
 	lock *sync.Mutex
 }
 
@@ -227,7 +236,7 @@ func (txtLabelDto *TextFieldLabelDto) CopyIn(
 
 	defer txtLabelDto.lock.Unlock()
 
-	_ = textFieldLabelDtoNanobot{}.ptr().copy(
+	_ = new(textFieldLabelDtoNanobot).copy(
 		txtLabelDto,
 		&incomingTxtLabelDto,
 		nil)
@@ -265,7 +274,7 @@ func (txtLabelDto *TextFieldLabelDto) CopyOut() (
 
 	defer txtLabelDto.lock.Unlock()
 
-	_ = textFieldLabelDtoNanobot{}.ptr().copy(
+	_ = new(textFieldLabelDtoNanobot).copy(
 		&deepCopyTxtLabelDto,
 		txtLabelDto,
 		nil)
@@ -306,7 +315,7 @@ func (txtLabelDto *TextFieldLabelDto) Empty() {
 
 	txtLabelDto.lock.Lock()
 
-	textFieldLabelDtoAtom{}.ptr().
+	new(textFieldLabelDtoAtom).
 		empty(
 			txtLabelDto)
 
@@ -361,7 +370,7 @@ func (txtLabelDto *TextFieldLabelDto) Equal(
 
 	defer txtLabelDto.lock.Unlock()
 
-	return textFieldLabelDtoAtom{}.ptr().
+	return new(textFieldLabelDtoAtom).
 		equal(
 			txtLabelDto,
 			&incomingTxtLabelDto)
@@ -425,7 +434,7 @@ func (txtLabelDtoNanobot *textFieldLabelDtoNanobot) copy(
 		return err
 	}
 
-	textFieldLabelDtoAtom{}.ptr().empty(
+	new(textFieldLabelDtoAtom).empty(
 		destinationTxtLabelDto)
 
 	destinationTxtLabelDto.FormatType =
@@ -455,24 +464,10 @@ func (txtLabelDtoNanobot *textFieldLabelDtoNanobot) copy(
 	destinationTxtLabelDto.TurnAutoLineLengthBreaksOn =
 		sourceTxtLabelDto.TurnAutoLineLengthBreaksOn
 
+	destinationTxtLabelDto.MultiLineLeftMarginStr =
+		sourceTxtLabelDto.MultiLineLeftMarginStr
+
 	return err
-}
-
-// ptr - Returns a pointer to a new instance of
-// textFieldLabelDtoNanobot.
-func (txtLabelDtoNanobot textFieldLabelDtoNanobot) ptr() *textFieldLabelDtoNanobot {
-
-	if txtLabelDtoNanobot.lock == nil {
-		txtLabelDtoNanobot.lock = new(sync.Mutex)
-	}
-
-	txtLabelDtoNanobot.lock.Lock()
-
-	defer txtLabelDtoNanobot.lock.Unlock()
-
-	return &textFieldLabelDtoNanobot{
-		lock: new(sync.Mutex),
-	}
 }
 
 // textFieldLabelDtoAtom - Provides helper methods for
@@ -496,8 +491,6 @@ func (txtLabelDtoAtom *textFieldLabelDtoAtom) empty(
 
 	txtLabelDtoAtom.lock.Lock()
 
-	defer txtLabelDtoAtom.lock.Unlock()
-
 	if txtLabelDto == nil {
 
 		return
@@ -520,6 +513,12 @@ func (txtLabelDtoAtom *textFieldLabelDtoAtom) empty(
 	txtLabelDto.MaxLineLength = -99
 
 	txtLabelDto.TurnAutoLineLengthBreaksOn = false
+
+	txtLabelDto.MultiLineLeftMarginStr = ""
+
+	txtLabelDtoAtom.lock.Unlock()
+
+	txtLabelDtoAtom.lock = nil
 
 	return
 }
@@ -603,22 +602,11 @@ func (txtLabelDtoAtom *textFieldLabelDtoAtom) equal(
 		return false
 	}
 
+	if txtLabelDto1.MultiLineLeftMarginStr !=
+		txtLabelDto2.MultiLineLeftMarginStr {
+
+		return false
+	}
+
 	return true
-}
-
-// ptr - Returns a pointer to a new instance of
-// textFieldLabelDtoAtom.
-func (txtLabelDtoAtom textFieldLabelDtoAtom) ptr() *textFieldLabelDtoAtom {
-
-	if txtLabelDtoAtom.lock == nil {
-		txtLabelDtoAtom.lock = new(sync.Mutex)
-	}
-
-	txtLabelDtoAtom.lock.Lock()
-
-	defer txtLabelDtoAtom.lock.Unlock()
-
-	return &textFieldLabelDtoAtom{
-		lock: new(sync.Mutex),
-	}
 }

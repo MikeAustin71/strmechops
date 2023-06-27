@@ -112,6 +112,15 @@ type TextFieldDateTimeDto struct {
 	// will be terminated with a new line character ('\n') and
 	// placed on the following line of text.
 
+	MultiLineLeftMarginStr string
+	// The left margin used when a text string exceeds the
+	// maximum line length and is separated into multiple text
+	// lines. This left margin is applied to the second and
+	// all subsequent lines of a multi-line text display. This
+	// parameter is only valid when 'TurnAutoLineLengthBreaksOn'
+	// is set to 'true' and the initial text string exceeds the
+	// maximum line length.
+
 	lock *sync.Mutex
 }
 
@@ -263,6 +272,8 @@ func (txtDateTimeDto *TextFieldDateTimeDto) Empty() {
 
 	txtDateTimeDto.TurnAutoLineLengthBreaksOn = false
 
+	txtDateTimeDto.MultiLineLeftMarginStr = ""
+
 	txtDateTimeDto.lock.Unlock()
 
 	txtDateTimeDto.lock = nil
@@ -373,6 +384,12 @@ func (txtDateTimeDto *TextFieldDateTimeDto) Equal(
 		return false
 	}
 
+	if txtDateTimeDto.MultiLineLeftMarginStr !=
+		incomingDateTimeDto.MultiLineLeftMarginStr {
+
+		return false
+	}
+
 	return true
 }
 
@@ -462,6 +479,9 @@ func (txtDateTimeDtoNanobot textFieldDateTimeDtoNanobot) copy(
 
 	destinationTxtDateTimeDto.TurnAutoLineLengthBreaksOn =
 		sourceTxtDateTimeDto.TurnAutoLineLengthBreaksOn
+
+	destinationTxtDateTimeDto.MultiLineLeftMarginStr =
+		sourceTxtDateTimeDto.MultiLineLeftMarginStr
 
 	return err
 }

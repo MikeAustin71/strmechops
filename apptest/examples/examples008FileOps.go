@@ -67,7 +67,7 @@ func (dirOpsTest007 MainFileOpsTest008) GetFiles01() {
 	err = filesLocated.
 		GetTextListing(
 			" ",
-			" ",
+			"",
 			80,
 			'-',
 			"Directory "+targetDir,
@@ -80,6 +80,16 @@ func (dirOpsTest007 MainFileOpsTest008) GetFiles01() {
 			err.Error())
 		return
 	}
+
+	/*
+		output := strBuilder.String()
+
+		printableChars := new(strmech.StrMech).
+			ConvertNonPrintableString(output, true)
+
+		fmt.Println(printableChars)
+
+	*/
 
 	fmt.Println(strBuilder.String())
 

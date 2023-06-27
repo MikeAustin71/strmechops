@@ -107,6 +107,15 @@ type TextAdHocDto struct {
 	// will be formatted as a separate line of text on the
 	// following line.
 
+	MultiLineLeftMarginStr string
+	// The left margin used when a text string exceeds the
+	// maximum line length and is separated into multiple text
+	// lines. This left margin is applied to the second and
+	// all subsequent lines of a multi-line text display. This
+	// parameter is only valid when 'TurnAutoLineLengthBreaksOn'
+	// is set to 'true' and the initial text string exceeds the
+	// maximum line length.
+
 	lock *sync.Mutex
 }
 
@@ -157,7 +166,7 @@ func (textAdHocDto *TextAdHocDto) CopyIn(
 
 	defer textAdHocDto.lock.Unlock()
 
-	_ = textAdHocDtoNanobot{}.ptr().copyData(
+	_ = new(textAdHocDtoNanobot).copyData(
 		textAdHocDto,
 		&incomingTxtAdHocDto,
 		nil)
@@ -195,7 +204,7 @@ func (textAdHocDto *TextAdHocDto) CopyOut() (
 
 	defer textAdHocDto.lock.Unlock()
 
-	_ = textAdHocDtoNanobot{}.ptr().copyData(
+	_ = new(textAdHocDtoNanobot).copyData(
 		&deepCopyTxtAdHocDto,
 		textAdHocDto,
 		nil)
@@ -236,7 +245,7 @@ func (textAdHocDto *TextAdHocDto) Empty() {
 
 	textAdHocDto.lock.Lock()
 
-	textAdHocDtoMolecule{}.ptr().empty(
+	new(textAdHocDtoMolecule).empty(
 		textAdHocDto)
 
 	textAdHocDto.lock.Unlock()
@@ -290,7 +299,7 @@ func (textAdHocDto *TextAdHocDto) Equal(
 
 	defer textAdHocDto.lock.Unlock()
 
-	return textAdHocDtoMolecule{}.ptr().equal(
+	return new(textAdHocDtoMolecule).equal(
 		textAdHocDto,
 		&incomingTxtAdHocDto)
 }
@@ -352,7 +361,7 @@ func (txtSolidLineDtoNanobot *textAdHocDtoNanobot) copyData(
 		return err
 	}
 
-	textAdHocDtoMolecule{}.ptr().empty(
+	new(textAdHocDtoMolecule).empty(
 		destinationTextAdHocDto)
 
 	destinationTextAdHocDto.FormatType =
@@ -379,24 +388,10 @@ func (txtSolidLineDtoNanobot *textAdHocDtoNanobot) copyData(
 	destinationTextAdHocDto.TurnAutoLineLengthBreaksOn =
 		sourceTextAdHocDto.TurnAutoLineLengthBreaksOn
 
+	destinationTextAdHocDto.MultiLineLeftMarginStr =
+		sourceTextAdHocDto.MultiLineLeftMarginStr
+
 	return err
-}
-
-// ptr - Returns a pointer to a new instance of
-// textAdHocDtoNanobot.
-func (txtSolidLineDtoNanobot textAdHocDtoNanobot) ptr() *textAdHocDtoNanobot {
-
-	if txtSolidLineDtoNanobot.lock == nil {
-		txtSolidLineDtoNanobot.lock = new(sync.Mutex)
-	}
-
-	txtSolidLineDtoNanobot.lock.Lock()
-
-	defer txtSolidLineDtoNanobot.lock.Unlock()
-
-	return &textAdHocDtoNanobot{
-		lock: new(sync.Mutex),
-	}
 }
 
 // textAdHocDtoMolecule - Provides helper methods for
@@ -437,6 +432,8 @@ func (txtAdHocDtoMolecule *textAdHocDtoMolecule) empty(
 	txtAdHocDto.MaxLineLength = -99
 
 	txtAdHocDto.TurnAutoLineLengthBreaksOn = false
+
+	txtAdHocDto.MultiLineLeftMarginStr = ""
 
 	return
 }
@@ -512,22 +509,11 @@ func (txtAdHocDtoMolecule *textAdHocDtoMolecule) equal(
 		return false
 	}
 
+	if txtAdHocDto1.MultiLineLeftMarginStr !=
+		txtAdHocDto2.MultiLineLeftMarginStr {
+
+		return false
+	}
+
 	return true
-}
-
-// ptr - Returns a pointer to a new instance of
-// textFieldSpacerDtoMolecule.
-func (txtAdHocDtoMolecule textAdHocDtoMolecule) ptr() *textAdHocDtoMolecule {
-
-	if txtAdHocDtoMolecule.lock == nil {
-		txtAdHocDtoMolecule.lock = new(sync.Mutex)
-	}
-
-	txtAdHocDtoMolecule.lock.Lock()
-
-	defer txtAdHocDtoMolecule.lock.Unlock()
-
-	return &textAdHocDtoMolecule{
-		lock: new(sync.Mutex),
-	}
 }

@@ -21,6 +21,7 @@ type textStrBuilderParamsDto struct {
 	maxLineLength              int
 	currentLineLength          int
 	turnAutoLineLengthBreaksOn bool
+	multiLineLeftMarginStr     string
 	lastWriteWasLineTerminator bool
 	sourceTag                  string
 	sourceDtoTag               string
@@ -258,6 +259,7 @@ func (txtBuilderMolecule *textStrBuilderMolecule) buildFieldFillerWithDto(
 		maxLineLength:              fillerFieldDto.MaxLineLength,
 		currentLineLength:          0,
 		turnAutoLineLengthBreaksOn: fillerFieldDto.TurnAutoLineLengthBreaksOn,
+		multiLineLeftMarginStr:     fillerFieldDto.MultiLineLeftMarginStr,
 		lastWriteWasLineTerminator: false,
 		sourceTag:                  "Filler Field",
 		sourceDtoTag:               "fillerFieldDto",
