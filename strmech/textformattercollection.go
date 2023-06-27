@@ -2067,76 +2067,85 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldLabelDto(
 //
 // Input Parameters
 //
-//	leftMarginStr              string
-//	   - The contents of this string will be used as the left
-//	     margin for the Text Spacer Field.
+//	leftMarginStr				string
 //
-//	     If no left margin is required, set 'leftMarginStr' to a
-//	     zero length or empty string, and no left margin will be
-//	     created.
+//		The contents of this string will be used as the left
+//		margin for the Text Spacer Field.
 //
+//		If no left margin is required, set 'leftMarginStr' to a
+//		zero length or empty string, and no left margin will be
+//		created.
 //
-//	fieldLength                int
-//	   - An integer value used to specify the number of white space
-//	     characters in the Text Spacer Field.
+//	fieldLength					int
 //
-//	     If the value of this parameter is less than zero and greater
-//	     than one-million (1,000,000), an error will be generated when
-//	     attempting to create formatted text output.
+//		An integer value used to specify the number of white space
+//		characters in the Text Spacer Field.
 //
-//	     Examples:
-//	      fieldLen = 1 produces text field " "  // 1-white space
-//	      fieldLen = 2 produces text field "  " // 2-white spaces
-//	      fieldLen = 5 produces text field "     " // 5-white spaces
+//		If the value of this parameter is less than zero and greater
+//		than one-million (1,000,000), an error will be generated when
+//		attempting to create formatted text output.
 //
+//		Examples:
+//		 fieldLen = 1 produces text field " "  // 1-white space
+//		 fieldLen = 2 produces text field "  " // 2-white spaces
+//		 fieldLen = 5 produces text field "     " // 5-white spaces
 //
-//	lineTerminator             string
-//	   - This string holds the character or characters which will
-//	     be used to terminate the formatted text thereby converting
-//	     this text element into a valid line of text.
+//	lineTerminator				string
 //
-//	     If a text line is required, setting this string to include
-//	     a new line character ('\n') will ensure that the text line
-//	     consists of the text spacer field and no other text
-//	     elements. Any string of text characters will be accepted
-//	     for this parameter.
+//		This string holds the character or characters which will
+//		be used to terminate the formatted text thereby converting
+//		this text element into a valid line of text.
 //
-//	     Again, the most common usage sets this string to a new
-//	     line character ("\n").
+//		If a text line is required, setting this string to include
+//		a new line character ('\n') will ensure that the text line
+//		consists of the text spacer field and no other text
+//		elements. Any string of text characters will be accepted
+//		for this parameter.
 //
-//	     If Line Termination is NOT required, set 'lineTerminator'
-//	     to a zero length or empty string and no line termination
-//	     characters will be created.
+//		Again, the most common usage sets this string to a new
+//		line character ("\n").
 //
+//		If Line Termination is NOT required, set 'lineTerminator'
+//		to a zero length or empty string and no line termination
+//		characters will be created.
 //
-//	maxLineLength              int
-//	   - The maximum length of the line on which this Text Spacer
-//	     Field will be presented.
+//	maxLineLength				int
 //
-//	     Set this parameter to minus one (-1) to specify an
-//	     unlimited line length for this text line.
+//		The maximum length of the line on which this Text Spacer
+//		Field will be presented.
 //
-// /
+//		Set this parameter to minus one (-1) to specify an
+//		unlimited line length for this text line.
 //
-//	     'maxLineLength' is used in conjunction with parameter
-//	     'turnAutoLineLengthBreaksOn' to automatically place text
-//	     fields on separate text lines when that text exceeds the
-//	     maximum text line length ('maxLineLength'). Therefore,
-//	     paramter 'turnAutoLineLengthBreaksOn' controls whether
-//	     automatic line breaks using 'maxLineLength' will be
-//	     applied.
+//		'maxLineLength' is used in conjunction with parameter
+//		'turnAutoLineLengthBreaksOn' to automatically place text
+//		fields on separate text lines when that text exceeds the
+//		maximum text line length ('maxLineLength'). Therefore,
+//		paramter 'turnAutoLineLengthBreaksOn' controls whether
+//		automatic line breaks using 'maxLineLength' will be
+//		applied.
 //
-//	     If the value of 'maxLineLength' is less than zero (0), it
-//	     will be automatically converted to minus one (-1).
+//		If the value of 'maxLineLength' is less than zero (0), it
+//		will be automatically converted to minus one (-1).
 //
+//	turnAutoLineLengthBreaksOn	bool
 //
-//	turnAutoLineLengthBreaksOn bool
-//	   - This parameter controls whether text lines which exceed
-//	     the maximum line length ('maxLineLength') are broken up
-//	     and presented on the following line.
+//		This parameter controls whether text lines which exceed
+//		the maximum line length ('maxLineLength') are broken up
+//		and presented on the following line.
 //
-//	     To apply automatic line breaking at the maximum line
-//	     length, set the value of this parameter to 'true'.
+//		To apply automatic line breaking at the maximum line
+//		length, set the value of this parameter to 'true'.
+//
+//	multiLineLeftMarginStr		string
+//
+//		The left margin used when a text string exceeds the
+//		maximum line length and is separated into multiple text
+//		lines. This left margin is applied to the second and
+//		all subsequent lines of a multi-line text display. This
+//		parameter is only valid when 'TurnAutoLineLengthBreaksOn'
+//		is set to 'true' and the initial text string exceeds the
+//		maximum line length.
 //
 // ----------------------------------------------------------------
 //
@@ -2149,7 +2158,8 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldSpacer(
 	rightMarginStr string,
 	lineTerminator string,
 	maxLineLength int,
-	turnAutoLineLengthBreaksOn bool) {
+	turnAutoLineLengthBreaksOn bool,
+	multiLineLeftMarginStr string) {
 
 	if txtFmtCollection.lock == nil {
 		txtFmtCollection.lock = new(sync.Mutex)
@@ -2176,6 +2186,7 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldSpacer(
 			LineTerminator:             lineTerminator,
 			MaxLineLength:              maxLineLength,
 			TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
+			MultiLineLeftMarginStr:     multiLineLeftMarginStr,
 			lock:                       nil,
 		},
 		BlankLine:           TextLineBlankDto{},
