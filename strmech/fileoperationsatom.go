@@ -6,8 +6,7 @@ import (
 	"sync"
 )
 
-// TODO - Fix this. It should be private
-type FileOperationsAtom struct {
+type fileOperationsAtom struct {
 	lock *sync.Mutex
 }
 
@@ -75,7 +74,7 @@ type FileOperationsAtom struct {
 //	 	text passed by input parameter, 'errPrefDto'.
 //	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fOpsAtom *FileOperationsAtom) deleteSourceAndDestinationFiles(
+func (fOpsAtom *fileOperationsAtom) deleteSourceAndDestinationFiles(
 	fOps *FileOps,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
@@ -91,7 +90,7 @@ func (fOpsAtom *FileOperationsAtom) deleteSourceAndDestinationFiles(
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	funcName := "FileOperationsAtom." +
+	funcName := "fileOperationsAtom." +
 		"deleteSourceAndDestinationFiles()"
 
 	ePrefix,
@@ -215,7 +214,7 @@ func (fOpsAtom *FileOperationsAtom) deleteSourceAndDestinationFiles(
 //	 	text passed by input parameter, 'errPrefDto'.
 //	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fOpsAtom *FileOperationsAtom) setFileOps(
+func (fOpsAtom *fileOperationsAtom) setFileOps(
 	fOps *FileOps,
 	sourceFMgr FileMgr,
 	destinationFMgr FileMgr,
@@ -233,7 +232,7 @@ func (fOpsAtom *FileOperationsAtom) setFileOps(
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	funcName := "FileOperationsAtom." +
+	funcName := "fileOperationsAtom." +
 		"setFileOps()"
 
 	ePrefix,

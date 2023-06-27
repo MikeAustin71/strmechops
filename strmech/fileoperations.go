@@ -898,7 +898,7 @@ func (fops *FileOps) ExecuteFileOperation(
 
 	case FileOpCode.DeleteSourceAndDestinationFiles():
 
-		err = new(FileOperationsAtom).
+		err = new(fileOperationsAtom).
 			deleteSourceAndDestinationFiles(
 				fops,
 				ePrefix)
@@ -1763,7 +1763,7 @@ func (fops *FileOps) NewByFileMgrs(
 
 	fOpsNew := FileOps{}
 
-	err = new(FileOperationsAtom).
+	err = new(fileOperationsAtom).
 		setFileOps(
 			&fOpsNew,
 			sourceFMgr,
@@ -2069,7 +2069,7 @@ func (fops *FileOps) SetByFileMgrs(
 		return err
 	}
 
-	return new(FileOperationsAtom).
+	return new(fileOperationsAtom).
 		setFileOps(
 			fops,
 			sourceFMgr,

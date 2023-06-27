@@ -2432,7 +2432,7 @@ func (fOpsNanobot *FileOperationsNanobot) setFileOpsByDirAndFileNameStr(
 			err.Error())
 	}
 
-	return new(FileOperationsAtom).setFileOps(
+	return new(fileOperationsAtom).setFileOps(
 		fOps,
 		sourceFMgr,
 		destinationFMgr,
@@ -2669,7 +2669,7 @@ func (fOpsNanobot *FileOperationsNanobot) setFileOpsByDirMgrFileName(
 			err.Error())
 	}
 
-	return new(FileOperationsAtom).setFileOps(
+	return new(fileOperationsAtom).setFileOps(
 		fOps,
 		sourceFMgr,
 		destinationFMgr,
@@ -2845,7 +2845,7 @@ func (fOpsNanobot *FileOperationsNanobot) setByPathFileNameExtStrs(
 			err.Error())
 	}
 
-	return new(FileOperationsAtom).setFileOps(
+	return new(fileOperationsAtom).setFileOps(
 		fOps,
 		sourceFMgr,
 		destinationFMgr,
