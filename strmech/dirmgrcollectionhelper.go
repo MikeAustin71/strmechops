@@ -529,6 +529,7 @@ func (dMgrColHelper *dirMgrCollectionHelper) fmtTextListingAbsPath(
 			"\n",
 			maxLineLength,
 			true,
+			leftMargin,
 			ePrefix)
 
 	if err != nil {

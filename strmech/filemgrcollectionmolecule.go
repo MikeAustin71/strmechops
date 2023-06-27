@@ -274,6 +274,7 @@ func (fMgrColMolecule *FileMgrCollectionMolecule) fmtTextListingAllFiles(
 			"",
 			maxLineLength,
 			true,
+			leftMargin,
 			ePrefix)
 
 	if err != nil {

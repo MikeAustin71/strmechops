@@ -664,6 +664,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		"",
 		-1,
 		false,
+		"",
 		ePrefix.XCpy(
 			"1-Column Setup"))
 

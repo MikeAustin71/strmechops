@@ -438,6 +438,7 @@ func (mTest02 MainTest02) StrMechRead01() {
 		"",
 		-1,
 		false,
+		" ",
 		ePrefix.XCpy(
 			"1-Column Setup"))
 
