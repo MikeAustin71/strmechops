@@ -11,23 +11,6 @@ type textFieldSpecDateTimeMechanics struct {
 	lock *sync.Mutex
 }
 
-// ptr - Returns a pointer to a new instance of
-// textFieldSpecDateTimeMechanics.
-func (txtFieldDateTimeMechanics textFieldSpecDateTimeMechanics) ptr() *textFieldSpecDateTimeMechanics {
-
-	if txtFieldDateTimeMechanics.lock == nil {
-		txtFieldDateTimeMechanics.lock = new(sync.Mutex)
-	}
-
-	txtFieldDateTimeMechanics.lock.Lock()
-
-	defer txtFieldDateTimeMechanics.lock.Unlock()
-
-	return &textFieldSpecDateTimeMechanics{
-		lock: new(sync.Mutex),
-	}
-}
-
 // setTextFieldDateTime - Receives a pointer to an instance of
 // TextFieldSpecDateTime and proceeds to reset the data values
 // based on the input parameters.
