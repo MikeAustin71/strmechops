@@ -7277,6 +7277,7 @@ func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsLine2Col(
 		LineTerminator:             lineTerminator,
 		MaxLineLength:              maxLineLength,
 		TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
+		MultiLineLeftMarginStr:     multiLineLeftMarginStr,
 		lock:                       nil,
 	}
 
@@ -7448,6 +7449,7 @@ func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsMultiCol(
 	lineTerminator string,
 	maxLineLength int,
 	turnAutoLineLengthBreaksOn bool,
+	multiLineLeftMarginStr string,
 	errorPrefix interface{}) error {
 
 	if txtFmtCollection.lock == nil {
@@ -7479,6 +7481,7 @@ func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsMultiCol(
 		LineTerminator:             lineTerminator,
 		MaxLineLength:              maxLineLength,
 		TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
+		MultiLineLeftMarginStr:     multiLineLeftMarginStr,
 		lock:                       nil,
 	}
 
