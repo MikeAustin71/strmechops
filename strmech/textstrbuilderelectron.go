@@ -662,10 +662,6 @@ func (txtBuilderElectron *textStrBuilderElectron) writeText(
 			err
 	}
 
-	if len(multiLineLeftMarginStr) == 0 {
-		multiLineLeftMarginStr = leftMarginStr
-	}
-
 	lenTextStr := len(textStr)
 
 	if lenTextStr == 0 {
