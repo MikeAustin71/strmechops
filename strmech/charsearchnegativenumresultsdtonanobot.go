@@ -931,7 +931,8 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 			false,
 			"\n",
 			maxLineLen,
-			true)
+			true,
+			spacer)
 
 		goto exitMethodTrailer
 

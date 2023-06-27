@@ -828,7 +828,8 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 			false,
 			"\n",
 			maxLineLen,
-			true)
+			true,
+			spacer)
 
 		goto exitMethodTrailer
 

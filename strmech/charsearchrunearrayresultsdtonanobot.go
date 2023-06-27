@@ -818,7 +818,8 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 			false,
 			"\n",
 			maxLineLen,
-			true)
+			true,
+			spacer)
 
 		goto exitMethodTrailer
 

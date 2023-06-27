@@ -40,101 +40,112 @@ type TextFormatterCollection struct {
 // Input Parameters
 //
 //	leftMarginStr                      string
-//	   - A string containing the text characters to be positioned
-//	     on the Left side of the Ad Hoc Text.
 //
-//	     If no Left margin is required, set this parameter to an
-//	     empty string.
+//		A string containing the text characters to be positioned
+//		on the Left side of the Ad Hoc Text.
 //
+//		If no Left margin is required, set this parameter to an
+//		empty string.
 //
 //	adHocText                          string
-//	   - This strings holds the raw, ad hoc text which will be
-//	     inserted "as is", into the final output of formatted
-//	     text.
 //
-//	     If this parameter is submitted as an empty or zero
-//	     length string, an error will be generated when
-//	     attempting to create formatted text output.
+//		This strings holds the raw, ad hoc text which will be
+//		inserted "as is", into the final output of formatted
+//		text.
 //
-//
+//		If this parameter is submitted as an empty or zero
+//		length string, an error will be generated when
+//		attempting to create formatted text output.
 //
 //	rightMarginStr                     string
-//	   - The contents of the string will be used as the right
-//	     margin for the Text Ad Hoc string.
 //
-//	     If no right margin is required, set 'rightMarginStr' to
-//	     a zero length or empty string, and no right margin will
-//	     be created.
+//		The contents of the string will be used as the right
+//		margin for the Text Ad Hoc string.
 //
+//		If no right margin is required, set 'rightMarginStr' to
+//		a zero length or empty string, and no right margin will
+//		be created.
 //
 //	turnLineTerminationOff             bool
-//	   - By default, a new line string terminator ('\n') will be
-//	     appended to the Ad Hoc text ('AdHocText'). If this
-//	     parameter is set to 'true', no line termination sequence
-//	     will be applied.
 //
-//	     This parameter controls the operation of parameter
-//	     'LineTerminator'. If 'TurnLineTerminationOff' is set to
-//	     'true', 'LineTerminator' will be completely ignored and
-//	      have no effect.
+//		By default, a new line string terminator ('\n') will be
+//		appended to the Ad Hoc text ('AdHocText'). If this
+//		parameter is set to 'true', no line termination sequence
+//		will be applied.
 //
+//		This parameter controls the operation of parameter
+//		'LineTerminator'. If 'TurnLineTerminationOff' is set to
+//		'true', 'LineTerminator' will be completely ignored and
+//		have no effect.
 //
 //	lineTerminator                     string
-//	   - This string holds the character or characters which
-//	     will be used to terminate the formatted line of text
-//	     output, if parameter 'TurnLineTerminationOff' is set
-//	     to 'false'.
 //
-//	     The most common usage sets this string to a new line
-//	     character ("\n").
+//		This string holds the character or characters which
+//		will be used to terminate the formatted line of text
+//		output, if parameter 'TurnLineTerminationOff' is set
+//		to 'false'.
 //
-//	     If 'lineTerminator' is configured as an empty string
-//	     (string length zero), a single new line character ('\n')
-//	     will be automatically applied to produce line termination
-//	     depending on the setting for parameter
-//	     'turnLineTerminationOff'.
+//		The most common usage sets this string to a new line
+//		character ("\n").
 //
-//	     LineTerminator works in conjunction with parameter
-//	     'turnLineTerminationOff'. 'turnLineTerminationOff'
-//	     controls the application of a line terminator. Setting
-//	     'turnLineTerminationOff' to 'true' means that NO line
-//	     terminator will be applied.
+//		If 'lineTerminator' is configured as an empty string
+//		(string length zero), a single new line character ('\n')
+//		will be automatically applied to produce line termination
+//		depending on the setting for parameter
+//		'turnLineTerminationOff'.
 //
-//	     Setting 'turnLineTerminationOff' to 'true' means that
-//	     parameter 'lineTerminator' will be completely ignored
-//	     and have no effect.
+//		LineTerminator works in conjunction with parameter
+//		'turnLineTerminationOff'. 'turnLineTerminationOff'
+//		controls the application of a line terminator. Setting
+//		'turnLineTerminationOff' to 'true' means that NO line
+//		terminator will be applied.
 //
+//		Setting 'turnLineTerminationOff' to 'true' means that
+//		parameter 'lineTerminator' will be completely ignored
+//		and have no effect.
 //
 //	maxLineLength                      int
-//	   - The maximum length of the line on which the solid line
-//	     text characters will be presented.
 //
-//	     Set this parameter to minus one (-1) to specify an
-//	     unlimited line length for this text line.
+//		The maximum length of the line on which the solid line
+//		text characters will be presented.
 //
-//	     If the value of 'maxLineLength' is less than one (1),
-//	     it will be automatically converted to minus one (-1).
+//		Set this parameter to minus one (-1) to specify an
+//		unlimited line length for this text line.
 //
-//	     'maxLineLength' is used in conjunction with parameter
-//	     'turnAutoLineLengthBreaksOn' to automatically place text
-//	     on separate text lines when that text exceeds the maximum
-//	     text line length ('maxLineLength'). Therefore, parameter
-//	     'turnAutoLineLengthBreaksOn' controls whether automatic
-//	     line breaks using 'maxLineLength' will be applied.
+//		If the value of 'maxLineLength' is less than one (1),
+//		it will be automatically converted to minus one (-1).
+//
+//		'maxLineLength' is used in conjunction with parameter
+//		'turnAutoLineLengthBreaksOn' to automatically place text
+//		on separate text lines when that text exceeds the maximum
+//		text line length ('maxLineLength'). Therefore, parameter
+//		'turnAutoLineLengthBreaksOn' controls whether automatic
+//		line breaks using 'maxLineLength' will be applied.
 //
 //
 //	turnAutoLineLengthBreaksOn         bool
-//	   - This parameter controls whether text lines which exceed
-//	     the maximum line length ('maxLineLength') are positioned
-//	     on the following line as a separate line of text.
 //
-//	     To apply automatic line breaking at the maximum line
-//	     length, set the value of this parameter to 'true'.
+//		This parameter controls whether text lines which exceed
+//		the maximum line length ('maxLineLength') are positioned
+//		on the following line as a separate line of text.
 //
-//	     When this parameter is set to 'true', text fields which
-//	     extend beyond the maximum line length ('maxLineLength')
-//	     will be formatted as a separate line of text on the
-//	     following line.
+//		To apply automatic line breaking at the maximum line
+//		length, set the value of this parameter to 'true'.
+//
+//		When this parameter is set to 'true', text fields which
+//		extend beyond the maximum line length ('maxLineLength')
+//		will be formatted as a separate line of text on the
+//		following line.
+//
+//	multiLineLeftMarginStr			string
+//
+//		The left margin used when a text string exceeds the
+//		maximum line length and is separated into multiple text
+//		lines. This left margin is applied to the second and
+//		all subsequent lines of a multi-line text display. This
+//		parameter is only valid when 'TurnAutoLineLengthBreaksOn'
+//		is set to 'true' and the initial text string exceeds the
+//		maximum line length.
 //
 // ----------------------------------------------------------------
 //
@@ -148,7 +159,8 @@ func (txtFmtCollection *TextFormatterCollection) AddAdHocText(
 	turnLineTerminationOff bool,
 	lineTerminator string,
 	maxLineLength int,
-	turnAutoLineLengthBreaksOn bool) {
+	turnAutoLineLengthBreaksOn bool,
+	multiLineLeftMarginStr string) {
 
 	if txtFmtCollection.lock == nil {
 		txtFmtCollection.lock = new(sync.Mutex)
@@ -181,6 +193,7 @@ func (txtFmtCollection *TextFormatterCollection) AddAdHocText(
 			LineTerminator:             lineTerminator,
 			MaxLineLength:              maxLineLength,
 			TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
+			MultiLineLeftMarginStr:     multiLineLeftMarginStr,
 			lock:                       nil,
 		},
 
