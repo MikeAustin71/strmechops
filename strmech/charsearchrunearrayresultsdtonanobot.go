@@ -757,7 +757,8 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 				colonSpace,
 				"\n",
 				-1,
-				false)
+				false,
+				" ")
 
 			spacer := strings.Repeat(" ", 16)
 
@@ -777,7 +778,8 @@ func (searchRunesResultsDtoNanobot charSearchRuneArrayResultsDtoNanobot) getPara
 				"",
 				"\n",
 				-1,
-				false)
+				false,
+				"")
 
 			txtFormatCol.AddLineBlank(
 				1,

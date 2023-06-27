@@ -868,7 +868,8 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 				colonSpace,
 				"\n",
 				-1,
-				false)
+				false,
+				" ")
 
 			spacer := strings.Repeat(" ", 16)
 
@@ -888,7 +889,8 @@ func (searchNegNumResultsNanobot *charSearchNegNumResultsDtoNanobot) getParamete
 				"",
 				"\n",
 				-1,
-				false)
+				false,
+				"")
 
 			txtFormatCol.AddLineBlank(
 				1,

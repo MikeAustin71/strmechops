@@ -814,7 +814,8 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 			colonSpace,
 			"\n",
 			-1,
-			false)
+			false,
+			" ")
 
 		spacer := strings.Repeat(" ", 16)
 
@@ -834,7 +835,8 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 			"",
 			"\n",
 			-1,
-			false)
+			false,
+			"")
 
 	}
 

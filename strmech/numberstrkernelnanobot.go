@@ -461,7 +461,8 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 				colonSpace,
 				"",
 				-1,
-				false)
+				false,
+				" ")
 
 			txtFormatCol.AddFieldLabel(
 				"",
@@ -471,7 +472,8 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 				"",
 				"\n",
 				-1,
-				false)
+				false,
+				"")
 
 		} else {
 
@@ -483,7 +485,8 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 				colonSpace,
 				"\n",
 				-1,
-				false)
+				false,
+				" ")
 
 			spacer := strings.Repeat(" ", 16)
 
@@ -503,7 +506,8 @@ func (numStrKernelNanobot *numberStrKernelNanobot) getParameterTextListing(
 				"",
 				"\n",
 				-1,
-				false)
+				false,
+				"")
 
 		}
 

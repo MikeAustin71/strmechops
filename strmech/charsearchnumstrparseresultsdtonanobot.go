@@ -497,7 +497,8 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 				colonSpace,
 				"\n",
 				-1,
-				false)
+				false,
+				" ")
 
 			spacer := strings.Repeat(" ", 16)
 
@@ -517,7 +518,8 @@ func (searchNumStrParseResultsNanobot *charSearchNumStrParseResultsDtoNanobot) g
 				"",
 				"\n",
 				-1,
-				false)
+				false,
+				"")
 
 		}
 

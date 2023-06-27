@@ -766,7 +766,8 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 				colonSpace,
 				"\n",
 				-1,
-				false)
+				false,
+				" ")
 
 			spacer := strings.Repeat(" ", 16)
 
@@ -786,7 +787,8 @@ func (searchDecimalSepResultsNanobot *charSearchDecimalSeparatorResultsDtoNanobo
 				"",
 				"\n",
 				-1,
-				false)
+				false,
+				"")
 
 			txtFormatCol.AddLineBlank(
 				1,
