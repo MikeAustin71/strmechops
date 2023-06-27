@@ -7312,137 +7312,149 @@ func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsLine2Col(
 //
 // Input Parameters
 //
-//		fieldFormatParams          []TextFieldFmtParamsDto
-//		   - An array of TextFieldFmtParamsDto objects containing the
-//		     Text Field Format Parameters (TextFieldFmtParamsDto).
+//	fieldFormatParams			[]TextFieldFmtParamsDto
 //
-//		    The TextFieldFmtParamsDto type is defined as follows:
+//		An array of TextFieldFmtParamsDto objects containing the
+//		Text Field Format Parameters (TextFieldFmtParamsDto).
 //
-//		      type TextFieldFmtParamsDto struct {
-//		        LeftMarginStr  string
-//		        FieldLength    int
-//		        FieldJustify   TextJustify
-//		        DateTimeFormat string
-//		        RightMarginStr string
-//		      }
+//		The TextFieldFmtParamsDto type is defined as follows:
 //
+//		type TextFieldFmtParamsDto struct {
+//		  LeftMarginStr  string
+//		  FieldLength    int
+//		  FieldJustify   TextJustify
+//		  DateTimeFormat string
+//		  RightMarginStr string
+//		}
 //
-//		 turnLineTerminationOff    bool
-//		   - When this parameter is set to 'true', no line termination
-//		     sequence will be configured for this 'Line1Column' Text
-//		     Line.
+//	turnLineTerminationOff		bool
 //
-//		     Text Lines operate on the assumption that a line
-//		     termination is standard operating procedure. The default
-//		     line terminator for text lines is the new line character,
-//		     '\n'.
+//		When this parameter is set to 'true', no line termination
+//		sequence will be configured for this 'Line1Column' Text
+//		Line.
 //
-//		     Users have the option of turning off the entire line
-//		     termination sequence if this parameter is set to 'true'.
+//		Text Lines operate on the assumption that a line
+//		termination is standard operating procedure. The default
+//		line terminator for text lines is the new line character,
+//		'\n'.
 //
+//		Users have the option of turning off the entire line
+//		termination sequence if this parameter is set to 'true'.
 //
-//		lineTerminator             string
-//		   - If this parameter is set to an empty string, the default
-//		     line terminator, a new line character '\n', will be
-//		     applied to 'Line1Column' Text Lines.
+//	lineTerminator				string
 //
-//		     If this string is populated and the string length is
-//		     greater than zero (0), an alternate line termination
-//		     sequence will be configured using the characters provided
-//		     in the 'lineTerminator' string.
+//		If this parameter is set to an empty string, the default
+//		line terminator, a new line character '\n', will be
+//		applied to 'Line1Column' Text Lines.
 //
-//		     Remember that the application of a line termination
-//		     sequence is controlled by parameter
-//		     'turnLineTerminationOff'. If 'turnLineTerminationOff' is
-//		     set to 'true', no line termination characters will be
-//		     configured for this 'Line1Column' Text Lines.
+//		If this string is populated and the string length is
+//		greater than zero (0), an alternate line termination
+//		sequence will be configured using the characters provided
+//		in the 'lineTerminator' string.
 //
+//		Remember that the application of a line termination
+//		sequence is controlled by parameter
+//		'turnLineTerminationOff'. If 'turnLineTerminationOff' is
+//		set to 'true', no line termination characters will be
+//		configured for this 'Line1Column' Text Lines.
 //
-//		maxLineLength              int
-//		   - The maximum length of the line on which this 'Line1Column'
-//		     Text will be presented.
+//	maxLineLength				int
 //
-//		     Set this parameter to minus one (-1), and no maximum line
-//		     limits will be applied.
+//		The maximum length of the line on which this 'Line1Column'
+//		Text will be presented.
 //
-//		     'maxLineLength' is used in conjunction with parameter
-//		     'turnAutoLineLengthBreaksOn' to automatically place text
-//		     fields on separate text lines when that text exceeds the
-//		     maximum text line length ('maxLineLength').
+//		Set this parameter to minus one (-1), and no maximum line
+//		limits will be applied.
 //
-//		     If the value of 'maxLineLength' is less than minus one
-//		     (-1), an error will be returned.
+//		'maxLineLength' is used in conjunction with parameter
+//		'turnAutoLineLengthBreaksOn' to automatically place text
+//		fields on separate text lines when that text exceeds the
+//		maximum text line length ('maxLineLength').
 //
-//		     If the value of 'maxLineLength' is zero (0), an error will
-//		     be returned.
+//		If the value of 'maxLineLength' is less than minus one
+//		(-1), an error will be returned.
 //
+//		If the value of 'maxLineLength' is zero (0), an error will
+//		be returned.
 //
-//		turnAutoLineLengthBreaksOn bool
-//		   - This parameter controls whether text lines which exceed
-//		     the maximum line length ('maxLineLength') are broken up
-//		     and presented on the following line.
+//	turnAutoLineLengthBreaksOn	bool
 //
-//		     To apply automatic line breaking at the maximum line
-//		     length, set the value of this parameter to 'true'.
+//		This parameter controls whether text lines which exceed
+//		the maximum line length ('maxLineLength') are broken up
+//		and presented on the following line.
 //
+//		To apply automatic line breaking at the maximum line
+//		length, set the value of this parameter to 'true'.
 //
-//	 errorPrefix                interface{}
-//		   - This object encapsulates error prefix text which is
-//		     included in all returned error messages. Usually, it
-//		     contains the name of the calling method or methods
-//		     listed as a method or function chain of execution.
+//	multiLineLeftMarginStr		string
 //
-//		     If no error prefix information is needed, set this parameter
-//		     to 'nil'.
+//		The left margin used when a text string exceeds the
+//		maximum line length and is separated into multiple text
+//		lines. This left margin is applied to the second and
+//		all subsequent lines of a multi-line text display. This
+//		parameter is only valid when 'TurnAutoLineLengthBreaksOn'
+//		is set to 'true' and the initial text string exceeds the
+//		maximum line length.
 //
-//		     This empty interface must be convertible to one of the
-//		     following types:
+//	errorPrefix					interface{}
 //
-//		     1. nil - A nil value is valid and generates an empty
-//		        collection of error prefix and error context
-//		        information.
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
 //
-//		     2. string - A string containing error prefix information.
+//		If no error prefix information is needed, set this parameter
+//		to 'nil'.
 //
-//		     3. []string A one-dimensional slice of strings containing
-//		        error prefix information
+//		This empty interface must be convertible to one of the
+//		following types:
 //
-//		     4. [][2]string A two-dimensional slice of strings
-//		        containing error prefix and error context information.
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		        from this object will be copied for use in error and
-//		        informational messages.
+//		2. string - A string containing error prefix information.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		        Information from this object will be copied for use in
-//		        error and informational messages.
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
 //
-//		     7. IBasicErrorPrefix - An interface to a method generating
-//		        a two-dimensional slice of strings containing error
-//		        prefix and error context information.
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
 //
-//		     If parameter 'errorPrefix' is NOT convertible to one of
-//		     the valid types listed above, it will be considered
-//		     invalid and trigger the return of an error.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
 //
-//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		     the 'errpref' software package,
-//		     "github.com/MikeAustin71/errpref".
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
+//
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
 //	error
-//	   - If this method completes successfully and no errors are
-//	     encountered, this return value is set to 'nil'. Otherwise,
-//	     if errors are encountered, this return value will contain
-//	     an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//		If this method completes successfully and no errors are
+//		encountered, this return value is set to 'nil'. Otherwise,
+//		if errors are encountered, this return value will contain
+//		an appropriate error message.
+//
+//		If an error message is returned, the text value of input
+//		parameter 'errorPrefix' will be inserted or prefixed at
+//		the beginning of the error message.
 func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsMultiCol(
 	fieldFormatParams []TextFieldFmtParamsDto,
 	turnLineTerminationOff bool,
@@ -7523,143 +7535,156 @@ func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsMultiCol(
 //
 // Input Parameters
 //
-//	 errorPrefix                interface{}
-//		   - This object encapsulates error prefix text which is
-//		     included in all returned error messages. Usually, it
-//		     contains the name of the calling method or methods
-//		     listed as a method or function chain of execution.
+//	errorPrefix					interface{}
 //
-//		     If no error prefix information is needed, set this parameter
-//		     to 'nil'.
+//		This object encapsulates error prefix text which is
+//		included in all returned error messages. Usually, it
+//		contains the name of the calling method or methods
+//		listed as a method or function chain of execution.
 //
-//		     This empty interface must be convertible to one of the
-//		     following types:
+//		If no error prefix information is needed, set this parameter
+//		to 'nil'.
 //
-//		     1. nil - A nil value is valid and generates an empty
-//		        collection of error prefix and error context
-//		        information.
+//		This empty interface must be convertible to one of the
+//		following types:
 //
-//		     2. string - A string containing error prefix information.
+//		1. nil - A nil value is valid and generates an empty
+//		   collection of error prefix and error context
+//		   information.
 //
-//		     3. []string A one-dimensional slice of strings containing
-//		        error prefix information
+//		2. string - A string containing error prefix information.
 //
-//		     4. [][2]string A two-dimensional slice of strings
-//		        containing error prefix and error context information.
+//		3. []string A one-dimensional slice of strings containing
+//		   error prefix information
 //
-//		     5. ErrPrefixDto - An instance of ErrPrefixDto. Information
-//		        from this object will be copied for use in error and
-//		        informational messages.
+//		4. [][2]string A two-dimensional slice of strings
+//		   containing error prefix and error context information.
 //
-//		     6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
-//		        Information from this object will be copied for use in
-//		        error and informational messages.
+//		5. ErrPrefixDto - An instance of ErrPrefixDto. Information
+//		   from this object will be copied for use in error and
+//		   informational messages.
 //
-//		     7. IBasicErrorPrefix - An interface to a method generating
-//		        a two-dimensional slice of strings containing error
-//		        prefix and error context information.
+//		6. *ErrPrefixDto - A pointer to an instance of ErrPrefixDto.
+//		   Information from this object will be copied for use in
+//		   error and informational messages.
 //
-//		     If parameter 'errorPrefix' is NOT convertible to one of
-//		     the valid types listed above, it will be considered
-//		     invalid and trigger the return of an error.
+//		7. IBasicErrorPrefix - An interface to a method generating
+//		   a two-dimensional slice of strings containing error
+//		   prefix and error context information.
 //
-//		     Types ErrPrefixDto and IBasicErrorPrefix are included in
-//		     the 'errpref' software package,
-//		     "github.com/MikeAustin71/errpref".
+//		If parameter 'errorPrefix' is NOT convertible to one of
+//		the valid types listed above, it will be considered
+//		invalid and trigger the return of an error.
 //
+//		Types ErrPrefixDto and IBasicErrorPrefix are included in
+//		the 'errpref' software package,
+//		"github.com/MikeAustin71/errpref".
 //
-//		 turnLineTerminationOff    bool
-//		   - When this parameter is set to 'true', no line termination
-//		     sequence will be configured for this 'Line1Column' Text
-//		     Line.
+//	turnLineTerminationOff		bool
 //
-//		     Text Lines operate on the assumption that a line
-//		     termination is standard operating procedure. The default
-//		     line terminator for text lines is the new line character,
-//		     '\n'.
+//		When this parameter is set to 'true', no line termination
+//		sequence will be configured for this 'Line1Column' Text
+//		Line.
 //
-//		     Users have the option of turning off the entire line
-//		     termination sequence if this parameter is set to 'true'.
+//		Text Lines operate on the assumption that a line
+//		termination is standard operating procedure. The default
+//		line terminator for text lines is the new line character,
+//		'\n'.
 //
+//		Users have the option of turning off the entire line
+//		termination sequence if this parameter is set to 'true'.
 //
-//		lineTerminator             string
-//		   - If this parameter is set to an empty string, the default
-//		     line terminator, a new line character '\n', will be
-//		     applied to 'Line1Column' Text Lines.
+//	lineTerminator				string
 //
-//		     If this string is populated and the string length is
-//		     greater than zero (0), an alternate line termination
-//		     sequence will be configured using the characters provided
-//		     in the 'lineTerminator' string.
+//		If this parameter is set to an empty string, the default
+//		line terminator, a new line character '\n', will be
+//		applied to 'Line1Column' Text Lines.
 //
-//		     Remember that the application of a line termination
-//		     sequence is controlled by parameter
-//		     'turnLineTerminationOff'. If 'turnLineTerminationOff' is
-//		     set to 'true', no line termination characters will be
-//		     configured for this 'Line1Column' Text Lines.
+//		If this string is populated and the string length is
+//		greater than zero (0), an alternate line termination
+//		sequence will be configured using the characters provided
+//		in the 'lineTerminator' string.
 //
+//		Remember that the application of a line termination
+//		sequence is controlled by parameter
+//		'turnLineTerminationOff'. If 'turnLineTerminationOff' is
+//		set to 'true', no line termination characters will be
+//		configured for this 'Line1Column' Text Lines.
 //
-//		maxLineLength              int
-//		   - The maximum length of the line on which this 'Line1Column'
-//		     Text will be presented.
+//	maxLineLength				int
 //
-//		     Set this parameter to minus one (-1), and no maximum line
-//		     limits will be applied.
+//		The maximum length of the line on which this 'Line1Column'
+//		Text will be presented.
 //
-//		     'maxLineLength' is used in conjunction with parameter
-//		     'turnAutoLineLengthBreaksOn' to automatically place text
-//		     fields on separate text lines when that text exceeds the
-//		     maximum text line length ('maxLineLength').
+//		Set this parameter to minus one (-1), and no maximum line
+//		limits will be applied.
 //
-//		     If the value of 'maxLineLength' is less than minus one
-//		     (-1), an error will be returned.
+//		'maxLineLength' is used in conjunction with parameter
+//		'turnAutoLineLengthBreaksOn' to automatically place text
+//		fields on separate text lines when that text exceeds the
+//		maximum text line length ('maxLineLength').
 //
-//		     If the value of 'maxLineLength' is zero (0), an error will
-//		     be returned.
+//		If the value of 'maxLineLength' is less than minus one
+//		(-1), an error will be returned.
 //
+//		If the value of 'maxLineLength' is zero (0), an error will
+//		be returned.
 //
-//		turnAutoLineLengthBreaksOn bool
-//		   - This parameter controls whether text lines which exceed
-//		     the maximum line length ('maxLineLength') are broken up
-//		     and presented on the following line.
+//	turnAutoLineLengthBreaksOn	bool
 //
-//		     To apply automatic line breaking at the maximum line
-//		     length, set the value of this parameter to 'true'.
+//		This parameter controls whether text lines which exceed
+//		the maximum line length ('maxLineLength') are broken up
+//		and presented on the following line.
 //
+//		To apply automatic line breaking at the maximum line
+//		length, set the value of this parameter to 'true'.
 //
-//		fieldFormatParams          []TextFieldFmtParamsDto
-//		   - An array of TextFieldFmtParamsDto objects containing the
-//		     Text Field Format Parameters (TextFieldFmtParamsDto).
+//	multiLineLeftMarginStr		string
 //
-//		    The TextFieldFmtParamsDto type is defined as follows:
+//		The left margin used when a text string exceeds the
+//		maximum line length and is separated into multiple text
+//		lines. This left margin is applied to the second and
+//		all subsequent lines of a multi-line text display. This
+//		parameter is only valid when 'TurnAutoLineLengthBreaksOn'
+//		is set to 'true' and the initial text string exceeds the
+//		maximum line length.
 //
-//		      type TextFieldFmtParamsDto struct {
-//		        LeftMarginStr  string
-//		        FieldLength    int
-//		        FieldJustify   TextJustify
-//		        DateTimeFormat string
-//		        RightMarginStr string
-//		      }
+//	fieldFormatParams			[]TextFieldFmtParamsDto
+//
+//		An array of TextFieldFmtParamsDto objects containing the
+//		Text Field Format Parameters (TextFieldFmtParamsDto).
+//
+//		The TextFieldFmtParamsDto type is defined as follows:
+//
+//		type TextFieldFmtParamsDto struct {
+//		  LeftMarginStr  string
+//		  FieldLength    int
+//		  FieldJustify   TextJustify
+//		  DateTimeFormat string
+//		  RightMarginStr string
+//		}
 //
 // ----------------------------------------------------------------
 //
 // Return Values
 //
 //	error
-//	   - If this method completes successfully and no errors are
-//	     encountered, this return value is set to 'nil'. Otherwise,
-//	     if errors are encountered, this return value will contain
-//	     an appropriate error message.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//		If this method completes successfully and no errors are
+//		encountered, this return value is set to 'nil'. Otherwise,
+//		if errors are encountered, this return value will contain
+//		an appropriate error message.
+//
+//		If an error message is returned, the text value of input
+//		parameter 'errorPrefix' will be inserted or prefixed at
+//		the beginning of the error message.
 func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsManyCol(
 	errorPrefix interface{},
 	turnLineTerminationOff bool,
 	lineTerminator string,
 	maxLineLength int,
 	turnAutoLineLengthBreaksOn bool,
+	multiLineLeftMarginStr string,
 	fieldFormatParams ...TextFieldFmtParamsDto) error {
 
 	if txtFmtCollection.lock == nil {
@@ -7700,6 +7725,7 @@ func (txtFmtCollection *TextFormatterCollection) SetStdFormatParamsManyCol(
 		LineTerminator:             lineTerminator,
 		MaxLineLength:              maxLineLength,
 		TurnAutoLineLengthBreaksOn: turnAutoLineLengthBreaksOn,
+		MultiLineLeftMarginStr:     multiLineLeftMarginStr,
 		lock:                       nil,
 	}
 
