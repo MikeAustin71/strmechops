@@ -1800,84 +1800,6 @@ func (dMgrs *DirMgrCollection) FindDirectories(
 	return dMgrs2, err
 }
 
-// GetAbsPathStrArray
-//
-// Converts the directories contained in the current
-// instance of Directory Manager Collection
-// (DirMgrCollection) to an array of strings returned by
-// an instance of StringArrayDto.
-//
-// The Directory Manager Collection encapsulates an array
-// of Directory Manager objects (DirMgr). These Directory
-// Manager objects are convert to absolute directory
-// paths and returned in a string array encapsulated in
-// the returned instance of StringArrayDto.
-//
-// If the current Directory Manager Collection instance
-// is empty, containing zero directories, the returned
-// instance of StringArrayDto is also empty.
-//
-// ----------------------------------------------------------------
-//
-// # Definition of Terms
-//
-// An absolute or full path points to the same location
-// in a file system, regardless of the current working
-// directory. To do that, it must include the root
-// directory.
-//
-//	https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	NONE
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	StringArrayDto
-//
-//		This returned instance of StringArrayDto encapsulates
-//		a string array consisting of the absolute directory
-//		paths stored in the current instance of the Directory
-//		Manager Collection.
-func (dMgrs *DirMgrCollection) GetAbsPathStrArray() StringArrayDto {
-
-	if dMgrs.lock == nil {
-		dMgrs.lock = new(sync.Mutex)
-	}
-
-	dMgrs.lock.Lock()
-
-	defer dMgrs.lock.Unlock()
-
-	newStrArrayDto := StringArrayDto{}.New()
-
-	lenDirMgrs := len(dMgrs.dirMgrs)
-
-	var absPath string
-
-	for i := 0; i < lenDirMgrs; i++ {
-
-		absPath = dMgrs.dirMgrs[i].GetPathAbsolute()
-
-		if len(absPath) == 0 {
-
-			absPath = fmt.Sprintf("Error DirMgr[%v]: %v",
-				i,
-				dMgrs.dirMgrs[i].absolutePath)
-
-		}
-
-		newStrArrayDto.PushStr(absPath)
-	}
-
-	return newStrArrayDto
-}
-
 // GetDirMgrArray
 //
 // Returns the Directory Manager Collection.
@@ -2343,6 +2265,182 @@ func (dMgrs *DirMgrCollection) GetNumOfDirs() int {
 	defer dMgrs.lock.Unlock()
 
 	return len(dMgrs.dirMgrs)
+}
+
+// GetPathOriginalStrArray
+//
+// Converts the directories contained in the current
+// instance of Directory Manager Collection
+// (DirMgrCollection) to an array of strings returned by
+// an instance of StringArrayDto.
+//
+// The Directory Manager Collection encapsulates an array
+// of Directory Manager objects (DirMgr). These Directory
+// Manager objects are convert to the original path used
+// to initialize the Directory Manager instance. This
+// returned path may/ be an absolute path or a relative
+// path depending on how the DirMgr instance was
+// initialized.
+//
+// If the current Directory Manager Collection instance
+// is empty, containing zero directories, the returned
+// instance of StringArrayDto is also empty.
+//
+// ----------------------------------------------------------------
+//
+// # Definition of Terms
+//
+//	An absolute or full path points to the same location
+//	in a file system, regardless of the current working
+//	directory. To do that, it must include the root
+//	directory.
+//
+//	By contrast, a relative path starts from some given
+//	working directory, avoiding the need to provide the
+//	full absolute path. A filename can be considered as
+//	a relative path based at the current working directory.
+//
+//	https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	StringArrayDto
+//
+//		This returned instance of StringArrayDto
+//		encapsulates a string array consisting of the
+//		original directory paths stored in the current
+//		instance of the Directory Manager Collection.
+//
+//		The original directory path is the path used to
+//		initialize the Directory Manager instance
+//		(DirMgr). This original path may be an absolute
+//		path or a relative path depending on how the
+//		particular Directory Manager instance was
+//		initialized.
+func (dMgrs *DirMgrCollection) GetPathOriginalStrArray() StringArrayDto {
+
+	if dMgrs.lock == nil {
+		dMgrs.lock = new(sync.Mutex)
+	}
+
+	dMgrs.lock.Lock()
+
+	defer dMgrs.lock.Unlock()
+
+	newStrArrayDto := StringArrayDto{}.New()
+
+	lenDirMgrs := len(dMgrs.dirMgrs)
+
+	var absPath string
+
+	for i := 0; i < lenDirMgrs; i++ {
+
+		absPath = dMgrs.dirMgrs[i].GetPathOriginal()
+
+		if len(absPath) == 0 {
+
+			absPath = fmt.Sprintf("Error DirMgr[%v]: %v",
+				i,
+				dMgrs.dirMgrs[i].absolutePath)
+
+		}
+
+		newStrArrayDto.PushStr(absPath)
+	}
+
+	return newStrArrayDto
+}
+
+// GetPathAbsoluteStrArray
+//
+// Converts the directories contained in the current
+// instance of Directory Manager Collection
+// (DirMgrCollection) to an array of strings returned by
+// an instance of StringArrayDto.
+//
+// The Directory Manager Collection encapsulates an array
+// of Directory Manager objects (DirMgr). These Directory
+// Manager objects are converted to absolute directory
+// paths and returned in a string array encapsulated in
+// the returned instance of StringArrayDto.
+//
+// If the current Directory Manager Collection instance
+// is empty, containing zero directories, the returned
+// instance of StringArrayDto is also empty.
+//
+// ----------------------------------------------------------------
+//
+// # Definition of Terms
+//
+// An absolute or full path points to the same location
+// in a file system, regardless of the current working
+// directory. To do that, it must include the root
+// directory.
+//
+//	By contrast, a relative path starts from some given
+//	working directory, avoiding the need to provide the
+//	full absolute path. A filename can be considered as
+//	a relative path based at the current working
+//	directory.
+//
+//	https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	StringArrayDto
+//
+//		This returned instance of StringArrayDto
+//		encapsulates a string array consisting of the
+//		absolute directory paths stored in the current
+//		instance of the Directory Manager Collection.
+func (dMgrs *DirMgrCollection) GetPathAbsoluteStrArray() StringArrayDto {
+
+	if dMgrs.lock == nil {
+		dMgrs.lock = new(sync.Mutex)
+	}
+
+	dMgrs.lock.Lock()
+
+	defer dMgrs.lock.Unlock()
+
+	newStrArrayDto := StringArrayDto{}.New()
+
+	lenDirMgrs := len(dMgrs.dirMgrs)
+
+	var absPath string
+
+	for i := 0; i < lenDirMgrs; i++ {
+
+		absPath = dMgrs.dirMgrs[i].GetPathAbsolute()
+
+		if len(absPath) == 0 {
+
+			absPath = fmt.Sprintf("Error DirMgr[%v]: %v",
+				i,
+				dMgrs.dirMgrs[i].absolutePath)
+
+		}
+
+		newStrArrayDto.PushStr(absPath)
+	}
+
+	return newStrArrayDto
 }
 
 // GetTextListingAbsPath
