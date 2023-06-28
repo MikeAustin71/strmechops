@@ -1544,7 +1544,7 @@ func (fHelpMolecule *fileHelperMolecule) makeFileHelperWalkDirFindFilesFunc(
 			}
 
 			err = dInfo.FoundFiles.AddFileMgrByFileInfo(
-				fMgr.dMgr.GetAbsolutePath(),
+				fMgr.dMgr.GetPathAbsolute(),
 				info,
 				ePrefix)
 

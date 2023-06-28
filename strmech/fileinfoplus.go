@@ -664,7 +664,7 @@ func (fip *FileInfoPlus) NewFromDirMgrFileInfo(
 	newInfo.isFInfoInitialized = true
 	newInfo.origFileInfo = info
 
-	newInfo.dirPath = dMgr.GetAbsolutePath()
+	newInfo.dirPath = dMgr.GetPathAbsolute()
 
 	newInfo.isDirPathInitialized = true
 

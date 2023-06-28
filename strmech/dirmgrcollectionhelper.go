@@ -567,7 +567,7 @@ func (dMgrColHelper *dirMgrCollectionHelper) fmtTextListingAbsPath(
 		for i := 0; i < lenDMgrCol; i++ {
 
 			err = txtFormatCol.AddLine1Col(
-				dMgrCollection.dirMgrs[i].GetAbsolutePath(),
+				dMgrCollection.dirMgrs[i].GetPathAbsolute(),
 				ePrefix.XCpy(
 					fmt.Sprintf("dMgrCollection.dirMgrs[%v]",
 						i)))

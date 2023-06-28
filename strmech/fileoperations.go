@@ -2791,7 +2791,7 @@ func (fops *FileOps) SetDestinationByDirMgrFileName(
 			"destinationFileNameExt= '%v'\n"+
 			"Error= \n%v\n",
 			funcName,
-			destinationDir.GetAbsolutePath(),
+			destinationDir.GetPathAbsolute(),
 			destinationFileNameExt,
 			err.Error())
 	}
@@ -3498,7 +3498,7 @@ func (fops *FileOps) SetSourceByDirMgrFileName(
 			"sourceFileNameExt= '%v'\n"+
 			"Error= \n%v\n",
 			funcName,
-			sourceDir.GetAbsolutePath(),
+			sourceDir.GetPathAbsolute(),
 			sourceFileNameExt,
 			err.Error())
 	}

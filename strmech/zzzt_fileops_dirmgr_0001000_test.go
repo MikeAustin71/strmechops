@@ -226,7 +226,7 @@ func TestDirMgr_CopyDirectory_000100(t *testing.T) {
 			"targetDir='%v'\n"+
 			"Errors= \n%v\n",
 			ePrefix.String(),
-			targetDMgr.GetAbsolutePath(),
+			targetDMgr.GetPathAbsolute(),
 			new(StrMech).ConsolidateErrors(nonfatalErrs))
 
 		_,
@@ -245,7 +245,7 @@ func TestDirMgr_CopyDirectory_000100(t *testing.T) {
 			"targetDir='%v'\n"+
 			"Error=\n%v\n",
 			ePrefix.String(),
-			targetDMgr.GetAbsolutePath(),
+			targetDMgr.GetPathAbsolute(),
 			fatalErr.Error())
 
 		_,
@@ -288,7 +288,7 @@ func TestDirMgr_CopyDirectory_000100(t *testing.T) {
 			"targetDMgr='%v'\n"+
 			"Error= \n%v\n",
 			funcName,
-			targetDMgr.GetAbsolutePath(),
+			targetDMgr.GetPathAbsolute(),
 			fatalErr.Error())
 
 		_,

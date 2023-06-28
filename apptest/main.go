@@ -7,6 +7,6 @@ import "github.com/MikeAustin71/strmechops/apptest/examples"
 
 func main() {
 
-	examples.MainFileOpsTest008{}.GetFiles01()
+	examples.MainDirOpsTest007{}.GetDirs02()
 
 }

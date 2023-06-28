@@ -5075,7 +5075,7 @@ func (fMgr *FileMgr) GetAbsolutePath() string {
 
 	defer fMgr.lock.Unlock()
 
-	return fMgr.dMgr.GetAbsolutePath()
+	return fMgr.dMgr.GetPathAbsolute()
 }
 
 // GetAbsolutePathFileName
@@ -8057,7 +8057,7 @@ func (fMgr *FileMgr) MoveFileToNewDirMgr(
 	}
 
 	targetFile :=
-		dMgr.GetAbsolutePathWithSeparator() + fMgr.fileNameExt
+		dMgr.GetPathAbsoluteWithSeparator() + fMgr.fileNameExt
 
 	fMgrHlpr := fileMgrHelper{}
 

@@ -2039,7 +2039,7 @@ func (fOpsNanobot *FileOperationsNanobot) moveSourceFileToDestinationDir(
 			"Error= \n%v\n",
 			funcName,
 			fOps.source.GetAbsolutePathFileName(),
-			deepCopyDirMgr.GetAbsolutePath(),
+			deepCopyDirMgr.GetPathAbsolute(),
 			err2.Error())
 	}
 
@@ -2644,7 +2644,7 @@ func (fOpsNanobot *FileOperationsNanobot) setFileOpsByDirMgrFileName(
 			"sourceFileNameExt= '%v'\n"+
 			"Error= \n%v\n",
 			funcName,
-			sourceDir.GetAbsolutePath(),
+			sourceDir.GetPathAbsolute(),
 			sourceFileNameExt,
 			err.Error())
 	}
@@ -2664,7 +2664,7 @@ func (fOpsNanobot *FileOperationsNanobot) setFileOpsByDirMgrFileName(
 			"destinationFileNameExt= '%v'\n"+
 			"Error= \n%v\n",
 			funcName,
-			destinationDir.GetAbsolutePath(),
+			destinationDir.GetPathAbsolute(),
 			destinationFileNameExt,
 			err.Error())
 	}
