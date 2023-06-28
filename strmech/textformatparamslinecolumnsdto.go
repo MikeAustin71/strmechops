@@ -429,6 +429,9 @@ func (lineColsNanobot *textFmtParamsLineColsNanobot) copy(
 	destinationTxtParamsLineColsDto.TurnAutoLineLengthBreaksOn =
 		sourceTxtParamsLineColsDto.TurnAutoLineLengthBreaksOn
 
+	destinationTxtParamsLineColsDto.MultiLineLeftMarginStr =
+		sourceTxtParamsLineColsDto.MultiLineLeftMarginStr
+
 	return err
 }
 
@@ -476,6 +479,8 @@ func (lineColsMolecule textFmtParamsLineColsMolecule) empty(
 	targetTxtParamsLineColsDto.MaxLineLength = -1
 
 	targetTxtParamsLineColsDto.TurnAutoLineLengthBreaksOn = false
+
+	targetTxtParamsLineColsDto.MultiLineLeftMarginStr = ""
 
 	return
 }
@@ -535,6 +540,12 @@ func (lineColsMolecule textFmtParamsLineColsMolecule) equal(
 
 	if txtFmtParamsDto1.TurnAutoLineLengthBreaksOn !=
 		txtFmtParamsDto2.TurnAutoLineLengthBreaksOn {
+
+		return false
+	}
+
+	if txtFmtParamsDto1.MultiLineLeftMarginStr !=
+		txtFmtParamsDto2.MultiLineLeftMarginStr {
 
 		return false
 	}

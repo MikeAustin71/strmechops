@@ -71,7 +71,7 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirs01() {
 	err = directoriesLocated.
 		GetTextListingAbsPath(
 			" ",
-			" ",
+			"",
 			80,
 			'-',
 			"Directory D:\\T02\\WebSite_15",
@@ -86,6 +86,16 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirs01() {
 	}
 
 	fmt.Println(strBuilder.String())
+
+	/*
+		output := strBuilder.String()
+
+		printableChars := new(strmech.StrMech).
+			ConvertNonPrintableString(output, true)
+
+		fmt.Println(printableChars)
+
+	*/
 
 	fmt.Printf(breakStr + "\n")
 

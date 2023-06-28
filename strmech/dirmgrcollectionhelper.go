@@ -435,7 +435,12 @@ func (dMgrColHelper *dirMgrCollectionHelper) fmtTextListingAbsPath(
 
 	lenRightMar := len(rightMargin)
 
-	netTextLineLen := maxLineLength - lenLeftMar - lenRightMar
+	lenLineTerminator := 1
+
+	netTextLineLen := maxLineLength -
+		lenLeftMar -
+		lenRightMar -
+		lenLineTerminator
 
 	if netTextLineLen < 5 {
 
@@ -526,10 +531,10 @@ func (dMgrColHelper *dirMgrCollectionHelper) fmtTextListingAbsPath(
 			TxtJustify.Left(),
 			rightMargin,
 			false,
-			"\n",
+			"",
 			maxLineLength,
 			true,
-			leftMargin,
+			leftMargin+"  ",
 			ePrefix)
 
 	if err != nil {

@@ -68,8 +68,9 @@ func (txtBuilderAtom *textStrBuilderAtom) preBuildScreening(
 		// textParams.turnLineTerminationOff == false
 
 		if textParams.lenLineTerminatorStr == 0 {
-			textParams.lenLineTerminatorStr = 1
 			textParams.lineTerminatorStr = "\n"
+			textParams.lenLineTerminatorStr =
+				len(textParams.lineTerminatorStr)
 		}
 	}
 

@@ -180,7 +180,13 @@ func (fMgrColMolecule *FileMgrCollectionMolecule) fmtTextListingAllFiles(
 
 	lenRightMar := len(rightMargin)
 
-	netTextLineLen := maxLineLength - lenLeftMar - lenRightMar
+	lenLineTerminator := 1
+
+	netTextLineLen :=
+		maxLineLength -
+			lenLeftMar -
+			lenRightMar -
+			lenLineTerminator
 
 	if netTextLineLen < 5 {
 
@@ -274,7 +280,7 @@ func (fMgrColMolecule *FileMgrCollectionMolecule) fmtTextListingAllFiles(
 			"",
 			maxLineLength,
 			true,
-			leftMargin,
+			leftMargin+"  ",
 			ePrefix)
 
 	if err != nil {

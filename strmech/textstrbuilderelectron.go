@@ -784,7 +784,7 @@ func (txtBuilderElectron *textStrBuilderElectron) writeText(
 
 	}
 
-	if lenTextStr < currLineNetMaxLen {
+	if lenTextStr <= currLineNetMaxLen {
 
 		strBuilder.WriteString(textStr)
 

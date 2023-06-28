@@ -11,7 +11,7 @@ type MainFileOpsTest008 struct {
 	input string
 }
 
-func (dirOpsTest007 MainFileOpsTest008) GetFiles01() {
+func (dirOpsTest008 MainFileOpsTest008) GetFiles01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
 		"MainDirOpsTest007.MainDirOpsTest007()",
