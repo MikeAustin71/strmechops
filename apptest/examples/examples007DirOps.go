@@ -28,7 +28,14 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirs01() {
 
 	fmt.Printf("\n" + breakStr + "\n\n\n")
 
-	targetDir := "D:\\T02\\WebSite_15"
+	targetDir := "..\\fileOpsTest\\filesForTest"
+	osPathSepStr := string(os.PathSeparator)
+
+	targetDir = strings.Replace(
+		targetDir,
+		"\\",
+		osPathSepStr,
+		-1)
 
 	var numOfDirectoriesLocated int
 	var isParentDirectoryIncluded bool
@@ -75,7 +82,7 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirs01() {
 			"",
 			80,
 			'-',
-			"Directory D:\\T02\\WebSite_15",
+			"Directory "+targetDir,
 			true,
 			&strBuilder,
 			ePrefix.XCpy("<-directoriesLocated"))
