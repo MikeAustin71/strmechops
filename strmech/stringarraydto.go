@@ -2632,7 +2632,7 @@ func (strArrayDto *StringArrayDto) SortAlphabeticalReverseOrder() {
 // the shortest string.
 //
 // In this sort order "fffffffffff" comes before
-// "ddddddddd" because "fffffffffff" is the longest
+// "aaaaa" because "fffffffffff" is the longest
 // string.
 //
 // ----------------------------------------------------------------
@@ -2649,7 +2649,8 @@ func (strArrayDto *StringArrayDto) SortAlphabeticalReverseOrder() {
 //		"ddddddddd",
 //		"eeeeeeeeeee" }
 //
-//	sort.Sort(strArrayDto.StrArray)
+//	strArrayDto.SortByStrLengthLongestToShortest(
+//			strArrayDto.StrArray)
 //
 //	Output:
 //
@@ -2706,5 +2707,90 @@ func (strArrayDto *StringArrayDto) SortByStrLengthLongestToShortest() {
 	}
 
 	sort.Sort(SortStrLengthHighestToLowest(strArrayDto.StrArray))
+
+}
+
+// SortByStrLengthShortestToLongest
+//
+// Sorts the string array encapsulated by the current
+// instance of StringArrayDto. The array is sorted
+// by string length for each element, shortest string to
+// the longest string.
+//
+// In this sort order "aaaaa" comes before
+// "fffffffffff" because "aaaaa" is the shortest string.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	strArrayDto.StrArray := []string {
+//		"aaaaa",
+//		"bbbbb",
+//		"cccccccccc",
+//		"z",
+//		"fffffffffff",
+//		"xx",
+//		"ddddddddd",
+//		"eeeeeeeeeee" }
+//
+//	strArrayDto.SortByStrLengthShortestToLongest(
+//		strArrayDto.StrArray)
+//
+//	Output:
+//
+//		==================================
+//		Sort by Length (Lowest To Highest)
+//		Ordered List
+//		==================================
+//
+//		1. z
+//		2. xx
+//		3. aaaaa
+//		4. bbbbb
+//		5. ddddddddd
+//		6. cccccccccc
+//		7. eeeeeeeeeee
+//		8. fffffffffff
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will reorder the string array
+//	encapsulated by the current instance of
+//	StringArrayDto. This means that the original values
+//	of the string array will be altered and modified.
+//
+//	To retain the original string array, make a copy of
+//	this StringArrayDto instance, and sort the copied
+//	version.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	-- NONE --
+func (strArrayDto *StringArrayDto) SortByStrLengthShortestToLongest() {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	if len(strArrayDto.StrArray) == 0 {
+		return
+	}
+
+	sort.Sort(SortStrLengthLowestToHighest(strArrayDto.StrArray))
 
 }
