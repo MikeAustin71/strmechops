@@ -3,6 +3,7 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"sort"
 	"sync"
 )
 
@@ -1242,10 +1243,13 @@ func (strArrayDto *StringArrayDto) InsertAtIndex(
 //
 // Return Values
 //
-//		StringArrayDto
-//		   - This method returns a new instance of StringArrayDto.
-//	      The internal string array maintained by this new
-//	      instance is empty and set to 'nil'.
+//	StringArrayDto
+//
+//		This method returns a new instance of
+//		StringArrayDto.
+//
+//		The internal string array maintained by this new
+//		instance is empty and set to 'nil'.
 func (strArrayDto StringArrayDto) New() StringArrayDto {
 
 	if strArrayDto.lock == nil {
@@ -2513,4 +2517,194 @@ func (strArrayDto *StringArrayDto) SetStringArray(
 	}
 
 	return
+}
+
+// SortAlphabetically
+//
+// Sorts the string array encapsulated by the current
+// instance of StringArrayDto. The array is sorted
+// alphabetically from lowest to highest.
+//
+// In this sort order "alligator" comes before "zebra".
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will reorder the string array
+//	encapsulated by the current instance of
+//	StringArrayDto. This means that the original values
+//	of the string array will be altered and modified.
+//
+//	To retain the original string array, make a copy of
+//	this StringArrayDto instance, and sort the copied
+//	version.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	-- NONE --
+func (strArrayDto *StringArrayDto) SortAlphabetically() {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	if len(strArrayDto.StrArray) == 0 {
+		return
+	}
+
+	sort.Strings(strArrayDto.StrArray)
+
+}
+
+// SortAlphabeticalReverseOrder
+//
+// Sorts the string array encapsulated by the current
+// instance of StringArrayDto. The array is sorted
+// in alphabetical reverse order from highest to lowest.
+//
+// In this sort order "zebra" comes before "alligator".
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will reorder the string array
+//	encapsulated by the current instance of
+//	StringArrayDto. This means that the original values
+//	of the string array will be altered and modified.
+//
+//	To retain the original string array, make a copy of
+//	this StringArrayDto instance, and sort the copied
+//	version.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	-- NONE --
+func (strArrayDto *StringArrayDto) SortAlphabeticalReverseOrder() {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	if len(strArrayDto.StrArray) == 0 {
+		return
+	}
+
+	sort.Slice(
+		strArrayDto.StrArray,
+		func(i int, j int) bool {
+			return strArrayDto.StrArray[i] >
+				strArrayDto.StrArray[j]
+		})
+
+}
+
+// SortByStrLengthLongestToShortest
+//
+// Sorts the string array encapsulated by the current
+// instance of StringArrayDto. The array is sorted
+// by string length for each element, longest string to
+// the shortest string.
+//
+// In this sort order "fffffffffff" comes before
+// "ddddddddd" because "fffffffffff" is the longest
+// string.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	strArrayDto.StrArray := []string {
+//		"aaaaa",
+//		"bbbbb",
+//		"cccccccccc",
+//		"z",
+//		"fffffffffff",
+//		"xx",
+//		"ddddddddd",
+//		"eeeeeeeeeee" }
+//
+//	sort.Sort(strArrayDto.StrArray)
+//
+//	Output:
+//
+//		====================================
+//		Sort by Length (Longest To Shortest)
+//		Ordered List
+//		====================================
+//
+//		1. fffffffffff
+//		2. eeeeeeeeeee
+//		3. cccccccccc
+//		4. ddddddddd
+//		5. bbbbb
+//		6. aaaaa
+//		7. xx
+//		8. z
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will reorder the string array
+//	encapsulated by the current instance of
+//	StringArrayDto. This means that the original values
+//	of the string array will be altered and modified.
+//
+//	To retain the original string array, make a copy of
+//	this StringArrayDto instance, and sort the copied
+//	version.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	-- NONE --
+func (strArrayDto *StringArrayDto) SortByStrLengthLongestToShortest() {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	if len(strArrayDto.StrArray) == 0 {
+		return
+	}
+
+	sort.Sort(SortStrLengthHighestToLowest(strArrayDto.StrArray))
+
 }
