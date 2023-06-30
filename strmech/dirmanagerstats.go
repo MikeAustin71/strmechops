@@ -3,7 +3,9 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"strings"
 	"sync"
+	"time"
 )
 
 // DirectoryStatsDto
@@ -492,6 +494,29 @@ type DirectoryProfile struct {
 	lock *sync.Mutex
 }
 
+// AddDirProfileStats
+//
+// Receives an incoming instance of DirectoryProfile and
+// proceeds to add the directory metrics to the directory
+// metric values contained in the current instance of
+// DirectoryProfile.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	incomingDirProfile			DirectoryProfile
+//
+//		A concrete instance of DirectoryProfile. The
+//		Directory statistics contained in this instance
+//		will be added to those contained in the current
+//		instance of AddDirProfileStats.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	-- NONE --
 func (dirProfile *DirectoryProfile) AddDirProfileStats(
 	incomingDirProfile DirectoryProfile) {
 
@@ -538,6 +563,355 @@ func (dirProfile *DirectoryProfile) AddDirProfileStats(
 		incomingDirProfile.Errors...)
 
 	return
+}
+
+// GetTextListing
+//
+// Returns a string containing a text listing displaying
+// the directory metrics contained in the current
+// instance of DirectoryProfile.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	leftMargin					string
+//
+//		This string serves as the left margin for all
+//		text lines.
+//
+//	rightMargin					string
+//
+//		This string serves as the right margin for all
+//		text lines.
+//
+//
+//	maxLineLength				int
+//
+//		This integer value defines the maximum line
+//		length for all text lines. If this value is
+//		less than 10, an error will be returned.
+//
+//	solidLineChar				rune
+//
+//		This single character will be used to construct
+//		'line-breaks' after the title line. Examples:
+//			'-'	"----------------------------"
+//			'='	"============================"
+//			'*'	"****************************"
+//
+//
+//	titleLine					string
+//
+//		The text in this string will be formatted as the
+//		title for the text listing display.
+//
+//	addDateTimeLine				bool
+//
+//		When set to 'true' a text line will be added for
+//		current date and time expressed as a local time
+//		value.
+//
+//	strBuilder					*strings.Builder
+//
+//		A pointer to an instance of strings.Builder.
+//		The text listing for directory absolute paths
+//		will be added to this instance of
+//		strings.Builder.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (dirProfile *DirectoryProfile) GetTextListing(
+	leftMargin string,
+	rightMargin string,
+	maxLineLength int,
+	solidLineChar rune,
+	titleLine string,
+	addDateTimeLine bool,
+	strBuilder *strings.Builder,
+	errorPrefix interface{}) error {
+
+	if dirProfile.lock == nil {
+		dirProfile.lock = new(sync.Mutex)
+	}
+
+	dirProfile.lock.Lock()
+
+	defer dirProfile.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	funcName := "DirectoryProfile." +
+		"GetTextListing()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if strBuilder == nil {
+
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' is invalid!\n"+
+			"'strBuilder' is a nil pointer.\n",
+			ePrefix.String())
+
+	}
+
+	if maxLineLength < 10 {
+
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter 'maxLineLength' is invalid!\n"+
+			"'maxLineLength' is less than '10'.\n"+
+			"'maxLineLength' = %v\n",
+			ePrefix.String(),
+			maxLineLength)
+
+	}
+
+	if maxLineLength > 1999 {
+
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter 'maxLineLength' is invalid!\n"+
+			"'maxLineLength' is greater than '1999'.\n"+
+			"'maxLineLength' = %v\n",
+			ePrefix.String(),
+			maxLineLength)
+
+	}
+
+	if solidLineChar == 0 {
+
+		solidLineChar = '-'
+
+	}
+
+	if len(titleLine) == 0 {
+
+		titleLine = "Directory Listing"
+
+	}
+
+	lenLeftMar := len(leftMargin)
+	lenRightMar := len(rightMargin)
+	lenCol1 := 37
+	lenCol2 := 15
+
+	lenLineTerminator := 1
+
+	actualTextLineLen :=
+		lenLeftMar +
+			lenRightMar +
+			lenCol1 +
+			lenCol2 +
+			lenLineTerminator
+
+	if actualTextLineLen > maxLineLength {
+
+		return fmt.Errorf("%v\n"+
+			"Error: The Actual Text Line length is greater than."+
+			"the Maximum Line Length!\n"+
+			"The Actual Text Line length is calculated by adding\n"+
+			"the left and right margin lengths, the Column1\n"+
+			"and Column2 lengths and the Line Terminator length.\n"+
+			"Actual Text Line Length =  Left Margin Length plus\n"+
+			"Right Margin Length plus Column-1 Length plus Column-2\n"+
+			"Length plus Line Terminator Length.\n"+
+			"    Maximum Line Length = '%v'\n"+
+			"Actual Text Line Length = '%v'\n"+
+			"     Left Margin Length = '%v'\n"+
+			"    Right Margin Length = '%v'\n"+
+			"        Column-1 Length = '%v'\n"+
+			"        Column-2 Length = '%v'\n"+
+			" Line Terminator Length = '%v'\n",
+			ePrefix.String(),
+			maxLineLength,
+			actualTextLineLen,
+			lenLeftMar,
+			lenRightMar,
+			lenCol1,
+			lenCol2,
+			lenLineTerminator)
+
+	}
+
+	netCapacityStrBuilder :=
+		strBuilder.Cap() -
+			strBuilder.Len()
+
+	titleLines := 12
+
+	thisReqCapacity := (actualTextLineLen * 17) +
+		len(dirProfile.Errors) +
+		(titleLines * maxLineLength)
+
+	netRequiredCapacity :=
+		thisReqCapacity - netCapacityStrBuilder
+
+	if netRequiredCapacity > 0 {
+
+		strBuilder.Grow(netRequiredCapacity + 64)
+	}
+
+	txtFormatCol := TextFormatterCollection{}
+
+	var titleMarquee TextLineTitleMarqueeDto
+
+	titleMarquee,
+		err = new(TextLineTitleMarqueeDto).
+		NewBasicTitleMarqueeDto(
+			leftMargin,
+			rightMargin,
+			leftMargin,
+			rightMargin,
+			maxLineLength,
+			string(solidLineChar),
+			ePrefix.XCpy("titleMarquee<-"),
+			titleLine+"\n")
+
+	if err != nil {
+		return err
+	}
+
+	if addDateTimeLine == true {
+
+		err = titleMarquee.AddTitleLineDateTimeStr(
+			time.Now(),
+			"Monday 2006-01-02 15:04:05.000000000 -0700 MST",
+			ePrefix)
+
+		if err != nil {
+			return err
+		}
+	}
+
+	err = titleMarquee.AddTitleLineStrings(
+		ePrefix,
+		"Parent Directory",
+		dirProfile.ParentDirAbsolutePath)
+
+	if err != nil {
+		return err
+	}
+
+	titleMarquee.NumTrailingBlankLines = 1
+
+	err = txtFormatCol.AddTextTitleMarqueeDto(
+		titleMarquee,
+		ePrefix.XCpy("<-titleMarquee"))
+
+	if err != nil {
+		return err
+	}
+
+	err = txtFormatCol.
+		SetStdFormatParamsLine2Col(
+			leftMargin,
+			len("SubDirsIncludeParentDirTwoDot:")+2,
+			TxtJustify.Right(),
+			": ",
+			15,
+			TxtJustify.Left(),
+			"",
+			false,
+			"",
+			maxLineLength,
+			true,
+			leftMargin+"  ",
+			ePrefix)
+
+	if err != nil {
+		return err
+	}
+
+	txtFormatCol.AddLineBlank(2, "")
+
+	err = txtFormatCol.BuildText(
+		strBuilder,
+		ePrefix.XCpy(
+			"Final Text Output"))
+
+	return err
+
 }
 
 // SetDirMgr

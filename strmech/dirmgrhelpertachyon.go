@@ -482,6 +482,13 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getDirectoryProfile(
 	}
 
 	var fileInfos []FileInfoPlus
+
+	exitFInfo := func() {
+		fileInfos = nil
+	}
+
+	defer exitFInfo()
+
 	var lenFileInfos int
 	var errs2 []error
 
