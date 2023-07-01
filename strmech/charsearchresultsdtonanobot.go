@@ -777,7 +777,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 	err = txtFormatCol.AddLine2Col(
 		txtStrLabel,
 		txtStrParam,
-		ePrefix)
+		ePrefix.XCpy(txtStrLabel))
 
 	if err != nil {
 		return err
@@ -796,7 +796,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		err = txtFormatCol.AddLine2Col(
 			txtStrLabel,
 			txtStrParam,
-			ePrefix)
+			ePrefix.XCpy(txtStrLabel))
 
 		if err != nil {
 			return err
@@ -846,7 +846,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		txtStrLabel,
 		searchResultsDto.FoundSearchTarget,
 		ePrefix.XCpy(
-			"FoundSearchTarget"))
+			txtStrLabel))
 
 	if err != nil {
 		return err
@@ -860,7 +860,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		txtStrLabel,
 		searchResultsDto.FoundSearchTargetOnPreviousSearch,
 		ePrefix.XCpy(
-			"FoundSearchTargetOnPreviousSearch"))
+			txtStrLabel))
 
 	if err != nil {
 		return err
@@ -874,7 +874,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		txtStrLabel,
 		searchResultsDto.FoundFirstNumericDigitInNumStr,
 		ePrefix.XCpy(
-			"FoundFirstNumericDigitInNumStr"))
+			txtStrLabel))
 
 	if err != nil {
 		return err
@@ -888,7 +888,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		txtStrLabel,
 		searchResultsDto.FoundDecimalSeparatorSymbols,
 		ePrefix.XCpy(
-			"FoundDecimalSeparatorSymbols"))
+			txtStrLabel))
 
 	if err != nil {
 		return err
@@ -902,7 +902,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		txtStrLabel,
 		searchResultsDto.FoundNonZeroValue,
 		ePrefix.XCpy(
-			"FoundNonZeroValue"))
+			txtStrLabel))
 
 	if err != nil {
 		return err
@@ -937,7 +937,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		txtStrLabel,
 		searchResultsDto.TargetStringLength,
 		ePrefix.XCpy(
-			"TargetStringLength"))
+			txtStrLabel))
 
 	if err != nil {
 		return err
@@ -951,7 +951,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		txtStrLabel,
 		searchResultsDto.TargetStringSearchLength,
 		ePrefix.XCpy(
-			"TargetStringSearchLength"))
+			txtStrLabel))
 
 	if err != nil {
 		return err
@@ -965,7 +965,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		txtStrLabel,
 		searchResultsDto.TargetStringAdjustedSearchLength,
 		ePrefix.XCpy(
-			"TargetStringAdjustedSearchLength"))
+			txtStrLabel))
 
 	if err != nil {
 		return err
@@ -979,7 +979,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		txtStrLabel,
 		searchResultsDto.TargetStringStartingSearchIndex,
 		ePrefix.XCpy(
-			"TargetStringStartingSearchIndex"))
+			txtStrLabel))
 
 	if err != nil {
 		return err
@@ -993,7 +993,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		txtStrLabel,
 		searchResultsDto.TargetStringCurrentSearchIndex,
 		ePrefix.XCpy(
-			"TargetStringCurrentSearchIndex"))
+			txtStrLabel))
 
 	if err != nil {
 		return err
@@ -1007,7 +1007,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		txtStrLabel,
 		searchResultsDto.TargetStringFirstFoundIndex,
 		ePrefix.XCpy(
-			"TargetStringFirstFoundIndex"))
+			txtStrLabel))
 
 	if err != nil {
 		return err
@@ -1021,7 +1021,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		txtStrLabel,
 		searchResultsDto.TargetStringLastFoundIndex,
 		ePrefix.XCpy(
-			"TargetStringLastFoundIndex"))
+			txtStrLabel))
 
 	if err != nil {
 		return err
@@ -1035,7 +1035,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		txtStrLabel,
 		searchResultsDto.TargetStringLastSearchIndex,
 		ePrefix.XCpy(
-			"TargetStringLastSearchIndex"))
+			txtStrLabel))
 
 	if err != nil {
 		return err
@@ -1049,7 +1049,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		txtStrLabel,
 		searchResultsDto.TargetStringNextSearchIndex,
 		ePrefix.XCpy(
-			"TargetStringNextSearchIndex"))
+			txtStrLabel))
 
 	if err != nil {
 		return err
@@ -1105,7 +1105,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		txtStrLabel,
 		searchResultsDto.TestStringLength,
 		ePrefix.XCpy(
-			"TestStringLength"))
+			txtStrLabel))
 
 	if err != nil {
 		return err
@@ -1119,7 +1119,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		txtStrLabel,
 		searchResultsDto.TestStringStartingIndex,
 		ePrefix.XCpy(
-			"TestStringStartingIndex"))
+			txtStrLabel))
 
 	if err != nil {
 		return err
@@ -1133,7 +1133,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		txtStrLabel,
 		searchResultsDto.TestStringFirstFoundIndex,
 		ePrefix.XCpy(
-			"TestStringFirstFoundIndex"))
+			txtStrLabel))
 
 	if err != nil {
 		return err
@@ -1147,7 +1147,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		txtStrLabel,
 		searchResultsDto.TestStringLastFoundIndex,
 		ePrefix.XCpy(
-			"TestStringLastFoundIndex"))
+			txtStrLabel))
 
 	if err != nil {
 		return err
@@ -1203,7 +1203,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		txtStrLabel,
 		searchResultsDto.CollectionTestObjIndex,
 		ePrefix.XCpy(
-			"CollectionTestObjIndex"))
+			txtStrLabel))
 
 	if err != nil {
 		return err
@@ -1264,7 +1264,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		txtStrLabel,
 		searchResultsDto.NumValueType,
 		ePrefix.XCpy(
-			"NumValueType"))
+			txtStrLabel))
 
 	if err != nil {
 		return err
@@ -1283,7 +1283,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		txtStrLabel,
 		searchResultsDto.NumStrFormatType,
 		ePrefix.XCpy(
-			"NumStrFormatType"))
+			txtStrLabel))
 
 	if err != nil {
 		return err
@@ -1302,7 +1302,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		txtStrLabel,
 		searchResultsDto.NumSymbolLocation,
 		ePrefix.XCpy(
-			"NumSymbolLocation"))
+			txtStrLabel))
 
 	if err != nil {
 		return err
@@ -1321,7 +1321,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		txtStrLabel,
 		searchResultsDto.NumSymbolClass,
 		ePrefix.XCpy(
-			"NumSymbolClass"))
+			txtStrLabel))
 
 	if err != nil {
 		return err
@@ -1340,7 +1340,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		txtStrLabel,
 		searchResultsDto.NumSignValue,
 		ePrefix.XCpy(
-			"NumSignValue"))
+			txtStrLabel))
 
 	if err != nil {
 		return err
@@ -1359,7 +1359,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		txtStrLabel,
 		searchResultsDto.PrimaryNumSignPosition,
 		ePrefix.XCpy(
-			"PrimaryNumSignPosition"))
+			txtStrLabel))
 
 	if err != nil {
 		return err
@@ -1378,7 +1378,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		txtStrLabel,
 		searchResultsDto.SecondaryNumSignPosition,
 		ePrefix.XCpy(
-			"SecondaryNumSignPosition"))
+			txtStrLabel))
 
 	if err != nil {
 		return err
@@ -1397,7 +1397,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		txtStrLabel,
 		searchResultsDto.TextCharSearchType,
 		ePrefix.XCpy(
-			"TextCharSearchType"))
+			txtStrLabel))
 
 	if err != nil {
 		return err
