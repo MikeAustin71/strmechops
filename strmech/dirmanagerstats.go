@@ -996,14 +996,21 @@ func (dirProfile *DirectoryProfile) GetTextListing(
 
 	var delimitedNumStr string
 
+	// DirTotalFiles
+
+	txtStrLabel = "DirTotalFiles"
+
 	delimitedNumStr,
 		err = intSep.
 		GetFmtIntSeparatedNumStr(
 			fmt.Sprintf("%v",
 				dirProfile.DirTotalFiles),
-			ePrefix.XCpy("delimitedNumStr<-"))
+			ePrefix.XCpy(txtStrLabel))
 
-	txtStrLabel = "DirTotalFiles"
+	if err != nil {
+		return err
+	}
+
 	txtStrParam = delimitedNumStr
 
 	err = txtFormatCol.AddLine2Col(
@@ -1013,6 +1020,329 @@ func (dirProfile *DirectoryProfile) GetTextListing(
 
 	if err != nil {
 		return err
+	}
+
+	// DirTotalFileBytes
+
+	txtStrLabel = "DirTotalFileBytes"
+
+	delimitedNumStr,
+		err = intSep.
+		GetFmtIntSeparatedNumStr(
+			fmt.Sprintf("%v",
+				dirProfile.DirTotalFileBytes),
+			ePrefix.XCpy(txtStrLabel))
+
+	if err != nil {
+		return err
+	}
+
+	txtStrParam = delimitedNumStr
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(txtStrLabel))
+
+	if err != nil {
+		return err
+	}
+
+	// DirSubDirectories
+
+	txtStrLabel = "DirSubDirectories"
+
+	delimitedNumStr,
+		err = intSep.
+		GetFmtIntSeparatedNumStr(
+			fmt.Sprintf("%v",
+				dirProfile.DirSubDirectories),
+			ePrefix.XCpy(txtStrLabel))
+
+	if err != nil {
+		return err
+	}
+
+	txtStrParam = delimitedNumStr
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(txtStrLabel))
+
+	if err != nil {
+		return err
+	}
+
+	// DirSubDirectoriesBytes
+
+	txtStrLabel = "DirSubDirectoriesBytes"
+
+	delimitedNumStr,
+		err = intSep.
+		GetFmtIntSeparatedNumStr(
+			fmt.Sprintf("%v",
+				dirProfile.DirSubDirectoriesBytes),
+			ePrefix.XCpy(txtStrLabel))
+
+	if err != nil {
+		return err
+	}
+
+	txtStrParam = delimitedNumStr
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(txtStrLabel))
+
+	if err != nil {
+		return err
+	}
+
+	// SubDirsIncludeCurrentDirOneDot
+
+	txtStrLabel = "SubDirsIncludeCurrentDirOneDot"
+	txtStrParam = fmt.Sprintf("%v",
+		dirProfile.SubDirsIncludeCurrentDirOneDot)
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(txtStrLabel))
+
+	if err != nil {
+		return err
+	}
+
+	// SubDirsIncludeParentDirTwoDot
+
+	txtStrLabel = "SubDirsIncludeParentDirTwoDot"
+	txtStrParam = fmt.Sprintf("%v",
+		dirProfile.SubDirsIncludeParentDirTwoDot)
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(txtStrLabel))
+
+	if err != nil {
+		return err
+	}
+
+	// DirRegularFiles
+
+	txtStrLabel = "DirRegularFiles"
+
+	delimitedNumStr,
+		err = intSep.
+		GetFmtIntSeparatedNumStr(
+			fmt.Sprintf("%v",
+				dirProfile.DirRegularFiles),
+			ePrefix.XCpy(txtStrLabel))
+
+	if err != nil {
+		return err
+	}
+
+	txtStrParam = delimitedNumStr
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(txtStrLabel))
+
+	if err != nil {
+		return err
+	}
+
+	// DirRegularFileBytes
+
+	txtStrLabel = "DirRegularFileBytes"
+
+	delimitedNumStr,
+		err = intSep.
+		GetFmtIntSeparatedNumStr(
+			fmt.Sprintf("%v",
+				dirProfile.DirRegularFileBytes),
+			ePrefix.XCpy(txtStrLabel))
+
+	if err != nil {
+		return err
+	}
+
+	txtStrParam = delimitedNumStr
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(txtStrLabel))
+
+	if err != nil {
+		return err
+	}
+
+	// DirSymLinkFiles
+
+	txtStrLabel = "DirSymLinkFiles"
+
+	delimitedNumStr,
+		err = intSep.
+		GetFmtIntSeparatedNumStr(
+			fmt.Sprintf("%v",
+				dirProfile.DirSymLinkFiles),
+			ePrefix.XCpy(txtStrLabel))
+
+	if err != nil {
+		return err
+	}
+
+	txtStrParam = delimitedNumStr
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(txtStrLabel))
+
+	if err != nil {
+		return err
+	}
+
+	// DirSymLinkFiles
+
+	txtStrLabel = "DirSymLinkFileBytes"
+
+	delimitedNumStr,
+		err = intSep.
+		GetFmtIntSeparatedNumStr(
+			fmt.Sprintf("%v",
+				dirProfile.DirSymLinkFileBytes),
+			ePrefix.XCpy(txtStrLabel))
+
+	if err != nil {
+		return err
+	}
+
+	txtStrParam = delimitedNumStr
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(txtStrLabel))
+
+	if err != nil {
+		return err
+	}
+
+	// DirNonRegularFiles
+
+	txtStrLabel = "DirNonRegularFiles"
+
+	delimitedNumStr,
+		err = intSep.
+		GetFmtIntSeparatedNumStr(
+			fmt.Sprintf("%v",
+				dirProfile.DirNonRegularFiles),
+			ePrefix.XCpy(txtStrLabel))
+
+	if err != nil {
+		return err
+	}
+
+	txtStrParam = delimitedNumStr
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(txtStrLabel))
+
+	if err != nil {
+		return err
+	}
+
+	txtStrLabel = "DirNonRegularFileBytes"
+
+	delimitedNumStr,
+		err = intSep.
+		GetFmtIntSeparatedNumStr(
+			fmt.Sprintf("%v",
+				dirProfile.DirNonRegularFileBytes),
+			ePrefix.XCpy(txtStrLabel))
+
+	if err != nil {
+		return err
+	}
+
+	txtStrParam = delimitedNumStr
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(txtStrLabel))
+
+	if err != nil {
+		return err
+	}
+
+	lenErrors := len(dirProfile.Errors)
+
+	if lenErrors == 0 {
+
+		txtStrLabel = "Errors"
+
+		txtStrParam = "-- NONE --"
+
+		err = txtFormatCol.AddLine2Col(
+			txtStrLabel,
+			txtStrParam,
+			ePrefix.XCpy(txtStrLabel))
+
+		if err != nil {
+			return err
+		}
+
+	} else {
+
+		txtFormatCol.AddFieldLabel(
+			leftMargin,
+			"Errors:",
+			lenCol1Field,
+			TxtJustify.Right(),
+			" ",
+			"",
+			maxLineLength,
+			false,
+			"")
+
+		txtFormatCol.AddLineBlank(
+			1,
+			"\n")
+
+		var errStr1, errStr2 string
+
+		for i := 0; i < lenErrors; i++ {
+
+			errStr1 = fmt.Sprintf(leftMargin+"%v",
+				dirProfile.Errors[i].Error())
+
+			errStr2 = strings.Replace(
+				errStr1,
+				"\n",
+				"\n"+leftMargin,
+				-1)
+
+			txtFormatCol.AddAdHocText(
+				"",
+				errStr2,
+				"",
+				false,
+				"\n",
+				maxLineLength,
+				true,
+				leftMargin)
+
+		}
+
 	}
 
 	// Final Text Line Build
