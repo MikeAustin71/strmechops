@@ -791,7 +791,7 @@ func (dirProfile *DirectoryProfile) GetTextListing(
 		strings.Repeat(" ",
 			lenCol1Field+
 				lenCol1RightMargin+
-				1)
+				2)
 
 	lenLeftMar := len(leftMargin)
 	lenRightMar := len(rightMargin)

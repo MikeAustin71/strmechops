@@ -220,3 +220,83 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirs02() {
 	fmt.Printf("\n" + breakStr + "\n")
 
 }
+
+// GetDirProfile01
+//
+// Testing Get Directory Profile for parent directory.
+func (dirOpsTest007 MainDirOpsTest007) GetDirProfile01() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainDirOpsTest007.GetDirProfile01()",
+		"")
+
+	breakStr := " " + strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n\n\n")
+
+	targetDir := "..\\fileOpsTest\\filesForTest\\levelfilesfortest"
+	osPathSepStr := string(os.PathSeparator)
+
+	targetDir = strings.Replace(
+		targetDir,
+		"\\",
+		osPathSepStr,
+		-1)
+
+	var err error
+	var dirProfile strmech.DirectoryProfile
+	var directoryPathDoesExist bool
+
+	directoryPathDoesExist,
+		dirProfile,
+		err = new(strmech.DirHelper).
+		GetDirectoryProfile(
+			targetDir,
+			false,
+			false,
+			strmech.FileSelectionCriteria{},
+			ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("Directory Does Exist: %v\n",
+		directoryPathDoesExist)
+
+	strBuilder := strings.Builder{}
+
+	err = dirProfile.GetTextListing(
+		" ",
+		"",
+		80,
+		'-',
+		"Directory Metrics",
+		true,
+		&strBuilder,
+		ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fmt.Println(strBuilder.String())
+
+	fmt.Printf(breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+}
