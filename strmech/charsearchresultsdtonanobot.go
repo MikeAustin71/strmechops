@@ -777,8 +777,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 	err = txtFormatCol.AddLine2Col(
 		txtStrLabel,
 		txtStrParam,
-		ePrefix.XCpy(
-			""))
+		ePrefix)
 
 	if err != nil {
 		return err
@@ -797,8 +796,7 @@ func (searchResultsDtoNanobot *charSearchResultsDtoNanobot) getParameterTextList
 		err = txtFormatCol.AddLine2Col(
 			txtStrLabel,
 			txtStrParam,
-			ePrefix.XCpy(
-				""))
+			ePrefix)
 
 		if err != nil {
 			return err

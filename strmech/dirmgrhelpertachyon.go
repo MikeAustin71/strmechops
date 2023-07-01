@@ -299,7 +299,7 @@ type dirMgrHelperTachyon struct {
 //				for the directory described by this profile
 //				information.
 //
-//			DirExistsOnStorageDrive 	bool
+//			ParentDirExistsOnStorageDrive 	bool
 //				If 'true', this paramter signals
 //				that the directory actually exists on
 //				a storage drive.
@@ -310,6 +310,18 @@ type dirMgrHelperTachyon struct {
 //				information provided by this instance of
 //				DirectoryProfile includes metrics from
 //				the parent directory.
+//
+//			IsDirectoryTreeStats bool
+//				If this parameter is set to 'true', it
+//				signals that the metrics included in this
+//				instance of DirectoryProfile are compiled
+//				for a directory tree, and not an individual
+//				directory.
+//
+//				Conversely, if this parameter is set to
+//				'false', it signals that these directory
+//				metrics describe a single directory and
+//				not a directory tree.
 //
 //			DirTotalFiles				uint64
 //				The number of total files, of all types,
@@ -473,7 +485,7 @@ func (dMgrHlprTachyon *dirMgrHelperTachyon) getDirectoryProfile(
 	dirProfile.SubDirsIncludeParentDirTwoDot =
 		includeSubDirParentDirTwoDots
 
-	dirProfile.DirExistsOnStorageDrive =
+	dirProfile.ParentDirExistsOnStorageDrive =
 		directoryPathDoesExist
 
 	if !directoryPathDoesExist {

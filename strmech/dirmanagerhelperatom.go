@@ -1267,7 +1267,7 @@ func (dMgrHlprAtom *dirMgrHelperAtom) lowLevelScreenPathStrForInvalidChars(
 //				DirectoryProfile includes metrics from
 //				the parent directory.
 //
-//			DirExistsOnStorageDrive bool
+//			ParentDirExistsOnStorageDrive bool
 //				If 'true', this paramter signals
 //				that the directory actually exists on
 //				a storage drive.

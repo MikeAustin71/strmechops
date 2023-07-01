@@ -352,7 +352,19 @@ type DirHelper struct {
 //				for the directory described by this profile
 //				information.
 //
-//			DirExistsOnStorageDrive 	bool
+//			IsDirectoryTreeStats bool
+//				If this parameter is set to 'true', it
+//				signals that the metrics included in this
+//				instance of DirectoryProfile are compiled
+//				for a directory tree, and not an individual
+//				directory.
+//
+//				Conversely, if this parameter is set to
+//				'false', it signals that these directory
+//				metrics describe a single directory and
+//				not a directory tree.
+//
+//			ParentDirExistsOnStorageDrive 	bool
 //				If 'true', this paramter signals
 //				that the directory actually exists on
 //				a storage drive.
@@ -875,7 +887,7 @@ func (dHlpr *DirHelper) GetDirectoryProfile(
 //				for the directory described by this profile
 //				information.
 //
-//			DirExistsOnStorageDrive 	bool
+//			ParentDirExistsOnStorageDrive 	bool
 //				If 'true', this paramter signals
 //				that the directory actually exists on
 //				a storage drive.

@@ -2484,7 +2484,7 @@ func (dMgr *DirMgr) DeleteAll(
 //				for the directory described by this profile
 //				information.
 //
-//			DirExistsOnStorageDrive bool
+//			ParentDirExistsOnStorageDrive bool
 //				If 'true', this paramter signals
 //				that the directory actually exists on
 //				a storage drive.
@@ -7918,7 +7918,7 @@ func (dMgr *DirMgr) FindWalkSubDirFiles(
 //				DirectoryProfile includes metrics from
 //				the parent directory.
 //
-//			DirExistsOnStorageDrive bool
+//			ParentDirExistsOnStorageDrive bool
 //				If 'true', this paramter signals
 //				that the directory actually exists on
 //				a storage drive.
@@ -12657,7 +12657,7 @@ func (dMgr *DirMgr) MakeDir(
 //				for the directory described by this profile
 //				information.
 //
-//			DirExistsOnStorageDrive bool
+//			ParentDirExistsOnStorageDrive bool
 //				If 'true', this paramter signals
 //				that the directory actually exists on
 //				a storage drive.

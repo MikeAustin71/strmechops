@@ -407,10 +407,22 @@ type DirectoryProfile struct {
 	// DirectoryProfile includes metrics from
 	// the parent directory.
 
-	DirExistsOnStorageDrive bool
+	IsDirectoryTreeStats bool
+	// If this parameter is set to 'true', it
+	// signals that the metrics included in this
+	// instance of DirectoryProfile are compiled
+	// for a directory tree, and not an individual
+	// directory.
+	//
+	// Conversely, if this parameter is set to
+	// 'false', it signals that these directory
+	// metrics describe a single directory and
+	// not a directory tree.
+
+	ParentDirExistsOnStorageDrive bool
 	// If 'true', this paramter signals
-	// that the directory actually exists on
-	// a storage drive.
+	// that the parent directory actually
+	// exists on a storage drive.
 
 	DirTotalFiles uint64
 	// The number of total files residing in
@@ -771,9 +783,21 @@ func (dirProfile *DirectoryProfile) GetTextListing(
 
 	}
 
+	lenCol1Field := len("SubDirsIncludeCurrentDirTwoDot")
+	col1RightMarginStr := ": "
+	lenCol1RightMargin := len(col1RightMarginStr)
+
+	multiLineLeftMargin :=
+		strings.Repeat(" ",
+			lenCol1Field+
+				lenCol1RightMargin+
+				1)
+
 	lenLeftMar := len(leftMargin)
 	lenRightMar := len(rightMargin)
-	lenCol1 := 37
+	lenCol1 := lenCol1Field +
+		lenCol1RightMargin
+
 	lenCol2 := 15
 
 	lenLineTerminator := 1
@@ -818,11 +842,11 @@ func (dirProfile *DirectoryProfile) GetTextListing(
 		strBuilder.Cap() -
 			strBuilder.Len()
 
-	titleLines := 12
+	numOfTitleLines := 12
 
 	thisReqCapacity := (actualTextLineLen * 17) +
 		len(dirProfile.Errors) +
-		(titleLines * maxLineLength)
+		(numOfTitleLines * maxLineLength)
 
 	netRequiredCapacity :=
 		thisReqCapacity - netCapacityStrBuilder
@@ -864,15 +888,6 @@ func (dirProfile *DirectoryProfile) GetTextListing(
 		}
 	}
 
-	err = titleMarquee.AddTitleLineStrings(
-		ePrefix,
-		"Parent Directory",
-		dirProfile.ParentDirAbsolutePath)
-
-	if err != nil {
-		return err
-	}
-
 	titleMarquee.NumTrailingBlankLines = 1
 
 	err = txtFormatCol.AddTextTitleMarqueeDto(
@@ -886,24 +901,122 @@ func (dirProfile *DirectoryProfile) GetTextListing(
 	err = txtFormatCol.
 		SetStdFormatParamsLine2Col(
 			leftMargin,
-			len("SubDirsIncludeParentDirTwoDot:")+2,
+			lenCol1Field,
 			TxtJustify.Right(),
-			": ",
-			15,
+			col1RightMarginStr,
+			lenCol2,
 			TxtJustify.Left(),
 			"",
 			false,
 			"",
 			maxLineLength,
 			true,
-			leftMargin+"  ",
+			multiLineLeftMargin,
 			ePrefix)
 
 	if err != nil {
 		return err
 	}
 
-	txtFormatCol.AddLineBlank(2, "")
+	txtStrLabel := "Parent Directory"
+	txtStrParam := dirProfile.ParentDirAbsolutePath
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(txtStrLabel))
+
+	if err != nil {
+		return err
+	}
+
+	txtStrLabel = "ParentDirIsIncludedInStats"
+	txtStrParam = fmt.Sprintf("%v",
+		dirProfile.ParentDirIsIncludedInStats)
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(txtStrLabel))
+
+	if err != nil {
+		return err
+	}
+
+	txtStrLabel = "IsDirectoryTreeStats"
+	txtStrParam = fmt.Sprintf("%v",
+		dirProfile.IsDirectoryTreeStats)
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(txtStrLabel))
+
+	if err != nil {
+		return err
+	}
+
+	txtStrLabel = "IsDirectoryTreeStats"
+	txtStrParam = fmt.Sprintf("%v",
+		dirProfile.IsDirectoryTreeStats)
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(txtStrLabel))
+
+	if err != nil {
+		return err
+	}
+
+	txtStrLabel = "ParentDirExistsOnStorageDrive"
+	txtStrParam = fmt.Sprintf("%v",
+		dirProfile.ParentDirExistsOnStorageDrive)
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(txtStrLabel))
+
+	if err != nil {
+		return err
+	}
+
+	var intSep IntegerSeparatorSpec
+
+	intSep,
+		err = new(IntegerSeparatorSpec).
+		NewUnitedStatesDefaults(
+			ePrefix.XCpy(
+				"intSep<-"))
+
+	if err != nil {
+		return err
+	}
+
+	var delimitedNumStr string
+
+	delimitedNumStr,
+		err = intSep.
+		GetFmtIntSeparatedNumStr(
+			fmt.Sprintf("%v",
+				dirProfile.DirTotalFiles),
+			ePrefix.XCpy("delimitedNumStr<-"))
+
+	txtStrLabel = "DirTotalFiles"
+	txtStrParam = delimitedNumStr
+
+	err = txtFormatCol.AddLine2Col(
+		txtStrLabel,
+		txtStrParam,
+		ePrefix.XCpy(txtStrLabel))
+
+	if err != nil {
+		return err
+	}
+
+	// Final Text Line Build
+	txtFormatCol.AddLineBlank(1, "")
 
 	err = txtFormatCol.BuildText(
 		strBuilder,

@@ -291,7 +291,7 @@ type dirMgrHelperPreon struct {
 //				for the directory described by this profile
 //				information.
 //
-//			DirExistsOnStorageDrive 	bool
+//			ParentDirExistsOnStorageDrive 	bool
 //				If 'true', this paramter signals
 //				that the directory actually exists on
 //				a storage drive.
@@ -431,8 +431,6 @@ func (dMgrHlprPreon *dirMgrHelperPreon) getDirectoryTreeProfile(
 		return directoryPathDoesExist, dirProfile, err
 	}
 
-	dirProfile.DirExistsOnStorageDrive = false
-
 	if len(dMgrLabel) == 0 {
 
 		dMgrLabel = "dMgr"
@@ -464,6 +462,12 @@ func (dMgrHlprPreon *dirMgrHelperPreon) getDirectoryTreeProfile(
 
 	var subDirsInDir DirMgrCollection
 
+	exitSubDirsClose := func() {
+		subDirsInDir.Empty()
+	}
+
+	defer exitSubDirsClose()
+
 	if !skipTopLevelDirectory {
 
 		err = subDirsInDir.AddDirMgr(
@@ -486,7 +490,7 @@ func (dMgrHlprPreon *dirMgrHelperPreon) getDirectoryTreeProfile(
 	dirProfile.SubDirsIncludeParentDirTwoDot =
 		includeSubDirParentDirTwoDots
 
-	dirProfile.DirExistsOnStorageDrive =
+	dirProfile.ParentDirExistsOnStorageDrive =
 		directoryPathDoesExist
 
 	var numOfSubDirsLocated int
@@ -572,9 +576,10 @@ func (dMgrHlprPreon *dirMgrHelperPreon) getDirectoryTreeProfile(
 
 		dirProfile.AddDirProfileStats(
 			newDirProfile)
-	}
 
-	subDirsInDir.Empty()
+		dirProfile.IsDirectoryTreeStats = true
+
+	}
 
 	return directoryPathDoesExist, dirProfile, err
 }

@@ -1442,7 +1442,7 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 //				for the directory described by this profile
 //				information.
 //
-//			DirExistsOnStorageDrive 	bool
+//			ParentDirExistsOnStorageDrive 	bool
 //				If 'true', this paramter signals
 //				that the directory actually exists on
 //				a storage drive.
