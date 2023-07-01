@@ -1397,16 +1397,16 @@ func (dMgrs *DirMgrCollection) Empty() {
 //		Two Directory Manager Collections from input
 //		parameter 'incomingDMgrCollection' and the
 //		current instance of DirMgrCollection are
-//		compared to determine if they are equal in all
-//		respects.
+//		compared to determine if they are equivalent.
 //
-//		If any of the Directory Manager (DirMgr) objects
-//		in the two collections are not equal, this method
-//		returns a boolean value of 'false'.
+//		If any of the corresponding Directory Manager
+//		(DirMgr) objects in the two collections are not
+//		equal, this method returns a boolean value of
+//		'false'.
 //
 //		A value of 'true' is only returned if all
-//	 	Directory Manager objects in both collections are
-//	 	equal in all respects.
+//	 	corresponding Directory Manager objects in both
+//	 	collections are	equal in all respects.
 func (dMgrs *DirMgrCollection) Equal(
 	incomingDMgrCollection *DirMgrCollection) bool {
 

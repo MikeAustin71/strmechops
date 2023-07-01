@@ -1592,6 +1592,87 @@ func (fMgrs *FileMgrCollection) Empty() {
 	return
 }
 
+// Equal
+//
+// This method receives a pointer to an incoming instance
+// of FileMgrCollection and proceeds to compare the
+// encapsulated File Manager Collection with the
+// File Manager Collection contained in the current
+// instance of FileMgrCollection.
+//
+// If any of the File Manager (FileMgr) objects in
+// the two collections are not equal, this method returns
+// a boolean value of 'false'.
+//
+// A value of 'true' is only returned if all File
+// Manager objects in both collections are equal in all
+// respects.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	incomingDMgrCollection		*FileMgrCollection
+//
+//		A pointer to an external instance of
+//		FileMgrCollection. All the File Manager
+//		objects in this File Manager Collection will
+//		be compared to the File Manager Collection
+//		contained in the current instance of
+//		FileMgrCollection to determine if all the
+//		File Manager objects are equivalent.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		Two File Manager Collections from input
+//		parameter 'incomingDMgrCollection' and the
+//		current instance of FileMgrCollection are
+//		compared to determine if they are equivalent.
+//
+//		If any of the corresponding File Manager
+//		(FileMgr) objects in the two collections are not
+//		equal, this method returns a boolean value of
+//		'false'.
+//
+//		A value of 'true' is only returned if all
+//	 	corresponding File Manager objects in both
+//	 	collections are equal in all respects.
+func (fMgrs *FileMgrCollection) Equal(
+	incomingFMgrCollection *FileMgrCollection) bool {
+
+	if fMgrs.lock == nil {
+		fMgrs.lock = new(sync.Mutex)
+	}
+
+	fMgrs.lock.Lock()
+
+	defer fMgrs.lock.Unlock()
+
+	colArrayLen := len(fMgrs.fileMgrs)
+
+	if colArrayLen != len(incomingFMgrCollection.fileMgrs) {
+
+		return false
+	}
+
+	for i := 0; i < colArrayLen; i++ {
+
+		if !fMgrs.fileMgrs[i].Equal(
+			&incomingFMgrCollection.fileMgrs[i]) {
+
+			return false
+
+		}
+
+	}
+
+	return true
+}
+
 // FindFiles
 //
 // Searches the current FileMgrCollection and returns a
