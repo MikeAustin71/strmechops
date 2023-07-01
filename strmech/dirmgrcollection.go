@@ -1353,6 +1353,8 @@ func (dMgrs *DirMgrCollection) Empty() {
 
 	dMgrs.lock.Unlock()
 
+	dMgrs.lock = nil
+
 	return
 }
 

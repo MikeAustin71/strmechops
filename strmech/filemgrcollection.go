@@ -1538,6 +1538,60 @@ func (fMgrs *FileMgrCollection) DeleteAtIndex(
 				fmt.Sprintf("fMgrs[%v]", idx)))
 }
 
+//	Empty
+//
+//	Resets all internal member variables for the current
+//	instance of FileMgrCollection to their initial or
+//	zero values.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete all pre-existing FileMgr
+//	objects contained in the File Manager Collection
+//	encapsulated in the current instance of
+//	FileMgrCollection. Upon completion of this method,
+//	the internal File Manager Collection array for the
+//	current FileMgrCollection instance will have a length
+//	of zero.
+//
+// ------------------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ------------------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (fMgrs *FileMgrCollection) Empty() {
+
+	if fMgrs.lock == nil {
+		fMgrs.lock = new(sync.Mutex)
+	}
+
+	fMgrs.lock.Lock()
+
+	colArrayLen := len(fMgrs.fileMgrs)
+
+	for i := 0; i < colArrayLen; i++ {
+
+		fMgrs.fileMgrs[i].Empty()
+
+	}
+
+	fMgrs.fileMgrs = make([]FileMgr, 0)
+
+	fMgrs.lock.Unlock()
+
+	fMgrs.lock = nil
+
+	return
+}
+
 // FindFiles
 //
 // Searches the current FileMgrCollection and returns a
