@@ -12395,6 +12395,22 @@ func (fMgr *FileMgr) WriteStrOpenClose(
 		return numBytesWritten, err
 	}
 
+	var fMgrHlpr = new(fileMgrHelper)
+
+	if fMgr.filePtr != nil {
+
+		err = fMgrHlpr.
+			closeFile(
+				fMgr,
+				ePrefix.XCpy("fMgr.filePtr"))
+
+		if err != nil {
+
+			return numBytesWritten, err
+		}
+
+	}
+
 	var writeAccessCfg FileAccessControl
 
 	if truncateExistingFile {
@@ -12423,7 +12439,7 @@ func (fMgr *FileMgr) WriteStrOpenClose(
 
 	}
 
-	err = new(fileMgrHelper).writeFileSetup(
+	err = fMgrHlpr.writeFileSetup(
 		fMgr,
 		writeAccessCfg,
 		true,
@@ -12433,8 +12449,6 @@ func (fMgr *FileMgr) WriteStrOpenClose(
 	if err != nil {
 		return numBytesWritten, err
 	}
-
-	fMgrHlpr := fileMgrHelper{}
 
 	// file is open
 	cleanupFileClose := func() {
