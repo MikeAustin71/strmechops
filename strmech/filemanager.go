@@ -12340,7 +12340,7 @@ func (fMgr *FileMgr) WriteStrToFile(
 //
 //		If this method completes successfully, this
 //		integer value will equal the number of bytes
-//		written the file identified by the current
+//		written to the file identified by the current
 //		instance of FileMgr. It should match the number
 //		of bytes contained in the input string
 //		parameter, 'textToWrite'.
@@ -12438,7 +12438,7 @@ func (fMgr *FileMgr) WriteStrOpenClose(
 
 	// file is open
 	cleanupFileClose := func() {
-		err = fMgrHlpr.closeFile(fMgr, ePrefix)
+		_ = fMgrHlpr.closeFile(fMgr, nil)
 	}
 
 	defer cleanupFileClose()

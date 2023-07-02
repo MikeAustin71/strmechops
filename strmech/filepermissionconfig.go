@@ -1812,7 +1812,7 @@ func (fPerm *FilePermissionConfig) IsValidInstanceError(
 // # Reference:
 //
 //	https://www.cyberciti.biz/faq/explain-the-nine-permissions-bits-on-files/.
-//	https://en.wikipedia.org/wiki/File_system_permissions
+//	https://en.wikipedia.org/wiki/File-system_permissions
 //	https://linuxconfig.org/how-to-use-special-permissions-the-setuid-setgid-and-sticky-bits
 //
 // ----------------------------------------------------------------

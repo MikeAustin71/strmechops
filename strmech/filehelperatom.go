@@ -625,6 +625,16 @@ func (fHelperAtom *fileHelperAtom) deleteAllFilesInDirectory(
 //		This strings holds the directory path which will
 //		be examined to determine if it actually exists.
 //
+//	dirPathLabel				string
+//
+//		The name or label associated with input parameter
+//		'dirPath' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "dirPath" will be
+//		automatically applied.
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -672,6 +682,7 @@ func (fHelperAtom *fileHelperAtom) deleteAllFilesInDirectory(
 //	 	attached to the	beginning of the error message.
 func (fHelperAtom *fileHelperAtom) doesDirectoryExist(
 	dirPath string,
+	dirPathLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
 	dirPathDoesExist bool,
 	fInfoPlus FileInfoPlus,
@@ -687,15 +698,21 @@ func (fHelperAtom *fileHelperAtom) doesDirectoryExist(
 
 	var ePrefix *ePref.ErrPrefixDto
 
+	funcName := "fileHelperAtom." +
+		"doesDirectoryExist()"
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"fileHelperAtom."+
-			"doesDirectoryExist()",
+		funcName,
 		"")
 
 	if err != nil {
 		return dirPathDoesExist, fInfoPlus, err
+	}
+
+	if len(dirPathLabel) == 0 {
+		dirPathLabel = "dirPath"
 	}
 
 	dirPathDoesExist = false
@@ -712,8 +729,9 @@ func (fHelperAtom *fileHelperAtom) doesDirectoryExist(
 	if errCode < 0 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input paramter 'dirPath' is an empty string!\n",
-			ePrefix.String())
+			"Error: Input paramter '%v' is an empty string!\n",
+			ePrefix.String(),
+			dirPathLabel)
 
 		return dirPathDoesExist, fInfoPlus, err
 	}
@@ -743,10 +761,12 @@ func (fHelperAtom *fileHelperAtom) doesDirectoryExist(
 			// This is a non-path error. The non-path error will be
 			// tested up to 3-times before it is returned.
 			err = fmt.Errorf("%v\n"+
-				"Non-Path error returned by os.Stat(dirPath)\n"+
-				"dirPath='%v'\n"+
+				"Non-Path error returned by os.Stat(%v)\n"+
+				"%v='%v'\n"+
 				"Error=\n%v\n",
 				ePrefix.String(),
+				dirPathLabel,
+				dirPathLabel,
 				dirPath,
 				err2.Error())
 
@@ -769,11 +789,13 @@ func (fHelperAtom *fileHelperAtom) doesDirectoryExist(
 			if err2 != nil {
 
 				err = fmt.Errorf("%v\n"+
-					"'dirPath' Exists.\n"+
-					"dirPath = %v\n"+
+					"'%v' Exists.\n"+
+					"%v = '%v'\n"+
 					"Error returned by FileInfoPlus{}.NewFromPathFileInfo(dirPath, info)\n"+
-					"Error='%v'\n",
-					ePrefix.String(),
+					"Error= \n%v\n",
+					funcName,
+					dirPathLabel,
+					dirPathLabel,
 					dirPath,
 					err2.Error())
 

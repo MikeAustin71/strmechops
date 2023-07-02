@@ -35,14 +35,27 @@ type fileHelperBoson struct {
 //
 // # Input Parameters
 //
-//	pathFileName				string
+//	pathFileName					string
 //
 //		A string containing the path and file name of the
 //		file which will be opened. If a parent path
 //		component does NOT exist, this method will
 //		trigger an error.
 //
-//	fileOpenCfg					FileOpenConfig
+//	createDirectoryPathIfNotExist	bool
+//
+//		If the directory path element of parameter
+//		'pathFileName' does not exist on an attached
+//		storage drive, and this parameter is set to
+//		'true', this method will attempt to create
+//		the directory path.
+//
+//		If 'createDirectoryPathIfNotExist' is set to
+//		'false', and the directory path element of
+//		parameter 'pathFileName' does not exist on an
+//		attached storage drive, an error will be returned.
+//
+//	fileOpenCfg						FileOpenConfig
 //
 //		This parameter encapsulates the File Open
 //		parameters which will be used to open subject
@@ -50,7 +63,7 @@ type fileHelperBoson struct {
 //		see method:
 //			FileOpenConfig.New().
 //
-//	filePermissionCfg			FilePermissionConfig
+//	filePermissionCfg				FilePermissionConfig
 //
 //		This parameter encapsulates the File Permission
 //		parameters which will be used to open the subject
@@ -58,7 +71,7 @@ type fileHelperBoson struct {
 //		parameters, see method:
 //			FilePermissionConfig.New().
 //
-//	pathFileNameLabel			string
+//	pathFileNameLabel				string
 //
 //		The name or label associated with input parameter
 //		'pathFileName' which will be used in error
@@ -68,7 +81,7 @@ type fileHelperBoson struct {
 //		string, a default value of "pathFileName" will be
 //		automatically applied.
 //
-//	errPrefDto					*ePref.ErrPrefixDto
+//	errPrefDto						*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
 //		which is included in all returned error
@@ -117,6 +130,7 @@ type fileHelperBoson struct {
 //	 	attached to the	beginning of the error message.
 func (fileHelpBoson *fileHelperBoson) openFile(
 	pathFileName string,
+	createDirectoryPathIfNotExist bool,
 	fileOpenCfg FileOpenConfig,
 	filePermissionCfg FilePermissionConfig,
 	pathFileNameLabel string,
@@ -136,11 +150,12 @@ func (fileHelpBoson *fileHelperBoson) openFile(
 
 	filePtr = nil
 
+	funcName := "fileHelperBoson.openFile()"
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errPrefDto,
-		"fileHelperBoson."+
-			"openFile()",
+		funcName,
 		"")
 
 	if err != nil {
@@ -161,50 +176,180 @@ func (fileHelpBoson *fileHelperBoson) openFile(
 			pathFileNameLabel)
 
 		return filePtr, err
+	}
 
+	var err2 error
+
+	pathFileName,
+		err2 = new(fileHelperMolecule).
+		getAbsPathFromFilePath(
+			pathFileName,
+			ePrefix.XCpy(
+				"<-pathFileName"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"'%v' conversion to an absolute path failed!\n"+
+			"Error returned by fileHelperMolecule.getAbsPathFromFilePath()\n"+
+			"%v= '%v'\n"+
+			"Error= \n%v\n",
+			funcName,
+			pathFileNameLabel,
+			pathFileNameLabel,
+			pathFileName,
+			err2.Error())
+
+		return filePtr, err
+	}
+
+	var directoryPath, fileNameExt string
+	var bothAreEmpty bool
+
+	directoryPath,
+		fileNameExt,
+		bothAreEmpty,
+		err2 = new(fileHelperDirector).
+		getPathAndFileNameExt(
+			pathFileName,
+			pathFileNameLabel,
+			ePrefix.XCpy("<-pathFileName"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"An error occurred while breaking '%v'\n"+
+			"into directory path, file name and file extension\n"+
+			"components.\n"+
+			"Error = \n%v\n",
+			funcName,
+			pathFileNameLabel,
+			pathFileNameLabel,
+			err2.Error())
+
+		return filePtr, err
+	}
+
+	if len(fileNameExt) == 0 || bothAreEmpty {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"No valid file name could be extracted from\n"+
+			"'%v'.\n"+
+			"%v= '%v'\n"+
+			"Directory Path Element= '%v'\n"+
+			"File Name Element= '%v'\n",
+			ePrefix.String(),
+			pathFileNameLabel,
+			pathFileNameLabel,
+			pathFileNameLabel,
+			pathFileName,
+			directoryPath,
+			fileNameExt)
+
+		return filePtr, err
 	}
 
 	var pathFileNameDoesExist bool
 
 	var fInfoPlus FileInfoPlus
 
-	pathFileName,
-		pathFileNameDoesExist,
+	pathFileNameDoesExist,
 		fInfoPlus,
-		err = new(fileHelperMolecule).doesPathFileExist(
-		pathFileName,
-		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
-		ePrefix,
-		"pathFileName")
+		err2 = new(fileHelperAtom).doesDirectoryExist(
+		directoryPath,
+		pathFileNameLabel+" Dir Path",
+		ePrefix.XCpy(pathFileNameLabel+" Dir Path"))
 
-	if err != nil {
-		return nil, err
-	}
-
-	if !pathFileNameDoesExist {
+	if err2 != nil {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'pathFileName' DOES NOT EXIST!\n"+
-			"pathFileName='%v'\n",
+			"Error returned by fileHelperAtom.doesDirectoryExist()\n"+
+			"%v= '%v'\n"+
+			"Error=\n%v\n",
+			funcName,
+			pathFileNameLabel,
+			pathFileName,
+			err2.Error())
+
+		return filePtr, err
+	}
+
+	if !fInfoPlus.IsDir() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The directory path extracted from '%v'\n"+
+			"is NOT a valid directory. '%v' is therefore invalid!\n"+
+			"%v= '%v'\n",
 			ePrefix.String(),
+			pathFileNameLabel,
+			pathFileNameLabel,
+			pathFileNameLabel,
 			pathFileName)
 
 		return filePtr, err
 	}
 
-	if fInfoPlus.IsDir() {
-		err =
-			fmt.Errorf("%v\n"+
-				"ERROR: Input parameter 'pathFileName' is \n"+
-				"a 'Directory' - NOT a file!\n"+
-				"pathFileName='%v'\n",
-				ePrefix.String(),
-				pathFileName)
+	if pathFileNameDoesExist {
+		// The 'pathFileName' directory path does NOT
+		// exist on an attached storage volume.
 
-		return filePtr, err
+		if createDirectoryPathIfNotExist {
+
+			err2 = new(fileHelperMechanics).makeDirAll(
+				directoryPath,
+				pathFileNameLabel+" directoryPath",
+				ePrefix)
+
+			if err2 != nil {
+
+				err = fmt.Errorf("%v\n"+
+					"Attempted creation of directory path failed!\n"+
+					"%v= '%v'\n"+
+					"%v Directory Path= '%v'\n"+
+					"Error returned by fileHelperMechanics.makeDirAll()\n"+
+					"Error=\n%v\n",
+					funcName,
+					pathFileNameLabel,
+					pathFileName,
+					pathFileNameLabel,
+					directoryPath,
+					err2.Error())
+
+				return filePtr, err
+			}
+
+		} else {
+			// The Path File Name Directory DOES NOT EXIST
+			// on an attached storage drive and
+			// createDirectoryPathIfNotExist = 'false'.
+
+			err = fmt.Errorf("%v\n"+
+				"Error: The %v Directory\n"+
+				"does NOT exist on an attached storage drive and\n"+
+				"Input Parameter 'createDirectoryPathIfNotExist'\n"+
+				"was set to 'false'. Therefore the file cannot be\n"+
+				"opened.\n"+
+				"%v= '%v\n"+
+				"%v Directory = '%v'\n",
+				ePrefix.String(),
+				pathFileNameLabel,
+				pathFileNameLabel,
+				pathFileName,
+				pathFileNameLabel,
+				directoryPath)
+
+			return filePtr, err
+		}
+
 	}
 
-	err2 := fileOpenCfg.IsValidInstanceError(ePrefix)
+	// At this point the 'pathFileName' directory exists
+	// on an attached storage drive. Time to open the file.
+
+	err2 = fileOpenCfg.IsValidInstanceError(
+		ePrefix.XCpy("fileOpenCfg"))
 
 	if err2 != nil {
 
@@ -217,45 +362,63 @@ func (fileHelpBoson *fileHelperBoson) openFile(
 		return filePtr, err
 	}
 
-	fOpenCode, err2 := fileOpenCfg.
-		GetCompositeFileOpenCode(ePrefix)
+	var fOpenCode int
+
+	fOpenCode,
+		err2 = fileOpenCfg.
+		GetCompositeFileOpenCode(
+			ePrefix.XCpy("fileOpenCfg"))
 
 	if err2 != nil {
 
 		err = fmt.Errorf("%v\n"+
-			"%v\n",
-			ePrefix.String(),
+			"Input parameter 'fileOpenCfg' is invalid!\n"+
+			"fileOpenCfg caused an error return from \n"+
+			"fileOpenCfg.GetGetCompositeFileOpenCode()\n"+
+			"Error = \n%v\n",
+			funcName,
 			err2.Error())
 
 		return filePtr, err
 	}
 
 	err2 = filePermissionCfg.IsValidInstanceError(
-		ePrefix)
+		ePrefix.XCpy("filePermissionCfg"))
 
 	if err2 != nil {
 
 		err = fmt.Errorf("%v\n"+
 			"Input Parameter 'filePermissionCfg' is INVALID!\n"+
-			"Error='%v'\n",
-			ePrefix.String(),
+			"filePermissionCfg.IsValidInstanceError() returned\n"+
+			"an error.\n"+
+			"Error= \n%v'\n",
+			funcName,
 			err2.Error())
 
 		return filePtr, err
 	}
 
-	fileMode, err2 := filePermissionCfg.
+	var fileMode os.FileMode
+
+	fileMode,
+		err2 = filePermissionCfg.
 		GetCompositePermissionMode(ePrefix.XCpy(
 			"fileMode<-"))
 
 	if err2 != nil {
-		err = fmt.Errorf(
-			"%v\n"+"%v\n",
-			ePrefix.String(),
+
+		err = fmt.Errorf("%v\n"+
+			"Input parameter 'filePermissionCfg' is invalid!\n"+
+			"filePermissionCfg.GetCompositePermissionMode()\n"+
+			"returned an error.\n"+
+			"Error= \n%v\n",
+			funcName,
 			err2.Error())
 
 		return filePtr, err
 	}
+
+	var err3 error
 
 	filePtr,
 		err2 = os.OpenFile(
@@ -265,13 +428,46 @@ func (fileHelpBoson *fileHelperBoson) openFile(
 
 	if err2 != nil {
 
-		err = fmt.Errorf("%v\n"+
-			"Error returned by os.OpenFile(pathFileName, fOpenCode, fileMode).\n"+
-			"pathFileName='%v'\n"+
-			"Error='%v'\n",
-			ePrefix.String(),
-			pathFileName,
-			err2.Error())
+		if filePtr != nil {
+
+			err3 = filePtr.Close()
+
+		}
+
+		if err3 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"There were two errors!\n"+
+				"Error #1\n"+
+				"Error #1 returned by os.OpenFile(%v, fOpenCode, fileMode).\n"+
+				"%v= '%v'\n"+
+				"Error #1=\n%v\n\n"+
+				"Error #2\n"+
+				"Error #2 returned by filePtr.Close() while attempting to\n"+
+				"close the file pointer returned by os.OpenFile().\n"+
+				"Error #2=\n%v\n",
+				ePrefix.String(),
+				pathFileNameLabel,
+				pathFileNameLabel,
+				pathFileName,
+				err2.Error(),
+				err3.Error())
+
+			return filePtr, err
+
+		} else {
+
+			err = fmt.Errorf("%v\n"+
+				"Error returned by os.OpenFile(%v, fOpenCode, fileMode).\n"+
+				"%v= '%v'\n"+
+				"Error=\n%v\n\n",
+				ePrefix.String(),
+				pathFileNameLabel,
+				pathFileNameLabel,
+				pathFileName,
+				err2.Error())
+
+		}
 
 		return filePtr, err
 	}
@@ -281,11 +477,7 @@ func (fileHelpBoson *fileHelperBoson) openFile(
 		err = fmt.Errorf("%v\n"+
 			"ERROR: os.OpenFile() returned a 'nil' file pointer!\n",
 			ePrefix.String())
-
-		return filePtr, err
 	}
-
-	err = nil
 
 	return filePtr, err
 }

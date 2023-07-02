@@ -3363,6 +3363,7 @@ func (fh *FileHelper) DoesDirectoryExist(
 
 	return new(fileHelperAtom).doesDirectoryExist(
 		dirPath,
+		"dirPath",
 		ePrefix)
 }
 
@@ -7567,6 +7568,7 @@ func (fh *FileHelper) GetPathAndFileNameExt(
 		err = new(fileHelperDirector).
 		getPathAndFileNameExt(
 			pathFileNameExt,
+			"pathFileNameExt",
 			ePrefix)
 
 	return pathDir, fileNameExt, bothAreEmpty, err
@@ -8891,6 +8893,7 @@ func (fh *FileHelper) MakeDirAll(
 
 	return new(fileHelperMechanics).makeDirAll(
 		dirPath,
+		"dirPath",
 		ePrefix)
 }
 
@@ -9251,6 +9254,7 @@ func (fh *FileHelper) MakeDirAllPerm(
 		makeDirAllPerm(
 			dirPath,
 			permission,
+			"dirPath",
 			ePrefix)
 }
 
@@ -9858,6 +9862,7 @@ func (fh *FileHelper) OpenDirectory(
 		openDirectory(
 			directoryPath,
 			createDir,
+			"directoryPath",
 			ePrefix)
 }
 
@@ -9886,14 +9891,27 @@ func (fh *FileHelper) OpenDirectory(
 //
 // # Input Parameters
 //
-//	pathFileName				string
+//	pathFileName					string
 //
 //		A string containing the path and file name of the
 //		file which will be opened. If a parent path
 //		component does NOT exist, this method will
 //		trigger an error.
 //
-//	fileOpenCfg					FileOpenConfig
+//	createDirectoryPathIfNotExist	bool
+//
+//		If the directory path element of parameter
+//		'pathFileName' does not exist on an attached
+//		storage drive, and this parameter is set to
+//		'true', this method will attempt to create
+//		the directory path.
+//
+//		If 'createDirectoryPathIfNotExist' is set to
+//		'false', and the directory path element of
+//		parameter 'pathFileName' does not exist on an
+//		attached storage drive, an error will be returned.
+//
+//	fileOpenCfg						FileOpenConfig
 //
 //		This parameter encapsulates the File Open
 //		parameters which will be used to open subject
@@ -9901,14 +9919,14 @@ func (fh *FileHelper) OpenDirectory(
 //		see the source code documentation for method
 //		FileOpenConfig.New().
 //
-//	filePermissionCfg			FilePermissionConfig
+//	filePermissionCfg				FilePermissionConfig
 //
 //		This parameter encapsulates the File Permission
 //		parameters which will be used to open the subject
 //		file. For an explanation of File Permission
 //	 	parameters, see method FilePermissionConfig.New().
 //
-//	errorPrefix					interface{}
+//	errorPrefix						interface{}
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
@@ -10001,6 +10019,7 @@ func (fh *FileHelper) OpenDirectory(
 //	 	attached to the	beginning of the error message.
 func (fh *FileHelper) OpenFile(
 	pathFileName string,
+	createDirectoryPathIfNotExist bool,
 	fileOpenCfg FileOpenConfig,
 	filePermissionCfg FilePermissionConfig,
 	errorPrefix interface{}) (
@@ -10031,6 +10050,7 @@ func (fh *FileHelper) OpenFile(
 
 	return new(fileHelperBoson).openFile(
 		pathFileName,
+		createDirectoryPathIfNotExist,
 		fileOpenCfg,
 		filePermissionCfg,
 		"pathFileName",
@@ -12510,10 +12530,144 @@ func (fh *FileHelper) SwapBasePath(
 			ePrefix)
 }
 
+// WriteStrOpenClose
+//
+// Opens or Creates a target output file, writes a single
+// string to that target output file and then closes that
+// target output file.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName					string
+//
+//		A string containing the path and file name of the
+//		target output file to which string text will be
+//		written.
+//
+//	createDirectoryPathIfNotExist	bool
+//
+//		If the directory path element of parameter
+//		'pathFileName' does not exist on an attached
+//		storage drive, and this parameter is set to
+//		'true', this method will attempt to create
+//		the directory path.
+//
+//		If 'createDirectoryPathIfNotExist' is set to
+//		'false', and the directory path element of
+//		parameter 'pathFileName' does not exist on an
+//		attached storage drive, an error will be returned.
+//
+//	truncateExistingFile			bool
+//
+//		If this parameter is set to 'true', the target
+//		output file will be opened for write operations.
+//		If the target file previously existed, it will be
+//		truncated. This means that the file's previous
+//		contents will be deleted.
+//
+//		If this parameter is set to 'false', the target
+//		file will be opened for write operations. If the
+//		target file previously existed, the new text
+//		written to the file will be appended to the
+//		end of the previous file contents.
+//
+//	textToWrite						string
+//
+//		This string holds the text that will be written
+//		to the target output file identified by input
+//		parameter 'pathFileName'.
+//
+//	errorPrefix						interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numBytesWritten					int
+//
+//		If this method completes successfully, this
+//		integer value will equal the number of bytes
+//		written the target output file identified by
+//		input parameter 'pathFileName' . It should match
+//		the number of bytes contained in the input string
+//		parameter, 'textToWrite'.
+//
+//	err								error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fh *FileHelper) WriteStrOpenClose(
-	filePathName string,
-	textToWrite string,
+	pathFileName string,
+	createDirectoryPathIfNotExist bool,
 	truncateExistingFile bool,
+	textToWrite string,
 	errorPrefix interface{}) (
 	numBytesWritten int,
 	err error) {
@@ -12540,4 +12694,77 @@ func (fh *FileHelper) WriteStrOpenClose(
 		return numBytesWritten, err
 	}
 
+	var filePermissionCfg FilePermissionConfig
+
+	filePermissionCfg,
+		err = new(FilePermissionConfig).New(
+		"--w--w--w-",
+		ePrefix.XCpy("filePermissionCfg<-"))
+
+	if err != nil {
+
+		return numBytesWritten, err
+	}
+
+	var fileOpenCfg FileOpenConfig
+
+	if truncateExistingFile {
+
+		fileOpenCfg,
+			err = new(FileOpenConfig).New(
+			ePrefix.XCpy("fileOpenCfg<-"),
+			FOpenType.TypeWriteOnly(),
+			FOpenMode.ModeCreate(),
+			FOpenMode.ModeTruncate())
+
+		if err != nil {
+			return numBytesWritten, err
+		}
+
+	} else {
+		// truncateExistingFile = 'false'
+		// This signals Append to existing file.
+
+		fileOpenCfg,
+			err = new(FileOpenConfig).New(
+			ePrefix.XCpy("fileOpenCfg<-"),
+			FOpenType.TypeWriteOnly(),
+			FOpenMode.ModeCreate(),
+			FOpenMode.ModeAppend())
+
+		if err != nil {
+			return numBytesWritten, err
+		}
+
+	}
+
+	var filePtr *os.File
+
+	defer func() {
+
+		if filePtr != nil {
+			_ = filePtr.Close()
+		}
+
+	}()
+
+	filePtr,
+		err = new(fileHelperBoson).
+		openFile(
+			pathFileName,
+			createDirectoryPathIfNotExist,
+			fileOpenCfg,
+			filePermissionCfg,
+			"pathFileName",
+			ePrefix)
+
+	if err != nil {
+
+		return numBytesWritten, err
+	}
+
+	numBytesWritten,
+		err = filePtr.WriteString(textToWrite)
+
+	return numBytesWritten, err
 }

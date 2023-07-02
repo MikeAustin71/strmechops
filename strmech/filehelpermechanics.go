@@ -2356,6 +2356,16 @@ func (fileHelpMech *fileHelperMechanics) isPathString(
 //		This string contains the name of the directory
 //		path which will be created by this method.
 //
+//	dirPathLabel				string
+//
+//		The name or label associated with input parameter
+//		'dirPath' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "dirPath" will be
+//		automatically applied.
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -2389,6 +2399,7 @@ func (fileHelpMech *fileHelperMechanics) isPathString(
 //		the error message.
 func (fileHelpMech *fileHelperMechanics) makeDirAll(
 	dirPath string,
+	dirPathLabel string,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if fileHelpMech.lock == nil {
@@ -2411,6 +2422,10 @@ func (fileHelpMech *fileHelperMechanics) makeDirAll(
 
 	if err != nil {
 		return err
+	}
+
+	if len(dirPathLabel) == 0 {
+		dirPathLabel = "dirPath"
 	}
 
 	var permission FilePermissionConfig

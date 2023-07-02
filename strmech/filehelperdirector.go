@@ -302,6 +302,16 @@ func (fHelpDirector *fileHelperDirector) copyFileByLinkByIo(
 //		as in the first parameter. The file name and file
 //		extension will be returned in a second paramter.
 //
+//	pathFileNameExtLabel		string
+//
+//		The name or label associated with input parameter
+//		'pathFileNameExt' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "pathFileNameExt" will
+//		be automatically applied.
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -352,6 +362,7 @@ func (fHelpDirector *fileHelperDirector) copyFileByLinkByIo(
 //	 	attached to the	beginning of the error message.
 func (fHelpDirector *fileHelperDirector) getPathAndFileNameExt(
 	pathFileNameExt string,
+	pathFileNameExtLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
 	pathDir string,
 	fileNameExt string,
@@ -385,6 +396,11 @@ func (fHelpDirector *fileHelperDirector) getPathAndFileNameExt(
 		return pathDir, fileNameExt, bothAreEmpty, err
 	}
 
+	if len(pathFileNameExtLabel) == 0 {
+
+		pathFileNameExtLabel = "pathFileNameExt"
+	}
+
 	trimmedFileNameExt := ""
 
 	errCode := 0
@@ -397,16 +413,18 @@ func (fHelpDirector *fileHelperDirector) getPathAndFileNameExt(
 	if errCode == -1 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'pathFileName' is an empty string!\n",
-			ePrefix.String())
+			"Error: Input parameter '%v' is an empty string!\n",
+			ePrefix.String(),
+			pathFileNameExtLabel)
 
 		return pathDir, fileNameExt, bothAreEmpty, err
 	}
 
 	if errCode == -2 {
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'pathFileName' consists of blank spaces!\n",
-			ePrefix.String())
+			"Error: Input parameter '%v' consists of blank spaces!\n",
+			ePrefix.String(),
+			pathFileNameExtLabel)
 
 		return pathDir, fileNameExt, bothAreEmpty, err
 	}
@@ -421,10 +439,12 @@ func (fHelpDirector *fileHelperDirector) getPathAndFileNameExt(
 	if err2 != nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error returned from getFileNameWithExt(pathFileNameExt).\n"+
-			"pathFileNameExt='%v'\n"+
+			"Error returned from getFileNameWithExt(%v).\n"+
+			"%v= '%v'\n"+
 			"Error=\n%v\n",
 			ePrefix.String(),
+			pathFileNameExtLabel,
+			pathFileNameExtLabel,
 			pathFileNameExt,
 			err2.Error())
 
@@ -463,9 +483,12 @@ func (fHelpDirector *fileHelperDirector) getPathAndFileNameExt(
 	if err2 != nil {
 		err = fmt.Errorf("%v\n"+
 			"Error returned from getPathFromPathFileName(remainingPathStr).\n"+
-			"remainingPathStr='%v'\n"+
+			"remainingPathStr= '%v'\n"+
+			"%v= '%v'\n"+
 			"Error=\n%v\n",
 			ePrefix.String(),
+			pathFileNameExtLabel,
+			pathFileNameExt,
 			remainingPathStr,
 			err2.Error())
 
@@ -826,6 +849,16 @@ func (fHelpDirector *fileHelperDirector) moveFile(
 //		and permission mode represented by the returned
 //		os.File pointer.
 //
+//	directoryPathLabel			string
+//
+//		The name or label associated with input parameter
+//		'directoryPath' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "directoryPath" will
+//		be automatically applied.
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -877,6 +910,7 @@ func (fHelpDirector *fileHelperDirector) moveFile(
 func (fHelpDirector *fileHelperDirector) openDirectory(
 	directoryPath string,
 	createDir bool,
+	directoryPathLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
 	*os.File,
 	error) {
@@ -891,16 +925,21 @@ func (fHelpDirector *fileHelperDirector) openDirectory(
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
+	funcName := "fileHelperDirector." +
+		"openDirectory()"
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"fileHelperDirector."+
-			"openDirectory()",
+		funcName,
 		"")
 
 	if err != nil {
 		return nil, err
+	}
+
+	if len(directoryPathLabel) == 0 {
+		directoryPathLabel = "directoryPath"
 	}
 
 	var directoryPathDoesExist bool
@@ -915,7 +954,7 @@ func (fHelpDirector *fileHelperDirector) openDirectory(
 		directoryPath,
 		PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
 		ePrefix,
-		"directoryPath")
+		directoryPathLabel)
 
 	if err != nil {
 		return nil, err
@@ -928,8 +967,9 @@ func (fHelpDirector *fileHelperDirector) openDirectory(
 			fmt.Errorf("%v\n"+
 				"ERROR: 'directoryPath' does exist, but\n"+
 				"IT IS NOT A DIRECTORY!\n"+
-				"directoryPath='%v'\n",
+				"%v= '%v'\n",
 				ePrefix.String(),
+				directoryPathLabel,
 				directoryPath)
 	}
 
@@ -948,9 +988,11 @@ func (fHelpDirector *fileHelperDirector) openDirectory(
 		if !createDir {
 			return nil,
 				fmt.Errorf("%v\n"+
-					"Error 'directoryPath' DOES NOT EXIST!\n"+
-					"directoryPath='%v'\n",
+					"Error '%v' DOES NOT EXIST!\n"+
+					"%v= '%v'\n",
 					ePrefix.String(),
+					directoryPathLabel,
+					directoryPathLabel,
 					directoryPath)
 		}
 
@@ -958,15 +1000,18 @@ func (fHelpDirector *fileHelperDirector) openDirectory(
 		// The error signaled that the path does not exist. So, create the directory path
 		err = new(fileHelperMechanics).makeDirAll(
 			directoryPath,
+			directoryPathLabel,
 			ePrefix)
 
 		if err != nil {
 			return nil,
 				fmt.Errorf("%v\n"+
-					"ERROR: Attmpted creation of 'directoryPath' FAILED!\n"+
-					"directoryPath='%v'\n"+
+					"ERROR: Attmpted creation of '%v' FAILED!\n"+
+					"%v= '%v'\n"+
 					"Error=\n%v\n",
-					ePrefix.String(),
+					funcName,
+					directoryPathLabel,
+					directoryPathLabel,
 					directoryPath,
 					err.Error())
 		}
@@ -980,17 +1025,20 @@ func (fHelpDirector *fileHelperDirector) openDirectory(
 			directoryPath,
 			PreProcPathCode.None(), // Take No Pre-Processing Action
 			ePrefix,
-			"directoryPath")
+			directoryPathLabel)
 
 		if err != nil {
 			return nil,
 				fmt.Errorf("%v\n"+
 					"Error occurred verifying existance of "+
-					"newly created 'directoryPath'!\n"+
-					"Non-Path error returned by os.Stat(directoryPath)\n"+
-					"directoryPath='%v'\n"+
+					"newly created '%v'!\n"+
+					"Non-Path error returned by os.Stat(%v)\n"+
+					"%v= '%v'\n"+
 					"Error=\n%v\n",
-					ePrefix.String(),
+					funcName,
+					directoryPathLabel,
+					directoryPathLabel,
+					directoryPathLabel,
 					directoryPath,
 					err.Error())
 		}
@@ -998,29 +1046,36 @@ func (fHelpDirector *fileHelperDirector) openDirectory(
 		if !directoryPathDoesExist {
 			return nil, fmt.Errorf("%v\n"+
 				"Error: Verification of newly created "+
-				"directoryPath FAILED!\n"+
-				"'directoryPath' DOES NOT EXIST!\n"+
-				"directoryPath='%v'\n",
+				"%v FAILED!\n"+
+				"'%v' DOES NOT EXIST!\n"+
+				"%v= '%v'\n",
 				ePrefix.String(),
+				directoryPathLabel,
+				directoryPathLabel,
+				directoryPathLabel,
 				directoryPath)
 		}
 
 		if !dirPathFInfo.IsDir() {
 			return nil,
 				fmt.Errorf("%v\n"+
-					"ERROR: Input Paramter 'directoryPath' is NOT a directory!\n"+
-					"directoryPath='%v'\n",
+					"ERROR: Input Paramter '%v' is NOT a directory!\n"+
+					"%v= '%v'\n",
 					ePrefix.String(),
+					directoryPathLabel,
+					directoryPathLabel,
 					directoryPath)
 		}
 
 		if dirPathFInfo.Mode().IsRegular() {
 			return nil,
 				fmt.Errorf("%v\n"+
-					"ERROR: 'directoryPath' does exist, but\n"+
+					"ERROR: '%v' does exist, but\n"+
 					"it is classifed as a REGULAR File!\n"+
-					"directoryPath='%v'\n",
+					"%v= '%v'\n",
 					ePrefix.String(),
+					directoryPathLabel,
+					directoryPathLabel,
 					directoryPath)
 		}
 	}
@@ -1030,18 +1085,23 @@ func (fHelpDirector *fileHelperDirector) openDirectory(
 	if err != nil {
 		return nil,
 			fmt.Errorf("%v\n"+
-				"directoryPath='%v'\n"+
-				"File Open Error: %v\n",
+				"Error returned by os.Open(%v)\n"+
+				"%v= '%v'\n"+
+				"File Open Error: \n%v\n",
 				ePrefix.String(),
+				directoryPathLabel,
+				directoryPathLabel,
 				directoryPath,
 				err.Error())
 	}
 
 	if filePtr == nil {
-		return nil, fmt.Errorf("%v\n"+
-			"ERROR: os.OpenFile() returned a 'nil' file pointer!\n",
-			ePrefix.String())
+		err = fmt.Errorf("%v\n"+
+			"ERROR: os.OpenFile(%v) returned a\n"+
+			"'nil' file pointer!\n",
+			ePrefix.String(),
+			directoryPathLabel)
 	}
 
-	return filePtr, nil
+	return filePtr, err
 }

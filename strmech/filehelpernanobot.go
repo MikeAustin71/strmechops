@@ -4213,6 +4213,16 @@ func (fHelperNanobot *fileHelperNanobot) isPathFileString(
 //				Note: drwxrwxrwx - identifies permissions for directory
 //
 //
+//	dirPathLabel				string
+//
+//		The name or label associated with input parameter
+//		'dirPath' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "dirPath" will be
+//		automatically applied.
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -4247,6 +4257,7 @@ func (fHelperNanobot *fileHelperNanobot) isPathFileString(
 func (fHelperNanobot *fileHelperNanobot) makeDirAllPerm(
 	dirPath string,
 	permission FilePermissionConfig,
+	dirPathLabel string,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if fHelperNanobot.lock == nil {
@@ -4259,16 +4270,21 @@ func (fHelperNanobot *fileHelperNanobot) makeDirAllPerm(
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
+	funcName := "fileHelperNanobot." +
+		"makeDirAllPerm()"
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"fileHelperNanobot."+
-			"makeDirAllPerm()",
+		funcName,
 		"")
 
 	if err != nil {
 		return err
+	}
+
+	if len(dirPathLabel) == 0 {
+		dirPathLabel = "dirPath"
 	}
 
 	errCode := 0
@@ -4280,15 +4296,17 @@ func (fHelperNanobot *fileHelperNanobot) makeDirAllPerm(
 
 	if errCode == -1 {
 		return fmt.Errorf("%v\n"+
-			"Error: Input parameter 'dirPath' is an empty string!\n",
-			ePrefix.String())
+			"Error: Input parameter '%v' is an empty string!\n",
+			ePrefix.String(),
+			dirPathLabel)
 	}
 
 	if errCode == -2 {
 
 		return fmt.Errorf("%v\n"+
-			"Error: Input parameter 'dirPath' consists of blank spaces!\n",
-			ePrefix.String())
+			"Error: Input parameter '%v' consists of blank spaces!\n",
+			ePrefix.String(),
+			dirPathLabel)
 	}
 
 	var err2 error
@@ -4315,9 +4333,10 @@ func (fHelperNanobot *fileHelperNanobot) makeDirAllPerm(
 
 	if err2 != nil {
 		return fmt.Errorf("%v\n"+
-			"ERROR: INVALID Permission Code\n"+
+			"ERROR: INVALID Permission Code!\n"+
+			"Error returned by permission.GetCompositePermissionMode()\n"+
 			"Error=\n%v\n",
-			ePrefix.String(),
+			funcName,
 			err2.Error())
 	}
 
@@ -4332,7 +4351,7 @@ func (fHelperNanobot *fileHelperNanobot) makeDirAllPerm(
 			"Error returned by fh.MakeAbsolutePath(dirPath).\n"+
 			"dirPath='%v'\n"+
 			"Error=\n%v\n",
-			ePrefix.String(),
+			funcName,
 			dirPath,
 			err2.Error())
 	}
@@ -4341,11 +4360,13 @@ func (fHelperNanobot *fileHelperNanobot) makeDirAllPerm(
 
 	if err2 != nil {
 		return fmt.Errorf("%v\n"+
-			"Error return from os.MkdirAll(dirPath, permission).\n"+
-			"dirPath= '%v'\n"+
+			"Error return from os.MkdirAll(%v, permission).\n"+
+			"%v= '%v'\n"+
 			"Permission Code ('dirPermCode') = '%v'\n"+
 			"Error=\n%v\n",
 			ePrefix.String(),
+			dirPathLabel,
+			dirPathLabel,
 			dirPath,
 			dirPermCode,
 			err2.Error())
@@ -4360,21 +4381,32 @@ func (fHelperNanobot *fileHelperNanobot) makeDirAllPerm(
 		dirPath,
 		PreProcPathCode.None(), // Take no Pre-Processing Action
 		ePrefix,
-		"dirPath")
+		dirPathLabel)
 
 	if err2 != nil {
-		return err2
+
+		err = fmt.Errorf("%v\n"+
+			"After creating the %v directory, an error\n"+
+			"was returned by fileHelperMolecule.doesPathFileExist()\n"+
+			"Error=\n%v\n",
+			funcName,
+			dirPathLabel,
+			err2.Error())
+
+		return err
 	}
 
 	if !pathDoesExist {
-		return fmt.Errorf("%v\n"+
+
+		err = fmt.Errorf("%v\n"+
 			"Error: Directory creation FAILED!. New Directory Path DOES NOT EXIST!\n"+
-			"dirPath='%v'\n",
+			"%v='%v'\n",
 			ePrefix.String(),
+			dirPathLabel,
 			dirPath)
 	}
 
-	return nil
+	return err
 }
 
 // openFileReadOnly
