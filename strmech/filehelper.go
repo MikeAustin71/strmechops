@@ -10029,10 +10029,11 @@ func (fh *FileHelper) OpenFile(
 		return filePtr, err
 	}
 
-	return new(fileHelperMechanics).openFile(
+	return new(fileHelperBoson).openFile(
 		pathFileName,
 		fileOpenCfg,
 		filePermissionCfg,
+		"pathFileName",
 		ePrefix)
 }
 
@@ -12507,4 +12508,36 @@ func (fh *FileHelper) SwapBasePath(
 			newBasePath,
 			targetPath,
 			ePrefix)
+}
+
+func (fh *FileHelper) WriteStrOpenClose(
+	filePathName string,
+	textToWrite string,
+	truncateExistingFile bool,
+	errorPrefix interface{}) (
+	numBytesWritten int,
+	err error) {
+
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	funcName := "FileHelper.WriteStrOpenClose() "
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return numBytesWritten, err
+	}
+
 }

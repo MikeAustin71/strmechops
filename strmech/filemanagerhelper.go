@@ -2542,8 +2542,7 @@ func (fMgrHlpr *fileMgrHelper) writeFileSetup(
 			"Error: fMgr.fileBufWriter == nil\n",
 			ePrefix.String())
 
-		return err
 	}
 
-	return nil
+	return err
 }
