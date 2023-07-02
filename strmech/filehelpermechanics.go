@@ -2446,6 +2446,7 @@ func (fileHelpMech *fileHelperMechanics) makeDirAll(
 	err = new(fileHelperNanobot).makeDirAllPerm(
 		dirPath,
 		permission,
+		dirPathLabel,
 		ePrefix)
 
 	if err != nil {
