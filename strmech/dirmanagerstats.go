@@ -442,11 +442,6 @@ type DirectoryProfile struct {
 	// The number of subdirectories residing
 	// within the subject directory. This
 
-	DirSubDirectoriesBytes uint64
-	// The total size of all Subdirectory entries
-	// residing in the subject directory expressed
-	// in bytes.
-
 	SubDirsIncludeCurrentDirOneDot bool
 	// All directories include an os.FileInfo entry for
 	// the current directory. The current directory name
@@ -548,9 +543,6 @@ func (dirProfile *DirectoryProfile) AddDirProfileStats(
 
 	dirProfile.DirSubDirectories +=
 		incomingDirProfile.DirSubDirectories
-
-	dirProfile.DirSubDirectoriesBytes +=
-		incomingDirProfile.DirSubDirectoriesBytes
 
 	dirProfile.DirRegularFiles +=
 		incomingDirProfile.DirRegularFiles
@@ -1088,32 +1080,6 @@ func (dirProfile *DirectoryProfile) GetTextListing(
 		GetFmtIntSeparatedNumStr(
 			fmt.Sprintf("%v",
 				dirProfile.DirSubDirectories),
-			ePrefix.XCpy(txtStrLabel))
-
-	if err != nil {
-		return err
-	}
-
-	txtStrParam = delimitedNumStr
-
-	err = txtFormatCol.AddLine2Col(
-		txtStrLabel,
-		txtStrParam,
-		ePrefix.XCpy(txtStrLabel))
-
-	if err != nil {
-		return err
-	}
-
-	// DirSubDirectoriesBytes
-
-	txtStrLabel = "DirSubDirectoriesBytes"
-
-	delimitedNumStr,
-		err = intSep.
-		GetFmtIntSeparatedNumStr(
-			fmt.Sprintf("%v",
-				dirProfile.DirSubDirectoriesBytes),
 			ePrefix.XCpy(txtStrLabel))
 
 	if err != nil {

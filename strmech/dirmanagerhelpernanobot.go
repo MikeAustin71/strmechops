@@ -1436,7 +1436,7 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 //				directory described by this profile
 //				information.
 //
-//			ParentDirManager					DirMgr
+//			ParentDirManager				DirMgr
 //				An instance of DirMgr encapsulating the
 //				Directory Path and associated parameters
 //				for the directory described by this profile
@@ -1447,37 +1447,32 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 //				that the directory actually exists on
 //				a storage drive.
 //
-//			ParentDirIsIncludedInStats bool
+//			ParentDirIsIncludedInStats		bool
 //				If this parameter is set to 'true', it
 //				signals that the directory statistics and
 //				information provided by this instance of
 //				DirectoryProfile includes metrics from
 //				the parent directory.
 //
-//			DirTotalFiles				uint64
+//			DirTotalFiles					uint64
 //				The number of total files, of all types,
 //				residing in the subject directory. This
 //				includes directory entry files, Regular
 //				Files, SymLink Files and Non-Regular
 //				Files.
 //
-//			DirTotalFileBytes			uint64
+//			DirTotalFileBytes				uint64
 //				The size of all files, of all types,
 //				residing in the subject directory
 //				expressed in bytes. This includes
 //				directory entry files, Regular Files,
 //				SymLink Files and Non-Regular Files.
 //
-//			DirSubDirectories			uint64
+//			DirSubDirectories				uint64
 //				The number of subdirectories residing
 //				within the subject directory. This
 //
-//			DirSubDirectoriesBytes		uint64
-//				The total size of all Subdirectory entries
-//				residing in the subject directory expressed
-//				in bytes.
-//
-//			SubDirsIncludeCurrentDirOneDot bool
+//			SubDirsIncludeCurrentDirOneDot	bool
 //				All directories include an os.FileInfo entry for
 //				the current directory. The current directory name
 //				is always denoted as single dot ('.').
@@ -1487,7 +1482,7 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 //				will be included in the directory profile information
 //				and counted as a separate subdirectory.
 //
-//			SubDirsIncludeParentDirTwoDot bool
+//			SubDirsIncludeParentDirTwoDot	bool
 //				All directories include an os.FileInfo entry for
 //				the parent directory. The parent directory name
 //				is always denoted as two dots ('..').
@@ -1529,9 +1524,9 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) copyDirectoryTree(
 //				The total size of all Non-Regular files residing
 //				in the subject directory expressed in bytes.
 //
-//			Errors						error
-//				Computational or processing errors will be
-//				recorded through this parameter.
+//			Errors						[]error
+//				An array of errors associated with the
+//				calculation of these statistics.
 //		}
 //
 //	nonfatalErrs				[]error

@@ -2469,82 +2469,105 @@ func (dMgr *DirMgr) DeleteAll(
 //
 //		Returns an instance of DirectoryProfile
 //		containing statistics and information on the
-//		target directory ('') after completion of the
-//		file deletion operation.
+//		target directory after completion of the file
+//		deletion operation.
 //
 //		type DirectoryProfile struct {
-//			ParentDirAbsolutePath string
+//
+//			ParentDirAbsolutePath 			string
 //				The absolute directory path for the
 //				directory described by this profile
 //				information.
 //
-//			ParentDirManager DirMgr
+//			ParentDirManager				DirMgr
 //				An instance of DirMgr encapsulating the
 //				Directory Path and associated parameters
 //				for the directory described by this profile
 //				information.
 //
-//			ParentDirExistsOnStorageDrive bool
+//			ParentDirExistsOnStorageDrive 	bool
 //				If 'true', this paramter signals
 //				that the directory actually exists on
 //				a storage drive.
 //
-//			DirTotalFiles uint64
-//				The number of total files residing in
-//				the subject directory. This includes
-//				Regular Files, SymLink Files and
-//				Non-Regular Files. It does NOT include
-//				directory entry files.
+//			ParentDirIsIncludedInStats		bool
+//				If this parameter is set to 'true', it
+//				signals that the directory statistics and
+//				information provided by this instance of
+//				DirectoryProfile includes metrics from
+//				the parent directory.
 //
-//			DirTotalFileBytes uint64
-//				The size of all files residing in the
-//				subject directory expressed in bytes.
-//				This includes Regular Files, SymLink
-//				Files and Non-Regular Files. It does
-//				NOT include directory entry files.
+//			DirTotalFiles					uint64
+//				The number of total files, of all types,
+//				residing in the subject directory. This
+//				includes directory entry files, Regular
+//				Files, SymLink Files and Non-Regular
+//				Files.
 //
-//			DirSubDirectories uint64
+//			DirTotalFileBytes				uint64
+//				The size of all files, of all types,
+//				residing in the subject directory
+//				expressed in bytes. This includes
+//				directory entry files, Regular Files,
+//				SymLink Files and Non-Regular Files.
+//
+//			DirSubDirectories				uint64
 //				The number of subdirectories residing
 //				within the subject directory. This
 //
-//			DirSubDirectoriesBytes uint64
-//				The total size of all Subdirectory entries
-//				residing in the subject directory expressed
-//				in bytes.
+//			SubDirsIncludeCurrentDirOneDot	bool
+//				All directories include an os.FileInfo entry for
+//				the current directory. The current directory name
+//				is always denoted as single dot ('.').
 //
-//			DirRegularFiles uint64
+//				When data element, 'SubDirsIncludeCurrentDirOneDot',
+//				is set to 'true', the one dot current directory ('.')
+//				will be included in the directory profile information
+//				and counted as a separate subdirectory.
+//
+//			SubDirsIncludeParentDirTwoDot	bool
+//				All directories include an os.FileInfo entry for
+//				the parent directory. The parent directory name
+//				is always denoted as two dots ('..').
+//
+//				When data element, 'SubDirsIncludeParentDirTwoDot',
+//				is set to 'true', the two dot ('..') parent directory,
+//				will be included in the directory profile information
+//				and counted as a separate subdirectory.
+//
+//			DirRegularFiles				uint64
 //				The number of 'Regular' Files residing
 //				within the subject Directory. Regular
 //				files include text files, image files
 //				and executable files. Reference:
 //				https://www.computerhope.com/jargon/r/regular-file.htm
 //
-//			DirRegularFileBytes uint64
+//			DirRegularFileBytes			uint64
 //				The total size of all 'Regular' files
 //				residing in the subject directory expressed
 //				in bytes.
 //
-//			DirSymLinkFiles uint64
+//			DirSymLinkFiles				uint64
 //				The number of SymLink files residing in the
 //				subject directory.
 //
-//			DirSymLinkFileBytes uint64
+//			DirSymLinkFileBytes			uint64
 //				The total size of all SymLink files
 //				residing in the subject directory
 //				expressed in bytes.
 //
-//			DirNonRegularFiles uint64
+//			DirNonRegularFiles			uint64
 //				The total number of Non-Regular files residing
 //				in the subject directory.
 //
 //				Non-Regular files include directories, device
 //				files, named pipes, sockets, and symbolic links.
 //
-//			DirNonRegularFileBytes uint64
+//			DirNonRegularFileBytes		uint64
 //				The total size of all Non-Regular files residing
 //				in the subject directory expressed in bytes.
 //
-//			Errors []error
+//			Errors						[]error
 //				An array of errors associated with the
 //				calculation of these statistics.
 //		}
@@ -7900,53 +7923,48 @@ func (dMgr *DirMgr) FindWalkSubDirFiles(
 //
 //		type DirectoryProfile struct {
 //
-//			ParentDirAbsolutePath string
+//			ParentDirAbsolutePath 			string
 //				The absolute directory path for the
 //				directory described by this profile
 //				information.
 //
-//			ParentDirManager DirMgr
+//			ParentDirManager				DirMgr
 //				An instance of DirMgr encapsulating the
 //				Directory Path and associated parameters
 //				for the directory described by this profile
 //				information.
 //
-//			ParentDirIsIncludedInStats bool
+//			ParentDirExistsOnStorageDrive 	bool
+//				If 'true', this paramter signals
+//				that the directory actually exists on
+//				a storage drive.
+//
+//			ParentDirIsIncludedInStats		bool
 //				If this parameter is set to 'true', it
 //				signals that the directory statistics and
 //				information provided by this instance of
 //				DirectoryProfile includes metrics from
 //				the parent directory.
 //
-//			ParentDirExistsOnStorageDrive bool
-//				If 'true', this paramter signals
-//				that the directory actually exists on
-//				a storage drive.
-//
-//			DirTotalFiles uint64
+//			DirTotalFiles					uint64
 //				The number of total files, of all types,
 //				residing in the subject directory. This
 //				includes directory entry files, Regular
 //				Files, SymLink Files and Non-Regular
 //				Files.
 //
-//			DirTotalFileBytes uint64
+//			DirTotalFileBytes				uint64
 //				The size of all files, of all types,
 //				residing in the subject directory
 //				expressed in bytes. This includes
 //				directory entry files, Regular Files,
 //				SymLink Files and Non-Regular Files.
 //
-//			DirSubDirectories uint64
+//			DirSubDirectories				uint64
 //				The number of subdirectories residing
 //				within the subject directory. This
 //
-//			DirSubDirectoriesBytes uint64
-//				The total size of all Subdirectory entries
-//				residing in the subject directory expressed
-//				in bytes.
-//
-//			SubDirsIncludeCurrentDirOneDot bool
+//			SubDirsIncludeCurrentDirOneDot	bool
 //				All directories include an os.FileInfo entry for
 //				the current directory. The current directory name
 //				is always denoted as single dot ('.').
@@ -7956,7 +7974,7 @@ func (dMgr *DirMgr) FindWalkSubDirFiles(
 //				will be included in the directory profile information
 //				and counted as a separate subdirectory.
 //
-//			SubDirsIncludeParentDirTwoDot bool
+//			SubDirsIncludeParentDirTwoDot	bool
 //				All directories include an os.FileInfo entry for
 //				the parent directory. The parent directory name
 //				is always denoted as two dots ('..').
@@ -7966,41 +7984,41 @@ func (dMgr *DirMgr) FindWalkSubDirFiles(
 //				will be included in the directory profile information
 //				and counted as a separate subdirectory.
 //
-//			DirRegularFiles uint64
+//			DirRegularFiles				uint64
 //				The number of 'Regular' Files residing
 //				within the subject Directory. Regular
 //				files include text files, image files
 //				and executable files. Reference:
 //				https://www.computerhope.com/jargon/r/regular-file.htm
 //
-//			DirRegularFileBytes uint64
+//			DirRegularFileBytes			uint64
 //				The total size of all 'Regular' files
 //				residing in the subject directory expressed
 //				in bytes.
 //
-//			DirSymLinkFiles uint64
+//			DirSymLinkFiles				uint64
 //				The number of SymLink files residing in the
 //				subject directory.
 //
-//			DirSymLinkFileBytes uint64
+//			DirSymLinkFileBytes			uint64
 //				The total size of all SymLink files
 //				residing in the subject directory
 //				expressed in bytes.
 //
-//			DirNonRegularFiles uint64
+//			DirNonRegularFiles			uint64
 //				The total number of Non-Regular files residing
 //				in the subject directory.
 //
 //				Non-Regular files include directories, device
 //				files, named pipes, sockets, and symbolic links.
 //
-//			DirNonRegularFileBytes uint64
+//			DirNonRegularFileBytes		uint64
 //				The total size of all Non-Regular files residing
 //				in the subject directory expressed in bytes.
 //
-//			Errors error
-//				Computational or processing errors will be
-//				recorded through this parameter.
+//			Errors						[]error
+//				An array of errors associated with the
+//				calculation of these statistics.
 //		}
 //
 //	err							error
@@ -12646,78 +12664,101 @@ func (dMgr *DirMgr) MakeDir(
 //		move operation, will be documented here.
 //
 //		type DirectoryProfile struct {
-//			ParentDirAbsolutePath string
+//
+//			ParentDirAbsolutePath 			string
 //				The absolute directory path for the
 //				directory described by this profile
 //				information.
 //
-//			ParentDirManager DirMgr
+//			ParentDirManager				DirMgr
 //				An instance of DirMgr encapsulating the
 //				Directory Path and associated parameters
 //				for the directory described by this profile
 //				information.
 //
-//			ParentDirExistsOnStorageDrive bool
+//			ParentDirExistsOnStorageDrive 	bool
 //				If 'true', this paramter signals
 //				that the directory actually exists on
 //				a storage drive.
 //
-//			DirTotalFiles uint64
-//				The number of total files residing in
-//				the subject directory. This includes
-//				Regular Files, SymLink Files and
-//				Non-Regular Files. It does NOT include
-//				directory entry files.
+//			ParentDirIsIncludedInStats		bool
+//				If this parameter is set to 'true', it
+//				signals that the directory statistics and
+//				information provided by this instance of
+//				DirectoryProfile includes metrics from
+//				the parent directory.
 //
-//			DirTotalFileBytes uint64
-//				The size of all files residing in the
-//				subject directory expressed in bytes.
-//				This includes Regular Files, SymLink
-//				Files and Non-Regular Files. It does
-//				NOT include directory entry files.
+//			DirTotalFiles					uint64
+//				The number of total files, of all types,
+//				residing in the subject directory. This
+//				includes directory entry files, Regular
+//				Files, SymLink Files and Non-Regular
+//				Files.
 //
-//			DirSubDirectories uint64
+//			DirTotalFileBytes				uint64
+//				The size of all files, of all types,
+//				residing in the subject directory
+//				expressed in bytes. This includes
+//				directory entry files, Regular Files,
+//				SymLink Files and Non-Regular Files.
+//
+//			DirSubDirectories				uint64
 //				The number of subdirectories residing
 //				within the subject directory. This
 //
-//			DirSubDirectoriesBytes uint64
-//				The total size of all Subdirectory entries
-//				residing in the subject directory expressed
-//				in bytes.
+//			SubDirsIncludeCurrentDirOneDot	bool
+//				All directories include an os.FileInfo entry for
+//				the current directory. The current directory name
+//				is always denoted as single dot ('.').
 //
-//			DirRegularFiles uint64
+//				When data element, 'SubDirsIncludeCurrentDirOneDot',
+//				is set to 'true', the one dot current directory ('.')
+//				will be included in the directory profile information
+//				and counted as a separate subdirectory.
+//
+//			SubDirsIncludeParentDirTwoDot	bool
+//				All directories include an os.FileInfo entry for
+//				the parent directory. The parent directory name
+//				is always denoted as two dots ('..').
+//
+//				When data element, 'SubDirsIncludeParentDirTwoDot',
+//				is set to 'true', the two dot ('..') parent directory,
+//				will be included in the directory profile information
+//				and counted as a separate subdirectory.
+//
+//			DirRegularFiles				uint64
 //				The number of 'Regular' Files residing
 //				within the subject Directory. Regular
 //				files include text files, image files
 //				and executable files. Reference:
 //				https://www.computerhope.com/jargon/r/regular-file.htm
 //
-//			DirRegularFileBytes uint64
+//			DirRegularFileBytes			uint64
 //				The total size of all 'Regular' files
 //				residing in the subject directory expressed
 //				in bytes.
 //
-//			DirSymLinkFiles uint64
+//			DirSymLinkFiles				uint64
 //				The number of SymLink files residing in the
 //				subject directory.
 //
-//			DirSymLinkFileBytes uint64
+//			DirSymLinkFileBytes			uint64
 //				The total size of all SymLink files
 //				residing in the subject directory
 //				expressed in bytes.
 //
-//			DirNonRegularFiles uint64
+//			DirNonRegularFiles			uint64
 //				The total number of Non-Regular files residing
 //				in the subject directory.
 //
 //				Non-Regular files include directories, device
 //				files, named pipes, sockets, and symbolic links.
 //
-//			DirNonRegularFileBytes uint64
+//			DirNonRegularFileBytes		uint64
 //				The total size of all Non-Regular files residing
 //				in the subject directory expressed in bytes.
 //
-//			Errors []error
+//			Errors						[]error
 //				An array of errors associated with the
 //				calculation of these statistics.
 //		}

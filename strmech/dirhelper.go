@@ -782,60 +782,43 @@ func (dHlpr *DirHelper) GetCurrentDir(
 //				directory described by this profile
 //				information.
 //
-//			ParentDirManager					DirMgr
+//			ParentDirManager				DirMgr
 //				An instance of DirMgr encapsulating the
 //				Directory Path and associated parameters
 //				for the directory described by this profile
 //				information.
-//
-//			IsDirectoryTreeStats bool
-//				If this parameter is set to 'true', it
-//				signals that the metrics included in this
-//				instance of DirectoryProfile are compiled
-//				for a directory tree, and not an individual
-//				directory.
-//
-//				Conversely, if this parameter is set to
-//				'false', it signals that these directory
-//				metrics describe a single directory and
-//				not a directory tree.
 //
 //			ParentDirExistsOnStorageDrive 	bool
 //				If 'true', this paramter signals
 //				that the directory actually exists on
 //				a storage drive.
 //
-//			ParentDirIsIncludedInStats bool
+//			ParentDirIsIncludedInStats		bool
 //				If this parameter is set to 'true', it
 //				signals that the directory statistics and
 //				information provided by this instance of
 //				DirectoryProfile includes metrics from
 //				the parent directory.
 //
-//			DirTotalFiles				uint64
+//			DirTotalFiles					uint64
 //				The number of total files, of all types,
 //				residing in the subject directory. This
 //				includes directory entry files, Regular
 //				Files, SymLink Files and Non-Regular
 //				Files.
 //
-//			DirTotalFileBytes			uint64
+//			DirTotalFileBytes				uint64
 //				The size of all files, of all types,
 //				residing in the subject directory
 //				expressed in bytes. This includes
 //				directory entry files, Regular Files,
 //				SymLink Files and Non-Regular Files.
 //
-//			DirSubDirectories			uint64
+//			DirSubDirectories				uint64
 //				The number of subdirectories residing
 //				within the subject directory. This
 //
-//			DirSubDirectoriesBytes		uint64
-//				The total size of all Subdirectory entries
-//				residing in the subject directory expressed
-//				in bytes.
-//
-//			SubDirsIncludeCurrentDirOneDot bool
+//			SubDirsIncludeCurrentDirOneDot	bool
 //				All directories include an os.FileInfo entry for
 //				the current directory. The current directory name
 //				is always denoted as single dot ('.').
@@ -845,7 +828,7 @@ func (dHlpr *DirHelper) GetCurrentDir(
 //				will be included in the directory profile information
 //				and counted as a separate subdirectory.
 //
-//			SubDirsIncludeParentDirTwoDot bool
+//			SubDirsIncludeParentDirTwoDot	bool
 //				All directories include an os.FileInfo entry for
 //				the parent directory. The parent directory name
 //				is always denoted as two dots ('..').
@@ -887,9 +870,9 @@ func (dHlpr *DirHelper) GetCurrentDir(
 //				The total size of all Non-Regular files residing
 //				in the subject directory expressed in bytes.
 //
-//			Errors						error
-//				Computational or processing errors will be
-//				recorded through this parameter.
+//			Errors						[]error
+//				An array of errors associated with the
+//				calculation of these statistics.
 //		}
 //
 //	err							error
@@ -1317,7 +1300,7 @@ func (dHlpr *DirHelper) GetDirectoryProfile(
 //				directory described by this profile
 //				information.
 //
-//			ParentDirManager					DirMgr
+//			ParentDirManager				DirMgr
 //				An instance of DirMgr encapsulating the
 //				Directory Path and associated parameters
 //				for the directory described by this profile
@@ -1328,37 +1311,32 @@ func (dHlpr *DirHelper) GetDirectoryProfile(
 //				that the directory actually exists on
 //				a storage drive.
 //
-//			ParentDirIsIncludedInStats bool
+//			ParentDirIsIncludedInStats		bool
 //				If this parameter is set to 'true', it
 //				signals that the directory statistics and
 //				information provided by this instance of
 //				DirectoryProfile includes metrics from
 //				the parent directory.
 //
-//			DirTotalFiles				uint64
+//			DirTotalFiles					uint64
 //				The number of total files, of all types,
 //				residing in the subject directory. This
 //				includes directory entry files, Regular
 //				Files, SymLink Files and Non-Regular
 //				Files.
 //
-//			DirTotalFileBytes			uint64
+//			DirTotalFileBytes				uint64
 //				The size of all files, of all types,
 //				residing in the subject directory
 //				expressed in bytes. This includes
 //				directory entry files, Regular Files,
 //				SymLink Files and Non-Regular Files.
 //
-//			DirSubDirectories			uint64
+//			DirSubDirectories				uint64
 //				The number of subdirectories residing
 //				within the subject directory. This
 //
-//			DirSubDirectoriesBytes		uint64
-//				The total size of all Subdirectory entries
-//				residing in the subject directory expressed
-//				in bytes.
-//
-//			SubDirsIncludeCurrentDirOneDot bool
+//			SubDirsIncludeCurrentDirOneDot	bool
 //				All directories include an os.FileInfo entry for
 //				the current directory. The current directory name
 //				is always denoted as single dot ('.').
@@ -1368,7 +1346,7 @@ func (dHlpr *DirHelper) GetDirectoryProfile(
 //				will be included in the directory profile information
 //				and counted as a separate subdirectory.
 //
-//			SubDirsIncludeParentDirTwoDot bool
+//			SubDirsIncludeParentDirTwoDot	bool
 //				All directories include an os.FileInfo entry for
 //				the parent directory. The parent directory name
 //				is always denoted as two dots ('..').
@@ -1410,9 +1388,9 @@ func (dHlpr *DirHelper) GetDirectoryProfile(
 //				The total size of all Non-Regular files residing
 //				in the subject directory expressed in bytes.
 //
-//			Errors						error
-//				Computational or processing errors will be
-//				recorded through this parameter.
+//			Errors						[]error
+//				An array of errors associated with the
+//				calculation of these statistics.
 //		}
 //
 //	err							error
