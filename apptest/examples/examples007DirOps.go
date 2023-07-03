@@ -249,6 +249,14 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirProfile01() {
 		osPathSepStr,
 		-1)
 
+	targetOutputFile := "..\\apptest\\examples\\mike.txt"
+
+	targetOutputFile = strings.Replace(
+		targetOutputFile,
+		"\\",
+		osPathSepStr,
+		-1)
+
 	var err error
 	var dirProfile strmech.DirectoryProfile
 	var directoryPathDoesExist bool
@@ -291,6 +299,26 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirProfile01() {
 	}
 
 	fmt.Println(strBuilder.String())
+
+	var numOfBytesWritten int
+
+	numOfBytesWritten,
+		err = new(strmech.FileHelper).
+		WriteStrOpenClose(
+			targetOutputFile,
+			true,
+			true,
+			strBuilder.String(),
+			ePrefix.XCpy("targetOutputFile<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("\n\nNumber of Bytes Written: %v\n",
+		numOfBytesWritten)
 
 	fmt.Printf(breakStr + "\n")
 

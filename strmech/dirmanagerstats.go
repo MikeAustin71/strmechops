@@ -888,7 +888,7 @@ func (dirProfile *DirectoryProfile) GetTextListing(
 		}
 	}
 
-	titleMarquee.NumTrailingBlankLines = 1
+	titleMarquee.NumTrailingBlankLines = 0
 
 	err = txtFormatCol.AddTextTitleMarqueeDto(
 		titleMarquee,
@@ -897,6 +897,60 @@ func (dirProfile *DirectoryProfile) GetTextListing(
 	if err != nil {
 		return err
 	}
+
+	effectiveLineLen := maxLineLength - lenLeftMar - lenRightMar - 1
+
+	txtFormatCol.AddFieldLabel(
+		leftMargin,
+		"Parent Directory",
+		effectiveLineLen,
+		TxtJustify.Center(),
+		rightMargin,
+		"\n\n",
+		maxLineLength,
+		false,
+		"")
+
+	lenTxtParam := len(dirProfile.ParentDirAbsolutePath)
+
+	if lenTxtParam > effectiveLineLen {
+
+		txtFormatCol.AddFieldLabel(
+			leftMargin,
+			dirProfile.ParentDirAbsolutePath,
+			-1,
+			TxtJustify.Left(),
+			rightMargin,
+			"\n",
+			maxLineLength,
+			true,
+			leftMargin)
+
+	} else {
+
+		txtFormatCol.AddFieldLabel(
+			leftMargin,
+			dirProfile.ParentDirAbsolutePath,
+			-1,
+			TxtJustify.Center(),
+			rightMargin,
+			"\n",
+			maxLineLength,
+			false,
+			"")
+
+	}
+
+	txtFormatCol.AddLineSolid(
+		leftMargin,
+		string(solidLineChar),
+		effectiveLineLen,
+		rightMargin,
+		true,
+		"\n",
+		maxLineLength,
+		false,
+		"")
 
 	err = txtFormatCol.
 		SetStdFormatParamsLine2Col(
@@ -918,34 +972,11 @@ func (dirProfile *DirectoryProfile) GetTextListing(
 		return err
 	}
 
-	txtStrLabel := "Parent Directory"
-	txtStrParam := dirProfile.ParentDirAbsolutePath
-
-	err = txtFormatCol.AddLine2Col(
-		txtStrLabel,
-		txtStrParam,
-		ePrefix.XCpy(txtStrLabel))
-
-	if err != nil {
-		return err
-	}
+	var txtStrLabel, txtStrParam string
 
 	txtStrLabel = "ParentDirIsIncludedInStats"
 	txtStrParam = fmt.Sprintf("%v",
 		dirProfile.ParentDirIsIncludedInStats)
-
-	err = txtFormatCol.AddLine2Col(
-		txtStrLabel,
-		txtStrParam,
-		ePrefix.XCpy(txtStrLabel))
-
-	if err != nil {
-		return err
-	}
-
-	txtStrLabel = "IsDirectoryTreeStats"
-	txtStrParam = fmt.Sprintf("%v",
-		dirProfile.IsDirectoryTreeStats)
 
 	err = txtFormatCol.AddLine2Col(
 		txtStrLabel,
