@@ -5532,10 +5532,10 @@ func (fh *FileHelper) GetAbsPathFromFilePath(
 //
 // This wrapper function calls os.Getwd().
 //
-// Getwd returns a rooted path name corresponding to the
+// Getwd() returns a rooted path name corresponding to the
 // current directory. If the current directory can be
 // reached via multiple paths (due to symbolic links),
-// Getwd may return any one of them.
+// Getwd() may return any one of them.
 //
 // In this context the returned current directory is
 // the current working directory.
@@ -5545,6 +5545,7 @@ func (fh *FileHelper) GetAbsPathFromFilePath(
 // # Reference:
 //
 //	https://pkg.go.dev/os#Getwd
+//	https://en.wikipedia.org/wiki/Working_directory
 //
 // ----------------------------------------------------------------
 //

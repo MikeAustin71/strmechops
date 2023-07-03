@@ -10,6 +10,442 @@ type DirHelper struct {
 	lock *sync.Mutex
 }
 
+// GetAbsolutePath
+//
+// Receives a relative path string and returns an
+// absolute path string.
+//
+// This method returns an instance of ValidPathStrDto
+// which contains a number of public methods designed
+// to provide information on the directory path. The
+// absolute path string can be acquired by calling
+// ValidPathStrDto.GetAbsPath().
+//
+// ----------------------------------------------------------------
+//
+// # Definition of Terms
+//
+//	An absolute, or full path, points to the same
+//	location in a file system, regardless of the current
+//	working directory. To do that, it must include the
+//	root directory.
+//
+//	By contrast, a relative path starts from some given
+//	working directory, avoiding the need to provide the
+//	full absolute path. A filename can be considered as
+//	a relative path based at the current working
+//	directory.
+//
+//	https://en.wikipedia.org/wiki/Path_(computing)#Absolute_and_relative_paths
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	directoryPath				string
+//
+//		This string holds the directory path for which
+//		path information, including the absolute
+//		directory will be returned by an instance of
+//		ValidPathStrDto.
+//
+//		Typically, 'directoryPath' is submitted as a
+//		'relative' directory path. However, absolute
+//		directory paths are also valid and acceptable.
+//
+//		For an explanation of 'absolute' and 'relative'
+//		directory paths, see the section on 'Definition
+//		of Terms', above.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	validPathDto				ValidPathStrDto
+//
+//		If this method completes successfully, an
+//		instance of ValidPathStrDto containing the
+//		absolute directory path generated from input
+//		parameter 'directoryPath'.
+//
+//		To acquire a string containing the absolute path,
+//		call method ValidPathStrDto.GetAbsPath().
+//
+//		Type ValidPathStrDto is typically used to store
+//		and transfer file/path string attributes and
+//		associated errors. While the structure data
+//		elements are private, this type provides public
+//		methods for returning these data elements.
+//
+//		type ValidPathStrDto struct {
+//
+//			isInitialized bool
+//				Signals whether the current ValidPathStrDto
+//				instance has been properly initialized.
+//
+//			originalPathStr string
+//				The original, unformatted path string.
+//
+//			pathStr string
+//				The current path string which may or may not
+//				be the absolute path.
+//
+//			pathFInfoPlus FileInfoPlus
+//				Only populated if the absolute path (absValidPath)
+//				exists on an attached storage drive.
+//
+//			pathDoesExist PathExistsStatusCode
+//
+//				Describes the status of 'pathStr'.
+//
+//				PathExistsStatus Code is an enumeration.
+//				Valid values are shown as follows:
+//
+//				PathExistsStatus.Unknown()		= -1
+//
+//				   -1 -	Status undetermined. File/path
+//						existence has not been tested.
+//
+//				PathExistsStatus.DoesNotExist()	= 0
+//
+//					0 -	Tests show the file/path doesn't exist
+//						on an attached storage drive.
+//
+//				PathExistsStatus.Exists() 		= 1
+//
+//					1 -	Tests show the file/path does exist
+//						on an attached storage drive.
+//
+//			pathStrLength int
+//
+//				Length of the directory path string
+//				('pathStr').
+//
+//			absPathStr string
+//
+//				The absolute directory path version of 'pathStr'.
+//
+//			absPathFInfoPlus FileInfoPlus
+//
+//				Only populated if the absolute path exists on
+//				an attached storage drive.
+//
+//			absPathDoesExist PathExistsStatusCode
+//
+//				Describes the status of the absolute
+//				directory path ('absPathStr').
+//
+//				PathExistsStatus Code is an enumeration.
+//				Valid values are shown as follows:
+//
+//				PathExistsStatus.Unknown()		= -1
+//
+//				   -1 -	Status undetermined. File/path
+//						existence has not been tested.
+//
+//				PathExistsStatus.DoesNotExist()	= 0
+//
+//					0 -	Tests show the file/path doesn't exist
+//						on an attached storage drive.
+//
+//				PathExistsStatus.Exists() 		= 1
+//
+//					1 -	Tests show the file/path does exist
+//						on an attached storage drive.
+//
+//			absPathStrLength int
+//
+//				Length of the absolute path string
+//				('absPathStr').
+//
+//			pathType PathFileTypeCode
+//
+//				Describes the path type. Path File, Path
+//				Directory, File, Volume or Indeterminate.
+//
+//				Type PathFileTypeCode is an enumeration
+//				which will be set to one of the following
+//				valid values.
+//
+//				PathFileTypeCode.None()
+//				PathFileTypeCode.Path()
+//				PathFileTypeCode.File()
+//				PathFileTypeCode.Volume()
+//				PathFileTypeCode.Indeterminate()
+//
+//			pathIsValid PathValidityStatusCode
+//
+//				Describes the status of the
+//				path.
+//
+//				Type PathValidityStatusCode is an
+//				enumeration. Valid values are shown
+//				as follows:
+//
+//					PathValidStatus.Unknown()
+//					PathValidStatus.Invalid()
+//					PathValidStatus.Valid()
+//
+//			pathVolumeName string
+//
+//				Volume name associated with current path.
+//
+//			pathVolumeIndex int
+//
+//				Index of the starting character of Volume
+//				Name in the path string.
+//
+//			pathVolumeStrLength int
+//
+//				Length of the Volume name in the path string.
+//
+//			err error
+//
+//				If no error is encountered this value is 'nil'.
+//		}
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (dHlpr *DirHelper) GetAbsolutePath(
+	directoryPath string,
+	errorPrefix interface{}) (
+	validPathDto ValidPathStrDto,
+	err error) {
+
+	if dHlpr.lock == nil {
+		dHlpr.lock = new(sync.Mutex)
+	}
+
+	dHlpr.lock.Lock()
+
+	defer dHlpr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirHelper."+
+			"GetAbsolutePath()",
+		"")
+
+	if err != nil {
+		return validPathDto, err
+	}
+
+	validPathDto,
+		err = new(dirMgrHelperMolecule).
+		getValidPathStr(
+			directoryPath,
+			"directoryPath",
+			ePrefix)
+
+	return validPathDto, err
+}
+
+// GetCurrentDir
+//
+// This wrapper function calls os.Getwd().
+//
+// os.Getwd() returns a rooted path name corresponding to
+// the current directory. If the current directory can be
+// reached via multiple paths (due to symbolic links),
+// os.Getwd() may return any one of them.
+//
+// In this context the returned current directory is
+// the current working directory.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/os#Getwd
+//	https://en.wikipedia.org/wiki/Working_directory
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		This method returns a string containing the
+//		current working directory path.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (dHlpr *DirHelper) GetCurrentDir(
+	errorPrefix interface{}) (
+	string,
+	error) {
+
+	if dHlpr.lock == nil {
+		dHlpr.lock = new(sync.Mutex)
+	}
+
+	dHlpr.lock.Lock()
+
+	defer dHlpr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirHelper."+
+			"GetCurrentDir()",
+		"")
+
+	if err != nil {
+		return "", err
+	}
+
+	return new(fileHelperElectron).
+		getCurrentDir(ePrefix)
+}
+
 // GetDirectoryProfile
 //
 // This method returns an instance of DirectoryProfile

@@ -29,6 +29,7 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirs01() {
 	fmt.Printf("\n" + breakStr + "\n\n\n")
 
 	targetDir := "..\\fileOpsTest\\filesForTest"
+
 	osPathSepStr := string(os.PathSeparator)
 
 	targetDir = strings.Replace(
@@ -241,6 +242,7 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirProfile01() {
 	fmt.Printf("\n" + breakStr + "\n\n\n")
 
 	targetDir := "..\\fileOpsTest\\filesForTest\\levelfilesfortest"
+
 	osPathSepStr := string(os.PathSeparator)
 
 	targetDir = strings.Replace(
@@ -310,6 +312,128 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirProfile01() {
 			true,
 			strBuilder.String(),
 			ePrefix.XCpy("targetOutputFile<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("\n\nNumber of Bytes Written: %v\n",
+		numOfBytesWritten)
+
+	fmt.Printf(breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+}
+
+// GetDirTreeProfile01
+//
+// Returns directory stats on an entire directory tree.
+func (dirOpsTest007 MainDirOpsTest007) GetDirTreeProfile01() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainDirOpsTest007.GetDirProfile01()",
+		"")
+
+	breakStr := " " + strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n\n\n")
+
+	var err error
+	var strMechOpsBaseDir string
+
+	strMechOpsBaseDir,
+		err = GetBaseDirectory(
+		ePrefix.XCpy("strMechOpsBaseDir<-"))
+
+	fmt.Printf("strMechOpsBaseDir: %v\n",
+		strMechOpsBaseDir)
+
+	targetDir := strMechOpsBaseDir +
+		"\\fileOpsTest\\filesForTest\\levelfilesfortest"
+
+	osPathSepStr := string(os.PathSeparator)
+
+	targetDir = strings.Replace(
+		targetDir,
+		"\\",
+		osPathSepStr,
+		-1)
+
+	targetOutputFileName :=
+		strMechOpsBaseDir +
+			"\\apptest\\examples\\mike.txt"
+
+	targetOutputFileName = strings.Replace(
+		targetOutputFileName,
+		"\\",
+		osPathSepStr,
+		-1)
+
+	var dirProfile strmech.DirectoryProfile
+	var directoryPathDoesExist bool
+
+	directoryPathDoesExist,
+		dirProfile,
+		err = new(strmech.DirHelper).
+		GetDirectoryTreeProfile(
+			targetDir,
+			false,
+			false,
+			false,
+			strmech.FileSelectionCriteria{},
+			ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("Directory Does Exist: %v\n",
+		directoryPathDoesExist)
+
+	strBuilder := strings.Builder{}
+
+	err = dirProfile.GetTextListing(
+		" ",
+		"",
+		80,
+		'-',
+		"Directory Metrics",
+		true,
+		&strBuilder,
+		ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fmt.Println(strBuilder.String())
+
+	var numOfBytesWritten int
+
+	numOfBytesWritten,
+		err = new(strmech.FileHelper).
+		WriteStrOpenClose(
+			targetOutputFileName,
+			true,
+			true,
+			strBuilder.String(),
+			ePrefix.XCpy("targetOutputFileName<-"))
 
 	if err != nil {
 		fmt.Printf("\n%v\n\n",

@@ -479,6 +479,8 @@ func (dMgrHlprPreon *dirMgrHelperPreon) getDirectoryTreeProfile(
 			return directoryPathDoesExist, dirProfile, err
 		}
 
+		dirProfile.ParentDirIsIncludedInStats = true
+
 	} else {
 
 		dirProfile.ParentDirIsIncludedInStats = false
@@ -578,7 +580,6 @@ func (dMgrHlprPreon *dirMgrHelperPreon) getDirectoryTreeProfile(
 			newDirProfile)
 
 		dirProfile.IsDirectoryTreeStats = true
-
 	}
 
 	return directoryPathDoesExist, dirProfile, err

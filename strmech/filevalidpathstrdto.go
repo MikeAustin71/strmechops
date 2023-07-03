@@ -22,38 +22,87 @@ type ValidPathStrDto struct {
 	//	the absolute path.
 
 	pathFInfoPlus FileInfoPlus
-	// Only populated if absValidPath exists on disk.
+	//	Only populated if the absolute path (absValidPath)
+	//	exists on an attached storage drive.
 
 	pathDoesExist PathExistsStatusCode
-	//	-1 = don't know, file/path existence has not been tested
-	//	 0 - No, tests show the file/path doesn't exist on disk.
-	//	 1 - Yes, tests show the file/path does exist on disk.
+	// Describes the status of 'pathStr'.
+	//
+	// PathExistsStatus Code is an enumeration.
+	//	Valid values are shown as follows:
+	//
+	//	PathExistsStatus.Unknown()		= -1
+	//	  -1 -	Status undetermined. File/path
+	//			existence has not been tested.
+	//
+	//	PathExistsStatus.DoesNotExist()	= 0
+	//		0 -	Tests show the file/path doesn't exist
+	//			on an attached storage drive.
+	//
+	//	PathExistsStatus.Exists() 		= 1
+	//		1 -	Tests show the file/path does exist on
+	//			an attached storage drive.
 
 	pathStrLength int
-	// Length of the path string
+	//	Length of the path string.
 
 	absPathStr string
-	// The absolute path version of 'path'
+	//	The absolute path version of 'pathStr'.
 
 	absPathFInfoPlus FileInfoPlus
-	// Only populated if absPathStr
-	// exists on disk.
+	//	Only populated if absPathStr
+	//	exists on disk.
 
 	absPathDoesExist PathExistsStatusCode
-	//	-1 = don't know, has not been tested
-	//	 0 - No, tests shown path doesn't exist
-	//	 1 - Yes, tests show path does exist
+	//	Describes the status of the absolute
+	//	directory path ('absPathStr').
+	//
+	//	PathExistsStatus Code is an enumeration.
+	//	Valid values are shown as follows:
+	//
+	//	PathExistsStatus.Unknown()		= -1
+	//
+	//	   -1 -	Status undetermined. File/path
+	//			existence has not been tested.
+	//
+	//	PathExistsStatus.DoesNotExist()	= 0
+	//
+	//		0 -	Tests show the file/path doesn't exist
+	//			on an attached storage drive.
+	//
+	//	PathExistsStatus.Exists() 		= 1
+	//
+	//		1 -	Tests show the file/path does exist
+	//			on an attached storage drive.
 
 	absPathStrLength int
 	//	Length of the absolute path string
 
 	pathType PathFileTypeCode
-	//	The path type. Path File, Path Directory
+	//	Describes the path type. Path File, Path
+	//	Directory, File, Volume or Indeterminate.
+	//
+	//	Type PathFileTypeCode is an enumeration
+	//	which will be set to one of the following
+	//	valid values.
+	//
+	//	PathFileTypeCode.None()
+	//	PathFileTypeCode.Path()
+	//	PathFileTypeCode.File()
+	//	PathFileTypeCode.Volume()
+	//	PathFileTypeCode.Indeterminate()
 
 	pathIsValid PathValidityStatusCode
-	//	-1 - don't know
-	//	 0 - No path is NOT valid
-	//	 1 - Yes, path is valid
+	//	Describes the status of the
+	//	path.
+	//
+	//	Type PathValidityStatusCode is an
+	//	enumeration. Valid values are shown
+	//	as follows:
+	//
+	//		PathValidStatus.Unknown()
+	//		PathValidStatus.Invalid()
+	//		PathValidStatus.Valid()
 
 	pathVolumeName string
 	//	Volume name associated with current path
