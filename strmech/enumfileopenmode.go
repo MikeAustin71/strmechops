@@ -24,6 +24,7 @@ var mFileOpenModeToString = map[FileOpenMode]string{
 // mFileOpenModeToString - This map is used to map enumeration values
 // to enumeration names stored as strings for Type FileOpenMode.
 var mValidFileOpenModeToString = map[FileOpenMode]string{
+	FileOpenMode(-1):          "ModeNone",
 	FileOpenMode(os.O_APPEND): "ModeAppend",
 	FileOpenMode(os.O_CREATE): "ModeCreate",
 	FileOpenMode(os.O_EXCL):   "ModeExclusive",

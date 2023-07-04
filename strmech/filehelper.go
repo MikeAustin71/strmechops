@@ -11087,8 +11087,7 @@ func (fh *FileHelper) ReadStrBuilderFile(
 	fileOpenCfg,
 		err = new(FileOpenConfig).New(
 		ePrefix.XCpy("fileOpenCfg<-"),
-		FOpenType.TypeReadOnly(),
-		FOpenMode.ModeAppend())
+		FOpenType.TypeReadOnly())
 
 	if err != nil {
 
