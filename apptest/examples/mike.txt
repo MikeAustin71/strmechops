@@ -3,7 +3,7 @@
                                                                                
                                Directory Metrics
                               
-                 Monday 2023-07-03 03:06:31.447525400 -0500 CDT                
+                 Monday 2023-07-03 19:15:54.857777600 -0500 CDT                
                                                                                
  ------------------------------------------------------------------------------
                                 Parent Directory                               
@@ -11,20 +11,19 @@
  d:\goprojects\mikeaustin71\strmechops\fileOpsTest\filesForTest\levelfilesforte
  st
  ------------------------------------------------------------------------------
-     ParentDirIsIncludedInStats:  true           
-           IsDirectoryTreeStats:  true           
-  ParentDirExistsOnStorageDrive:  true           
-                  DirTotalFiles:  15             
-              DirTotalFileBytes:  5,990          
-              DirSubDirectories:  3              
-         DirSubDirectoriesBytes:  0              
- SubDirsIncludeCurrentDirOneDot:  false          
-  SubDirsIncludeParentDirTwoDot:  false          
-                DirRegularFiles:  15             
-            DirRegularFileBytes:  5,990          
-                DirSymLinkFiles:  0              
-            DirSymLinkFileBytes:  0              
-             DirNonRegularFiles:  0              
-         DirNonRegularFileBytes:  0              
-                         Errors:  -- NONE --     
+     ParentDirIsIncludedInStats:  true                       
+           IsDirectoryTreeStats:  true                       
+  ParentDirExistsOnStorageDrive:  true                       
+                  DirTotalFiles:  25                         
+              DirTotalFileBytes:  10,017                     
+              DirSubDirectories:  4                          
+ SubDirsIncludeCurrentDirOneDot:  false                      
+  SubDirsIncludeParentDirTwoDot:  false                      
+                DirRegularFiles:  25                         
+            DirRegularFileBytes:  10,017                     
+                DirSymLinkFiles:  0                          
+            DirSymLinkFileBytes:  0                          
+             DirNonRegularFiles:  0                          
+         DirNonRegularFileBytes:  0                          
+                         Errors:  -- NONE --                 
 

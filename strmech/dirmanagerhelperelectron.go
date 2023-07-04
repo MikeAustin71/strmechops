@@ -1129,7 +1129,6 @@ func (dMgrHlprElectron *dirMgrHelperElectron) getSubDirsFilesInDirTree(
 
 		numOfFilesLocated += newNumOfFilesLocated
 
-		idx++
 	}
 
 	return numOfSubDirsLocated, numOfFilesLocated, err

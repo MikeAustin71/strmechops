@@ -790,7 +790,7 @@ func (dirProfile *DirectoryProfile) GetTextListing(
 	lenCol1 := lenCol1Field +
 		lenCol1RightMargin
 
-	lenCol2 := 15
+	lenCol2 := 27
 
 	lenLineTerminator := 1
 
