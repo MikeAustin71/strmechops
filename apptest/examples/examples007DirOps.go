@@ -251,7 +251,7 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirProfile01() {
 		osPathSepStr,
 		-1)
 
-	targetOutputFile := "..\\apptest\\examples\\mike.txt"
+	targetOutputFile := "..\\apptest\\examples\\testoutput.txt"
 
 	targetOutputFile = strings.Replace(
 		targetOutputFile,
@@ -375,7 +375,7 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirTreeProfile01() {
 
 	targetOutputFileName :=
 		strMechOpsBaseDir +
-			"\\apptest\\examples\\mike.txt"
+			"\\apptest\\examples\\testoutput.txt"
 
 	targetOutputFileName = strings.Replace(
 		targetOutputFileName,

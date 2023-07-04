@@ -130,7 +130,7 @@ func (dirOpsTest008 MainFileOpsTest008) ReadFiles01() {
 
 	targetInputFileName :=
 		strMechOpsBaseDir +
-			"\\apptest\\examples\\mike.txt"
+			"\\apptest\\examples\\testoutput.txt"
 
 	fhHelper := new(strmech.FileHelper)
 
