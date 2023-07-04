@@ -132,10 +132,21 @@ func (fOpenType FileOpenType) IsValid() error {
 	_, ok := mValidFileOpenTypeToString[fOpenType]
 
 	if !ok {
-		ePrefix := "FileOpenType.IsValidInstanceError() "
-		return fmt.Errorf(ePrefix+
-			"Error: Invalid FileOpenType! Current FileOpenType='%v'",
-			fOpenType)
+
+		currentCode := int(fOpenType)
+
+		currentCodeStr := "None"
+
+		if currentCode != -1 {
+
+			currentCodeStr = fmt.Sprintf("%v",
+				currentCode)
+		}
+
+		return fmt.Errorf("FileOpenType.IsValidInstanceError()\n"+
+			"Error: Invalid FileOpenType!\n"+
+			"Current FileOpenType='%v'",
+			currentCodeStr)
 	}
 
 	return nil

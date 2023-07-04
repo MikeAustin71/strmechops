@@ -24,7 +24,6 @@ var mFileOpenModeToString = map[FileOpenMode]string{
 // mFileOpenModeToString - This map is used to map enumeration values
 // to enumeration names stored as strings for Type FileOpenMode.
 var mValidFileOpenModeToString = map[FileOpenMode]string{
-	FileOpenMode(-1):          "None",
 	FileOpenMode(os.O_APPEND): "ModeAppend",
 	FileOpenMode(os.O_CREATE): "ModeCreate",
 	FileOpenMode(os.O_EXCL):   "ModeExclusive",
@@ -178,10 +177,19 @@ func (fOpenMode FileOpenMode) XIsValid() error {
 
 	if !ok {
 
+		currentCode := int(fOpenMode)
+		currentCodeStr := "None"
+
+		if currentCode != -1 {
+
+			currentCodeStr = fmt.Sprintf("%v",
+				currentCode)
+		}
+
 		err = fmt.Errorf("FileOpenMode.XIsValid()\n"+
 			"Error: Ivalid FileOpenMode!\n"+
 			"Current FileOpenMode='%v'\n",
-			int(fOpenMode))
+			currentCodeStr)
 	}
 
 	return err
@@ -283,7 +291,7 @@ func (fOpenMode FileOpenMode) ParseString(
 		idx, ok = mFileOpenModeStringToInt[valueString]
 
 		if !ok {
-			return FileOpenMode(0),
+			return FileOpenMode(-1),
 				fmt.Errorf(ePrefix+
 					"'valueString' did NOT MATCH a FileOpenMode. valueString='%v' ", valueString)
 		}
