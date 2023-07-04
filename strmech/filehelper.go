@@ -1,10 +1,14 @@
 package strmech
 
 import (
+	"bufio"
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"io"
+	"math"
 	"os"
 	fp "path/filepath"
+	"strings"
 	"sync"
 	"time"
 )
@@ -10592,6 +10596,384 @@ func (fh *FileHelper) OpenFileWriteOnly(
 			"fPtr<-"))
 
 	return fPtr, err
+}
+
+// ReadStrBuilderFile
+//
+// This method will read bytes from a designated file and
+// write those bytes to an instance of strings.Builder
+// passed as an input parameter.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method is designed to read files less than 2.1
+//	Gigabytes in size. However, depending on memory
+//	resources, you may run out of memory when reading
+//	files of this size into an instance of
+//	strings.Builder.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName				string
+//
+//		A string containing the path and file name of the
+//		target input file. The contents of this file will
+//		be read and written to the strings.Builder instance
+//		passed as 'strBuilder'.
+//
+//		After reading the contents, this file will be
+//		automatically will be automatically closed and
+//		rendered ready in all respects for future
+//		read/write operations.
+//
+//
+//	strBuilder					*strings.Builder
+//
+//		A pointer to an instance of strings.Builder. The
+//		contents of 'pathFileName' will be read and written
+//		to 'strBuilder'.
+//
+//	errorPrefix						interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numBytesRead				int
+//
+//		If this method completes successfully, this
+//		integer value will equal the number of bytes
+//		read from input file 'pathFileName' and stored
+//		in the strings.Builder instance passed by input
+//		parameter 'strBuilder'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fh *FileHelper) ReadStrBuilderFile(
+	pathFileName string,
+	strBuilder *strings.Builder,
+	errorPrefix interface{}) (
+	numBytesRead int,
+	err error) {
+
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	funcName := "FileHelper.ReadStrBuilderFile() "
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return numBytesRead, err
+	}
+
+	var fInfoPlus FileInfoPlus
+	var pathFileDoesExist bool
+	var err2 error
+
+	pathFileName,
+		pathFileDoesExist,
+		fInfoPlus,
+		err2 =
+		new(fileHelperMolecule).
+			doesPathFileExist(
+				pathFileName,
+				PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
+				ePrefix,
+				"pathFileName")
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while testing for the existance\n"+
+			"of 'pathFileName' on an attached storage drive.\n"+
+			"pathFileName = '%v'\n"+
+			"Error= \n%v\n",
+			funcName,
+			pathFileName,
+			err2.Error())
+
+		return numBytesRead, err
+	}
+
+	if !pathFileDoesExist {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'pathFileName' is invalid!\n"+
+			"The path and file name do NOT exist on an attached\n"+
+			"storage drive.\n"+
+			"pathFileName= '%v'\n",
+			ePrefix.String(),
+			pathFileName)
+
+		return numBytesRead, err
+	}
+
+	if strBuilder == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' is invalid!\n"+
+			"'strBuilder' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return numBytesRead, err
+	}
+
+	netCapacityStrBuilder :=
+		strBuilder.Cap() -
+			strBuilder.Len()
+
+	thisReqCapacity := fInfoPlus.Size()
+
+	netRequiredCapacity :=
+		thisReqCapacity - int64(netCapacityStrBuilder)
+
+	if netRequiredCapacity > int64(math.MaxInt) {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The target file for reading exceeds the\n"+
+			"maximum capacity of 'strBuilder'. This is a large\n"+
+			"file. Try reading this file with a buffer in smaller\n"+
+			"segments.\n"+
+			"File size = %v\n"+
+			"Net Required Capacity for 'strBuilder' = '%v'\n"+
+			"Maximum 'strBuilder' capacity = '%v'\n",
+			ePrefix.String(),
+			thisReqCapacity,
+			netRequiredCapacity,
+			math.MaxInt)
+
+		return numBytesRead, err
+	}
+
+	if netRequiredCapacity > 0 {
+
+		strBuilder.Grow(int(netRequiredCapacity))
+	}
+
+	var filePermissionCfg FilePermissionConfig
+
+	filePermissionCfg,
+		err = new(FilePermissionConfig).New(
+		"-r--r--r--",
+		ePrefix.XCpy("filePermissionCfg<-"))
+
+	if err != nil {
+
+		return numBytesRead, err
+	}
+
+	var fileOpenCfg FileOpenConfig
+
+	fileOpenCfg,
+		err = new(FileOpenConfig).New(
+		ePrefix.XCpy("fileOpenCfg<-"),
+		FOpenType.TypeReadOnly(),
+		FOpenMode.ModeAppend())
+
+	if err != nil {
+
+		return numBytesRead, err
+	}
+
+	var filePtr *os.File
+
+	defer func() {
+
+		if filePtr != nil {
+			_ = filePtr.Close()
+		}
+
+	}()
+
+	filePtr,
+		err = new(fileHelperBoson).
+		openFile(
+			pathFileName,
+			false,
+			fileOpenCfg,
+			filePermissionCfg,
+			"pathFileName",
+			ePrefix)
+
+	defer func() {
+
+		if filePtr != nil {
+			_ = filePtr.Close()
+		}
+
+	}()
+
+	if err != nil {
+
+		return numBytesRead, err
+	}
+
+	bufferCapacity := 4096
+
+	if thisReqCapacity/int64(4096) > 10 {
+
+		bufferCapacity = 8192
+
+	}
+
+	reader := bufio.NewReader(filePtr)
+	buf := make([]byte, bufferCapacity)
+	var localBytesRead, localBytesWritten, cycleCount int
+	var isEOF bool
+
+	for isEOF == false {
+
+		cycleCount++
+
+		localBytesRead,
+			err2 = reader.Read(buf)
+
+		if err2 != nil {
+
+			if err2 != io.EOF {
+
+				err = fmt.Errorf("%v\n"+
+					"Error occurred while reading from file 'pathFileName'.\n"+
+					"Error return from bufio reader.Read(buf)\n"+
+					"pathFileName = '%v'\n"+
+					"Error= \n%v\n",
+					ePrefix.String(),
+					pathFileName,
+					err2.Error())
+
+				return numBytesRead, err
+
+			} else {
+
+				isEOF = true
+			}
+		}
+
+		if localBytesRead > 0 {
+
+			localBytesWritten,
+				err2 =
+				strBuilder.Write(buf[:localBytesRead])
+
+			if err2 != nil {
+				err = fmt.Errorf("%v\n"+
+					"Error occurred while writing bytes to 'strBuilder'\n"+
+					"pathFileName = '%v'\n"+
+					"Error= \n%v\n",
+					ePrefix.String(),
+					pathFileName,
+					err2.Error())
+
+				return numBytesRead, err
+			}
+
+			if localBytesWritten != localBytesRead {
+
+				err = fmt.Errorf("%v\n"+
+					"Error: The number of bytes written to 'strBuilder'\n"+
+					"did NOT equal the number of bytes read from 'pathFileName'.\n"+
+					"pathFileName = '%v'\n"+
+					"Bytes Read = '%v'\n"+
+					"Bytes Written = '%v'\n"+
+					"Read Cycle Count = '%v'\n",
+					ePrefix.String(),
+					pathFileName,
+					localBytesRead,
+					localBytesWritten,
+					cycleCount)
+
+				return numBytesRead, err
+			}
+
+			numBytesRead += localBytesRead
+		}
+
+	}
+
+	return numBytesRead, err
 }
 
 // RemovePathSeparatorFromEndOfPathString

@@ -429,7 +429,7 @@ func (fOpenCfg *FileOpenConfig) GetFileOpenNarrativeText() string {
 			sb.WriteString("; ")
 		}
 
-		err = fOpenCfg.fileOpenModes[i].IsValid()
+		err = fOpenCfg.fileOpenModes[i].XIsValid()
 
 		if err != nil {
 			sb.WriteString(fmt.Sprintf("Index=%v INVALID!", i))
@@ -797,7 +797,7 @@ func (fOpenCfg *FileOpenConfig) New(
 
 	for idx, mode := range fOpenModes {
 
-		err = mode.IsValid()
+		err = mode.XIsValid()
 
 		if err != nil {
 			return FileOpenConfig{},
@@ -1194,7 +1194,7 @@ func (fOpenCfg *FileOpenConfig) SetFileOpenModes(
 
 	for idx, fOpenMode := range fOpenModes {
 
-		err = fOpenMode.IsValid()
+		err = fOpenMode.XIsValid()
 
 		if err != nil {
 

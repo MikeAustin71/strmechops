@@ -291,7 +291,7 @@ func (fileHelpBoson *fileHelperBoson) openFile(
 		return filePtr, err
 	}
 
-	if pathFileNameDoesExist {
+	if !pathFileNameDoesExist {
 		// The 'pathFileName' directory path does NOT
 		// exist on an attached storage volume.
 

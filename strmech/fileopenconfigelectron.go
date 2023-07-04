@@ -203,7 +203,7 @@ func (fOpenCfgElectron *fileOpenConfigElectron) testValidityFileOpenConfig(
 
 	for i := 0; i < lenFileOpenModes; i++ {
 
-		err := fOpenCfg.fileOpenModes[i].IsValid()
+		err = fOpenCfg.fileOpenModes[i].XIsValid()
 
 		if err != nil {
 

@@ -361,7 +361,9 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirTreeProfile01() {
 		strMechOpsBaseDir)
 
 	targetDir := strMechOpsBaseDir +
-		"\\fileOpsTest\\filesForTest\\levelfilesfortest"
+		"\\fileOpsTest\\filesForTest\\levelfilesfortest\\level_01_dir\\level_02_dir\\level_03_dir"
+
+	//	"\\fileOpsTest\\filesForTest\\levelfilesfortest"
 
 	osPathSepStr := string(os.PathSeparator)
 

@@ -24,6 +24,7 @@ var mFileOpenModeToString = map[FileOpenMode]string{
 // mFileOpenModeToString - This map is used to map enumeration values
 // to enumeration names stored as strings for Type FileOpenMode.
 var mValidFileOpenModeToString = map[FileOpenMode]string{
+	FileOpenMode(-1):          "None",
 	FileOpenMode(os.O_APPEND): "ModeAppend",
 	FileOpenMode(os.O_CREATE): "ModeCreate",
 	FileOpenMode(os.O_EXCL):   "ModeExclusive",
@@ -155,28 +156,35 @@ func (fOpenMode FileOpenMode) ModeTruncate() FileOpenMode {
 	return FileOpenMode(os.O_TRUNC)
 }
 
-// IsValid - If the value of the current FileOpenMode is 'invalid',
+// XIsValid - If the value of the current FileOpenMode is 'invalid',
 // this method will return an error. If the FileOpenMode is 'valid',
 // this method will return a value of 'nil'.
 //
 // This is a standard utility method and is not part of the valid enumerations
 // for this type.
-func (fOpenMode FileOpenMode) IsValid() error {
+func (fOpenMode FileOpenMode) XIsValid() error {
 
 	enumFileOpenModeLock.Lock()
 
 	defer enumFileOpenModeLock.Unlock()
 
+	fileOpenModeMapsLock.Lock()
+
+	defer fileOpenModeMapsLock.Unlock()
+
 	_, ok := mValidFileOpenModeToString[fOpenMode]
 
+	var err error
+
 	if !ok {
-		ePrefix := "FileOpenMode.IsValidInstanceError() "
-		return fmt.Errorf(ePrefix+
-			"Error: Ivalid FileOpenMode! Current FileOpenMode='%v'",
-			fOpenMode)
+
+		err = fmt.Errorf("FileOpenMode.XIsValid()\n"+
+			"Error: Ivalid FileOpenMode!\n"+
+			"Current FileOpenMode='%v'\n",
+			int(fOpenMode))
 	}
 
-	return nil
+	return err
 }
 
 // ParseString - Receives a string and attempts to match it with

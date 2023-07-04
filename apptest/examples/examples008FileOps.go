@@ -101,3 +101,70 @@ func (dirOpsTest008 MainFileOpsTest008) GetFiles01() {
 
 	fmt.Printf("\n" + breakStr + "\n")
 }
+
+func (dirOpsTest008 MainFileOpsTest008) ReadFiles01() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainFileOpsTest008.ReadFiles01()",
+		"")
+
+	breakStr := " " + strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n\n\n")
+
+	var err error
+	var strMechOpsBaseDir string
+
+	strMechOpsBaseDir,
+		err = GetBaseDirectory(
+		ePrefix.XCpy("strMechOpsBaseDir<-"))
+
+	fmt.Printf("strMechOpsBaseDir: %v\n",
+		strMechOpsBaseDir)
+
+	targetInputFileName :=
+		strMechOpsBaseDir +
+			"\\apptest\\examples\\mike.txt"
+
+	fhHelper := new(strmech.FileHelper)
+
+	strBuilder := new(strings.Builder)
+
+	var numBytesRead int
+
+	numBytesRead,
+		err = fhHelper.ReadStrBuilderFile(
+		targetInputFileName,
+		strBuilder,
+		ePrefix.XCpy("targetInputFileName->"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("Number of Bytes Read: %v\n\n",
+		numBytesRead)
+
+	fmt.Printf("Length of 'strBuilder' string: %v\n\n",
+		strBuilder.Len())
+
+	fmt.Printf("%v",
+		strBuilder.String())
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+}
