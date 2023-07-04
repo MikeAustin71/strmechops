@@ -461,7 +461,7 @@ func (fop FileOperationCode) IsValid() error {
 			"Error: File Operation Code INVALID!.\n"+
 			"Unknown Value= %v\n",
 			ePrefix,
-			fop.Value())
+			int(fop))
 	}
 
 	return nil
