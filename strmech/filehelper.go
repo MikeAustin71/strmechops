@@ -10570,7 +10570,7 @@ func (fh *FileHelper) OpenFileWriteOnly(
 
 	defer fh.lock.Unlock()
 
-	funcName := "FileHelper.OpenFileWriteOnly() "
+	funcName := "FileHelper.OpenFileWriteOnly()"
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -10596,6 +10596,244 @@ func (fh *FileHelper) OpenFileWriteOnly(
 			"fPtr<-"))
 
 	return fPtr, err
+}
+
+// ReadFileBytes
+//
+// Reads the entire contents of a file and returns
+// the bytes read from that file in a byte array.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method reads the entire contents of input file
+//	'pathFileName' into memory. Large files may challenge
+//	the memory limitations on your computer.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName				string
+//
+//		A string containing the path and file name of the
+//		target input file. The contents of this file will
+//		be read and written to the strings.Builder instance
+//		passed as 'strBuilder'.
+//
+//		After reading the contents, this file will be
+//		automatically will be automatically closed and
+//		rendered ready in all respects for future
+//		read/write operations.
+//
+//	errorPrefix						interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	byteArray					[]byte
+//
+//		If this method completes successfully, this byte
+//		array will contain all the contents of the file
+//		identified by input parameter 'pathFileName'.
+//
+//	numBytesRead				int64
+//
+//		If this method completes successfully, this
+//		int64 value will equal the number of bytes
+//		read from input file 'pathFileName' and returned
+//		in the byte array 'byteArray'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fh *FileHelper) ReadFileBytes(
+	pathFileName string,
+	errorPrefix interface{}) (
+	byteArray []byte,
+	numOfBytesRead int64,
+	err error) {
+
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	funcName := "FileHelper.ReadFileBytes()"
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return byteArray,
+			numOfBytesRead,
+			err
+	}
+
+	var fInfoPlus FileInfoPlus
+	var pathFileDoesExist bool
+	var err2 error
+
+	pathFileName,
+		pathFileDoesExist,
+		fInfoPlus,
+		err2 =
+		new(fileHelperMolecule).
+			doesPathFileExist(
+				pathFileName,
+				PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
+				ePrefix,
+				"pathFileName")
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while testing for the existance\n"+
+			"of 'pathFileName' on an attached storage drive.\n"+
+			"pathFileName = '%v'\n"+
+			"Error= \n%v\n",
+			funcName,
+			pathFileName,
+			err2.Error())
+
+		return byteArray,
+			numOfBytesRead,
+			err
+	}
+
+	if !pathFileDoesExist {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'pathFileName' is invalid!\n"+
+			"The path and file name do NOT exist on an attached\n"+
+			"storage drive.\n"+
+			"pathFileName= '%v'\n",
+			ePrefix.String(),
+			pathFileName)
+
+		return byteArray,
+			numOfBytesRead,
+			err
+	}
+
+	var fileSize int64
+
+	byteArray,
+		err2 = os.ReadFile(pathFileName)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by os.ReadFile(pathFileName)\n"+
+			"pathFileName = '%v'\n"+
+			"Error = \n%v\n",
+			ePrefix.String(),
+			pathFileName,
+			err2.Error())
+
+		return byteArray,
+			numOfBytesRead,
+			err
+	}
+
+	fileSize = fInfoPlus.Size()
+
+	numOfBytesRead = int64(len(byteArray))
+
+	if fileSize != numOfBytesRead {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The number of bytes in the files does NOT\n"+
+			"equal the number of bytes read from the file.\n"+
+			"pathFileName = '%v'\n"+
+			"'pathFileName' file size = '%v'\n"+
+			"Bytes read from 'pathFileName' = '%v'\n",
+			ePrefix.String(),
+			pathFileName,
+			fileSize,
+			numOfBytesRead)
+	}
+
+	return byteArray,
+		numOfBytesRead,
+		err
 }
 
 // ReadStrBuilderFile
@@ -10629,7 +10867,6 @@ func (fh *FileHelper) OpenFileWriteOnly(
 //		automatically will be automatically closed and
 //		rendered ready in all respects for future
 //		read/write operations.
-//
 //
 //	strBuilder					*strings.Builder
 //
