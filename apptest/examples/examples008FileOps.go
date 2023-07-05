@@ -102,6 +102,9 @@ func (dirOpsTest008 MainFileOpsTest008) GetFiles01() {
 	fmt.Printf("\n" + breakStr + "\n")
 }
 
+// ReadFiles01
+//
+// Runs test on FileHelper.ReadStrBuilderFile()
 func (dirOpsTest008 MainFileOpsTest008) ReadFiles01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -158,6 +161,75 @@ func (dirOpsTest008 MainFileOpsTest008) ReadFiles01() {
 
 	fmt.Printf("%v",
 		strBuilder.String())
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+}
+
+// ReadFiles02
+//
+// Runs test on FileHelper.ReadFileBytes()
+func (dirOpsTest008 MainFileOpsTest008) ReadFiles02() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainFileOpsTest008.ReadFiles02()",
+		"")
+
+	breakStr := " " + strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n\n\n")
+
+	var err error
+	var strMechOpsBaseDir string
+
+	strMechOpsBaseDir,
+		err = GetBaseDirectory(
+		ePrefix.XCpy("strMechOpsBaseDir<-"))
+
+	fmt.Printf("strMechOpsBaseDir: %v\n",
+		strMechOpsBaseDir)
+
+	targetInputFileName :=
+		strMechOpsBaseDir +
+			"\\apptest\\examples\\testoutput.txt"
+
+	fhHelper := new(strmech.FileHelper)
+
+	var numBytesRead int64
+	var bytesRead []byte
+
+	bytesRead,
+		numBytesRead,
+		err = fhHelper.ReadFileBytes(
+		targetInputFileName,
+		ePrefix.XCpy("targetInputFileName->"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("Number of Bytes Read: %v\n\n",
+		numBytesRead)
+
+	fmt.Printf("Length of 'bytesRead' Array: %v\n\n",
+		len(bytesRead))
+
+	fmt.Printf("%v",
+		string(bytesRead))
 
 	fmt.Printf("\n\n" + breakStr + "\n")
 

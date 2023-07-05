@@ -8,6 +8,7 @@ import "github.com/MikeAustin71/strmechops/apptest/examples"
 func main() {
 
 	//examples.MainDirOpsTest007{}.GetDirTreeProfile01()
-	examples.MainFileOpsTest008{}.ReadFiles01()
+	//examples.MainFileOpsTest008{}.ReadFiles01()
+	examples.MainFileOpsTest008{}.ReadFiles02()
 
 }

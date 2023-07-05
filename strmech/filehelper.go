@@ -10603,6 +10603,10 @@ func (fh *FileHelper) OpenFileWriteOnly(
 // Reads the entire contents of a file and returns
 // the bytes read from that file in a byte array.
 //
+// The read operation is performed by os.ReadFile and
+// reads the entire file contents in to a byte array
+// with one read operation.
+//
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
@@ -13147,6 +13151,352 @@ func (fh *FileHelper) SwapBasePath(
 			newBasePath,
 			targetPath,
 			ePrefix)
+}
+
+// WriteFileBytes
+//
+// Uses os.WriteFile to write an entire byte array to a
+// target output file in one write operation.
+//
+// Existing files are truncated before writing
+// 'bytesToWrite' to the target output file. If the
+// target output file does NOT exist, it will be created.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName					string
+//
+//		A string containing the path and file name of the
+//		target output file to which the byte array,
+//		'bytesToWrite', will be written.
+//
+//	createDirectoryPathIfNotExist	bool
+//
+//		If the directory path element of parameter
+//		'pathFileName' does not exist on an attached
+//		storage drive, and this parameter is set to
+//		'true', this method will attempt to create
+//		the directory path.
+//
+//		If 'createDirectoryPathIfNotExist' is set to
+//		'false', and the directory path element of
+//		parameter 'pathFileName' does not exist on an
+//		attached storage drive, the write operation will
+//		fail and an error will be returned.
+//
+//	bytesToWrite					[]byte
+//
+//		The contents of this byte array will be written
+//		to the target output file identified by input
+//		parameter 'pathFileName'.
+//
+//	errorPrefix						interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numBytesWritten					int
+//
+//		If this method completes successfully, this
+//		integer value will equal the number of bytes
+//		written the target output file identified by
+//		input parameter 'pathFileName' . It should match
+//		the number of bytes contained in the input string
+//		parameter, 'textToWrite'.
+//
+//	err								error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fh *FileHelper) WriteFileBytes(
+	pathFileName string,
+	createDirectoryPathIfNotExist bool,
+	bytesToWrite []byte,
+	errorPrefix interface{}) (
+	numBytesWritten int,
+	err error) {
+
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	funcName := "FileHelper.WriteStrOpenClose() "
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return numBytesWritten, err
+	}
+
+	pathFileNameLabel := "pathFileName"
+
+	var fInfoPlus FileInfoPlus
+	var pathFileDoesExist bool
+	var err2 error
+
+	pathFileName,
+		pathFileDoesExist,
+		fInfoPlus,
+		err2 =
+		new(fileHelperMolecule).
+			doesPathFileExist(
+				pathFileName,
+				PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
+				ePrefix,
+				pathFileNameLabel)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while testing for the existance\n"+
+			"of 'pathFileName' on an attached storage drive.\n"+
+			"pathFileName = '%v'\n"+
+			"Error= \n%v\n",
+			funcName,
+			pathFileName,
+			err2.Error())
+
+		return numBytesWritten, err
+	}
+
+	if !pathFileDoesExist {
+
+		var directoryPath, fileNameExt string
+		var bothAreEmpty bool
+
+		directoryPath,
+			fileNameExt,
+			bothAreEmpty,
+			err2 = new(fileHelperDirector).
+			getPathAndFileNameExt(
+				pathFileName,
+				pathFileNameLabel,
+				ePrefix.XCpy("<-pathFileName"))
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Input parameter '%v' is invalid!\n"+
+				"An error occurred while breaking '%v'\n"+
+				"into directory path, file name and file extension\n"+
+				"components.\n"+
+				"Error = \n%v\n",
+				funcName,
+				pathFileNameLabel,
+				pathFileNameLabel,
+				err2.Error())
+
+			return numBytesWritten, err
+		}
+
+		if len(fileNameExt) == 0 || bothAreEmpty {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Input parameter '%v' is invalid!\n"+
+				"No valid file name could be extracted from\n"+
+				"'%v'.\n"+
+				"%v= '%v'\n"+
+				"Directory Path Element= '%v'\n"+
+				"File Name Element= '%v'\n",
+				ePrefix.String(),
+				pathFileNameLabel,
+				pathFileNameLabel,
+				pathFileNameLabel,
+				pathFileName,
+				directoryPath,
+				fileNameExt)
+
+			return numBytesWritten, err
+		}
+
+		pathFileDoesExist,
+			fInfoPlus,
+			err2 = new(fileHelperAtom).doesDirectoryExist(
+			directoryPath,
+			pathFileNameLabel+" Dir Path",
+			ePrefix.XCpy(pathFileNameLabel+" Dir Path"))
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error returned by fileHelperAtom.doesDirectoryExist()\n"+
+				"%v= '%v'\n"+
+				"Error=\n%v\n",
+				funcName,
+				pathFileNameLabel,
+				pathFileName,
+				err2.Error())
+
+			return numBytesWritten, err
+		}
+
+		if !fInfoPlus.IsDir() {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: The directory path extracted from '%v'\n"+
+				"is NOT a valid directory. '%v' is therefore invalid!\n"+
+				"%v= '%v'\n",
+				ePrefix.String(),
+				pathFileNameLabel,
+				pathFileNameLabel,
+				pathFileNameLabel,
+				pathFileName)
+
+			return numBytesWritten, err
+		}
+
+		if !pathFileDoesExist {
+			// The 'pathFileName' directory path does NOT
+			// exist on an attached storage volume.
+
+			if createDirectoryPathIfNotExist {
+
+				err2 = new(fileHelperMechanics).makeDirAll(
+					directoryPath,
+					pathFileNameLabel+" directoryPath",
+					ePrefix)
+
+				if err2 != nil {
+
+					err = fmt.Errorf("%v\n"+
+						"Attempted creation of directory path failed!\n"+
+						"%v= '%v'\n"+
+						"%v Directory Path= '%v'\n"+
+						"Error returned by fileHelperMechanics.makeDirAll()\n"+
+						"Error=\n%v\n",
+						funcName,
+						pathFileNameLabel,
+						pathFileName,
+						pathFileNameLabel,
+						directoryPath,
+						err2.Error())
+
+					return numBytesWritten, err
+				}
+
+			} else {
+				// The Path File Name Directory DOES NOT EXIST
+				// on an attached storage drive and
+				// createDirectoryPathIfNotExist = 'false'.
+
+				err = fmt.Errorf("%v\n"+
+					"Error: The %v Directory\n"+
+					"does NOT exist on an attached storage drive and\n"+
+					"Input Parameter 'createDirectoryPathIfNotExist'\n"+
+					"was set to 'false'. Therefore the file cannot be\n"+
+					"opened.\n"+
+					"%v= '%v\n"+
+					"%v Directory = '%v'\n",
+					ePrefix.String(),
+					pathFileNameLabel,
+					pathFileNameLabel,
+					pathFileName,
+					pathFileNameLabel,
+					directoryPath)
+
+				return numBytesWritten, err
+			}
+		}
+	}
+
+	err2 = os.WriteFile(
+		pathFileName,
+		bytesToWrite,
+		0222)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by os.WriteFile(pathFileName,bytesToWrite)\n"+
+			"pathFileName= '%v'\n"+
+			"Error= \n%v\n",
+			ePrefix.String(),
+			pathFileName,
+			err2.Error())
+
+	}
+
+	numBytesWritten = len(bytesToWrite)
+
+	return numBytesWritten, err
 }
 
 // WriteStrOpenClose
