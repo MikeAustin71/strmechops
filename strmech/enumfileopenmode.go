@@ -96,7 +96,12 @@ type FileOpenMode int
 
 var enumFileOpenModeLock sync.Mutex
 
-// ModeNone - No File Open Mode is active
+// ModeNone
+//
+// Signals that FileOpenMode has NOT been initialized.
+//
+// This setting is a valid setting and represents a NOP
+// or 'No Operation' condition.
 func (fOpenMode FileOpenMode) ModeNone() FileOpenMode {
 
 	enumFileOpenModeLock.Lock()
