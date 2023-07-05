@@ -4,6 +4,7 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"github.com/MikeAustin71/strmechops/strmech"
+	"os"
 	"strings"
 )
 
@@ -28,6 +29,14 @@ func (dirOpsTest008 MainFileOpsTest008) GetFiles01() {
 	fmt.Printf("\n" + breakStr + "\n\n\n")
 
 	targetDir := "D:\\t00"
+
+	osPathSepStr := string(os.PathSeparator)
+
+	targetDir = strings.Replace(
+		targetDir,
+		"\\",
+		osPathSepStr,
+		-1)
 
 	var numOFilesLocated int
 	var filesLocated strmech.FileMgrCollection
@@ -135,11 +144,19 @@ func (dirOpsTest008 MainFileOpsTest008) ReadFiles01() {
 		strMechOpsBaseDir +
 			"\\apptest\\examples\\testoutput.txt"
 
+	osPathSepStr := string(os.PathSeparator)
+
+	targetInputFileName = strings.Replace(
+		targetInputFileName,
+		"\\",
+		osPathSepStr,
+		-1)
+
 	fhHelper := new(strmech.FileHelper)
 
 	strBuilder := new(strings.Builder)
 
-	var numBytesRead int
+	var numBytesRead int64
 
 	numBytesRead,
 		err = fhHelper.ReadStrBuilderFile(
@@ -205,6 +222,14 @@ func (dirOpsTest008 MainFileOpsTest008) ReadFiles02() {
 		strMechOpsBaseDir +
 			"\\apptest\\examples\\testoutput.txt"
 
+	osPathSepStr := string(os.PathSeparator)
+
+	targetInputFileName = strings.Replace(
+		targetInputFileName,
+		"\\",
+		osPathSepStr,
+		-1)
+
 	fhHelper := new(strmech.FileHelper)
 
 	var numBytesRead int64
@@ -230,6 +255,115 @@ func (dirOpsTest008 MainFileOpsTest008) ReadFiles02() {
 
 	fmt.Printf("%v",
 		string(bytesRead))
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+}
+
+// WriteFileBytes01
+//
+// Runs test on FileHelper.WriteFileBytes()
+func (dirOpsTest008 MainFileOpsTest008) WriteFileBytes01() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainFileOpsTest008.WriteFileBytes01()",
+		"")
+
+	breakStr := " " + strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n\n\n")
+
+	var err error
+	var strMechOpsBaseDir string
+
+	strMechOpsBaseDir,
+		err = GetBaseDirectory(
+		ePrefix.XCpy("strMechOpsBaseDir<-"))
+
+	fmt.Printf("strMechOpsBaseDir: %v\n",
+		strMechOpsBaseDir)
+
+	targetInputFileName :=
+		strMechOpsBaseDir +
+			"\\apptest\\examples\\testoutput.txt"
+
+	osPathSepStr := string(os.PathSeparator)
+
+	targetInputFileName = strings.Replace(
+		targetInputFileName,
+		"\\",
+		osPathSepStr,
+		-1)
+
+	targetOutputFileName :=
+		strMechOpsBaseDir +
+			"\\apptest\\examples\\testoutput_2.txt"
+
+	targetOutputFileName = strings.Replace(
+		targetOutputFileName,
+		"\\",
+		osPathSepStr,
+		-1)
+
+	fhHelper := new(strmech.FileHelper)
+
+	var numBytesRead int64
+	var bytesRead []byte
+
+	bytesRead,
+		numBytesRead,
+		err = fhHelper.ReadFileBytes(
+		targetInputFileName,
+		ePrefix.XCpy("targetInputFileName->"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("Number of Bytes Read: %v\n\n",
+		numBytesRead)
+
+	fmt.Printf("Length of 'bytesRead' Array: %v\n\n",
+		len(bytesRead))
+
+	fmt.Printf("%v",
+		string(bytesRead))
+
+	var bytesWritten int64
+
+	bytesWritten,
+		err = fhHelper.
+		WriteFileBytes(
+			targetOutputFileName,
+			false,
+			bytesRead,
+			ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("Wrote Bytes to %v\n",
+		targetInputFileName)
+
+	fmt.Printf("Bytes Written: %v\n",
+		bytesWritten)
 
 	fmt.Printf("\n\n" + breakStr + "\n")
 

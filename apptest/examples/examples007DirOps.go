@@ -302,7 +302,7 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirProfile01() {
 
 	fmt.Println(strBuilder.String())
 
-	var numOfBytesWritten int
+	var numOfBytesWritten int64
 
 	numOfBytesWritten,
 		err = new(strmech.FileHelper).
@@ -426,7 +426,7 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirTreeProfile01() {
 
 	fmt.Println(strBuilder.String())
 
-	var numOfBytesWritten int
+	var numOfBytesWritten int64
 
 	numOfBytesWritten,
 		err = new(strmech.FileHelper).

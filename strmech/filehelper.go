@@ -10965,7 +10965,7 @@ func (fh *FileHelper) ReadStrBuilderFile(
 	pathFileName string,
 	strBuilder *strings.Builder,
 	errorPrefix interface{}) (
-	numBytesRead int,
+	numBytesRead int64,
 	err error) {
 
 	if fh.lock == nil {
@@ -11208,7 +11208,7 @@ func (fh *FileHelper) ReadStrBuilderFile(
 				return numBytesRead, err
 			}
 
-			numBytesRead += localBytesRead
+			numBytesRead += int64(localBytesRead)
 		}
 
 	}
@@ -13255,7 +13255,7 @@ func (fh *FileHelper) SwapBasePath(
 //
 // # Return Values
 //
-//	numBytesWritten					int
+//	numBytesWritten					int64
 //
 //		If this method completes successfully, this
 //		integer value will equal the number of bytes
@@ -13281,7 +13281,7 @@ func (fh *FileHelper) WriteFileBytes(
 	createDirectoryPathIfNotExist bool,
 	bytesToWrite []byte,
 	errorPrefix interface{}) (
-	numBytesWritten int,
+	numBytesWritten int64,
 	err error) {
 
 	if fh.lock == nil {
@@ -13494,7 +13494,7 @@ func (fh *FileHelper) WriteFileBytes(
 
 	}
 
-	numBytesWritten = len(bytesToWrite)
+	numBytesWritten = int64(len(bytesToWrite))
 
 	return numBytesWritten, err
 }
@@ -13611,7 +13611,7 @@ func (fh *FileHelper) WriteFileBytes(
 //
 // # Return Values
 //
-//	numBytesWritten					int
+//	numBytesWritten					int64
 //
 //		If this method completes successfully, this
 //		integer value will equal the number of bytes
@@ -13638,7 +13638,7 @@ func (fh *FileHelper) WriteStrOpenClose(
 	truncateExistingFile bool,
 	textToWrite string,
 	errorPrefix interface{}) (
-	numBytesWritten int,
+	numBytesWritten int64,
 	err error) {
 
 	if fh.lock == nil {
@@ -13732,8 +13732,25 @@ func (fh *FileHelper) WriteStrOpenClose(
 		return numBytesWritten, err
 	}
 
-	numBytesWritten,
-		err = filePtr.WriteString(textToWrite)
+	var err2 error
+	var localBytesWritten int
+
+	localBytesWritten,
+		err2 = filePtr.WriteString(textToWrite)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by *os.File.WriteString(textToWrite)\n"+
+			"pathFileName= '%v'\n"+
+			"Error= \n%v\n",
+			ePrefix.String(),
+			pathFileName,
+			err2.Error())
+
+	} else {
+		numBytesWritten = int64(localBytesWritten)
+	}
 
 	return numBytesWritten, err
 }
