@@ -3106,7 +3106,7 @@ func (strArrayDto *StringArrayDto) SortByStrLengthShortestToLongest() {
 //	Before: ***Bella Ramsey**
 //	After: Bella Ramsey**
 //
-// To remove a suffix, use TrimPrefix instead.
+// To remove a prefix, use TrimPrefix instead.
 //
 // ----------------------------------------------------------------
 //
@@ -3160,7 +3160,7 @@ func (strArrayDto *StringArrayDto) TrimLeft(
 
 // TrimRight
 //
-// This method applies the 'Trim' function to every
+// This method applies the 'TrimRight' function to every
 // string in the string array encapsulated by the current
 // instance of StringArrayDto.
 //
@@ -3223,6 +3223,150 @@ func (strArrayDto *StringArrayDto) TrimRight(
 
 		strArrayDto.StrArray[i] =
 			strings.TrimRight(strArrayDto.StrArray[i], targetChars)
+
+	}
+
+}
+
+// TrimPrefix
+//
+// This method applies the 'TrimPrefix' function to every
+// string in the string array encapsulated by the current
+// instance of StringArrayDto.
+//
+// The TrimPrefix function returns a slice of the string
+// s, without the leading prefix specified by
+// 'targetChars'. If the original string doesn't start with
+// prefix 'targetChars', the original string is returned
+// unchanged.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	TargetChars: "***Hello "
+//	Before: ***Hello world.
+//	After: world.
+//
+// To remove text characters, see TrimLeft().
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method could potentially modify every string in
+//	the string array encapsulated by the current instance
+//	of StringArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	targetChars					string
+//
+//		The characters contained in this string will be removed
+//		from the trailing or right side of every string in the
+//		StringArrayDto string array.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	-- NONE --
+func (strArrayDto *StringArrayDto) TrimPrefix(
+	targetChars string) {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	lenStrArray := len(strArrayDto.StrArray)
+
+	if lenStrArray == 0 {
+
+		return
+	}
+
+	for i := 0; i < lenStrArray; i++ {
+
+		strArrayDto.StrArray[i] =
+			strings.TrimPrefix(strArrayDto.StrArray[i], targetChars)
+
+	}
+
+}
+
+// TrimSuffix
+//
+// This method applies the 'TrimSuffix' function to every
+// string in the string array encapsulated by the current
+// instance of StringArrayDto.
+//
+// The TrimSuffix function returns a slice of the string
+// s, without the trailing suffix specified by
+// 'targetChars'. If the original string doesn't end with
+// suffix 'targetChars', the original string is returned
+// unchanged.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	TargetChars: " world."
+//	Before: ***Hello world.
+//	After: ***Hello
+//
+// To remove text characters, see TrimRight().
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method could potentially modify every string in
+//	the string array encapsulated by the current instance
+//	of StringArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	targetChars					string
+//
+//		The characters contained in this string will be removed
+//		from the trailing or right side of every string in the
+//		StringArrayDto string array.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	-- NONE --
+func (strArrayDto *StringArrayDto) TrimSuffix(
+	targetChars string) {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	lenStrArray := len(strArrayDto.StrArray)
+
+	if lenStrArray == 0 {
+
+		return
+	}
+
+	for i := 0; i < lenStrArray; i++ {
+
+		strArrayDto.StrArray[i] =
+			strings.TrimSuffix(strArrayDto.StrArray[i], targetChars)
 
 	}
 
