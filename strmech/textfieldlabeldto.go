@@ -22,31 +22,34 @@ import (
 // value which may be set to 'Left', 'Right' or 'Center'.
 //
 // Text Label Justification Examples:
-//   'Hello World  ' - Left Justified, Field Length= 13
-//   '  Hello World' - Right Justified, Field Length= 13
-//   ' Hello World ' - Centered, Field Length= 13
+//
+//	'Hello World  ' - Left Justified, Field Length= 13
+//	'  Hello World' - Right Justified, Field Length= 13
+//	' Hello World ' - Centered, Field Length= 13
 //
 // Text Label Usage Example 1:
-//   LeftMarginStr = "" // Empty String
-//   FieldText = "Hello"  // Length = 5 characters
-//   FieldLength = 7
-//   FieldJustify = TxtJustify.Center()
-//   RightMarginStr = "" // Empty String
-//   LineTerminator = "" // Empty String
-//   MaxLineLength = -1
-//   TurnAutoLineLengthBreaksOn = false
-//   Final Text Label string = " Hello "
+//
+//	LeftMarginStr = "" // Empty String
+//	FieldText = "Hello"  // Length = 5 characters
+//	FieldLength = 7
+//	FieldJustify = TxtJustify.Center()
+//	RightMarginStr = "" // Empty String
+//	LineTerminator = "" // Empty String
+//	MaxLineLength = -1
+//	TurnAutoLineLengthBreaksOn = false
+//	Final Text Label string = " Hello "
 //
 // Text Label Usage Example 2:
-//   LeftMarginStr = "" // Empty String
-//   FieldText = "Hello"  // Length = 5 characters
-//   FieldLength = 7
-//   FieldJustify = TxtJustify.Center()
-//   RightMarginStr = "" // Empty String
-//   LineTerminator = "\n" // Empty String
-//   MaxLineLength = -1
-//   TurnAutoLineLengthBreaksOn = false
-//   Final Text Label string = " Hello \n"
+//
+//	LeftMarginStr = "" // Empty String
+//	FieldText = "Hello"  // Length = 5 characters
+//	FieldLength = 7
+//	FieldJustify = TxtJustify.Center()
+//	RightMarginStr = "" // Empty String
+//	LineTerminator = "\n" // Empty String
+//	MaxLineLength = -1
+//	TurnAutoLineLengthBreaksOn = false
+//	Final Text Label string = " Hello \n"
 //
 // Text Field Specifications are designed to be configured within a
 // line of text. Those lines of text can then be formatted for text
@@ -56,7 +59,6 @@ import (
 // TextFieldSpecLabel. Text Field Specifications are therefore
 // used as the components or building blocks for single lines of
 // text.
-
 type TextFieldLabelDto struct {
 	FormatType TextFieldType
 	// Required. This enumeration value specifies the type of Text

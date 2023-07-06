@@ -4,6 +4,7 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"sort"
+	"strings"
 	"sync"
 )
 
@@ -778,10 +779,10 @@ func (strArrayDto *StringArrayDto) Equal(
 // Formats all strings in the string array contained in
 // the current instance of StringArrayDto.
 //
-// A single instance of TextFieldLabelDto passed as input
-// parameter 'txtFieldFmt' is used to apply standardized
-// text formatting to all strings in the current instance
-// of StringArrayDto (StringArrayDto.StrArray).
+// Standardized text formatting is applied to all strings
+// in the StringArrayDto array (StringArrayDto.StrArray)
+// using input parameters containing text file format
+// specifications.
 //
 // ----------------------------------------------------------------
 //
@@ -1010,6 +1011,56 @@ func (strArrayDto *StringArrayDto) FormatStrArray(
 
 	if err != nil {
 		return err
+	}
+
+	lenStrArray := len(strArrayDto.StrArray)
+
+	if lenStrArray == 0 {
+		return err
+	}
+
+	maxLineLen := fieldLength +
+		len(leftMarginStr) +
+		len(rightMarginStr) +
+		len(lineTerminator)
+
+	strBuilder := new(strings.Builder)
+
+	strBuilder.Grow(256)
+
+	txtStrBuildr := new(TextStrBuilder)
+
+	for i := 0; i < lenStrArray; i++ {
+
+		fieldLabelSpec := TextFieldLabelDto{
+			FormatType:                 TxtFieldType.Label(),
+			LeftMarginStr:              leftMarginStr,
+			FieldText:                  strArrayDto.StrArray[i],
+			FieldLength:                fieldLength,
+			FieldJustify:               fieldJustify,
+			RightMarginStr:             rightMarginStr,
+			LineTerminator:             lineTerminator,
+			MaxLineLength:              maxLineLen,
+			TurnAutoLineLengthBreaksOn: false,
+			MultiLineLeftMarginStr:     "",
+		}
+
+		err = txtStrBuildr.
+			FieldLabelDto(
+				strBuilder,
+				fieldLabelSpec,
+				ePrefix.XCpy(
+					fmt.Sprintf("strArrayDto.StrArray[%v]",
+						i)))
+
+		if err != nil {
+
+			return err
+		}
+
+		strArrayDto.StrArray[i] = strBuilder.String()
+
+		strBuilder.Reset()
 	}
 
 	return err
