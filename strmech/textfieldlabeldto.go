@@ -89,8 +89,8 @@ type TextFieldLabelDto struct {
 	//
 	// If 'FieldLength' is greater than the length of the
 	// 'FieldText' text string, the 'FieldJustify' parameter will
-	//  be used to configure or justify the text within the
-	//  boundaries of the text field defined by 'FieldLength'.
+	// be used to configure or justify the text within the
+	// boundaries of the text field defined by 'FieldLength'.
 	//
 	// To automatically set the value of 'FieldLength' to the
 	// length of 'FieldText', set this parameter to a value of
@@ -127,7 +127,7 @@ type TextFieldLabelDto struct {
 	//     TxtJustify.Center()
 
 	RightMarginStr string
-	// The contents of the string will be used as the right
+	// The contents of this string will be used as the right
 	// margin for the Text Field.
 	//
 	// If no right margin is required, set 'RightMarginStr' to

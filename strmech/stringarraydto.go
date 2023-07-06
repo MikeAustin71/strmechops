@@ -773,6 +773,248 @@ func (strArrayDto *StringArrayDto) Equal(
 		incomingStrArray)
 }
 
+// FormatStrArray
+//
+// Formats all strings in the string array contained in
+// the current instance of StringArrayDto.
+//
+// A single instance of TextFieldLabelDto passed as input
+// parameter 'txtFieldFmt' is used to apply standardized
+// text formatting to all strings in the current instance
+// of StringArrayDto (StringArrayDto.StrArray).
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	To set input parameter 'fieldLength' to the length
+//	of the longest string in the StringArrayDto string
+//	array, first call StringArrayDto.GetMaxStringLen()
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will modify every string in the string
+//	array encapsulated by the current instance of
+//	StringArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	leftMarginStr				string
+//
+//		The contents of the string will be used as the
+//		left margin for the Text Field.
+//
+//		This left margin will be configured for every
+//		string in the string array encapsulated by
+//		StringArrayDto.
+//
+//		If no left margin is required, set 'LeftMarginStr'
+//		to a zero length or empty string, and no left
+//		margin will be created.
+//
+//	fieldLength					int
+//
+//		Used to format each string in the StringArrayDto
+//		string array. This is the length of the text
+//		field in which each string array member string
+//		will be displayed.
+//
+//		If 'FieldLength' is less than the length of the
+//		string array member string, it will be
+//		automatically set equal to the string array
+//		member string length.
+//
+//		If 'FieldLength' is greater than the length of
+//		the string array member string, the
+//		'FieldJustify' parameter will be used to
+//		configure or justify the text within the
+//		boundaries of the text field defined by
+//		'FieldLength'.
+//
+//		To automatically set the value of 'FieldLength'
+//		to the length of the string array member string,
+//		set this parameter to a value of minus one (-1).
+//
+//		If this parameter is submitted with a value less
+//		than minus one (-1) or greater than 1-million
+//		(1,000,000), an error will be returned.
+//
+//		To set input parameter 'fieldLength' to the
+//		length of the longest string in the StringArrayDto
+//		string array, first call:
+//			StringArrayDto.GetMaxStringLen()
+//
+//	fieldJustify				TextJustify
+//
+//		An enumeration which specifies the justification
+//		of the text label string within the text field
+//		specified by 'FieldLength'. In this case, the
+//		text label string is the string array member
+//		string as these formatting specifications are
+//		applied to all strings the StringArrayDto string
+//		array.
+//
+//		Text justification can only be evaluated in the
+//		context of a text label, field length and a Text
+//		Justification object of type TextJustify. This is
+//		because text labels with a field length equal to
+//		or less than the length of the text label never
+//		use text justification. In these cases, text
+//		justification is completely ignored.
+//
+//		If the field length is greater than the length of
+//		the text label, text justification must be equal
+//		to one of these three valid values:
+//		    TextJustify(0).Left()
+//		    TextJustify(0).Right()
+//		    TextJustify(0).Center()
+//
+//		You can also use the abbreviated text justification
+//		enumeration syntax as follows:
+//
+//		    TxtJustify.Left()
+//		    TxtJustify.Right()
+//		    TxtJustify.Center()
+//
+//	rightMarginStr				string
+//
+//		The contents of this string will be used as the
+//		right margin for the text label field populated
+//		by the string array member string.
+//
+//		If no right margin is required, set
+//		'RightMarginStr' to a zero length or empty
+//		string, and no right margin will be created.
+//
+//	lineTerminator				string
+//
+//		This string holds the character or characters
+//		which will be used to terminate the formatted
+//		line of text output thereby converting this text
+//		element into a valid line of text with an end of
+//		line delimiter. Line Termination is optional.
+//		Populate this string only if this text output
+//		should be formatted as a separate line of text.
+//
+//		The most common usage sets this string to a new
+//		line character ("\n").
+//
+//		If no Line Terminator is required, set
+//		'LineTerminator' to a zero length or empty string
+//		and no line termination characters will be created.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (strArrayDto *StringArrayDto) FormatStrArray(
+	leftMarginStr string,
+	fieldLength int,
+	fieldJustify TextJustify,
+	rightMarginStr string,
+	lineTerminator string,
+	errorPrefix interface{}) error {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StringArrayDto."+
+			"FormatStrArray()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return err
+}
+
 // GetDescription1 - Description1 is a name, tag, label or
 // narrative text used to describe the current instance of
 // StringArrayDto.
