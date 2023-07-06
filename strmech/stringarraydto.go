@@ -3087,3 +3087,143 @@ func (strArrayDto *StringArrayDto) SortByStrLengthShortestToLongest() {
 	sort.Sort(SortStrLengthLowestToHighest(strArrayDto.StrArray))
 
 }
+
+// TrimLeft
+//
+// This method applies the 'TrimLeft' function to every
+// string in the string array encapsulated by the current
+// instance of StringArrayDto.
+//
+// The 'TrimLeft' function returns a slice of the string
+// s, with all leading Unicode code points contained in
+// 'targetChars' removed.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	TargetChars: "*"
+//	Before: ***Bella Ramsey**
+//	After: Bella Ramsey**
+//
+// To remove a suffix, use TrimPrefix instead.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method could potentially modify every string in
+//	the string array encapsulated by the current instance
+//	of StringArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	targetChars					string
+//
+//		The characters contained in this string will be removed
+//		from the leading or left side of every string in the
+//		StringArrayDto string array.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	-- NONE --
+func (strArrayDto *StringArrayDto) TrimLeft(
+	targetChars string) {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	lenStrArray := len(strArrayDto.StrArray)
+
+	if lenStrArray == 0 {
+
+		return
+	}
+
+	for i := 0; i < lenStrArray; i++ {
+
+		strArrayDto.StrArray[i] =
+			strings.TrimLeft(strArrayDto.StrArray[i], targetChars)
+
+	}
+
+}
+
+// TrimRight
+//
+// This method applies the 'Trim' function to every
+// string in the string array encapsulated by the current
+// instance of StringArrayDto.
+//
+// The TrimRight function returns a slice of the string
+// s, with all trailing Unicode code points contained in
+// 'targetChars' removed.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	TargetChars: "*"
+//	Before: ***Bella Ramsey**
+//	After: ***Bella Ramsey
+//
+// To remove a suffix, use TrimSuffix instead.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method could potentially modify every string in
+//	the string array encapsulated by the current instance
+//	of StringArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	targetChars					string
+//
+//		The characters contained in this string will be removed
+//		from the trailing or right side of every string in the
+//		StringArrayDto string array.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	-- NONE --
+func (strArrayDto *StringArrayDto) TrimRight(
+	targetChars string) {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	lenStrArray := len(strArrayDto.StrArray)
+
+	if lenStrArray == 0 {
+
+		return
+	}
+
+	for i := 0; i < lenStrArray; i++ {
+
+		strArrayDto.StrArray[i] =
+			strings.TrimRight(strArrayDto.StrArray[i], targetChars)
+
+	}
+
+}
