@@ -242,6 +242,137 @@ func (strArrayDto *StringArrayDto) AddStringArrayDto(
 	return
 }
 
+// AppendPrefix
+//
+// Appends a string to the beginning of each string
+// contained in the string array encapsulated by the
+// current instance of StringArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	prefixStr = "**"
+//
+//	Before: "Hello World"
+//	After:	"**Hello World"
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will modify every string in the string
+//	array encapsulated by the current instance of
+//	StringArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	prefixStr					string
+//
+//		This string will be appended to the beginning of
+//		every string contained in the string array
+//		encapsulated by the current instance of
+//		StringArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	-- NONE --
+func (strArrayDto *StringArrayDto) AppendPrefix(
+	prefixStr string) {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	lenStrArray := len(strArrayDto.StrArray)
+
+	if lenStrArray == 0 {
+
+		return
+	}
+
+	for i := 0; i < lenStrArray; i++ {
+
+		strArrayDto.StrArray[i] =
+			prefixStr + strArrayDto.StrArray[i]
+
+	}
+
+}
+
+// AppendSuffix
+//
+// Appends a string to the end of each string contained
+// in the string array encapsulated by the current
+// instance of StringArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// # Usage
+//
+//	suffixStr = "**"
+//
+//	Before: "Hello World"
+//	After:	"Hello World**"
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will modify every string in the string
+//	array encapsulated by the current instance of
+//	StringArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	prefixStr					string
+//
+//		This string will be appended to the end of every
+//		string contained in the string array encapsulated
+//		by the current instance of StringArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	-- NONE --
+func (strArrayDto *StringArrayDto) AppendSuffix(
+	suffixStr string) {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	lenStrArray := len(strArrayDto.StrArray)
+
+	if lenStrArray == 0 {
+
+		return
+	}
+
+	for i := 0; i < lenStrArray; i++ {
+
+		strArrayDto.StrArray[i] =
+			strArrayDto.StrArray[i] + suffixStr
+
+	}
+
+}
+
 //	ConcatenateStrings
 //
 //	Concatenates all the strings in the internal string
