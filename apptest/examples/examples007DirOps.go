@@ -422,7 +422,7 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirProfile01() {
 func (dirOpsTest007 MainDirOpsTest007) GetDirTreeProfile01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"MainDirOpsTest007.GetDirProfile01()",
+		"MainDirOpsTest007.GetDirTreeProfile01()",
 		"")
 
 	breakStr := " " + strings.Repeat("=", 50)
@@ -501,6 +501,8 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirTreeProfile01() {
 		len(leftMargin) -
 		len(rightMargin)
 
+	solidLineChar := "-"
+
 	topTitle := strmech.TextLineTitleMarqueeDto{
 		StandardSolidLineLeftMargin:  leftMargin,
 		StandardSolidLineRightMargin: rightMargin,
@@ -510,12 +512,12 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirTreeProfile01() {
 		StandardTextFieldLen:         netFieldLength,
 		StandardTextJustification:    strmech.TxtJustify.Center(),
 		NumLeadingBlankLines:         1,
-		LeadingSolidLineChar:         "-",
+		LeadingSolidLineChar:         solidLineChar,
 		NumLeadingSolidLines:         1,
 		NumTopTitleBlankLines:        0,
 		TitleLines:                   strmech.TextLineSpecLinesCollection{},
 		NumBottomTitleBlankLines:     0,
-		TrailingSolidLineChar:        "-",
+		TrailingSolidLineChar:        solidLineChar,
 		NumTrailingSolidLines:        1,
 		NumTrailingBlankLines:        0,
 	}
@@ -554,13 +556,13 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirTreeProfile01() {
 		StandardTextFieldLen:         netFieldLength,
 		StandardTextJustification:    strmech.TxtJustify.Center(),
 		NumLeadingBlankLines:         1,
-		LeadingSolidLineChar:         "-",
+		LeadingSolidLineChar:         solidLineChar,
 		NumLeadingSolidLines:         1,
 		NumTopTitleBlankLines:        0,
 		TitleLines:                   strmech.TextLineSpecLinesCollection{},
 		NumBottomTitleBlankLines:     0,
-		TrailingSolidLineChar:        "-",
-		NumTrailingSolidLines:        1,
+		TrailingSolidLineChar:        solidLineChar,
+		NumTrailingSolidLines:        0,
 		NumTrailingBlankLines:        0,
 	}
 
