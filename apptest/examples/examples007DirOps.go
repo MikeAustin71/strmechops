@@ -6,6 +6,7 @@ import (
 	"github.com/MikeAustin71/strmechops/strmech"
 	"os"
 	"strings"
+	"time"
 )
 
 type MainDirOpsTest007 struct {
@@ -284,13 +285,38 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirProfile01() {
 
 	strBuilder := strings.Builder{}
 
+	leftMargin := " "
+	rightMargin := ""
+	maxLineLength := 80
+
+	netFieldLength := maxLineLength -
+		len(leftMargin) -
+		len(rightMargin)
+
+	topTitle := strmech.TextLineTitleMarqueeDto{
+		StandardSolidLineLeftMargin:  leftMargin,
+		StandardSolidLineRightMargin: rightMargin,
+		StandardTitleLeftMargin:      leftMargin,
+		StandardTitleRightMargin:     rightMargin,
+		StandardMaxLineLen:           maxLineLength,
+		StandardTextFieldLen:         netFieldLength,
+		StandardTextJustification:    strmech.TxtJustify.Center(),
+		NumLeadingBlankLines:         1,
+		LeadingSolidLineChar:         "-",
+		NumLeadingSolidLines:         1,
+		NumTopTitleBlankLines:        0,
+		TitleLines:                   strmech.TextLineSpecLinesCollection{},
+		NumBottomTitleBlankLines:     0,
+		TrailingSolidLineChar:        "-",
+		NumTrailingSolidLines:        1,
+		NumTrailingBlankLines:        0,
+	}
+
 	err = dirProfile.GetTextListing(
-		" ",
-		"",
-		80,
-		'-',
-		"Directory Metrics",
-		true,
+		leftMargin,
+		rightMargin,
+		maxLineLength,
+		topTitle,
 		&strBuilder,
 		ePrefix)
 
@@ -408,13 +434,81 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirTreeProfile01() {
 
 	strBuilder := strings.Builder{}
 
+	leftMargin := " "
+	rightMargin := ""
+	maxLineLength := 80
+
+	netFieldLength := maxLineLength -
+		len(leftMargin) -
+		len(rightMargin)
+
+	topTitle := strmech.TextLineTitleMarqueeDto{
+		StandardSolidLineLeftMargin:  leftMargin,
+		StandardSolidLineRightMargin: rightMargin,
+		StandardTitleLeftMargin:      leftMargin,
+		StandardTitleRightMargin:     rightMargin,
+		StandardMaxLineLen:           maxLineLength,
+		StandardTextFieldLen:         netFieldLength,
+		StandardTextJustification:    strmech.TxtJustify.Center(),
+		NumLeadingBlankLines:         1,
+		LeadingSolidLineChar:         "-",
+		NumLeadingSolidLines:         1,
+		NumTopTitleBlankLines:        0,
+		TitleLines:                   strmech.TextLineSpecLinesCollection{},
+		NumBottomTitleBlankLines:     0,
+		TrailingSolidLineChar:        "-",
+		NumTrailingSolidLines:        1,
+		NumTrailingBlankLines:        0,
+	}
+
+	err = topTitle.AddTitleLineStrings(
+		ePrefix,
+		"Directory Metrics")
+
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	err = topTitle.AddTitleLineDateTimeStr(
+		time.Now(),
+		""
+		ePrefix,
+		"Directory Metrics")
+
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+
+	topTitle := strmech.TextLineTitleMarqueeDto{
+		StandardSolidLineLeftMargin:  leftMargin,
+		StandardSolidLineRightMargin: rightMargin,
+		StandardTitleLeftMargin:      leftMargin,
+		StandardTitleRightMargin:     rightMargin,
+		StandardMaxLineLen:           maxLineLength,
+		StandardTextFieldLen:         netFieldLength,
+		StandardTextJustification:    strmech.TxtJustify.Center(),
+		NumLeadingBlankLines:         1,
+		LeadingSolidLineChar:         "-",
+		NumLeadingSolidLines:         1,
+		NumTopTitleBlankLines:        0,
+		TitleLines:                   strmech.TextLineSpecLinesCollection{},
+		NumBottomTitleBlankLines:     0,
+		TrailingSolidLineChar:        "-",
+		NumTrailingSolidLines:        1,
+		NumTrailingBlankLines:        0,
+	}
+
 	err = dirProfile.GetTextListing(
 		" ",
 		"",
-		80,
-		'-',
-		"Directory Metrics",
-		true,
+		topTitle,
 		&strBuilder,
 		ePrefix)
 

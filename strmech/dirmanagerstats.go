@@ -5,7 +5,6 @@ import (
 	ePref "github.com/MikeAustin71/errpref"
 	"strings"
 	"sync"
-	"time"
 )
 
 // DirectoryStatsDto
@@ -596,25 +595,48 @@ func (dirProfile *DirectoryProfile) AddDirProfileStats(
 //		length for all text lines. If this value is
 //		less than 10, an error will be returned.
 //
-//	solidLineChar				rune
+//	topTitleDisplay				TextLineTitleMarqueeDto
 //
-//		This single character will be used to construct
-//		'line-breaks' after the title line. Examples:
-//			'-'	"----------------------------"
-//			'='	"============================"
-//			'*'	"****************************"
+//		Contains specifications for the top tile display
+//		including title lines and solid line breaks.
 //
+//		If no title is required, set this parameter to an
+//		empty instance of TextLineTitleMarqueeDto.
 //
-//	titleLine					string
+//		Example:
+//			titleMarquee = 	TextLineTitleMarqueeDto{}
 //
-//		The text in this string will be formatted as the
-//		title for the text listing display.
+//		All TextLineTitleMarqueeDto member data values
+//		are public. Just set the data values as
+//		necessary during creation of the
+//		TextLineTitleMarqueeDto instance. Afterward, use
+//		the 'Add' methods to add title lines to the
+//		TextLineTitleMarqueeDto collection.
 //
-//	addDateTimeLine				bool
+//	bottomTitleDisplay			TextLineTitleMarqueeDto
 //
-//		When set to 'true' a text line will be added for
-//		current date and time expressed as a local time
-//		value.
+//		Contains specifications for the bottom tile
+//		display including title lines and solid line
+//		breaks.
+//
+//		If no bottom title is required, set this
+//		parameter to an empty instance of
+//		TextLineTitleMarqueeDto.
+//
+//		Example:
+//			titleMarquee = 	TextLineTitleMarqueeDto{}
+//
+//		All TextLineTitleMarqueeDto member data values
+//		are public. Just set the data values as
+//		necessary during creation of the
+//		TextLineTitleMarqueeDto instance. Afterward, use
+//		the 'Add' methods to add title lines to the
+//		TextLineTitleMarqueeDto collection.
+//
+//		If no bottom title lines are required, and the
+//		solid line breaks are still necessary, simply
+//		the title lines to empty blank strings with
+//		a length greater than one.
 //
 //	strBuilder					*strings.Builder
 //
@@ -702,9 +724,8 @@ func (dirProfile *DirectoryProfile) GetTextListing(
 	leftMargin string,
 	rightMargin string,
 	maxLineLength int,
-	solidLineChar rune,
-	titleLine string,
-	addDateTimeLine bool,
+	topTitleDisplay TextLineTitleMarqueeDto,
+	bottomTitleDisplay TextLineTitleMarqueeDto,
 	strBuilder *strings.Builder,
 	errorPrefix interface{}) error {
 
@@ -760,18 +781,6 @@ func (dirProfile *DirectoryProfile) GetTextListing(
 			"'maxLineLength' = %v\n",
 			ePrefix.String(),
 			maxLineLength)
-
-	}
-
-	if solidLineChar == 0 {
-
-		solidLineChar = '-'
-
-	}
-
-	if len(titleLine) == 0 {
-
-		titleLine = "Directory Listing"
 
 	}
 
@@ -850,44 +859,16 @@ func (dirProfile *DirectoryProfile) GetTextListing(
 
 	txtFormatCol := TextFormatterCollection{}
 
-	var titleMarquee TextLineTitleMarqueeDto
+	if topTitleDisplay.IsValidInstance() {
 
-	titleMarquee,
-		err = new(TextLineTitleMarqueeDto).
-		NewBasicTitleMarqueeDto(
-			leftMargin,
-			rightMargin,
-			leftMargin,
-			rightMargin,
-			maxLineLength,
-			string(solidLineChar),
-			ePrefix.XCpy("titleMarquee<-"),
-			titleLine+"\n")
-
-	if err != nil {
-		return err
-	}
-
-	if addDateTimeLine == true {
-
-		err = titleMarquee.AddTitleLineDateTimeStr(
-			time.Now(),
-			"Monday 2006-01-02 15:04:05.000000000 -0700 MST",
-			ePrefix)
+		err = txtFormatCol.AddTextTitleMarqueeDto(
+			topTitleDisplay,
+			ePrefix.XCpy("<-topTitleDisplay"))
 
 		if err != nil {
 			return err
 		}
-	}
 
-	titleMarquee.NumTrailingBlankLines = 0
-
-	err = txtFormatCol.AddTextTitleMarqueeDto(
-		titleMarquee,
-		ePrefix.XCpy("<-titleMarquee"))
-
-	if err != nil {
-		return err
 	}
 
 	effectiveLineLen := maxLineLength - lenLeftMar - lenRightMar - 1
@@ -933,9 +914,21 @@ func (dirProfile *DirectoryProfile) GetTextListing(
 
 	}
 
+	solidLineChar := "-"
+
+	if len(topTitleDisplay.TrailingSolidLineChar) > 0 {
+
+		solidLineChar = topTitleDisplay.TrailingSolidLineChar
+
+	} else if len(topTitleDisplay.LeadingSolidLineChar) > 0 {
+
+		solidLineChar = topTitleDisplay.LeadingSolidLineChar
+
+	}
+
 	txtFormatCol.AddLineSolid(
 		leftMargin,
-		string(solidLineChar),
+		solidLineChar,
 		effectiveLineLen,
 		rightMargin,
 		true,
