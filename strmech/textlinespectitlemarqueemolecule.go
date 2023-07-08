@@ -149,15 +149,19 @@ func (txtLineTitleMolecule *textLineSpecTitleMarqueeMolecule) getFormattedText(
 	beginningStrBuilderLen := strBuilder.Len()
 	var collectionMaxLineLen int
 
-	collectionMaxLineLen,
-		err = txtLineTitleMarquee.leadingMarqueeLines.
-		TextBuilder(
-			strBuilder,
-			ePrefix.XCpy(
-				"txtLineTitleMarquee.leadingMarqueeLines"))
+	if len(txtLineTitleMarquee.leadingMarqueeLines.textLines) > 0 {
 
-	if err != nil {
-		return maxLineLength, totalStrLength, err
+		collectionMaxLineLen,
+			err = txtLineTitleMarquee.leadingMarqueeLines.
+			TextBuilder(
+				strBuilder,
+				ePrefix.XCpy(
+					"txtLineTitleMarquee.leadingMarqueeLines"))
+
+		if err != nil {
+			return maxLineLength, totalStrLength, err
+		}
+
 	}
 
 	if collectionMaxLineLen > maxLineLength {
@@ -182,15 +186,19 @@ func (txtLineTitleMolecule *textLineSpecTitleMarqueeMolecule) getFormattedText(
 		maxLineLength = collectionMaxLineLen
 	}
 
-	collectionMaxLineLen,
-		err = txtLineTitleMarquee.trailingMarqueeLines.
-		TextBuilder(
-			strBuilder,
-			ePrefix.XCpy(
-				"txtLineTitleMarquee.trailingMarqueeLines"))
+	if len(txtLineTitleMarquee.trailingMarqueeLines.textLines) > 0 {
 
-	if err != nil {
-		return maxLineLength, totalStrLength, err
+		collectionMaxLineLen,
+			err = txtLineTitleMarquee.trailingMarqueeLines.
+			TextBuilder(
+				strBuilder,
+				ePrefix.XCpy(
+					"txtLineTitleMarquee.trailingMarqueeLines"))
+
+		if err != nil {
+			return maxLineLength, totalStrLength, err
+		}
+
 	}
 
 	if collectionMaxLineLen > maxLineLength {
