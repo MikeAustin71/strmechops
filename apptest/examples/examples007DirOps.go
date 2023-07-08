@@ -29,7 +29,21 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirs01() {
 
 	fmt.Printf("\n" + breakStr + "\n\n\n")
 
-	targetDir := "..\\fileOpsTest\\filesForTest"
+	var err error
+	var strMechOpsBaseDir string
+
+	strMechOpsBaseDir,
+		err = ExampleUtility{}.GetBaseDirectory(
+		ePrefix.XCpy("strMechOpsBaseDir<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	targetDir := strMechOpsBaseDir +
+		"\\fileOpsTest\\filesForTest"
 
 	osPathSepStr := string(os.PathSeparator)
 
@@ -42,7 +56,6 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirs01() {
 	var numOfDirectoriesLocated int
 	var isParentDirectoryIncluded bool
 	var directoriesLocated strmech.DirMgrCollection
-	var err error
 
 	numOfDirectoriesLocated,
 		isParentDirectoryIncluded,
@@ -136,7 +149,22 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirs02() {
 
 	fmt.Printf("\n" + breakStr + "\n\n\n")
 
-	targetDir := "..\\fileOpsTest\\filesForTest"
+	var err error
+	var strMechOpsBaseDir string
+
+	strMechOpsBaseDir,
+		err = ExampleUtility{}.GetBaseDirectory(
+		ePrefix.XCpy("strMechOpsBaseDir<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	targetDir := strMechOpsBaseDir +
+		"\\fileOpsTest\\filesForTest"
+
 	osPathSepStr := string(os.PathSeparator)
 
 	targetDir = strings.Replace(
@@ -148,7 +176,6 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirs02() {
 	var numOfDirectoriesLocated int
 	var isParentDirectoryIncluded bool
 	var directoriesLocated strmech.DirMgrCollection
-	var err error
 
 	numOfDirectoriesLocated,
 		isParentDirectoryIncluded,
@@ -242,7 +269,21 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirProfile01() {
 
 	fmt.Printf("\n" + breakStr + "\n\n\n")
 
-	targetDir := "..\\fileOpsTest\\filesForTest\\levelfilesfortest"
+	var err error
+	var strMechOpsBaseDir string
+
+	strMechOpsBaseDir,
+		err = ExampleUtility{}.GetBaseDirectory(
+		ePrefix.XCpy("strMechOpsBaseDir<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	targetDir := strMechOpsBaseDir +
+		"\\fileOpsTest\\filesForTest\\levelfilesfortest"
 
 	osPathSepStr := string(os.PathSeparator)
 
@@ -252,7 +293,8 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirProfile01() {
 		osPathSepStr,
 		-1)
 
-	targetOutputFile := "..\\apptest\\examples\\testoutput.txt"
+	targetOutputFile := strMechOpsBaseDir +
+		"\\apptest\\examples\\testoutput.txt"
 
 	targetOutputFile = strings.Replace(
 		targetOutputFile,
@@ -260,7 +302,6 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirProfile01() {
 		osPathSepStr,
 		-1)
 
-	var err error
 	var dirProfile strmech.DirectoryProfile
 	var directoryPathDoesExist bool
 
@@ -439,16 +480,20 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirTreeProfile01() {
 	var strMechOpsBaseDir string
 
 	strMechOpsBaseDir,
-		err = GetBaseDirectory(
+		err = ExampleUtility{}.GetBaseDirectory(
 		ePrefix.XCpy("strMechOpsBaseDir<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
 
 	fmt.Printf("strMechOpsBaseDir: %v\n",
 		strMechOpsBaseDir)
 
 	targetDir := strMechOpsBaseDir +
 		"\\fileOpsTest\\filesForTest\\levelfilesfortest\\level_01_dir\\level_02_dir\\level_03_dir"
-
-	//	"\\fileOpsTest\\filesForTest\\levelfilesfortest"
 
 	osPathSepStr := string(os.PathSeparator)
 
@@ -496,12 +541,11 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirTreeProfile01() {
 	leftMargin := " "
 	rightMargin := ""
 	maxLineLength := 80
+	solidLineChar := "-"
 
 	netFieldLength := maxLineLength -
 		len(leftMargin) -
-		len(rightMargin)
-
-	solidLineChar := "-"
+		len(rightMargin) - 1
 
 	topTitle := strmech.TextLineTitleMarqueeDto{
 		StandardSolidLineLeftMargin:  leftMargin,

@@ -6,6 +6,7 @@ import (
 	"github.com/MikeAustin71/strmechops/strmech"
 	"os"
 	"strings"
+	"time"
 )
 
 type MainFileOpsTest008 struct {
@@ -15,7 +16,7 @@ type MainFileOpsTest008 struct {
 func (dirOpsTest008 MainFileOpsTest008) GetFiles01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"MainDirOpsTest007.MainDirOpsTest007()",
+		"MainDirOpsTest007.GetFiles01()",
 		"")
 
 	breakStr := " " + strings.Repeat("=", 50)
@@ -28,7 +29,24 @@ func (dirOpsTest008 MainFileOpsTest008) GetFiles01() {
 
 	fmt.Printf("\n" + breakStr + "\n\n\n")
 
-	targetDir := "D:\\t00"
+	var err error
+	var strMechOpsBaseDir string
+
+	strMechOpsBaseDir,
+		err = ExampleUtility{}.GetBaseDirectory(
+		ePrefix.XCpy("strMechOpsBaseDir<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("strMechOpsBaseDir: %v\n",
+		strMechOpsBaseDir)
+
+	targetDir := strMechOpsBaseDir +
+		"\\fileOpsTest\\filesForTest\\levelfilesfortest\\level_01_dir\\level_02_dir\\level_03_dir"
 
 	osPathSepStr := string(os.PathSeparator)
 
@@ -40,7 +58,6 @@ func (dirOpsTest008 MainFileOpsTest008) GetFiles01() {
 
 	var numOFilesLocated int
 	var filesLocated strmech.FileMgrCollection
-	var err error
 
 	_, // numOfDirectoriesLocated
 		_,                //isParentDirectoryIncluded
@@ -71,16 +88,129 @@ func (dirOpsTest008 MainFileOpsTest008) GetFiles01() {
 	fmt.Printf(" Number Of Files Located: %v\n",
 		numOFilesLocated)
 
+	leftMargin := " "
+	rightMargin := ""
+	maxLineLength := 80
+	solidLineChar := "-"
+
+	netFieldLength := maxLineLength -
+		len(leftMargin) -
+		len(rightMargin) - 1
+
+	topTitle := strmech.TextLineTitleMarqueeDto{
+		StandardSolidLineLeftMargin:  leftMargin,
+		StandardSolidLineRightMargin: rightMargin,
+		StandardTitleLeftMargin:      leftMargin,
+		StandardTitleRightMargin:     rightMargin,
+		StandardMaxLineLen:           maxLineLength,
+		StandardTextFieldLen:         netFieldLength,
+		StandardTextJustification:    strmech.TxtJustify.Center(),
+		NumLeadingBlankLines:         1,
+		LeadingSolidLineChar:         solidLineChar,
+		NumLeadingSolidLines:         1,
+		NumTopTitleBlankLines:        0,
+		TitleLines:                   strmech.TextLineSpecLinesCollection{},
+		NumBottomTitleBlankLines:     0,
+		TrailingSolidLineChar:        solidLineChar,
+		NumTrailingSolidLines:        1,
+		NumTrailingBlankLines:        0,
+	}
+
+	err = topTitle.AddTitleLineStrings(
+		ePrefix,
+		"Selected Files")
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	dateFmtStr := new(strmech.DateTimeHelper).
+		GetDateTimeFormat(
+			2)
+
+	err = topTitle.AddTitleLineDateTimeStr(
+		time.Now(),
+		dateFmtStr,
+		ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	bottomTitle := strmech.TextLineTitleMarqueeDto{
+		StandardSolidLineLeftMargin:  leftMargin,
+		StandardSolidLineRightMargin: rightMargin,
+		StandardTitleLeftMargin:      leftMargin,
+		StandardTitleRightMargin:     rightMargin,
+		StandardMaxLineLen:           maxLineLength,
+		StandardTextFieldLen:         netFieldLength,
+		StandardTextJustification:    strmech.TxtJustify.Center(),
+		NumLeadingBlankLines:         1,
+		LeadingSolidLineChar:         solidLineChar,
+		NumLeadingSolidLines:         1,
+		NumTopTitleBlankLines:        0,
+		TitleLines:                   strmech.TextLineSpecLinesCollection{},
+		NumBottomTitleBlankLines:     0,
+		TrailingSolidLineChar:        solidLineChar,
+		NumTrailingSolidLines:        1,
+		NumTrailingBlankLines:        1,
+	}
+
+	fileBytes := filesLocated.GetTotalFileBytes()
+
+	var intSep strmech.IntegerSeparatorSpec
+
+	intSep,
+		err = new(strmech.IntegerSeparatorSpec).
+		NewUnitedStatesDefaults(
+			ePrefix.XCpy(
+				"intSep<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var delimitedNumStr string
+
+	delimitedNumStr,
+		err = intSep.
+		GetFmtIntSeparatedNumStr(
+			fmt.Sprintf("%v",
+				fileBytes),
+			ePrefix.XCpy("<-fileBytes"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	err = bottomTitle.AddTitleLineStrings(
+		ePrefix,
+		fmt.Sprintf("Total File Bytes: %v",
+			delimitedNumStr))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
 	strBuilder := strings.Builder{}
 
 	err = filesLocated.
 		GetTextListing(
-			" ",
-			"",
-			80,
-			'-',
-			"Directory "+targetDir,
-			true,
+			leftMargin,
+			rightMargin,
+			maxLineLength,
+			topTitle,
+			bottomTitle,
 			&strBuilder,
 			ePrefix.XCpy("<-filesLocated"))
 
@@ -134,7 +264,7 @@ func (dirOpsTest008 MainFileOpsTest008) ReadFiles01() {
 	var strMechOpsBaseDir string
 
 	strMechOpsBaseDir,
-		err = GetBaseDirectory(
+		err = ExampleUtility{}.GetBaseDirectory(
 		ePrefix.XCpy("strMechOpsBaseDir<-"))
 
 	fmt.Printf("strMechOpsBaseDir: %v\n",
@@ -212,7 +342,7 @@ func (dirOpsTest008 MainFileOpsTest008) ReadFiles02() {
 	var strMechOpsBaseDir string
 
 	strMechOpsBaseDir,
-		err = GetBaseDirectory(
+		err = ExampleUtility{}.GetBaseDirectory(
 		ePrefix.XCpy("strMechOpsBaseDir<-"))
 
 	fmt.Printf("strMechOpsBaseDir: %v\n",
@@ -289,7 +419,7 @@ func (dirOpsTest008 MainFileOpsTest008) WriteFileBytes01() {
 	var strMechOpsBaseDir string
 
 	strMechOpsBaseDir,
-		err = GetBaseDirectory(
+		err = ExampleUtility{}.GetBaseDirectory(
 		ePrefix.XCpy("strMechOpsBaseDir<-"))
 
 	fmt.Printf("strMechOpsBaseDir: %v\n",

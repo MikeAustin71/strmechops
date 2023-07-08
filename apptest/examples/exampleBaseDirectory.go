@@ -7,11 +7,15 @@ import (
 	"strings"
 )
 
+type ExampleUtility struct {
+	Input string
+}
+
 // GetBaseDirectory
 //
 // Used to search for and return the base directory
 // path to the 'strmechops' project.
-func GetBaseDirectory(
+func (exUtil ExampleUtility) GetBaseDirectory(
 	errorPrefix interface{}) (
 	string,
 	error) {

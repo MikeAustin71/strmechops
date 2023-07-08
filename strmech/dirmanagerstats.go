@@ -613,6 +613,10 @@ func (dirProfile *DirectoryProfile) AddDirProfileStats(
 //		the 'Add' methods to add title lines to the
 //		TextLineTitleMarqueeDto collection.
 //
+//		If no top title text lines are required, and the
+//		solid line breaks are still necessary, simply
+//		leave the title lines collection empty.
+//
 //	bottomTitleDisplay			TextLineTitleMarqueeDto
 //
 //		Contains specifications for the bottom tile
@@ -633,10 +637,9 @@ func (dirProfile *DirectoryProfile) AddDirProfileStats(
 //		the 'Add' methods to add title lines to the
 //		TextLineTitleMarqueeDto collection.
 //
-//		If no bottom title lines are required, and the
-//		solid line breaks are still necessary, simply
-//		the title lines to empty blank strings with
-//		a length greater than one.
+//		If no bottom title text lines are required, and
+//		the solid line breaks are still necessary, simply
+//		leave the title lines collection empty.
 //
 //	strBuilder					*strings.Builder
 //

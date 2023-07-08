@@ -5,7 +5,6 @@ import (
 	ePref "github.com/MikeAustin71/errpref"
 	"strings"
 	"sync"
-	"time"
 )
 
 type FileMgrCollectionMolecule struct {
@@ -48,25 +47,51 @@ type FileMgrCollectionMolecule struct {
 //		length for all text lines. If this value is
 //		less than 10, an error will be returned.
 //
-//	solidLineChar				rune
+//	topTitleDisplay				TextLineTitleMarqueeDto
 //
-//		This single character will be used to construct
-//		'line-breaks' after the title line. Examples:
-//			'-'	"----------------------------"
-//			'='	"============================"
-//			'*'	"****************************"
+//		Contains specifications for the top tile display
+//		including title lines and solid line breaks.
 //
+//		If no title is required, set this parameter to an
+//		empty instance of TextLineTitleMarqueeDto.
 //
-//	titleLine					string
+//		Example:
+//			titleMarquee = 	TextLineTitleMarqueeDto{}
 //
-//		The text in this string will be formatted as the
-//		title for the text listing display.
+//		All TextLineTitleMarqueeDto member data values
+//		are public. Just set the data values as
+//		necessary during creation of the
+//		TextLineTitleMarqueeDto instance. Afterward, use
+//		the 'Add' methods to add title lines to the
+//		TextLineTitleMarqueeDto collection.
 //
-//	addDateTimeLine				bool
+//		If no top title text lines are required, and the
+//		solid line breaks are still necessary, simply
+//		leave the title lines collection empty.
 //
-//		When set to 'true' a text line will be added for
-//		current date and time expressed as a local time
-//		value.
+//	bottomTitleDisplay			TextLineTitleMarqueeDto
+//
+//		Contains specifications for the bottom tile
+//		display including title lines and solid line
+//		breaks.
+//
+//		If no bottom title is required, set this
+//		parameter to an empty instance of
+//		TextLineTitleMarqueeDto.
+//
+//		Example:
+//			titleMarquee = 	TextLineTitleMarqueeDto{}
+//
+//		All TextLineTitleMarqueeDto member data values
+//		are public. Just set the data values as
+//		necessary during creation of the
+//		TextLineTitleMarqueeDto instance. Afterward, use
+//		the 'Add' methods to add title lines to the
+//		TextLineTitleMarqueeDto collection.
+//
+//		If no bottom title text lines are required, and
+//		the solid line breaks are still necessary, simply
+//		leave the title lines collection empty.
 //
 //	strBuilder					*strings.Builder
 //
@@ -96,9 +121,8 @@ func (fMgrColMolecule *FileMgrCollectionMolecule) fmtTextListingAllFiles(
 	leftMargin string,
 	rightMargin string,
 	maxLineLength int,
-	solidLineChar rune,
-	titleLine string,
-	addDateTimeLine bool,
+	topTitleDisplay TextLineTitleMarqueeDto,
+	bottomTitleDisplay TextLineTitleMarqueeDto,
 	strBuilder *strings.Builder,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
@@ -164,18 +188,6 @@ func (fMgrColMolecule *FileMgrCollectionMolecule) fmtTextListingAllFiles(
 
 	}
 
-	if solidLineChar == 0 {
-
-		solidLineChar = '-'
-
-	}
-
-	if len(titleLine) == 0 {
-
-		titleLine = "File Listing"
-
-	}
-
 	lenLeftMar := len(leftMargin)
 
 	lenRightMar := len(rightMargin)
@@ -188,10 +200,10 @@ func (fMgrColMolecule *FileMgrCollectionMolecule) fmtTextListingAllFiles(
 			lenRightMar -
 			lenLineTerminator
 
-	if netTextLineLen < 5 {
+	if netTextLineLen < 10 {
 
 		return fmt.Errorf("%v\n"+
-			"Error: The Net Text Line length is less than 5.\n"+
+			"Error: The Net Text Line length is less than 10.\n"+
 			"The Net Text Line length is calculated by subtracting\n"+
 			"the left and right margin lengths from the maximum\n"+
 			"line length.\n"+
@@ -225,49 +237,30 @@ func (fMgrColMolecule *FileMgrCollectionMolecule) fmtTextListingAllFiles(
 		strBuilder.Grow(netRequiredCapacity + 256)
 	}
 
+	solidLineChar := "-"
+
 	txtFormatCol := TextFormatterCollection{}
 
-	var titleMarquee TextLineTitleMarqueeDto
+	if topTitleDisplay.IsValidInstance() {
 
-	titleMarquee,
-		err = new(TextLineTitleMarqueeDto).
-		NewBasicTitleMarqueeDto(
-			leftMargin,
-			rightMargin,
-			leftMargin,
-			rightMargin,
-			maxLineLength,
-			string(solidLineChar),
-			ePrefix.XCpy("titleMarquee<-"),
-			titleLine+"\n",
-			fmt.Sprintf(
-				"Number of Files: %v\n",
-				lenFMgrCol))
-
-	if err != nil {
-		return err
-	}
-
-	if addDateTimeLine == true {
-
-		err = titleMarquee.AddTitleLineDateTimeStr(
-			time.Now(),
-			"Monday 2006-01-02 15:04:05.000000000 -0700 MST",
-			ePrefix)
+		err = txtFormatCol.AddTextTitleMarqueeDto(
+			topTitleDisplay,
+			ePrefix.XCpy("<-topTitleDisplay"))
 
 		if err != nil {
 			return err
 		}
-	}
 
-	titleMarquee.NumTrailingBlankLines = 2
+		solidLineChar = topTitleDisplay.LeadingSolidLineChar
 
-	err = txtFormatCol.AddTextTitleMarqueeDto(
-		titleMarquee,
-		ePrefix.XCpy("<-titleMarquee"))
+		if len(topTitleDisplay.TrailingSolidLineChar) > 0 {
+			solidLineChar = topTitleDisplay.TrailingSolidLineChar
+		}
 
-	if err != nil {
-		return err
+		if len(solidLineChar) == 0 {
+			solidLineChar = "-"
+		}
+
 	}
 
 	err = txtFormatCol.
@@ -326,7 +319,22 @@ func (fMgrColMolecule *FileMgrCollectionMolecule) fmtTextListingAllFiles(
 		}
 	}
 
-	txtFormatCol.AddLineBlank(1, "")
+	if bottomTitleDisplay.IsValidInstance() {
+
+		err = txtFormatCol.AddTextTitleMarqueeDto(
+			bottomTitleDisplay,
+			ePrefix.XCpy("<-bottomTitleDisplay"))
+
+		if err != nil {
+			return err
+		}
+
+	} else {
+
+		// Final Text Line Build
+		txtFormatCol.AddLineBlank(1, "")
+
+	}
 
 	err = txtFormatCol.BuildText(
 		strBuilder,
