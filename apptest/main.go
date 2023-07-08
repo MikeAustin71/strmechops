@@ -10,6 +10,7 @@ func main() {
 	//examples.MainDirOpsTest007{}.GetDirTreeProfile01()
 	//examples.MainFileOpsTest008{}.ReadFiles01()
 	//examples.MainFileOpsTest008{}.ReadFiles02()
-	examples.MainFileOpsTest008{}.WriteFileBytes01()
+	//examples.MainFileOpsTest008{}.WriteFileBytes01()
+	examples.MainDirOpsTest007{}.GetDirProfile01()
 
 }

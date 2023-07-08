@@ -164,15 +164,18 @@ func (txtLineTitleMolecule *textLineSpecTitleMarqueeMolecule) getFormattedText(
 		maxLineLength = collectionMaxLineLen
 	}
 
-	collectionMaxLineLen,
-		err = txtLineTitleMarquee.titleLines.
-		TextBuilder(
-			strBuilder,
-			ePrefix.XCpy(
-				"txtLineTitleMarquee.titleLines"))
+	if len(txtLineTitleMarquee.titleLines.textLines) > 0 {
 
-	if err != nil {
-		return maxLineLength, totalStrLength, err
+		collectionMaxLineLen,
+			err = txtLineTitleMarquee.titleLines.
+			TextBuilder(
+				strBuilder,
+				ePrefix.XCpy(
+					"txtLineTitleMarquee.titleLines"))
+
+		if err != nil {
+			return maxLineLength, totalStrLength, err
+		}
 	}
 
 	if collectionMaxLineLen > maxLineLength {

@@ -857,6 +857,8 @@ func (dirProfile *DirectoryProfile) GetTextListing(
 		strBuilder.Grow(netRequiredCapacity + 64)
 	}
 
+	solidLineChar := "-"
+
 	txtFormatCol := TextFormatterCollection{}
 
 	if topTitleDisplay.IsValidInstance() {
@@ -869,6 +871,15 @@ func (dirProfile *DirectoryProfile) GetTextListing(
 			return err
 		}
 
+		solidLineChar = topTitleDisplay.LeadingSolidLineChar
+
+		if len(topTitleDisplay.TrailingSolidLineChar) > 0 {
+			solidLineChar = topTitleDisplay.TrailingSolidLineChar
+		}
+
+		if len(solidLineChar) == 0 {
+			solidLineChar = "-"
+		}
 	}
 
 	effectiveLineLen := maxLineLength - lenLeftMar - lenRightMar - 1
@@ -913,8 +924,6 @@ func (dirProfile *DirectoryProfile) GetTextListing(
 			"")
 
 	}
-
-	solidLineChar := "-"
 
 	if len(topTitleDisplay.TrailingSolidLineChar) > 0 {
 
@@ -1335,8 +1344,22 @@ func (dirProfile *DirectoryProfile) GetTextListing(
 
 	}
 
-	// Final Text Line Build
-	txtFormatCol.AddLineBlank(1, "")
+	if bottomTitleDisplay.IsValidInstance() {
+
+		err = txtFormatCol.AddTextTitleMarqueeDto(
+			bottomTitleDisplay,
+			ePrefix.XCpy("<-bottomTitleDisplay"))
+
+		if err != nil {
+			return err
+		}
+
+	} else {
+
+		// Final Text Line Build
+		txtFormatCol.AddLineBlank(1, "")
+
+	}
 
 	err = txtFormatCol.BuildText(
 		strBuilder,

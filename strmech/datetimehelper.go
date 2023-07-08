@@ -985,7 +985,6 @@ func (dateTimeHelper *DateTimeHelper) AllocateTimeDuration(
 //		  671: 	"Mon 2 JAN, 2006 03:04PM MST",
 //		  672: 	"Mon 2 JAN, 2006 03:04PM -0700",
 //		  673: 	"Mon 2 JAN, 2006 03:04PM -0700 MST",
-//
 //		  674: 	"2006-01-02T15:04:05Z07:00",
 //		  675: 	"Mon 021504Z 0106",
 //		  676: 	"Mon 021504Z 012006",
@@ -1066,8 +1065,6 @@ func (dateTimeHelper *DateTimeHelper) GetDateTimeFormat(
 	mapDateTimeFormatLock.Lock()
 
 	defer mapDateTimeFormatLock.Unlock()
-
-	// 2:  "2006-01-02 Monday 15:04:05 -0700 MST"
 
 	var formatStr string
 	var ok bool

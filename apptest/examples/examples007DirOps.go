@@ -312,11 +312,68 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirProfile01() {
 		NumTrailingBlankLines:        0,
 	}
 
+	err = topTitle.AddTitleLineStrings(
+		ePrefix.XCpy("title lines"),
+		"Directory Metrics")
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	dateFmtStr := new(strmech.DateTimeHelper).
+		GetDateTimeFormat(
+			2)
+
+	err = topTitle.AddTitleLineDateTimeStr(
+		time.Now(),
+		dateFmtStr,
+		ePrefix.XCpy("<-time.Now()"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	bottomTitle := strmech.TextLineTitleMarqueeDto{
+		StandardSolidLineLeftMargin:  leftMargin,
+		StandardSolidLineRightMargin: rightMargin,
+		StandardTitleLeftMargin:      leftMargin,
+		StandardTitleRightMargin:     rightMargin,
+		StandardMaxLineLen:           maxLineLength,
+		StandardTextFieldLen:         netFieldLength,
+		StandardTextJustification:    strmech.TxtJustify.Center(),
+		NumLeadingBlankLines:         1,
+		LeadingSolidLineChar:         "-",
+		NumLeadingSolidLines:         1,
+		NumTopTitleBlankLines:        0,
+		TitleLines:                   strmech.TextLineSpecLinesCollection{},
+		NumBottomTitleBlankLines:     0,
+		TrailingSolidLineChar:        "-",
+		NumTrailingSolidLines:        1,
+		NumTrailingBlankLines:        0,
+	}
+
+	/*
+		err = bottomTitle.AddTitleLineStrings(
+			ePrefix.XCpy("title lines"),
+			"Directory Metrics")
+
+		if err != nil {
+			fmt.Printf("\n%v\n\n",
+				err.Error())
+			return
+		}
+	*/
+
 	err = dirProfile.GetTextListing(
 		leftMargin,
 		rightMargin,
 		maxLineLength,
 		topTitle,
+		bottomTitle,
 		&strBuilder,
 		ePrefix)
 
@@ -465,19 +522,20 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirTreeProfile01() {
 		ePrefix,
 		"Directory Metrics")
 
-
 	if err != nil {
 		fmt.Printf("\n%v\n\n",
 			err.Error())
 		return
 	}
+
+	dateFmtStr := new(strmech.DateTimeHelper).
+		GetDateTimeFormat(
+			2)
 
 	err = topTitle.AddTitleLineDateTimeStr(
 		time.Now(),
-		""
-		ePrefix,
-		"Directory Metrics")
-
+		dateFmtStr,
+		ePrefix)
 
 	if err != nil {
 		fmt.Printf("\n%v\n\n",
@@ -485,8 +543,7 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirTreeProfile01() {
 		return
 	}
 
-
-	topTitle := strmech.TextLineTitleMarqueeDto{
+	bottomTitle := strmech.TextLineTitleMarqueeDto{
 		StandardSolidLineLeftMargin:  leftMargin,
 		StandardSolidLineRightMargin: rightMargin,
 		StandardTitleLeftMargin:      leftMargin,
@@ -505,10 +562,24 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirTreeProfile01() {
 		NumTrailingBlankLines:        0,
 	}
 
+	/*
+		err = bottomTitle.AddTitleLineStrings(
+			ePrefix.XCpy("title lines"),
+			"Directory Metrics")
+
+		if err != nil {
+			fmt.Printf("\n%v\n\n",
+				err.Error())
+			return
+		}
+	*/
+
 	err = dirProfile.GetTextListing(
-		" ",
-		"",
+		leftMargin,
+		rightMargin,
+		maxLineLength,
 		topTitle,
+		bottomTitle,
 		&strBuilder,
 		ePrefix)
 
