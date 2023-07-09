@@ -2150,7 +2150,13 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddTitleLineStrings(
 
 		for lenSubTitleStr > 0 {
 
-			if lenSubTitleStr > txtLineTitleMarqueeDto.StandardTextFieldLen {
+			if new(strMechQuark).isEmptyOrWhiteSpace(subTitleStr) {
+
+				titleStr = "\n"
+
+				subTitleStr = ""
+
+			} else if lenSubTitleStr > txtLineTitleMarqueeDto.StandardTextFieldLen {
 
 				txtJustification = TxtJustify.Left()
 				titleStr = subTitleStr[:txtLineTitleMarqueeDto.StandardTextFieldLen]

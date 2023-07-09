@@ -2478,25 +2478,51 @@ func (dMgrs *DirMgrCollection) GetPathAbsoluteStrArray() StringArrayDto {
 //		length for all text lines. If this value is
 //		less than 10, an error will be returned.
 //
-//	solidLineChar				rune
+//	topTitleDisplay				TextLineTitleMarqueeDto
 //
-//		This single character will be used to construct
-//		'line-breaks' after the title line. Examples:
-//			'-'	"----------------------------"
-//			'='	"============================"
-//			'*'	"****************************"
+//		Contains specifications for the top tile display
+//		including title lines and solid line breaks.
 //
+//		If no title is required, set this parameter to an
+//		empty instance of TextLineTitleMarqueeDto.
 //
-//	titleLine					string
+//		Example:
+//			titleMarquee = 	TextLineTitleMarqueeDto{}
 //
-//		The text in this string will be formatted as the
-//		title for the text listing display.
+//		All TextLineTitleMarqueeDto member data values
+//		are public. Just set the data values as
+//		necessary during creation of the
+//		TextLineTitleMarqueeDto instance. Afterward, use
+//		the 'Add' methods to add title lines to the
+//		TextLineTitleMarqueeDto collection.
 //
-//	addDateTimeLine				bool
+//		If no top title text lines are required, and the
+//		solid line breaks are still necessary, simply
+//		leave the title lines collection empty.
 //
-//		When set to 'true' a text line will be added for
-//		current date and time expressed as a local time
-//		value.
+//	bottomTitleDisplay			TextLineTitleMarqueeDto
+//
+//		Contains specifications for the bottom tile
+//		display including title lines and solid line
+//		breaks.
+//
+//		If no bottom title is required, set this
+//		parameter to an empty instance of
+//		TextLineTitleMarqueeDto.
+//
+//		Example:
+//			titleMarquee = 	TextLineTitleMarqueeDto{}
+//
+//		All TextLineTitleMarqueeDto member data values
+//		are public. Just set the data values as
+//		necessary during creation of the
+//		TextLineTitleMarqueeDto instance. Afterward, use
+//		the 'Add' methods to add title lines to the
+//		TextLineTitleMarqueeDto collection.
+//
+//		If no bottom title text lines are required, and
+//		the solid line breaks are still necessary, simply
+//		leave the title lines collection empty.
 //
 //	strBuilder					*strings.Builder
 //
@@ -2584,9 +2610,8 @@ func (dMgrs *DirMgrCollection) GetTextListingAbsPath(
 	leftMargin string,
 	rightMargin string,
 	maxLineLength int,
-	solidLineChar rune,
-	titleLine string,
-	addDateTimeLine bool,
+	topTitleDisplay TextLineTitleMarqueeDto,
+	bottomTitleDisplay TextLineTitleMarqueeDto,
 	strBuilder *strings.Builder,
 	errorPrefix interface{}) error {
 
@@ -2620,9 +2645,8 @@ func (dMgrs *DirMgrCollection) GetTextListingAbsPath(
 			leftMargin,
 			rightMargin,
 			maxLineLength,
-			solidLineChar,
-			titleLine,
-			addDateTimeLine,
+			topTitleDisplay,
+			bottomTitleDisplay,
 			strBuilder,
 			ePrefix.XCpy("<-dMgrs"))
 }

@@ -42,6 +42,9 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirs01() {
 		return
 	}
 
+	fmt.Printf("\nstrMechOpsBaseDir: %v\n\n",
+		strMechOpsBaseDir)
+
 	targetDir := strMechOpsBaseDir +
 		"\\fileOpsTest\\filesForTest"
 
@@ -89,16 +92,90 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirs01() {
 	fmt.Printf(" Is Parent Directory Included: %v\n\n",
 		isParentDirectoryIncluded)
 
+	leftMargin := " "
+	rightMargin := ""
+	maxLineLength := 90
+	solidLineChar := "-"
+
+	netFieldLength := maxLineLength -
+		len(leftMargin) -
+		len(rightMargin) - 1
+
+	topTitle := strmech.TextLineTitleMarqueeDto{
+		StandardSolidLineLeftMargin:  leftMargin,
+		StandardSolidLineRightMargin: rightMargin,
+		StandardTitleLeftMargin:      leftMargin,
+		StandardTitleRightMargin:     rightMargin,
+		StandardMaxLineLen:           maxLineLength,
+		StandardTextFieldLen:         netFieldLength,
+		StandardTextJustification:    strmech.TxtJustify.Center(),
+		NumLeadingBlankLines:         1,
+		LeadingSolidLineChar:         solidLineChar,
+		NumLeadingSolidLines:         1,
+		NumTopTitleBlankLines:        0,
+		TitleLines:                   strmech.TextLineSpecLinesCollection{},
+		NumBottomTitleBlankLines:     0,
+		TrailingSolidLineChar:        solidLineChar,
+		NumTrailingSolidLines:        1,
+		NumTrailingBlankLines:        0,
+	}
+
+	err = topTitle.AddTitleLineStrings(
+		ePrefix,
+		"Selected Directory",
+		"    ",
+		targetDir,
+		"    ")
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	dateFmtStr := new(strmech.DateTimeHelper).
+		GetDateTimeFormat(
+			2)
+
+	err = topTitle.AddTitleLineDateTimeStr(
+		time.Now(),
+		dateFmtStr,
+		ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	bottomTitle := strmech.TextLineTitleMarqueeDto{
+		StandardSolidLineLeftMargin:  leftMargin,
+		StandardSolidLineRightMargin: rightMargin,
+		StandardTitleLeftMargin:      leftMargin,
+		StandardTitleRightMargin:     rightMargin,
+		StandardMaxLineLen:           maxLineLength,
+		StandardTextFieldLen:         netFieldLength,
+		StandardTextJustification:    strmech.TxtJustify.Center(),
+		NumLeadingBlankLines:         1,
+		LeadingSolidLineChar:         solidLineChar,
+		NumLeadingSolidLines:         1,
+		NumTopTitleBlankLines:        0,
+		TitleLines:                   strmech.TextLineSpecLinesCollection{},
+		NumBottomTitleBlankLines:     0,
+		TrailingSolidLineChar:        solidLineChar,
+		NumTrailingSolidLines:        0,
+		NumTrailingBlankLines:        1,
+	}
+
 	strBuilder := strings.Builder{}
 
 	err = directoriesLocated.
 		GetTextListingAbsPath(
-			" ",
-			"",
-			80,
-			'-',
-			"Directory "+targetDir,
-			true,
+			leftMargin,
+			rightMargin,
+			maxLineLength,
+			topTitle,
+			bottomTitle,
 			&strBuilder,
 			ePrefix.XCpy("<-directoriesLocated"))
 
@@ -162,6 +239,9 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirs02() {
 		return
 	}
 
+	fmt.Printf("\nstrMechOpsBaseDir: %v\n\n",
+		strMechOpsBaseDir)
+
 	targetDir := strMechOpsBaseDir +
 		"\\fileOpsTest\\filesForTest"
 
@@ -209,16 +289,90 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirs02() {
 	fmt.Printf(" Is Parent Directory Included: %v\n\n",
 		isParentDirectoryIncluded)
 
+	leftMargin := " "
+	rightMargin := ""
+	maxLineLength := 80
+	solidLineChar := "-"
+
+	netFieldLength := maxLineLength -
+		len(leftMargin) -
+		len(rightMargin) - 1
+
+	topTitle := strmech.TextLineTitleMarqueeDto{
+		StandardSolidLineLeftMargin:  leftMargin,
+		StandardSolidLineRightMargin: rightMargin,
+		StandardTitleLeftMargin:      leftMargin,
+		StandardTitleRightMargin:     rightMargin,
+		StandardMaxLineLen:           maxLineLength,
+		StandardTextFieldLen:         netFieldLength,
+		StandardTextJustification:    strmech.TxtJustify.Center(),
+		NumLeadingBlankLines:         1,
+		LeadingSolidLineChar:         solidLineChar,
+		NumLeadingSolidLines:         1,
+		NumTopTitleBlankLines:        0,
+		TitleLines:                   strmech.TextLineSpecLinesCollection{},
+		NumBottomTitleBlankLines:     0,
+		TrailingSolidLineChar:        solidLineChar,
+		NumTrailingSolidLines:        1,
+		NumTrailingBlankLines:        0,
+	}
+
+	err = topTitle.AddTitleLineStrings(
+		ePrefix,
+		"Selected Directory Tree",
+		"   ",
+		targetDir,
+		"    ")
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	dateFmtStr := new(strmech.DateTimeHelper).
+		GetDateTimeFormat(
+			2)
+
+	err = topTitle.AddTitleLineDateTimeStr(
+		time.Now(),
+		dateFmtStr,
+		ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	bottomTitle := strmech.TextLineTitleMarqueeDto{
+		StandardSolidLineLeftMargin:  leftMargin,
+		StandardSolidLineRightMargin: rightMargin,
+		StandardTitleLeftMargin:      leftMargin,
+		StandardTitleRightMargin:     rightMargin,
+		StandardMaxLineLen:           maxLineLength,
+		StandardTextFieldLen:         netFieldLength,
+		StandardTextJustification:    strmech.TxtJustify.Center(),
+		NumLeadingBlankLines:         1,
+		LeadingSolidLineChar:         solidLineChar,
+		NumLeadingSolidLines:         1,
+		NumTopTitleBlankLines:        0,
+		TitleLines:                   strmech.TextLineSpecLinesCollection{},
+		NumBottomTitleBlankLines:     0,
+		TrailingSolidLineChar:        solidLineChar,
+		NumTrailingSolidLines:        0,
+		NumTrailingBlankLines:        1,
+	}
+
 	strBuilder := strings.Builder{}
 
 	err = directoriesLocated.
 		GetTextListingAbsPath(
-			" ",
-			"",
-			80,
-			'-',
-			"Directory "+targetDir,
-			true,
+			leftMargin,
+			rightMargin,
+			maxLineLength,
+			topTitle,
+			bottomTitle,
 			&strBuilder,
 			ePrefix.XCpy("<-directoriesLocated"))
 
