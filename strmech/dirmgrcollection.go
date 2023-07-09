@@ -2269,6 +2269,339 @@ func (dMgrs *DirMgrCollection) GetNumOfDirs() int {
 	return len(dMgrs.dirMgrs)
 }
 
+// GetTotalBytes
+//
+// Returns the total number of bytes contained in the
+// directories which make up the Directory Collection
+// encapsulated in the current instance of
+// DirMgrCollection.
+//
+// The byte total represents only the files in the top
+// level of each directory in the collection. It does
+// not include the files in each directory's tree.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	totalBytesInDirs			uint64
+//
+//		If this method completes successfully,
+//		'totalBytesInDirs' will return the total number
+//		of bytes contained within all files residing in
+//		the top level of each directory in the Directory
+//		Collection encapsulated by the current instance
+//		of DirMgrCollection.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (dMgrs *DirMgrCollection) GetTotalBytes(
+	errorPrefix interface{}) (
+	totalBytesInDirs uint64,
+	err error) {
+
+	if dMgrs.lock == nil {
+		dMgrs.lock = new(sync.Mutex)
+	}
+
+	dMgrs.lock.Lock()
+
+	defer dMgrs.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgrCollection.GetTotalBytes()",
+		"")
+
+	if err != nil {
+		return totalBytesInDirs, err
+	}
+
+	lenDirCollection := len(dMgrs.dirMgrs)
+
+	var localTotalBytes uint64
+
+	for i := 0; i < lenDirCollection; i++ {
+
+		localTotalBytes,
+			err = dMgrs.dirMgrs[i].GetTotalBytes(
+			ePrefix.XCpy(
+				fmt.Sprintf("dMgrs.dirMgrs[%v]",
+					i)))
+
+		if err != nil {
+			return totalBytesInDirs, err
+		}
+
+		totalBytesInDirs += localTotalBytes
+
+		localTotalBytes = 0
+
+	}
+
+	return totalBytesInDirs, err
+}
+
+// GetTotalBytesCommaSeparated
+//
+// Returns the total number of bytes contained in the
+// directories which make up the Directory Collection
+// encapsulated in the current instance of
+// DirMgrCollection.
+//
+// The byte total represents only the files in the top
+// level of each directory in the collection. It does
+// not include the files in each directory's tree.
+//
+// The returned numeric value for total bytes will be
+// formatted as a number string meaning that thousands
+// will be separated by commas.
+//
+//	Example: 1,645,321
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	totalBytesInDirs			string
+//
+//		If this method completes successfully,
+//		'totalBytesInDirs' will return the total number
+//		of bytes contained within all files residing in
+//		the top level of each directory in the Directory
+//		Collection encapsulated by the current instance
+//		of DirMgrCollection. The returned numeric value
+//		for total bytes will be formatted as a number
+//		string meaning that thousands will be separated
+//		by commas.
+//
+//			Example: 1,645,321
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (dMgrs *DirMgrCollection) GetTotalBytesCommaSeparated(
+	errorPrefix interface{}) (
+	totalBytesInDirs string,
+	err error) {
+
+	if dMgrs.lock == nil {
+		dMgrs.lock = new(sync.Mutex)
+	}
+
+	dMgrs.lock.Lock()
+
+	defer dMgrs.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"DirMgrCollection.GetTotalBytes()",
+		"")
+
+	if err != nil {
+		return totalBytesInDirs, err
+	}
+
+	lenDirCollection := len(dMgrs.dirMgrs)
+
+	var localTotalBytes uint64
+	var bytesSubTotal uint64
+
+	for i := 0; i < lenDirCollection; i++ {
+
+		localTotalBytes,
+			err = dMgrs.dirMgrs[i].GetTotalBytes(
+			ePrefix.XCpy(
+				fmt.Sprintf("dMgrs.dirMgrs[%v]",
+					i)))
+
+		if err != nil {
+			return totalBytesInDirs, err
+		}
+
+		bytesSubTotal += localTotalBytes
+
+		localTotalBytes = 0
+
+	}
+
+	var intSep IntegerSeparatorSpec
+
+	intSep,
+		err = new(IntegerSeparatorSpec).
+		NewUnitedStatesDefaults(
+			ePrefix.XCpy(
+				"intSep<-"))
+
+	if err != nil {
+		return "", err
+	}
+
+	totalBytesInDirs,
+		err = intSep.
+		GetFmtIntSeparatedNumStr(
+			fmt.Sprintf("%v",
+				bytesSubTotal),
+			ePrefix.XCpy("<-bytesSubTotal"))
+
+	if err != nil {
+		return totalBytesInDirs, err
+	}
+
+	return totalBytesInDirs, err
+}
+
 // GetPathOriginalStrArray
 //
 // Converts the directories contained in the current

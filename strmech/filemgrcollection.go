@@ -2590,7 +2590,7 @@ func (fMgrs *FileMgrCollection) GetTotalFileBytesCommaSeparated(
 		GetFmtIntSeparatedNumStr(
 			fmt.Sprintf("%v",
 				totalFileBytes),
-			ePrefix.XCpy("<-fileBytes"))
+			ePrefix.XCpy("<-totalFileBytes"))
 
 	if err != nil {
 		return "", err
