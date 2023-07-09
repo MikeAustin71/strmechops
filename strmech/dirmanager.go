@@ -11105,6 +11105,337 @@ func (dMgr *DirMgr) GetSubdirectoriesParentDir(
 	return numOfSubdirectories, err
 }
 
+// GetTotalBytes
+//
+// Returns the number of bytes contained by files
+// residing in the directory identified by the current
+// instance of DirMgr.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	totalBytesInDir				uint64
+//
+//		If this method completes successfully,
+//		'totalBytesInDir' will return the total number of
+//		bytes contained by files residing in the
+//		directory identified by the current instance of
+//		DirMgr.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (dMgr *DirMgr) GetTotalBytes(
+	errorPrefix interface{}) (
+	totalBytesInDir uint64,
+	err error) {
+
+	if dMgr.lock == nil {
+		dMgr.lock = new(sync.Mutex)
+	}
+
+	dMgr.lock.Lock()
+
+	defer dMgr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "DirMgr." +
+		"GetTotalBytes()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return totalBytesInDir, err
+	}
+
+	var directoryPathDoesExist, includeSubDirCurrenDirOneDot,
+		includeSubDirParentDirTwoDots bool
+
+	includeSubDirCurrenDirOneDot = false
+	includeSubDirParentDirTwoDots = false
+	fileSelectCharacteristics := FileSelectionCriteria{}
+
+	var dirProfile DirectoryProfile
+
+	directoryPathDoesExist,
+		dirProfile,
+		err = new(dirMgrHelperTachyon).
+		getDirectoryProfile(
+			dMgr,
+			includeSubDirCurrenDirOneDot,
+			includeSubDirParentDirTwoDots,
+			fileSelectCharacteristics,
+			"dMgr",
+			ePrefix.XCpy("dMgr"))
+
+	if !directoryPathDoesExist ||
+		err != nil {
+
+		return totalBytesInDir, err
+	}
+
+	totalBytesInDir = dirProfile.DirTotalFileBytes
+
+	return totalBytesInDir, err
+}
+
+// GetTotalBytesCommaSeparated
+//
+// Returns the number of bytes contained by files
+// residing in the directory identified by the current
+// instance of DirMgr. The total bytes numeric value
+// will be formatted as a number string with thousands
+// being separated by commas.
+//
+//	Example: (1,647,321)
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	totalBytesInDir				string
+//
+//		If this method completes successfully, this
+//		string will return the total number of bytes
+//		contained by files residing in the directory
+//		identified by the current instance of DirMgr.
+//		This numeric value will be formatted with
+//		thousands separated by commas.
+//		Example: (1,647,321)
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (dMgr *DirMgr) GetTotalBytesCommaSeparated(
+	errorPrefix interface{}) (
+	totalBytesInDir string,
+	err error) {
+
+	if dMgr.lock == nil {
+		dMgr.lock = new(sync.Mutex)
+	}
+
+	dMgr.lock.Lock()
+
+	defer dMgr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "DirMgr." +
+		"GetTotalBytesCommaSeparated()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return totalBytesInDir, err
+	}
+
+	var directoryPathDoesExist, includeSubDirCurrenDirOneDot,
+		includeSubDirParentDirTwoDots bool
+
+	includeSubDirCurrenDirOneDot = false
+	includeSubDirParentDirTwoDots = false
+	fileSelectCharacteristics := FileSelectionCriteria{}
+
+	var dirProfile DirectoryProfile
+
+	directoryPathDoesExist,
+		dirProfile,
+		err = new(dirMgrHelperTachyon).
+		getDirectoryProfile(
+			dMgr,
+			includeSubDirCurrenDirOneDot,
+			includeSubDirParentDirTwoDots,
+			fileSelectCharacteristics,
+			"dMgr",
+			ePrefix.XCpy("dMgr"))
+
+	if !directoryPathDoesExist ||
+		err != nil {
+
+		return totalBytesInDir, err
+	}
+
+	var intSep IntegerSeparatorSpec
+
+	intSep,
+		err = new(IntegerSeparatorSpec).
+		NewUnitedStatesDefaults(
+			ePrefix.XCpy(
+				"intSep<-"))
+
+	if err != nil {
+		return "", err
+	}
+
+	totalBytesInDir,
+		err = intSep.
+		GetFmtIntSeparatedNumStr(
+			fmt.Sprintf("%v",
+				dirProfile.DirTotalFileBytes),
+			ePrefix.XCpy("<-fileBytes"))
+
+	if err != nil {
+		return "", err
+	}
+
+	return totalBytesInDir, err
+}
+
 // GetVolumeName
 //
 // Returns a string containing the volume name of the
