@@ -118,7 +118,8 @@ func (dirOpsTest008 MainFileOpsTest008) GetFiles01() {
 
 	err = topTitle.AddTitleLineStrings(
 		ePrefix,
-		"Selected Files")
+		"Selected Files",
+		targetDir)
 
 	if err != nil {
 		fmt.Printf("\n%v\n\n",
@@ -160,30 +161,12 @@ func (dirOpsTest008 MainFileOpsTest008) GetFiles01() {
 		NumTrailingBlankLines:        1,
 	}
 
-	fileBytes := filesLocated.GetTotalFileBytes()
-
-	var intSep strmech.IntegerSeparatorSpec
-
-	intSep,
-		err = new(strmech.IntegerSeparatorSpec).
-		NewUnitedStatesDefaults(
-			ePrefix.XCpy(
-				"intSep<-"))
-
-	if err != nil {
-		fmt.Printf("\n%v\n\n",
-			err.Error())
-		return
-	}
-
 	var delimitedNumStr string
 
 	delimitedNumStr,
-		err = intSep.
-		GetFmtIntSeparatedNumStr(
-			fmt.Sprintf("%v",
-				fileBytes),
-			ePrefix.XCpy("<-fileBytes"))
+		err = filesLocated.
+		GetTotalFileBytesCommaSeparated(
+			ePrefix.XCpy("<-delimitedNumStr"))
 
 	if err != nil {
 		fmt.Printf("\n%v\n\n",

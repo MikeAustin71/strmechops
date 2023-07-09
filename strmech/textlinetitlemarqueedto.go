@@ -2136,44 +2136,71 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) AddTitleLineStrings(
 
 	itemCnt := 0
 
-	txtLabelFmtDto := TextFieldFormatDtoLabel{
-		LeftMarginStr:  txtLineTitleMarqueeDto.StandardTitleLeftMargin,
-		FieldContents:  nil,
-		FieldLength:    txtLineTitleMarqueeDto.StandardTextFieldLen,
-		FieldJustify:   txtLineTitleMarqueeDto.StandardTextJustification,
-		RightMarginStr: txtLineTitleMarqueeDto.StandardTitleRightMargin,
-	}
-
 	txtLineMarqueeNanobot := textLineTitleMarqueeDtoNanobot{}
+
+	var subTitleStr string
+	var lenSubTitleStr int
+	var txtJustification TextJustify
 
 	for idx, titleStr := range titleLineStrings {
 
-		txtLabelFmtDto.FieldContents = titleStr
+		subTitleStr = titleStr
+		txtJustification = txtLineTitleMarqueeDto.StandardTextJustification
+		lenSubTitleStr = len(subTitleStr)
 
-		err = txtLabelFmtDto.IsValidInstanceError(
-			ePrefix.XCpy(
-				fmt.Sprintf("titleStr[%v]",
-					idx)))
+		for lenSubTitleStr > 0 {
 
-		if err != nil {
+			if lenSubTitleStr > txtLineTitleMarqueeDto.StandardTextFieldLen {
 
-			return err
-		}
+				txtJustification = TxtJustify.Left()
+				titleStr = subTitleStr[:txtLineTitleMarqueeDto.StandardTextFieldLen]
+				subTitleStr = subTitleStr[txtLineTitleMarqueeDto.StandardTextFieldLen:]
 
-		err = txtLineMarqueeNanobot.
-			addTitleLineFmtDtos(
-				txtLineTitleMarqueeDto,
+			} else {
+
+				titleStr = subTitleStr
+
+				subTitleStr = ""
+
+			}
+
+			txtLabelFmtDto := TextFieldFormatDtoLabel{
+				LeftMarginStr:  txtLineTitleMarqueeDto.StandardTitleLeftMargin,
+				FieldContents:  titleStr,
+				FieldLength:    txtLineTitleMarqueeDto.StandardTextFieldLen,
+				FieldJustify:   txtJustification,
+				RightMarginStr: txtLineTitleMarqueeDto.StandardTitleRightMargin,
+			}
+
+			err = txtLabelFmtDto.IsValidInstanceError(
 				ePrefix.XCpy(
 					fmt.Sprintf("titleStr[%v]",
-						idx)),
-				&txtLabelFmtDto)
+						idx)))
 
-		if err != nil {
+			if err != nil {
 
-			return err
+				return err
+			}
+
+			err = txtLineMarqueeNanobot.
+				addTitleLineFmtDtos(
+					txtLineTitleMarqueeDto,
+					ePrefix.XCpy(
+						fmt.Sprintf("titleStr[%v]",
+							idx)),
+					&txtLabelFmtDto)
+
+			if err != nil {
+
+				return err
+			}
+
+			itemCnt++
+
+			lenSubTitleStr = len(subTitleStr)
+
 		}
 
-		itemCnt++
 	}
 
 	if itemCnt == 0 {
