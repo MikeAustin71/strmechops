@@ -118,8 +118,8 @@ func (dirOpsTest008 MainFileOpsTest008) GetFiles01() {
 
 	err = topTitle.AddTitleLineStrings(
 		ePrefix,
-		"Selected Files",
-		targetDir)
+		"Selected Files\n",
+		targetDir+"\n")
 
 	if err != nil {
 		fmt.Printf("\n%v\n\n",
