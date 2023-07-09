@@ -92,6 +92,18 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirs01() {
 	fmt.Printf(" Is Parent Directory Included: %v\n\n",
 		isParentDirectoryIncluded)
 
+	var totalBytesNumStr string
+
+	totalBytesNumStr,
+		err = directoriesLocated.GetTotalBytesCommaSeparated(
+		ePrefix.XCpy("directoriesLocated"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
 	leftMargin := " "
 	rightMargin := ""
 	maxLineLength := 90
@@ -163,8 +175,20 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirs01() {
 		TitleLines:                   strmech.TextLineSpecLinesCollection{},
 		NumBottomTitleBlankLines:     0,
 		TrailingSolidLineChar:        solidLineChar,
-		NumTrailingSolidLines:        0,
+		NumTrailingSolidLines:        1,
 		NumTrailingBlankLines:        1,
+	}
+
+	err =
+		bottomTitle.AddTitleLineStrings(
+			ePrefix.XCpy("bottomTitle"),
+			fmt.Sprintf("Total Bytes in all Directories: %v",
+				totalBytesNumStr))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
 	}
 
 	strBuilder := strings.Builder{}
