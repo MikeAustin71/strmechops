@@ -845,3 +845,214 @@ func (dirOpsTest007 MainDirOpsTest007) GetDirTreeProfile01() {
 
 	fmt.Printf("\n" + breakStr + "\n")
 }
+
+// GetDirTreeProfile02
+//
+// Returns directory stats on an entire directory tree.
+func (dirOpsTest007 MainDirOpsTest007) GetDirTreeProfile02() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainDirOpsTest007.GetDirTreeProfile02()",
+		"")
+
+	breakStr := " " + strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n\n\n")
+
+	var err error
+	var strMechOpsBaseDir string
+
+	strMechOpsBaseDir,
+		err = ExampleUtility{}.GetBaseDirectory(
+		ePrefix.XCpy("strMechOpsBaseDir<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("strMechOpsBaseDir: %v\n",
+		strMechOpsBaseDir)
+
+	targetDir := strMechOpsBaseDir +
+		"\\fileOpsTest\\filesForTest"
+
+	osPathSepStr := string(os.PathSeparator)
+
+	targetDir = strings.Replace(
+		targetDir,
+		"\\",
+		osPathSepStr,
+		-1)
+
+	targetOutputFileName :=
+		strMechOpsBaseDir +
+			"\\apptest\\examples\\testoutput.txt"
+
+	targetOutputFileName = strings.Replace(
+		targetOutputFileName,
+		"\\",
+		osPathSepStr,
+		-1)
+
+	var dirProfile strmech.DirectoryProfile
+	var directoryPathDoesExist bool
+
+	directoryPathDoesExist,
+		dirProfile,
+		err = new(strmech.DirHelper).
+		GetDirectoryTreeProfile(
+			targetDir,
+			false,
+			false,
+			false,
+			strmech.FileSelectionCriteria{},
+			ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("Directory Does Exist: %v\n",
+		directoryPathDoesExist)
+
+	strBuilder := strings.Builder{}
+
+	leftMargin := " "
+	rightMargin := ""
+	maxLineLength := 80
+	solidLineChar := "-"
+
+	netFieldLength := maxLineLength -
+		len(leftMargin) -
+		len(rightMargin) - 1
+
+	topTitle := strmech.TextLineTitleMarqueeDto{
+		StandardSolidLineLeftMargin:  leftMargin,
+		StandardSolidLineRightMargin: rightMargin,
+		StandardTitleLeftMargin:      leftMargin,
+		StandardTitleRightMargin:     rightMargin,
+		StandardMaxLineLen:           maxLineLength,
+		StandardTextFieldLen:         netFieldLength,
+		StandardTextJustification:    strmech.TxtJustify.Center(),
+		NumLeadingBlankLines:         1,
+		LeadingSolidLineChar:         solidLineChar,
+		NumLeadingSolidLines:         1,
+		NumTopTitleBlankLines:        0,
+		TitleLines:                   strmech.TextLineSpecLinesCollection{},
+		NumBottomTitleBlankLines:     0,
+		TrailingSolidLineChar:        solidLineChar,
+		NumTrailingSolidLines:        1,
+		NumTrailingBlankLines:        0,
+	}
+
+	err = topTitle.AddTitleLineStrings(
+		ePrefix,
+		"Directory Metrics")
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	dateFmtStr := new(strmech.DateTimeHelper).
+		GetDateTimeFormat(
+			2)
+
+	err = topTitle.AddTitleLineDateTimeStr(
+		time.Now(),
+		dateFmtStr,
+		ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	bottomTitle := strmech.TextLineTitleMarqueeDto{
+		StandardSolidLineLeftMargin:  leftMargin,
+		StandardSolidLineRightMargin: rightMargin,
+		StandardTitleLeftMargin:      leftMargin,
+		StandardTitleRightMargin:     rightMargin,
+		StandardMaxLineLen:           maxLineLength,
+		StandardTextFieldLen:         netFieldLength,
+		StandardTextJustification:    strmech.TxtJustify.Center(),
+		NumLeadingBlankLines:         1,
+		LeadingSolidLineChar:         solidLineChar,
+		NumLeadingSolidLines:         1,
+		NumTopTitleBlankLines:        0,
+		TitleLines:                   strmech.TextLineSpecLinesCollection{},
+		NumBottomTitleBlankLines:     0,
+		TrailingSolidLineChar:        solidLineChar,
+		NumTrailingSolidLines:        0,
+		NumTrailingBlankLines:        0,
+	}
+
+	/*
+		err = bottomTitle.AddTitleLineStrings(
+			ePrefix.XCpy("title lines"),
+			"Directory Metrics")
+
+		if err != nil {
+			fmt.Printf("\n%v\n\n",
+				err.Error())
+			return
+		}
+	*/
+
+	err = dirProfile.GetTextListing(
+		leftMargin,
+		rightMargin,
+		maxLineLength,
+		topTitle,
+		bottomTitle,
+		&strBuilder,
+		ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fmt.Println(strBuilder.String())
+
+	var numOfBytesWritten int64
+
+	numOfBytesWritten,
+		err = new(strmech.FileHelper).
+		WriteStrOpenClose(
+			targetOutputFileName,
+			true,
+			true,
+			strBuilder.String(),
+			ePrefix.XCpy("targetOutputFileName<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("\n\nNumber of Bytes Written: %v\n",
+		numOfBytesWritten)
+
+	fmt.Printf(breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+}

@@ -1,23 +1,22 @@
 
  ------------------------------------------------------------------------------
                                Directory Metrics                               
-                     2023-07-08 Saturday 17:31:22 -0500 CDT                    
+                      2023-07-09 Sunday 21:54:02 -0500 CDT                     
  ------------------------------------------------------------------------------
                                 Parent Directory                               
 
- d:\goprojects\mikeaustin71\strmechops\fileOpsTest\filesForTest\levelfilesforte
- st\level_01_dir\level_02_dir\level_03_dir
+ d:\goprojects\mikeaustin71\strmechops\fileOpsTest\filesForTest
  ------------------------------------------------------------------------------
      ParentDirIsIncludedInStats:  true                       
            IsDirectoryTreeStats:  true                       
   ParentDirExistsOnStorageDrive:  true                       
-                  DirTotalFiles:  10                         
-              DirTotalFileBytes:  4,027                      
-              DirSubDirectories:  1                          
+                  DirTotalFiles:  46                         
+              DirTotalFileBytes:  697,002                    
+              DirSubDirectories:  13                         
  SubDirsIncludeCurrentDirOneDot:  false                      
   SubDirsIncludeParentDirTwoDot:  false                      
-                DirRegularFiles:  10                         
-            DirRegularFileBytes:  4,027                      
+                DirRegularFiles:  46                         
+            DirRegularFileBytes:  697,002                    
                 DirSymLinkFiles:  0                          
             DirSymLinkFileBytes:  0                          
              DirNonRegularFiles:  0                          
