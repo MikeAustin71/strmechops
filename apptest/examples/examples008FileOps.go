@@ -487,3 +487,194 @@ func (dirOpsTest008 MainFileOpsTest008) WriteFileBytes01() {
 	fmt.Printf("\n" + breakStr + "\n")
 
 }
+
+// WriteFileBytes02
+//
+// This method tests FileMgr.WriteBytesToFile()
+func (dirOpsTest008 MainFileOpsTest008) WriteFileBytes02() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainFileOpsTest008.WriteFileBytes02()",
+		"")
+
+	breakStr := " " + strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	var err error
+	var strMechOpsBaseDir string
+
+	strMechOpsBaseDir,
+		err = ExampleUtility{}.GetBaseDirectory(
+		ePrefix.XCpy("strMechOpsBaseDir<-"))
+
+	fmt.Printf("strMechOpsBaseDir: %v\n",
+		strMechOpsBaseDir)
+
+	targetInputFileName :=
+		strMechOpsBaseDir +
+			"\\apptest\\examples\\testoutput.txt"
+
+	osPathSepStr := string(os.PathSeparator)
+
+	targetInputFileName = strings.Replace(
+		targetInputFileName,
+		"\\",
+		osPathSepStr,
+		-1)
+
+	var inputFileMgr strmech.FileMgr
+
+	inputFileMgr,
+		err = new(strmech.FileMgr).New(
+		targetInputFileName,
+		ePrefix.XCpy("targetInputFileName"))
+
+	if err != nil {
+
+		_ = inputFileMgr.CloseThisFile(
+			ePrefix.XCpy("inputFileMgr"))
+
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var fileBytes []byte
+
+	fileBytes,
+		err = inputFileMgr.ReadAllFileBytes(
+		ePrefix.XCpy("Read targetInputFileName"))
+
+	if err != nil {
+
+		_ = inputFileMgr.CloseThisFile(
+			ePrefix.XCpy("inputFileMgr"))
+
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	err = inputFileMgr.CloseThisFile(
+		ePrefix.XCpy("targetInputFileName"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	targetOutputFileName :=
+		strMechOpsBaseDir +
+			"\\apptest\\examples\\testoutput_2.txt"
+
+	targetOutputFileName = strings.Replace(
+		targetOutputFileName,
+		"\\",
+		osPathSepStr,
+		-1)
+
+	var outputFileMgr strmech.FileMgr
+
+	outputFileMgr,
+		err = new(strmech.FileMgr).New(
+		targetOutputFileName,
+		ePrefix.XCpy("targetOutputFileName"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	err = outputFileMgr.DeleteThisFile(
+		ePrefix.XCpy("targetOutputFileName"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var numOfBytesWritten int
+
+	numOfBytesWritten,
+		err = outputFileMgr.WriteBytesToFile(
+		fileBytes,
+		true,
+		ePrefix.XCpy("<-outputFileMgr"))
+
+	if err != nil {
+
+		_ = outputFileMgr.CloseThisFile(
+			ePrefix.XCpy("outputFileMgr"))
+
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	err = outputFileMgr.CloseThisFile(
+		ePrefix.XCpy("outputFileMgr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("\nOutput File:\n"+
+		"%v\n"+
+		"Cycle 1 Number Of Bytes Written: %v\n\n",
+		outputFileMgr.GetAbsolutePathFileName(),
+		numOfBytesWritten)
+
+	fileBytes = make([]byte, 0)
+
+	fileBytes = []byte("\nHello World!!\n")
+
+	numOfBytesWritten,
+		err = outputFileMgr.WriteBytesToFile(
+		fileBytes,
+		false,
+		ePrefix.XCpy("<-outputFileMgr"))
+
+	if err != nil {
+
+		_ = outputFileMgr.CloseThisFile(
+			ePrefix.XCpy("outputFileMgr"))
+
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	err = outputFileMgr.CloseThisFile(
+		ePrefix.XCpy("outputFileMgr"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("\nOutput File:\n"+
+		"%v\n"+
+		"Cycle 2 Number Of Bytes Written: %v\n\n",
+		outputFileMgr.GetAbsolutePathFileName(),
+		numOfBytesWritten)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+}

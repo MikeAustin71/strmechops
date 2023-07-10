@@ -4142,9 +4142,13 @@ func (fMgr *FileMgr) CreateThisFile(
 
 // DeleteThisFile
 //
-// Deletes the file identified by
+// Deletes the target file identified by
 // FileMgr.absolutePathFileName in the current FileMgr
 // instance.
+//
+// If the target file does NOT currently exist on an
+// attached storage drive, this method will exit and no
+// error will be returned.
 //
 // ----------------------------------------------------------------
 //
@@ -10247,7 +10251,7 @@ func (fMgr *FileMgr) OpenThisFileReadWriteTruncate(
 			"fMgr<-readWriteTruncateAccessCtrl"))
 }
 
-// ReadAllFile
+// ReadAllFileBytes
 //
 // Reads the entire contents of the file identified by
 // the current FileMgr and returns said contents in a
@@ -10354,7 +10358,7 @@ func (fMgr *FileMgr) OpenThisFileReadWriteTruncate(
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fMgr *FileMgr) ReadAllFile(
+func (fMgr *FileMgr) ReadAllFileBytes(
 	errorPrefix interface{}) (
 	bytesRead []byte,
 	err error) {
@@ -10371,7 +10375,7 @@ func (fMgr *FileMgr) ReadAllFile(
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	funcName := "FileMgr.ReadAllFile()"
+	funcName := "FileMgr.ReadAllFileBytes()"
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
