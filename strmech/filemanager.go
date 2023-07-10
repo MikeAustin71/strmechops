@@ -11786,24 +11786,37 @@ func (fMgr *FileMgr) SetFileMgrFromPathFileName(
 //
 // ----------------------------------------------------------------
 //
-// # BE ADVISED
-//
-//	If the number of bytes written to the file is not
-//	equal to the number of bytes in input parameter
-//	'bytes', an error will be returned.
-//
-// ----------------------------------------------------------------
-//
 // # IMPORTANT
 //
-//	This method will not automatically close the file to
-//	which the text contained input parameter 'bytes' was
-//	written.
+//	(1)	This method will NOT automatically close the file
+//		to which the text contained input parameter
+//		'bytes' was written.
 //
-//	The user is responsible for closing this file. To
-//	close this file after writing text to it, see method:
+//		The user is responsible for closing this file. To
+//		close this file after writing text to it, see
+//		method:
 //
-//		FileMgr.CloseThisFile()
+//			FileMgr.CloseThisFile()
+//
+//	(2)	If the number of bytes written to the file is not
+//		equal to the number of bytes in input parameter
+//		'bytes', an error will be returned.
+//
+//	(3) If the target file is NOT open, this method will
+//		attempt to open it. In doing so, this parameter
+//		will control the type of file open procedure
+//		applied.
+//
+//		If 'truncateFile' is set to 'true', the original
+//		contents of the target file will be deleted.
+//		Thereafter, the 'bytes' array will be written to
+//		the empty file completely replacing the original
+//		contents.
+//
+//		If 'truncateFile' is set to false, the original
+//		contents of a pre-existing target file will be
+//		retained, and the 'bytes' array will be appended
+//		to the end of the existing file contents.
 //
 // ----------------------------------------------------------------
 //
@@ -11814,6 +11827,24 @@ func (fMgr *FileMgr) SetFileMgrFromPathFileName(
 //		An array of bytes. This byte array contains the
 //		text characters which will be written to the file
 //		identified by the current instance of FileMgr.
+//
+//	truncateExistingFile		bool
+//
+//		If the target file is NOT open, this method will
+//		attempt to open it. In doing so, this parameter
+//		will control the type of file open procedure
+//		applied.
+//
+//		If 'truncateFile' is set to 'true', the original
+//		contents of the target file will be deleted.
+//		Thereafter, the 'bytes' array will be written to
+//		the empty file completely replacing the original
+//		contents.
+//
+//		If 'truncateFile' is set to false, the original
+//		contents of a pre-existing target file will be
+//		retained, and the 'bytes' array will be appended
+//		to the end of the existing file contents.
 //
 //	errorPrefix					interface{}
 //
@@ -11901,6 +11932,7 @@ func (fMgr *FileMgr) SetFileMgrFromPathFileName(
 //	 	attached to the	beginning of the error message.
 func (fMgr *FileMgr) WriteBytesToFile(
 	bytes []byte,
+	truncateExistingFile bool,
 	errorPrefix interface{}) (
 	numBytesWritten int,
 	err error) {
@@ -11940,14 +11972,31 @@ func (fMgr *FileMgr) WriteBytesToFile(
 
 	var readWriteAccessCtrl FileAccessControl
 
-	readWriteAccessCtrl,
-		err =
-		new(FileAccessControl).NewReadWriteAccess(
-			ePrefix.XCpy(
-				"readWriteAccessCtrl<-"))
+	if truncateExistingFile {
 
-	if err != nil {
-		return numBytesWritten, err
+		readWriteAccessCtrl,
+			err =
+			new(FileAccessControl).
+				NewReadWriteCreateTruncateAccess(
+					ePrefix.XCpy(
+						"writeTruncateAccessCfg<-"))
+
+		if err != nil {
+			return numBytesWritten, err
+		}
+
+	} else {
+
+		readWriteAccessCtrl,
+			err =
+			new(FileAccessControl).
+				NewReadWriteCreateAppendAccess(ePrefix.XCpy(
+					"writeOnlyFileAccessCfg<-"))
+
+		if err != nil {
+			return numBytesWritten, err
+		}
+
 	}
 
 	err = new(fileMgrHelper).writeFileSetup(
