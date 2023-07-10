@@ -2542,6 +2542,48 @@ func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) Empty() {
 	return
 }
 
+// EmptyTitleLines
+//
+// This method is used to delete or empty the collection
+// of title line strings maintained by the current
+// instance of TextLineTitleMarqueeDto.
+//
+// The deletion of existing title line strings facilitates
+// the reuse of existing format parameters for multiple
+// title marquee presentations.
+//
+// Only the internal member variable affected by this
+// deletion operation is:
+//
+//	TextLineTitleMarqueeDto.TitleLines
+//
+// All other member variables remain unchanged.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	NONE
+func (txtLineTitleMarqueeDto *TextLineTitleMarqueeDto) EmptyTitleLines() {
+
+	if txtLineTitleMarqueeDto.lock == nil {
+		txtLineTitleMarqueeDto.lock = new(sync.Mutex)
+	}
+
+	txtLineTitleMarqueeDto.lock.Lock()
+
+	txtLineTitleMarqueeDto.TitleLines.Empty()
+
+	defer txtLineTitleMarqueeDto.lock.Unlock()
+
+}
+
 // GetFormattedText
 //
 //	Returns lines of text comprising the entire Title
