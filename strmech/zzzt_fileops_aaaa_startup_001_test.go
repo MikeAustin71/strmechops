@@ -9,7 +9,9 @@ import (
 
 const (
 	//FILEOpsBaseTestLogDir   = "/fileOpsTest/logTest"
-	FILEOpsBaseFilesForTest = "/fileOpsTest/filesForTest"
+	FILEOpsBaseFilesForTest      = "/fileOpsTest/filesForTest"
+	FILEOpsBaseLevelFilesForTest = "/fileOpsTest/filesForTest/levelfilesfortest"
+	FILEOpsBaseTrashDirectory    = "/fileOpsTest/trashDirectory"
 	//FILEOpsBaseTrashDirectory = "/fileOpsTest/trashDirectory"
 	FILEOpsRelTestLogDir     = "../fileOpsTest/logTest"
 	FILEOpsRelFilesForTest   = "../fileOpsTest/filesForTest"

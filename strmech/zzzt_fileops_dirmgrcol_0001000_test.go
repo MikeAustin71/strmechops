@@ -58,10 +58,6 @@ func TestDirMgrCollection_GetTextListingAbsPath_000100(t *testing.T) {
 
 	}
 
-	//targetDir := FILEOpsRelFilesForTest
-	//"../fileOpsTest/filesForTest"
-	// Number of Directories: 4
-
 	var numOfDirectoriesLocated int
 	var isParentDirectoryIncluded bool
 	var directoriesLocated DirMgrCollection
@@ -291,4 +287,217 @@ func TestDirMgrCollection_GetTextListingAbsPath_000100(t *testing.T) {
 	}
 
 	return
+}
+
+func TestDirMgrCollection_GetDirProfile_000100(t *testing.T) {
+
+	funcName := "TestDirMgrCollection_GetTextListingAbsPath_000100()"
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		funcName,
+		"")
+
+	var targetDir, outputFile string
+	var err error
+
+	targetDir,
+		err = new(fileOpsTestUtility).
+		GetCompositeDir(
+			FILEOpsBaseLevelFilesForTest,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	outputFile,
+		err = new(fileOpsTestUtility).
+		GetCompositeDir(
+			FILEOpsBaseTrashDirectory+
+				"\\testGetDirProfile_000100.txt",
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var dirProfile DirectoryProfile
+	var directoryPathDoesExist bool
+
+	directoryPathDoesExist,
+		dirProfile,
+		err = new(DirHelper).
+		GetDirectoryProfile(
+			targetDir,
+			false,
+			false,
+			FileSelectionCriteria{},
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !directoryPathDoesExist {
+
+		t.Errorf("\n%v\n"+
+			"Error: Test Directory Path Does NOT Exist on\n"+
+			"attached storage volume!\n"+
+			"Base Test Directory = '%v'\n"+
+			"targetDir='%v'\n",
+			funcName,
+			FILEOpsBaseLevelFilesForTest,
+			targetDir)
+
+		return
+
+	}
+
+	strBuilder1 := strings.Builder{}
+
+	leftMargin := " "
+	rightMargin := ""
+	maxLineLength := 90
+
+	netFieldLength := maxLineLength -
+		len(leftMargin) -
+		len(rightMargin)
+
+	solidLineChar := "-"
+
+	topTitle := TextLineTitleMarqueeDto{
+		StandardSolidLineLeftMargin:  leftMargin,
+		StandardSolidLineRightMargin: rightMargin,
+		StandardTitleLeftMargin:      leftMargin,
+		StandardTitleRightMargin:     rightMargin,
+		StandardMaxLineLen:           maxLineLength,
+		StandardTextFieldLen:         netFieldLength,
+		StandardTextJustification:    TxtJustify.Center(),
+		NumLeadingBlankLines:         1,
+		LeadingSolidLineChar:         solidLineChar,
+		NumLeadingSolidLines:         1,
+		NumTopTitleBlankLines:        0,
+		TitleLines:                   TextLineSpecLinesCollection{},
+		NumBottomTitleBlankLines:     0,
+		TrailingSolidLineChar:        solidLineChar,
+		NumTrailingSolidLines:        1,
+		NumTrailingBlankLines:        0,
+	}
+
+	err = topTitle.AddTitleLineStrings(
+		ePrefix.XCpy("title lines"),
+		"Directory Metrics")
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	dateFmtStr := new(DateTimeHelper).
+		GetDateTimeFormat(
+			2)
+
+	err = topTitle.AddTitleLineDateTimeStr(
+		time.Now(),
+		dateFmtStr,
+		ePrefix.XCpy("<-time.Now()"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	bottomTitle := TextLineTitleMarqueeDto{
+		StandardSolidLineLeftMargin:  leftMargin,
+		StandardSolidLineRightMargin: rightMargin,
+		StandardTitleLeftMargin:      leftMargin,
+		StandardTitleRightMargin:     rightMargin,
+		StandardMaxLineLen:           maxLineLength,
+		StandardTextFieldLen:         netFieldLength,
+		StandardTextJustification:    TxtJustify.Center(),
+		NumLeadingBlankLines:         1,
+		LeadingSolidLineChar:         solidLineChar,
+		NumLeadingSolidLines:         1,
+		NumTopTitleBlankLines:        0,
+		TitleLines:                   TextLineSpecLinesCollection{},
+		NumBottomTitleBlankLines:     0,
+		TrailingSolidLineChar:        solidLineChar,
+		NumTrailingSolidLines:        0,
+		NumTrailingBlankLines:        0,
+	}
+
+	err = dirProfile.GetTextListing(
+		leftMargin,
+		rightMargin,
+		maxLineLength,
+		topTitle,
+		bottomTitle,
+		&strBuilder1,
+		ePrefix.XCpy("<-dirProfile"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var numOfBytesWritten int64
+
+	fHelper := new(FileHelper)
+
+	numOfBytesWritten,
+		err = fHelper.
+		WriteStrOpenClose(
+			outputFile,
+			true,
+			true,
+			strBuilder1.String(),
+			ePrefix.XCpy("outputFile<-"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var numOfBytesRead int64
+
+	strBuilder2 := strings.Builder{}
+
+	numOfBytesRead,
+		err = fHelper.ReadFileStrBuilderOpenClose(
+		outputFile,
+		&strBuilder2,
+		ePrefix.XCpy("outputFile"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if numOfBytesRead != numOfBytesWritten {
+
+		t.Errorf("\n%v\n"+
+			"Error: Bytes Written to output file do NOT\n"+
+			"equal the Bytes Read from that output file!\n"+
+			"Output File= '%v'\n"+
+			"Bytes Written= '%v'\n"+
+			"Bytes Read= '%v'\n",
+			funcName,
+			outputFile,
+			numOfBytesWritten,
+			numOfBytesRead)
+
+		return
+
+	}
 }

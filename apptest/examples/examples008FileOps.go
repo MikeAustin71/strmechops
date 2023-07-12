@@ -226,7 +226,7 @@ func (dirOpsTest008 MainFileOpsTest008) GetFiles01() {
 
 // ReadFiles01
 //
-// Runs test on FileHelper.ReadStrBuilderFile()
+// Runs test on FileHelper.ReadFileStrBuilderOpenClose()
 func (dirOpsTest008 MainFileOpsTest008) ReadFiles01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -272,7 +272,7 @@ func (dirOpsTest008 MainFileOpsTest008) ReadFiles01() {
 	var numBytesRead int64
 
 	numBytesRead,
-		err = fhHelper.ReadStrBuilderFile(
+		err = fhHelper.ReadFileStrBuilderOpenClose(
 		targetInputFileName,
 		strBuilder,
 		ePrefix.XCpy("targetInputFileName->"))
