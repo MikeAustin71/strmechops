@@ -3,7 +3,9 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"os"
 	"sync"
+	"time"
 )
 
 type dirMgrHelperNanobot struct {
@@ -2094,6 +2096,299 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) deleteAllSubDirectories(
 	}
 
 	return err
+}
+
+// Receives an instance of DirMgr identifying a target
+// parent directory. This method then proceeds to delete
+// all files within that parent directory, all
+// subdirectories in that parent directory and all files
+// in the subdirectory trees within that parent directory.
+//
+// Upon completion, the top level parent directory
+// identified by input parameter 'dMgr' will remain.
+// However, all previous contents within that directory
+// (files and subdirectories) will be deleted.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete all files and subdirectories
+//	residing in the parent directory identified by input
+//	parameter 'dMgr'. Upon completion, only the parent
+//	directory 'dMgr' will remain as an empty directory.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	dMgr						*DirMgr
+//
+//		A pointer to an instance of DirMgr. This DirMgr
+//		object identifies the parent directory where
+//		deletion operations will be conducted.
+//
+//		This method will delete all files within the
+//		designated parent directory, all subdirectories
+//		in that parent directory and all files in the
+//		subdirectory trees within that parent directory.
+//
+//		Upon completion, the top level parent directory
+//		identified by input parameter 'dMgr' will remain.
+//		However, all previous contents within that
+//		directory (files and subdirectories) will be
+//		deleted.
+//
+//	dMgrLabel					string
+//
+//		The name or label associated with input parameter
+//		'dMgr' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "dMgr" will be
+//		automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	errs						[]error
+//
+//		An array of error objects.
+//
+//		If this method completes successfully, the
+//		returned error array is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate appropriate
+//		error messages.
+//
+//		The returned error messages will incorporate
+//		the method chain and text passed by input
+//		parameter, 'errPrefDto'. The 'errPrefDto' text
+//		will be prefixed or attached to the beginning of
+//		the error message.
+//
+//		This error array may contain multiple errors.
+//
+//		An error array may be consolidated into a single
+//		error using method StrMech.ConsolidateErrors()
+func (dMgrHlprNanobot *dirMgrHelperNanobot) emptyParentDirectory(
+	dMgr *DirMgr,
+	dMgrLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	errs []error) {
+
+	if dMgrHlprNanobot.lock == nil {
+		dMgrHlprNanobot.lock = new(sync.Mutex)
+	}
+
+	dMgrHlprNanobot.lock.Lock()
+
+	defer dMgrHlprNanobot.lock.Unlock()
+
+	funcName := "dirMgrHelperNanobot.emptyDirectory() "
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		errs = append(
+			errs, err)
+
+		return errs
+	}
+
+	if len(dMgrLabel) == 0 {
+
+		dMgrLabel = "dMgr"
+	}
+
+	if dMgr == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' pointer.\n",
+			ePrefix.String(),
+			dMgrLabel,
+			dMgrLabel)
+
+		errs = append(
+			errs, err)
+
+		return errs
+	}
+
+	_,
+		_,
+		err = new(dirMgrHelperPreon).
+		validateDirMgr(
+			dMgr,
+			true, // pathMustExist
+			dMgrLabel,
+			ePrefix)
+
+	if err != nil {
+
+		errs = append(
+			errs, err)
+
+		return errs
+	}
+
+	var err2 error
+	var nameDirEntries []os.DirEntry
+
+	nameDirEntries,
+		err2 = os.ReadDir(dMgr.absolutePath)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by os.ReadDir(%v.absolutePath).\n"+
+			"%v Absolute Path='%v'\n"+
+			"Error= \n%v\n",
+			ePrefix.String(),
+			dMgrLabel,
+			dMgrLabel,
+			dMgr.absolutePath,
+			err2.Error())
+
+		errs = append(
+			errs, err)
+
+		return errs
+	}
+
+	lenDirInfos := len(nameDirEntries)
+
+	if lenDirInfos == 0 {
+		// Nothing to do. The Directory is empty!
+
+		return errs
+	}
+
+	var osFInfo os.FileInfo
+
+	osPathSepStr := string(os.PathSeparator)
+
+	for i := 0; i < lenDirInfos; i++ {
+
+		osFInfo,
+			err2 = nameDirEntries[i].Info()
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Error Returned by nameDirEntry.Info().\n"+
+				"The conversion of DirEntry to os.FileInfo Failed."+
+				"%v= '%v'\n"+
+				"FileName= '%v'\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				dMgrLabel,
+				dMgr.absolutePath,
+				dMgr.absolutePath+osPathSepStr+nameDirEntries[i].Name(),
+				err2.Error())
+
+			errs = append(
+				errs, err)
+
+			continue
+		}
+
+		if osFInfo.IsDir() {
+
+			deleteSubDirPath :=
+				dMgr.absolutePath +
+					osPathSepStr +
+					osFInfo.Name()
+
+			for i := 0; i < 3; i++ {
+
+				err2 = os.RemoveAll(deleteSubDirPath)
+
+				if err2 != nil {
+
+					if i >= 2 {
+
+						err = fmt.Errorf("\n%v\n"+
+							"Error returned by os.RemoveAll(deleteSubDirPath)\n"+
+							"deleteSubDirPath='%v'\n"+
+							"Error= \n%v\n",
+							ePrefix.String(),
+							deleteSubDirPath,
+							err2.Error())
+
+						errs = append(
+							errs, err)
+
+						return errs
+					}
+
+					time.Sleep(50 * time.Millisecond)
+
+					continue
+
+				} else {
+					// err2 == nil
+					// Deletion was successful
+					break
+				}
+			}
+
+		} else {
+			// This is a file
+
+			deleteFilePath :=
+				dMgr.absolutePath +
+					osPathSepStr +
+					osFInfo.Name()
+
+			err2 = os.Remove(deleteFilePath)
+
+			if err2 != nil {
+
+				err = fmt.Errorf("%v\n"+
+					"Error returned by os.Remove(deleteFilePath).\n"+
+					"deleteFilePath='%v'\n"+
+					"Error= \n%v\n",
+					ePrefix.String(),
+					deleteFilePath,
+					err2.Error())
+
+				errs = append(
+					errs, err)
+
+				return errs
+			}
+		}
+	}
+
+	return errs
 }
 
 // setDirMgr

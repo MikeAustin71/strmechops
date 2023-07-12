@@ -4311,16 +4311,26 @@ func (dHlpr *DirHelper) GetSubDirsFilesInParentDir(
 // EmptyParentDirectory
 //
 // Receives a string identifying a target parent
-// directory. This method then proceeds to delete
-// all files within that parent directory, all
-// subdirectories in that parent directory and all
-// files in the subdirectory trees within that parent
-// directory.
+// directory. This method then proceeds to delete all
+// files within that parent directory, all subdirectories
+// in that parent directory and all files in the
+// subdirectory trees within that parent directory.
 //
-// Upon completion the top level parent directory
+// Upon completion, the top level parent directory
 // identified by input parameter 'parentDirectoryPath'
-// will remain. However, all previous contents within that
-// directory will be deleted.
+// will remain. However, all previous contents within
+// that directory (files and subdirectories) will be
+// deleted.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete all files and subdirectories
+//	residing in the parent directory identified by input
+//	parameter 'parentDirectoryPath'. Upon completion, only
+//	the parent directory 'parentDirectoryPath' will remain
+//	as an empty directory.
 //
 // ----------------------------------------------------------------
 //
@@ -4464,34 +4474,17 @@ func (dHlpr *DirHelper) EmptyParentDirectory(
 		return err
 	}
 
-	var dirPathDoesExist bool
+	var errs []error
 
-	dirPathDoesExist,
-		_,
-		err =
-		new(dirMgrHelperAtom).
-			doesDirectoryExist(
-				&dMgr,
-				PreProcPathCode.None(),
-				"parentDirectoryPath",
-				ePrefix)
+	errs = new(dirMgrHelperNanobot).emptyParentDirectory(
+		&dMgr,
+		"parentDirectoryPath",
+		ePrefix)
 
-	if err != nil {
+	if len(errs) > 0 {
 
-		return err
-	}
+		err = new(StrMech).ConsolidateErrors(errs)
 
-	if !dirPathDoesExist {
-
-		err = fmt.Errorf("\n%v\n"+
-			"Error: The 'parentDirectoryPath' does NOT exist\n"+
-			"on an attached storage drive.\n"+
-			"'parentDirectoryPath' is invalid!\n"+
-			"parentDirectoryPath= '%v'\n",
-			ePrefix.String(),
-			parentDirectoryPath)
-
-		return err
 	}
 
 	return err
