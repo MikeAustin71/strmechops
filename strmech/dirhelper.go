@@ -932,8 +932,10 @@ func (dHlpr *DirHelper) GetDirectoryProfile(
 
 		err = fmt.Errorf("%v\n"+
 			"Error: directoryPath is NOT a valid directory path!\n"+
+			"directoryPath= '%v'\n"+
 			"Error= \n%v\n",
 			funcName,
+			directoryPath,
 			err2.Error())
 
 		return directoryPathDoesExist, dirProfile, err
@@ -4304,4 +4306,193 @@ func (dHlpr *DirHelper) GetSubDirsFilesInParentDir(
 		numOfFilesLocated,
 		filesLocated,
 		err
+}
+
+// EmptyParentDirectory
+//
+// Receives a string identifying a target parent
+// directory. This method then proceeds to delete
+// all files within that parent directory, all
+// subdirectories in that parent directory and all
+// files in the subdirectory trees within that parent
+// directory.
+//
+// Upon completion the top level parent directory
+// identified by input parameter 'parentDirectoryPath'
+// will remain. However, all previous contents within that
+// directory will be deleted.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	parentDirectoryPath			string
+//
+//		This string holds the directory path identifying
+//		the target parent directory. All files in this
+//		directory tree and all subdirectories in this
+//		directory tree will be deleted. Upon completion,
+//		all that will remain is the empty parent directory.
+//
+//		If the directory path passed by
+//		'parentDirectoryPath' does not exist on an attached
+//		storage drive, an error will be returned.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (dHlpr *DirHelper) EmptyParentDirectory(
+	parentDirectoryPath string,
+	errorPrefix interface{}) error {
+
+	if dHlpr.lock == nil {
+		dHlpr.lock = new(sync.Mutex)
+	}
+
+	dHlpr.lock.Lock()
+
+	defer dHlpr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	funcName := "DirHelper." +
+		"EmptyParentDirectory()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return err
+	}
+
+	var err2 error
+	var dMgr DirMgr
+
+	dMgr,
+		err2 = new(DirMgr).New(
+		parentDirectoryPath,
+		ePrefix.XCpy("dMgr<-parentDirectoryPath"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: parentDirectoryPath is NOT a valid directory path!\n"+
+			"parentDirectoryPath= '%v'\n"+
+			"Error= \n%v\n",
+			funcName,
+			parentDirectoryPath,
+			err2.Error())
+
+		return err
+	}
+
+	var dirPathDoesExist bool
+
+	dirPathDoesExist,
+		_,
+		err =
+		new(dirMgrHelperAtom).
+			doesDirectoryExist(
+				&dMgr,
+				PreProcPathCode.None(),
+				"parentDirectoryPath",
+				ePrefix)
+
+	if err != nil {
+
+		return err
+	}
+
+	if !dirPathDoesExist {
+
+		err = fmt.Errorf("\n%v\n"+
+			"Error: The 'parentDirectoryPath' does NOT exist\n"+
+			"on an attached storage drive.\n"+
+			"'parentDirectoryPath' is invalid!\n"+
+			"parentDirectoryPath= '%v'\n",
+			ePrefix.String(),
+			parentDirectoryPath)
+
+		return err
+	}
+
+	return err
 }
