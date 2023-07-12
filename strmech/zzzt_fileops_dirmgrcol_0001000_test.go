@@ -325,6 +325,36 @@ func TestDirMgrCollection_GetDirProfile_000100(t *testing.T) {
 		return
 	}
 
+	fHelper := new(FileHelper)
+
+	var lowLevelErr error
+
+	err,
+		lowLevelErr = fHelper.DeleteDirFile(
+		outputFile,
+		ePrefix.XCpy("outputFile"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if lowLevelErr != nil {
+		t.Errorf("\n%v\n"+
+			"Low Level Error Returned by \n"+
+			"fHelper.DeleteDirFile(outputFile)\n"+
+			"outputFile= '%v'\n"+
+			"Low Level Error= \n%v\n",
+			ePrefix.String(),
+			outputFile,
+			lowLevelErr.Error())
+		return
+	}
+
+	// We know outputFile does NOT exist on
+	// disk.
+
 	var dirProfile DirectoryProfile
 	var directoryPathDoesExist bool
 
@@ -451,8 +481,6 @@ func TestDirMgrCollection_GetDirProfile_000100(t *testing.T) {
 
 	var numOfBytesWritten int64
 
-	fHelper := new(FileHelper)
-
 	numOfBytesWritten,
 		err = fHelper.
 		WriteStrOpenClose(
@@ -500,4 +528,28 @@ func TestDirMgrCollection_GetDirProfile_000100(t *testing.T) {
 		return
 
 	}
+
+	err,
+		lowLevelErr = fHelper.DeleteDirFile(
+		outputFile,
+		ePrefix.XCpy("Final Delete outputFile"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if lowLevelErr != nil {
+		t.Errorf("\n%v\n"+
+			"Low Level Error Returned by \n"+
+			"fHelper.DeleteDirFile(outputFile)\n"+
+			"outputFile= '%v'\n"+
+			"Low Level Error= \n%v\n",
+			ePrefix.String(),
+			outputFile,
+			lowLevelErr.Error())
+		return
+	}
+
 }
