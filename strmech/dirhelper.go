@@ -4308,7 +4308,7 @@ func (dHlpr *DirHelper) GetSubDirsFilesInParentDir(
 		err
 }
 
-// EmptyParentDirectory
+// DeleteAllInParentDirectory
 //
 // Receives a string identifying a target parent
 // directory. This method then proceeds to delete all
@@ -4423,7 +4423,7 @@ func (dHlpr *DirHelper) GetSubDirsFilesInParentDir(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (dHlpr *DirHelper) EmptyParentDirectory(
+func (dHlpr *DirHelper) DeleteAllInParentDirectory(
 	parentDirectoryPath string,
 	errorPrefix interface{}) error {
 
@@ -4440,7 +4440,7 @@ func (dHlpr *DirHelper) EmptyParentDirectory(
 	var err error
 
 	funcName := "DirHelper." +
-		"EmptyParentDirectory()"
+		"DeleteAllInParentDirectory()"
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
