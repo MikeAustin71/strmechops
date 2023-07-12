@@ -32,8 +32,8 @@ func TestDirMgr_ChangeWorkingDir_000100(t *testing.T) {
 	}
 
 	targetDir, err = fh.MakeAbsolutePath(
-		FILEOpsTestLogDir,
-		ePrefix.XCpy("FILEOpsTestLogDir"))
+		FILEOpsRelTestLogDir,
+		ePrefix.XCpy("FILEOpsRelTestLogDir"))
 
 	if err != nil {
 
@@ -121,7 +121,7 @@ func TestDirMgr_CopyDirectory_000100(t *testing.T) {
 		funcName,
 		"")
 
-	targetDir := FILEOPSTrashDirectory + "/TestDirMgr_CopyFilesToDirectory_000100"
+	targetDir := FILEOpsRelTrashDirectory + "/TestDirMgr_CopyFilesToDirectory_000100"
 	//"../../checkFiles/TestDirMgr_CopyFilesToDirectory_01"
 
 	fh := new(FileHelper)
@@ -176,7 +176,7 @@ func TestDirMgr_CopyDirectory_000100(t *testing.T) {
 		return
 	}
 
-	srcDir1 := FILEOPSFilesForTest + "/levelfilesfortest"
+	srcDir1 := FILEOpsRelFilesForTest + "/levelfilesfortest"
 
 	//"../../filesfortest/levelfilesfortest"
 

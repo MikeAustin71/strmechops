@@ -8,10 +8,12 @@ import (
 )
 
 const (
-	FILEOpsTestLogDir = "../fileOpsTest/logTest"
-	//FILEOpsCheckFiles   = "../fileOpsTest/checkFiles"
-	FILEOPSFilesForTest   = "../fileOpsTest/filesForTest"
-	FILEOPSTrashDirectory = "../fileOpsTest/trashDirectory"
+	//FILEOpsBaseTestLogDir   = "/fileOpsTest/logTest"
+	FILEOpsBaseFilesForTest = "/fileOpsTest/filesForTest"
+	//FILEOpsBaseTrashDirectory = "/fileOpsTest/trashDirectory"
+	FILEOpsRelTestLogDir     = "../fileOpsTest/logTest"
+	FILEOpsRelFilesForTest   = "../fileOpsTest/filesForTest"
+	FILEOpsRelTrashDirectory = "../fileOpsTest/trashDirectory"
 	//commonDir = "../../pathFileOps"
 )
 
@@ -94,5 +96,5 @@ func (fOpsTestUtil *fileOpsTestUtility) GetCompositeDir(
 		osPathSepStr,
 		-1)
 
-	return strMechOpsBaseDir, err
+	return compositeDir, err
 }

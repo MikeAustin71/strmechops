@@ -1,9 +1,12 @@
 package strmech
 
 import (
+	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"os"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestDirMgrCollection_GetTextListingAbsPath_000100(t *testing.T) {
@@ -14,14 +17,54 @@ func TestDirMgrCollection_GetTextListingAbsPath_000100(t *testing.T) {
 		funcName,
 		"")
 
-	targetDir := FILEOPSFilesForTest
+	var targetDir string
+	var err error
+
+	targetDir,
+		err = new(fileOpsTestUtility).
+		GetCompositeDir(
+			FILEOpsBaseFilesForTest,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	osPathSepStr := string(os.PathSeparator)
+
+	testString := "\\fileOpsTest\\filesForTest"
+
+	testString = strings.Replace(
+		testString,
+		"\\",
+		osPathSepStr,
+		-1)
+
+	if !strings.Contains(targetDir, "filesForTest") {
+
+		t.Errorf("\n%v\n"+
+			"Error: Returned 'targetDir' string does NOT\n"+
+			"contain '%v'\n"+
+			"targetDir= '%v'\n"+
+			"testString= '%v'\n",
+			funcName,
+			testString,
+			targetDir,
+			testString)
+
+		return
+
+	}
+
+	//targetDir := FILEOpsRelFilesForTest
 	//"../fileOpsTest/filesForTest"
 	// Number of Directories: 4
 
 	var numOfDirectoriesLocated int
 	var isParentDirectoryIncluded bool
 	var directoriesLocated DirMgrCollection
-	var err error
 
 	numOfDirectoriesLocated,
 		isParentDirectoryIncluded,
@@ -57,16 +100,116 @@ func TestDirMgrCollection_GetTextListingAbsPath_000100(t *testing.T) {
 		return
 	}
 
+	leftMargin := " "
+	rightMargin := ""
+	maxLineLength := 90
+	solidLineChar := "-"
+
+	netFieldLength := maxLineLength -
+		len(leftMargin) -
+		len(rightMargin) - 1
+
+	var totalBytesNumStr string
+
+	totalBytesNumStr,
+		err = directoriesLocated.GetTotalBytesCommaSeparated(
+		ePrefix.XCpy("directoriesLocated"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	topTitle := TextLineTitleMarqueeDto{
+		StandardSolidLineLeftMargin:  leftMargin,
+		StandardSolidLineRightMargin: rightMargin,
+		StandardTitleLeftMargin:      leftMargin,
+		StandardTitleRightMargin:     rightMargin,
+		StandardMaxLineLen:           maxLineLength,
+		StandardTextFieldLen:         netFieldLength,
+		StandardTextJustification:    TxtJustify.Center(),
+		NumLeadingBlankLines:         1,
+		LeadingSolidLineChar:         solidLineChar,
+		NumLeadingSolidLines:         1,
+		NumTopTitleBlankLines:        0,
+		TitleLines:                   TextLineSpecLinesCollection{},
+		NumBottomTitleBlankLines:     0,
+		TrailingSolidLineChar:        solidLineChar,
+		NumTrailingSolidLines:        1,
+		NumTrailingBlankLines:        0,
+	}
+
+	err = topTitle.AddTitleLineStrings(
+		ePrefix,
+		"Selected Directory",
+		"    ",
+		targetDir,
+		"    ")
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	dateFmtStr := new(DateTimeHelper).
+		GetDateTimeFormat(
+			2)
+
+	err = topTitle.AddTitleLineDateTimeStr(
+		time.Now(),
+		dateFmtStr,
+		ePrefix.XCpy("<-time.Now()"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	bottomTitle := TextLineTitleMarqueeDto{
+		StandardSolidLineLeftMargin:  leftMargin,
+		StandardSolidLineRightMargin: rightMargin,
+		StandardTitleLeftMargin:      leftMargin,
+		StandardTitleRightMargin:     rightMargin,
+		StandardMaxLineLen:           maxLineLength,
+		StandardTextFieldLen:         netFieldLength,
+		StandardTextJustification:    TxtJustify.Center(),
+		NumLeadingBlankLines:         1,
+		LeadingSolidLineChar:         solidLineChar,
+		NumLeadingSolidLines:         1,
+		NumTopTitleBlankLines:        0,
+		TitleLines:                   TextLineSpecLinesCollection{},
+		NumBottomTitleBlankLines:     0,
+		TrailingSolidLineChar:        solidLineChar,
+		NumTrailingSolidLines:        1,
+		NumTrailingBlankLines:        1,
+	}
+
+	err =
+		bottomTitle.AddTitleLineStrings(
+			ePrefix.XCpy("bottomTitle"),
+			fmt.Sprintf("Number of Directories: %v",
+				directoriesLocated.GetNumOfDirs()),
+			fmt.Sprintf("Total Bytes in all Directories: %v",
+				totalBytesNumStr))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
 	strBuilder := strings.Builder{}
 
 	err = directoriesLocated.
 		GetTextListingAbsPath(
-			" ",
-			" ",
-			80,
-			'-',
-			targetDir,
-			true,
+			leftMargin,
+			rightMargin,
+			maxLineLength,
+			topTitle,
+			bottomTitle,
 			&strBuilder,
 			ePrefix.XCpy("<-directoriesLocated"))
 
@@ -126,6 +269,22 @@ func TestDirMgrCollection_GetTextListingAbsPath_000100(t *testing.T) {
 			"targetDir='%v'\n",
 			ePrefix.String(),
 			targetDir)
+
+		return
+
+	}
+
+	expectedTotalBytes := "688,959"
+
+	if expectedTotalBytes != totalBytesNumStr {
+
+		t.Errorf("\n%v\n"+
+			"Error: Expected Total Bytes != Actual Total Bytes\n"+
+			"Expected Total Bytes = '%v'\n"+
+			"  Actual Total Bytes = '%v'\n",
+			ePrefix.String(),
+			expectedTotalBytes,
+			totalBytesNumStr)
 
 		return
 
