@@ -297,7 +297,7 @@ func TestDirMgrCollection_GetDirProfile_000100(t *testing.T) {
 		funcName,
 		"")
 
-	var targetDir, outputFile string
+	var targetDir, trashDirectory, outputFile string
 	var err error
 
 	targetDir,
@@ -312,12 +312,25 @@ func TestDirMgrCollection_GetDirProfile_000100(t *testing.T) {
 		return
 	}
 
-	outputFile,
+	trashDirectory,
 		err = new(fileOpsTestUtility).
 		GetCompositeDir(
-			FILEOpsBaseTrashDirectory+
-				"\\testGetDirProfile_000100.txt",
+			FILEOpsBaseTrashDirectory,
 			ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	outputFile = trashDirectory +
+		string(os.PathSeparator) +
+		"testGetDirProfile_000100.txt"
+
+	err = new(DirHelper).DeleteAllInParentDirectory(
+		trashDirectory,
+		ePrefix.XCpy("trashDirectory"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
