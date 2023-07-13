@@ -12302,6 +12302,15 @@ func (fMgr *FileMgr) WriteStrToFile(
 //		identified by the current instance of FileMgr.
 //		The target file will be closed automatically.
 //
+//	(3) If input parameter 'truncateExistingFile' is set
+//		to 'true', any pre-existing contents in the
+//		target file will be deleted or truncated before
+//		the new string is written to the file.
+//
+//		If input parameter 'truncateExistingFile' is set
+//		to 'false', the new string will be appended to
+//		the end of any pre-existing file contents.
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -12450,18 +12459,14 @@ func (fMgr *FileMgr) WriteStrOpenClose(
 
 	var fMgrHlpr = new(fileMgrHelper)
 
-	if fMgr.filePtr != nil {
+	err = fMgrHlpr.
+		closeFile(
+			fMgr,
+			ePrefix.XCpy("fMgr.filePtr"))
 
-		err = fMgrHlpr.
-			closeFile(
-				fMgr,
-				ePrefix.XCpy("fMgr.filePtr"))
+	if err != nil {
 
-		if err != nil {
-
-			return numBytesWritten, err
-		}
-
+		return numBytesWritten, err
 	}
 
 	var writeAccessCfg FileAccessControl
@@ -12471,7 +12476,7 @@ func (fMgr *FileMgr) WriteStrOpenClose(
 		writeAccessCfg,
 			err =
 			new(FileAccessControl).
-				NewWriteOnlyTruncateAccess(ePrefix.XCpy(
+				NewReadWriteCreateTruncateAccess(ePrefix.XCpy(
 					"writeTruncateAccessCfg<-"))
 
 		if err != nil {
@@ -12483,7 +12488,7 @@ func (fMgr *FileMgr) WriteStrOpenClose(
 		writeAccessCfg,
 			err =
 			new(FileAccessControl).
-				NewWriteOnlyAppendAccess(ePrefix.XCpy(
+				NewWriteOnlyCreateAppendAccess(ePrefix.XCpy(
 					"writeOnlyFileAccessCfg<-"))
 
 		if err != nil {
@@ -12514,6 +12519,272 @@ func (fMgr *FileMgr) WriteStrOpenClose(
 
 	numBytesWritten,
 		err2 = fMgr.fileBufWriter.WriteString(textToWrite)
+
+	if err2 != nil {
+
+		err =
+			fmt.Errorf("%v\n"+
+				"Error returned from fMgr.filePtr.WriteString(textToWrite).\n"+
+				"Output File='%v'.\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				fMgr.absolutePathFileName,
+				err2.Error())
+
+	}
+
+	return numBytesWritten, err
+}
+
+// WriteStrBuilderOpenClose
+//
+// Using the target file identified by the current
+// instance of FileMgr, this method will open the
+// target file, write a string to the target file
+// and close the target file.
+//
+// The string, or text to be written to the target file
+// is provided by input parameter strBuilder, an instance
+// of strings.Builder.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	(1) If the target file did not previously exist, it
+//		will be created.
+//
+//	(2)	After this write operation is completed, the user
+//		is NOT required to close the target file
+//		identified by the current instance of FileMgr.
+//		The target file will be closed automatically.
+//
+//	(3) If input parameter 'truncateExistingFile' is set
+//		to 'true', any pre-existing contents in the
+//		target file will be deleted or truncated before
+//		the new string is written to the file.
+//
+//		If input parameter 'truncateExistingFile' is set
+//		to 'false', the new string will be appended to
+//		the end of any pre-existing file contents.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	strBuilder					*strings.Builder
+//
+//		A pointer to an instance of 'strings.Builder'.
+//		'strBuilder' holds the text that will be written
+//		to the target file identified by the current
+//		instance of FileMgr.
+//
+//	truncateExistingFile		bool
+//
+//		If this parameter is set to 'true', the target
+//		file will be opened for write operations. If the
+//		target file previously existed, it will be
+//		truncated. This means that the file's previous
+//		contents will be deleted.
+//
+//		If this parameter is set to 'false', the target
+//		file will be opened for write operations. If the
+//		target file previously existed, the new text
+//		written to the file will be appended to the
+//		previous file contents.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numBytesWritten				int
+//
+//		If this method completes successfully, this
+//		integer value will equal the number of bytes
+//		written to the file identified by the current
+//		instance of FileMgr. It should match the number
+//		of bytes contained in the input string
+//		parameter, 'textToWrite'.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgr *FileMgr) WriteStrBuilderOpenClose(
+	strBuilder *strings.Builder,
+	truncateExistingFile bool,
+	errorPrefix interface{}) (
+	numBytesWritten int,
+	err error) {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr."+
+			"WriteStrBuilderOpenClose()",
+		"")
+
+	if err != nil {
+		return numBytesWritten, err
+	}
+
+	if strBuilder == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' is invalid!\n"+
+			"'strBuilder' is a 'nil' pointer.",
+			ePrefix.String())
+
+		return numBytesWritten, err
+	}
+
+	if strBuilder.Len() == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' is invalid!\n"+
+			"'strBuilder' is empty and contains a zero length string.\n",
+			ePrefix.String())
+
+		return numBytesWritten, err
+	}
+
+	var fMgrHlpr = new(fileMgrHelper)
+
+	err = fMgrHlpr.
+		closeFile(
+			fMgr,
+			ePrefix.XCpy("fMgr.filePtr"))
+
+	if err != nil {
+
+		return numBytesWritten, err
+	}
+
+	var writeAccessCfg FileAccessControl
+
+	if truncateExistingFile {
+
+		writeAccessCfg,
+			err =
+			new(FileAccessControl).
+				NewReadWriteCreateTruncateAccess(ePrefix.XCpy(
+					"writeTruncateAccessCfg<-"))
+
+		if err != nil {
+			return numBytesWritten, err
+		}
+
+	} else {
+
+		writeAccessCfg,
+			err =
+			new(FileAccessControl).
+				NewWriteOnlyCreateAppendAccess(ePrefix.XCpy(
+					"writeOnlyFileAccessCfg<-"))
+
+		if err != nil {
+			return numBytesWritten, err
+		}
+
+	}
+
+	err = fMgrHlpr.writeFileSetup(
+		fMgr,
+		writeAccessCfg,
+		true,
+		ePrefix.XCpy(
+			"fMgr<-writeAccessCfg"))
+
+	if err != nil {
+		return numBytesWritten, err
+	}
+
+	// file is open
+	defer func() {
+		_ = fMgrHlpr.closeFile(fMgr, nil)
+	}()
+
+	var err2 error
+
+	numBytesWritten,
+		err2 = fMgr.fileBufWriter.WriteString(strBuilder.String())
 
 	if err2 != nil {
 
