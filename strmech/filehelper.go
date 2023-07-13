@@ -14103,3 +14103,271 @@ func (fh *FileHelper) WriteStrOpenClose(
 
 	return numBytesWritten, err
 }
+
+// WriteStrBuilderOpenClose
+//
+// Opens or Creates a target output file, writes the
+// string contents of a strings.Builder instance to the
+// target output file and then closes that target output
+// file automatically. The user is NOT required to close
+// the target file manually.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName					string
+//
+//		A string containing the path and file name of the
+//		target output file to which string text will be
+//		written.
+//
+//	createDirectoryPathIfNotExist	bool
+//
+//		If the directory path element of parameter
+//		'pathFileName' does not exist on an attached
+//		storage drive, and this parameter is set to
+//		'true', this method will attempt to create
+//		the directory path.
+//
+//		If 'createDirectoryPathIfNotExist' is set to
+//		'false', and the directory path element of
+//		parameter 'pathFileName' does not exist on an
+//		attached storage drive, an error will be returned.
+//
+//	truncateExistingFile			bool
+//
+//		If this parameter is set to 'true', the target
+//		output file will be opened for write operations.
+//		If the target file previously existed, it will be
+//		truncated. This means that the file's previous
+//		contents will be deleted.
+//
+//		If this parameter is set to 'false', the target
+//		file will be opened for write operations. If the
+//		target file previously existed, the new text
+//		written to the file will be appended to the
+//		end of the previous file contents.
+//
+//	strBuilder						*strings.Builder
+//
+//		A pointer to an instance of strings.Builder. This
+//		instance of strings.Builder holds the text that
+//		will be written to the target output file
+//		identified by input parameter 'pathFileName'.
+//
+//	errorPrefix						interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numBytesWritten					int64
+//
+//		If this method completes successfully, this
+//		integer value will equal the number of bytes
+//		written the target output file identified by
+//		input parameter 'pathFileName' . It should match
+//		the number of bytes contained in the input string
+//		builder parameter, 'strBuilder'.
+//
+//	err								error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fh *FileHelper) WriteStrBuilderOpenClose(
+	pathFileName string,
+	createDirectoryPathIfNotExist bool,
+	truncateExistingFile bool,
+	strBuilder *strings.Builder,
+	errorPrefix interface{}) (
+	numBytesWritten int64,
+	err error) {
+
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	funcName := "FileHelper.WriteStrBuilderOpenClose() "
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return numBytesWritten, err
+	}
+
+	if strBuilder == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' is invalid!\n"+
+			"'strBuilder' is a nil pointer.\n",
+			ePrefix.String())
+
+		return numBytesWritten, err
+	}
+
+	var filePermissionCfg FilePermissionConfig
+
+	filePermissionCfg,
+		err = new(FilePermissionConfig).New(
+		"--w--w--w-",
+		ePrefix.XCpy("filePermissionCfg<-"))
+
+	if err != nil {
+
+		return numBytesWritten, err
+	}
+
+	var fileOpenCfg FileOpenConfig
+
+	if truncateExistingFile {
+		fileOpenCfg,
+			err = new(FileOpenConfig).New(
+			ePrefix.XCpy("fileOpenCfg<-"),
+			FOpenType.TypeWriteOnly(),
+			FOpenMode.ModeCreate(),
+			FOpenMode.ModeTruncate())
+
+		if err != nil {
+			return numBytesWritten, err
+		}
+
+	} else {
+		// truncateExistingFile = 'false'
+		// This signals Append to existing file.
+
+		fileOpenCfg,
+			err = new(FileOpenConfig).New(
+			ePrefix.XCpy("fileOpenCfg<-"),
+			FOpenType.TypeWriteOnly(),
+			FOpenMode.ModeCreate(),
+			FOpenMode.ModeAppend())
+
+		if err != nil {
+			return numBytesWritten, err
+		}
+
+	}
+
+	var filePtr *os.File
+
+	defer func() {
+
+		if filePtr != nil {
+			_ = filePtr.Close()
+		}
+
+	}()
+
+	filePtr,
+		err = new(fileHelperBoson).
+		openFile(
+			pathFileName,
+			createDirectoryPathIfNotExist,
+			fileOpenCfg,
+			filePermissionCfg,
+			"pathFileName",
+			ePrefix)
+
+	if err != nil {
+
+		return numBytesWritten, err
+	}
+
+	var err2 error
+	var localBytesWritten int
+
+	localBytesWritten,
+		err2 = filePtr.WriteString(strBuilder.String())
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by *os.File.WriteString(textToWrite)\n"+
+			"pathFileName= '%v'\n"+
+			"Error= \n%v\n",
+			ePrefix.String(),
+			pathFileName,
+			err2.Error())
+
+	} else {
+		numBytesWritten = int64(localBytesWritten)
+	}
+
+	return numBytesWritten, err
+}
