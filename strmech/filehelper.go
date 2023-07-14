@@ -10844,8 +10844,8 @@ func (fh *FileHelper) ReadFileBytes(
 //
 // This method is designed to open a target file, read
 // the entire contents of that file, write the contents
-// to a strings.Builder passed as an input parameter and
-// close the target file before exiting.
+// to a strings.Builder instance passed as an input
+// parameter and close the target file before exiting.
 //
 // It follows that this method will read the entire
 // contents of the target file into memory when writing

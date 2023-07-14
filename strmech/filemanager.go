@@ -10386,6 +10386,7 @@ func (fMgr *FileMgr) ReadAllFileBytes(
 	if err != nil {
 		return bytesRead, err
 	}
+
 	var readWriteAccessCtrl FileAccessControl
 
 	readWriteAccessCtrl,
@@ -11059,6 +11060,243 @@ func (fMgr *FileMgr) ReadFileString(
 	}
 
 	return stringRead, err
+}
+
+// ReadFileStrBuilderOpenClose
+//
+// This method is designed to open the target file
+// identified by the current instance of FileMgr, read
+// the entire contents of that file, write the contents
+// to a strings.Builder instance passed as an input
+// parameter and close the target file before exiting.
+//
+// It follows that this method will read the entire
+// contents of the current FileMgr instance into memory
+// when writing said contents to the strings.Builder
+// instance.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method is designed to read the entire
+//		contents of the target file identified by the
+//		current instance of FileMgr into memory.
+//
+//		BE CAREFUL when reading large files!
+//
+//		Depending on the memory resources available to
+//		your computer, you may run out of memory when
+//		reading large files and writing their contents
+//		to an instance of strings.Builder.
+//
+//	(2)	This method will open the target file identified
+//		by the current FileMgr instance, read the entire
+//		contents of that file and automatically close the
+//		target file. The user is NOT required to manually
+//		close the target file.
+//
+//	(3)	If the target file identified by the current
+//		FileMgr instance does not exist on an attached
+//		storage drive, an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	strBuilder					*strings.Builder
+//
+//		A pointer to an instance of strings.Builder. The
+//		contents of the target file identified by the
+//		current FileMgr instance will be read and written
+//		to 'strBuilder'.
+//
+//	errorPrefix						interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numBytesRead				int64
+//
+//		If this method completes successfully, this
+//		integer value will equal the number of bytes read
+//		from the target file identified by the current
+//		instance of FileMgr. This numeric value will also
+//		equal the number of bytes written to the
+//		strings.Builder instance passed by input
+//		parameter 'strBuilder'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgr *FileMgr) ReadFileStrBuilderOpenClose(
+	strBuilder *strings.Builder,
+	errorPrefix interface{}) (
+	numBytesRead int64,
+	err error) {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr."+
+			"ReadFileStrBuilderOpenClose()",
+		"")
+
+	if err != nil {
+		return numBytesRead, err
+	}
+
+	if strBuilder == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' is invalid!\n"+
+			"'strBuilder' is a 'nil' pointer.",
+			ePrefix.String())
+
+		return numBytesRead, err
+	}
+
+	var fMgrHlpr = new(fileMgrHelper)
+
+	err = fMgrHlpr.
+		closeFile(
+			fMgr,
+			ePrefix.XCpy("fMgr.filePtr"))
+
+	if err != nil {
+
+		return numBytesRead, err
+	}
+
+	var readOnlyAccessCtrl FileAccessControl
+
+	readOnlyAccessCtrl,
+		err =
+		new(FileAccessControl).
+			NewReadOnlyAccess(ePrefix.XCpy(
+				"readOnlyAccessCtrl<-"))
+
+	if err != nil {
+
+		return numBytesRead, err
+	}
+
+	err = fMgrHlpr.readFileSetup(
+		fMgr,
+		readOnlyAccessCtrl,
+		false,
+		ePrefix.XCpy(
+			"fMgr<-readWriteAccessCtrl"))
+
+	if err != nil {
+
+		return numBytesRead, err
+	}
+
+	// file is open
+	defer func() {
+		_ = fMgrHlpr.closeFile(fMgr, nil)
+	}()
+
+	var err2 error
+	var bytesRead []byte
+
+	bytesRead,
+		err2 = io.ReadAll(fMgr.filePtr)
+
+	if err2 != nil {
+		err =
+			fmt.Errorf("%v\n"+
+				"Error returned by ioutil.ReadAll(fMgr.filePtr).\n"+
+				"fileName= '%v'\n"+
+				"Errors= \n%v\n",
+				ePrefix.String(),
+				fMgr.absolutePathFileName,
+				err2.Error())
+	}
+
+	numBytesRead = int64(len(bytesRead))
+
+	strBuilder.Write(bytesRead)
+
+	return numBytesRead, err
 }
 
 // ResetFileInfo
@@ -12294,7 +12532,7 @@ func (fMgr *FileMgr) WriteStrToFile(
 //
 // # BE ADVISED
 //
-//	(1) If the target file did not previously exist, it
+//	(1) If the target file does not previously exist, it
 //		will be created.
 //
 //	(2)	After this write operation is completed, the user
@@ -12551,7 +12789,7 @@ func (fMgr *FileMgr) WriteStrOpenClose(
 //
 // # BE ADVISED
 //
-//	(1) If the target file did not previously exist, it
+//	(1) If the target file does not previously exist, it
 //		will be created.
 //
 //	(2)	After this write operation is completed, the user
