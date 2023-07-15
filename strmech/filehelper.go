@@ -11238,11 +11238,26 @@ func (fh *FileHelper) ReadFileStrBuilderOpenClose(
 // Reads a file and returns each line in the file
 // as an element of a string array.
 //
+// Custom end of line delimiters are utilized to
+// determine the end of each line of text read from the
+// target file. End of line delimiters are specified by
+// input parameter 'endOfLineDelimiters', an instance of
+// StringArrayDto. 'endOfLineDelimiters' contains an
+// array of strings any one of which may be used to
+// identify and separate individual lines of text read
+// from the target file.
+//
 // This method is designed to open a target file, read
 // the entire contents of that file, separate the file
 // contents into individual lines of text and return
 // those text lines in a string array encapsulated by
-// an instance of StringArrayDto.
+// an instance of StringArrayDto passed as input
+// parameter 'outputLinesArray'.
+//
+// The returned individual lines of text will NOT
+// include the end of line delimiters. End of line
+// delimiters will therefore be stripped and deleted
+// from the end of each configured text line.
 //
 // It follows that this method will read the entire
 // contents of the target file into memory when writing
@@ -11288,6 +11303,22 @@ func (fh *FileHelper) ReadFileStrBuilderOpenClose(
 //		file will be automatically closed and rendered
 //		ready in all respects for future read/write
 //		operations.
+//
+//	endOfLineDelimiters				*StringArrayDto
+//
+//		A pointer to an instance of StringArrayDto.
+//		'endOfLineDelimiters' encapsulates a string
+//		array which contains the end-of-line delimiters
+//		which will be used to identify and separate
+//		individual lines of text.
+//
+//	outputLinesArray *StringArrayDto,
+//
+//		A pointer to an instance of StringArrayDto.
+//		Lines of text read from the file specified
+//		by 'pathFileName' will be stored as
+//		individual strings in the string array
+//		encapsulated by 'outputLinesArray'.
 //
 //	errorPrefix						interface{}
 //
@@ -11352,14 +11383,6 @@ func (fh *FileHelper) ReadFileStrBuilderOpenClose(
 //
 // # Return Values
 //
-//	strArray					StringArrayDto
-//
-//		If this method completes successfully, this
-//		returned instance of StringArrayDto will
-//		encapsulate a string array containing the
-//		individual lines of text read from the file
-//		specified by input parameter 'pathFileName'.
-//
 //	originalFileSize			int64
 //
 //		The original file size in bytes of the file
@@ -11395,8 +11418,9 @@ func (fh *FileHelper) ReadFileStrBuilderOpenClose(
 //	 	attached to the	beginning of the error message.
 func (fh *FileHelper) ReadLines(
 	pathFileName string,
+	endOfLineDelimiters *StringArrayDto,
+	outputLinesArray *StringArrayDto,
 	errorPrefix interface{}) (
-	strArray StringArrayDto,
 	originalFileSize int64,
 	numOfLinesRead int,
 	numOfBytesRead int64,
@@ -11422,144 +11446,23 @@ func (fh *FileHelper) ReadLines(
 
 	if err != nil {
 
-		return strArray,
-			originalFileSize,
+		return originalFileSize,
 			numOfLinesRead,
 			numOfBytesRead,
 			err
 	}
 
-	var fInfoPlus FileInfoPlus
-	var pathFileDoesExist bool
-	var err2 error
+	originalFileSize,
+		numOfLinesRead,
+		numOfBytesRead,
+		err = new(fileHelperMechanics).readLines(
+		pathFileName,
+		endOfLineDelimiters,
+		outputLinesArray,
+		"pathFileName",
+		ePrefix)
 
-	pathFileName,
-		pathFileDoesExist,
-		fInfoPlus,
-		err2 =
-		new(fileHelperMolecule).
-			doesPathFileExist(
-				pathFileName,
-				PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
-				ePrefix,
-				"pathFileName")
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"An error occurred while testing for the existance\n"+
-			"of 'pathFileName' on an attached storage drive.\n"+
-			"pathFileName = '%v'\n"+
-			"Error= \n%v\n",
-			funcName,
-			pathFileName,
-			err2.Error())
-
-		return strArray,
-			originalFileSize,
-			numOfLinesRead,
-			numOfBytesRead,
-			err
-	}
-
-	if !pathFileDoesExist {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'pathFileName' is invalid!\n"+
-			"The path and file name do NOT exist on an attached\n"+
-			"storage drive. Therefore the contents cannot be read.\n"+
-			"pathFileName= '%v'\n",
-			ePrefix.String(),
-			pathFileName)
-
-		return strArray,
-			originalFileSize,
-			numOfLinesRead,
-			numOfBytesRead,
-			err
-	}
-
-	originalFileSize = fInfoPlus.Size()
-
-	var filePermissionCfg FilePermissionConfig
-
-	filePermissionCfg,
-		err = new(FilePermissionConfig).New(
-		"-r--r--r--",
-		ePrefix.XCpy("filePermissionCfg<-"))
-
-	if err != nil {
-
-		return strArray,
-			originalFileSize,
-			numOfLinesRead,
-			numOfBytesRead,
-			err
-	}
-
-	var fileOpenCfg FileOpenConfig
-
-	fileOpenCfg,
-		err = new(FileOpenConfig).New(
-		ePrefix.XCpy("fileOpenCfg<-"),
-		FOpenType.TypeReadOnly())
-
-	if err != nil {
-
-		return strArray,
-			originalFileSize,
-			numOfLinesRead,
-			numOfBytesRead,
-			err
-	}
-
-	var filePtr *os.File
-
-	defer func() {
-
-		if filePtr != nil {
-			_ = filePtr.Close()
-		}
-
-	}()
-
-	filePtr,
-		err = new(fileHelperBoson).
-		openFile(
-			pathFileName,
-			false,
-			fileOpenCfg,
-			filePermissionCfg,
-			"pathFileName",
-			ePrefix)
-
-	if err != nil {
-
-		return strArray,
-			originalFileSize,
-			numOfLinesRead,
-			numOfBytesRead,
-			err
-	}
-
-	scanner := bufio.NewScanner(filePtr)
-
-	var textLine string
-
-	for scanner.Scan() {
-
-		textLine = scanner.Text()
-
-		strArray.PushStr(textLine)
-
-		numOfBytesRead += int64(len(textLine))
-
-		numOfLinesRead++
-
-	}
-
-	return strArray,
-		originalFileSize,
+	return originalFileSize,
 		numOfLinesRead,
 		numOfBytesRead,
 		err

@@ -2457,6 +2457,400 @@ func (fileHelpMech *fileHelperMechanics) makeDirAll(
 	return nil
 }
 
+// readLines
+//
+// Reads a file and returns each line in a target file as
+// an element of a string array.
+//
+// Custom end of line delimiters are utilized to
+// determine the end of each line of text read from the
+// target file. End of line delimiters are specified by
+// input parameter 'endOfLineDelimiters', an instance of
+// StringArrayDto. 'endOfLineDelimiters' contains an
+// array of strings any one of which may be used to
+// identify and separate individual lines of text read
+// from the target file.
+//
+// This method is designed to open a target file, read
+// the entire contents of that file, separate the file
+// contents into individual lines of text and return
+// those text lines in a string array encapsulated by
+// an instance of StringArrayDto passed as input
+// parameter 'outputLinesArray'.
+//
+// The returned individual lines of text will NOT
+// include the end of line delimiters. End of line
+// delimiters will therefore be stripped and deleted
+// from the end of each configured text line.
+//
+// It follows that this method will read the entire
+// contents of the target file into memory when writing
+// said contents to the StringArrayDto instance.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method is designed to read the entire
+//		contents of the target file ('pathFileName') into
+//		memory.
+//
+//		BE CAREFUL when reading large files!
+//
+//		Depending on the memory resources available to
+//		your computer, you may run out of memory when
+//		reading large files and writing their contents
+//		to an instance of StringArrayDto.
+//
+//	(2)	This method will open the target file, read the
+//		entire contents of that file and automatically
+//		close the target file.
+//
+//		The user is NOT required to manually close the
+//		target file.
+//
+//	(3)	If the target file to be read does not exist on
+//		an attached storage drive, an error will be
+//		returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName				string
+//
+//		A string containing the path and file name of the
+//		target input file. The contents of this file will
+//		be read, line by line, with each text line added
+//		as an individual array element in the string
+//		array returned by parameter 'strArray'.
+//
+//		After reading the file contents, the target input
+//		file will be automatically closed and rendered
+//		ready in all respects for future read/write
+//		operations.
+//
+//	endOfLineDelimiters				*StringArrayDto
+//
+//		A pointer to an instance of StringArrayDto.
+//		'endOfLineDelimiters' encapsulates a string
+//		array which contains the end-of-line delimiters
+//		which will be used to identify and separate
+//		individual lines of text.
+//
+//	outputLinesArray *StringArrayDto,
+//
+//		A pointer to an instance of StringArrayDto.
+//		Lines of text read from the file specified
+//		by 'pathFileName' will be stored as
+//		individual strings in the string array
+//		encapsulated by 'outputLinesArray'.
+//
+//	pathFileNameLabel			string
+//
+//		The name or label associated with input parameter
+//		'pathFileName' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "pathFileName" will be
+//		automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	originalFileSize			int64
+//
+//		The original file size in bytes of the file
+//		specified by input parameter 'pathFileName'.
+//
+//	numOfLinesRead				int
+//
+//		This integer value contains the number of text
+//		lines read from the file specified by input
+//		parameter 'pathFileName'. This value also
+//		specifies the number of array elements in the
+//		string array returned by 'strArray'.
+//
+//	numBytesRead				int64
+//
+//		If this method completes successfully, this
+//		integer value will equal the number of bytes
+//		read from the target input file 'pathFileName'
+//		and stored the string array returned by
+//		parameter 'strArray'.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (fileHelpMech *fileHelperMechanics) readLines(
+	pathFileName string,
+	endOfLineDelimiters *StringArrayDto,
+	outputLinesArray *StringArrayDto,
+	pathFileNameLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	originalFileSize int64,
+	numOfLinesRead int,
+	numOfBytesRead int64,
+	err error) {
+
+	if fileHelpMech.lock == nil {
+		fileHelpMech.lock = new(sync.Mutex)
+	}
+
+	fileHelpMech.lock.Lock()
+
+	defer fileHelpMech.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileHelperMechanics.readLines()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return originalFileSize,
+			numOfLinesRead,
+			numOfBytesRead,
+			err
+	}
+
+	if len(pathFileNameLabel) == 0 {
+
+		pathFileNameLabel = "pathFileName"
+	}
+
+	if endOfLineDelimiters == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'endOfLineDelimiters' is invalid!\n"+
+			"endOfLineDelimiters' is a nil pointer.\n",
+			ePrefix.String())
+
+		return originalFileSize,
+			numOfLinesRead,
+			numOfBytesRead,
+			err
+	}
+
+	if len(endOfLineDelimiters.StrArray) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'endOfLineDelimiters' is invalid!\n"+
+			"endOfLineDelimiters' contains a zero length string array.\n"+
+			"There are no End-Of-Line delimiters available for text\n"+
+			"line separation and identification.\n",
+			ePrefix.String())
+
+		return originalFileSize,
+			numOfLinesRead,
+			numOfBytesRead,
+			err
+
+	}
+
+	if outputLinesArray == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'outputLinesArray' is invalid!\n"+
+			"outputLinesArray' is a nil pointer.\n",
+			ePrefix.String())
+
+		return originalFileSize,
+			numOfLinesRead,
+			numOfBytesRead,
+			err
+	}
+
+	var fInfoPlus FileInfoPlus
+	var pathFileDoesExist bool
+	var err2 error
+
+	pathFileName,
+		pathFileDoesExist,
+		fInfoPlus,
+		err2 =
+		new(fileHelperMolecule).
+			doesPathFileExist(
+				pathFileName,
+				PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
+				ePrefix,
+				pathFileNameLabel)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while testing for the existance\n"+
+			"of '%v' on an attached storage drive.\n"+
+			"%v = '%v'\n"+
+			"Error= \n%v\n",
+			funcName,
+			pathFileNameLabel,
+			pathFileNameLabel,
+			pathFileName,
+			err2.Error())
+
+	}
+
+	if !pathFileDoesExist {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"The path and file name do NOT exist on an attached\n"+
+			"storage drive. Therefore the contents cannot be read.\n"+
+			"%v= '%v'\n",
+			ePrefix.String(),
+			pathFileNameLabel,
+			pathFileNameLabel,
+			pathFileName)
+
+		return originalFileSize,
+			numOfLinesRead,
+			numOfBytesRead,
+			err
+	}
+
+	originalFileSize = fInfoPlus.Size()
+
+	var filePermissionCfg FilePermissionConfig
+
+	filePermissionCfg,
+		err = new(FilePermissionConfig).New(
+		"-r--r--r--",
+		ePrefix.XCpy("filePermissionCfg<-"))
+
+	if err != nil {
+
+		return originalFileSize,
+			numOfLinesRead,
+			numOfBytesRead,
+			err
+	}
+
+	var fileOpenCfg FileOpenConfig
+
+	fileOpenCfg,
+		err = new(FileOpenConfig).New(
+		ePrefix.XCpy("fileOpenCfg<-"),
+		FOpenType.TypeReadOnly())
+
+	if err != nil {
+
+		return originalFileSize,
+			numOfLinesRead,
+			numOfBytesRead,
+			err
+	}
+
+	var filePtr *os.File
+
+	defer func() {
+
+		if filePtr != nil {
+			_ = filePtr.Close()
+		}
+
+	}()
+
+	filePtr,
+		err = new(fileHelperBoson).
+		openFile(
+			pathFileName,
+			false,
+			fileOpenCfg,
+			filePermissionCfg,
+			"pathFileName",
+			ePrefix)
+
+	if err != nil {
+
+		return originalFileSize,
+			numOfLinesRead,
+			numOfBytesRead,
+			err
+	}
+
+	endOfLineDelimiters.SortByStrLengthLongestToShortest()
+
+	lenEndOfLineDelim := len(endOfLineDelimiters.StrArray)
+
+	scanner := bufio.NewScanner(filePtr)
+
+	scanner.Split(func(data []byte, atEOF bool) (advance int, token []byte, err error) {
+
+		if atEOF && len(data) == 0 {
+			return 0, nil, nil
+		}
+
+		if atEOF {
+			return len(data), data, nil
+		}
+
+		for i := 0; i < lenEndOfLineDelim; i++ {
+
+			if j := strings.Index(string(data),
+				endOfLineDelimiters.StrArray[i]); j >= 0 {
+
+				return j + len(endOfLineDelimiters.StrArray[i]),
+					data[0:j],
+					nil
+			}
+
+		}
+
+		return 0, nil, nil
+	})
+
+	var textLine string
+
+	for scanner.Scan() {
+
+		textLine = scanner.Text()
+
+		outputLinesArray.PushStr(textLine)
+
+		numOfBytesRead += int64(len(textLine))
+
+		numOfLinesRead++
+
+	}
+
+	return originalFileSize,
+		numOfLinesRead,
+		numOfBytesRead,
+		err
+}
+
 // readTextLines
 //
 // Reads a file and returns each line in a target file as
@@ -2785,11 +3179,7 @@ func (fileHelpMech *fileHelperMechanics) readTextLines(
 		return 0, nil, nil
 	})
 
-	//var strMech = new(StrMech)
-
 	var textLine string
-
-	// var printableStr string
 
 	for scanner.Scan() {
 

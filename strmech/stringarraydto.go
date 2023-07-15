@@ -424,8 +424,13 @@ func (strArrayDto *StringArrayDto) AppendSuffix(
 //
 // # BE ADVISED
 //
-//	This method correctly process string array element
-//	members with zero length strings.
+//	(1)	This method correctly process string array
+//		element members with zero length strings.
+//
+//	(2)	This method is useful when adding new line
+//		characters ('\n') to the end of string array
+//		member strings without modifying the original
+//		string array.
 //
 // ----------------------------------------------------------------
 //

@@ -379,13 +379,13 @@ func (fileHlprOpsTest008 MainFileHelperOpsTest008) ReadFiles02() {
 
 }
 
-// ReadFileLines01
+// ReadTextLines01
 //
 // Reads single lines of text from a file.
-func (fileHlprOpsTest008 MainFileHelperOpsTest008) ReadFileLines01() {
+func (fileHlprOpsTest008 MainFileHelperOpsTest008) ReadTextLines01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"MainFileHelperOpsTest008.ReadFiles02()",
+		"MainFileHelperOpsTest008.ReadTextLines01()",
 		"")
 
 	breakStr := " " + strings.Repeat("=", 50)
@@ -463,6 +463,123 @@ func (fileHlprOpsTest008 MainFileHelperOpsTest008) ReadFileLines01() {
 		true,
 		true,
 		strArrayDto.ConcatenateStrings("\n"),
+		ePrefix.XCpy("targetOutputFile<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("%v\n"+
+		"targetOutputFile= %v\n"+
+		"Number of Bytes Written= %v\n",
+		ePrefix.String(),
+		targetOutputFile,
+		numBytesWritten)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+}
+
+// ReadLines02
+//
+// Reads single lines of text from a file.
+func (fileHlprOpsTest008 MainFileHelperOpsTest008) ReadLines02() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainFileHelperOpsTest008.ReadLines02()",
+		"")
+
+	breakStr := " " + strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n\n\n")
+
+	var err error
+	var targetReadFile, targetOutputFile string
+	var exampleUtil = ExampleUtility{}
+
+	targetReadFile,
+		err = exampleUtil.GetCompositeDirectory(
+		"fileOpsTest\\filesForTest\\textFilesForTest\\splitFunc2.txt",
+		ePrefix.XCpy("readFileAddOn"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	targetOutputFile,
+		err = exampleUtil.GetCompositeDirectory(
+		"fileOpsTest\\trashDirectory\\testOutput.txt",
+		ePrefix.XCpy("readFileAddOn"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var fHelper = new(strmech.FileHelper)
+
+	var outputLinesArray,
+		endOfLineDelimiters strmech.StringArrayDto
+
+	var originalFileSize, numOfBytesRead int64
+	var numOfLinesRead int
+
+	endOfLineDelimiters.AddManyStrings(
+		"\r",
+		"\r\r",
+		"[EOL]")
+
+	originalFileSize,
+		numOfLinesRead,
+		numOfBytesRead,
+		err = fHelper.ReadLines(
+		targetReadFile,
+		&endOfLineDelimiters,
+		&outputLinesArray,
+		ePrefix.XCpy("outputLinesArray"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("\n%v\n"+
+		"  Original File Size= '%v'\n"+
+		"Number of Lines Read= '%v'\n"+
+		"Number of Bytes Read= '%v'\n\n",
+		ePrefix.String(),
+		originalFileSize,
+		numOfLinesRead,
+		numOfBytesRead)
+
+	//outputLinesArray.ConvertToPrintableChars()
+
+	var numBytesWritten int64
+
+	numBytesWritten,
+		err = fHelper.WriteStrOpenClose(
+		targetOutputFile,
+		true,
+		true,
+		outputLinesArray.ConcatenateStrings("\n"),
 		ePrefix.XCpy("targetOutputFile<-"))
 
 	if err != nil {
