@@ -8,7 +8,7 @@ import (
 
 func TestFileHelper_ReadLines_000100(t *testing.T) {
 
-	funcName := "TestDirMgrCollection_GetTextListingAbsPath_000100()"
+	funcName := "TestFileHelper_ReadLines_000100()"
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
 		funcName,
