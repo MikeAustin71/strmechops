@@ -227,11 +227,11 @@ func TestDirMgrCollection_GetTextListingAbsPath_000100(t *testing.T) {
 
 	if !strings.Contains(
 		outputStr,
-		"Number of Directories: 9") {
+		"Number of Directories: 10") {
 
 		t.Errorf("\n%v\n"+
 			"Error: The Text Listing did NOT contain:\n"+
-			"'Number of Directories: 9'\n"+
+			"'Number of Directories: 10'\n"+
 			" directoriesLocated.GetTextListingAbsPath().\n"+
 			"targetDir='%v'\n"+
 			"outputStr=\n%v\n",
@@ -243,10 +243,10 @@ func TestDirMgrCollection_GetTextListingAbsPath_000100(t *testing.T) {
 
 	}
 
-	if numOfDirectoriesLocated != 9 {
+	if numOfDirectoriesLocated != 10 {
 
 		t.Errorf("\n%v\n"+
-			"Error: Expected numOfDirectoriesLocated == 4\n"+
+			"Error: Expected numOfDirectoriesLocated == 10\n"+
 			"Instead, numOfDirectoriesLocated = '%v'\n"+
 			"targetDir='%v'\n",
 			ePrefix.String(),
@@ -270,7 +270,7 @@ func TestDirMgrCollection_GetTextListingAbsPath_000100(t *testing.T) {
 
 	}
 
-	expectedTotalBytes := "688,959"
+	expectedTotalBytes := "691,486"
 
 	if expectedTotalBytes != totalBytesNumStr {
 
