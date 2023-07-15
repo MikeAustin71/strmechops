@@ -11565,6 +11565,228 @@ func (fh *FileHelper) ReadLines(
 		err
 }
 
+// ReadTextLines
+//
+// Reads a file and returns each line in a target file as
+// an element of a string array.
+//
+// The end of line delimiters may be either a new line
+// character ('\n') or a combination of carriage return
+// and new line characters ('\r\n').
+//
+// This method is designed to open a target file, read
+// the entire contents of that file, separate the file
+// contents into individual lines of text and return
+// those text lines in a string array encapsulated by
+// an instance of StringArrayDto.
+//
+// The returned individual lines of text will NOT
+// include the end of line delimiters '\n' or '\r\n'.
+//
+// It follows that this method will read the entire
+// contents of the target file into memory when writing
+// said contents to the StringArrayDto instance.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method is designed to read the entire
+//		contents of the target file ('pathFileName') into
+//		memory.
+//
+//		BE CAREFUL when reading large files!
+//
+//		Depending on the memory resources available to
+//		your computer, you may run out of memory when
+//		reading large files and writing their contents
+//		to an instance of StringArrayDto.
+//
+//	(2)	This method will open the target file, read the
+//		entire contents of that file and automatically
+//		close the target file.
+//
+//		The user is NOT required to manually close the
+//		target file.
+//
+//	(3)	If the target file to be read does not exist on
+//		an attached storage drive, an error will be
+//		returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName				string
+//
+//		A string containing the path and file name of the
+//		target input file. The contents of this file will
+//		be read, line by line, with each text line added
+//		as an individual array element in the string
+//		array returned by parameter 'strArray'.
+//
+//		After reading the file contents, the target input
+//		file will be automatically closed and rendered
+//		ready in all respects for future read/write
+//		operations.
+//
+//	strArrayDto					*StringArrayDto
+//
+//		A pointer to an instance of StringArrayDto.
+//		'strArrayDto' encapsulates the string array
+//		which will contain the lines of text read from
+//		the target file identified by input parameter
+//		'pathFileName'. Each line of text read from
+//		'pathFileName' will occupy a separate string
+//		array element in 'strArrayDto'.
+//
+//	errorPrefix						interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	originalFileSize			int64
+//
+//		The original file size in bytes of the file
+//		specified by input parameter 'pathFileName'.
+//
+//	numOfLinesRead				int
+//
+//		This integer value contains the number of text
+//		lines read from the file specified by input
+//		parameter 'pathFileName'. This value also
+//		specifies the number of array elements in the
+//		string array returned by 'strArray'.
+//
+//	numBytesRead				int64
+//
+//		If this method completes successfully, this
+//		integer value will equal the number of bytes
+//		read from the target input file 'pathFileName'
+//		and stored the string array returned by
+//		parameter 'strArray'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fh *FileHelper) ReadTextLines(
+	pathFileName string,
+	strArrayDto *StringArrayDto,
+	errorPrefix interface{}) (
+	originalFileSize int64,
+	numOfLinesRead int,
+	numOfBytesRead int64,
+	err error) {
+
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	funcName := "FileHelper.ReadTextLines()"
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return originalFileSize,
+			numOfLinesRead,
+			numOfBytesRead,
+			err
+	}
+
+	originalFileSize,
+		numOfLinesRead,
+		numOfBytesRead,
+		err = new(fileHelperMechanics).
+		readTextLines(
+			pathFileName,
+			strArrayDto,
+			"pathFileName",
+			ePrefix)
+
+	return originalFileSize,
+		numOfLinesRead,
+		numOfBytesRead,
+		err
+}
+
 // RemovePathSeparatorFromEndOfPathString
 //
 // This method will remove or delete the Trailing path

@@ -9,11 +9,11 @@ import (
 	"time"
 )
 
-type MainFileOpsTest008 struct {
+type MainFileHelperOpsTest008 struct {
 	input string
 }
 
-func (dirOpsTest008 MainFileOpsTest008) GetFiles01() {
+func (fileHlprOpsTest008 MainFileHelperOpsTest008) GetFiles01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
 		"MainDirOpsTest007.GetFiles01()",
@@ -227,10 +227,10 @@ func (dirOpsTest008 MainFileOpsTest008) GetFiles01() {
 // ReadFiles01
 //
 // Runs test on FileHelper.ReadFileStrBuilderOpenClose()
-func (dirOpsTest008 MainFileOpsTest008) ReadFiles01() {
+func (fileHlprOpsTest008 MainFileHelperOpsTest008) ReadFiles01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"MainFileOpsTest008.ReadFiles01()",
+		"MainFileHelperOpsTest008.ReadFiles01()",
 		"")
 
 	breakStr := " " + strings.Repeat("=", 50)
@@ -305,10 +305,10 @@ func (dirOpsTest008 MainFileOpsTest008) ReadFiles01() {
 // ReadFiles02
 //
 // Runs test on FileHelper.ReadFileBytes()
-func (dirOpsTest008 MainFileOpsTest008) ReadFiles02() {
+func (fileHlprOpsTest008 MainFileHelperOpsTest008) ReadFiles02() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"MainFileOpsTest008.ReadFiles02()",
+		"MainFileHelperOpsTest008.ReadFiles02()",
 		"")
 
 	breakStr := " " + strings.Repeat("=", 50)
@@ -379,13 +379,119 @@ func (dirOpsTest008 MainFileOpsTest008) ReadFiles02() {
 
 }
 
+func (fileHlprOpsTest008 MainFileHelperOpsTest008) ReadFileLines01() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainFileHelperOpsTest008.ReadFiles02()",
+		"")
+
+	breakStr := " " + strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n\n\n")
+
+	var err error
+	var targetReadFile, targetOutputFile string
+	var exampleUtil = ExampleUtility{}
+
+	targetReadFile,
+		err = exampleUtil.GetCompositeDirectory(
+		"fileOpsTest\\filesForTest\\textFilesForTest\\splitFunc.txt",
+		ePrefix.XCpy("readFileAddOn"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	targetOutputFile,
+		err = exampleUtil.GetCompositeDirectory(
+		"fileOpsTest\\trashDirectory\\testOutput.txt",
+		ePrefix.XCpy("readFileAddOn"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var fHelper = new(strmech.FileHelper)
+
+	var strArrayDto strmech.StringArrayDto
+	var originalFileSize, numOfBytesRead int64
+	var numOfLinesRead int
+
+	originalFileSize,
+		numOfLinesRead,
+		numOfBytesRead,
+		err = fHelper.ReadTextLines(
+		targetReadFile,
+		&strArrayDto,
+		ePrefix.XCpy("strArrayDto"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("\n%v\n"+
+		"  Original File Size= '%v'\n"+
+		"Number of Lines Read= '%v'\n"+
+		"Number of Bytes Read= '%v'\n\n",
+		ePrefix.String(),
+		originalFileSize,
+		numOfLinesRead,
+		numOfBytesRead)
+
+	strArrayDto.ConvertPrintableChars()
+
+	var numBytesWritten int64
+
+	numBytesWritten,
+		err = fHelper.WriteStrOpenClose(
+		targetOutputFile,
+		true,
+		true,
+		strArrayDto.ConcatenateStrings(""),
+		ePrefix.XCpy("targetOutputFile<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("%v\n"+
+		"targetOutputFile= %v\n"+
+		"Number of Bytes Written= %v\n",
+		ePrefix.String(),
+		targetOutputFile,
+		numBytesWritten)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+}
+
 // WriteFileBytes01
 //
 // Runs test on FileHelper.WriteFileBytes()
-func (dirOpsTest008 MainFileOpsTest008) WriteFileBytes01() {
+func (fileHlprOpsTest008 MainFileHelperOpsTest008) WriteFileBytes01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"MainFileOpsTest008.WriteFileBytes01()",
+		"MainFileHelperOpsTest008.WriteFileBytes01()",
 		"")
 
 	breakStr := " " + strings.Repeat("=", 50)
@@ -491,10 +597,10 @@ func (dirOpsTest008 MainFileOpsTest008) WriteFileBytes01() {
 // WriteFileBytes02
 //
 // This method tests FileMgr.WriteBytesToFile()
-func (dirOpsTest008 MainFileOpsTest008) WriteFileBytes02() {
+func (fileHlprOpsTest008 MainFileHelperOpsTest008) WriteFileBytes02() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"MainFileOpsTest008.WriteFileBytes02()",
+		"MainFileHelperOpsTest008.WriteFileBytes02()",
 		"")
 
 	breakStr := " " + strings.Repeat("=", 50)

@@ -408,7 +408,8 @@ func (strArrayDto *StringArrayDto) AppendSuffix(
 //		The strings contained in the internal string
 //		array maintained by the current StringArrayDto
 //		instance will be concatenated together and
-//		returned through this parameter
+//		returned as a single string through this
+//		parameter.
 func (strArrayDto *StringArrayDto) ConcatenateStrings(
 	insertStr string) string {
 
@@ -438,6 +439,113 @@ func (strArrayDto *StringArrayDto) ConcatenateStrings(
 	}
 
 	return conCatStr
+}
+
+// ConvertPrintableChars
+//
+// Converts every string in the string array encapsulated by
+// the current instance of StringArrayDto to printable
+// characters.
+//
+// This means that non-printable characters such as spaces
+// and new lines will be converted to readable text.
+//
+// ------------------------------------------------------------------------
+//
+// Example Usage
+//
+//	var strArrayDto = new(StringArrayDto)
+//	strArrayDto.Push("Hello world!\n")
+//
+//	strArrayDto.ConvertNonPrintableChars()
+//
+//	actualStr := strArrayDto.StrArray[0]
+//
+//	----------------------------------------------------
+//	'actualStr' is now equal to:
+//	   "Hello[SPACE]world!\\n"
+func (strArrayDto *StringArrayDto) ConvertPrintableChars() {
+
+	var sMech = new(StrMech)
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	lenStrArray := len(strArrayDto.StrArray)
+
+	for i := 0; i < lenStrArray; i++ {
+
+		strArrayDto.StrArray[i] =
+			sMech.ConvertNonPrintableString(
+				strArrayDto.StrArray[i],
+				true)
+	}
+
+	return
+}
+
+// ConvertToNonPrintableChars
+//
+// This operation is the reverse of that applied by
+// method:
+//
+//	StringArrayDto.ConvertNonPrintableChars()
+//
+// When the contents of the current StringArrayDto
+// instance are converted to printable characters,
+// non-printable characters such as the new line ('\n')
+// are converted to printable equivalents.
+//
+//			'\n' is convert to "\\n"
+//	     ' ' space is converted to "[SPACE]"
+//
+// This method converts those printable equivalents
+// back to non-printable characters.
+//
+//			"\\n" is convert to '\n'
+//	     "[SPACE]" space is converted to ' '
+//
+// ------------------------------------------------------------------------
+//
+// Example Usage
+//
+//	strArrayDto.StrArray[0] = "Hello[SPACE]world!\\n"
+//
+//	strArrayDto.ConvertToNonPrintableChars()
+//
+//	actualStr := strArrayDto.StrArray[0]
+//
+//	----------------------------------------------------
+//	'actualStr' is now equal to:
+//	   "Hello world!\n"
+func (strArrayDto *StringArrayDto) ConvertToNonPrintableChars() {
+
+	var sMech = new(StrMech)
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	lenStrArray := len(strArrayDto.StrArray)
+
+	for i := 0; i < lenStrArray; i++ {
+
+		strArrayDto.StrArray[i] =
+			sMech.ConvertNonPrintableString(
+				strArrayDto.StrArray[i],
+				true)
+	}
+
+	return
 }
 
 // CopyIn - Copies the data fields from an incoming instance of

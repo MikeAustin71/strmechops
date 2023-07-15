@@ -351,8 +351,8 @@ func (sMech *StrMech) ConvertNonPrintableChars(
 //	testStr := "Hello world!\n"
 //
 //	actualStr :=
-//	  StrMech{}.NewConstructor().
-//	    ConvertNonPrintableString(testStr, true)
+//	  new(StrMech).
+//	  	ConvertNonPrintableString(testStr, true)
 //
 //	----------------------------------------------------
 //	'actualStr' is now equal to:

@@ -339,6 +339,11 @@ func (fOpenCfg *FileOpenConfig) GetCompositeFileOpenCode(
 	fileOpenVal := fOpenCfg.fileOpenType.Value()
 
 	for i := 0; i < lenFileOpenModes; i++ {
+
+		if fOpenCfg.fileOpenModes[i].Value() == int(FOpenMode.ModeNone()) {
+			continue
+		}
+
 		fileOpenVal = fileOpenVal | fOpenCfg.fileOpenModes[i].Value()
 	}
 
