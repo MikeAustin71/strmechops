@@ -83,6 +83,13 @@ func (strArrayDto *StringArrayDto) AddRuneArray(
 //
 // ----------------------------------------------------------------
 //
+// # BE ADVISED
+//
+//	This method correctly process string array element
+//	members with zero length strings.
+//
+// ----------------------------------------------------------------
+//
 // Input Parameters
 //
 //	strToAdd                   string
@@ -109,6 +116,19 @@ func (strArrayDto *StringArrayDto) AddString(
 	strArrayDto.lock.Lock()
 
 	defer strArrayDto.lock.Unlock()
+
+	if len(strToAdd) == 0 {
+
+		strToAdd = " "
+
+		strArrayDto.StrArray =
+			append(strArrayDto.StrArray, strToAdd)
+
+		strArrayDto.StrArray[len(strArrayDto.StrArray)-1] =
+			""
+
+		return
+	}
 
 	strArrayDto.StrArray =
 		append(strArrayDto.StrArray, strToAdd)
@@ -162,6 +182,19 @@ func (strArrayDto *StringArrayDto) AddManyStrings(
 	defer strArrayDto.lock.Unlock()
 
 	for _, val := range stringsToAdd {
+
+		if len(val) == 0 {
+
+			val = " "
+
+			strArrayDto.StrArray =
+				append(strArrayDto.StrArray, val)
+
+			strArrayDto.StrArray[len(strArrayDto.StrArray)-1] =
+				""
+
+			continue
+		}
 
 		strArrayDto.StrArray =
 			append(strArrayDto.StrArray, val)
@@ -389,6 +422,13 @@ func (strArrayDto *StringArrayDto) AppendSuffix(
 //
 // ----------------------------------------------------------------
 //
+// # BE ADVISED
+//
+//	This method correctly process string array element
+//	members with zero length strings.
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	insertStr					string
@@ -427,7 +467,8 @@ func (strArrayDto *StringArrayDto) ConcatenateStrings(
 
 	for i := 0; i < len(strArrayDto.StrArray); i++ {
 
-		if len(strArrayDto.StrArray[i]) == 0 {
+		if len(strArrayDto.StrArray[i]) == 0 &&
+			lenInsertStr == 0 {
 			continue
 		}
 
@@ -2682,6 +2723,13 @@ func (strArrayDto *StringArrayDto) PopLastStr(
 //
 // ----------------------------------------------------------------
 //
+// # BE ADVISED
+//
+//	This method correctly process string array element
+//	members with zero length strings.
+//
+// ----------------------------------------------------------------
+//
 // Input Parameters
 //
 //	str                        string
@@ -2708,6 +2756,18 @@ func (strArrayDto *StringArrayDto) PushStr(
 	strArrayDto.lock.Lock()
 
 	defer strArrayDto.lock.Unlock()
+
+	if len(str) == 0 {
+		str = " "
+
+		strArrayDto.StrArray =
+			append(strArrayDto.StrArray, str)
+
+		strArrayDto.StrArray[len(strArrayDto.StrArray)-1] =
+			""
+
+		return
+	}
 
 	strArrayDto.StrArray =
 		append(strArrayDto.StrArray, str)

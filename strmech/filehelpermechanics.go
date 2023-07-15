@@ -2770,11 +2770,7 @@ func (fileHelpMech *fileHelperMechanics) readTextLines(
 
 		if j := strings.Index(string(data), "\n\n"); j >= 0 {
 
-			var newData = append(
-				data[0:j],
-				[]byte("[EMPTY]")...)
-
-			return j + 2, newData, nil
+			return j + 1, data[0:j], nil
 		}
 
 		if k := strings.Index(string(data), "\n"); k >= 0 {
@@ -2798,43 +2794,8 @@ func (fileHelpMech *fileHelperMechanics) readTextLines(
 	for scanner.Scan() {
 
 		textLine = scanner.Text()
-		/*
-			printableStr = strMech.ConvertNonPrintableString(
-				textLine,
-				true)
 
-		*/
-		if i := strings.Index(textLine, "[EMPTY]"); i >= 0 {
-
-			if i > 0 {
-				/*
-					textLine,
-						err = strMech.ConvertPrintableString(
-						printableStr[0:i],
-						ePrefix.XCpy("printableStr[0:i]"))
-
-					if err != nil {
-
-						return originalFileSize,
-							numOfLinesRead,
-							numOfBytesRead,
-							err
-					}
-
-				*/
-				if len(textLine) > 0 {
-					strArrayDto.PushStr(textLine)
-				}
-
-			}
-
-			strArrayDto.PushStr(" ")
-
-		} else {
-
-			strArrayDto.PushStr(textLine)
-
-		}
+		strArrayDto.PushStr(textLine)
 
 		numOfBytesRead += int64(len(textLine))
 
