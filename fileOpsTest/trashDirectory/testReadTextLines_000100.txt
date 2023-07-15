@@ -20,4 +20,3 @@ longer slice starting at the same point in the input.
 The function is never called with an empty data slice unless atEOF
 is true. If atEOF is true, however, data may be non-empty and,
 as always, holds unprocessed text.
-
