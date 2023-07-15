@@ -2758,26 +2758,83 @@ func (fileHelpMech *fileHelperMechanics) readTextLines(
 
 	scanner := bufio.NewScanner(filePtr)
 
-	var textLine string
-
 	scanner.Split(func(data []byte, atEOF bool) (advance int, token []byte, err error) {
 
-		if !atEOF && string(data[:2]) == "\r\n" {
-			return 2, nil, nil
+		if atEOF && len(data) == 0 {
+			return 0, nil, nil
 		}
 
-		if !atEOF && string(data[:1]) == "\n" {
-			return 1, nil, nil
+		if i := strings.Index(string(data), "\r\n"); i >= 0 {
+			return i + 2, data[0:i], nil
+		}
+
+		if j := strings.Index(string(data), "\n\n"); j >= 0 {
+
+			var newData = append(
+				data[0:j],
+				[]byte("[EMPTY]")...)
+
+			return j + 2, newData, nil
+		}
+
+		if k := strings.Index(string(data), "\n"); k >= 0 {
+
+			return k + 1, data[0:k], nil
+		}
+
+		if atEOF {
+			return len(data), data, nil
 		}
 
 		return 0, nil, nil
 	})
 
+	//var strMech = new(StrMech)
+
+	var textLine string
+
+	// var printableStr string
+
 	for scanner.Scan() {
 
 		textLine = scanner.Text()
+		/*
+			printableStr = strMech.ConvertNonPrintableString(
+				textLine,
+				true)
 
-		strArrayDto.PushStr(textLine)
+		*/
+		if i := strings.Index(textLine, "[EMPTY]"); i >= 0 {
+
+			if i > 0 {
+				/*
+					textLine,
+						err = strMech.ConvertPrintableString(
+						printableStr[0:i],
+						ePrefix.XCpy("printableStr[0:i]"))
+
+					if err != nil {
+
+						return originalFileSize,
+							numOfLinesRead,
+							numOfBytesRead,
+							err
+					}
+
+				*/
+				if len(textLine) > 0 {
+					strArrayDto.PushStr(textLine)
+				}
+
+			}
+
+			strArrayDto.PushStr(" ")
+
+		} else {
+
+			strArrayDto.PushStr(textLine)
+
+		}
 
 		numOfBytesRead += int64(len(textLine))
 

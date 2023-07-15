@@ -379,6 +379,9 @@ func (fileHlprOpsTest008 MainFileHelperOpsTest008) ReadFiles02() {
 
 }
 
+// ReadFileLines01
+//
+// Reads single lines of text from a file.
 func (fileHlprOpsTest008 MainFileHelperOpsTest008) ReadFileLines01() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
@@ -450,7 +453,7 @@ func (fileHlprOpsTest008 MainFileHelperOpsTest008) ReadFileLines01() {
 		numOfLinesRead,
 		numOfBytesRead)
 
-	strArrayDto.ConvertPrintableChars()
+	//strArrayDto.ConvertToPrintableChars()
 
 	var numBytesWritten int64
 
@@ -459,7 +462,7 @@ func (fileHlprOpsTest008 MainFileHelperOpsTest008) ReadFileLines01() {
 		targetOutputFile,
 		true,
 		true,
-		strArrayDto.ConcatenateStrings(""),
+		strArrayDto.ConcatenateStrings("\n"),
 		ePrefix.XCpy("targetOutputFile<-"))
 
 	if err != nil {

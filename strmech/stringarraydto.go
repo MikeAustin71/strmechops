@@ -441,54 +441,6 @@ func (strArrayDto *StringArrayDto) ConcatenateStrings(
 	return conCatStr
 }
 
-// ConvertPrintableChars
-//
-// Converts every string in the string array encapsulated by
-// the current instance of StringArrayDto to printable
-// characters.
-//
-// This means that non-printable characters such as spaces
-// and new lines will be converted to readable text.
-//
-// ------------------------------------------------------------------------
-//
-// Example Usage
-//
-//	var strArrayDto = new(StringArrayDto)
-//	strArrayDto.Push("Hello world!\n")
-//
-//	strArrayDto.ConvertNonPrintableChars()
-//
-//	actualStr := strArrayDto.StrArray[0]
-//
-//	----------------------------------------------------
-//	'actualStr' is now equal to:
-//	   "Hello[SPACE]world!\\n"
-func (strArrayDto *StringArrayDto) ConvertPrintableChars() {
-
-	var sMech = new(StrMech)
-
-	if strArrayDto.lock == nil {
-		strArrayDto.lock = new(sync.Mutex)
-	}
-
-	strArrayDto.lock.Lock()
-
-	defer strArrayDto.lock.Unlock()
-
-	lenStrArray := len(strArrayDto.StrArray)
-
-	for i := 0; i < lenStrArray; i++ {
-
-		strArrayDto.StrArray[i] =
-			sMech.ConvertNonPrintableString(
-				strArrayDto.StrArray[i],
-				true)
-	}
-
-	return
-}
-
 // ConvertToNonPrintableChars
 //
 // This operation is the reverse of that applied by
@@ -523,7 +475,79 @@ func (strArrayDto *StringArrayDto) ConvertPrintableChars() {
 //	----------------------------------------------------
 //	'actualStr' is now equal to:
 //	   "Hello world!\n"
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	--- NONE ---
 func (strArrayDto *StringArrayDto) ConvertToNonPrintableChars() {
+
+	var sMech = new(StrMech)
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	lenStrArray := len(strArrayDto.StrArray)
+
+	for i := 0; i < lenStrArray; i++ {
+
+		strArrayDto.StrArray[i] =
+			sMech.ConvertNonPrintableString(
+				strArrayDto.StrArray[i],
+				true)
+	}
+
+	return
+}
+
+// ConvertToPrintableChars
+//
+// Converts every string in the string array encapsulated by
+// the current instance of StringArrayDto to printable
+// characters.
+//
+// This means that non-printable characters such as spaces
+// and new lines will be converted to readable text.
+//
+// ------------------------------------------------------------------------
+//
+// Example Usage
+//
+//	var strArrayDto = new(StringArrayDto)
+//	strArrayDto.Push("Hello world!\n")
+//
+//	strArrayDto.ConvertNonPrintableChars()
+//
+//	actualStr := strArrayDto.StrArray[0]
+//
+//	----------------------------------------------------
+//	'actualStr' is now equal to:
+//	   "Hello[SPACE]world!\\n"
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	--- NONE ---
+func (strArrayDto *StringArrayDto) ConvertToPrintableChars() {
 
 	var sMech = new(StrMech)
 
