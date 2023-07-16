@@ -11304,7 +11304,7 @@ func (fh *FileHelper) ReadFileStrBuilderOpenClose(
 //		ready in all respects for future read/write
 //		operations.
 //
-//	endOfLineDelimiters				*StringArrayDto
+//	endOfLineDelimiters			*StringArrayDto
 //
 //		A pointer to an instance of StringArrayDto.
 //		'endOfLineDelimiters' encapsulates a string
@@ -11312,7 +11312,7 @@ func (fh *FileHelper) ReadFileStrBuilderOpenClose(
 //		which will be used to identify and separate
 //		individual lines of text.
 //
-//	outputLinesArray *StringArrayDto,
+//	outputLinesArray 			*StringArrayDto
 //
 //		A pointer to an instance of StringArrayDto.
 //		Lines of text read from the file specified
@@ -11320,7 +11320,7 @@ func (fh *FileHelper) ReadFileStrBuilderOpenClose(
 //		individual strings in the string array
 //		encapsulated by 'outputLinesArray'.
 //
-//	errorPrefix						interface{}
+//	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
@@ -11533,7 +11533,7 @@ func (fh *FileHelper) ReadLines(
 //		ready in all respects for future read/write
 //		operations.
 //
-//	strArrayDto					*StringArrayDto
+//	outputLinesArray			*StringArrayDto
 //
 //		A pointer to an instance of StringArrayDto.
 //		'strArrayDto' encapsulates the string array
@@ -11543,7 +11543,7 @@ func (fh *FileHelper) ReadLines(
 //		'pathFileName' will occupy a separate string
 //		array element in 'strArrayDto'.
 //
-//	errorPrefix						interface{}
+//	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
@@ -11641,7 +11641,7 @@ func (fh *FileHelper) ReadLines(
 //	 	attached to the	beginning of the error message.
 func (fh *FileHelper) ReadTextLines(
 	pathFileName string,
-	strArrayDto *StringArrayDto,
+	outputLinesArray *StringArrayDto,
 	errorPrefix interface{}) (
 	originalFileSize int64,
 	numOfLinesRead int,
@@ -11674,15 +11674,20 @@ func (fh *FileHelper) ReadTextLines(
 			err
 	}
 
+	endOfLineDelimiters := StringArrayDto{}.New()
+
+	endOfLineDelimiters.PushStr("\n")
+	endOfLineDelimiters.PushStr("\r\n")
+
 	originalFileSize,
 		numOfLinesRead,
 		numOfBytesRead,
-		err = new(fileHelperMechanics).
-		readTextLines(
-			pathFileName,
-			strArrayDto,
-			"pathFileName",
-			ePrefix)
+		err = new(fileHelperMechanics).readLines(
+		pathFileName,
+		&endOfLineDelimiters,
+		outputLinesArray,
+		"pathFileName",
+		ePrefix)
 
 	return originalFileSize,
 		numOfLinesRead,
