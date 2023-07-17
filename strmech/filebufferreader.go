@@ -32,8 +32,11 @@ import (
 //
 // # IMPORTANT
 //
-//	Use the 'New' method to create new instances of
-//	FileBufferReader.
+//	(1)	Use the 'New' method to create new instances of
+//		FileBufferReader.
+//
+//	(2)	FileBufferReader implements the io.Reader
+//		interface.
 type FileBufferReader struct {
 	fileReader *bufio.Reader
 	filePtr    *os.File
@@ -541,40 +544,46 @@ func (fBufReader *FileBufferReader) NewPathFileName(
 // underlying Reader, hence 'numOfBytesRead' may be less
 // than len(bytesRead).
 //
-//	If the underlying Reader can return a non-zero count
-//	with io.EOF, then this Read method can do so as well;
-//	see the io.Reader docs.
+// If the underlying Reader can return a non-zero count
+// with io.EOF, then this Read method can do so as well
+// (See the io.Reader docs and 'Reference' section
+// below).
 //
-//	The underlying data source will be automatically
-//	closed when an error occurs or when all bytes have
-//	been read from the data source.
+// The underlying data source will be automatically
+// closed when an error occurs or when all bytes have
+// been read from the data source.
 //
-//	If there are any doubts about whether the data source
-//	has been 'closed', call method:
+// If there are any doubts about whether the data source
+// has been 'closed', call method:
 //
-//		FileBufferReader.Close()
+//	FileBufferReader.Close()
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
-//	(1)	Keep calling this method until all the bytes have
+//	(1)	This method implements the io.Reader interface.
+//
+//	(2)	Keep calling this method until all the bytes have
 //		been read from the data source configured for the
 //		current instance of FileBufferReader.
 //
-//	(2)	When the returned error is set to 'nil',
-//		'numOfBytesRead' is set to '0' and 'isEndOfFile' is
-//		set to 'true', it signals that all bytes have been
-//		successfully read from the data source.
+//	(3)	Callers should always process the
+//		numOfBytesRead > 0 bytes returned before
+//		considering the error err. Doing so correctly
+//		handles I/O errors that happen after reading some
+//		bytes and also both of the allowed EOF behaviors.
 //
-//	(3)	When a processing error occurs during the 'read'
-//		operation (err != nil), the data source will be
-//		automatically closed.
+//	(4)	When a processing error occurs (err != io.EOF)
+//		during the 'read' operation, a file data source
+//		will be automatically closed and the current
+//		FileBufferReader instance will be no longer
+//		operational.
 //
-//	(4)	When  all bytes have been successfully read from
+//	(5)	When all bytes have been successfully read from
 //		the data source, it will be automatically closed.
 //
-//	(5)	If there are any doubts about whether the data
+//	(6)	If there are any doubts about whether a file data
 //		source has been 'closed', call method:
 //
 //			FileBufferReader.Close()
@@ -633,86 +642,40 @@ func (fBufReader *FileBufferReader) NewPathFileName(
 //		Bytes will be read from the data source
 //		configured for the current instance of
 //
-//	errorPrefix					interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set
-//		this parameter to 'nil'.
-//
-//		This empty interface must be convertible to one
-//		of the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
 // ----------------------------------------------------------------
 //
 // # Return Values
+//
+//	numOfBytesRead				int
+//
+//		If this method completes successfully, the number
+//		of bytes read from the data source, and stored in
+//		the byte array passed as input parameter
+//		'bytesRead', will be returned through this
+//		parameter.
 //
 //	err							error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
 //
-//		If errors are encountered during processing, the
+//		If processing errors are encountered, the
 //		returned error Type will encapsulate an
 //		appropriate error message. This returned error
 //	 	message will incorporate the method chain and
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
+//
+//		If an end of file is encountered (after reading
+//		all data source contents), this returned error
+//		will be set to 'io.EOF'. See the 'Reference'
+//		section for a discussion of 'io.EOF'. Disk files
+//		will return an 'io.EOF'. However, some other
+//		types of readers may not.
 func (fBufReader *FileBufferReader) Read(
-	bytesRead []byte,
-	errorPrefix interface{}) (
+	bytesRead []byte) (
 	numOfBytesRead int,
-	isEndOfFile bool,
 	err error) {
 
 	if fBufReader.lock == nil {
@@ -727,13 +690,14 @@ func (fBufReader *FileBufferReader) Read(
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
+		nil,
 		"FileBufferReader."+
 			"Read()",
 		"")
 
 	if err != nil {
-		return numOfBytesRead, isEndOfFile, err
+
+		return numOfBytesRead, err
 	}
 
 	if len(bytesRead) < 16 {
@@ -745,7 +709,7 @@ func (fBufReader *FileBufferReader) Read(
 			ePrefix.String(),
 			bytesRead)
 
-		return numOfBytesRead, isEndOfFile, err
+		return numOfBytesRead, err
 	}
 
 	if fBufReader.fileReader == nil {
@@ -757,7 +721,7 @@ func (fBufReader *FileBufferReader) Read(
 			"of 'FileBufferReader'\n",
 			ePrefix.String())
 
-		return numOfBytesRead, isEndOfFile, err
+		return numOfBytesRead, err
 	}
 
 	var err2 error
@@ -767,22 +731,19 @@ func (fBufReader *FileBufferReader) Read(
 
 	if err2 != nil {
 
-		if err2 == io.EOF {
-
-			isEndOfFile = true
-
-		} else {
+		if err2 != io.EOF {
 
 			err = fmt.Errorf("%v\n"+
 				"Error returned by fBufReader.fileReader.Read(bytesRead).\n"+
 				"Error=\n%v\n",
 				ePrefix.String(),
 				err2.Error())
+
 		}
 
 	}
 
-	if err != nil || isEndOfFile == true {
+	if err != nil {
 
 		if fBufReader.filePtr != nil {
 
@@ -790,5 +751,5 @@ func (fBufReader *FileBufferReader) Read(
 		}
 	}
 
-	return numOfBytesRead, isEndOfFile, err
+	return numOfBytesRead, err
 }
