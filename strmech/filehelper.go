@@ -11057,6 +11057,18 @@ func (fh *FileHelper) ReadFileStrBuilderOpenClose(
 		return numBytesRead, err
 	}
 
+	if fInfoPlus.IsDir() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'pathFileName' is invalid!\n"+
+			"'pathFileName' is directory and NOT a file name.\n"+
+			"pathFileName= '%v'\n",
+			ePrefix.String(),
+			pathFileName)
+
+		return numBytesRead, err
+	}
+
 	if strBuilder == nil {
 
 		err = fmt.Errorf("%v\n"+
