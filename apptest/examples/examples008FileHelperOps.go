@@ -4,6 +4,7 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"github.com/MikeAustin71/strmechops/strmech"
+	"io"
 	"os"
 	"strings"
 	"time"
@@ -514,7 +515,7 @@ func (fileHlprOpsTest008 MainFileHelperOpsTest008) ReadLines02() {
 	targetReadFile,
 		err = exampleUtil.GetCompositeDirectory(
 		"fileOpsTest\\filesForTest\\textFilesForTest\\splitFunc2.txt",
-		ePrefix.XCpy("readFileAddOn"))
+		ePrefix.XCpy("targetReadFile"))
 
 	if err != nil {
 		fmt.Printf("\n%v\n\n",
@@ -603,6 +604,113 @@ func (fileHlprOpsTest008 MainFileHelperOpsTest008) ReadLines02() {
 
 	fmt.Printf("\n" + breakStr + "\n")
 
+}
+
+func (fileHlprOpsTest008 MainFileHelperOpsTest008) FileBufferReader03() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainFileHelperOpsTest008.ReadLines02()",
+		"")
+
+	breakStr := " " + strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n\n\n")
+
+	var err error
+	var targetReadFile string
+	var exampleUtil = ExampleUtility{}
+
+	targetReadFile,
+		err = exampleUtil.GetCompositeDirectory(
+		"fileOpsTest\\filesForTest\\textFilesForTest\\splitFunc.txt",
+		ePrefix.XCpy("readFileAddOn"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var fBufReader strmech.FileBufferReader
+
+	fBufReader,
+		err = new(strmech.FileBufferReader).
+		NewPathFileName(
+			targetReadFile,
+			512,
+			ePrefix.XCpy("targetReadFile"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	bytesReadBuff := make([]byte, 425)
+
+	var totalBytesRead, localBytesRead int
+	var err2 error
+
+	for {
+
+		localBytesRead,
+			err2 = fBufReader.Read(
+			bytesReadBuff)
+
+		totalBytesRead += localBytesRead
+
+		if err2 == io.EOF {
+
+			break
+		}
+
+		if err2 != nil {
+
+			fmt.Printf("\n%v\n"+
+				"Processing error returned by\n"+
+				"fBufReader.Read(bytesReadBuff)"+
+				"while reading the file.\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				err2.Error())
+
+			return
+		}
+
+	}
+
+	if totalBytesRead != 1228 {
+
+		fmt.Printf("\n%v\n"+
+			"Error Reading File!\n"+
+			"Expected to read 1,228 bytes.\n"+
+			"Instead, total bytes read = '%v'\n"+
+			"Target File = '%v'\n",
+			ePrefix.String(),
+			totalBytesRead,
+			targetReadFile)
+
+		return
+
+	} else {
+
+		fmt.Printf("\nTotal Bytes Read = '1228'\n" +
+			"The file read is CORRECT!\n")
+	}
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
 }
 
 // WriteFileBytes01

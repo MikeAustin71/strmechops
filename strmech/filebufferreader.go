@@ -38,8 +38,9 @@ import (
 //	(2)	FileBufferReader implements the io.Reader
 //		interface.
 type FileBufferReader struct {
-	fileReader *bufio.Reader
-	filePtr    *os.File
+	fileReader         *bufio.Reader
+	filePtr            *os.File
+	targetReadFileName string
 
 	lock *sync.Mutex
 }
@@ -521,6 +522,8 @@ func (fBufReader *FileBufferReader) NewPathFileName(
 		return newFileBufReader, err
 	}
 
+	newFileBufReader.targetReadFileName = pathFileName
+
 	newFileBufReader.fileReader = bufio.NewReaderSize(
 		newFileBufReader.filePtr,
 		bufSize)
@@ -739,15 +742,42 @@ func (fBufReader *FileBufferReader) Read(
 				ePrefix.String(),
 				err2.Error())
 
+		} else {
+
+			err = io.EOF
+
 		}
 
 	}
+
+	var err3 error
 
 	if err != nil {
 
 		if fBufReader.filePtr != nil {
 
-			_ = fBufReader.filePtr.Close()
+			err3 = fBufReader.filePtr.Close()
+
+			if err3 != nil {
+
+				if len(fBufReader.targetReadFileName) == 0 {
+					fBufReader.targetReadFileName = "Target Read File Unknown"
+				}
+
+				err2 = fmt.Errorf("%v\n"+
+					"An error occurred while closing the internal\n"+
+					"file pointer for this instance of FileBufferReader.\n"+
+					"Target Read File Name = '%v'\n"+
+					"filePtr.Close() Error = \n%v\n"+
+					"Original Error = \n%v\n",
+					ePrefix.String(),
+					fBufReader.targetReadFileName,
+					err3.Error(),
+					err.Error())
+
+				return numOfBytesRead, err2
+			}
+
 		}
 	}
 

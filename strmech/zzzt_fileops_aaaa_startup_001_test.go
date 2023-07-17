@@ -89,8 +89,16 @@ func (fOpsTestUtil *fileOpsTestUtility) GetCompositeDir(
 
 	strMechOpsBaseDir := baseDir[0:endStrmechopsIdx]
 
+	if localDir[0] == '\\' ||
+		localDir[0] == '/' {
+
+		localDir = localDir[1:]
+	}
+
 	compositeDir :=
-		strMechOpsBaseDir + localDir
+		strMechOpsBaseDir +
+			osPathSepStr +
+			localDir
 
 	compositeDir = strings.Replace(
 		compositeDir,
