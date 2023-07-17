@@ -41,6 +41,46 @@ type FileBufferReader struct {
 	lock *sync.Mutex
 }
 
+// Close
+//
+// This method is used to close any open file pointers.
+//
+// File pointers are closed automatically by
+// FileBufferReader. However, in the case of processing
+// errors or if there is any doubt about whether the
+// file pointer is actually closed, simply call this
+// method to ensure proper closure of an open file
+// pointer.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	--- NONE ---
+func (fBufReader *FileBufferReader) Close() {
+
+	if fBufReader.lock == nil {
+		fBufReader.lock = new(sync.Mutex)
+	}
+
+	fBufReader.lock.Lock()
+
+	defer fBufReader.lock.Unlock()
+
+	if fBufReader.filePtr != nil {
+
+		_ = fBufReader.filePtr.Close()
+	}
+
+	return
+}
+
 // New
 //
 // This method returns a fully initialized instance of
@@ -528,8 +568,8 @@ func (fBufReader *FileBufferReader) NewPathFileName(
 //		successfully read from the data source.
 //
 //	(3)	When a processing error occurs during the 'read'
-//		operation, the data source will be automatically
-//		closed.
+//		operation (err != nil), the data source will be
+//		automatically closed.
 //
 //	(4)	When  all bytes have been successfully read from
 //		the data source, it will be automatically closed.
@@ -740,7 +780,14 @@ func (fBufReader *FileBufferReader) Read(
 				err2.Error())
 		}
 
-		return numOfBytesRead, isEndOfFile, err
+	}
+
+	if err != nil || isEndOfFile == true {
+
+		if fBufReader.filePtr != nil {
+
+			_ = fBufReader.filePtr.Close()
+		}
 	}
 
 	return numOfBytesRead, isEndOfFile, err

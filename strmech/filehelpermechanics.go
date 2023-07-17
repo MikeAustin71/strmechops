@@ -2740,6 +2740,24 @@ func (fileHelpMech *fileHelperMechanics) readLines(
 			err
 	}
 
+	if fInfoPlus.IsDir() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is directory and NOT a file name.\n"+
+			"%v = '%v'\n",
+			ePrefix.String(),
+			pathFileNameLabel,
+			pathFileNameLabel,
+			pathFileNameLabel,
+			pathFileName)
+
+		return originalFileSize,
+			numOfLinesRead,
+			numOfBytesRead,
+			err
+	}
+
 	originalFileSize = fInfoPlus.Size()
 
 	var filePermissionCfg FilePermissionConfig
