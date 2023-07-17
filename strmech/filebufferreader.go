@@ -12,7 +12,7 @@ import (
 // FileBufferReader
 //
 // This structure and the associated methods are designed
-// to facilitate data read operations. The most common
+// to facilitate data 'read' operations. The most common
 // data source for these read operations is assumed to be
 // a data file residing on an attached storage drive.
 // However, any object implementing the io.Reader
@@ -20,20 +20,23 @@ import (
 //
 // The FileBufferReader type is a wrapper for
 // 'bufio.Reader'. As such, FileBufferReader supports
-// incremental read operations from the data source.
+// incremental or buffered read operations from the target
+// data source.
 //
 // ----------------------------------------------------------------
 //
 // # Reference:
 //
 //	https://pkg.go.dev/bufio
+//	https://pkg.go.dev/bufio#Reader
+//	https://pkg.go.dev/io#Reader
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
-//	(1)	Use the 'New' method to create new instances of
-//		FileBufferReader.
+//	(1)	Use methods 'New' and 'NewPathFileName' to create
+//		new instances of FileBufferReader.
 //
 //	(2)	FileBufferReader implements the io.Reader
 //		interface.
@@ -50,11 +53,17 @@ type FileBufferReader struct {
 // This method is used to close any open file pointers.
 //
 // File pointers are closed automatically by
-// FileBufferReader. However, in the case of processing
-// errors or if there is any doubt about whether the
-// file pointer is actually closed, simply call this
-// method to ensure proper closure of an open file
-// pointer.
+// FileBufferReader.Read(). However, in the case of
+// processing errors or if there is any doubt about
+// whether the file pointer is actually closed, simply
+// call this method to ensure proper closure of an open
+// file pointer.
+//
+// If an instance of FileBufferReader is created with a
+// call to FileBufferReader.NewPathFileName(), and no
+// calls are made to FileBufferReader.Read(), be sure
+// to call this method in order to manually close the
+// the file pointer.
 //
 // ----------------------------------------------------------------
 //
@@ -96,22 +105,35 @@ func (fBufReader *FileBufferReader) Close() {
 //
 // ----------------------------------------------------------------
 //
+// # Reference:
+//
+//	https://pkg.go.dev/bufio
+//	https://pkg.go.dev/bufio#Reader
+//	https://pkg.go.dev/io#Reader
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	reader						io.Reader
 //
 //		An object which implements io.Reader interface.
-//		Typically, this is a file pointer of type
-//		*os.File.
+//
+//		This object may be a file pointer of type *os.File.
+//		File pointers of this type implement the io.Reader
+//		interface.
 //
 //		A file pointer (*os.File) will facilitate reading
-//		file data from files residing on an attached
-//		storage drive.
+//		data from files residing on an attached storage
+//		drive. However, with this configuration, the user
+//		is responsible for manually closing the file and
+//		performing any other required clean-up
+//		operations.
 //
 //		While the returned instance of FileBufferReader
-//		is primarily designed for reading file data, the
-//		reader will in fact read data from any object
-//		implementing the io.Reader interface.
+//		is primarily designed for reading data from disk
+//		files, this 'reader' will in fact read data from
+//		any object implementing the io.Reader interface.
 //
 //	bufSize						int
 //
@@ -231,7 +253,7 @@ func (fBufReader *FileBufferReader) New(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"FileBufferReader."+
-			"NewInitializeReader()",
+			"New()",
 		"")
 
 	if err != nil {
