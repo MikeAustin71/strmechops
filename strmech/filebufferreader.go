@@ -294,26 +294,22 @@ func (fBufReader *FileBufferReader) New(
 //
 // # Input Parameters
 //
-//	reader						io.Reader
+//	pathFileName				string
 //
-//		An object which implements io.Reader interface.
-//		Typically, this is a file pointer of type
-//		*os.File.
+//		This string contains the path and file name of
+//		the file which will be used a data source for
+//		'read' operations performed by method:
+//			FileBufferReader.Read()
 //
-//		A file pointer (*os.File) will facilitate reading
-//		file data from files residing on an attached
-//		storage drive.
-//
-//		While the returned instance of FileBufferReader
-//		is primarily designed for reading file data, the
-//		reader will in fact read data from any object
-//		implementing the io.Reader interface.
+//		If this file does not currently exist on an
+//		attached storage drive, an error will be
+//		returned.
 //
 //	bufSize						int
 //
 //		This integer value controls the size of the
-//		buffer created for the returned instance of
-//		FileBufferReader.
+//		'read' buffer created for the returned instance
+//		of FileBufferReader.
 //
 //		'bufSize' should be configured to maximize
 //		performance for 'read' operations subject to
@@ -432,6 +428,16 @@ func (fBufReader *FileBufferReader) NewPathFileName(
 		"")
 
 	if err != nil {
+		return newFileBufReader, err
+	}
+
+	if len(pathFileName) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'pathFileName' is invalid!\n"+
+			"'pathFileName' is an empty string with a length of zero (0).\n",
+			ePrefix.String())
+
 		return newFileBufReader, err
 	}
 
