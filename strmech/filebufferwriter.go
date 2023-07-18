@@ -512,6 +512,10 @@ func (fBufWriter *FileBufferWriter) New(
 // is configured in the returned instance
 // FileBufferWriter.
 //
+// If the target path and file do not currently exist on
+// an attached storage drive, this method will attempt to
+// create them.
+//
 // The size of the internal 'write' buffer is controlled
 // by input parameter 'bufSize'. If 'bufSize' is set to a
 // value less than or equal to zero (0), it will be
@@ -529,9 +533,9 @@ func (fBufWriter *FileBufferWriter) New(
 //		'read' operations performed by method:
 //			FileBufferReader.Read()
 //
-//		If this file does not currently exist on an
-//		attached storage drive, an error will be
-//		returned.
+//		If the target path and file do not currently
+//		exist on an attached storage drive, this method
+//		will attempt to create them.
 //
 //	bufSize						int
 //
@@ -691,13 +695,11 @@ func (fBufWriter *FileBufferWriter) NewPathFileName(
 
 	}
 
-	var fInfoPlus FileInfoPlus
-	var pathFileDoesExist bool
 	var err2 error
 
 	pathFileName,
-		pathFileDoesExist,
-		fInfoPlus,
+		_,
+		_,
 		err2 =
 		new(fileHelperMolecule).
 			doesPathFileExist(
@@ -716,31 +718,6 @@ func (fBufWriter *FileBufferWriter) NewPathFileName(
 			funcName,
 			pathFileName,
 			err2.Error())
-
-		return newFileBufWriter, err
-	}
-
-	if !pathFileDoesExist {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'pathFileName' is invalid!\n"+
-			"The path and file name do NOT exist on an attached\n"+
-			"storage drive.\n"+
-			"pathFileName= '%v'\n",
-			ePrefix.String(),
-			pathFileName)
-
-		return newFileBufWriter, err
-	}
-
-	if fInfoPlus.IsDir() {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'pathFileName' is invalid!\n"+
-			"'pathFileName' is directory and NOT a file name.\n"+
-			"pathFileName= '%v'\n",
-			ePrefix.String(),
-			pathFileName)
 
 		return newFileBufWriter, err
 	}

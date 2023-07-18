@@ -222,7 +222,7 @@ func TestFileHelper_ReadTextLines_000100(t *testing.T) {
 
 	outputFile = trashDirectory +
 		string(os.PathSeparator) +
-		"testReadTextLines_000100.txt"
+		"TestFileHelper_ReadTextLines_000100.txt"
 
 	var fHelper = new(FileHelper)
 
@@ -323,11 +323,9 @@ func TestFileHelper_ReadTextLines_000100(t *testing.T) {
 		return
 	}
 
-	trashDirectory,
-		err = new(fileOpsTestUtility).
-		GetCompositeDir(
-			FILEOpsBaseTrashDirectory,
-			ePrefix)
+	err = new(DirHelper).DeleteAllInParentDirectory(
+		trashDirectory,
+		ePrefix.XCpy("trashDirectory"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
