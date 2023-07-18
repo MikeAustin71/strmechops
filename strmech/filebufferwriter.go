@@ -48,6 +48,61 @@ type FileBufferWriter struct {
 	lock *sync.Mutex
 }
 
+// Close
+//
+// This method is used to close any open file pointers
+// and perform necessary clean-up operations after all
+// data has been written to the destination io.Writer
+// object.
+//
+// After calling this method, the current instance of
+// FileBufferWriter will be unusable and should be
+// discarded.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	Call this method after completing all write operations.
+//	Calling this method is essential to performance of
+//	necessary clean-up tasks.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	--- NONE ---
+func (fBufWriter *FileBufferWriter) Close() {
+
+	if fBufWriter.lock == nil {
+		fBufWriter.lock = new(sync.Mutex)
+	}
+
+	fBufWriter.lock.Lock()
+
+	defer fBufWriter.lock.Unlock()
+
+	if fBufWriter.filePtr != nil {
+
+		_ = fBufWriter.filePtr.Close()
+
+		fBufWriter.filePtr = nil
+	}
+
+	if fBufWriter.fileWriter != nil {
+
+		fBufWriter.fileWriter = nil
+	}
+
+	return
+}
+
 // New
 //
 // This method returns a fully initialized instance of

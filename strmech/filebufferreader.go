@@ -63,7 +63,11 @@ type FileBufferReader struct {
 // call to FileBufferReader.NewPathFileName(), and no
 // calls are made to FileBufferReader.Read(), be sure
 // to call this method in order to manually close the
-// the file pointer.
+// file pointer.
+//
+// After calling this method, the current instance of
+// FileBufferReader will be unusable and should be
+// discarded.
 //
 // ----------------------------------------------------------------
 //
@@ -89,6 +93,14 @@ func (fBufReader *FileBufferReader) Close() {
 	if fBufReader.filePtr != nil {
 
 		_ = fBufReader.filePtr.Close()
+
+		fBufReader.filePtr = nil
+	}
+
+	if fBufReader.fileReader != nil {
+
+		fBufReader.fileReader = nil
+
 	}
 
 	return
