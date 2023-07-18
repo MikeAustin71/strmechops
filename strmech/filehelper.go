@@ -6158,6 +6158,10 @@ func (fh *FileHelper) GetFileExtension(
 //		the file which is described by the os.FileInfo
 //		object returned by this method.
 //
+//		If the file identified by 'pathFileName' does NOT
+//		exist on an attached storage drive, an error will
+//		be returned.
+//
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
@@ -6328,6 +6332,10 @@ func (fh *FileHelper) GetFileInfo(
 //		This string contains the path and file name of
 //		the file which is described by the os.FileInfo
 //		object returned by this method.
+//
+//		If the file identified by 'pathFileName' does NOT
+//		exist on an attached storage drive, an error will
+//		be returned.
 //
 //	errorPrefix					interface{}
 //
