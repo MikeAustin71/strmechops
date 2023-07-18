@@ -40,6 +40,68 @@ import (
 //
 //	(2)	FileBufferWriter implements the io.Writer
 //		interface.
+//
+// ----------------------------------------------------------------
+//
+// # Best Practice
+//
+//	(1)	Create a new instance of FileBufferWriter using
+//		either the New() method or the NewPathFileName()
+//		method.
+//
+//		(a)	The New() method is used when an instance of
+//			io.Writer is created externally by the user
+//			and passed to the FileBufferWriter.New()
+//			method.
+//
+//			Under this scenario, the user is independently
+//			responsible for clean-up of the io.Writer
+//			object after FileBufferWriter 'write'
+//			operations have been completed.
+//
+//			Once all FileBufferWriter 'write' operations
+//			have been completed, call methods Flush() and
+//			Close() to perform local FileBufferWriter
+//			clean-up tasks.
+//
+//		(b)	The NewPathFileName() method allows for the
+//			creation of an internal file pointer to a
+//			file passed as a path and file name by the
+//			user. This file serves at the target
+//			io.Writer object to which data will be
+//			written.
+//
+//			Under this scenario, the user simply calls
+//			methods Flush() and Close() in sequence to
+//			perform all required clean-up tasks after
+//			'write' operations have been completed.
+//
+//			Once method Close() is called, the current
+//			FileBufferWriter instance becomes unusable
+//			and should be discarded.
+//
+//	(2)	After creating an instance of FileBufferWriter,
+//		the user calls the Write() method to write bytes
+//		of data to target io.Writer object. This 'write'
+//		target may be a file or any other object which
+//		implements the io.Writer interface.
+//
+//		The Write() method should be called repeatedly
+//		until all data has been written to the underlying
+//		io.Writer object.
+//
+//		Upon completion of the 'write' operation, call
+//		methods Flush() and Close() in sequence to
+//		perform required clean-up tasks.
+//
+//	(3)	After all data bytes have been written to the
+//		target io.Writer object, the user must call
+//		methods Flush() and Close() to perform necessary
+//		clean-up operations.
+//
+//		Once method Close() is called, the current
+//		FileBufferWriter instance becomes unusable
+//		and should be discarded.
 type FileBufferWriter struct {
 	fileWriter          *bufio.Writer
 	filePtr             *os.File
@@ -54,6 +116,10 @@ type FileBufferWriter struct {
 // and perform necessary clean-up operations after all
 // data has been written to the destination io.Writer
 // object.
+//
+// These clean-up operations include flushing the
+// write buffer to ensure that all data is written to
+// the destination io.Writer object.
 //
 // After calling this method, the current instance of
 // FileBufferWriter will be unusable and should be
@@ -71,14 +137,83 @@ type FileBufferWriter struct {
 //
 // # Input Parameters
 //
-//	--- NONE ---
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // # Return Values
 //
-//	--- NONE ---
-func (fBufWriter *FileBufferWriter) Close() {
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufWriter *FileBufferWriter) Close(
+	errorPrefix interface{}) error {
 
 	if fBufWriter.lock == nil {
 		fBufWriter.lock = new(sync.Mutex)
@@ -88,19 +223,205 @@ func (fBufWriter *FileBufferWriter) Close() {
 
 	defer fBufWriter.lock.Unlock()
 
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileBufferWriter."+
+			"Close()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	var err2 error
+	var errs []error
+
+	if fBufWriter.fileWriter != nil {
+
+		err2 = fBufWriter.fileWriter.Flush()
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error returned while flushing the 'write' buffer!\n"+
+				"fBufWriter.fileWriter.Flush()\n"+
+				"Error = \n%v\n",
+				ePrefix.String(),
+				err2.Error())
+
+			errs = append(errs, err)
+
+		}
+
+		fBufWriter.fileWriter = nil
+
+	}
+
 	if fBufWriter.filePtr != nil {
 
-		_ = fBufWriter.filePtr.Close()
+		err2 = fBufWriter.filePtr.Close()
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error returned while closing the target 'write' file!\n"+
+				"fBufWriter.filePtr.Close()\n"+
+				"Error = \n%v\n",
+				ePrefix.String(),
+				err2.Error())
+
+			errs = append(errs, err)
+
+		}
 
 		fBufWriter.filePtr = nil
 	}
 
-	if fBufWriter.fileWriter != nil {
+	if len(errs) > 0 {
+		err = new(StrMech).ConsolidateErrors(errs)
 
-		fBufWriter.fileWriter = nil
+	} else {
+
+		err = nil
 	}
 
-	return
+	return err
+}
+
+// Flush
+//
+// Calling this method ensures that all remaining data in
+// 'write' buffer will be written to the destination
+// io.Writer object.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufWriter *FileBufferWriter) Flush(
+	errorPrefix interface{}) error {
+
+	if fBufWriter.lock == nil {
+		fBufWriter.lock = new(sync.Mutex)
+	}
+
+	fBufWriter.lock.Lock()
+
+	defer fBufWriter.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileBufferWriter."+
+			"Close()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if fBufWriter.fileWriter == nil {
+		return err
+	}
+
+	var err2 error
+
+	err2 = fBufWriter.fileWriter.Flush()
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned while flushing the 'write' buffer!\n"+
+			"fBufWriter.fileWriter.Flush()\n"+
+			"Error = \n%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+	}
+
+	return err
 }
 
 // New

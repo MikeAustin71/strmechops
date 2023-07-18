@@ -40,6 +40,67 @@ import (
 //
 //	(2)	FileBufferReader implements the io.Reader
 //		interface.
+//
+// ----------------------------------------------------------------
+//
+// # Best Practice
+//
+//	(1)	Create a new instance of FileBufferReader using
+//		either the New() method or the NewPathFileName()
+//		method.
+//
+//		(a)	The New() method is used when an instance of
+//			io.Reader is created externally by the user
+//			and passed to the FileBufferReader.New()
+//			method.
+//
+//			Under this scenario, the user is independently
+//			responsible for clean-up of the io.Reader
+//			object after FileBufferReader 'read'
+//			operations have been completed.
+//
+//			Once all FileBufferReader 'read' operations
+//			have been completed, call method Close() to
+//			perform local FileBufferReader clean-up tasks.
+//
+//		(b)	The NewPathFileName() method allows for the
+//			creation of an internal file pointer to a
+//			file passed as a path and file name by the
+//			user. This file serves at the target
+//			io.Reader object from which data will be
+//			read.
+//
+//			Under this scenario, the user simply calls
+//			method Close() to perform all required
+//			clean-up tasks after 'read' operations have
+//			been completed.
+//
+//			Once method Close() is called, the current
+//			FileBufferReader instance becomes unusable
+//			and should be discarded.
+//
+//	(2)	After creating an instance of FileBufferReader,
+//		the user calls the Read() method to read bytes
+//		of data from the target io.Reader object. This
+//		'read' target may be a file or any other object
+//		which implements the io.Reader interface.
+//
+//		The Read() method should be called repeatedly
+//		until all data has been read from the underlying
+//		io.Reader object.
+//
+//		Upon completion of the 'read' operation, call
+//		method Close() to perform required clean-up
+//		tasks.
+//
+//	(3)	After all data bytes have been read from the
+//		target io.Reader object, the user must call
+//		method Close() to perform necessary clean-up
+//		tasks.
+//
+//		Once method Close() is called, the current
+//		FileBufferReader instance becomes unusable and
+//		should be discarded.
 type FileBufferReader struct {
 	fileReader         *bufio.Reader
 	filePtr            *os.File
@@ -50,20 +111,11 @@ type FileBufferReader struct {
 
 // Close
 //
-// This method is used to close any open file pointers.
+// This method is used to close any open file pointers
+// and perform required clean-up operations.
 //
-// File pointers are closed automatically by
-// FileBufferReader.Read(). However, in the case of
-// processing errors or if there is any doubt about
-// whether the file pointer is actually closed, simply
-// call this method to ensure proper closure of an open
-// file pointer.
-//
-// If an instance of FileBufferReader is created with a
-// call to FileBufferReader.NewPathFileName(), and no
-// calls are made to FileBufferReader.Read(), be sure
-// to call this method in order to manually close the
-// file pointer.
+// Users MUST call this method after all 'read'
+// operations have been completed.
 //
 // After calling this method, the current instance of
 // FileBufferReader will be unusable and should be
@@ -73,14 +125,83 @@ type FileBufferReader struct {
 //
 // # Input Parameters
 //
-//	--- NONE ---
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
 // # Return Values
 //
-//	--- NONE ---
-func (fBufReader *FileBufferReader) Close() {
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufReader *FileBufferReader) Close(
+	errorPrefix interface{}) error {
 
 	if fBufReader.lock == nil {
 		fBufReader.lock = new(sync.Mutex)
@@ -90,9 +211,36 @@ func (fBufReader *FileBufferReader) Close() {
 
 	defer fBufReader.lock.Unlock()
 
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileBufferWriter."+
+			"Close()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	var err2 error
+
 	if fBufReader.filePtr != nil {
 
-		_ = fBufReader.filePtr.Close()
+		err2 = fBufReader.filePtr.Close()
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error returned while closing the target 'write' file!\n"+
+				"fBufWriter.filePtr.Close()\n"+
+				"Error = \n%v\n",
+				ePrefix.String(),
+				err2.Error())
+
+		}
 
 		fBufReader.filePtr = nil
 	}
@@ -103,7 +251,7 @@ func (fBufReader *FileBufferReader) Close() {
 
 	}
 
-	return
+	return err
 }
 
 // New
@@ -577,27 +725,28 @@ func (fBufReader *FileBufferReader) NewPathFileName(
 // source associated with the current instance of
 // FileBufferReader.
 //
-// This method is a wrapper for the bufio
-// 'Reader.Read' method.
+// This method is a wrapper for the bufio 'Reader.Read'
+// method.
 //
 // Method 'Read' reads data into the byte array
 // 'bytesRead'. It returns the number of bytes read
-// into 'bytesRead' as return parameter 'numOfBytesRead'.
-// The bytes are taken from at most one Read on the
-// underlying Reader, hence 'numOfBytesRead' may be less
-// than len(bytesRead).
+// into the byte array as return parameter,
+// 'numOfBytesRead'.
 //
-// If the underlying Reader can return a non-zero count
-// with io.EOF, then this Read method can do so as well
-// (See the io.Reader docs and 'Reference' section
-// below).
+// Under certain circumstances, the number of bytes read
+// may be less than the length of the byte array
+// (len(bytesRead)) due to the length of the underlying
+// read buffer.
 //
-// The underlying data source will be automatically
-// closed when an error occurs or when all bytes have
-// been read from the data source.
+// To complete the read operation, repeat the call to
+// this method until the returned error is set to
+// 'io.EOF' signaling 'End of File'.
 //
-// If there are any doubts about whether the data source
-// has been 'closed', call method:
+// See the io.Reader docs and 'Reference' section below.
+//
+// Once the 'read' operation has been completed, the user
+// MUST call the 'Close' method to ensure clean-up
+// operations are properly applied:
 //
 //	FileBufferReader.Close()
 //
@@ -609,25 +758,19 @@ func (fBufReader *FileBufferReader) NewPathFileName(
 //
 //	(2)	Keep calling this method until all the bytes have
 //		been read from the data source configured for the
-//		current instance of FileBufferReader.
+//		current instance of FileBufferReader and the
+//		returned error is set to 'io.EOF'.
 //
 //	(3)	Callers should always process the
 //		numOfBytesRead > 0 bytes returned before
 //		considering the error err. Doing so correctly
 //		handles I/O errors that happen after reading some
-//		bytes and also both of the allowed EOF behaviors.
+//		bytes and also both of the allowed EOF behaviors
+//		(See the io.Reader docs and 'Reference' section
+//		below).
 //
-//	(4)	When a processing error occurs (err != io.EOF)
-//		during the 'read' operation, a file data source
-//		will be automatically closed and the current
-//		FileBufferReader instance will be no longer
-//		operational.
-//
-//	(5)	When all bytes have been successfully read from
-//		the data source, it will be automatically closed.
-//
-//	(6)	If there are any doubts about whether a file data
-//		source has been 'closed', call method:
+//	(4)	When all 'read' operations have been completed,
+//		call method:
 //
 //			FileBufferReader.Close()
 //
@@ -788,37 +931,6 @@ func (fBufReader *FileBufferReader) Read(
 
 		}
 
-	}
-
-	var err3 error
-
-	if err != nil {
-
-		if fBufReader.filePtr != nil {
-
-			err3 = fBufReader.filePtr.Close()
-
-			if err3 != nil {
-
-				if len(fBufReader.targetReadFileName) == 0 {
-					fBufReader.targetReadFileName = "Target Read File Unknown"
-				}
-
-				err2 = fmt.Errorf("%v\n"+
-					"An error occurred while closing the internal\n"+
-					"file pointer for this instance of FileBufferReader.\n"+
-					"Target Read File Name = '%v'\n"+
-					"filePtr.Close() Error = \n%v\n"+
-					"Original Error = \n%v\n",
-					ePrefix.String(),
-					fBufReader.targetReadFileName,
-					err3.Error(),
-					err.Error())
-
-				return numOfBytesRead, err2
-			}
-
-		}
 	}
 
 	return numOfBytesRead, err
