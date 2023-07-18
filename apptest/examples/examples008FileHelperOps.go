@@ -305,7 +305,7 @@ func (fileHlprOpsTest008 MainFileHelperOpsTest008) ReadFiles01() {
 
 // ReadFiles02
 //
-// Runs test on FileHelper.ReadFileBytes()
+// Runs test on FileHelper.Read()
 func (fileHlprOpsTest008 MainFileHelperOpsTest008) ReadFiles02() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(

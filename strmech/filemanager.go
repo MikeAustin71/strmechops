@@ -10428,7 +10428,7 @@ func (fMgr *FileMgr) ReadAllFileBytes(
 	return bytesRead, err
 }
 
-// ReadFileBytes
+// Read
 //
 // Reads bytes from the file identified by the current
 // FileMgr instance. Bytes are stored in 'byteBuff', a
@@ -10455,87 +10455,31 @@ func (fMgr *FileMgr) ReadAllFileBytes(
 //
 // # IMPORTANT
 //
-//	This method will NOT automatically close the os.File
-//	pointer to the file identified by the current
-//	instance of FileMgr upon completion of the file read
-//	operation.
+//	(1)	This method implements the io.Reader interface.
 //
-//	The user is therefore responsible for closing the
-//	file. See method FileMgr.CloseThisFile().
+//	(2)	This method will NOT automatically close the
+//		os.File pointer to the file identified by the
+//		current instance of FileMgr upon completion of
+//		the file read operation.
+//
+//		The user is therefore responsible for closing the
+//		file. See method FileMgr.CloseThisFile().
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	byteBuff					[]byte
+//	bytesReadBuff				[]byte
 //
 //		A byte array which serves as the byte buffer for
-//		the file read operation.
-//
-//	errorPrefix					interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set
-//		this parameter to 'nil'.
-//
-//		This empty interface must be convertible to one
-//		of the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
+//		the file read operation. Bytes read from the
+//		target FileMgr data file will be stored here.
 //
 // ----------------------------------------------------------------
 //
 // # Return Values
 //
-//	bytesRead					int
+//	numOfBytesRead				int
 //
 //		If this method completes successfully, the number
 //		of bytes read will be returned through this
@@ -10558,10 +10502,9 @@ func (fMgr *FileMgr) ReadAllFileBytes(
 //	 	'errorPrefix'. The 'errorPrefix' text will be
 //	 	prefixed or attached to the beginning of the
 //	 	error message.
-func (fMgr *FileMgr) ReadFileBytes(
-	byteBuff []byte,
-	errorPrefix interface{}) (
-	bytesRead int,
+func (fMgr *FileMgr) Read(
+	bytesReadBuff []byte) (
+	numOfBytesRead int,
 	err error) {
 
 	if fMgr.lock == nil {
@@ -10574,17 +10517,17 @@ func (fMgr *FileMgr) ReadFileBytes(
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	bytesRead = 0
+	numOfBytesRead = 0
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
+		nil,
 		"FileMgr."+
-			"ReadFileBytes()",
+			"Read()",
 		"")
 
 	if err != nil {
-		return bytesRead, err
+		return numOfBytesRead, err
 	}
 
 	var readWriteAccessCtrl FileAccessControl
@@ -10596,7 +10539,7 @@ func (fMgr *FileMgr) ReadFileBytes(
 				"readWriteAccessCtrl<-"))
 
 	if err != nil {
-		return bytesRead, err
+		return numOfBytesRead, err
 	}
 
 	err = new(fileMgrHelper).readFileSetup(
@@ -10606,13 +10549,13 @@ func (fMgr *FileMgr) ReadFileBytes(
 		ePrefix)
 
 	if err != nil {
-		return bytesRead, err
+		return numOfBytesRead, err
 	}
 
 	var err2 error
 
-	bytesRead,
-		err2 = fMgr.fileBufRdr.Read(byteBuff)
+	numOfBytesRead,
+		err2 = fMgr.fileBufRdr.Read(bytesReadBuff)
 
 	if err2 != nil &&
 		err2 == io.EOF {
@@ -10622,7 +10565,7 @@ func (fMgr *FileMgr) ReadFileBytes(
 	} else if err2 != nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error returned by fMgr.fileBufRdr.Read(byteBuff)\n"+
+			"Error returned by fMgr.fileBufRdr.Read(bytesReadBuff)\n"+
 			"File='%v'\n"+
 			"Error= \n%v\n ",
 			ePrefix.String(),
@@ -10630,7 +10573,7 @@ func (fMgr *FileMgr) ReadFileBytes(
 			err2.Error())
 	}
 
-	return bytesRead, err
+	return numOfBytesRead, err
 }
 
 // ReadFileLine

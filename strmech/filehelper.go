@@ -10742,7 +10742,7 @@ func (fh *FileHelper) ReadFileBytes(
 
 	defer fh.lock.Unlock()
 
-	funcName := "FileHelper.ReadFileBytes()"
+	funcName := "FileHelper.Read()"
 
 	var ePrefix *ePref.ErrPrefixDto
 
