@@ -10450,6 +10450,7 @@ func (fMgr *FileMgr) ReadAllFileBytes(
 // # Reference:
 //
 //	https://pkg.go.dev/golang.org/x/exp/slog/internal/buffer
+//	https://pkg.go.dev/io#Reader
 //
 // ----------------------------------------------------------------
 //
@@ -12186,9 +12187,9 @@ func (fMgr *FileMgr) SetFileMgrFromPathFileName(
 
 // WriteBytesToFile
 //
-// Writes a string to the File identified by the current
-// instance of FileMgr. If the file is not open, this
-// method will attempt to open it.
+// Writes an array of bytes to the File identified by the
+// current instance of FileMgr. If the file is not open,
+// this method will attempt to open it.
 //
 // This method uses the 'bufio' package.
 //
