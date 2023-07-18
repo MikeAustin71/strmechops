@@ -100,10 +100,12 @@ func TestFileBufferWriter_Write_000100(t *testing.T) {
 			t.Errorf("%v\n"+
 				"Error returned by fBufWriter.Write(bytesToWrite)\n"+
 				"Bytes To Write = '%v'\n"+
-				"Index = '%v'\n",
+				"Index = '%v'\n"+
+				"Error= \n%v\n",
 				ePrefix.String(),
 				string(bytesToWrite),
-				i)
+				i,
+				err.Error())
 
 			_ = fBufWriter.Flush(nil)
 

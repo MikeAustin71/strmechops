@@ -168,7 +168,7 @@ func (exUtil ExampleUtility) GetCompositeDirectory(
 		dirFileAddOn[0] == '/' {
 
 		if len(dirFileAddOn) > 0 {
-			dirFileAddOn = dirFileSpec[1:]
+			dirFileAddOn = dirFileAddOn[1:]
 		} else {
 
 			dirFileAddOn = ""
