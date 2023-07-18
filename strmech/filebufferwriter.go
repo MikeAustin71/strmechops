@@ -442,3 +442,148 @@ func (fBufWriter *FileBufferWriter) NewPathFileName(
 
 	return newFileBufWriter, err
 }
+
+// Write
+//
+// Writes the contents of the byte array input paramter
+// ('bytesToWrite') to the destination io.Writer object
+// previously configured for this instance of
+// FileBufferWriter.
+//
+// If for any reason, the returned number of bytes
+// written ('numBytesWritten') to the destination
+// io.Writer object is less than the length of the byte
+// array passed as input parameter 'bytesToWrite', an
+// error containing an explanation for this event will
+// be returned.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	After all write operations have been completed, the
+//	user MUST call FileBufferWriter.Close() to perform
+//	necessary clean-up operations.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	bytesToWrite				[]byte
+//
+//		The contents of this byte array will be written
+//		to the destination io.Writer object previously
+//		configured for the current instance of
+//		FileBufferWriter.
+//
+//		Typically, the destination io.Writer object will
+//		be a data file existing on an attached storage
+//		drive. However, the destination io.Writer object
+//		may be any object implementing the io.Writer
+//		interface.
+//
+//		If for any reason, the returned number of bytes
+//		written ('numBytesWritten') to the destination
+//		io.Writer object is less than the length of this
+//		byte array ('bytesToWrite'), an error containing
+//		an explanation for this event will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numBytesWritten				int
+//
+//		This parameter returns the number of bytes
+//		written to the destination io.Writer object
+//		configured for the current instance of
+//		FileBufferWriter.
+//
+//		If 'numBytesWritten' is less than the length
+//		of the byte array input parameter 'bytesToWrite',
+//		an error will also be returned.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If processing errors are encountered, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		If an end of file is encountered (after reading
+//		all data source contents), this returned error
+//		will be set to 'io.EOF'. See the 'Reference'
+//		section for a discussion of 'io.EOF'. Disk files
+//		will return an 'io.EOF'. However, some other
+//		types of readers may not.
+func (fBufWriter *FileBufferWriter) Write(
+	bytesToWrite []byte) (
+	numBytesWritten int,
+	err error) {
+
+	if fBufWriter.lock == nil {
+		fBufWriter.lock = new(sync.Mutex)
+	}
+
+	fBufWriter.lock.Lock()
+
+	defer fBufWriter.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileBufferWriter."+
+			"Write()",
+		"")
+
+	if err != nil {
+
+		return numBytesWritten, err
+	}
+
+	if fBufWriter.fileWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of 'FileBufferWriter' is invalid!\n"+
+			"The internal bufio.Writer has NOT been initialized.\n"+
+			"Call one of the 'New' methods when creating an instance\n"+
+			"of 'FileBufferWriter'\n",
+			ePrefix.String())
+
+		return numBytesWritten, err
+	}
+
+	if len(bytesToWrite) <= 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'bytesToWrite' is invalid!\n"+
+			"The 'bytesToWrite' byte array is empty. It has zero bytes.\n",
+			ePrefix.String())
+
+		return numBytesWritten, err
+	}
+
+	var err2 error
+
+	numBytesWritten,
+		err2 = fBufWriter.fileWriter.Write(bytesToWrite)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by fBufWriter.fileWriter.Write(bytesToWrite).\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			err2.Error())
+	}
+
+	return numBytesWritten, err
+}
