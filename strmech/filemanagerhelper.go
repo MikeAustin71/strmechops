@@ -1739,7 +1739,9 @@ func (fMgrHlpr *fileMgrHelper) moveFile(
 	return strMech.ConsolidateErrors(errs)
 }
 
-// openFile - Helper method used to open files specified
+// openFile
+//
+// Helper method used to open files specified
 // by FileMgr.
 //
 // If the directory does not previously exist, it will be
