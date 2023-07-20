@@ -14,11 +14,21 @@ import (
 // FileMgr
 //
 // This type and its associated methods are used to
-// manage organize and control disk files and file
-// permissions.
+// manage, organize, monitor and control disk files
+// and related file permissions.
+//
+// This type also includes methods allowing for creating,
+// reading, writing and deleting disk files.
 //
 // To create an instance of type 'FileMgr' use one of the
 // 'FileMgr.New' methods.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	The FileMgr type implements the io.Reader and
+//	io.Writer interfaces.
 type FileMgr struct {
 	isInitialized                   bool
 	originalPathFileName            string
@@ -7296,17 +7306,7 @@ func (fMgr *FileMgr) IsFilePointerOpen() bool {
 
 	defer fMgr.lock.Unlock()
 
-	if fMgr.filePtr == nil {
-
-		fMgr.isFilePtrOpen = false
-
-		return false
-
-	}
-
-	fMgr.isFilePtrOpen = true
-
-	return true
+	return new(fileMgrHelperBoson).isFilePointerOpen(fMgr)
 }
 
 // IsInitialized
@@ -12543,6 +12543,146 @@ func (fMgr *FileMgr) SetFileMgrFromPathFileName(
 		ePrefix)
 
 	return isEmpty, err
+}
+
+// Write
+//
+// This method receives a byte array ('bytesToWrite') and
+// proceeds to write these bytes to the file identified by
+// the current instance of FileMgr.
+//
+// This method uses the 'bufio' package.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/golang.org/x/exp/slog/internal/buffer
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method implements the io.Writer interface.
+//
+//	(2) After all data has been written to the target
+//		file, the user is responsible for calling the
+//		following methods in sequence to finalize clean-up
+//		operations:
+//
+//			FileMgr.FlushBytesToDisk()
+//			FileMgr.CloseThisFile()
+//
+//	(3) If the target file was NOT opened before calling
+//		this method, an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	bytesToWrite					[]byte
+//
+//		An array of bytes. This byte array contains the
+//		text characters which will be written to the file
+//		identified by the current instance of FileMgr.
+//
+//	numBytesWritten				int
+//
+//		If this method completes successfully, this
+//		integer value will equal the number of bytes
+//		written the file identified by the current
+//		instance of FileMgr. It should match the number
+//		of bytes contained in the input byte array
+//		parameter, 'bytes'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgr *FileMgr) Write(
+	bytesToWrite []byte) (
+	numBytesWritten int,
+	err error) {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileMgr."+
+			"Write()",
+		"")
+
+	if err != nil {
+
+		return numBytesWritten, err
+	}
+
+	lenOfBytes := len(bytesToWrite)
+
+	if lenOfBytes == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'bytesToWrite' is empty!\n"+
+			"The 'bytesToWrite' array has a length of zero\n",
+			ePrefix.String())
+
+		return numBytesWritten, err
+	}
+
+	if new(fileMgrHelperBoson).isFilePointerOpen(fMgr) == false {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The current instance of 'FileMgr' has NOT been opened."+
+			"The file identified by the current instance of 'FileMgr'\n"+
+			"was NOT previoulsy opened for write operations.\n"+
+			"Open the file before calling this method.\n"+
+			"FileMgr file= %v\n",
+			ePrefix.String(),
+			fMgr.absolutePathFileName)
+
+		return numBytesWritten, err
+	}
+
+	var err2 error
+
+	numBytesWritten,
+		err2 =
+		fMgr.fileBufWriter.Write(bytesToWrite)
+
+	if err2 != nil {
+
+		err =
+			fmt.Errorf("%v\n"+
+				"Error returned from fMgr.fileBufWriter.Write(bytes).\n"+
+				"Output File='%v'\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				fMgr.absolutePathFileName,
+				err2.Error())
+
+		return numBytesWritten, err
+	}
+
+	fMgr.buffBytesWritten += uint64(numBytesWritten)
+
+	return numBytesWritten, err
 }
 
 // WriteBytesToFile

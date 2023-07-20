@@ -364,3 +364,69 @@ func (fMgrHlprBoson *fileMgrHelperBoson) flushBytesToDisk(
 
 	return new(StrMech).ConsolidateErrors(errs)
 }
+
+// isFilePointerOpen
+//
+// Returns a boolean value indicating whether the
+// internal File Pointer (*os.File) for the File Manager
+// instance passed as input parameter 'fMgr' is open,
+// or not.
+//
+// If the File Pointer is open (return value of 'true'),
+// it signals that the file identified by 'fMgr' has been
+// opened for Read and/or Write operations.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fMgr 						*FileMgr
+//
+//		A pointer to an instance of FileMgr. If
+//		the internal file pointer contained in this
+//		instance is open, a boolean value of 'true'
+//		will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If this returned boolean value is set to 'true',
+//		it signals that the file pointer for the file
+//		identified by input parameter 'fMgr' has been
+//		previously opened for Read and/or Write
+//		operations.
+//
+//		Conversely, if this method returns 'false', it
+//		means that the file identified by 'fMgr' has NOT
+//		been opened.
+func (fMgrHlprBoson *fileMgrHelperBoson) isFilePointerOpen(
+	fMgr *FileMgr) bool {
+
+	if fMgrHlprBoson.lock == nil {
+		fMgrHlprBoson.lock = new(sync.Mutex)
+	}
+
+	fMgrHlprBoson.lock.Lock()
+
+	defer fMgrHlprBoson.lock.Unlock()
+
+	if fMgr == nil {
+		return false
+	}
+
+	if fMgr.filePtr == nil {
+
+		fMgr.isFilePtrOpen = false
+
+		return false
+
+	}
+
+	fMgr.isFilePtrOpen = true
+
+	return true
+
+}
