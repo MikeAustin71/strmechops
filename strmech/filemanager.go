@@ -10611,6 +10611,182 @@ func (fMgr *FileMgr) OpenThisFileReadWriteTruncate(
 			"fMgr<-readWriteTruncateAccessCtrl"))
 }
 
+// Read
+//
+// Reads bytes from the file identified by the current
+// FileMgr instance. Bytes are stored in 'byteBuff', a
+// byte array passed in as an input parameter.
+//
+// If successful, the returned error value is 'nil' or
+// io.EOF.
+//
+// The returned value 'int' contains the number of bytes
+// read from the current file.
+//
+// At End of File (EOF), the byte count will be zero and
+// err will be equal to 'io.EOF'.
+//
+// This method uses the 'bufio' package.
+//
+// This method implements the io.Reader interface.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/golang.org/x/exp/slog/internal/buffer
+//	https://pkg.go.dev/io#Reader
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method implements the io.Reader interface.
+//
+//	(2)	This method will NOT automatically close the
+//		os.File pointer to the file identified by the
+//		current instance of FileMgr upon completion of
+//		the file read operation.
+//
+//		The user is therefore responsible for closing the
+//		file. See method FileMgr.CloseThisFile().
+//
+// ----------------------------------------------------------------
+//
+// # Usage and Best Practice
+//
+//	Follow these steps when calling this method:
+//
+//			FileMgr.Read()
+//
+//	(1)	Open the target file for reading. Use one of
+//		the following methods to open the target file:
+//
+//			FileMgr.OpenThisFileReadOnly()
+//			FileMgr.OpenThisFileReadWriteAppend()
+//			FileMgr.OpenThisFileReadWriteTruncate()
+//			FileMgr.OpenThisFileComponents()
+//
+//	(2)	Call this method (FileMgr.Read()) one or more
+//		times as necessary to read all data from the
+//		target source file.
+//
+//	(3)	Close the target source file by calling this
+//		method:
+//
+//			FileMgr.CloseThisFile()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	bytesReadBuff				[]byte
+//
+//		A byte array which serves as the byte buffer for
+//		the file read operation. Bytes read from the
+//		target FileMgr data file will be stored here.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numOfBytesRead				int
+//
+//		If this method completes successfully, the number
+//		of bytes read will be returned through this
+//		integer parameter.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If the end of the file is encountered during the
+//		file read operation, this parameter will be set
+//		to io.EOF (End-Of-File).
+//
+//		For all processing errors encountered during the
+//		file read operation, the returned error Type will
+//		encapsulate an appropriate error message. This
+//	 	returned error message will incorporate the
+//	 	method chain and text passed by input parameter,
+//	 	'errorPrefix'. The 'errorPrefix' text will be
+//	 	prefixed or attached to the beginning of the
+//	 	error message.
+func (fMgr *FileMgr) Read(
+	bytesReadBuff []byte) (
+	numOfBytesRead int,
+	err error) {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	numOfBytesRead = 0
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileMgr."+
+			"Read()",
+		"")
+
+	if err != nil {
+		return numOfBytesRead, err
+	}
+
+	var readWriteAccessCtrl FileAccessControl
+
+	readWriteAccessCtrl,
+		err =
+		new(FileAccessControl).
+			NewReadWriteAccess(ePrefix.XCpy(
+				"readWriteAccessCtrl<-"))
+
+	if err != nil {
+		return numOfBytesRead, err
+	}
+
+	err = new(fileMgrHelper).readFileSetup(
+		fMgr,
+		readWriteAccessCtrl,
+		false,
+		ePrefix)
+
+	if err != nil {
+		return numOfBytesRead, err
+	}
+
+	var err2 error
+
+	numOfBytesRead,
+		err2 = fMgr.fileBufRdr.Read(bytesReadBuff)
+
+	if err2 != nil &&
+		err2 == io.EOF {
+
+		err = err2
+
+	} else if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by fMgr.fileBufRdr.Read(bytesReadBuff)\n"+
+			"File='%v'\n"+
+			"Error= \n%v\n ",
+			ePrefix.String(),
+			fMgr.absolutePathFileName,
+			err2.Error())
+	}
+
+	return numOfBytesRead, err
+}
+
 // ReadAllFileBytes
 //
 // Reads the entire contents of the file identified by
@@ -10786,155 +10962,6 @@ func (fMgr *FileMgr) ReadAllFileBytes(
 	}
 
 	return bytesRead, err
-}
-
-// Read
-//
-// Reads bytes from the file identified by the current
-// FileMgr instance. Bytes are stored in 'byteBuff', a
-// byte array passed in as an input parameter.
-//
-// If successful, the returned error value is 'nil' or
-// io.EOF.
-//
-// The returned value 'int' contains the number of bytes
-// read from the current file.
-//
-// At End of File (EOF), the byte count will be zero and
-// err will be equal to 'io.EOF'.
-//
-// This method uses the 'bufio' package.
-//
-// ----------------------------------------------------------------
-//
-// # Reference:
-//
-//	https://pkg.go.dev/golang.org/x/exp/slog/internal/buffer
-//	https://pkg.go.dev/io#Reader
-//
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-//	(1)	This method implements the io.Reader interface.
-//
-//	(2)	This method will NOT automatically close the
-//		os.File pointer to the file identified by the
-//		current instance of FileMgr upon completion of
-//		the file read operation.
-//
-//		The user is therefore responsible for closing the
-//		file. See method FileMgr.CloseThisFile().
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	bytesReadBuff				[]byte
-//
-//		A byte array which serves as the byte buffer for
-//		the file read operation. Bytes read from the
-//		target FileMgr data file will be stored here.
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	numOfBytesRead				int
-//
-//		If this method completes successfully, the number
-//		of bytes read will be returned through this
-//		integer parameter.
-//
-//	err							error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If the end of the file is encountered during the
-//		file read operation, this parameter will be set
-//		to io.EOF (End-Of-File).
-//
-//		For all processing errors encountered during the
-//		file read operation, the returned error Type will
-//		encapsulate an appropriate error message. This
-//	 	returned error message will incorporate the
-//	 	method chain and text passed by input parameter,
-//	 	'errorPrefix'. The 'errorPrefix' text will be
-//	 	prefixed or attached to the beginning of the
-//	 	error message.
-func (fMgr *FileMgr) Read(
-	bytesReadBuff []byte) (
-	numOfBytesRead int,
-	err error) {
-
-	if fMgr.lock == nil {
-		fMgr.lock = new(sync.Mutex)
-	}
-
-	fMgr.lock.Lock()
-
-	defer fMgr.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	numOfBytesRead = 0
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		nil,
-		"FileMgr."+
-			"Read()",
-		"")
-
-	if err != nil {
-		return numOfBytesRead, err
-	}
-
-	var readWriteAccessCtrl FileAccessControl
-
-	readWriteAccessCtrl,
-		err =
-		new(FileAccessControl).
-			NewReadWriteAccess(ePrefix.XCpy(
-				"readWriteAccessCtrl<-"))
-
-	if err != nil {
-		return numOfBytesRead, err
-	}
-
-	err = new(fileMgrHelper).readFileSetup(
-		fMgr,
-		readWriteAccessCtrl,
-		false,
-		ePrefix)
-
-	if err != nil {
-		return numOfBytesRead, err
-	}
-
-	var err2 error
-
-	numOfBytesRead,
-		err2 = fMgr.fileBufRdr.Read(bytesReadBuff)
-
-	if err2 != nil &&
-		err2 == io.EOF {
-
-		err = err2
-
-	} else if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error returned by fMgr.fileBufRdr.Read(bytesReadBuff)\n"+
-			"File='%v'\n"+
-			"Error= \n%v\n ",
-			ePrefix.String(),
-			fMgr.absolutePathFileName,
-			err2.Error())
-	}
-
-	return numOfBytesRead, err
 }
 
 // ReadFileLine
@@ -12575,6 +12602,37 @@ func (fMgr *FileMgr) SetFileMgrFromPathFileName(
 //
 //	(3) If the target file was NOT opened before calling
 //		this method, an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Usage and Best Practice
+//
+//	Follow these steps when calling this method:
+//
+//			FileMgr.Write()
+//
+//	(1)	Open the target file for writing. Use one of
+//		the following methods to open the target file:
+//
+//			FileMgr.OpenThisFileWriteOnlyAppend()
+//			FileMgr.OpenThisFileWriteOnlyTruncate()
+//			FileMgr.OpenThisFileReadWriteAppend()
+//			FileMgr.OpenThisFileReadWriteTruncate()
+//			FileMgr.OpenThisFileComponents()
+//
+//	(2)	Call this method (FileMgr.Write()) one or more
+//		times as necessary to write all data to the
+//		target file.
+//
+//	(3)	Flush the write buffer to ensure all data in
+//		the underlying buffer is written to the target
+//		file. Call this method:
+//
+//			FileMgr.FlushBytesToDisk()
+//
+//	(4)	Close the target file by calling this method:
+//
+//			FileMgr.CloseThisFile()
 //
 // ----------------------------------------------------------------
 //
