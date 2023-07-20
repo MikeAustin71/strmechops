@@ -561,11 +561,20 @@ func (fMgrHlprAtom *fileMgrHelperAtom) doesFileMgrPathFileExist(
 
 	var err2, err3 error
 
-	err2 = fileMgr.dMgr.IsValidInstanceError(ePrefix.String())
+	_,
+		_,
+		err2 = new(dirMgrHelperPreon).validateDirMgr(
+		&fileMgr.dMgr,
+		false, // Path is NOT required to exit on disk
+		"fileMgr.dMgr",
+		ePrefix)
 
 	if err2 != nil {
-		nonPathError = fmt.Errorf("\nFileMgr Directory Manager INVALID!\n"+
-			"\nError='%v'", err2.Error())
+		nonPathError = fmt.Errorf("\n"+
+			"FileMgr Directory Manager INVALID!\n"+
+			"Error=\n%v\n",
+			err2.Error())
+
 		return filePathDoesExist, nonPathError
 	}
 
