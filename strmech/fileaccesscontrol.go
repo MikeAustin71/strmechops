@@ -7,8 +7,10 @@ import (
 	"sync"
 )
 
-// FileAccessControl encapsulates the codes required the
-// open files and configure file access permissions. As
+// FileAccessControl
+//
+// Type FileAccessControl encapsulates the codes required
+// to open files and configure file access permissions. As
 // such this type encapsulates types FilePermissionConfig
 // and FileOpenConfig.
 //
@@ -17,12 +19,162 @@ import (
 // # Background
 //
 // The FileAccessControl type is used when opening files
-// for read and write operations.
+// for read and write operations. The FileAccessControl
+// type encapsulates File Permission Codes, File Open
+// Type and File Open Modes.
 //
-// To open a file, two components are required:
+// To open a file, three components may be required,
+// File Permission Codes, File Open Type and File
+// Open Modes:
 //
-//  1. A FileOpenType
-//     A file open type is specified by FileOpenConfig.
+//  1. File Permission Codes
+//
+//     The File Permission Codes is a 10-character
+//     string containing the read, write and execute
+//     permissions for the three groups or user
+//     classes:
+//
+//     (1)	'Owner/User'
+//
+//     (2)	'Group'
+//
+//     (3)	'Other'
+//
+//     This 10-character string will be used to
+//     configure the internal File Permission data
+//     field for a configured instance of
+//     FileAccessControl.
+//
+//     The File Permission string must conform to the
+//     symbolic notation options shown below. Failure
+//     to comply with this requirement will generate
+//     an error. As indicated, the File Permission
+//     string must consist of 10-characters.
+//
+//     The first character in the File Permission
+//     string may be dash ('-') specifying a file or a
+//     'd' specifying a directory.
+//
+//     The remaining nine characters in the File
+//     Permission string represent unix permission
+//     bits and consist of three group fields each
+//     containing 3-characters. Each character in
+//     the three group fields may consist of 'r'
+//     (Read-Permission), 'w' (Write-Permission),
+//     'x' (Execute-Permission) or dash ('-')
+//     signaling no permission or no access allowed.
+//     A typical File Permission string authorizing
+//     permission for full access to a file would be
+//     styled as:
+//
+//     Example: "-rwxrwxrwx"
+//
+//     Groups:	-	Owner/User, Group, Other
+//
+//     From left to right
+//     First Characters is Entry Type
+//     -----------------------------------------------------
+//     First Char index 0	=	"-"   Designates a file
+//
+//     First Char index 0	=	"d"   Designates a directory
+//     -----------------------------------------------------
+//
+//     Char indexes 1-3	=	Owner "rwx" Authorizing 'Read',
+//     Write' & Execute Permissions
+//     for 'Owner'
+//
+//     Char indexes 4-6	= 	Group "rwx" Authorizing 'Read', 'Write' & Execute
+//     Permissions for 'Group'
+//
+//     Char indexes 7-9	=	Other "rwx" Authorizing 'Read', 'Write' & Execute
+//     Permissions for 'Other'
+//
+//     The Symbolic notation provided by input parameter
+//     'filePermissionStr' MUST conform to the options
+//     presented below. The first character or 'Entry Type'
+//     is listed as "-". However, in practice, the caller
+//     may set the first character as either a "-",
+//     specifying a file, or a "d", specifying a directory.
+//     No other first character types are currently
+//     supported.
+//
+//     Three SymbolicGroups:
+//
+//     The three group types are: User/Owners, Groups & Others.
+//
+//     Directory Permissions:
+//
+//     -----------------------------------------------------
+//     Directory Mode String Permission Codes
+//     -----------------------------------------------------
+//     Directory
+//     10-Character
+//     File Permission
+//     String
+//     Symbolic		  	Directory Access
+//     Format	   		Permission Descriptions
+//     ----------------------------------------------------
+//
+//     d---------		no permissions
+//     drwx------		read, write, & execute only for owner
+//     drwxrwx---		read, write, & execute for owner and group
+//     drwxrwxrwx		read, write, & execute for owner, group and others
+//     d--x--x--x		execute
+//     d-w--w--w-		write
+//     d-wx-wx-wx		write & execute
+//     dr--r--r--		read
+//     dr-xr-xr-x		read & execute
+//     drw-rw-rw-		read & write
+//     drwxr-----		Owner can read, write, & execute. Group can only read;
+//     others have no permissions
+//
+//     Note: drwxrwxrwx - identifies permissions for directory
+//
+//     File Permissions:
+//
+//     -----------------------------------------------------
+//     File Mode String Permission Codes
+//     -----------------------------------------------------
+//
+//     10-Character
+//     File
+//     Permission
+//     String
+//     Symbolic	Octal		Permission
+//     Format		Notation	Descriptions
+//     ------------------------------------------------------------
+//
+//     ----------	  0000		no permissions
+//
+//     -rwx------	  0700		read, write, & execute only for owner
+//
+//     -rwxrwx---	  0770		read, write, & execute for
+//     owner and group
+//
+//     -rwxrwxrwx	  0777		read, write, & execute for owner,
+//     group and others
+//
+//     ---x--x--x	  0111		execute
+//
+//     --w--w--w-	  0222		write
+//
+//     --wx-wx-wx	  0333		write & execute
+//
+//     -r--r--r--	  0444		read
+//
+//     -r-xr-xr-x	  0555		read & execute
+//
+//     -rw-rw-rw-	  0666		read & write
+//
+//     -rwxr-----	  0740		Owner can read, write, &
+//     execute. Group can only
+//     read; others have no
+//     permissions
+//
+//  2. File Open Type
+//
+//     A file open type is an enumeration specifying
+//     the manner in which  the file will be opened.
 //     In order to open a file, exactly one of the
 //     following File Open Codes MUST be specified:
 //
@@ -32,15 +184,13 @@ import (
 //
 //     -- AND --
 //
-//  2. A FileOpenMode
-//     A File Open Mode is specified by
-//     FilePermissionConfig.
+//  3. File Open Mode
 //
-//     In addition to a 'FileOpenType', a File Open Mode
-//     is also required. This code is also referred to as
-//     a 'permissions' code. Zero or more of the
-//     following File Open Mode codes may optionally be
-//     specified to better control file open behavior.
+//     In addition to a File Open Type, a File Open
+//     Mode may be specified. Zero or more of the
+//     following File Open Modes may optionally be
+//     specified to achieve granular control over
+//     file open behavior.
 //
 //     FileOpenMode(0).ModeAppend()
 //     FileOpenMode(0).ModeCreate()
@@ -1029,11 +1179,11 @@ func (fAccess *FileAccessControl) New(
 //			(3)	'Other'
 //
 //		This 10-character string will be used to
-//		configure the internal FileMode data field for
-//		the new returned instance of FilePermissionConfig.
+//		configure the internal File Permission data field
+//		for the new returned instance of FilePermissionConfig.
 //
 //		'filePermissionStr' must conform to the symbolic
-//		notation options shown above. Failure to comply
+//		notation options shown below. Failure to comply
 //		with this requirement will generate an error. As
 //		indicated, 'filePermissionStr' must consist of
 //		10-characters.
@@ -1043,26 +1193,27 @@ func (fAccess *FileAccessControl) New(
 //		directory.
 //
 //		The remaining nine characters in the
-//		'filePermissionStr' represent unix permission
+//		File Permission String represent unix permission
 //		bits and consist of three group fields each
 //		containing 3-characters. Each character in the
 //		three group fields may consist of 'r'
 //		(Read-Permission), 'w' (Write-Permission), 'x'
-//		(Execute-Permission) or '-' signaling no
+//		(Execute-Permission) or dash ('-') signaling no
 //		permission or no access allowed. A typical
-//		'filePermissionStr' authorizing permission for
-//		full access to a file would be styled as:
+//		File Permission String authorizing permission
+//		for full access to a file would be styled as:
 //
-//		Example: "-rwxrwxrwx"
+//			Example: "-rwxrwxrwx"
 //
 //		Groups:	-	Owner/User, Group, Other
-//					From left to right
-//					First Characters is Entry
-//					Type index 0 ("-")
 //
+//		From left to right
+//		First Characters is Entry Type
+//		-----------------------------------------------------
 //		First Char index 0	=	"-"   Designates a file
 //
 //		First Char index 0	=	"d"   Designates a directory
+//		-----------------------------------------------------
 //
 //		Char indexes 1-3	=	Owner "rwx" Authorizing 'Read',
 //								Write' & Execute Permissions
@@ -1092,11 +1243,12 @@ func (fAccess *FileAccessControl) New(
 //			-----------------------------------------------------
 //			        Directory Mode String Permission Codes
 //			-----------------------------------------------------
-//			   Directory
-//			10-Character
-//			'filePermissionStr'
-//			   Symbolic		  	Directory Access
-//			   Format	   		Permission Descriptions
+//				Directory
+//				10-Character
+//				File Permission
+//				String
+//				Symbolic		  	Directory Access
+//				Format	   		Permission Descriptions
 //			----------------------------------------------------
 //
 //				d---------		no permissions
@@ -1120,36 +1272,37 @@ func (fAccess *FileAccessControl) New(
 //			       File Mode String Permission Codes
 //			-----------------------------------------------------
 //
-//		      File
 //			10-Character
-//		 'filePermissionStr'
-//			 Symbolic	Octal		File Access
+//		       File
+//			Permission
+//			  String
+//			 Symbolic	 Octal		File Access
 //			  Format	Notation  Permission Descriptions
 //			------------------------------------------------------------
 //
-//			----------	0000	no permissions
+//			----------	  0000		no permissions
 //
-//			-rwx------	0700	read, write, & execute only for owner
+//			-rwx------	  0700		read, write, & execute only for owner
 //
-//			-rwxrwx---	0770	read, write, & execute for owner and
-//									group
+//			-rwxrwx---	  0770		read, write, & execute for owner and
+//						  				group
 //
-//			-rwxrwxrwx	0777	read, write, & execute for owner,
-//									group and others
+//			-rwxrwxrwx	  0777		read, write, & execute for owner,
+//						  				group and others
 //
-//			---x--x--x	0111	execute
+//			---x--x--x	  0111		execute
 //
-//			--w--w--w-	0222	write
+//			--w--w--w-	  0222		write
 //
-//			--wx-wx-wx	0333	write & execute
+//			--wx-wx-wx	  0333		write & execute
 //
-//			-r--r--r--	0444	read
+//			-r--r--r--	  0444		read
 //
-//			-r-xr-xr-x	0555	read & execute
+//			-r-xr-xr-x	  0555		read & execute
 //
-//			-rw-rw-rw-	0666	read & write
+//			-rw-rw-rw-	  0666		read & write
 //
-//			-rwxr-----	0740	Owner can read, write, & execute.
+//			-rwxr-----	  0740		Owner can read, write, & execute.
 //									Group can only read; others
 //									have no permissions
 //
@@ -1187,6 +1340,16 @@ func (fAccess *FileAccessControl) New(
 // ----------------------------------------------------------------
 //
 // # Return Values
+//
+//	FileAccessControl
+//
+//		If this method completes successfully, a new
+//		instance of FileAccessControl will be returned.
+//
+//		This new FileAccessControl instance will be
+//		configured in accordance with the File
+//		Permissions, Open Type and File Modes passed as
+//		input parameters.
 //
 //	error
 //

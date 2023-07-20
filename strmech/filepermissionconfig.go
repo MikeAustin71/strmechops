@@ -1920,11 +1920,12 @@ func (fPerm *FilePermissionConfig) IsValidInstanceError(
 //
 // # Input Parameters
 //
-//	modeStr						string
+//	filePermissionStr			string
 //
-//		'modeStr' is a 10-character string containing the
-//		read, write and execute permissions for the three
-//		groups or user classes:
+//		'filePermissionStr' is a 10-character string
+//		containing the read, write and execute
+//		permissions for the three groups or user
+//		classes:
 //
 //			(1)	'Owner/User'
 //
@@ -1933,51 +1934,60 @@ func (fPerm *FilePermissionConfig) IsValidInstanceError(
 //			(3)	'Other'
 //
 //		This 10-character string will be used to
-//		configure the internal FileMode data field for
-//		the new returned instance of FilePermissionConfig.
+//		configure the internal File Permission data field
+//		for the new returned instance of FilePermissionConfig.
 //
-//		'modeStr' must conform to the symbolic notation
-//		options shown above. Failure to comply with this
-//		requirement will generate an error. As indicated,
-//		'modeStr' must consist of 10-characters.
+//		'filePermissionStr' must conform to the symbolic
+//		notation options shown below. Failure to comply
+//		with this requirement will generate an error. As
+//		indicated, 'filePermissionStr' must consist of
+//		10-characters.
 //
-//		The first character in 'modeStr' may be '-'
-//		specifying a fle or 'd' specifying a directory.
+//		The first character in 'filePermissionStr' may be
+//		'-' specifying a fle or 'd' specifying a
+//		directory.
 //
-//		The remaining nine characters in the 'modeStr'
-//		represent unix permission bits and consist of three
-//		group fields each containing 3-characters. Each
-//		character in the three group fields may consist of
-//		'r' (Read-Permission), 'w' (Write-Permission), 'x'
-//		(Execute-Permission) or '-' signaling no permission or
-//		no access allowed. A typical 'modeStr' authorizing
-//		permission for full access to a file would be styled
-//		as:
+//		The remaining nine characters in the
+//		File Permission String represent unix permission
+//		bits and consist of three group fields each
+//		containing 3-characters. Each character in the
+//		three group fields may consist of 'r'
+//		(Read-Permission), 'w' (Write-Permission), 'x'
+//		(Execute-Permission) or dash ('-') signaling no
+//		permission or no access allowed. A typical
+//		File Permission String authorizing permission
+//		for full access to a file would be styled as:
 //
-//				Example: "-rwxrwxrwx"
+//			Example: "-rwxrwxrwx"
 //
-//				Groups: - Owner/User, Group, Other
-//				From left to right
-//				First Characters is Entry Type index 0 ("-")
+//		Groups:	-	Owner/User, Group, Other
 //
-//				First Char index 0 =     "-"   Designates a file
+//		From left to right
+//		First Characters is Entry Type
+//		-----------------------------------------------------
+//		First Char index 0	=	"-"   Designates a file
 //
-//				First Char index 0 =     "d"   Designates a directory
+//		First Char index 0	=	"d"   Designates a directory
+//		-----------------------------------------------------
 //
-//				Char indexes 1-3 = Owner "rwx" Authorizing 'Read',
-//			                                  Write' & Execute Permissions for 'Owner'
+//		Char indexes 1-3	=	Owner "rwx" Authorizing 'Read',
+//								Write' & Execute Permissions
+//								for 'Owner'
 //
-//				Char indexes 4-6 = Group "rwx" Authorizing 'Read', 'Write' & Execute
-//			                                  Permissions for 'Group'
+//		Char indexes 4-6	= 	Group "rwx" Authorizing 'Read', 'Write' & Execute
+//								Permissions for 'Group'
 //
-//				Char indexes 7-9 = Other "rwx" Authorizing 'Read', 'Write' & Execute
-//			                                  Permissions for 'Other'
+//		Char indexes 7-9	=	Other "rwx" Authorizing 'Read', 'Write' & Execute
+//								Permissions for 'Other'
 //
-//		The Symbolic notation provided by input parameter 'modeStr' MUST conform to
-//		the options presented below. The first character or 'Entry Type' is listed as
-//		"-". However, in practice, the caller may set the first character as either a
-//		"-", specifying a file, or a "d", specifying a directory. No other first character
-//		types are currently supported.
+//		The Symbolic notation provided by input parameter
+//		'filePermissionStr' MUST conform to the options
+//		presented below. The first character or 'Entry Type'
+//		is listed as "-". However, in practice, the caller
+//		may set the first character as either a "-",
+//		specifying a file, or a "d", specifying a directory.
+//		No other first character types are currently
+//		supported.
 //
 //		Three SymbolicGroups:
 //
@@ -1985,56 +1995,71 @@ func (fPerm *FilePermissionConfig) IsValidInstanceError(
 //
 //		Directory Permissions:
 //
-//			        -----------------------------------------------------
-//			               Directory Mode String Permission Codes
-//			        -----------------------------------------------------
-//			          Directory
-//						10-Character
-//						 'modeStr'
-//						 Symbolic		  Directory Access
-//						  Format	   Permission Descriptions
-//						----------------------------------------------------
+//			-----------------------------------------------------
+//			        Directory Mode String Permission Codes
+//			-----------------------------------------------------
+//				Directory
+//				10-Character
+//				File Permission
+//				String
+//				Symbolic		  	Directory Access
+//				Format	   		Permission Descriptions
+//			----------------------------------------------------
 //
-//						d---------		no permissions
-//						drwx------		read, write, & execute only for owner
-//						drwxrwx---		read, write, & execute for owner and group
-//						drwxrwxrwx		read, write, & execute for owner, group and others
-//						d--x--x--x		execute
-//						d-w--w--w-		write
-//						d-wx-wx-wx		write & execute
-//						dr--r--r--		read
-//						dr-xr-xr-x		read & execute
-//						drw-rw-rw-		read & write
-//						drwxr-----		Owner can read, write, & execute. Group can only read;
-//						                others have no permissions
+//				d---------		no permissions
+//				drwx------		read, write, & execute only for owner
+//				drwxrwx---		read, write, & execute for owner and group
+//				drwxrwxrwx		read, write, & execute for owner, group and others
+//				d--x--x--x		execute
+//				d-w--w--w-		write
+//				d-wx-wx-wx		write & execute
+//				dr--r--r--		read
+//				dr-xr-xr-x		read & execute
+//				drw-rw-rw-		read & write
+//				drwxr-----		Owner can read, write, & execute. Group can only read;
+//				                others have no permissions
 //
-//						Note: drwxrwxrwx - identifies permissions for directory
+//				Note: drwxrwxrwx - identifies permissions for directory
 //
 //		File Permissions:
 //
-//			        -----------------------------------------------------
-//			               File Mode String Permission Codes
-//			        -----------------------------------------------------
+//			-----------------------------------------------------
+//			       File Mode String Permission Codes
+//			-----------------------------------------------------
 //
-//			               File
-//						10-Character
-//						 'modeStr'
-//						 Symbolic	Octal		File Access
-//						  Format	Notation  Permission Descriptions
-//						------------------------------------------------------------
+//			10-Character
+//		       File
+//			Permission
+//			  String
+//			 Symbolic	 Octal		File Access
+//			  Format	Notation  Permission Descriptions
+//			------------------------------------------------------------
 //
-//						----------	0000	no permissions
-//						-rwx------	0700	read, write, & execute only for owner
-//						-rwxrwx---	0770	read, write, & execute for owner and group
-//						-rwxrwxrwx	0777	read, write, & execute for owner, group and others
-//						---x--x--x	0111	execute
-//						--w--w--w-	0222	write
-//						--wx-wx-wx	0333	write & execute
-//						-r--r--r--	0444	read
-//						-r-xr-xr-x	0555	read & execute
-//						-rw-rw-rw-	0666	read & write
-//						-rwxr-----	0740	Owner can read, write, & execute. Group can only read;
-//						                             others have no permissions
+//			----------	  0000		no permissions
+//
+//			-rwx------	  0700		read, write, & execute only for owner
+//
+//			-rwxrwx---	  0770		read, write, & execute for owner and
+//						  				group
+//
+//			-rwxrwxrwx	  0777		read, write, & execute for owner,
+//						  				group and others
+//
+//			---x--x--x	  0111		execute
+//
+//			--w--w--w-	  0222		write
+//
+//			--wx-wx-wx	  0333		write & execute
+//
+//			-r--r--r--	  0444		read
+//
+//			-r-xr-xr-x	  0555		read & execute
+//
+//			-rw-rw-rw-	  0666		read & write
+//
+//			-rwxr-----	  0740		Owner can read, write, & execute.
+//									Group can only read; others
+//									have no permissions
 //
 //	errorPrefix					interface{}
 //
@@ -2119,7 +2144,7 @@ func (fPerm *FilePermissionConfig) IsValidInstanceError(
 //		text will be attached to the beginning of the
 //		error message.
 func (fPerm *FilePermissionConfig) New(
-	modeStr string,
+	filePermissionStr string,
 	errorPrefix interface{}) (
 	FilePermissionConfig,
 	error) {
@@ -2152,9 +2177,9 @@ func (fPerm *FilePermissionConfig) New(
 	err = new(filePermissionConfigNanobot).
 		setFileModeByTextCode(
 			&fPerm2,
-			modeStr,
+			filePermissionStr,
 			ePrefix.XCpy(
-				"fPerm2<-modeStr"))
+				"fPerm2<-filePermissionStr"))
 
 	return fPerm2, nil
 }
@@ -3212,9 +3237,10 @@ func (fPerm *FilePermissionConfig) SetFileModeByOctalDigits(
 //
 // Sets the internal FileMode data field for the current
 // instance of FilePermissionConfig using input parameter
-// 'modeStr'. 'modeStr' is a 10-character string
-// containing the read, write and execute permissions for
-// the three groups or user classes:
+// 'filePermissionStr'. 'filePermissionStr' is a
+// 10-character string containing the read, write and
+// execute permissions for the three groups or user
+// classes:
 //
 //	(1)	'Owner/User'
 //
@@ -3222,8 +3248,8 @@ func (fPerm *FilePermissionConfig) SetFileModeByOctalDigits(
 //
 //	(3)	'Other'
 //
-// The text codes used in the 'modeStr' mimic the Unix
-// permission codes.
+// The text codes used in the 'filePermissionStr' mimic
+// the Unix permission codes.
 //
 // ----------------------------------------------------------------
 //
@@ -3235,89 +3261,14 @@ func (fPerm *FilePermissionConfig) SetFileModeByOctalDigits(
 //
 // ----------------------------------------------------------------
 //
-// The first character of the 'modeStr' designates the
-// 'Entry Type'. Currently, only two 'Entry Type'
-// characters are supported. Therefore, the first
-// character in 'modeStr' must consist of a hyphen ("-")
-// designating a file, or a "d" designating a directory.
-//
-// The remaining nine characters in the 'modeStr' are
-// styled as unix permission bits. These nine characters
-// are divided into three group fields each containing
-// 3-permission characters. Each character field may be
-// populated with one of the following characters:
-//
-//	'r' (Read-Permission)
-//
-//	'w' (Write-Permission)
-//
-//	'x' (Execute-Permission)
-//		or
-//	'-' signaling no permission or no access allowed
-//
-// A typical 'modeStr' authorizing permission for full
-// access to a file would therefore be styled as:
-//
-//	"-rwxrwxrwx"
-//
-//	Groups or User Classes: - Owner, Group, Other
-//	** Note: 'Owner' is also referred to as User/Owner
-//
-//	From left to right
-//
-//	Char index 0     = Entry Type. Must be either a "-" or a "d"
-//	Char indexes 1-3 = Owner  "rwx"  Authorizing 'Read', 'Write' & Execute Permissions for 'Owner'
-//	Char indexes 4-6 = Group  "rwx"  Authorizing 'Read', 'Write' & Execute Permissions for 'Group'
-//	Char indexes 7-9 = Other  "rwx"  Authorizing 'Read', 'Write' & Execute Permissions for 'Other'
-//
-// The Symbolic notation provided by input parameter
-// 'modeStr' MUST conform to the options presented below.
-// The first character or 'Entry Type' is listed as "-".
-// However, in practice, the caller may set the first
-// character as either a "-", specifying a file, or a
-// "d", specifying a directory. No other first character
-// types are currently supported.
-//
-// After the first character, the remaining 9-characters
-// are constituents of the three Symbolic User Classes:
-//
-//	Owners/Users
-//	Groups
-//	Others
-//
-// Each group has three characters which may be 'r',
-// 'w', 'x'. If a permission is not set, the character
-// position contains a '-'.
-//
-//		'modeStr'
-//		Symbolic    Octal           File Access
-//		Format     Notation        Permission Descriptions
-//		------------------------------------------------------------
-//
-//		----------   0000           File - no permissions
-//		-rwx------   0700           File - read, write, & execute only for owner
-//		-rwxrwx---   0770           File - read, write, & execute for owner and group
-//		-rwxrwxrwx   0777           File - read, write, & execute for owner, group and others
-//		---x--x--x   0111           File - execute
-//		--w--w--w-   0222           File - write only
-//		--wx-wx-wx   0333           File - write & execute
-//		-r--r--r--   0444           File - read only
-//		-r-xr-xr-x   0555           File - read & execute
-//		-rw-rw-rw-   0666           File - read & write
-//		-rwxr-----   0740           File - Owner can read, write, & execute. Group can only read;
-//	                                     others have no permissions
-//
-//		Note: drwxrwxrwx - identifies permissions for directory
-//
-// ----------------------------------------------------------------
-//
 // # Input Parameters
 //
-//	modeStr						string
+//	filePermissionStr			string
 //
-//		'modeStr' is a 10-character string containing the
-//		read, write and execute permissions for the three
-//		groups or user classes:
+//		'filePermissionStr' is a 10-character string
+//		containing the read, write and execute
+//		permissions for the three groups or user
+//		classes:
 //
 //			(1)	'Owner/User'
 //
@@ -3326,16 +3277,132 @@ func (fPerm *FilePermissionConfig) SetFileModeByOctalDigits(
 //			(3)	'Other'
 //
 //		This 10-character string will be used to
-//		configure the internal FileMode data field for
-//		the current instance of FilePermissionConfig.
+//		configure the internal File Permission data field
+//		for the new returned instance of FilePermissionConfig.
 //
-//		'modeStr' must conform to the symbolic notation
-//		options shown above. Failure to comply with this
-//		requirement will generate an error. As indicated,
-//		'modeStr' must consist of 10-characters.
+//		'filePermissionStr' must conform to the symbolic
+//		notation options shown below. Failure to comply
+//		with this requirement will generate an error. As
+//		indicated, 'filePermissionStr' must consist of
+//		10-characters.
 //
-//		The first character in 'modeStr' may be '-'
-//		specifying a fle or 'd' specifying a directory.
+//		The first character in 'filePermissionStr' may be
+//		'-' specifying a fle or 'd' specifying a
+//		directory.
+//
+//		The remaining nine characters in the
+//		File Permission String represent unix permission
+//		bits and consist of three group fields each
+//		containing 3-characters. Each character in the
+//		three group fields may consist of 'r'
+//		(Read-Permission), 'w' (Write-Permission), 'x'
+//		(Execute-Permission) or dash ('-') signaling no
+//		permission or no access allowed. A typical
+//		File Permission String authorizing permission
+//		for full access to a file would be styled as:
+//
+//			Example: "-rwxrwxrwx"
+//
+//		Groups:	-	Owner/User, Group, Other
+//
+//		From left to right
+//		First Characters is Entry Type
+//		-----------------------------------------------------
+//		First Char index 0	=	"-"   Designates a file
+//
+//		First Char index 0	=	"d"   Designates a directory
+//		-----------------------------------------------------
+//
+//		Char indexes 1-3	=	Owner "rwx" Authorizing 'Read',
+//								Write' & Execute Permissions
+//								for 'Owner'
+//
+//		Char indexes 4-6	= 	Group "rwx" Authorizing 'Read', 'Write' & Execute
+//								Permissions for 'Group'
+//
+//		Char indexes 7-9	=	Other "rwx" Authorizing 'Read', 'Write' & Execute
+//								Permissions for 'Other'
+//
+//		The Symbolic notation provided by input parameter
+//		'filePermissionStr' MUST conform to the options
+//		presented below. The first character or 'Entry Type'
+//		is listed as "-". However, in practice, the caller
+//		may set the first character as either a "-",
+//		specifying a file, or a "d", specifying a directory.
+//		No other first character types are currently
+//		supported.
+//
+//		Three SymbolicGroups:
+//
+//			The three group types are: User/Owners, Groups & Others.
+//
+//		Directory Permissions:
+//
+//			-----------------------------------------------------
+//			        Directory Mode String Permission Codes
+//			-----------------------------------------------------
+//				Directory
+//				10-Character
+//				File Permission
+//				String
+//				Symbolic		  	Directory Access
+//				Format	   		Permission Descriptions
+//			----------------------------------------------------
+//
+//				d---------		no permissions
+//				drwx------		read, write, & execute only for owner
+//				drwxrwx---		read, write, & execute for owner and group
+//				drwxrwxrwx		read, write, & execute for owner, group and others
+//				d--x--x--x		execute
+//				d-w--w--w-		write
+//				d-wx-wx-wx		write & execute
+//				dr--r--r--		read
+//				dr-xr-xr-x		read & execute
+//				drw-rw-rw-		read & write
+//				drwxr-----		Owner can read, write, & execute. Group can only read;
+//				                others have no permissions
+//
+//				Note: drwxrwxrwx - identifies permissions for directory
+//
+//		File Permissions:
+//
+//			-----------------------------------------------------
+//			       File Mode String Permission Codes
+//			-----------------------------------------------------
+//
+//			10-Character
+//		       File
+//			Permission
+//			  String
+//			 Symbolic	 Octal		File Access
+//			  Format	Notation  Permission Descriptions
+//			------------------------------------------------------------
+//
+//			----------	  0000		no permissions
+//
+//			-rwx------	  0700		read, write, & execute only for owner
+//
+//			-rwxrwx---	  0770		read, write, & execute for owner and
+//						  				group
+//
+//			-rwxrwxrwx	  0777		read, write, & execute for owner,
+//						  				group and others
+//
+//			---x--x--x	  0111		execute
+//
+//			--w--w--w-	  0222		write
+//
+//			--wx-wx-wx	  0333		write & execute
+//
+//			-r--r--r--	  0444		read
+//
+//			-r-xr-xr-x	  0555		read & execute
+//
+//			-rw-rw-rw-	  0666		read & write
+//
+//			-rwxr-----	  0740		Owner can read, write, & execute.
+//									Group can only read; others
+//									have no permissions
 //
 //	errorPrefix					interface{}
 //
@@ -3413,7 +3480,7 @@ func (fPerm *FilePermissionConfig) SetFileModeByOctalDigits(
 //		text will be attached to the beginning of the
 //		error message.
 func (fPerm *FilePermissionConfig) SetFileModeByTextCode(
-	modeStr string,
+	filePermissionStr string,
 	errorPrefix interface{}) error {
 
 	if fPerm.lock == nil {
@@ -3438,9 +3505,10 @@ func (fPerm *FilePermissionConfig) SetFileModeByTextCode(
 		return err
 	}
 
-	return new(filePermissionConfigNanobot).setFileModeByTextCode(
-		fPerm,
-		modeStr,
-		ePrefix.XCpy(
-			"fPerm<-modeStr"))
+	return new(filePermissionConfigNanobot).
+		setFileModeByTextCode(
+			fPerm,
+			filePermissionStr,
+			ePrefix.XCpy(
+				"fPerm<-filePermissionStr"))
 }

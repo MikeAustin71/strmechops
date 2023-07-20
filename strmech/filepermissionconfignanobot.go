@@ -662,11 +662,12 @@ func (fPermConfigNanobot *filePermissionConfigNanobot) setFileModeByOctalDigits(
 //		instance will be reset using the permission codes
 //		contained in input parameter 'modeStr'.
 //
-//	modeStr						string
+//	filePermissionStr			string
 //
-//		'modeStr' is a 10-character string containing the
-//		read, write and execute permissions for the three
-//		groups or user classes:
+//		'filePermissionStr' is a 10-character string
+//		containing the read, write and execute
+//		permissions for the three groups or user
+//		classes:
 //
 //			(1)	'Owner/User'
 //
@@ -675,17 +676,132 @@ func (fPermConfigNanobot *filePermissionConfigNanobot) setFileModeByOctalDigits(
 //			(3)	'Other'
 //
 //		This 10-character string will be used to
-//		configure the internal FileMode data field for
-//		the instance of FilePermissionConfig passed as
-//		input parameter 'fPerm'.
+//		configure the internal File Permission data field
+//		for the new returned instance of FilePermissionConfig.
 //
-//		'modeStr' must conform to the symbolic notation
-//		options shown above. Failure to comply with this
-//		requirement will generate an error. As indicated,
-//		'modeStr' must consist of 10-characters.
+//		'filePermissionStr' must conform to the symbolic
+//		notation options shown below. Failure to comply
+//		with this requirement will generate an error. As
+//		indicated, 'filePermissionStr' must consist of
+//		10-characters.
 //
-//		The first character in 'modeStr' may be '-'
-//		specifying a fle or 'd' specifying a directory.
+//		The first character in 'filePermissionStr' may be
+//		'-' specifying a fle or 'd' specifying a
+//		directory.
+//
+//		The remaining nine characters in the
+//		File Permission String represent unix permission
+//		bits and consist of three group fields each
+//		containing 3-characters. Each character in the
+//		three group fields may consist of 'r'
+//		(Read-Permission), 'w' (Write-Permission), 'x'
+//		(Execute-Permission) or dash ('-') signaling no
+//		permission or no access allowed. A typical
+//		File Permission String authorizing permission
+//		for full access to a file would be styled as:
+//
+//			Example: "-rwxrwxrwx"
+//
+//		Groups:	-	Owner/User, Group, Other
+//
+//		From left to right
+//		First Characters is Entry Type
+//		-----------------------------------------------------
+//		First Char index 0	=	"-"   Designates a file
+//
+//		First Char index 0	=	"d"   Designates a directory
+//		-----------------------------------------------------
+//
+//		Char indexes 1-3	=	Owner "rwx" Authorizing 'Read',
+//								Write' & Execute Permissions
+//								for 'Owner'
+//
+//		Char indexes 4-6	= 	Group "rwx" Authorizing 'Read', 'Write' & Execute
+//								Permissions for 'Group'
+//
+//		Char indexes 7-9	=	Other "rwx" Authorizing 'Read', 'Write' & Execute
+//								Permissions for 'Other'
+//
+//		The Symbolic notation provided by input parameter
+//		'filePermissionStr' MUST conform to the options
+//		presented below. The first character or 'Entry Type'
+//		is listed as "-". However, in practice, the caller
+//		may set the first character as either a "-",
+//		specifying a file, or a "d", specifying a directory.
+//		No other first character types are currently
+//		supported.
+//
+//		Three SymbolicGroups:
+//
+//			The three group types are: User/Owners, Groups & Others.
+//
+//		Directory Permissions:
+//
+//			-----------------------------------------------------
+//			        Directory Mode String Permission Codes
+//			-----------------------------------------------------
+//				Directory
+//				10-Character
+//				File Permission
+//				String
+//				Symbolic		  	Directory Access
+//				Format	   		Permission Descriptions
+//			----------------------------------------------------
+//
+//				d---------		no permissions
+//				drwx------		read, write, & execute only for owner
+//				drwxrwx---		read, write, & execute for owner and group
+//				drwxrwxrwx		read, write, & execute for owner, group and others
+//				d--x--x--x		execute
+//				d-w--w--w-		write
+//				d-wx-wx-wx		write & execute
+//				dr--r--r--		read
+//				dr-xr-xr-x		read & execute
+//				drw-rw-rw-		read & write
+//				drwxr-----		Owner can read, write, & execute. Group can only read;
+//				                others have no permissions
+//
+//				Note: drwxrwxrwx - identifies permissions for directory
+//
+//		File Permissions:
+//
+//			-----------------------------------------------------
+//			       File Mode String Permission Codes
+//			-----------------------------------------------------
+//
+//			10-Character
+//		       File
+//			Permission
+//			  String
+//			 Symbolic	 Octal		File Access
+//			  Format	Notation  Permission Descriptions
+//			------------------------------------------------------------
+//
+//			----------	  0000		no permissions
+//
+//			-rwx------	  0700		read, write, & execute only for owner
+//
+//			-rwxrwx---	  0770		read, write, & execute for owner and
+//						  				group
+//
+//			-rwxrwxrwx	  0777		read, write, & execute for owner,
+//						  				group and others
+//
+//			---x--x--x	  0111		execute
+//
+//			--w--w--w-	  0222		write
+//
+//			--wx-wx-wx	  0333		write & execute
+//
+//			-r--r--r--	  0444		read
+//
+//			-r-xr-xr-x	  0555		read & execute
+//
+//			-rw-rw-rw-	  0666		read & write
+//
+//			-rwxr-----	  0740		Owner can read, write, & execute.
+//									Group can only read; others
+//									have no permissions
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -720,7 +836,7 @@ func (fPermConfigNanobot *filePermissionConfigNanobot) setFileModeByOctalDigits(
 //		the error message.
 func (fPermConfigNanobot *filePermissionConfigNanobot) setFileModeByTextCode(
 	fPerm *FilePermissionConfig,
-	modeStr string,
+	filePermissionStr string,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if fPermConfigNanobot.lock == nil {
@@ -755,27 +871,27 @@ func (fPermConfigNanobot *filePermissionConfigNanobot) setFileModeByTextCode(
 		return err
 	}
 
-	if len(modeStr) != 10 {
+	if len(filePermissionStr) != 10 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'modeStr' MUST contain 10-characters.\n"+
-			"This 'modeStr' contains %v-characters.\n"+
-			"modeStr='%v' ",
+			"Error: Input parameter 'filePermissionStr' MUST contain 10-characters.\n"+
+			"This 'filePermissionStr' contains %v-characters.\n"+
+			"filePermissionStr='%v' ",
 			ePrefix.String(),
-			len(modeStr),
-			modeStr)
+			len(filePermissionStr),
+			filePermissionStr)
 
 		return err
 	}
 
-	firstChar := string(modeStr[0])
+	firstChar := string(filePermissionStr[0])
 
 	if firstChar != "-" &&
 		firstChar != "d" {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: First character of input parameter, 'modeStr' MUST BE 'd' or '-'.\n"+
-			"This first character in 'modeStr' is = '%v'",
+			"Error: First character of input parameter, 'filePermissionStr' MUST BE 'd' or '-'.\n"+
+			"This first character in 'filePermissionStr' is = '%v'",
 			ePrefix.String(),
 			firstChar)
 
@@ -790,16 +906,16 @@ func (fPermConfigNanobot *filePermissionConfigNanobot) setFileModeByTextCode(
 
 	ownerInt,
 		err2 = fPermElectron.convertGroupToDecimal(
-		modeStr[1:4],
+		filePermissionStr[1:4],
 		"owner",
 		ePrefix.XCpy(
-			"ownerInt<-modeStr[1:4]"))
+			"ownerInt<-filePermissionStr[1:4]"))
 
 	if err2 != nil {
 
 		err = fmt.Errorf(
 			"%v\n"+
-				"'owner' integer code errror for modeStr[1:4].\n"+
+				"'owner' integer code errror for filePermissionStr[1:4].\n"+
 				"Error: %v",
 			ePrefix.String(),
 			err2.Error())
@@ -809,16 +925,16 @@ func (fPermConfigNanobot *filePermissionConfigNanobot) setFileModeByTextCode(
 
 	groupInt,
 		err2 = fPermElectron.convertGroupToDecimal(
-		modeStr[4:7],
+		filePermissionStr[4:7],
 		"group",
 		ePrefix.XCpy(
-			"groupInt<-modeStr[4:7]"))
+			"groupInt<-filePermissionStr[4:7]"))
 
 	if err2 != nil {
 
 		err = fmt.Errorf(
 			"%v\n"+
-				"'group' integer code errror for modeStr[4:7].\n"+
+				"'group' integer code errror for filePermissionStr[4:7].\n"+
 				"Error: %v",
 			ePrefix.String(),
 			err2.Error())
@@ -828,16 +944,16 @@ func (fPermConfigNanobot *filePermissionConfigNanobot) setFileModeByTextCode(
 
 	otherInt,
 		err2 = fPermElectron.convertGroupToDecimal(
-		modeStr[7:],
+		filePermissionStr[7:],
 		"other",
 		ePrefix.XCpy(
-			"otherInt<-modeStr[7:]"))
+			"otherInt<-filePermissionStr[7:]"))
 
 	if err2 != nil {
 
 		err = fmt.Errorf(
 			"%v\n"+
-				"'other' integer code errror for modeStr[7:].\n"+
+				"'other' integer code errror for filePermissionStr[7:].\n"+
 				"Error: %v",
 			ePrefix.String(),
 			err2.Error())
