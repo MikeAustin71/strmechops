@@ -9723,8 +9723,12 @@ func (fh *FileHelper) MoveFile(
 //
 // # IMPORTANT
 //
-// The caller is responsible for calling "Close()" on the
-// returned os.File pointer.
+//	(1)	The calling method is responsible for calling
+//		"Close()" on the os.File pointer returned by this
+//		method.
+//
+//	(2)	Calling "Close()" on the same file pointer more
+//		than once will trigger errors.
 //
 // ----------------------------------------------------------------
 //
@@ -9879,7 +9883,7 @@ func (fh *FileHelper) OpenDirectory(
 			ePrefix)
 }
 
-// OpenFile
+// OpenFileElements
 //
 // This method is a wrapper for os.OpenFile. This method
 // may be used to open or create files depending on the
@@ -9896,9 +9900,12 @@ func (fh *FileHelper) OpenDirectory(
 //
 // # IMPORTANT
 //
-//	The calling method is responsible for calling
-//	"Close()" on the os.File pointer returned by this
-//	method.
+//	(1)	The calling method is responsible for calling
+//		"Close()" on the os.File pointer returned by this
+//		method.
+//
+//	(2)	Calling "Close()" on the same file pointer more
+//		than once will trigger errors.
 //
 // ----------------------------------------------------------------
 //
@@ -10002,7 +10009,7 @@ func (fh *FileHelper) OpenDirectory(
 //
 // Return Values:
 //
-//	*os.File
+//	filePtr							*os.File
 //
 //		If successful, this method returns an os.File
 //		pointer to the file designated by input parameter
@@ -10018,7 +10025,7 @@ func (fh *FileHelper) OpenDirectory(
 //		The caller is responsible for calling "Close()"
 //		on this os.File pointer.
 //
-//	error
+//	err								error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -10030,7 +10037,7 @@ func (fh *FileHelper) OpenDirectory(
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fh *FileHelper) OpenFile(
+func (fh *FileHelper) OpenFileElements(
 	pathFileName string,
 	createDirectoryPathIfNotExist bool,
 	fileOpenCfg FileOpenConfig,
@@ -10053,7 +10060,7 @@ func (fh *FileHelper) OpenFile(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"FileHelper."+
-			"OpenFile()",
+			"OpenFileElements()",
 		"")
 
 	if err != nil {
@@ -10068,6 +10075,386 @@ func (fh *FileHelper) OpenFile(
 		filePermissionCfg,
 		"pathFileName",
 		ePrefix)
+}
+
+// OpenFileComponents
+//
+// This method is a wrapper for os.OpenFile. This method
+// may be used to open or create files depending on the
+// File Open and File Permission parameters.
+//
+// If successful, this method will return a pointer to
+// the os.File object associated with the file designated
+// for opening.
+//
+// The calling routine is responsible for calling
+// "Close()" on this os.File pointer.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	The calling method is responsible for calling
+//		"Close()" on the os.File pointer returned by this
+//		method.
+//
+//	(2)	Calling "Close()" on the same file pointer more
+//		than once will trigger errors.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+//
+//	pathFileName					string
+//
+//		A string containing the path and file name of the
+//		file which will be opened. If a parent path
+//		component does NOT exist, this method will
+//		trigger an error.
+//
+//	createDirectoryPathIfNotExist	bool
+//
+//		If the directory path element of parameter
+//		'pathFileName' does not exist on an attached
+//		storage drive, and this parameter is set to
+//		'true', this method will attempt to create
+//		the directory path.
+//
+//		If 'createDirectoryPathIfNotExist' is set to
+//		'false', and the directory path element of
+//		parameter 'pathFileName' does not exist on an
+//		attached storage drive, an error will be returned.
+//
+//	filePermissionStr			string
+//
+//		'filePermissionStr' is a 10-character string
+//		containing the read, write and execute
+//		permissions for the three groups or user
+//		classes:
+//
+//			(1)	'Owner/User'
+//
+//			(2)	'Group'
+//
+//			(3)	'Other'
+//
+//		This 10-character string will be used to
+//		configure the internal File Permission data field
+//		for the new returned instance of FilePermissionConfig.
+//
+//		'filePermissionStr' must conform to the symbolic
+//		notation options shown below. Failure to comply
+//		with this requirement will generate an error. As
+//		indicated, 'filePermissionStr' must consist of
+//		10-characters.
+//
+//		The first character in 'filePermissionStr' may be
+//		'-' specifying a fle or 'd' specifying a
+//		directory.
+//
+//		The remaining nine characters in the
+//		File Permission String represent unix permission
+//		bits and consist of three group fields each
+//		containing 3-characters. Each character in the
+//		three group fields may consist of 'r'
+//		(Read-Permission), 'w' (Write-Permission), 'x'
+//		(Execute-Permission) or dash ('-') signaling no
+//		permission or no access allowed. A typical
+//		File Permission String authorizing permission
+//		for full access to a file would be styled as:
+//
+//			Example: "-rwxrwxrwx"
+//
+//		Groups:	-	Owner/User, Group, Other
+//
+//		From left to right
+//		First Characters is Entry Type
+//		-----------------------------------------------------
+//		First Char index 0	=	"-"   Designates a file
+//
+//		First Char index 0	=	"d"   Designates a directory
+//		-----------------------------------------------------
+//
+//		Char indexes 1-3	=	Owner "rwx" Authorizing 'Read',
+//								Write' & Execute Permissions
+//								for 'Owner'
+//
+//		Char indexes 4-6	= 	Group "rwx" Authorizing 'Read', 'Write' & Execute
+//								Permissions for 'Group'
+//
+//		Char indexes 7-9	=	Other "rwx" Authorizing 'Read', 'Write' & Execute
+//								Permissions for 'Other'
+//
+//		The Symbolic notation provided by input parameter
+//		'filePermissionStr' MUST conform to the options
+//		presented below. The first character or 'Entry Type'
+//		is listed as "-". However, in practice, the caller
+//		may set the first character as either a "-",
+//		specifying a file, or a "d", specifying a directory.
+//		No other first character types are currently
+//		supported.
+//
+//		Three SymbolicGroups:
+//
+//			The three group types are: User/Owners, Groups & Others.
+//
+//		Directory Permissions:
+//
+//			-----------------------------------------------------
+//			        Directory Mode String Permission Codes
+//			-----------------------------------------------------
+//				Directory
+//				10-Character
+//				File Permission
+//				String
+//				Symbolic		  	Directory Access
+//				Format	   		Permission Descriptions
+//			----------------------------------------------------
+//
+//				d---------		no permissions
+//				drwx------		read, write, & execute only for owner
+//				drwxrwx---		read, write, & execute for owner and group
+//				drwxrwxrwx		read, write, & execute for owner, group and others
+//				d--x--x--x		execute
+//				d-w--w--w-		write
+//				d-wx-wx-wx		write & execute
+//				dr--r--r--		read
+//				dr-xr-xr-x		read & execute
+//				drw-rw-rw-		read & write
+//				drwxr-----		Owner can read, write, & execute. Group can only read;
+//				                others have no permissions
+//
+//				Note: drwxrwxrwx - identifies permissions for directory
+//
+//		File Permissions:
+//
+//			-----------------------------------------------------
+//			       File Mode String Permission Codes
+//			-----------------------------------------------------
+//
+//			10-Character
+//		       File
+//			Permission
+//			  String
+//			 Symbolic	 Octal		File Access
+//			  Format	Notation  Permission Descriptions
+//			------------------------------------------------------------
+//
+//			----------	  0000		no permissions
+//
+//			-rwx------	  0700		read, write, & execute only for owner
+//
+//			-rwxrwx---	  0770		read, write, & execute for owner and
+//						  				group
+//
+//			-rwxrwxrwx	  0777		read, write, & execute for owner,
+//						  				group and others
+//
+//			---x--x--x	  0111		execute
+//
+//			--w--w--w-	  0222		write
+//
+//			--wx-wx-wx	  0333		write & execute
+//
+//			-r--r--r--	  0444		read
+//
+//			-r-xr-xr-x	  0555		read & execute
+//
+//			-rw-rw-rw-	  0666		read & write
+//
+//			-rwxr-----	  0740		Owner can read, write, & execute.
+//									Group can only read; others
+//									have no permissions
+//
+//	fOpenType					FileOpenType
+//
+//		The FileOpenType used to open a file.
+//		FileOpenType is an enumeration. Valid options are
+//		listed below using shorthand notation:
+//
+//			FOpenType.TypeReadOnly()
+//			FOpenType.TypeWriteOnly()
+//			FOpenType.TypeReadWrite()
+//
+//	fOpenModes					...FileOpenMode
+//
+//		As a golang variadic parameter, 'fOpenModes'
+//		parameter accepts a variable number of arguments.
+//
+//		'fOpenModes' therefore transmits none, one or
+//		more than one, File Open Modes used in the file
+//		opening procedure.
+//
+//		Configure 'fOpenModes' with Zero or more
+//		FileOpenMode concrete instances which will be
+//		or'd with the input parameter 'fOpenType' in
+//		order to generate the composite 'file open' code
+//		used to open the target file.
+//
+//		If no File Open Modes are required, the caller
+//		should pass nothing (blank/empty) for this
+//		parameter.
+//
+//		FileOpenMode is an enumeration. Valid options are
+//		listed below using the abbreviated notation:
+//
+//			FOpenMode.ModeAppend()
+//			FOpenMode.ModeCreate()
+//			FOpenMode.ModeExclusive()
+//			FOpenMode.ModeSync()
+//			FOpenMode.ModeTruncate()
+//
+//		Again, if no File Open Mode specifications are
+//		required, leave this parameter blank/empty.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	filePtr							*os.File
+//
+//		If successful, this method returns an os.File
+//		pointer to the file designated by input parameter
+//		'pathFileName'. This file pointer can
+//		subsequently be used for reading content from the
+//		subject file. It may NOT be used for writing
+//		content to the subject file.
+//
+//		If this method fails, the *os.File return value
+//		is 'nil'.
+//
+//		Note:
+//		The caller is responsible for calling "Close()"
+//		on this os.File pointer.
+//
+//	err								error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fh *FileHelper) OpenFileComponents(
+	errorPrefix interface{},
+	pathFileName string,
+	createDirectoryPathIfNotExist bool,
+	filePermissionStr string,
+	fOpenType FileOpenType,
+	fOpenModes ...FileOpenMode) (
+	filePtr *os.File,
+	err error) {
+
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"OpenFileComponents()",
+		"")
+
+	if err != nil {
+
+		return filePtr, err
+	}
+
+	var fAccessCtrl FileAccessControl
+
+	fAccessCtrl,
+		err = new(FileAccessControl).NewPermissionsOpenTypeModes(
+		ePrefix.XCpy("fAccessCtrl<-"),
+		filePermissionStr,
+		fOpenType,
+		fOpenModes...)
+
+	if err != nil {
+
+		return filePtr, err
+	}
+
+	filePtr,
+		err = new(fileHelperProton).
+		openFileWithAccessCtrl(
+			pathFileName,
+			createDirectoryPathIfNotExist,
+			fAccessCtrl,
+			"pathFileName",
+			ePrefix)
+
+	return filePtr, err
 }
 
 // OpenFileReadOnly
@@ -10089,9 +10476,12 @@ func (fh *FileHelper) OpenFile(
 //
 // # IMPORTANT
 //
-//	The calling method is responsible for calling
-//	"Close()" on the os.File pointer returned by this
-//	method.
+//	(1)	The calling method is responsible for calling
+//		"Close()" on the os.File pointer returned by this
+//		method.
+//
+//	(2)	Calling "Close()" on the same file pointer more
+//		than once will trigger errors.
 //
 // ----------------------------------------------------------------
 //
@@ -10253,9 +10643,12 @@ func (fh *FileHelper) OpenFileReadOnly(
 //		component of 'pathFileName' does not exist, an
 //		error will be returned.
 //
-//	(2)	If this method completes successfully, the caller
-//		is responsible for calling "Close()" on the
-//		returned os.File pointer.
+//	(2)	The calling method is responsible for calling
+//		"Close()" on the os.File pointer returned by this
+//		method.
+//
+//	(3)	Calling "Close()" on the same file pointer more
+//		than once will trigger errors.
 //
 // ----------------------------------------------------------------
 //
@@ -10439,6 +10832,9 @@ func (fh *FileHelper) OpenFileReadWrite(
 //	(3)	If the method completes successfully, the caller
 //		is responsible for calling 'Close()' on the
 //		returned os.File pointer.
+//
+//	(4)	Calling "Close()" on the same file pointer more
+//		than once will trigger errors.
 //
 // ----------------------------------------------------------------
 //

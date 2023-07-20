@@ -1318,12 +1318,22 @@ func (fAccess *FileAccessControl) New(
 //
 //	fOpenModes					...FileOpenMode
 //
-//		Zero or more FileOpenMode instances which will be
-//		or'd with the input parameter 'fOpenType' in order
-//		to generate the composite 'file open' code which
-//		will be used to open a file.  If no File Open Modes
-//		will be used, the user should pass nothing
-//		(blank/empty) for this parameter.
+//		As a golang variadic parameter, 'fOpenModes'
+//		parameter accepts a variable number of arguments.
+//
+//		'fOpenModes' therefore transmits none, one or
+//		more than one, File Open Modes used in the file
+//		opening procedure.
+//
+//		Configure 'fOpenModes' with Zero or more
+//		FileOpenMode concrete instances which will be
+//		or'd with the input parameter 'fOpenType' in
+//		order to generate the composite 'file open' code
+//		used to open the target file.
+//
+//		If no File Open Modes are required, the caller
+//		should pass nothing (blank/empty) for this
+//		parameter.
 //
 //		FileOpenMode is an enumeration. Valid options are
 //		listed below using the abbreviated notation:
