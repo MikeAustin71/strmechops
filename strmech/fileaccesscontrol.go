@@ -945,6 +945,329 @@ func (fAccess *FileAccessControl) New(
 	return newFAccessCtrl, err
 }
 
+// NewPermissionsOpenTypeModes
+//
+// Creates and returns a new instance of type
+// FileAccessControl configured with the values provided
+// by input parameters for file permissions, file open
+// type and file open modes.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+//	filePermissionStr			string
+//
+//		'filePermissionStr' is a 10-character string
+//		containing the read, write and execute
+//		permissions for the three groups or user
+//		classes:
+//
+//			(1)	'Owner/User'
+//
+//			(2)	'Group'
+//
+//			(3)	'Other'
+//
+//		This 10-character string will be used to
+//		configure the internal FileMode data field for
+//		the new returned instance of FilePermissionConfig.
+//
+//		'filePermissionStr' must conform to the symbolic
+//		notation options shown above. Failure to comply
+//		with this requirement will generate an error. As
+//		indicated, 'filePermissionStr' must consist of
+//		10-characters.
+//
+//		The first character in 'filePermissionStr' may be
+//		'-' specifying a fle or 'd' specifying a
+//		directory.
+//
+//		The remaining nine characters in the
+//		'filePermissionStr' represent unix permission
+//		bits and consist of three group fields each
+//		containing 3-characters. Each character in the
+//		three group fields may consist of 'r'
+//		(Read-Permission), 'w' (Write-Permission), 'x'
+//		(Execute-Permission) or '-' signaling no
+//		permission or no access allowed. A typical
+//		'filePermissionStr' authorizing permission for
+//		full access to a file would be styled as:
+//
+//		Example: "-rwxrwxrwx"
+//
+//		Groups:	-	Owner/User, Group, Other
+//					From left to right
+//					First Characters is Entry
+//					Type index 0 ("-")
+//
+//		First Char index 0	=	"-"   Designates a file
+//
+//		First Char index 0	=	"d"   Designates a directory
+//
+//		Char indexes 1-3	=	Owner "rwx" Authorizing 'Read',
+//								Write' & Execute Permissions
+//								for 'Owner'
+//
+//		Char indexes 4-6	= 	Group "rwx" Authorizing 'Read', 'Write' & Execute
+//								Permissions for 'Group'
+//
+//		Char indexes 7-9	=	Other "rwx" Authorizing 'Read', 'Write' & Execute
+//								Permissions for 'Other'
+//
+//		The Symbolic notation provided by input parameter
+//		'filePermissionStr' MUST conform to the options
+//		presented below. The first character or 'Entry Type'
+//		is listed as "-". However, in practice, the caller
+//		may set the first character as either a "-",
+//		specifying a file, or a "d", specifying a directory.
+//		No other first character types are currently
+//		supported.
+//
+//		Three SymbolicGroups:
+//
+//			The three group types are: User/Owners, Groups & Others.
+//
+//		Directory Permissions:
+//
+//			-----------------------------------------------------
+//			        Directory Mode String Permission Codes
+//			-----------------------------------------------------
+//			   Directory
+//			10-Character
+//			'filePermissionStr'
+//			   Symbolic		  	Directory Access
+//			   Format	   		Permission Descriptions
+//			----------------------------------------------------
+//
+//				d---------		no permissions
+//				drwx------		read, write, & execute only for owner
+//				drwxrwx---		read, write, & execute for owner and group
+//				drwxrwxrwx		read, write, & execute for owner, group and others
+//				d--x--x--x		execute
+//				d-w--w--w-		write
+//				d-wx-wx-wx		write & execute
+//				dr--r--r--		read
+//				dr-xr-xr-x		read & execute
+//				drw-rw-rw-		read & write
+//				drwxr-----		Owner can read, write, & execute. Group can only read;
+//				                others have no permissions
+//
+//				Note: drwxrwxrwx - identifies permissions for directory
+//
+//		File Permissions:
+//
+//			-----------------------------------------------------
+//			       File Mode String Permission Codes
+//			-----------------------------------------------------
+//
+//		      File
+//			10-Character
+//		 'filePermissionStr'
+//			 Symbolic	Octal		File Access
+//			  Format	Notation  Permission Descriptions
+//			------------------------------------------------------------
+//
+//			----------	0000	no permissions
+//
+//			-rwx------	0700	read, write, & execute only for owner
+//
+//			-rwxrwx---	0770	read, write, & execute for owner and
+//									group
+//
+//			-rwxrwxrwx	0777	read, write, & execute for owner,
+//									group and others
+//
+//			---x--x--x	0111	execute
+//
+//			--w--w--w-	0222	write
+//
+//			--wx-wx-wx	0333	write & execute
+//
+//			-r--r--r--	0444	read
+//
+//			-r-xr-xr-x	0555	read & execute
+//
+//			-rw-rw-rw-	0666	read & write
+//
+//			-rwxr-----	0740	Owner can read, write, & execute.
+//									Group can only read; others
+//									have no permissions
+//
+//	fOpenType					FileOpenType
+//
+//		The FileOpenType used to open a file.
+//		FileOpenType is an enumeration. Valid options are
+//		listed below using shorthand notation:
+//
+//			FOpenType.TypeReadOnly()
+//			FOpenType.TypeWriteOnly()
+//			FOpenType.TypeReadWrite()
+//
+//	fOpenModes					...FileOpenMode
+//
+//		Zero or more FileOpenMode instances which will be
+//		or'd with the input parameter 'fOpenType' in order
+//		to generate the composite 'file open' code which
+//		will be used to open a file.  If no File Open Modes
+//		will be used, the user should pass nothing
+//		(blank/empty) for this parameter.
+//
+//		FileOpenMode is an enumeration. Valid options are
+//		listed below using the abbreviated notation:
+//
+//			FOpenMode.ModeAppend()
+//			FOpenMode.ModeCreate()
+//			FOpenMode.ModeExclusive()
+//			FOpenMode.ModeSync()
+//			FOpenMode.ModeTruncate()
+//
+//		Again, if no File Open Mode specifications are
+//		required, leave this parameter blank/empty.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fAccess *FileAccessControl) NewPermissionsOpenTypeModes(
+	errorPrefix interface{},
+	filePermissionStr string,
+	fOpenType FileOpenType,
+	fOpenModes ...FileOpenMode) (
+	FileAccessControl,
+	error) {
+
+	if fAccess.lock == nil {
+		fAccess.lock = new(sync.Mutex)
+	}
+
+	fAccess.lock.Lock()
+
+	defer fAccess.lock.Unlock()
+
+	newFAccessCtrl := FileAccessControl{}
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileAccessControl."+
+			"NewPermissionsOpenTypeModes()",
+		"")
+
+	if err != nil {
+
+		return newFAccessCtrl, err
+	}
+
+	var filePermissionCfg FilePermissionConfig
+
+	filePermissionCfg,
+		err = new(FilePermissionConfig).New(
+		filePermissionStr,
+		ePrefix.XCpy("filePermissionCfg<-"))
+
+	if err != nil {
+
+		return newFAccessCtrl, err
+	}
+
+	var fileOpenCfg FileOpenConfig
+
+	fileOpenCfg,
+		err = new(FileOpenConfig).New(
+		ePrefix.XCpy("fileOpenCfg<-"),
+		fOpenType,
+		fOpenModes...)
+
+	if err != nil {
+
+		return newFAccessCtrl, err
+	}
+
+	err = new(fileAccessControlMechanics).
+		setFileAccessControl(
+			&newFAccessCtrl,
+			fileOpenCfg,
+			filePermissionCfg,
+			ePrefix.XCpy("newFAccessCtrl<-"))
+
+	return newFAccessCtrl, err
+}
+
 // NewReadWriteAccess
 //
 // Returns a FileAccessControl instance configured for
