@@ -42,6 +42,10 @@ func TestFileMgr_Write_000100(t *testing.T) {
 		return
 	}
 
+	var readFileSize int64
+
+	readFileSize = fMgrReadFile.GetFileSize()
+
 	err =
 		fMgrReadFile.OpenThisFileComponents(
 			ePrefix.XCpy("fMgrReadFile"),
@@ -220,6 +224,23 @@ func TestFileMgr_Write_000100(t *testing.T) {
 			totalNumOfBytesRead,
 			totalNumOfBytesWritten,
 			strArray.GetTotalBytesInStrings())
+
+		return
+	}
+
+	var writeFileSize int64
+
+	writeFileSize = fMgrWriteFile.GetFileSize()
+
+	if readFileSize != writeFileSize {
+
+		t.Errorf("%v\n"+
+			"Error: readFileSize != writeFileSize\n"+
+			" readFileSize = '%v'\n"+
+			"writeFileSize = '%v'\n",
+			ePrefix.String(),
+			readFileSize,
+			writeFileSize)
 
 		return
 	}

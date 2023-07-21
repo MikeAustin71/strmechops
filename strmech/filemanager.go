@@ -10649,7 +10649,20 @@ func (fMgr *FileMgr) OpenThisFileReadWriteTruncate(
 //		the file read operation.
 //
 //		The user is therefore responsible for closing the
-//		file. See method FileMgr.CloseThisFile().
+//		file. After reading all desired data from the
+//		target 'Read' file, call method:
+//
+//				FileMgr.CloseThisFile()
+//
+//	(3)	Be careful extracting data from the
+//		'bytesReadBuff' byte array after a 'read'
+//		operation.
+//
+//		Extract only the number of bytes read during
+//		the 'read' operation ('numOfBytesRead').
+//
+//		The number of actual bytes read may be less than
+//		the size of the 'bytesReadBuff' byte array.
 //
 // ----------------------------------------------------------------
 //
@@ -10671,6 +10684,16 @@ func (fMgr *FileMgr) OpenThisFileReadWriteTruncate(
 //		times as necessary to read all data from the
 //		target source file.
 //
+//		Be careful extracting data from the
+//		'bytesReadBuff' byte array after a 'read'
+//		operation.
+//
+//		Extract only the number of bytes read during
+//		the 'read' operation ('numOfBytesRead').
+//
+//		The number of actual bytes read may be less than
+//		the size of the 'bytesReadBuff' byte array.
+//
 //	(3)	Close the target source file by calling this
 //		method:
 //
@@ -10685,6 +10708,16 @@ func (fMgr *FileMgr) OpenThisFileReadWriteTruncate(
 //		A byte array which serves as the byte buffer for
 //		the file read operation. Bytes read from the
 //		target FileMgr data file will be stored here.
+//
+//		Be careful extracting data from the
+//		'bytesReadBuff' byte array after a 'read'
+//		operation.
+//
+//		Extract only the number of bytes read during
+//		the 'read' operation ('numOfBytesRead').
+//
+//		The number of actual bytes read may be less than
+//		the size of the 'bytesReadBuff' byte array.
 //
 // ----------------------------------------------------------------
 //
