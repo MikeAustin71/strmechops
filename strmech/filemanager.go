@@ -12594,11 +12594,13 @@ func (fMgr *FileMgr) SetFileMgrFromPathFileName(
 //
 //	(2) After all data has been written to the target
 //		file, the user is responsible for calling the
-//		following methods in sequence to finalize clean-up
+//		following method to finalize clean-up
 //		operations:
 //
-//			FileMgr.FlushBytesToDisk()
 //			FileMgr.CloseThisFile()
+//
+//			Note:	CloseThisFile() will automatically
+//					flush the write buffer.
 //
 //	(3) If the target file was NOT opened before calling
 //		this method, an error will be returned.
@@ -12624,15 +12626,12 @@ func (fMgr *FileMgr) SetFileMgrFromPathFileName(
 //		times as necessary to write all data to the
 //		target file.
 //
-//	(3)	Flush the write buffer to ensure all data in
-//		the underlying buffer is written to the target
-//		file. Call this method:
-//
-//			FileMgr.FlushBytesToDisk()
-//
-//	(4)	Close the target file by calling this method:
+//	(3)	Close the target file by calling this method:
 //
 //			FileMgr.CloseThisFile()
+//
+//			Note:	CloseThisFile() will automatically
+//					flush the write buffer.
 //
 // ----------------------------------------------------------------
 //
@@ -12770,6 +12769,9 @@ func (fMgr *FileMgr) Write(
 //		method:
 //
 //			FileMgr.CloseThisFile()
+//
+//			Note:	CloseThisFile() will automatically
+//					flush the write buffer.
 //
 //	(2)	If the number of bytes written to the file is not
 //		equal to the number of bytes in input parameter

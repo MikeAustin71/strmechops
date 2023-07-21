@@ -1677,6 +1677,51 @@ func (strArrayDto *StringArrayDto) GetStringArrayLength() int {
 	return len(strArrayDto.StrArray)
 }
 
+// GetTotalBytesInStrings
+//
+// This method returns the total number of bytes residing
+// in all strings contained in the internal string array
+// maintained by the current instance of StringArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	int64
+//
+//		This method returns an int64 value specifying the
+//		number of total bytes for all strings in the
+//		internal string array maintained by the current
+//		instance of StringArrayDto.
+func (strArrayDto *StringArrayDto) GetTotalBytesInStrings() int64 {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	lenStrArray := len(strArrayDto.StrArray)
+
+	var totalBytesInArray int64
+
+	for i := 0; i < lenStrArray; i++ {
+
+		totalBytesInArray += int64(len(strArrayDto.StrArray[i]))
+
+	}
+
+	return totalBytesInArray
+}
+
 // InsertAtIndex - Inserts a new string ('insertStr') into a target
 // string array contained within the current instance of
 // StringArrayDto.
@@ -2718,9 +2763,11 @@ func (strArrayDto *StringArrayDto) PopLastStr(
 	return lastArrayStr, newArrayLength, err
 }
 
-// PushStr - Appends a single string to the end of the internal
-// string array maintained by the current instance of
-// StringArrayDto.
+// PushBytes
+//
+// Appends a byte array as single string to the end of the
+// internal string array maintained by the current instance
+// of StringArrayDto.
 //
 // Note that no data validation is performed on input parameter
 // 'str'. If 'str' is an empty string, an empty string will be
@@ -2730,7 +2777,78 @@ func (strArrayDto *StringArrayDto) PopLastStr(
 //
 // # BE ADVISED
 //
-//	This method correctly process string array element
+//	This method correctly processes string array element
+//	members with zero length strings.
+//
+// ----------------------------------------------------------------
+//
+// Input Parameters
+//
+//	bytes						[]byte
+//
+//		A byte array which will be converted to a string
+//		and appended to the end of the internal string
+//		array maintained by the current instance of
+//		StringArrayDto.
+//
+//	     No data validation is performed on input
+//	     parameter, bytes'. If 'bytes' is submitted as an
+//	     empty array, an empty string will be appended to
+//	     the internal string array.
+//
+// ----------------------------------------------------------------
+//
+// Return Values
+//
+//	NONE
+func (strArrayDto *StringArrayDto) PushBytes(
+	bytes []byte) {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	var str string
+
+	if len(bytes) == 0 {
+
+		str = " "
+
+		strArrayDto.StrArray =
+			append(strArrayDto.StrArray, str)
+
+		strArrayDto.StrArray[len(strArrayDto.StrArray)-1] =
+			""
+
+		return
+	}
+
+	strArrayDto.StrArray =
+		append(strArrayDto.StrArray,
+			string(bytes))
+
+	return
+}
+
+// PushStr
+//
+// Appends a single string to the end of the internal
+// string array maintained by the current instance of
+// StringArrayDto.
+//
+// Note that no data validation is performed on input
+// parameter 'str'. If 'str' is an empty string, an empty
+// string will be appended to the internal string array.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method correctly processes string array element
 //	members with zero length strings.
 //
 // ----------------------------------------------------------------
@@ -2738,13 +2856,16 @@ func (strArrayDto *StringArrayDto) PopLastStr(
 // Input Parameters
 //
 //	str                        string
-//	   - A string which will be appended to the end of the string
-//	     array maintained by the current instance of
-//	     StringArrayDto.
 //
-//	     No data validation is performed on input parameter,
-//	     'str'. If 'str' is an empty string, an empty string will
-//	     be appended to the internal string array.
+//		A string which will be appended to the end of the
+//		internal string array maintained by the current
+//		instance of StringArrayDto.
+//
+//		No data validation is performed on input
+//		parameter, 'str'. If 'str' is an empty string, an
+//		empty string will be appended to the internal
+//		string array maintained by the current instance
+//		of StringArrayDto.
 //
 // ----------------------------------------------------------------
 //
