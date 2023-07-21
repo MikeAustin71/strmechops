@@ -8411,7 +8411,10 @@ func (fMgr *FileMgr) New(
 //
 // Usage:
 //
-//	dMgr, err := DirMgr{}.New("D:\\TestDir")
+//	dMgr, err := new(DirMgr).
+//					New(
+//						"D:\\TestDir",
+//						ePrefix)
 //
 //	if err != nil {
 //	 fmt.Printf("Error='%v' \n", err.Error())
@@ -8420,7 +8423,7 @@ func (fMgr *FileMgr) New(
 //
 //	fileNameExt := "yourFile.txt"
 //
-//	fMgr, err := FileMgr{}.NewFromDirMgrFileNameExt(dMgr, fileNameExt)
+//	fMgr, err := new(FileMgr).NewFromDirMgrFileNameExt(dMgr, fileNameExt)
 func (fMgr *FileMgr) NewFromDirMgrFileNameExt(
 	dMgr DirMgr,
 	fileNameExt string,
@@ -8575,7 +8578,6 @@ func (fMgr *FileMgr) NewFromDirMgrFileNameExt(
 //		FileMgr instance is returned containing
 //		information on the file specified in the two
 //		input parameters 'dirStr' and 'fileNameExtStr'.
-//
 //
 //	error
 //
@@ -10694,7 +10696,11 @@ func (fMgr *FileMgr) OpenThisFileReadWriteTruncate(
 //		The number of actual bytes read may be less than
 //		the size of the 'bytesReadBuff' byte array.
 //
-//	(3)	Close the target source file by calling this
+//	(3)	If the End Of File is encountered during the
+//		'read' operation, the returned error will be
+//		set to io.EOF.
+//
+//	(4)	Close the target source file by calling this
 //		method:
 //
 //			FileMgr.CloseThisFile()
@@ -11254,7 +11260,9 @@ func (fMgr *FileMgr) ReadFileLine(
 //	operation.
 //
 //	The user is therefore responsible for closing the
-//	file. See method FileMgr.CloseThisFile().
+//	file with a call to method:
+//
+//			FileMgr.CloseThisFile()
 //
 // ----------------------------------------------------------------
 //
@@ -13089,7 +13097,8 @@ func (fMgr *FileMgr) WriteBytesToFile(
 //	written.
 //
 //	The user is responsible for closing this file. To
-//	close this file after writing text to it, see method:
+//	close this file after writing text to it, call
+//	method:
 //
 //		FileMgr.CloseThisFile()
 //
