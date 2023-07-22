@@ -18,5 +18,6 @@ func main() {
 	//examples.MainFileHelperOpsTest008{}.ReadTextLines01()
 	//examples.MainFileHelperOpsTest008{}.ReadLines02()
 	//examples.MainFileHelperOpsTest008{}.FileBufferReader03()
-	examples.MainFileHelperOpsTest008{}.FileBufWriter01()
+	//examples.MainFileHelperOpsTest008{}.FileBufWriter01()
+	examples.MainFilePermissionsTest009{}.PermissionStr01()
 }

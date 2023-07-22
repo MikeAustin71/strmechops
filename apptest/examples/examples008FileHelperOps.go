@@ -629,7 +629,7 @@ func (fileHlprOpsTest008 MainFileHelperOpsTest008) FileBufferReader03() {
 	targetReadFile,
 		err = exampleUtil.GetCompositeDirectory(
 		"fileOpsTest\\filesForTest\\textFilesForTest\\splitFunc.txt",
-		ePrefix.XCpy("readFileAddOn"))
+		ePrefix.XCpy("targetReadFile"))
 
 	if err != nil {
 		fmt.Printf("\n%v\n\n",
