@@ -190,7 +190,7 @@ func (fHelperNanobot *fileHelperNanobot) areSameFile(
 	return false, nil
 }
 
-// ChangeFileMode
+// ChmodFilePermConfig
 //
 // This method changes the file mode of an existing file
 // designated by input parameter 'pathFileName'.
@@ -216,11 +216,31 @@ func (fHelperNanobot *fileHelperNanobot) areSameFile(
 //		file permissions provided by input parameter
 //		'filePermission'.
 //
-//	filePermission				FilePermissionConfig
+//	filePermissions				FilePermissionConfig
 //
 //		This parameter contains the new permissions which
 //		will be applied to the file identified by input
 //		paramter 'pathFileName'.
+//
+//	pathFileNameLabel			string
+//
+//		The name or label associated with input parameter
+//		'pathFileName' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "pathFileName" will be
+//		automatically applied.
+//
+//	filePermissionsLabel		string
+//
+//		The name or label associated with input parameter
+//		'filePermissions' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "filePermissions" will
+//		be automatically applied.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -255,7 +275,9 @@ func (fHelperNanobot *fileHelperNanobot) areSameFile(
 //		error message.
 func (fHelperNanobot *fileHelperNanobot) changeFileMode(
 	pathFileName string,
-	filePermission FilePermissionConfig,
+	filePermissions FilePermissionConfig,
+	pathFileNameLabel string,
+	filePermissionsLabel string,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if fHelperNanobot.lock == nil {
@@ -280,6 +302,14 @@ func (fHelperNanobot *fileHelperNanobot) changeFileMode(
 		return err
 	}
 
+	if len(pathFileNameLabel) == 0 {
+		pathFileNameLabel = "pathFileName"
+	}
+
+	if len(filePermissionsLabel) == 0 {
+		filePermissionsLabel = "filePermissions"
+	}
+
 	var filePathDoesExist bool
 
 	pathFileName,
@@ -298,23 +328,44 @@ func (fHelperNanobot *fileHelperNanobot) changeFileMode(
 	if !filePathDoesExist {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: 'pathFileName' DOES NOT EXIST!\n"+
-			"pathFileName='%v'\n",
+			"ERROR: '%v' DOES NOT EXIST!\n"+
+			"%v='%v'\n",
 			ePrefix.String(),
+			pathFileNameLabel,
+			pathFileNameLabel,
 			pathFileName)
 
 		return err
 	}
 
-	err = filePermission.IsValidInstanceError(
-		ePrefix.XCpy("filePermission"))
+	var changeModeTxt, changeModeValue string
+
+	changeModeTxt,
+		_ = filePermissions.GetPermissionTextCode(nil)
+
+	changeModeValue,
+		_ =
+		filePermissions.GetPermissionFileModeValueText(nil)
+
+	_,
+		err = new(filePermissionConfigElectron).
+		testValidityOfFilePermissionConfig(
+			&filePermissions,
+			ePrefix.XCpy(filePermissionsLabel))
 
 	if err != nil {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'filePermission' is INVALID!\n"+
-			"Error='%v'\n",
+			"ERROR: Input parameter '%v' is INVALID!\n"+
+			"%v (new os.FileMode) Text= '%v'\n"+
+			"%v (new os.FileMode) Value= '%v'\n"+
+			"Error=\n%v\n",
 			ePrefix.String(),
+			filePermissionsLabel,
+			filePermissionsLabel,
+			changeModeTxt,
+			filePermissionsLabel,
+			changeModeValue,
 			err.Error())
 
 		return err
@@ -322,8 +373,8 @@ func (fHelperNanobot *fileHelperNanobot) changeFileMode(
 
 	var newOsFileMode os.FileMode
 
-	newOsFileMode, err = filePermission.GetFileMode(
-		ePrefix.XCpy("newOsFileMode<-filePermission"))
+	newOsFileMode, err = filePermissions.GetFileMode(
+		ePrefix.XCpy("newOsFileMode<-" + filePermissionsLabel))
 
 	if err != nil {
 		return err
@@ -335,27 +386,22 @@ func (fHelperNanobot *fileHelperNanobot) changeFileMode(
 
 	if err2 != nil {
 
-		var changeModeTxt, changeModeValue string
-
-		changeModeTxt,
-			_ = filePermission.GetPermissionTextCode(
-			ePrefix.XCpy("changeModeTxt<-filePermission"))
-
-		changeModeValue,
-			_ =
-			filePermission.GetPermissionFileModeValueText(
-				ePrefix.XCpy("changeModeValue<-filePermission"))
-
 		err = fmt.Errorf("%v\n"+
-			"Error returned by os.Chmod(pathFileName, newOsFileMode).\n"+
-			"pathFileName='%v'\n"+
-			"newOsFileMode Text='%v'\n"+
-			"newOsFileModeValue='%v'\n"+
+			"Error returned by os.Chmod(%v, newOsFileMode).\n"+
+			"%v = '%v'\n"+
+			"%v (new os.FileMode) Text='%v'\n"+
+			"%v (new os.FileMode) Value='%v'\n"+
+			"new os.FileMode Value='%s'\n"+
 			"Error='%v'",
 			ePrefix.String(),
+			pathFileNameLabel,
+			pathFileNameLabel,
 			pathFileName,
+			filePermissionsLabel,
 			changeModeTxt,
+			filePermissionsLabel,
 			changeModeValue,
+			newOsFileMode,
 			err.Error())
 	}
 

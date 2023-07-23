@@ -377,7 +377,9 @@ func (fOpenCfg *FileOpenConfig) GetFileOpenModes() []FileOpenMode {
 	return resultAry
 }
 
-// GetFileOpenType - Returns the stored FileOpenType value.
+// GetFileOpenType
+//
+// Returns the stored FileOpenType value.
 func (fOpenCfg *FileOpenConfig) GetFileOpenType() FileOpenType {
 
 	if fOpenCfg.lock == nil {

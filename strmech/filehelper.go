@@ -395,14 +395,37 @@ func (fh *FileHelper) AreSameFile(
 		ePrefix)
 }
 
-// ChangeFileMode
+// ChmodFilePermConfig
 //
-// This method changes the file mode of an existing file
-// designated by input parameter 'pathFileName'.
+// This method is a wrapper for os.Chmod(). It changes
+// the file mode for the file identified by the input
+// parameter 'pathFileName' using file permission codes
+// provided by an instance of FilePermissionConfig passed
+// as input parameter 'filePermission'.
 //
-// The new os.FileMode value to which the mode will be
-// changed is extracted from input parameter
-// 'filePermission'.
+// If the target file is a symbolic link, it changes the
+// mode of the link's target. If there is an error, it
+// will be of type *PathError.
+//
+// A different subset of the mode bits are used,
+// depending on the operating system.
+//
+// On Unix/Linux, the mode's permission bits, ModeSetuid,
+// ModeSetgid, and ModeSticky are used.
+//
+// On Windows, the mode must be non-zero but otherwise only
+// the 0200 bit (owner writable) of mode is used; it controls
+// whether the file's read-only attribute is set or cleared.
+// The other bits are currently unused. Use mode 0400 for a
+// read-only file and 0600 for a readable+writable file.
+//
+// For Windows - Eligible permission codes are:
+//
+//	'modeStr'      Octal
+//	 Symbolic      Mode Value     File Access
+//
+//	 -r--r--r--     0444          File - read only
+//	 -rw-rw-rw-     0666          File - read & write
 //
 // If the target file does Not exist, an error will be
 // returned.
@@ -429,7 +452,7 @@ func (fh *FileHelper) AreSameFile(
 //		file permissions provided by input parameter
 //		'filePermission'.
 //
-//	filePermission				FilePermissionConfig
+//	filePermissions				FilePermissionConfig
 //
 //		This parameter contains the new permissions which
 //		will be applied to the file identified by input
@@ -575,9 +598,9 @@ func (fh *FileHelper) AreSameFile(
 //		input parameter, 'errorPrefix'. The 'errorPrefix'
 //		text will be attached to the beginning of the
 //		error message.
-func (fh *FileHelper) ChangeFileMode(
+func (fh *FileHelper) ChmodFilePermConfig(
 	pathFileName string,
-	filePermission FilePermissionConfig,
+	filePermissions FilePermissionConfig,
 	errorPrefix interface{}) error {
 
 	if fh.lock == nil {
@@ -595,7 +618,7 @@ func (fh *FileHelper) ChangeFileMode(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"FileHelper."+
-			"ChangeFileMode()",
+			"ChmodFilePermConfig()",
 		"")
 
 	if err != nil {
@@ -604,8 +627,364 @@ func (fh *FileHelper) ChangeFileMode(
 
 	return new(fileHelperNanobot).changeFileMode(
 		pathFileName,
-		filePermission,
-		ePrefix.XCpy("pathFileName"))
+		filePermissions,
+		"pathFileName",
+		"filePermissions",
+		ePrefix)
+}
+
+// ChmodPermissionStr
+//
+// This method is a wrapper for os.Chmod(). It changes
+// the file mode for the file identified by the input
+// parameter 'pathFileName' using file permission codes
+// provided by a 10-character string of file permission
+// text codes passed as input parameter
+// 'filePermissionStr'.
+//
+// If the target file is a symbolic link, it changes the
+// mode of the link's target. If there is an error, it
+// will be of type *PathError.
+//
+// A different subset of the mode bits are used,
+// depending on the operating system.
+//
+// On Unix/Linux, the mode's permission bits, ModeSetuid,
+// ModeSetgid, and ModeSticky are used.
+//
+// On Windows, the mode must be non-zero but otherwise only
+// the 0200 bit (owner writable) of mode is used; it controls
+// whether the file's read-only attribute is set or cleared.
+// The other bits are currently unused. Use mode 0400 for a
+// read-only file and 0600 for a readable+writable file.
+//
+// For Windows - Eligible permission codes are:
+//
+//	Characters	Octal	File Access
+//	 Symbolic	Mode	  Type
+//
+//	-r--r--r--	0444	File - read only
+//	-rw-rw-rw-	0666	File - read & write
+//
+// If the target file does Not exist, an error will be
+// returned.
+//
+// If the method succeeds and the file's mode is changed,
+// an error value of 'nil' is returned.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	os.FileMode https://pkg.go.dev/os#FileMode
+//	https://stackoverflow.com/questions/28969455/how-to-properly-instantiate-os-filemode
+//	https://www.includehelp.com/golang/os-filemode-constants-with-examples.aspx
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName				string
+//
+//		The file mode for the file identified by
+//		'pathFileName' will be modified using the new
+//		file permissions provided by input parameter
+//		'filePermission'.
+//
+//	filePermissionStr			string
+//
+//		'filePermissionStr' is a 10-character string
+//		containing the read, write and execute
+//		permissions for the three groups or user
+//		classes:
+//
+//			(1)	'Owner/User'
+//
+//			(2)	'Group'
+//
+//			(3)	'Other'
+//
+//		This 10-character string will be used to
+//		configure the internal File Permission data field
+//		for the new returned instance of FilePermissionConfig.
+//
+//		This 10-character string will be used to
+//		configure the internal File Permission data field
+//		for the new returned instance of FilePermissionConfig.
+//
+//		'filePermissionStr' must conform to the symbolic
+//		notation options shown below. Failure to comply
+//		with this requirement will generate an error. As
+//		indicated, 'filePermissionStr' must consist of
+//		10-characters.
+//
+//		The first character in 'filePermissionStr' may be
+//		'-' specifying a fle or 'd' specifying a
+//		directory.
+//
+//		The remaining nine characters in the
+//		File Permission String represent unix permission
+//		bits and consist of three group fields each
+//		containing 3-characters. Each character in the
+//		three group fields may consist of 'r'
+//		(Read-Permission), 'w' (Write-Permission), 'x'
+//		(Execute-Permission) or dash ('-') signaling no
+//		permission or no access allowed. A typical
+//		File Permission String authorizing permission
+//		for full access to a file would be styled as:
+//
+//			Example: "-rwxrwxrwx"
+//
+//		Groups:	-	Owner/User, Group, Other
+//
+//		From left to right
+//		First Characters is Entry Type
+//		-----------------------------------------------------
+//		First Char index 0	=	"-"   Designates a file
+//
+//		First Char index 0	=	"d"   Designates a directory
+//		-----------------------------------------------------
+//
+//		Char indexes 1-3	=	Owner "rwx" Authorizing 'Read',
+//								Write' & Execute Permissions
+//								for 'Owner'
+//
+//		Char indexes 4-6	= 	Group "rwx" Authorizing 'Read', 'Write' & Execute
+//								Permissions for 'Group'
+//
+//		Char indexes 7-9	=	Other "rwx" Authorizing 'Read', 'Write' & Execute
+//								Permissions for 'Other'
+//
+//		The Symbolic notation provided by input parameter
+//		'filePermissionStr' MUST conform to the options
+//		presented below. The first character or 'Entry Type'
+//		is listed as "-". However, in practice, the caller
+//		may set the first character as either a "-",
+//		specifying a file, or a "d", specifying a directory.
+//		No other first character types are currently
+//		supported.
+//
+//		Three SymbolicGroups:
+//
+//			The three group types are: User/Owners, Groups & Others.
+//
+//		Directory Permissions:
+//
+//			-----------------------------------------------------
+//			        Directory Mode String Permission Codes
+//			-----------------------------------------------------
+//				Directory
+//				10-Character
+//				File Permission
+//				String
+//				Symbolic		  	Directory Access
+//				Format	   		Permission Descriptions
+//			----------------------------------------------------
+//
+//				d---------		no permissions
+//				drwx------		read, write, & execute only for owner
+//				drwxrwx---		read, write, & execute for owner and group
+//				drwxrwxrwx		read, write, & execute for owner, group and others
+//				d--x--x--x		execute
+//				d-w--w--w-		write
+//				d-wx-wx-wx		write & execute
+//				dr--r--r--		read
+//				dr-xr-xr-x		read & execute
+//				drw-rw-rw-		read & write
+//				drwxr-----		Owner can read, write, & execute. Group can only read;
+//				                others have no permissions
+//
+//				Note: drwxrwxrwx - identifies permissions for directory
+//
+//		File Permissions:
+//
+//			-----------------------------------------------------
+//			       File Mode String Permission Codes
+//			-----------------------------------------------------
+//
+//			10-Character
+//		       File
+//			Permission
+//			  String
+//			 Symbolic	 Octal		File Access
+//			  Format	Notation  Permission Descriptions
+//			------------------------------------------------------------
+//
+//			----------	  0000		no permissions
+//
+//			-rwx------	  0700		read, write, & execute only for owner
+//
+//			-rwxrwx---	  0770		read, write, & execute for owner and
+//						  				group
+//
+//			-rwxrwxrwx	  0777		read, write, & execute for owner,
+//						  				group and others
+//
+//			---x--x--x	  0111		execute
+//
+//			--w--w--w-	  0222		write
+//
+//			--wx-wx-wx	  0333		write & execute
+//
+//			-r--r--r--	  0444		read
+//
+//			-r-xr-xr-x	  0555		read & execute
+//
+//			-rw-rw-rw-	  0666		read & write
+//
+//			-rwxr-----	  0740		Owner can read, write, & execute.
+//									Group can only read; others
+//									have no permissions
+//		-------------------------------------------------
+//						Be Advised
+//		Documentation states that the only valid file
+//		permission codes for Windows Operating Systems
+//		are:
+//
+//		Characters	Octal	File Access
+//	 	Symbolic	Mode	  Type
+//
+//		-r--r--r--	0444	File - read only
+//		-rw-rw-rw-	0666	File - read & write
+//
+//		-------------------------------------------------
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fh *FileHelper) ChmodPermissionStr(
+	pathFileName string,
+	filePermissionStr string,
+	errorPrefix interface{}) error {
+
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"ChmodPermissionStr()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	var filePermissionCfg FilePermissionConfig
+
+	filePermissionCfg,
+		err = new(FilePermissionConfig).New(
+		filePermissionStr,
+		ePrefix.XCpy("filePermissionCfg<-filePermissionStr"))
+
+	if err != nil {
+
+		return err
+	}
+
+	err = filePermissionCfg.IsValidInstanceError(ePrefix)
+
+	if err != nil {
+
+		return fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"filePermissionCfg.IsValidInstanceError(%v)\n"+
+			"returned the following error.\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			"filePermissionStr",
+			"filePermissionStr",
+			err.Error())
+	}
+
+	return new(fileHelperNanobot).
+		changeFileMode(
+			pathFileName,
+			filePermissionCfg,
+			"pathFileName",
+			"filePermissionStr",
+			ePrefix)
 }
 
 // ChangeFileTimes

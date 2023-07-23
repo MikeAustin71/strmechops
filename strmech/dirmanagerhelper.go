@@ -6554,7 +6554,7 @@ func (dMgrHlpr *dirMgrHelper) setPermissions(
 		return err
 	}
 
-	err = new(FileHelper).ChangeFileMode(
+	err = new(FileHelper).ChmodFilePermConfig(
 		dMgr.absolutePath,
 		permissionConfig,
 		ePrefix.XCpy(
@@ -6563,7 +6563,7 @@ func (dMgrHlpr *dirMgrHelper) setPermissions(
 
 	if err != nil {
 		return fmt.Errorf("%v\n"+
-			"Error retrned by FileHelper{}.ChangeFileMode("+
+			"Error retrned by FileHelper{}.ChmodFilePermConfig("+
 			"%v.absolutePath, %v)\n"+
 			"%v.absolutePath=%v\n"+
 			"%v='%v'"+
