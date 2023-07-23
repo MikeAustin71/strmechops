@@ -9499,7 +9499,7 @@ func (fMgr *FileMgr) OpenThisFileComponents(
 	var fAccessCtrl FileAccessControl
 
 	fAccessCtrl,
-		err = new(FileAccessControl).NewPermissionsOpenTypeModes(
+		err = new(FileAccessControl).NewComponents(
 		ePrefix.XCpy("fAccessCtrl<-"),
 		filePermissionStr,
 		fOpenType,

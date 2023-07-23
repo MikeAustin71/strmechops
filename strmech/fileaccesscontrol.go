@@ -913,189 +913,7 @@ func (fAccess *FileAccessControl) NewInitialized(
 	return newFAccessCtrl, err
 }
 
-// New
-//
-// Creates and returns a new instance of type
-// FileAccessControl configured with the values provided
-// by input parameters 'openCodes' and 'permissions'.
-//
-// The FileAccessControl type is used when opening files
-// for read and write operations.
-//
-// To open a file, two components are required:
-//
-//  1. A FileOpenType - Input parameter FileOpenConfig
-//     In order to open a file, exactly one of the
-//     following File Open Codes MUST be specified:
-//
-//     FileOpenType(0).TypeReadOnly()
-//     FileOpenType(0).TypeWriteOnly()
-//     FileOpenType(0).TypeReadWrite()
-//
-//     -- AND --
-//
-//  2. A FileOpenMode - Input parameter FilePermissionConfig
-//
-//     In addition to a 'FileOpenType', a File Open Mode
-//     is also required. This code is also referred to as
-//     'permissions'. Zero or more of the following File
-//     Open Mode codes may optionally be specified to
-//     better control file open behavior.
-//
-//     FileOpenMode(0).ModeAppend()
-//     FileOpenMode(0).ModeCreate()
-//     FileOpenMode(0).ModeExclusive()
-//     FileOpenMode(0).ModeSync()
-//     FileOpenMode(0).ModeTruncate()
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	openCodes					FileOpenConfig
-//
-//		This parameter encapsulates the File Open
-//		parameters which will be used to open subject
-//		file. 'openCodes' are also referred to as the
-//		File Open Type. For an explanation of File Open
-//		parameters, see the source code documentation
-//		for method FileOpenConfig.New().
-//
-//	permissions					FilePermissionConfig
-//
-//		This parameter encapsulates the File Permission
-//		parameters which will be used to open the subject
-//		file. 'permissions' is also referred to as the
-//		File Open Mode. For an explanation of File
-//		Permission parameters, see method FilePermissionConfig.New().
-//
-//	errorPrefix					interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set
-//		this parameter to 'nil'.
-//
-//		This empty interface must be convertible to one
-//		of the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	FileAccessControl
-//
-//		If this method completes successfully, a new
-//		instance of FileAccessControl will be returned.
-//
-//		This new FileAccessControl instance will be
-//		configured with File Open Codes and File
-//		Permission Codes provided by input parameters
-//		'openCodes' and 'permissions'.
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errorPrefix'.
-//	 	The 'errorPrefix' text will be prefixed or
-//	 	attached to the	beginning of the error message.
-func (fAccess *FileAccessControl) New(
-	openCodes FileOpenConfig,
-	permissions FilePermissionConfig,
-	errorPrefix interface{}) (
-	FileAccessControl,
-	error) {
-
-	if fAccess.lock == nil {
-		fAccess.lock = new(sync.Mutex)
-	}
-
-	fAccess.lock.Lock()
-
-	defer fAccess.lock.Unlock()
-
-	newFAccessCtrl := FileAccessControl{}
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"FileAccessControl."+
-			"New()",
-		"")
-
-	if err != nil {
-		return newFAccessCtrl, err
-	}
-
-	err = new(fileAccessControlMechanics).
-		setFileAccessControl(
-			&newFAccessCtrl,
-			openCodes,
-			permissions,
-			ePrefix.XCpy("newFAccessCtrl<-"))
-
-	return newFAccessCtrl, err
-}
-
-// NewPermissionsOpenTypeModes
+// NewComponents
 //
 // Creates and returns a new instance of type
 // FileAccessControl configured with the values provided
@@ -1373,7 +1191,7 @@ func (fAccess *FileAccessControl) New(
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fAccess *FileAccessControl) NewPermissionsOpenTypeModes(
+func (fAccess *FileAccessControl) NewComponents(
 	errorPrefix interface{},
 	filePermissionStr string,
 	fOpenType FileOpenType,
@@ -1398,7 +1216,7 @@ func (fAccess *FileAccessControl) NewPermissionsOpenTypeModes(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"FileAccessControl."+
-			"NewPermissionsOpenTypeModes()",
+			"NewComponents()",
 		"")
 
 	if err != nil {
@@ -1436,6 +1254,188 @@ func (fAccess *FileAccessControl) NewPermissionsOpenTypeModes(
 			&newFAccessCtrl,
 			fileOpenCfg,
 			filePermissionCfg,
+			ePrefix.XCpy("newFAccessCtrl<-"))
+
+	return newFAccessCtrl, err
+}
+
+// NewElements
+//
+// Creates and returns a new instance of type
+// FileAccessControl configured with the values provided
+// by input parameters 'openCodes' and 'permissions'.
+//
+// The FileAccessControl type is used when opening files
+// for read and write operations.
+//
+// To open a file, two components are required:
+//
+//  1. A FileOpenType - Input parameter FileOpenConfig
+//     In order to open a file, exactly one of the
+//     following File Open Codes MUST be specified:
+//
+//     FileOpenType(0).TypeReadOnly()
+//     FileOpenType(0).TypeWriteOnly()
+//     FileOpenType(0).TypeReadWrite()
+//
+//     -- AND --
+//
+//  2. A FileOpenMode - Input parameter FilePermissionConfig
+//
+//     In addition to a 'FileOpenType', a File Open Mode
+//     is also required. This code is also referred to as
+//     'permissions'. Zero or more of the following File
+//     Open Mode codes may optionally be specified to
+//     better control file open behavior.
+//
+//     FileOpenMode(0).ModeAppend()
+//     FileOpenMode(0).ModeCreate()
+//     FileOpenMode(0).ModeExclusive()
+//     FileOpenMode(0).ModeSync()
+//     FileOpenMode(0).ModeTruncate()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	openCodes					FileOpenConfig
+//
+//		This parameter encapsulates the File Open
+//		parameters which will be used to open subject
+//		file. 'openCodes' are also referred to as the
+//		File Open Type. For an explanation of File Open
+//		parameters, see the source code documentation
+//		for method FileOpenConfig.New().
+//
+//	permissions					FilePermissionConfig
+//
+//		This parameter encapsulates the File Permission
+//		parameters which will be used to open the subject
+//		file. 'permissions' is also referred to as the
+//		File Open Mode. For an explanation of File
+//		Permission parameters, see method FilePermissionConfig.New().
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	FileAccessControl
+//
+//		If this method completes successfully, a new
+//		instance of FileAccessControl will be returned.
+//
+//		This new FileAccessControl instance will be
+//		configured with File Open Codes and File
+//		Permission Codes provided by input parameters
+//		'openCodes' and 'permissions'.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fAccess *FileAccessControl) NewElements(
+	openCodes FileOpenConfig,
+	permissions FilePermissionConfig,
+	errorPrefix interface{}) (
+	FileAccessControl,
+	error) {
+
+	if fAccess.lock == nil {
+		fAccess.lock = new(sync.Mutex)
+	}
+
+	fAccess.lock.Lock()
+
+	defer fAccess.lock.Unlock()
+
+	newFAccessCtrl := FileAccessControl{}
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileAccessControl."+
+			"NewElements()",
+		"")
+
+	if err != nil {
+		return newFAccessCtrl, err
+	}
+
+	err = new(fileAccessControlMechanics).
+		setFileAccessControl(
+			&newFAccessCtrl,
+			openCodes,
+			permissions,
 			ePrefix.XCpy("newFAccessCtrl<-"))
 
 	return newFAccessCtrl, err
