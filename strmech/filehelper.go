@@ -707,6 +707,19 @@ func (fh *FileHelper) ChmodFilePermConfig(
 //		This 10-character string will be used to
 //		configure the internal File Permission data field
 //		for the new returned instance of FilePermissionConfig.
+//		-------------------------------------------------
+//						Be Advised
+//		Documentation states that the only valid file
+//		permission codes for Windows Operating Systems
+//		are:
+//
+//		Characters	Octal	File Access
+//	 	Symbolic	Mode	  Type
+//
+//		-r--r--r--	0444	File - read only
+//		-rw-rw-rw-	0666	File - read & write
+//
+//		-------------------------------------------------
 //
 //		This 10-character string will be used to
 //		configure the internal File Permission data field
@@ -835,19 +848,6 @@ func (fh *FileHelper) ChmodFilePermConfig(
 //			-rwxr-----	  0740		Owner can read, write, & execute.
 //									Group can only read; others
 //									have no permissions
-//		-------------------------------------------------
-//						Be Advised
-//		Documentation states that the only valid file
-//		permission codes for Windows Operating Systems
-//		are:
-//
-//		Characters	Octal	File Access
-//	 	Symbolic	Mode	  Type
-//
-//		-r--r--r--	0444	File - read only
-//		-rw-rw-rw-	0666	File - read & write
-//
-//		-------------------------------------------------
 //
 //	errorPrefix					interface{}
 //
@@ -939,12 +939,13 @@ func (fh *FileHelper) ChmodPermissionStr(
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
+	funcName := "FileHelper." +
+		"ChmodPermissionStr()"
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"FileHelper."+
-			"ChmodPermissionStr()",
+		funcName,
 		"")
 
 	if err != nil {
@@ -963,7 +964,9 @@ func (fh *FileHelper) ChmodPermissionStr(
 		return err
 	}
 
-	err = filePermissionCfg.IsValidInstanceError(ePrefix)
+	err = filePermissionCfg.
+		IsValidInstanceError(
+			ePrefix.XCtx("filePermissionCfg"))
 
 	if err != nil {
 
@@ -972,7 +975,7 @@ func (fh *FileHelper) ChmodPermissionStr(
 			"filePermissionCfg.IsValidInstanceError(%v)\n"+
 			"returned the following error.\n"+
 			"Error=\n%v\n",
-			ePrefix.String(),
+			funcName,
 			"filePermissionStr",
 			"filePermissionStr",
 			err.Error())

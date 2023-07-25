@@ -366,17 +366,36 @@ func (filePermissionsTest MainFilePermissionsTest009) PermissionStr02() {
 		totalNumOfBytesWritten)
 
 	var errs []error
+	var err2 error
 
-	err = targetReadFilePtr.Close()
+	err2 = targetReadFilePtr.Close()
 
-	if err != nil {
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error Closing Target Read File!\n"+
+			"targetReadFilePtr.Close()\n"+
+			"Target Read File = '%v'\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			targetReadFileName,
+			err2.Error())
 
 		errs = append(errs, err)
 	}
 
-	err = targetWriteFilePtr.Close()
+	err2 = targetWriteFilePtr.Close()
 
-	if err != nil {
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error Closing Target Write File!\n"+
+			"targetWriteFilePtr.Close()\n"+
+			"Target Write File = '%v'\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			targetWriteFileName,
+			err2.Error())
 
 		errs = append(errs, err)
 	}
@@ -408,17 +427,58 @@ func (filePermissionsTest MainFilePermissionsTest009) PermissionStr02() {
 	}
 
 	fmt.Printf("\n%v\n"+
-		"After Read/Write Operation\n"+
+		"After Read/Write Operation And File is Close.\n"+
 		"Target Write File: %v\n"+
 		"Target Write File Mode: 0%o\n"+
 		"Requested Target Write File Permissions: %s\n"+
-		"   Actual Target Write File Permissions: %s\n"+
-		"Target Write File is Open for writing.\n\n",
+		"   Actual Target Write File Permissions: %s\n\n",
 		ePrefix.String(),
 		targetWriteFileName,
 		writeFInfo.Mode(),
 		writeOpenFilePermissions,
-		fInfo.Mode().Perm())
+		writeFInfo.Mode().Perm())
+
+	var fileModeChangeStr = "-r--r--r--"
+
+	err = fHelper.
+		ChmodPermissionStr(
+			targetWriteFileName,
+			fileModeChangeStr,
+			ePrefix.XCpy("targetWriteFileName"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	writeFInfo,
+		err = fHelper.GetFileInfo(
+		targetWriteFileName,
+		ePrefix.XCpy("After Close-targetWriteFileName"))
+
+	if err != nil {
+
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+
+		return
+	}
+
+	fmt.Printf("\n%v\n"+
+		"After Read/Write Operation, Target Write\n"+
+		"File is Closed and the call to Change File\n"+
+		"Mode, this is the current permissions status.\n"+
+		"Medhod Call: fHelper.ChmodPermissionStr()\n"+
+		"Target Write File: %v\n"+
+		"Target Write File Mode: 0%o\n"+
+		"          Requested File Mode Change: %s\n"+
+		"Actual Target Write File Permissions: %s\n\n",
+		ePrefix.String(),
+		targetWriteFileName,
+		writeFInfo.Mode(),
+		fileModeChangeStr,
+		writeFInfo.Mode().Perm())
 
 	errs = make([]error, 0)
 
