@@ -1086,6 +1086,7 @@ func (fileHlprOpsTest008 MainFileHelperOpsTest008) FileBufWriter01() {
 		err = new(strmech.FileBufferWriter).
 		NewPathFileName(
 			targetWriteFile,
+			false, // openFileReadWrite
 			512,
 			true,
 			ePrefix.XCpy("targetWriteFile"))

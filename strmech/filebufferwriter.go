@@ -129,9 +129,15 @@ type FileBufferWriter struct {
 //
 // # IMPORTANT
 //
-//	Call this method after completing all write operations.
-//	Calling this method is essential to performance of
-//	necessary clean-up tasks.
+//	(1)	Call this method after completing all write
+//		operations. Calling this method is essential to
+//		performance of necessary clean-up tasks after
+//		completion of all 'write' operations.
+//
+//	(2)	Once this method completes the 'Close' operation,
+//		this instance of FileBufferWriter becomes
+//		invalid, unusable and unavailable for further
+//		'write' operations.
 //
 // ----------------------------------------------------------------
 //
@@ -289,6 +295,10 @@ func (fBufWriter *FileBufferWriter) Close(
 		err = nil
 	}
 
+	fBufWriter.fileWriter = nil
+
+	fBufWriter.filePtr = nil
+
 	return err
 }
 
@@ -429,9 +439,21 @@ func (fBufWriter *FileBufferWriter) Flush(
 // This method returns a fully initialized instance of
 // FileBufferWriter.
 //
+// This returned instance of FileBufferWriter is created
+// using an object implementing the io.Writer interface
+// and passed as input parameter 'writer'.
+//
 // The size of the internal read buffer is controlled by
 // input parameter 'bufSize'. The minimum buffer size is
 // 16-bytes.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	Input parameter 'writer' will accept a pointer to an
+//	instance of os.File because os.File implements the
+//	io.Writer interface.
 //
 // ----------------------------------------------------------------
 //
@@ -508,9 +530,12 @@ func (fBufWriter *FileBufferWriter) New(
 // NewPathFileName
 //
 // Receives a path and file name as an input parameter.
-// This file is opened for 'write-only' operations and
-// is configured in the returned instance
-// FileBufferWriter.
+// This target 'write' file is opened for either
+// 'write-only' or 'read/write' operations depending on
+// input parameter 'openFileReadWrite'.
+//
+// Upon completion, this method returns a fully
+// configured instance of FileBufferWriter.
 //
 // If the target path and file do not currently exist on
 // an attached storage drive, this method will attempt to
@@ -524,18 +549,38 @@ func (fBufWriter *FileBufferWriter) New(
 //
 // ----------------------------------------------------------------
 //
+// # BE ADVISED
+//
+//	The returned type, 'FileBufferWriter', implements the
+//	io.Writer interface.
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	pathFileName				string
 //
 //		This string contains the path and file name of
-//		the file which will be used a data source for
-//		'read' operations performed by method:
-//			FileBufferReader.Read()
+//		the target 'write' file which will be used a
+//		destination data source for 'write' operations
+//		performed by method:
+//
+//			FileBufferWriter.Write()
 //
 //		If the target path and file do not currently
 //		exist on an attached storage drive, this method
 //		will attempt to create them.
+//
+//	openFileReadWrite			bool
+//
+//		If this parameter is set to 'true', the target
+//		'write' file created from input parameter
+//		'pathFileName' will be opened for 'read' and
+//		'write' operations.
+//
+//		If 'openFileReadWrite' is set to 'false', the
+//		target write file will be opened for 'write-only'
+//		operations.
 //
 //	bufSize						int
 //
@@ -648,6 +693,7 @@ func (fBufWriter *FileBufferWriter) New(
 //	 	attached to the	beginning of the error message.
 func (fBufWriter *FileBufferWriter) NewPathFileName(
 	pathFileName string,
+	openFileReadWrite bool,
 	bufSize int,
 	truncateExistingFile bool,
 	errorPrefix interface{}) (
@@ -724,9 +770,16 @@ func (fBufWriter *FileBufferWriter) NewPathFileName(
 
 	var filePermissionCfg FilePermissionConfig
 
+	var filePermissionStr = "--w--w--w-"
+
+	if openFileReadWrite == true {
+
+		filePermissionStr = "-rw-rw-rw-"
+	}
+
 	filePermissionCfg,
 		err = new(FilePermissionConfig).New(
-		"--w--w--w-",
+		filePermissionStr,
 		ePrefix.XCpy("filePermissionCfg<-"))
 
 	if err != nil {
