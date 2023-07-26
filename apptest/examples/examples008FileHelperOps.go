@@ -643,6 +643,7 @@ func (fileHlprOpsTest008 MainFileHelperOpsTest008) FileBufferReader03() {
 		err = new(strmech.FileBufferReader).
 		NewPathFileName(
 			targetReadFile,
+			false, // openFileReadWrite
 			512,
 			ePrefix.XCpy("targetReadFile"))
 

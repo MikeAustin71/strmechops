@@ -73,6 +73,7 @@ func TestFileBufferWriter_Write_000100(t *testing.T) {
 		err = new(FileBufferWriter).
 		NewPathFileName(
 			targetWriteFile,
+			false, // openFileReadWrite
 			512,
 			true,
 			ePrefix.XCpy("targetWriteFile"))
@@ -291,6 +292,7 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 		err = new(FileBufferWriter).
 		NewPathFileName(
 			targetWriteFile,
+			false, // openFileReadWrite
 			512,
 			true,
 			ePrefix.XCpy("targetWriteFile"))
@@ -395,6 +397,7 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 		err = new(FileBufferWriter).
 		NewPathFileName(
 			targetWriteFile,
+			false, // openFileReadWrite
 			512,
 			false,
 			ePrefix.XCpy("targetWriteFile"))

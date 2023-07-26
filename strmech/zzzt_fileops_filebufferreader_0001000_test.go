@@ -35,6 +35,7 @@ func TestFileBufferReader_Read_000100(t *testing.T) {
 		err = new(FileBufferReader).
 		NewPathFileName(
 			targetReadFile,
+			false, // openFileReadWrite
 			256,
 			ePrefix.XCpy("targetReadFile"))
 

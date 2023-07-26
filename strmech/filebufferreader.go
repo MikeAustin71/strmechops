@@ -306,8 +306,9 @@ func (fBufReader *FileBufferReader) Close(
 //		prevailing memory limitations.
 //
 //		The minimum reader buffer size is 16-bytes. If
-//		'bufSize' is set to a size less than '16', an
-//		error will be returned.
+//		'bufSize' is set to a size less than '16', it
+//		will be automatically set to the default buffer
+//		size of 4096.
 //
 //	errorPrefix					interface{}
 //
@@ -392,10 +393,7 @@ func (fBufReader *FileBufferReader) Close(
 //	 	attached to the	beginning of the error message.
 func (fBufReader *FileBufferReader) New(
 	reader io.Reader,
-	bufSize int,
-	errorPrefix interface{}) (
-	FileBufferReader,
-	error) {
+	bufSize int) FileBufferReader {
 
 	if fBufReader.lock == nil {
 		fBufReader.lock = new(sync.Mutex)
@@ -405,38 +403,20 @@ func (fBufReader *FileBufferReader) New(
 
 	defer fBufReader.lock.Unlock()
 
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
 	var newFileBufReader FileBufferReader
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"FileBufferReader."+
-			"New()",
-		"")
-
-	if err != nil {
-		return newFileBufReader, err
-	}
 
 	if bufSize < 16 {
 
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'bufSize' is invalid!\n"+
-			"The minimum buffer size is '16'.\n"+
-			"Input parameter 'bufSize' = '%v'\n",
-			ePrefix.String(),
-			bufSize)
+		bufSize = 4096
 
-		return newFileBufReader, err
+		return newFileBufReader
 	}
 
 	newFileBufReader.fileReader = bufio.NewReaderSize(
 		reader,
 		bufSize)
 
-	return newFileBufReader, err
+	return newFileBufReader
 }
 
 // NewPathFileName
@@ -465,6 +445,17 @@ func (fBufReader *FileBufferReader) New(
 //		attached storage drive, an error will be
 //		returned.
 //
+//	openFileReadWrite			bool
+//
+//		If this parameter is set to 'true', the target
+//		'read' file identified from input parameter
+//		'pathFileName' will be opened for both 'read'
+//		and 'write' operations.
+//
+//		If 'openFileReadWrite' is set to 'false', the
+//		target 'read' file will be opened for 'read-only'
+//		operations.
+//
 //	bufSize						int
 //
 //		This integer value controls the size of the
@@ -476,8 +467,9 @@ func (fBufReader *FileBufferReader) New(
 //		prevailing memory limitations.
 //
 //		The minimum reader buffer size is 16-bytes. If
-//		'bufSize' is set to a size less than '16', an
-//		error will be returned.
+//		'bufSize' is set to a size less than "16", it
+//		will be automatically set to the default buffer
+//		size of 4096.
 //
 //	errorPrefix					interface{}
 //
@@ -562,6 +554,7 @@ func (fBufReader *FileBufferReader) New(
 //	 	attached to the	beginning of the error message.
 func (fBufReader *FileBufferReader) NewPathFileName(
 	pathFileName string,
+	openFileReadWrite bool,
 	bufSize int,
 	errorPrefix interface{}) (
 	FileBufferReader,
@@ -603,12 +596,7 @@ func (fBufReader *FileBufferReader) NewPathFileName(
 
 	if bufSize < 16 {
 
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'bufSize' is invalid!\n"+
-			"The minimum buffer size is '16'.\n"+
-			"Input parameter 'bufSize' = '%v'\n",
-			ePrefix.String(),
-			bufSize)
+		bufSize = 4096
 
 		return newFileBufReader, err
 	}
@@ -668,10 +656,15 @@ func (fBufReader *FileBufferReader) NewPathFileName(
 	}
 
 	var filePermissionCfg FilePermissionConfig
+	var fileOpenPermissions = "-r--r--r--"
+
+	if openFileReadWrite == true {
+		fileOpenPermissions = "-rw-rw-rw-"
+	}
 
 	filePermissionCfg,
 		err = new(FilePermissionConfig).New(
-		"-r--r--r--",
+		fileOpenPermissions,
 		ePrefix.XCpy("filePermissionCfg<-"))
 
 	if err != nil {
