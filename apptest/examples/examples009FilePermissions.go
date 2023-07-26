@@ -327,13 +327,11 @@ func (filePermissionsTest MainFilePermissionsTest009) PermissionStr02() {
 					"numOfBytesRead != numOfBytesWritten\n"+
 					"Target Write File = '%v'\n"+
 					"numOfBytesRead = %v\n"+
-					"numOfBytesWritten = %v\n"+
-					"Write Error=\n%v\n",
+					"numOfBytesWritten = %v\n",
 					ePrefix.String(),
-					numOfBytesRead,
-					numOfBytesWritten,
 					targetWriteFileName,
-					writeErr.Error())
+					numOfBytesRead,
+					numOfBytesWritten)
 
 				_ = targetReadFilePtr.Close()
 

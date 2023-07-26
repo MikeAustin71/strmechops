@@ -20,9 +20,16 @@ import (
 // Read and Write operations are performed using
 // private, internal FileBufferReader and
 // FileBufferWriter objects.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	To create a valid instance of FileBufferReadWrite,
+//	users MUST call one of the 'New' methods.
 type FileBufferReadWrite struct {
-	writer            FileBufferWriter
-	reader            FileBufferReader
+	writer            *FileBufferWriter
+	reader            *FileBufferReader
 	writeFilePathName string
 	readFilePathName  string
 
@@ -49,15 +56,23 @@ func (fBufReadWrite *FileBufferReadWrite) New(
 
 	var newFBuffReadWrite = FileBufferReadWrite{}
 
-	newFBuffReadWrite.reader =
+	var buffReader FileBufferReader
+
+	buffReader =
 		new(FileBufferReader).New(
 			reader,
 			readerBuffSize)
 
-	newFBuffReadWrite.writer =
+	fBufReadWrite.reader = &buffReader
+
+	var buffWriter FileBufferWriter
+
+	buffWriter =
 		new(FileBufferWriter).New(
 			writer,
 			writerBuffSize)
+
+	newFBuffReadWrite.writer = &buffWriter
 
 	return newFBuffReadWrite
 }
@@ -218,7 +233,9 @@ func (fBufReadWrite *FileBufferReadWrite) NewPathFileNames(
 		return newFBuffReadWrite, err
 	}
 
-	newFBuffReadWrite.reader,
+	var buffReader FileBufferReader
+
+	buffReader,
 		err =
 		new(FileBufferReader).NewPathFileName(
 			readerPathFileName,
@@ -231,7 +248,11 @@ func (fBufReadWrite *FileBufferReadWrite) NewPathFileNames(
 		return newFBuffReadWrite, err
 	}
 
-	newFBuffReadWrite.writer,
+	newFBuffReadWrite.reader = &buffReader
+
+	var buffWriter FileBufferWriter
+
+	buffWriter,
 		err = new(FileBufferWriter).NewPathFileName(
 		writerPathFileName,
 		openWriteFileReadWrite, // openFileReadWrite
@@ -239,5 +260,315 @@ func (fBufReadWrite *FileBufferReadWrite) NewPathFileNames(
 		truncateExistingWriteFile, // truncateExistingFile
 		ePrefix.XCpy("<-"))
 
+	if err != nil {
+
+		return newFBuffReadWrite, err
+	}
+
+	newFBuffReadWrite.writer = &buffWriter
+
 	return newFBuffReadWrite, err
+}
+
+// ReadWriteAll
+//
+// This method reads all data from the 'reader' data
+// source and writes all that data to the 'writer'
+// destination.
+//
+// If the total number of bytes read does NOT equal the
+// total number of bytes written, an error will be
+// returned.
+//
+// The 'read' and 'write' operations use the io.Reader
+// and io.Writer objects created when the current
+// instance of FileBufferReadWrite was initialized with
+// one of the 'New' methods.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
+	errorPrefix interface{}) (
+	totalBytesRead int,
+	totalBytesWritten int,
+	err error) {
+
+	if fBufReadWrite.lock == nil {
+		fBufReadWrite.lock = new(sync.Mutex)
+	}
+
+	fBufReadWrite.lock.Lock()
+
+	defer fBufReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "FileBufferReadWrite." +
+		"ReadWriteAll()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return totalBytesRead, totalBytesWritten, err
+	}
+
+	if fBufReadWrite.reader == nil ||
+		fBufReadWrite.writer == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: The current instance of\n"+
+			"FileBufferReadWrite is invalid!\n"+
+			"Call one of the 'New' methods to\n"+
+			"create a valid instance of FileBufferReadWrite.\n",
+			ePrefix.String())
+
+		return totalBytesRead, totalBytesWritten, err
+	}
+
+	var readErr, writeErr error
+	var numOfBytesRead, numOfBytesWritten, cycleCount int
+	byteArray := make([]byte, fBufReadWrite.reader.fileReader.Size())
+	var errs []error
+
+	for {
+
+		cycleCount++
+
+		numOfBytesRead,
+			readErr =
+			fBufReadWrite.reader.Read(byteArray)
+
+		if readErr != nil &&
+			readErr != io.EOF {
+
+			var err2 error
+
+			err2 = fmt.Errorf("%v\n"+
+				"Error Reading Target Read File!\n"+
+				"Cycle Count= %v\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				cycleCount,
+				readErr.Error())
+
+			errs = append(
+				errs, err2)
+
+			var err3 error
+
+			err3 = fBufReadWrite.reader.Close(
+				ePrefix.XCpy("reader-Close"))
+
+			if err3 != nil {
+
+				errs = append(
+					errs, err3)
+
+			}
+
+			var err4 error
+
+			err4 = fBufReadWrite.writer.Close(
+				ePrefix.XCpy("writer-Close"))
+
+			if err4 != nil {
+
+				errs = append(
+					errs, err4)
+
+			}
+
+			err = new(StrMech).ConsolidateErrors(errs)
+
+			return totalBytesRead, totalBytesWritten, err
+		}
+
+		if numOfBytesRead > 0 {
+
+			totalBytesRead += numOfBytesRead
+
+			numOfBytesWritten,
+				writeErr = fBufReadWrite.writer.Write(
+				byteArray[0:numOfBytesRead])
+
+			if writeErr != nil {
+
+				var err2 error
+
+				err2 = fmt.Errorf("%v\n"+
+					"Error Writing Bytes To File!\n"+
+					"Write Error=\n%v\n",
+					ePrefix.String(),
+					writeErr.Error())
+
+				errs = append(
+					errs, err2)
+
+				var err3 error
+
+				err3 = fBufReadWrite.reader.Close(
+					ePrefix.XCpy("reader-Close"))
+
+				if err3 != nil {
+
+					errs = append(
+						errs, err3)
+
+				}
+
+				var err4 error
+
+				err4 = fBufReadWrite.writer.Close(
+					ePrefix.XCpy("writer-Close"))
+
+				if err4 != nil {
+
+					errs = append(
+						errs, err4)
+
+				}
+
+				err = new(StrMech).ConsolidateErrors(errs)
+
+				return totalBytesRead, totalBytesWritten, err
+			}
+
+			totalBytesWritten += numOfBytesWritten
+		}
+
+		if numOfBytesRead != numOfBytesWritten {
+
+			var err2 error
+
+			err2 = fmt.Errorf("%v\n"+
+				"Error Writing Bytes To File!\n"+
+				"numOfBytesRead != numOfBytesWritten\n"+
+				"numOfBytesRead = %v\n"+
+				"numOfBytesWritten = %v\n",
+				ePrefix.String(),
+				numOfBytesRead,
+				numOfBytesWritten)
+
+			errs = append(
+				errs, err2)
+
+			var err3 error
+
+			err3 = fBufReadWrite.reader.Close(
+				ePrefix.XCpy("reader-Close"))
+
+			if err3 != nil {
+
+				errs = append(
+					errs, err3)
+
+			}
+
+			var err4 error
+
+			err4 = fBufReadWrite.writer.Close(
+				ePrefix.XCpy("writer-Close"))
+
+			if err4 != nil {
+
+				errs = append(
+					errs, err4)
+
+			}
+
+			err = new(StrMech).ConsolidateErrors(errs)
+
+			return totalBytesRead, totalBytesWritten, err
+		}
+
+		if readErr == io.EOF {
+
+			break
+		}
+
+	}
+
+	return totalBytesRead, totalBytesWritten, err
 }
