@@ -40,11 +40,18 @@ type FileBufferReadWrite struct {
 //
 // Creates and returns a new, fully configured instance
 // of FileBufferReadWrite
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
 func (fBufReadWrite *FileBufferReadWrite) New(
 	reader io.Reader,
 	readerBuffSize int,
 	writer io.Writer,
-	writerBuffSize int) FileBufferReadWrite {
+	writerBuffSize int,
+	errorPrefix interface{}) (
+	FileBufferReadWrite,
+	error) {
 
 	if fBufReadWrite.lock == nil {
 		fBufReadWrite.lock = new(sync.Mutex)
@@ -56,14 +63,36 @@ func (fBufReadWrite *FileBufferReadWrite) New(
 
 	var newFBuffReadWrite = FileBufferReadWrite{}
 
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	funcName := "FileBufferReadWrite." +
+		"New()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return newFBuffReadWrite, err
+	}
+
 	var buffReader FileBufferReader
 
-	buffReader =
+	buffReader,
+		err =
 		new(FileBufferReader).New(
 			reader,
-			readerBuffSize)
+			readerBuffSize,
+			ePrefix.XCpy("reader"))
 
-	fBufReadWrite.reader = &buffReader
+	if err != nil {
+
+		return newFBuffReadWrite, err
+	}
+
+	newFBuffReadWrite.reader = &buffReader
 
 	var buffWriter FileBufferWriter
 
@@ -74,7 +103,7 @@ func (fBufReadWrite *FileBufferReadWrite) New(
 
 	newFBuffReadWrite.writer = &buffWriter
 
-	return newFBuffReadWrite
+	return newFBuffReadWrite, err
 }
 
 // NewPathFileNames

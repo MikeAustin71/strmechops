@@ -225,31 +225,10 @@ func (fBufReader *FileBufferReader) Close(
 		return err
 	}
 
-	var err2 error
-
-	if fBufReader.filePtr != nil {
-
-		err2 = fBufReader.filePtr.Close()
-
-		if err2 != nil {
-
-			err = fmt.Errorf("%v\n"+
-				"Error returned while closing the target 'write' file!\n"+
-				"fBufWriter.filePtr.Close()\n"+
-				"Error = \n%v\n",
-				ePrefix.String(),
-				err2.Error())
-
-		}
-
-		fBufReader.filePtr = nil
-	}
-
-	if fBufReader.fileReader != nil {
-
-		fBufReader.fileReader = nil
-
-	}
+	err = new(fileBufferReaderMolecule).close(
+		fBufReader,
+		"fBufReader",
+		ePrefix.XCpy("fBufReader"))
 
 	return err
 }
@@ -298,17 +277,17 @@ func (fBufReader *FileBufferReader) Close(
 //	bufSize						int
 //
 //		This integer value controls the size of the
-//		buffer created for the returned instance of
-//		FileBufferReader.
+//		'read' buffer created for the returned instance
+//		of FileBufferReader.
 //
 //		'bufSize' should be configured to maximize
 //		performance for 'read' operations subject to
 //		prevailing memory limitations.
 //
 //		The minimum reader buffer size is 16-bytes. If
-//		'bufSize' is set to a size less than '16', it
+//		'bufSize' is set to a size less than "16", it
 //		will be automatically set to the default buffer
-//		size of 4096.
+//		size of 4096-bytes.
 //
 //	errorPrefix					interface{}
 //
@@ -393,7 +372,10 @@ func (fBufReader *FileBufferReader) Close(
 //	 	attached to the	beginning of the error message.
 func (fBufReader *FileBufferReader) New(
 	reader io.Reader,
-	bufSize int) FileBufferReader {
+	bufSize int,
+	errorPrefix interface{}) (
+	FileBufferReader,
+	error) {
 
 	if fBufReader.lock == nil {
 		fBufReader.lock = new(sync.Mutex)
@@ -403,20 +385,31 @@ func (fBufReader *FileBufferReader) New(
 
 	defer fBufReader.lock.Unlock()
 
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
 	var newFileBufReader FileBufferReader
 
-	if bufSize < 16 {
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileBufferReader."+
+			"New()",
+		"")
 
-		bufSize = 4096
-
-		return newFileBufReader
+	if err != nil {
+		return newFileBufReader, err
 	}
 
-	newFileBufReader.fileReader = bufio.NewReaderSize(
-		reader,
-		bufSize)
+	err = new(fileBufferReaderNanobot).
+		setIoReader(
+			&newFileBufReader,
+			"newFileBufReader",
+			reader,
+			"newFileBufReader",
+			bufSize,
+			ePrefix.XCpy("newFileBufReader"))
 
-	return newFileBufReader
+	return newFileBufReader, err
 }
 
 // NewPathFileName
@@ -584,130 +577,16 @@ func (fBufReader *FileBufferReader) NewPathFileName(
 		return newFileBufReader, err
 	}
 
-	if len(pathFileName) == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'pathFileName' is invalid!\n"+
-			"'pathFileName' is an empty string with a length of zero (0).\n",
-			ePrefix.String())
-
-		return newFileBufReader, err
-	}
-
-	if bufSize < 16 {
-
-		bufSize = 4096
-
-		return newFileBufReader, err
-	}
-
-	var fInfoPlus FileInfoPlus
-	var pathFileDoesExist bool
-	var err2 error
-
-	pathFileName,
-		pathFileDoesExist,
-		fInfoPlus,
-		err2 =
-		new(fileHelperMolecule).
-			doesPathFileExist(
-				pathFileName,
-				PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
-				ePrefix,
-				"pathFileName")
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"An error occurred while testing for the existance\n"+
-			"of 'pathFileName' on an attached storage drive.\n"+
-			"pathFileName = '%v'\n"+
-			"Error= \n%v\n",
-			funcName,
+	err = new(fileBufferReaderNanobot).
+		setPathFileName(
+			fBufReader,
+			"fBufReader",
 			pathFileName,
-			err2.Error())
-
-		return newFileBufReader, err
-	}
-
-	if !pathFileDoesExist {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'pathFileName' is invalid!\n"+
-			"The path and file name do NOT exist on an attached\n"+
-			"storage drive.\n"+
-			"pathFileName= '%v'\n",
-			ePrefix.String(),
-			pathFileName)
-
-		return newFileBufReader, err
-	}
-
-	if fInfoPlus.IsDir() {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'pathFileName' is invalid!\n"+
-			"'pathFileName' is directory and NOT a file name.\n"+
-			"pathFileName= '%v'\n",
-			ePrefix.String(),
-			pathFileName)
-
-		return newFileBufReader, err
-	}
-
-	var filePermissionCfg FilePermissionConfig
-	var fileOpenPermissions = "-r--r--r--"
-
-	if openFileReadWrite == true {
-		fileOpenPermissions = "-rw-rw-rw-"
-	}
-
-	filePermissionCfg,
-		err = new(FilePermissionConfig).New(
-		fileOpenPermissions,
-		ePrefix.XCpy("filePermissionCfg<-"))
-
-	if err != nil {
-
-		return newFileBufReader, err
-	}
-
-	var fileOpenCfg FileOpenConfig
-
-	fileOpenCfg,
-		err = new(FileOpenConfig).New(
-		ePrefix.XCpy("fileOpenCfg<-"),
-		FOpenType.TypeReadOnly())
-
-	if err != nil {
-
-		return newFileBufReader, err
-	}
-
-	newFileBufReader.filePtr,
-		err = new(fileHelperBoson).
-		openFile(
-			pathFileName,
-			false,
-			fileOpenCfg,
-			filePermissionCfg,
 			"pathFileName",
-			ePrefix)
-
-	if err != nil {
-
-		if newFileBufReader.filePtr != nil {
-			_ = newFileBufReader.filePtr.Close()
-		}
-
-		return newFileBufReader, err
-	}
-
-	newFileBufReader.targetReadFileName = pathFileName
-
-	newFileBufReader.fileReader = bufio.NewReaderSize(
-		newFileBufReader.filePtr,
-		bufSize)
+			openFileReadWrite,
+			bufSize,
+			ePrefix.XCpy(
+				pathFileName))
 
 	return newFileBufReader, err
 }
@@ -927,4 +806,624 @@ func (fBufReader *FileBufferReader) Read(
 	}
 
 	return numOfBytesRead, err
+}
+
+type fileBufferReaderNanobot struct {
+	lock *sync.Mutex
+}
+
+// setIoReader
+//
+// This 'setter' method is used to initialize new values
+// for internal member variables contained in the
+// instance of FileBufferReader passed as input parameter
+// 'fBufReader'. The new configuration will be based on
+// an io.Reader object passed as input parameter
+// 'reader'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the instance of
+//	FileBufferReader passed as input parameter
+//	'fBufReader'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufReader					*FileBufferReader
+//
+//		A pointer to an instance of FileBufferReader.
+//
+//		All internal member variable data values in
+//		this instance will be deleted and initialized
+//		to new values based on the following input
+//		parameters.
+//
+//	fBufReaderLabel				string
+//
+//		The name or label associated with input parameter
+//		'fBufReader' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufReader" will be
+//		automatically applied.
+//
+//	reader						io.Reader
+//
+//		This parameter will accept any object
+//		implementing the io.Reader interface.
+//
+//	readerLabel					string
+//
+//		The name or label associated with input parameter
+//		'reader' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "reader" will be
+//		automatically applied.
+//
+//	bufSize						int
+//
+//		This integer value controls the size of the
+//		'read' buffer created for the returned instance
+//		of FileBufferReader.
+//
+//		'bufSize' should be configured to maximize
+//		performance for 'read' operations subject to
+//		prevailing memory limitations.
+//
+//		The minimum reader buffer size is 16-bytes. If
+//		'bufSize' is set to a size less than "16", it
+//		will be automatically set to the default buffer
+//		size of 4096-bytes.
+func (fBufReaderNanobot *fileBufferReaderNanobot) setIoReader(
+	fBufReader *FileBufferReader,
+	fBufReaderLabel string,
+	reader io.Reader,
+	readerLabel string,
+	bufSize int,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fBufReaderNanobot.lock == nil {
+		fBufReaderNanobot.lock = new(sync.Mutex)
+	}
+
+	fBufReaderNanobot.lock.Lock()
+
+	defer fBufReaderNanobot.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileBufferReaderNanobot." +
+		"setIoReader()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if len(fBufReaderLabel) == 0 {
+
+		fBufReaderLabel = "fBufReader"
+	}
+
+	if len(readerLabel) == 0 {
+
+		readerLabel = "reader"
+	}
+
+	if fBufReader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The FileBufferReader instance passed\n"+
+			"as input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' pointer.\n",
+			ePrefix.String(),
+			fBufReaderLabel,
+			fBufReaderLabel)
+
+		return err
+	}
+
+	err = new(fileBufferReaderMolecule).close(
+		fBufReader,
+		fBufReaderLabel,
+		ePrefix.XCpy(fBufReaderLabel))
+
+	if err != nil {
+		return err
+	}
+
+	if bufSize < 16 {
+
+		bufSize = 4096
+	}
+
+	fBufReader.fileReader = bufio.NewReaderSize(
+		reader,
+		bufSize)
+
+	return err
+}
+
+// setPathFileName
+//
+// This 'setter' method is used to initialize new values
+// for internal member variables contained in the
+// instance of FileBufferReader passed as input parameter
+// 'fBufReader'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the instance of
+//	FileBufferReader passed as input parameter
+//	'fBufReader'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufReader					*FileBufferReader
+//
+//		A pointer to an instance of FileBufferReader.
+//
+//		All internal member variable data values in
+//		this instance will be deleted and initialized
+//		to new values based on the following input
+//		parameters.
+//
+//	fBufReaderLabel				string
+//
+//		The name or label associated with input parameter
+//		'fBufReader' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufReader" will be
+//		automatically applied.
+//
+//	pathFileName				string
+//
+//		This string contains the path and file name of
+//		the file which will be used a data source for
+//		'read' operations performed by method:
+//			FileBufferReader.Read()
+//
+//		If this file does not currently exist on an
+//		attached storage drive, an error will be
+//		returned.
+//
+//	pathFileNameLabel			string
+//
+//		The name or label associated with input parameter
+//		'pathFileName' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "pathFileName" will be
+//		automatically applied.
+//
+//	openFileReadWrite			bool
+//
+//		If this parameter is set to 'true', the target
+//		'read' file identified from input parameter
+//		'pathFileName' will be opened for both 'read'
+//		and 'write' operations.
+//
+//		If 'openFileReadWrite' is set to 'false', the
+//		target 'read' file will be opened for 'read-only'
+//		operations.
+//
+//	bufSize						int
+//
+//		This integer value controls the size of the
+//		'read' buffer created for the returned instance
+//		of FileBufferReader.
+//
+//		'bufSize' should be configured to maximize
+//		performance for 'read' operations subject to
+//		prevailing memory limitations.
+//
+//		The minimum reader buffer size is 16-bytes. If
+//		'bufSize' is set to a size less than "16", it
+//		will be automatically reset to the default buffer
+//		size of 4096.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufReaderNanobot *fileBufferReaderNanobot) setPathFileName(
+	fBufReader *FileBufferReader,
+	fBufReaderLabel string,
+	pathFileName string,
+	pathFileNameLabel string,
+	openFileReadWrite bool,
+	bufSize int,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fBufReaderNanobot.lock == nil {
+		fBufReaderNanobot.lock = new(sync.Mutex)
+	}
+
+	fBufReaderNanobot.lock.Lock()
+
+	defer fBufReaderNanobot.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileBufferReaderNanobot." +
+		"setPathFileName()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(fBufReaderLabel) == 0 {
+
+		fBufReaderLabel = "fBufReader"
+	}
+
+	if fBufReader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The FileBufferReader instance passed\n"+
+			"as input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' pointer.\n",
+			ePrefix.String(),
+			fBufReaderLabel,
+			fBufReaderLabel)
+
+		return err
+	}
+
+	if len(pathFileNameLabel) == 0 {
+
+		pathFileNameLabel = "pathFileName"
+	}
+
+	if len(pathFileName) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is an empty string with a length of zero (0).\n",
+			ePrefix.String(),
+			pathFileNameLabel,
+			pathFileNameLabel)
+
+		return err
+	}
+
+	err = new(fileBufferReaderMolecule).close(
+		fBufReader,
+		fBufReaderLabel,
+		ePrefix.XCpy(fBufReaderLabel))
+
+	if err != nil {
+		return err
+	}
+
+	if bufSize < 16 {
+
+		bufSize = 4096
+	}
+
+	var fInfoPlus FileInfoPlus
+	var pathFileDoesExist bool
+	var err2 error
+
+	pathFileName,
+		pathFileDoesExist,
+		fInfoPlus,
+		err2 =
+		new(fileHelperMolecule).
+			doesPathFileExist(
+				pathFileName,
+				PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
+				ePrefix,
+				pathFileNameLabel)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while testing for the existance\n"+
+			"of '%v' on an attached storage drive.\n"+
+			"%v = '%v'\n"+
+			"Error= \n%v\n",
+			funcName,
+			pathFileNameLabel,
+			pathFileNameLabel,
+			pathFileName,
+			err2.Error())
+
+		return err
+	}
+
+	if !pathFileDoesExist {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"The path and file name do NOT exist on an attached\n"+
+			"storage drive.\n"+
+			"%v= '%v'\n",
+			ePrefix.String(),
+			pathFileNameLabel,
+			pathFileNameLabel,
+			pathFileName)
+
+		return err
+	}
+
+	if fInfoPlus.IsDir() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'pathFileName' is invalid!\n"+
+			"'pathFileName' is directory and NOT a file name.\n"+
+			"pathFileName= '%v'\n",
+			ePrefix.String(),
+			pathFileName)
+
+		return err
+	}
+
+	var filePermissionCfg FilePermissionConfig
+	var fileOpenPermissions = "-r--r--r--"
+
+	if openFileReadWrite == true {
+		fileOpenPermissions = "-rw-rw-rw-"
+	}
+
+	filePermissionCfg,
+		err = new(FilePermissionConfig).New(
+		fileOpenPermissions,
+		ePrefix.XCpy("filePermissionCfg<-"))
+
+	if err != nil {
+
+		return err
+	}
+
+	var fileOpenCfg FileOpenConfig
+
+	fileOpenCfg,
+		err = new(FileOpenConfig).New(
+		ePrefix.XCpy("fileOpenCfg<-"),
+		FOpenType.TypeReadOnly())
+
+	if err != nil {
+
+		return err
+	}
+
+	fBufReader.filePtr,
+		err = new(fileHelperBoson).
+		openFile(
+			pathFileName,
+			false,
+			fileOpenCfg,
+			filePermissionCfg,
+			pathFileNameLabel,
+			ePrefix)
+
+	if err != nil {
+
+		return err
+	}
+
+	fBufReader.targetReadFileName = pathFileName
+
+	fBufReader.fileReader = bufio.NewReaderSize(
+		fBufReader.filePtr,
+		bufSize)
+
+	return err
+}
+
+type fileBufferReaderMolecule struct {
+	lock *sync.Mutex
+}
+
+// close
+//
+// This method will effectively close and invalidate the
+// instance of FileBufferReader passed as input parameter
+// 'fBufReader'.
+//
+// If a file pointer (*os.File) was previously configured
+// for 'fBufReader', it will be closed and set to 'nil'.
+//
+// After completion of this method this FileBufferReader
+// instance will be unusable, invalid and unavailable for
+// future 'read' operations.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete all pre-existing data values
+//	in the instance of FileBufferReader passed as input
+//	parameter 'fBufReader'.
+//
+//	After completion of this method this FileBufferReader
+//	instance will be unusable, invalid and unavailable
+//	for future 'read' operations.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufReader					*FileBufferReader
+//
+//		A pointer to an instance of FileBufferReader.
+//
+//		All internal member variable data values in
+//		this instance will be deleted.
+//
+//		If a file pointer (*os.File) was previously
+//		configured for 'fBufReader', it will be closed
+//		and set to 'nil' by this method.
+//
+//	fBufReaderLabel				string
+//
+//		The name or label associated with input parameter
+//		'fBufReader' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufReader" will be
+//		automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBuffReaderMolecule *fileBufferReaderMolecule) close(
+	fBufReader *FileBufferReader,
+	fBufReaderLabel string,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fBuffReaderMolecule.lock == nil {
+		fBuffReaderMolecule.lock = new(sync.Mutex)
+	}
+
+	fBuffReaderMolecule.lock.Lock()
+
+	defer fBuffReaderMolecule.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileBufferReaderMolecule." +
+		"close()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(fBufReaderLabel) == 0 {
+
+		fBufReaderLabel = "fBufReader"
+	}
+
+	if fBufReader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The FileBufferReader instance passed\n"+
+			"as input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' pointer.\n",
+			fBufReaderLabel,
+			fBufReaderLabel,
+			ePrefix.String())
+
+		return err
+	}
+
+	if fBufReader.filePtr != nil {
+
+		var err2 error
+
+		err2 = fBufReader.filePtr.Close()
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error returned while closing the target 'target' file!\n"+
+				"fBufWriter.filePtr.Close()\n"+
+				"Target Read File = '%v'\n"+
+				"Error = \n%v\n",
+				ePrefix.String(),
+				fBufReader.targetReadFileName,
+				err2.Error())
+
+		}
+	}
+
+	fBufReader.targetReadFileName = ""
+
+	fBufReader.filePtr = nil
+
+	fBufReader.fileReader = nil
+
+	return err
 }
