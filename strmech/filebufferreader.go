@@ -266,8 +266,8 @@ func (fBufReader *FileBufferReader) Close(
 //		data from files residing on an attached storage
 //		drive. However, with this configuration, the user
 //		is responsible for manually closing the file and
-//		performing any other required clean-up
-//		operations.
+//		performing any other required clean-up operations
+//		in addition to calling FileBufferReader.Close().
 //
 //		While the returned instance of FileBufferReader
 //		is primarily designed for reading data from disk
@@ -405,7 +405,7 @@ func (fBufReader *FileBufferReader) New(
 			&newFileBufReader,
 			"newFileBufReader",
 			reader,
-			"newFileBufReader",
+			"reader",
 			bufSize,
 			ePrefix.XCpy("newFileBufReader"))
 
@@ -699,6 +699,7 @@ func (fBufReader *FileBufferReader) NewPathFileName(
 //
 //		Bytes will be read from the data source
 //		configured for the current instance of
+//		FileBufferReader.
 //
 // ----------------------------------------------------------------
 //
@@ -806,6 +807,181 @@ func (fBufReader *FileBufferReader) Read(
 	}
 
 	return numOfBytesRead, err
+}
+
+// SetReader
+//
+// This method will completely re-initialize the current
+// instance of FileBufferReader using the io.Reader object
+// passed as input parameter 'reader'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the current instance of
+//	FileBufferReader.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/bufio
+//	https://pkg.go.dev/bufio#Reader
+//	https://pkg.go.dev/io#Reader
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	reader						io.Reader
+//
+//		An object which implements io.Reader interface.
+//
+//		This object may be a file pointer of type *os.File.
+//		File pointers of this type implement the io.Reader
+//		interface.
+//
+//		A file pointer (*os.File) will facilitate reading
+//		data from files residing on an attached storage
+//		drive. However, with this configuration, the user
+//		is responsible for manually closing the file and
+//		performing any other required clean-up operations
+//		in addition to calling FileBufferReader.Close().
+//
+//		While the returned instance of FileBufferReader
+//		is primarily designed for reading data from disk
+//		files, this 'reader' will in fact read data from
+//		any object implementing the io.Reader interface.
+//
+//	bufSize						int
+//
+//		This integer value controls the size of the
+//		'read' buffer created for the returned instance
+//		of FileBufferReader.
+//
+//		'bufSize' should be configured to maximize
+//		performance for 'read' operations subject to
+//		prevailing memory limitations.
+//
+//		The minimum reader buffer size is 16-bytes. If
+//		'bufSize' is set to a size less than "16", it
+//		will be automatically set to the default buffer
+//		size of 4096-bytes.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufReader *FileBufferReader) SetReader(
+	reader io.Reader,
+	bufSize int,
+	errorPrefix interface{}) error {
+
+	if fBufReader.lock == nil {
+		fBufReader.lock = new(sync.Mutex)
+	}
+
+	fBufReader.lock.Lock()
+
+	defer fBufReader.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileBufferReader."+
+			"SetReader()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	err = new(fileBufferReaderNanobot).
+		setIoReader(
+			fBufReader,
+			"fBufReader",
+			reader,
+			"reader",
+			bufSize,
+			ePrefix.XCpy("fBufReader"))
+
+	return err
 }
 
 type fileBufferReaderNanobot struct {
