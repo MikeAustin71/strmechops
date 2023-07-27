@@ -1756,9 +1756,9 @@ func (fBuffReaderMolecule *fileBufferReaderMolecule) close(
 			"Error: The FileBufferReader instance passed\n"+
 			"as input parameter '%v' is invalid!\n"+
 			"'%v' is a 'nil' pointer.\n",
+			ePrefix.String(),
 			fBufReaderLabel,
-			fBufReaderLabel,
-			ePrefix.String())
+			fBufReaderLabel)
 
 		return err
 	}

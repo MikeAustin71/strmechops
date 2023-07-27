@@ -296,7 +296,7 @@ func (fBufWriter *FileBufferWriter) Close(
 	}
 
 	fBufWriter.fileWriter = nil
-
+	fBufWriter.targetWriteFileName = ""
 	fBufWriter.filePtr = nil
 
 	return err
@@ -992,4 +992,320 @@ func (fBufWriter *FileBufferWriter) Write(
 	}
 
 	return numBytesWritten, err
+}
+
+type fileBufferWriterNanobot struct {
+	lock *sync.Mutex
+}
+
+type fileBufferWriterMolecule struct {
+	lock *sync.Mutex
+}
+
+// close
+//
+// This method is designed to perform clean up
+// operations after completion of all 'write'
+// operations.
+//
+// All internal member variable data values for the
+// instance of FileBufferWriter passed as input parameter
+// ”.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method will delete all pre-existing data
+//		values in the instance of FileBufferWriter passed
+//		as input parameter 'fBufWriter'.
+//
+//		After completion of this method this
+//		FileBufferWriter instance will be unusable,
+//		invalid and unavailable for future 'write'
+//		operations.
+//
+//	(2)	This 'close' method will NOT flush the 'write'
+//		buffer. To flush the 'write' buffer call:
+//			fileBufferWriterMolecule.flush()
+//
+//		Be sure to call the 'flush()' method before you
+//		call this method ('close()').
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufWriter					*FileBufferWriter
+//
+//		A pointer to an instance of FileBufferWriter.
+//
+//		All internal member variable data values in
+//		this instance will be deleted.
+//
+//		If a file pointer (*os.File) was previously
+//		configured for 'fBufWriter', it will be closed
+//		and set to 'nil' by this method.
+//
+//	fBufWriterLabel				string
+//
+//		The name or label associated with input parameter
+//		'fBufWriter' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufWriter" will be
+//		automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufWriterMolecule *fileBufferWriterMolecule) close(
+	fBufWriter *FileBufferWriter,
+	fBufWriterLabel string,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fBufWriterMolecule.lock == nil {
+		fBufWriterMolecule.lock = new(sync.Mutex)
+	}
+
+	fBufWriterMolecule.lock.Lock()
+
+	defer fBufWriterMolecule.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileBufferWriterMolecule." +
+		"close()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(fBufWriterLabel) == 0 {
+
+		fBufWriterLabel = "fBufWriter"
+	}
+
+	if fBufWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The FileBufferReader instance passed\n"+
+			"as input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' pointer.\n",
+			ePrefix.String(),
+			fBufWriterLabel,
+			fBufWriterLabel)
+
+		return err
+	}
+
+	if fBufWriter.filePtr != nil {
+
+		var err2 error
+
+		err2 = fBufWriter.filePtr.Close()
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error returned while closing the target 'target' file!\n"+
+				"fBufWriter.filePtr.Close()\n"+
+				"Target Read File = '%v'\n"+
+				"Error = \n%v\n",
+				ePrefix.String(),
+				fBufWriter.targetWriteFileName,
+				err2.Error())
+
+		}
+	}
+
+	fBufWriter.targetWriteFileName = ""
+
+	fBufWriter.filePtr = nil
+
+	fBufWriter.fileWriter = nil
+
+	return err
+}
+
+// flush
+//
+// This method performs one function. Namely, it flushes
+// all data from the write file effectively ensuring that
+// all data in the buffer is written to the file or
+// underlying device defined as an io.Writer.
+//
+// Specifically, this method does NOT 'close' the
+// FileBufferWriter instance passed as input parameter
+// 'fBufWriter'. As such, this method does not delete
+// member variable data contained in 'fBufWriter'. To
+// fully close the 'fBufWriter' instance, make a separate
+// call to method 'fileBufferWriterMolecule.close()'.
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method will NOT modify the internal member
+//	variable data values for the instance of
+//	FileBufferWriter passed as input parameter
+//	'fBufWriter'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufWriter					*FileBufferWriter
+//
+//		A pointer to an instance of FileBufferWriter.
+//		Any data remaining in the 'write' buffer will
+//		be written to the underlying data file by the
+//		flush 'operation' performed by this method.
+//
+//	fBufWriterLabel				string
+//
+//		The name or label associated with input parameter
+//		'fBufWriter' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufWriter" will be
+//		automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufWriterMolecule *fileBufferWriterMolecule) flush(
+	fBufWriter *FileBufferWriter,
+	fBufWriterLabel string,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fBufWriterMolecule.lock == nil {
+		fBufWriterMolecule.lock = new(sync.Mutex)
+	}
+
+	fBufWriterMolecule.lock.Lock()
+
+	defer fBufWriterMolecule.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileBufferWriterMolecule." +
+		"flush()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(fBufWriterLabel) == 0 {
+
+		fBufWriterLabel = "fBufWriter"
+	}
+
+	if fBufWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The FileBufferReader instance passed\n"+
+			"as input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' pointer.\n",
+			ePrefix.String(),
+			fBufWriterLabel,
+			fBufWriterLabel)
+
+		return err
+	}
+
+	if fBufWriter.fileWriter == nil {
+		return err
+	}
+
+	var err2 error
+
+	err2 = fBufWriter.fileWriter.Flush()
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned while flushing the 'write' buffer!\n"+
+			"%v.fileWriter.Flush()\n"+
+			"Error = \n%v\n",
+			ePrefix.String(),
+			fBufWriterLabel,
+			err2.Error())
+
+	}
+
+	return err
 }
