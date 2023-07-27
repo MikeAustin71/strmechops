@@ -618,13 +618,13 @@ func (fBufWriter *FileBufferWriter) New(
 //	pathFileName				string
 //
 //		This string contains the path and file name of
-//		the target 'write' file which will be used a
+//		the target 'write' file which will be used as a
 //		destination data source for 'write' operations
 //		performed by method:
 //
 //			FileBufferWriter.Write()
 //
-//		If the target path and file do not currently
+//		If the target path and file name do not currently
 //		exist on an attached storage drive, this method
 //		will attempt to create them.
 //
@@ -649,10 +649,11 @@ func (fBufWriter *FileBufferWriter) New(
 //		performance for 'write' operations subject to
 //		prevailing memory limitations.
 //
-//		If 'bufSize' is set to a value less than or equal
-//		to zero (0), it will be automatically reset to
-//		the default value of 4096-bytes.
-//
+//		The minimum write buffer size is 1-byte. If
+//		'bufSize' is set to a size less than or equal to
+//		zero, it will be automatically set to the default
+//		buffer size of 4096-bytes.
+
 //	truncateExistingFile			bool
 //
 //		If this parameter is set to 'true', the target
@@ -769,139 +770,27 @@ func (fBufWriter *FileBufferWriter) NewPathFileName(
 	var err error
 	var newFileBufWriter FileBufferWriter
 
-	funcName := "FileBufferWriter." +
-		"NewPathFileName()"
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		funcName,
+		"FileBufferWriter."+
+			"NewPathFileName()",
 		"")
 
 	if err != nil {
 		return newFileBufWriter, err
 	}
 
-	if len(pathFileName) == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'pathFileName' is invalid!\n"+
-			"'pathFileName' is an empty string with a length of zero (0).\n",
-			ePrefix.String())
-
-		return newFileBufWriter, err
-	}
-
-	if bufSize <= 0 {
-
-		bufSize = 4096
-
-	}
-
-	var err2 error
-
-	pathFileName,
-		_,
-		_,
-		err2 =
-		new(fileHelperMolecule).
-			doesPathFileExist(
-				pathFileName,
-				PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
-				ePrefix,
-				"pathFileName")
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"An error occurred while testing for the existance\n"+
-			"of 'pathFileName' on an attached storage drive.\n"+
-			"pathFileName = '%v'\n"+
-			"Error= \n%v\n",
-			funcName,
+	err = new(fileBufferWriterNanobot).
+		setPathFileName(
+			&newFileBufWriter,
+			"newFileBufWriter",
 			pathFileName,
-			err2.Error())
-
-		return newFileBufWriter, err
-	}
-
-	var filePermissionCfg FilePermissionConfig
-
-	var filePermissionStr = "--w--w--w-"
-
-	if openFileReadWrite == true {
-
-		filePermissionStr = "-rw-rw-rw-"
-	}
-
-	filePermissionCfg,
-		err = new(FilePermissionConfig).New(
-		filePermissionStr,
-		ePrefix.XCpy("filePermissionCfg<-"))
-
-	if err != nil {
-
-		return newFileBufWriter, err
-	}
-
-	var fileOpenCfg FileOpenConfig
-
-	if truncateExistingFile {
-
-		fileOpenCfg,
-			err = new(FileOpenConfig).New(
-			ePrefix.XCpy("fileOpenCfg<-"),
-			FOpenType.TypeWriteOnly(),
-			FOpenMode.ModeCreate(),
-			FOpenMode.ModeTruncate())
-
-		if err != nil {
-
-			return newFileBufWriter, err
-		}
-
-	} else {
-		// truncateExistingFile = 'false'
-		// This signals Append to existing file.
-
-		fileOpenCfg,
-			err = new(FileOpenConfig).New(
-			ePrefix.XCpy("fileOpenCfg<-"),
-			FOpenType.TypeWriteOnly(),
-			FOpenMode.ModeCreate(),
-			FOpenMode.ModeAppend())
-
-		if err != nil {
-
-			return newFileBufWriter, err
-		}
-
-	}
-
-	newFileBufWriter.filePtr,
-		err = new(fileHelperBoson).
-		openFile(
-			pathFileName,
-			false,
-			fileOpenCfg,
-			filePermissionCfg,
 			"pathFileName",
-			ePrefix)
-
-	if err != nil {
-
-		if newFileBufWriter.filePtr != nil {
-			_ = newFileBufWriter.filePtr.Close()
-		}
-
-		return newFileBufWriter, err
-	}
-
-	newFileBufWriter.targetWriteFileName = pathFileName
-
-	newFileBufWriter.fileWriter = bufio.NewWriterSize(
-		newFileBufWriter.filePtr,
-		bufSize)
+			openFileReadWrite,
+			bufSize,
+			truncateExistingFile,
+			ePrefix.XCpy("pathFileName"))
 
 	return newFileBufWriter, err
 }
@@ -1244,6 +1133,310 @@ func (fBufWriterNanobot *fileBufferWriterNanobot) setIoWriter(
 
 	fBufWriter.fileWriter = bufio.NewWriterSize(
 		writer,
+		bufSize)
+
+	return err
+}
+
+// setPathFileName
+//
+// This 'setter' method is used to initialize new values
+// for internal member variables contained in the
+// instance of FileBufferWriter passed as input parameter
+// 'fBufWriter'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the instance of
+//	FileBufferWriter passed as input parameter
+//	'fBufWriter'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufWriter					*FileBufferWriter
+//
+//		A pointer to an instance of FileBufferWriter.
+//
+//		All internal member variable data values in
+//		this instance will be deleted and initialized
+//		to new values based on the following input
+//		parameters.
+//
+//	fBufWriterLabel				string
+//
+//		The name or label associated with input parameter
+//		'fBufWriter' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufWriter" will be
+//		automatically applied.
+//
+//	pathFileName				string
+//
+//		This string contains the path and file name of
+//		the target 'write' file which will be used as a
+//		destination data source for 'write' operations
+//		performed by method:
+//
+//			FileBufferWriter.Write()
+//
+//		If the target path and file name do not currently
+//		exist on an attached storage drive, this method
+//		will attempt to create them.
+//
+//	pathFileNameLabel			string
+//
+//		The name or label associated with input parameter
+//		'pathFileName' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "pathFileName" will be
+//		automatically applied.
+//
+//	openFileReadWrite			bool
+//
+//		If this parameter is set to 'true', the target
+//		'write' file created from input parameter
+//		'pathFileName' will be opened for 'read' and
+//		'write' operations.
+//
+//		If 'openFileReadWrite' is set to 'false', the
+//		target write file will be opened for 'write-only'
+//		operations.
+//
+//	bufSize						int
+//
+//		This integer value controls the size of the
+//		'write' buffer created for the returned instance
+//		of FileBufferWriter.
+//
+//		'bufSize' should be configured to maximize
+//		performance for 'write' operations subject to
+//		prevailing memory limitations.
+//
+//		The minimum write buffer size is 1-byte. If
+//		'bufSize' is set to a size less than or equal to
+//		zero, it will be automatically set to the default
+//		buffer size of 4096-bytes.
+
+//	truncateExistingFile			bool
+//
+//		If this parameter is set to 'true', the target
+//		'write' file will be opened for write operations.
+//		If the target file previously existed, it will be
+//		truncated. This means that the file's previous
+//		contents will be deleted.
+//
+//		If this parameter is set to 'false', the target
+//		file will be opened for write operations. If the
+//		target file previously existed, the new text
+//		written to the file will be appended to the
+//		end of the previous file contents.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufWriterNanobot *fileBufferWriterNanobot) setPathFileName(
+	fBufWriter *FileBufferWriter,
+	fBufWriterLabel string,
+	pathFileName string,
+	pathFileNameLabel string,
+	openFileReadWrite bool,
+	bufSize int,
+	truncateExistingFile bool,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fBufWriterNanobot.lock == nil {
+		fBufWriterNanobot.lock = new(sync.Mutex)
+	}
+
+	fBufWriterNanobot.lock.Lock()
+
+	defer fBufWriterNanobot.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileBufferWriterNanobot." +
+		"setPathFileName()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(fBufWriterLabel) == 0 {
+
+		fBufWriterLabel = "fBufWriter"
+	}
+
+	if len(pathFileNameLabel) == 0 {
+
+		pathFileNameLabel = "pathFileName"
+	}
+
+	if fBufWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The FileBufferReader instance passed\n"+
+			"as input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' pointer.\n",
+			ePrefix.String(),
+			fBufWriterLabel,
+			fBufWriterLabel)
+
+		return err
+	}
+
+	if bufSize <= 0 {
+
+		bufSize = 4096
+	}
+
+	var err2 error
+
+	pathFileName,
+		_,
+		_,
+		err2 =
+		new(fileHelperMolecule).
+			doesPathFileExist(
+				pathFileName,
+				PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
+				ePrefix,
+				"pathFileName")
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while testing for the existance\n"+
+			"of 'pathFileName' on an attached storage drive.\n"+
+			"pathFileName = '%v'\n"+
+			"Error= \n%v\n",
+			funcName,
+			pathFileName,
+			err2.Error())
+
+		return err
+	}
+
+	var filePermissionCfg FilePermissionConfig
+
+	var filePermissionStr = "--w--w--w-"
+
+	if openFileReadWrite == true {
+
+		filePermissionStr = "-rw-rw-rw-"
+	}
+
+	filePermissionCfg,
+		err = new(FilePermissionConfig).New(
+		filePermissionStr,
+		ePrefix.XCpy("filePermissionCfg<-"))
+
+	if err != nil {
+
+		return err
+	}
+
+	var fileOpenCfg FileOpenConfig
+
+	if truncateExistingFile {
+
+		fileOpenCfg,
+			err = new(FileOpenConfig).New(
+			ePrefix.XCpy("fileOpenCfg<-"),
+			FOpenType.TypeWriteOnly(),
+			FOpenMode.ModeCreate(),
+			FOpenMode.ModeTruncate())
+
+		if err != nil {
+
+			return err
+		}
+
+	} else {
+		// truncateExistingFile = 'false'
+		// This signals Append to existing file.
+
+		fileOpenCfg,
+			err = new(FileOpenConfig).New(
+			ePrefix.XCpy("fileOpenCfg<-"),
+			FOpenType.TypeWriteOnly(),
+			FOpenMode.ModeCreate(),
+			FOpenMode.ModeAppend())
+
+		if err != nil {
+
+			return err
+		}
+
+	}
+
+	fBufWriter.filePtr,
+		err = new(fileHelperBoson).
+		openFile(
+			pathFileName,
+			false,
+			fileOpenCfg,
+			filePermissionCfg,
+			"pathFileName",
+			ePrefix)
+
+	if err != nil {
+
+		if fBufWriter.filePtr != nil {
+			_ = fBufWriter.filePtr.Close()
+		}
+
+		return err
+	}
+
+	fBufWriter.targetWriteFileName = pathFileName
+
+	fBufWriter.fileWriter = bufio.NewWriterSize(
+		fBufWriter.filePtr,
 		bufSize)
 
 	return err

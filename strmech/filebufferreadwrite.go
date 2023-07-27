@@ -96,10 +96,12 @@ func (fBufReadWrite *FileBufferReadWrite) New(
 
 	var buffWriter FileBufferWriter
 
-	buffWriter =
+	buffWriter,
+		err =
 		new(FileBufferWriter).New(
 			writer,
-			writerBuffSize)
+			writerBuffSize,
+			ePrefix.XCpy("writer"))
 
 	newFBuffReadWrite.writer = &buffWriter
 
