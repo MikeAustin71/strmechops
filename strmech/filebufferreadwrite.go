@@ -275,13 +275,15 @@ func (fBufReadWrite *FileBufferReadWrite) NewPathFileNames(
 
 	var buffReader FileBufferReader
 
-	buffReader,
-		err =
-		new(FileBufferReader).NewPathFileName(
+	err = new(fileBufferReaderNanobot).
+		setPathFileName(
+			&buffReader,
+			"buffReader",
 			readerPathFileName,
+			"readerPathFileName",
 			openReadFileReadWrite, // openFileReadWrite
 			readerBuffSize,
-			ePrefix.XCpy("<-readerPathFileName"))
+			ePrefix.XCpy("buffReader<-readerPathFileName"))
 
 	if err != nil {
 
@@ -292,13 +294,16 @@ func (fBufReadWrite *FileBufferReadWrite) NewPathFileNames(
 
 	var buffWriter FileBufferWriter
 
-	buffWriter,
-		err = new(FileBufferWriter).NewPathFileName(
-		writerPathFileName,
-		openWriteFileReadWrite, // openFileReadWrite
-		writerBuffSize,
-		truncateExistingWriteFile, // truncateExistingFile
-		ePrefix.XCpy("<-"))
+	err = new(fileBufferWriterNanobot).
+		setPathFileName(
+			&buffWriter,
+			"buffWriter",
+			writerPathFileName,
+			"writerPathFileName",
+			openWriteFileReadWrite, // openFileReadWrite
+			writerBuffSize,
+			truncateExistingWriteFile, // truncateExistingFile
+			ePrefix.XCpy("buffWriter<-writerPathFileName"))
 
 	if err != nil {
 
