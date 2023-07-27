@@ -80,10 +80,12 @@ func (fBufReadWrite *FileBufferReadWrite) New(
 
 	var buffReader FileBufferReader
 
-	buffReader,
-		err =
-		new(FileBufferReader).New(
+	err =
+		new(fileBufferReaderNanobot).setIoReader(
+			&buffReader,
+			"buffReader",
 			reader,
+			"reader",
 			readerBuffSize,
 			ePrefix.XCpy("reader"))
 
@@ -96,12 +98,19 @@ func (fBufReadWrite *FileBufferReadWrite) New(
 
 	var buffWriter FileBufferWriter
 
-	buffWriter,
-		err =
-		new(FileBufferWriter).New(
+	err =
+		new(fileBufferWriterNanobot).setIoWriter(
+			&buffWriter,
+			"buffWriter",
 			writer,
+			"writer",
 			writerBuffSize,
 			ePrefix.XCpy("writer"))
+
+	if err != nil {
+
+		return newFBuffReadWrite, err
+	}
 
 	newFBuffReadWrite.writer = &buffWriter
 
