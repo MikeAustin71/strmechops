@@ -1222,6 +1222,11 @@ type fileBufferReaderNanobot struct {
 //		This parameter will accept any object
 //		implementing the io.Reader interface.
 //
+//		This instance of io.Reader will be used to
+//		configure the internal bufio.Reader contained in
+//		'fBufReader' and used to conduct 'read'
+//		operations.
+//
 //	readerLabel					string
 //
 //		The name or label associated with input parameter
@@ -1235,8 +1240,9 @@ type fileBufferReaderNanobot struct {
 //	bufSize						int
 //
 //		This integer value controls the size of the
-//		'read' buffer created for the returned instance
-//		of FileBufferReader.
+//		'read' buffer configured for the
+//		FileBufferReader instance passed as input
+//		parameter 'fBufReader'.
 //
 //		'bufSize' should be configured to maximize
 //		performance for 'read' operations subject to
@@ -1246,6 +1252,38 @@ type fileBufferReaderNanobot struct {
 //		'bufSize' is set to a size less than "16", it
 //		will be automatically set to the default buffer
 //		size of 4096-bytes.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fBufReaderNanobot *fileBufferReaderNanobot) setIoReader(
 	fBufReader *FileBufferReader,
 	fBufReaderLabel string,
