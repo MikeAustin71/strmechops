@@ -454,7 +454,10 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 
 	var readErr, writeErr error
 	var numOfBytesRead, numOfBytesWritten, cycleCount int
-	byteArray := make([]byte, fBufReadWrite.reader.fileReader.Size())
+
+	byteArray := make([]byte,
+		fBufReadWrite.reader.fileReader.Size())
+
 	var errs []error
 
 	for {
