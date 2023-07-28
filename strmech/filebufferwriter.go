@@ -1031,6 +1031,204 @@ func (fBufWriter *FileBufferWriter) NewPathFileName(
 	return newFileBufWriter, err
 }
 
+// SetFileMgr
+//
+// This method will completely re-initialize the current
+// instance of FileBufferWriter using the path and file
+// name passed as input parameter 'fileMgr'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the current instance of
+//	FileBufferWriter.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/bufio
+//	https://pkg.go.dev/bufio#Writer
+//	https://pkg.go.dev/io#Writer
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fileMgr						*FileMgr
+//
+//		A pointer to an instance of FileMgr. The file
+//		identified by 'fileMgr' will be used as a
+//		destination for 'write' operations performed by
+//		method:
+//
+//			FileBufferWriter.Write()
+//
+//		If the path and file name encapsulated by
+//		'fileMgr' do not currently exist on an attached
+//		storage drive, this method will attempt to create
+//		them.
+//
+//	openFileReadWrite			bool
+//
+//		If this parameter is set to 'true', the target
+//		'write' file created from input parameter
+//		'fileMgr' will be opened for 'read' and
+//		'write' operations.
+//
+//		If 'openFileReadWrite' is set to 'false', the
+//		target write file will be opened for 'write-only'
+//		operations.
+//
+//	bufSize						int
+//
+//		This integer value controls the size of the
+//		'write' buffer created for the returned instance
+//		of FileBufferWriter.
+//
+//		'bufSize' should be configured to maximize
+//		performance for 'write' operations subject to
+//		prevailing memory limitations.
+//
+//		The minimum write buffer size is 1-byte. If
+//		'bufSize' is set to a size less than or equal to
+//		zero, it will be automatically set to the default
+//		buffer size of 4096-bytes.
+//
+//	truncateExistingFile			bool
+//
+//		If this parameter is set to 'true', the target
+//		'write' file will be opened for write operations.
+//		If the target file previously existed, it will be
+//		truncated. This means that the file's previous
+//		contents will be deleted.
+//
+//		If this parameter is set to 'false', the target
+//		file will be opened for write operations. If the
+//		target file previously existed, the new text
+//		written to the file will be appended to the
+//		end of the previous file contents.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufWriter *FileBufferWriter) SetFileMgr(
+	fileMgr *FileMgr,
+	openFileReadWrite bool,
+	bufSize int,
+	truncateExistingFile bool,
+	errorPrefix interface{}) error {
+
+	if fBufWriter.lock == nil {
+		fBufWriter.lock = new(sync.Mutex)
+	}
+
+	fBufWriter.lock.Lock()
+
+	defer fBufWriter.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileBufferWriter."+
+			"SetFileMgr()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	err = new(fileBufferWriterMicrobot).
+		setFileMgr(
+			fBufWriter,
+			"fBufWriter",
+			fileMgr,
+			"fileMgr",
+			openFileReadWrite,
+			bufSize,
+			truncateExistingFile,
+			ePrefix.XCpy("fileMgr"))
+
+	return err
+}
+
 // SetPathFileName
 //
 // This method will completely re-initialize the current
@@ -1095,7 +1293,7 @@ func (fBufWriter *FileBufferWriter) NewPathFileName(
 //		'bufSize' is set to a size less than or equal to
 //		zero, it will be automatically set to the default
 //		buffer size of 4096-bytes.
-
+//
 //	truncateExistingFile			bool
 //
 //		If this parameter is set to 'true', the target
