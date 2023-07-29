@@ -235,12 +235,21 @@ func (fBufReader *FileBufferReader) Close(
 
 // New
 //
-// This method returns a fully initialized instance of
-// FileBufferReader.
+// Receives input parameter, 'reader', which implements the
+// io.Reader interface.
 //
-// The size of the internal read buffer is controlled by
+// The io.Reader object is used to configure and return a
+// fully initialized instance of FileBufferReader.
+//
+// The returned instance of FileBufferReader may be used
+// to read data from the data source identified by the
+// io.Reader object, 'reader'.
+//
+// The size of the internal 'read' buffer is controlled by
 // input parameter 'bufSize'. The minimum buffer size is
-// 16-bytes.
+// 16-bytes. If 'bufSize' is set to a value less than
+// "16", it will be automatically reset to the default
+// value of 4096-bytes.
 //
 // ----------------------------------------------------------------
 //
@@ -285,7 +294,7 @@ func (fBufReader *FileBufferReader) Close(
 //		prevailing memory limitations.
 //
 //		The minimum reader buffer size is 16-bytes. If
-//		'bufSize' is set to a size less than "16", it
+//		'bufSize' is set to a value less than "16", it
 //		will be automatically set to the default buffer
 //		size of 4096-bytes.
 //
@@ -412,20 +421,260 @@ func (fBufReader *FileBufferReader) New(
 	return newFileBufReader, err
 }
 
+// NewFileMgr
+//
+// Receives an instance of FileMgr as input parameter
+// 'fileMgr'.
+//
+// The instance of FileBufferReader returned by this
+// method will configure the file identified by 'fileMgr'
+// as the data source for file 'read' operations.
+//
+// This target 'read' file identified by 'fileMgr' is
+// opened for either 'read-only' or 'read/write'
+// operations depending on input parameter
+// 'openFileReadWrite'.
+//
+// The size of the internal 'read' buffer is controlled by
+// input parameter 'bufSize'. The minimum buffer size is
+// 16-bytes. If 'bufSize' is set to a value less than
+// "16", it will be automatically reset to the default
+// value of 4096-bytes.
+//
+// If the target path and file identified by 'fileMgr' do
+// not currently exist on an attached storage drive, an
+// error will be returned.
+//
+// Upon completion, this method returns a fully
+// configured instance of FileBufferReader.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/bufio
+//	https://pkg.go.dev/bufio#Reader
+//	https://pkg.go.dev/io#Reader
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fileMgr						*FileMgr
+//
+//		A pointer to an instance of FileMgr. The file
+//		identified by 'fileMgr' will be used as a data
+//		source for 'read' operations performed by
+//		method:
+//
+//			FileBufferReader.Read()
+//
+//		If the path and file name encapsulated by
+//		'fileMgr' do not currently exist on an attached
+//		storage drive, an error will be returned.
+//
+//		The instance of FileBufferReader returned by this
+//		method will configure the file identified by
+//		'fileMgr' as the data source for file 'read'
+//		operations.
+//
+//	openFileReadWrite			bool
+//
+//		If this parameter is set to 'true', the target
+//		'read' file identified from input parameter
+//		'pathFileName' will be opened for both 'read'
+//		and 'write' operations.
+//
+//		If 'openFileReadWrite' is set to 'false', the
+//		target 'read' file will be opened for 'read-only'
+//		operations.
+//
+//	bufSize						int
+//
+//		This integer value controls the size of the
+//		'read' buffer created for the returned instance
+//		of FileBufferReader.
+//
+//		'bufSize' should be configured to maximize
+//		performance for 'read' operations subject to
+//		prevailing memory limitations.
+//
+//		The minimum reader buffer size is 16-bytes. If
+//		'bufSize' is set to a size less than "16", it
+//		will be automatically set to the default buffer
+//		size of 4096.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	FileBufferReader
+//
+//		If this method completes successfully, a fully
+//		configured instance of FileBufferReader will
+//		be returned.
+//
+//		This returned instance of FileBufferReader will
+//		configure the file identified by input parameter
+//		'fileMgr' is a data source for file 'read'
+//		operations.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufReader *FileBufferReader) NewFileMgr(
+	fileMgr *FileMgr,
+	openFileReadWrite bool,
+	bufSize int,
+	errorPrefix interface{}) (
+	FileBufferReader,
+	error) {
+
+	if fBufReader.lock == nil {
+		fBufReader.lock = new(sync.Mutex)
+	}
+
+	fBufReader.lock.Lock()
+
+	defer fBufReader.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var newFileBufReader FileBufferReader
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileBufferReader."+
+			"NewFileMgr()",
+		"")
+
+	if err != nil {
+		return newFileBufReader, err
+	}
+
+	err = new(fileBufferReaderMicrobot).
+		setFileMgr(
+			&newFileBufReader,
+			"newFileBufReader",
+			fileMgr,
+			"fileMgr",
+			openFileReadWrite,
+			bufSize,
+			ePrefix.XCpy(
+				"fileMgr"))
+
+	return newFileBufReader, err
+}
+
 // NewPathFileName
 //
-// Receives a path and file name as an input parameter.
-// This file is opened for 'read' operations and is
-// configured internally as a bufio.Reader contained in
-// the returned instance of FileBufferReader.
+// Receives a path and file name as an input parameter
+// string, 'pathFileName'.
 //
-// The path and file name will be used to create a file
-// pointer (*os.File) which in turn will be used to
-// configure the internal bufio.Reader.
+// The target 'read' file identified by 'pathFileName'
+// is opened for either 'read-only' or 'read/write'
+// operations depending on input parameter
+// 'openFileReadWrite'.
 //
-// The size of the internal read buffer is controlled by
+// This target 'read' file identified by 'pathFileName'
+// will be used to create a file pointer (*os.File) which
+// in turn will be used to configure the internal
+// bufio.Reader.
+//
+// This target 'read' file identified by 'fileMgr' will
+// be used to create a file pointer (*os.File) which in
+// turn will be used to configure the internal
+// bufio.Reader.
+//
+// The size of the internal 'read' buffer is controlled by
 // input parameter 'bufSize'. The minimum buffer size is
-// 16-bytes.
+// 16-bytes. If 'bufSize' is set to a value less than
+// "16", it will be automatically reset to the default
+// value of 4096-bytes.
+//
+// If the target path and file identified by
+// 'pathFileName' do not currently exist on an attached
+// storage drive, an error will be returned.
+//
+// Upon completion, this method returns a fully
+// configured instance of FileBufferReader.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/bufio
+//	https://pkg.go.dev/bufio#Reader
+//	https://pkg.go.dev/io#Reader
 //
 // ----------------------------------------------------------------
 //
@@ -987,16 +1236,16 @@ func (fBufReader *FileBufferReader) SetReader(
 	return err
 }
 
-// SetPathFileName
+// SetFileMgr
 //
 // This method will completely re-initialize the current
 // instance of FileBufferReader using the path and file
-// name passed as input parameter 'pathFileName'.
+// name identified by the FileMgr instance passed as
+// input parameter 'fileMgr'.
 //
-// The path and file name will be used to create a file
-// pointer (*os.File) which in turn will be used to
-// configure the internal bufio.Reader for the current
-// instance of FileBufferReader.
+// The file identified by 'fileMgr' will be used to
+// reconfigure the internal bufio.Reader encapsulated in
+// the current instance of FileBufferReader.
 //
 // ----------------------------------------------------------------
 //
@@ -1021,8 +1270,195 @@ func (fBufReader *FileBufferReader) SetReader(
 //	pathFileName				string
 //
 //		This string contains the path and file name of
-//		the file which will be used a data source for
-//		'read' operations performed by method:
+//		the file which will be configured as a new data
+//		source for 'read' operations performed by method:
+//
+//			FileBufferReader.Read()
+//
+//		If this file does not currently exist on an
+//		attached storage drive, an error will be
+//		returned.
+//
+//	openFileReadWrite			bool
+//
+//		If this parameter is set to 'true', the target
+//		'read' file identified from input parameter
+//		'pathFileName' will be opened for both 'read'
+//		and 'write' operations.
+//
+//		If 'openFileReadWrite' is set to 'false', the
+//		target 'read' file will be opened for 'read-only'
+//		operations.
+//
+//	bufSize						int
+//
+//		This integer value controls the size of the
+//		'read' buffer created for the returned instance
+//		of FileBufferReader.
+//
+//		'bufSize' should be configured to maximize
+//		performance for 'read' operations subject to
+//		prevailing memory limitations.
+//
+//		The minimum reader buffer size is 16-bytes. If
+//		'bufSize' is set to a size less than "16", it
+//		will be automatically set to the default buffer
+//		size of 4096.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufReader *FileBufferReader) SetFileMgr(
+	fileMgr *FileMgr,
+	openFileReadWrite bool,
+	bufSize int,
+	errorPrefix interface{}) error {
+
+	if fBufReader.lock == nil {
+		fBufReader.lock = new(sync.Mutex)
+	}
+
+	fBufReader.lock.Lock()
+
+	defer fBufReader.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileBufferReader."+
+			"SetFileMgr()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	err = new(fileBufferReaderMicrobot).
+		setFileMgr(
+			fBufReader,
+			"fBufReader",
+			fileMgr,
+			"fileMgr",
+			openFileReadWrite,
+			bufSize,
+			ePrefix.XCpy(
+				"fileMgr"))
+
+	return err
+}
+
+// SetPathFileName
+//
+// This method will completely re-initialize the current
+// instance of FileBufferReader using the path and file
+// name passed as input parameter 'pathFileName'.
+//
+// The path and file name specified by 'pathFileName'
+// will be used to reconfigure the internal bufio.Reader
+// encapsulated in the current instance of
+// FileBufferReader.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the current instance of
+//	FileBufferReader.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/bufio
+//	https://pkg.go.dev/bufio#Reader
+//	https://pkg.go.dev/io#Reader
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName				string
+//
+//		This string contains the path and file name of
+//		the file which will be configured as a new data
+//		source for 'read' operations performed by method:
+//
 //			FileBufferReader.Read()
 //
 //		If this file does not currently exist on an
@@ -1151,7 +1587,7 @@ func (fBufReader *FileBufferReader) SetPathFileName(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"FileBufferReader."+
-			"NewPathFileName()",
+			"SetPathFileName()",
 		"")
 
 	if err != nil {
@@ -1168,6 +1604,270 @@ func (fBufReader *FileBufferReader) SetPathFileName(
 			bufSize,
 			ePrefix.XCpy(
 				pathFileName))
+
+	return err
+}
+
+type fileBufferReaderMicrobot struct {
+	lock *sync.Mutex
+}
+
+// setFileMgr
+//
+// This 'setter' method is used to initialize new values
+// for internal member variables contained in the
+// instance of FileBufferReader passed as input parameter
+// 'fBufReader'.
+//
+// The new io.Reader object assigned to 'fBufReader' is
+// generated from the File Manager (FileMgr) instance
+// passed as input parameter 'fileMgr'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the instance of
+//	FileBufferReader passed as input parameter
+//	'fBufReader'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufReader					*FileBufferReader
+//
+//		A pointer to an instance of FileBufferReader.
+//
+//		All internal member variable data values in
+//		this instance will be deleted and initialized
+//		to new values based on the following input
+//		parameters.
+//
+//	fBufReaderLabel				string
+//
+//		The name or label associated with input parameter
+//		'fBufReader' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufReader" will be
+//		automatically applied.
+//
+//	fileMgr						*FileMgr
+//
+//		A pointer to an instance of FileMgr. The file
+//		identified by 'fileMgr' will be used as a
+//		data source for 'read' operations performed by
+//		method:
+//
+//			FileBufferReader.Write()
+//
+//		If the path and file name encapsulated by
+//		'fileMgr' do not currently exist on an attached
+//		storage drive, this method will attempt to create
+//		them.
+//
+//	fileMgrLabel				string
+//
+//		The name or label associated with input parameter
+//		'fileMgr' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fileMgr" will be
+//		automatically applied.
+//
+//	openFileReadWrite			bool
+//
+//		If this parameter is set to 'true', the target
+//		'read' file created from input parameter
+//		'fileMgr' will be opened for 'read' and 'read'
+//		operations.
+//
+//		If 'openFileReadWrite' is set to 'false', the
+//		target read file will be opened for 'read-only'
+//		operations.
+//
+//	bufSize						int
+//
+//		This integer value controls the size of the
+//		'read' buffer created for the returned instance
+//		of FileBufferReader.
+//
+//		'bufSize' should be configured to maximize
+//		performance for 'read' operations subject to
+//		prevailing memory limitations.
+//
+//		The minimum read buffer size is 1-byte. If
+//		'bufSize' is set to a size less than or equal to
+//		zero, it will be automatically set to the default
+//		buffer size of 4096-bytes.
+//
+//	truncateExistingFile			bool
+//
+//		If this parameter is set to 'true', the target
+//		'read' file will be opened for read operations.
+//		If the target file previously existed, it will be
+//		truncated. This means that the file's previous
+//		contents will be deleted.
+//
+//		If this parameter is set to 'false', the target
+//		file will be opened for read operations. If the
+//		target file previously existed, the new text
+//		written to the file will be appended to the
+//		end of the previous file contents.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufReaderMicrobot *fileBufferReaderMicrobot) setFileMgr(
+	fBufReader *FileBufferReader,
+	fBufReaderLabel string,
+	fileMgr *FileMgr,
+	fileMgrLabel string,
+	openFileReadWrite bool,
+	bufSize int,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fBufReaderMicrobot.lock == nil {
+		fBufReaderMicrobot.lock = new(sync.Mutex)
+	}
+
+	fBufReaderMicrobot.lock.Lock()
+
+	defer fBufReaderMicrobot.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileBufferReaderMicrobot." +
+		"setFileMgr()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(fBufReaderLabel) == 0 {
+
+		fBufReaderLabel = "fBufReader"
+	}
+
+	if len(fileMgrLabel) == 0 {
+
+		fileMgrLabel = "fileMgr"
+	}
+
+	if fBufReader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The FileBufferReader instance passed\n"+
+			"as input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' pointer.\n",
+			ePrefix.String(),
+			fBufReaderLabel,
+			fBufReaderLabel)
+
+		return err
+	}
+
+	if fileMgr == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The FileMgr instance passed\n"+
+			"as input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' pointer.\n",
+			ePrefix.String(),
+			fileMgrLabel,
+			fileMgrLabel)
+
+		return err
+	}
+
+	var err2 error
+
+	err = new(fileMgrHelperAtom).isFileMgrValid(
+		fileMgr,
+		ePrefix.XCpy(fileMgrLabel))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter %v is invalid.\n"+
+			"%v failed the validity test.\n"+
+			"Error=\n%v\n",
+			funcName,
+			fileMgrLabel,
+			fileMgrLabel,
+			err2.Error())
+
+		return err
+	}
+
+	err2 = new(fileMgrHelper).closeFile(
+		fileMgr,
+		ePrefix.XCpy(fileMgrLabel))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while closing the file pointer.\n"+
+			"for FileMgr input parameter '%v'.\n"+
+			"Error=\n%v\n",
+			funcName,
+			fileMgrLabel,
+			err2.Error())
+
+		return err
+	}
+
+	fileMgrLabel += ".absolutePath"
+
+	err = new(fileBufferReaderNanobot).
+		setPathFileName(
+			fBufReader,
+			fBufReaderLabel,
+			fileMgr.absolutePathFileName,
+			fileMgrLabel,
+			openFileReadWrite,
+			bufSize,
+			ePrefix.XCpy(fBufReaderLabel+"<-"+fileMgrLabel))
 
 	return err
 }

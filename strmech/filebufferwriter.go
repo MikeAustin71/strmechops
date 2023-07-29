@@ -594,23 +594,31 @@ func (fBufWriter *FileBufferWriter) New(
 
 // NewFileMgr
 //
-// Receives a path and file name as an input parameter.
-// This target 'write' file is opened for either
-// 'write-only' or 'read/write' operations depending on
-// input parameter 'openFileReadWrite'.
+// Receives an instance of FileMgr as an input parameter
+// 'fileMgr'.
 //
-// Upon completion, this method returns a fully
-// configured instance of FileBufferWriter.
+// The target 'write' file identified by the 'fileMgr' is
+// opened for either 'write-only' or 'read/write'
+// operations depending on input parameter
+// 'openFileReadWrite'.
 //
-// If the target path and file do not currently exist on
-// an attached storage drive, this method will attempt to
-// create them.
+// The target 'write' file identified by 'fileMgr' will
+// be used to create a file pointer (*os.File) which in
+// turn will be used to configure the internal
+// bufio.Reader.
 //
 // The size of the internal 'write' buffer is controlled
 // by input parameter 'bufSize'. If 'bufSize' is set to a
 // value less than or equal to zero (0), it will be
 // automatically reset to the default value of
 // 4096-bytes.
+//
+// If the target path and file do not currently exist on
+// an attached storage drive, this method will attempt to
+// create them.
+//
+// Upon completion, this method returns a fully
+// configured instance of FileBufferWriter.
 //
 // ----------------------------------------------------------------
 //
@@ -1843,7 +1851,7 @@ type fileBufferWriterMicrobot struct {
 //		'bufSize' is set to a size less than or equal to
 //		zero, it will be automatically set to the default
 //		buffer size of 4096-bytes.
-
+//
 //	truncateExistingFile			bool
 //
 //		If this parameter is set to 'true', the target
@@ -2008,7 +2016,7 @@ func (fBufWriterMicrobot *fileBufferWriterMicrobot) setFileMgr(
 			openFileReadWrite,
 			bufSize,
 			truncateExistingFile,
-			ePrefix.XCpy(fileMgrLabel))
+			ePrefix.XCpy(fBufWriterLabel+"<-"+fileMgrLabel))
 
 	return err
 }
@@ -2302,7 +2310,7 @@ func (fBufWriterNanobot *fileBufferWriterNanobot) setIoWriter(
 //		'bufSize' is set to a size less than or equal to
 //		zero, it will be automatically set to the default
 //		buffer size of 4096-bytes.
-
+//
 //	truncateExistingFile			bool
 //
 //		If this parameter is set to 'true', the target
