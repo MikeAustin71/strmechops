@@ -312,7 +312,7 @@ func (fBufReader *FileBufferReader) Close(
 //
 //		The minimum reader buffer size is 16-bytes. If
 //		'bufSize' is set to a value less than "16", it
-//		will be automatically set to the default buffer
+//		will be automatically reset to the default buffer
 //		size of 4096-bytes.
 //
 //	errorPrefix					interface{}
@@ -518,7 +518,7 @@ func (fBufReader *FileBufferReader) New(
 //
 //		The minimum reader buffer size is 16-bytes. If
 //		'bufSize' is set to a size less than "16", it
-//		will be automatically set to the default buffer
+//		will be automatically reset to the default buffer
 //		size of 4096.
 //
 //	errorPrefix					interface{}
@@ -731,7 +731,7 @@ func (fBufReader *FileBufferReader) NewFileMgr(
 //
 //		The minimum reader buffer size is 16-bytes. If
 //		'bufSize' is set to a size less than "16", it
-//		will be automatically set to the default buffer
+//		will be automatically reset to the default buffer
 //		size of 4096.
 //
 //	errorPrefix					interface{}
@@ -1136,7 +1136,7 @@ func (fBufReader *FileBufferReader) Read(
 //
 //		The minimum reader buffer size is 16-bytes. If
 //		'bufSize' is set to a size less than "16", it
-//		will be automatically set to the default buffer
+//		will be automatically reset to the default buffer
 //		size of 4096-bytes.
 //
 //	errorPrefix					interface{}
@@ -1319,7 +1319,7 @@ func (fBufReader *FileBufferReader) SetReader(
 //
 //		The minimum reader buffer size is 16-bytes. If
 //		'bufSize' is set to a size less than "16", it
-//		will be automatically set to the default buffer
+//		will be automatically reset to the default buffer
 //		size of 4096.
 //
 //	errorPrefix					interface{}
@@ -1505,7 +1505,7 @@ func (fBufReader *FileBufferReader) SetFileMgr(
 //
 //		The minimum reader buffer size is 16-bytes. If
 //		'bufSize' is set to a size less than "16", it
-//		will be automatically set to the default buffer
+//		will be automatically reset to the default buffer
 //		size of 4096.
 //
 //	errorPrefix					interface{}

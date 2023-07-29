@@ -466,8 +466,8 @@ func (fBufWriter *FileBufferWriter) Flush(
 //
 //		The minimum write buffer size is 1-byte. If
 //		'bufSize' is set to a size less than or equal to
-//		zero, it will be automatically set to the default
-//		buffer size of 4096-bytes.
+//		zero, it will be automatically reset to the
+//		default buffer size of 4096-bytes.
 //
 //	errorPrefix					interface{}
 //
@@ -676,8 +676,8 @@ func (fBufWriter *FileBufferWriter) New(
 //
 //		The minimum write buffer size is 1-byte. If
 //		'bufSize' is set to a size less than or equal to
-//		zero, it will be automatically set to the default
-//		buffer size of 4096-bytes.
+//		zero, it will be automatically reset to the
+//		default buffer size of 4096-bytes.
 //
 //	truncateExistingFile			bool
 //
@@ -895,8 +895,8 @@ func (fBufWriter *FileBufferWriter) NewFileMgr(
 //
 //		The minimum write buffer size is 1-byte. If
 //		'bufSize' is set to a size less than or equal to
-//		zero, it will be automatically set to the default
-//		buffer size of 4096-bytes.
+//		zero, it will be automatically reset to the
+//		default buffer size of 4096-bytes.
 //
 //	truncateExistingFile			bool
 //
@@ -1102,8 +1102,8 @@ func (fBufWriter *FileBufferWriter) NewPathFileName(
 //
 //		The minimum write buffer size is 1-byte. If
 //		'bufSize' is set to a size less than or equal to
-//		zero, it will be automatically set to the default
-//		buffer size of 4096-bytes.
+//		zero, it will be automatically reset to the
+//		default buffer size of 4096-bytes.
 //
 //	truncateExistingFile			bool
 //
@@ -1299,8 +1299,8 @@ func (fBufWriter *FileBufferWriter) SetFileMgr(
 //
 //		The minimum write buffer size is 1-byte. If
 //		'bufSize' is set to a size less than or equal to
-//		zero, it will be automatically set to the default
-//		buffer size of 4096-bytes.
+//		zero, it will be automatically reset to the
+//		default buffer size of 4096-bytes.
 //
 //	truncateExistingFile			bool
 //
@@ -1493,8 +1493,8 @@ func (fBufWriter *FileBufferWriter) SetPathFileName(
 //
 //		The minimum write buffer size is 1-byte. If
 //		'bufSize' is set to a size less than or equal to
-//		zero, it will be automatically set to the default
-//		buffer size of 4096-bytes.
+//		zero, it will be automatically reset to the
+//		default buffer size of 4096-bytes.
 //
 //	errorPrefix					interface{}
 //
@@ -1849,8 +1849,8 @@ type fileBufferWriterMicrobot struct {
 //
 //		The minimum write buffer size is 1-byte. If
 //		'bufSize' is set to a size less than or equal to
-//		zero, it will be automatically set to the default
-//		buffer size of 4096-bytes.
+//		zero, it will be automatically reset to the
+//		default buffer size of 4096-bytes.
 //
 //	truncateExistingFile			bool
 //
@@ -2117,8 +2117,8 @@ type fileBufferWriterNanobot struct {
 //
 //		The minimum write buffer size is 1-byte. If
 //		'bufSize' is set to a size less than or equal to
-//		zero, it will be automatically set to the default
-//		buffer size of 4096-bytes.
+//		zero, it will be automatically reset to the
+//		default buffer size of 4096-bytes.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -2414,6 +2414,19 @@ func (fBufWriterNanobot *fileBufferWriterNanobot) setPathFileName(
 		return err
 	}
 
+	if len(pathFileName) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is an empty string with a length of zero (0).\n",
+			ePrefix.String(),
+			pathFileNameLabel,
+			pathFileNameLabel)
+
+		return err
+
+	}
+
 	if bufSize <= 0 {
 
 		bufSize = 4096
@@ -2539,7 +2552,8 @@ type fileBufferWriterMolecule struct {
 //
 // All internal member variable data values for the
 // instance of FileBufferWriter passed as input parameter
-// ”.
+// 'fBufWriter' will be deleted and reset to their zero
+// states.
 //
 // ----------------------------------------------------------------
 //

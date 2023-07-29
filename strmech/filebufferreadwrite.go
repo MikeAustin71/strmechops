@@ -44,6 +44,162 @@ type FileBufferReadWrite struct {
 // ----------------------------------------------------------------
 //
 // # Input Parameters
+//
+//	reader						io.Reader
+//
+//		An object which implements io.Reader interface.
+//
+//		This object may be a file pointer of type *os.File.
+//		File pointers of this type implement the io.Reader
+//		interface.
+//
+//		A file pointer (*os.File) will facilitate reading
+//		data from files residing on an attached storage
+//		drive. However, with this configuration, the user
+//		is responsible for manually closing the file and
+//		performing any other required clean-up operations
+//		in addition to calling FileBufferReadWrite.Close().
+//
+//		While the 'read' services provided by
+//		FileBufferReadWrite are primarily designed to
+//		read data from disk files, this type of 'reader'
+//		will in fact read data from any object
+//		implementing the io.Reader interface.
+//
+//	readerBuffSize				int
+//
+//		This integer value controls the size of the
+//		buffer created for the io.Reader object passed as
+//		input parameter 'reader'.
+//
+//		'readerBuffSize' should be configured to maximize
+//		performance for 'read' operations subject to
+//		prevailing memory limitations.
+//
+//		The minimum reader buffer size is 16-bytes. If
+//		'readerBuffSize' is set to a value less than
+//		"16", it will be automatically reset to the
+//		default buffer size of 4096-bytes.
+//
+//	writer						io.Writer
+//
+//		This parameter will accept any object
+//		implementing the io.Writer interface.
+//
+//		This object may be a file pointer of type *os.File.
+//		File pointers of this type implement the io.Writer
+//		interface.
+//
+//		A file pointer (*os.File) will facilitate writing
+//		file data to files residing on an attached
+//		storage drive. However, with this configuration,
+//		the user is responsible for manually closing the
+//		file and performing any other required clean-up
+//		operations in addition to calling local method
+//		FileBufferReadWrite.Close().
+//
+//		While the 'write' services provided by the
+//		FileBufferReadWrite are primarily designed for
+//		writing data to disk files, this type of 'writer'
+//		will in fact write data to any object
+//		implementing the io.Writer interface.
+//
+//	writerBuffSize				int
+//
+//		This integer value controls the size of the
+//		buffer created for the io.Writer object passed as
+//		input parameter 'writer'.
+//
+//		'writerBuffSize' should be configured to maximize
+//		performance for 'write' operations subject to
+//		prevailing memory limitations.
+//
+//		The minimum write buffer size is 1-byte. If
+//		'writerBuffSize' is set to a size less than or
+//		equal to zero, it will be automatically reset to
+//		the default buffer size of 4096-bytes.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	FileBufferReadWrite
+//
+//		If this method completes successfully, it will
+//		return a fully configured instance of
+//		FileBufferReadWrite.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fBufReadWrite *FileBufferReadWrite) New(
 	reader io.Reader,
 	readerBuffSize int,
@@ -78,41 +234,85 @@ func (fBufReadWrite *FileBufferReadWrite) New(
 		return newFBuffReadWrite, err
 	}
 
-	var buffReader FileBufferReader
-
-	err =
-		new(fileBufferReaderNanobot).setIoReader(
-			&buffReader,
-			"buffReader",
+	err = new(fileBufferReadWriteNanobot).
+		setIoReaderWriter(
+			&newFBuffReadWrite,
+			"newFBuffReadWrite",
 			reader,
 			"reader",
 			readerBuffSize,
-			ePrefix.XCpy("reader"))
-
-	if err != nil {
-
-		return newFBuffReadWrite, err
-	}
-
-	newFBuffReadWrite.reader = &buffReader
-
-	var buffWriter FileBufferWriter
-
-	err =
-		new(fileBufferWriterNanobot).setIoWriter(
-			&buffWriter,
-			"buffWriter",
 			writer,
 			"writer",
 			writerBuffSize,
-			ePrefix.XCpy("writer"))
+			ePrefix)
+
+	return newFBuffReadWrite, err
+}
+
+func (fBufReadWrite *FileBufferReadWrite) NewFileMgrs(
+	readerFileMgr *FileMgr,
+	openReadFileReadWrite bool,
+	readerBuffSize int,
+	writerFileMgr *FileMgr,
+	openWriteFileReadWrite bool,
+	writerBuffSize int,
+	truncateExistingWriteFile bool,
+	errorPrefix interface{}) (
+	FileBufferReadWrite,
+	error) {
+
+	if fBufReadWrite.lock == nil {
+		fBufReadWrite.lock = new(sync.Mutex)
+	}
+
+	fBufReadWrite.lock.Lock()
+
+	defer fBufReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	var newFBuffReadWrite = FileBufferReadWrite{}
+
+	funcName := "FileBufferReadWrite." +
+		"NewFileMgrs()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
 
 	if err != nil {
 
 		return newFBuffReadWrite, err
 	}
 
-	newFBuffReadWrite.writer = &buffWriter
+	var newFileBufReader FileBufferReader
+	var err2 error
+
+	err2 = new(fileBufferReaderMicrobot).
+		setFileMgr(
+			&newFileBufReader,
+			"newFileBufReader",
+			readerFileMgr,
+			"readerFileMgr",
+			openReadFileReadWrite,
+			readerBuffSize,
+			ePrefix.XCpy(
+				"readerFileMgr"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while configuring the reader\n"+
+			"from input parameter 'readerFileMgr'.\n"+
+			"Error=\n%v\n",
+			funcName,
+			err2.Error())
+
+		return newFBuffReadWrite, err
+	}
 
 	return newFBuffReadWrite, err
 }
@@ -619,4 +819,549 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 	}
 
 	return totalBytesRead, totalBytesWritten, err
+}
+
+type fileBufferReadWriteNanobot struct {
+	lock *sync.Mutex
+}
+
+// setIoReaderWriter
+//
+// This 'setter' method is used to initialize new values
+// for internal member variables contained in the
+// instance of FileBufferReadWrite passed as input
+// parameter 'fBufReadWrite'. The new configuration will
+// be based on the io.Reader and io.Writer object passed
+// as input parameters.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the instance of
+//	FileBufferReadWrite passed as input parameter
+//	'fBufReadWrite'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufReadWrite				*FileBufferReadWrite
+//
+//		A pointer to an instance of FileBufferWriter.
+//
+//		The internal FileBufferReader and
+//		FileBufferWriter objects encapsulated in this
+//		instance be deleted and reinitialized using the
+//		io.Reader and io.Writer objects passed as input
+//		parameters 'reader' and 'writer'.
+//
+//	fBufReadWriteLabel			string
+//
+//		The name or label associated with input parameter
+//		'fBufReadWrite' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufReadWrite" will
+//		be automatically applied.
+//
+//	reader						io.Reader
+//
+//		An object which implements io.Reader interface.
+//
+//		This object may be a file pointer of type *os.File.
+//		File pointers of this type implement the io.Reader
+//		interface.
+//
+//		A file pointer (*os.File) will facilitate reading
+//		data from files residing on an attached storage
+//		drive. However, with this configuration, the user
+//		is responsible for manually closing the file and
+//		performing any other required clean-up operations
+//		in addition to calling FileBufferReadWrite.Close().
+//
+//		While the 'read' services provided by
+//		FileBufferReadWrite are primarily designed to
+//		read data from disk files, this type of 'reader'
+//		will in fact read data from any object
+//		implementing the io.Reader interface.
+//
+//	readerLabel					string
+//
+//		The name or label associated with input parameter
+//		'reader' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "reader" will
+//		be automatically applied.
+//
+//	readerBuffSize				int
+//
+//		This integer value controls the size of the
+//		buffer created for the io.Reader object passed as
+//		input parameter 'reader'.
+//
+//		'readerBuffSize' should be configured to maximize
+//		performance for 'read' operations subject to
+//		prevailing memory limitations.
+//
+//		The minimum reader buffer size is 16-bytes. If
+//		'readerBuffSize' is set to a value less than
+//		"16", it will be automatically reset to the
+//		default buffer size of 4096-bytes.
+//
+//	writer						io.Writer
+//
+//		This parameter will accept any object
+//		implementing the io.Writer interface.
+//
+//		This object may be a file pointer of type *os.File.
+//		File pointers of this type implement the io.Writer
+//		interface.
+//
+//		A file pointer (*os.File) will facilitate writing
+//		file data to files residing on an attached
+//		storage drive. However, with this configuration,
+//		the user is responsible for manually closing the
+//		file and performing any other required clean-up
+//		operations in addition to calling local method
+//		FileBufferReadWrite.Close().
+//
+//		While the 'write' services provided by the
+//		FileBufferReadWrite are primarily designed for
+//		writing data to disk files, this type of 'writer'
+//		will in fact write data to any object
+//		implementing the io.Writer interface.
+//
+//	writerLabel					string
+//
+//		The name or label associated with input parameter
+//		'writer' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "writer" will be
+//		automatically applied.
+//
+//	writerBuffSize				int
+//
+//		This integer value controls the size of the
+//		buffer created for the io.Writer object passed as
+//		input parameter 'writer'.
+//
+//		'writerBuffSize' should be configured to maximize
+//		performance for 'write' operations subject to
+//		prevailing memory limitations.
+//
+//		The minimum write buffer size is 1-byte. If
+//		'writerBuffSize' is set to a size less than or
+//		equal to zero, it will be automatically reset to
+//		the default buffer size of 4096-bytes.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setIoReaderWriter(
+	fBufReadWrite *FileBufferReadWrite,
+	fBufReadWriteLabel string,
+	reader io.Reader,
+	readerLabel string,
+	readerBuffSize int,
+	writer io.Writer,
+	writerLabel string,
+	writerBuffSize int,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fBufReadWriteNanobot.lock == nil {
+		fBufReadWriteNanobot.lock = new(sync.Mutex)
+	}
+
+	fBufReadWriteNanobot.lock.Lock()
+
+	defer fBufReadWriteNanobot.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileBufferReadWriteNanobot." +
+		"setIoReaderWriter()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(fBufReadWriteLabel) == 0 {
+
+		fBufReadWriteLabel = "fBufReadWrite"
+	}
+
+	if len(readerLabel) == 0 {
+
+		readerLabel = "reader"
+	}
+
+	if len(writerLabel) == 0 {
+
+		writerLabel = "writer"
+	}
+
+	if fBufReadWrite == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is a nil pointer!\n"+
+			"%v is invalid.\n",
+			ePrefix.String(),
+			fBufReadWriteLabel,
+			fBufReadWriteLabel)
+
+		return err
+	}
+
+	var newBuffReader FileBufferReader
+	var err2 error
+
+	err2 =
+		new(fileBufferReaderNanobot).setIoReader(
+			&newBuffReader,
+			"newBuffReader",
+			reader,
+			"reader",
+			readerBuffSize,
+			ePrefix.XCpy("newBuffReader<-reader"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while creating the new %v.reader.\n"+
+			"Error=\n%v\n",
+			funcName,
+			fBufReadWriteLabel,
+			err2.Error())
+
+		return err
+
+	}
+
+	var newBuffWriter FileBufferWriter
+
+	err2 =
+		new(fileBufferWriterNanobot).setIoWriter(
+			&newBuffWriter,
+			"newBuffWriter",
+			writer,
+			"writer",
+			writerBuffSize,
+			ePrefix.XCpy("newBuffWriter<-writer"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while creating the new %v.writer.\n"+
+			"Error=\n%v\n",
+			funcName,
+			fBufReadWriteLabel,
+			err2.Error())
+
+		return err
+
+	}
+
+	fBufReadWrite.reader = &newBuffReader
+
+	fBufReadWrite.writer = &newBuffWriter
+
+	return err
+}
+
+// setPathFileNames
+func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setPathFileNames(
+	fBufReadWrite *FileBufferReadWrite,
+	fBufReadWriteLabel string,
+	readerPathFileName string,
+	readerPathFileNameLabel string,
+	openReadFileReadWrite bool,
+	readerBuffSize int,
+	writerPathFileName string,
+	writerPathFileNameLabel string,
+	openWriteFileReadWrite bool,
+	writerBuffSize int,
+	truncateExistingWriteFile bool,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fBufReadWriteNanobot.lock == nil {
+		fBufReadWriteNanobot.lock = new(sync.Mutex)
+	}
+
+	fBufReadWriteNanobot.lock.Lock()
+
+	defer fBufReadWriteNanobot.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileBufferReadWriteNanobot." +
+		"setIoReaderWriter()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(fBufReadWriteLabel) == 0 {
+
+		fBufReadWriteLabel = "fBufReadWrite"
+	}
+
+	if len(readerPathFileNameLabel) == 0 {
+
+		readerPathFileNameLabel = "readerPathFileName"
+	}
+
+	if len(writerPathFileNameLabel) == 0 {
+
+		writerPathFileNameLabel = "writerPathFileName"
+	}
+
+	if fBufReadWrite == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is a nil pointer!\n"+
+			"%v is invalid.\n",
+			ePrefix.String(),
+			fBufReadWriteLabel,
+			fBufReadWriteLabel)
+
+		return err
+	}
+
+	if len(readerPathFileName) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is an empty string with a length of zero (0).\n",
+			ePrefix.String(),
+			readerPathFileNameLabel,
+			readerPathFileNameLabel)
+
+		return err
+	}
+
+}
+
+type fileBufferReadWriteMolecule struct {
+	lock *sync.Mutex
+}
+
+// close
+//
+// This method is designed to perform clean up tasks
+// after completion of all 'read' and 'write' operations.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will effectively render the instance of
+//	FileBufferReadWrite, passed as input parameter
+//	'fBufReadWrite', invalid and unusable for any
+//	future 'read' or 'write' operations.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufReadWrite				*FileBufferReadWrite
+//
+//		A pointer to an instance of FileBufferWriter.
+//
+//		The internal FileBufferReader and
+//		FileBufferWriter objects encapsulated in this
+//		instance of FileBufferReadWrite will be deleted
+//		as part of this 'close' operation.
+//
+//	fBufReadWriteLabel			string
+//
+//		The name or label associated with input parameter
+//		'fBufReadWrite' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufReadWrite" will
+//		be automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) close(
+	fBufReadWrite *FileBufferReadWrite,
+	fBufReadWriteLabel string,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fBuffReadWriteMolecule.lock == nil {
+		fBuffReadWriteMolecule.lock = new(sync.Mutex)
+	}
+
+	fBuffReadWriteMolecule.lock.Lock()
+
+	defer fBuffReadWriteMolecule.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileBufferReadWriteMolecule." +
+		"close()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(fBufReadWriteLabel) == 0 {
+
+		fBufReadWriteLabel = "fBufReadWrite"
+	}
+
+	if fBufReadWrite == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is a nil pointer!\n"+
+			"%v is invalid.\n",
+			ePrefix.String(),
+			fBufReadWriteLabel,
+			fBufReadWriteLabel)
+
+		return err
+	}
+
+	var err2 error
+
+	if fBufReadWrite.reader != nil {
+
+		err2 = new(fileBufferReaderMolecule).close(
+			fBufReadWrite.reader,
+			fBufReadWriteLabel+".reader",
+			ePrefix.XCpy(
+				fBufReadWriteLabel+".reader"))
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"An error occurred while closing %v.reader.\n"+
+				"Error=\n%v\n",
+				funcName,
+				fBufReadWriteLabel,
+				err2.Error())
+
+			return err
+		}
+
+		fBufReadWrite.reader = nil
+		fBufReadWrite.readFilePathName = ""
+
+	}
+
+	if fBufReadWrite.writer != nil {
+
+		err2 = new(fileBufferWriterMolecule).close(
+			fBufReadWrite.writer,
+			fBufReadWriteLabel+".writer",
+			ePrefix.XCpy(
+				fBufReadWriteLabel+".writer"))
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"An error occurred while closing %v.writer.\n"+
+				"Error=\n%v\n",
+				funcName,
+				fBufReadWriteLabel,
+				err2.Error())
+
+			return err
+		}
+
+		fBufReadWrite.writer = nil
+		fBufReadWrite.writeFilePathName = ""
+
+	}
+
+	return err
 }
