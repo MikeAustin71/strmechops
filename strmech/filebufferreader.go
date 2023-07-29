@@ -11,7 +11,7 @@ import (
 
 // FileBufferReader
 //
-// This structure and the associated methods are designed
+// This structure and its associated methods are designed
 // to facilitate data 'read' operations. The most common
 // data source for these read operations is assumed to be
 // a data file residing on an attached storage drive.
@@ -46,8 +46,11 @@ import (
 // # Best Practice
 //
 //	(1)	Create a new instance of FileBufferReader using
-//		either the New() method or the NewPathFileName()
-//		method.
+//		any of the 'New' methods:
+//
+//		FileBufferReader.New()
+//		FileBufferReader.NewFileMgr()
+//		FileBufferReader.NewPathFileName()
 //
 //		(a)	The New() method is used when an instance of
 //			io.Reader is created externally by the user
@@ -63,7 +66,21 @@ import (
 //			have been completed, call method Close() to
 //			perform local FileBufferReader clean-up tasks.
 //
-//		(b)	The NewPathFileName() method allows for the
+//		(b)	The NewFileMgr() method receives an instance
+//			of FileMgr which identifies a path and file
+//			name which will be configured as data source
+//			for subsequent file 'read' operations.
+//
+//			Under this scenario, the user simply calls
+//			method Close() to perform all required
+//			clean-up tasks after 'read' operations have
+//			been completed.
+//
+//			Once method Close() is called, the current
+//			FileBufferReader instance becomes unusable
+//			and should be discarded.
+//
+//		(c)	The NewPathFileName() method allows for the
 //			creation of an internal file pointer to a
 //			file passed as a path and file name by the
 //			user. This file serves at the target
