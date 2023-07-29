@@ -1805,7 +1805,7 @@ type fileBufferWriterMicrobot struct {
 //	fileMgr						*FileMgr
 //
 //		A pointer to an instance of FileMgr. The file
-//		identified by 'fileMgr' will be used as a
+//		identified by 'fileMgr' will be used as an output
 //		destination for 'write' operations performed by
 //		method:
 //
@@ -2005,7 +2005,7 @@ func (fBufWriterMicrobot *fileBufferWriterMicrobot) setFileMgr(
 		return err
 	}
 
-	fileMgrLabel += ".absolutePath"
+	fileMgrLabel += ".absolutePathFileName"
 
 	err = new(fileBufferWriterNanobot).
 		setPathFileName(

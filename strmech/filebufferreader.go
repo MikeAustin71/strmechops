@@ -1679,12 +1679,11 @@ type fileBufferReaderMicrobot struct {
 //		data source for 'read' operations performed by
 //		method:
 //
-//			FileBufferReader.Write()
+//			FileBufferReader.Read()
 //
 //		If the path and file name encapsulated by
 //		'fileMgr' do not currently exist on an attached
-//		storage drive, this method will attempt to create
-//		them.
+//		storage drive, an error will be returned.
 //
 //	fileMgrLabel				string
 //
@@ -1699,8 +1698,8 @@ type fileBufferReaderMicrobot struct {
 //	openFileReadWrite			bool
 //
 //		If this parameter is set to 'true', the target
-//		'read' file created from input parameter
-//		'fileMgr' will be opened for 'read' and 'read'
+//		'read' file identified by input parameter
+//		'fileMgr' will be opened for 'read' and 'write'
 //		operations.
 //
 //		If 'openFileReadWrite' is set to 'false', the
@@ -1717,24 +1716,10 @@ type fileBufferReaderMicrobot struct {
 //		performance for 'read' operations subject to
 //		prevailing memory limitations.
 //
-//		The minimum read buffer size is 1-byte. If
-//		'bufSize' is set to a size less than or equal to
-//		zero, it will be automatically set to the default
-//		buffer size of 4096-bytes.
-//
-//	truncateExistingFile			bool
-//
-//		If this parameter is set to 'true', the target
-//		'read' file will be opened for read operations.
-//		If the target file previously existed, it will be
-//		truncated. This means that the file's previous
-//		contents will be deleted.
-//
-//		If this parameter is set to 'false', the target
-//		file will be opened for read operations. If the
-//		target file previously existed, the new text
-//		written to the file will be appended to the
-//		end of the previous file contents.
+//		The minimum reader buffer size is 16-bytes. If
+//		'bufSize' is set to a size less than "16", it
+//		will be automatically reset to the default buffer
+//		size of 4096.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -1839,7 +1824,7 @@ func (fBufReaderMicrobot *fileBufferReaderMicrobot) setFileMgr(
 
 	var err2 error
 
-	err = new(fileMgrHelperAtom).isFileMgrValid(
+	err2 = new(fileMgrHelperAtom).isFileMgrValid(
 		fileMgr,
 		ePrefix.XCpy(fileMgrLabel))
 
@@ -1874,7 +1859,7 @@ func (fBufReaderMicrobot *fileBufferReaderMicrobot) setFileMgr(
 		return err
 	}
 
-	fileMgrLabel += ".absolutePath"
+	fileMgrLabel += ".absolutePathFileName"
 
 	err = new(fileBufferReaderNanobot).
 		setPathFileName(
