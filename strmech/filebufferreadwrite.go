@@ -28,12 +28,140 @@ import (
 //	To create a valid instance of FileBufferReadWrite,
 //	users MUST call one of the 'New' methods.
 type FileBufferReadWrite struct {
-	writer            *FileBufferWriter
-	reader            *FileBufferReader
-	writeFilePathName string
-	readFilePathName  string
+	writer             *FileBufferWriter
+	reader             *FileBufferReader
+	writerFilePathName string
+	readerFilePathName string
 
 	lock *sync.Mutex
+}
+
+// CloseFileBufferReadWrite
+//
+// This method is designed to perform clean up tasks
+// after completion of all 'read' and 'write' operations
+// associated with the current instance of
+// FileBufferReadWrite.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will effectively render the current
+//	instance of FileBufferReadWrite invalid and unusable
+//	for any future 'read' or 'write' operations.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufReadWrite *FileBufferReadWrite) CloseFileBufferReadWrite(
+	errorPrefix interface{}) error {
+
+	if fBufReadWrite.lock == nil {
+		fBufReadWrite.lock = new(sync.Mutex)
+	}
+
+	fBufReadWrite.lock.Lock()
+
+	defer fBufReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileBufferReadWrite."+
+			"NewPathFileNames()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	err = new(fileBufferReadWriteNanobot).
+		closeFileBufferReadWrite(
+			fBufReadWrite,
+			"fBufReadWrite",
+			ePrefix.XCpy("Close-Readers&Writers"))
+
+	return err
 }
 
 // New
@@ -1215,6 +1343,143 @@ type fileBufferReadWriteNanobot struct {
 	lock *sync.Mutex
 }
 
+// closeFileBufferReadWrite
+//
+// This method is designed to perform clean up tasks
+// after completion of all 'read' and 'write' operations
+// associated with an instance of FileBufferReadWrite
+// passed as input parameter 'fBufReadWrite'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will effectively render the instance of
+//	FileBufferReadWrite, passed as input parameter
+//	'fBufReadWrite', invalid and unusable for any
+//	future 'read' or 'write' operations.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufReadWrite				*FileBufferReadWrite
+//
+//		A pointer to an instance of FileBufferWriter.
+//
+//		The internal FileBufferReader and
+//		FileBufferWriter objects encapsulated in this
+//		instance of FileBufferReadWrite will be deleted
+//		as part of this 'close' operation.
+//
+//	fBufReadWriteLabel			string
+//
+//		The name or label associated with input parameter
+//		'fBufReadWrite' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufReadWrite" will
+//		be automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) closeFileBufferReadWrite(
+	fBufReadWrite *FileBufferReadWrite,
+	fBufReadWriteLabel string,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fBufReadWriteNanobot.lock == nil {
+		fBufReadWriteNanobot.lock = new(sync.Mutex)
+	}
+
+	fBufReadWriteNanobot.lock.Lock()
+
+	defer fBufReadWriteNanobot.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileBufferReadWriteNanobot." +
+		"closeFileBufferReadWrite()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(fBufReadWriteLabel) == 0 {
+
+		fBufReadWriteLabel = "fBufReadWrite"
+	}
+
+	if fBufReadWrite == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is a nil pointer!\n"+
+			"%v is invalid.\n",
+			ePrefix.String(),
+			fBufReadWriteLabel,
+			fBufReadWriteLabel)
+
+		return err
+	}
+
+	fBuffReadWriteMolecule := new(fileBufferReadWriteMolecule)
+
+	err = fBuffReadWriteMolecule.closeReader(
+		fBufReadWrite,
+		fBufReadWriteLabel,
+		ePrefix.XCpy("Close-Reader"))
+
+	if err != nil {
+
+		return err
+	}
+
+	err = fBuffReadWriteMolecule.closeWriter(
+		fBufReadWrite,
+		fBufReadWriteLabel,
+		ePrefix.XCpy("Close-Writer"))
+
+	return err
+}
+
 // setIoReaderWriter
 //
 // This 'setter' method is used to initialize new values
@@ -1804,10 +2069,10 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setPathFileNames(
 	}
 
 	fBufReadWrite.reader = &newBuffReader
-	fBufReadWrite.readFilePathName = readerPathFileName
+	fBufReadWrite.readerFilePathName = readerPathFileName
 
 	fBufReadWrite.writer = &newBuffWriter
-	fBufReadWrite.writeFilePathName = writerPathFileName
+	fBufReadWrite.writerFilePathName = writerPathFileName
 
 	return err
 }
@@ -1816,10 +2081,12 @@ type fileBufferReadWriteMolecule struct {
 	lock *sync.Mutex
 }
 
-// close
+// closeReader
 //
 // This method is designed to perform clean up tasks
-// after completion of all 'read' and 'write' operations.
+// associated with the io.Reader configured for the
+// instance of FileBufferReadWrite passed as input
+// parameter 'fBufReadWrite'.
 //
 // ----------------------------------------------------------------
 //
@@ -1828,7 +2095,7 @@ type fileBufferReadWriteMolecule struct {
 //	This method will effectively render the instance of
 //	FileBufferReadWrite, passed as input parameter
 //	'fBufReadWrite', invalid and unusable for any
-//	future 'read' or 'write' operations.
+//	future 'read' operations.
 //
 // ----------------------------------------------------------------
 //
@@ -1838,10 +2105,13 @@ type fileBufferReadWriteMolecule struct {
 //
 //		A pointer to an instance of FileBufferWriter.
 //
-//		The internal FileBufferReader and
-//		FileBufferWriter objects encapsulated in this
-//		instance of FileBufferReadWrite will be deleted
-//		as part of this 'close' operation.
+//		The internal io.Reader object encapsulated
+//		in this instance of FileBufferReadWrite will be
+//		deleted as part of this 'close' operation.
+//
+//		Upon completion of this method, 'fBufReadWrite'
+//		will be invalid and unusable with respect to
+//		'read' operations.
 //
 //	fBufReadWriteLabel			string
 //
@@ -1884,7 +2154,7 @@ type fileBufferReadWriteMolecule struct {
 //	 	text passed by input parameter, 'errPrefDto'.
 //	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) close(
+func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) closeReader(
 	fBufReadWrite *FileBufferReadWrite,
 	fBufReadWriteLabel string,
 	errPrefDto *ePref.ErrPrefixDto) error {
@@ -1902,7 +2172,7 @@ func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) close(
 	var ePrefix *ePref.ErrPrefixDto
 
 	funcName := "fileBufferReadWriteMolecule." +
-		"close()"
+		"closeReader()"
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -1953,10 +2223,135 @@ func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) close(
 			return err
 		}
 
-		fBufReadWrite.reader = nil
-		fBufReadWrite.readFilePathName = ""
-
 	}
+
+	fBufReadWrite.reader = nil
+	fBufReadWrite.readerFilePathName = ""
+
+	return err
+}
+
+// closeWriter
+//
+// This method is designed to perform clean up tasks
+// associated with the io.Writer configured for the
+// instance of FileBufferReadWrite passed as input
+// parameter 'fBufReadWrite'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will effectively render the instance of
+//	FileBufferReadWrite, passed as input parameter
+//	'fBufReadWrite', invalid and unusable for any
+//	future 'write' operations.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufReadWrite				*FileBufferReadWrite
+//
+//		A pointer to an instance of FileBufferWriter.
+//
+//		The internal io.Writer object encapsulated
+//		in this instance of FileBufferReadWrite will be
+//		deleted as part of this 'close' operation.
+//
+//		Upon completion of this method, 'fBufReadWrite'
+//		will be invalid and unusable with respect to
+//		'write' operations.
+//
+//	fBufReadWriteLabel			string
+//
+//		The name or label associated with input parameter
+//		'fBufReadWrite' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufReadWrite" will
+//		be automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) closeWriter(
+	fBufReadWrite *FileBufferReadWrite,
+	fBufReadWriteLabel string,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fBuffReadWriteMolecule.lock == nil {
+		fBuffReadWriteMolecule.lock = new(sync.Mutex)
+	}
+
+	fBuffReadWriteMolecule.lock.Lock()
+
+	defer fBuffReadWriteMolecule.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileBufferReadWriteMolecule." +
+		"closeWriter()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(fBufReadWriteLabel) == 0 {
+
+		fBufReadWriteLabel = "fBufReadWrite"
+	}
+
+	if fBufReadWrite == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is a nil pointer!\n"+
+			"%v is invalid.\n",
+			ePrefix.String(),
+			fBufReadWriteLabel,
+			fBufReadWriteLabel)
+
+		return err
+	}
+
+	var err2 error
 
 	if fBufReadWrite.writer != nil {
 
@@ -1978,10 +2373,10 @@ func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) close(
 			return err
 		}
 
-		fBufReadWrite.writer = nil
-		fBufReadWrite.writeFilePathName = ""
-
 	}
+
+	fBufReadWrite.writer = nil
+	fBufReadWrite.writerFilePathName = ""
 
 	return err
 }
