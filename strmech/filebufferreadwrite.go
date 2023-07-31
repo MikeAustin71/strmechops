@@ -1460,9 +1460,9 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) closeFileBufferReadWrite
 		return err
 	}
 
-	fBuffReadWriteMolecule := new(fileBufferReadWriteMolecule)
+	fBuffReadWriteAtom := new(fileBufferReadWriteElectron)
 
-	err = fBuffReadWriteMolecule.closeReader(
+	err = fBuffReadWriteAtom.closeReader(
 		fBufReadWrite,
 		fBufReadWriteLabel,
 		ePrefix.XCpy("Close-Reader"))
@@ -1472,7 +1472,7 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) closeFileBufferReadWrite
 		return err
 	}
 
-	err = fBuffReadWriteMolecule.closeWriter(
+	err = fBuffReadWriteAtom.closeWriter(
 		fBufReadWrite,
 		fBufReadWriteLabel,
 		ePrefix.XCpy("Close-Writer"))
@@ -1683,84 +1683,29 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setIoReaderWriter(
 		return err
 	}
 
-	if len(fBufReadWriteLabel) == 0 {
+	var fBufReadWriteMolecule = new(fileBufferReadWriteAtom)
 
-		fBufReadWriteLabel = "fBufReadWrite"
-	}
-
-	if len(readerLabel) == 0 {
-
-		readerLabel = "reader"
-	}
-
-	if len(writerLabel) == 0 {
-
-		writerLabel = "writer"
-	}
-
-	if fBufReadWrite == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter '%v' is a nil pointer!\n"+
-			"%v is invalid.\n",
-			ePrefix.String(),
+	err = fBufReadWriteMolecule.
+		setIoReader(
+			fBufReadWrite,
 			fBufReadWriteLabel,
-			fBufReadWriteLabel)
-
-		return err
-	}
-
-	var newBuffReader FileBufferReader
-	var err2 error
-
-	err2 =
-		new(fileBufferReaderNanobot).setIoReader(
-			&newBuffReader,
-			"newBuffReader",
 			reader,
 			readerLabel,
 			readerBuffSize,
-			ePrefix.XCpy("newBuffReader<-reader"))
+			ePrefix)
 
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"An error occurred while creating the new %v.reader.\n"+
-			"Error=\n%v\n",
-			funcName,
-			fBufReadWriteLabel,
-			err2.Error())
-
+	if err != nil {
 		return err
 	}
 
-	var newBuffWriter FileBufferWriter
-
-	err2 =
-		new(fileBufferWriterNanobot).setIoWriter(
-			&newBuffWriter,
-			"newBuffWriter",
+	err = fBufReadWriteMolecule.
+		setIoWriter(
+			fBufReadWrite,
+			fBufReadWriteLabel,
 			writer,
 			writerLabel,
 			writerBuffSize,
-			ePrefix.XCpy("newBuffWriter<-writer"))
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"An error occurred while creating the new %v.writer.\n"+
-			"Error=\n%v\n",
-			funcName,
-			fBufReadWriteLabel,
-			err2.Error())
-
-		return err
-
-	}
-
-	fBufReadWrite.reader = &newBuffReader
-
-	fBufReadWrite.writer = &newBuffWriter
+			ePrefix)
 
 	return err
 }
@@ -1966,6 +1911,273 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setPathFileNames(
 		return err
 	}
 
+	var fBufReadWriteMolecule = new(fileBufferReadWriteAtom)
+
+	err = fBufReadWriteMolecule.
+		setPathFileNameReader(
+			fBufReadWrite,
+			fBufReadWriteLabel,
+			readerPathFileName,
+			readerPathFileNameLabel,
+			openReadFileReadWrite,
+			readerBuffSize,
+			ePrefix)
+
+	if err != nil {
+
+		return err
+	}
+
+	err = fBufReadWriteMolecule.
+		setPathFileNameWriter(
+			fBufReadWrite,
+			fBufReadWriteLabel,
+			writerPathFileName,
+			writerPathFileNameLabel,
+			openWriteFileReadWrite,
+			writerBuffSize,
+			truncateExistingWriteFile,
+			ePrefix)
+
+	return err
+}
+
+type fileBufferReadWriteMolecule struct {
+	lock *sync.Mutex
+}
+
+type fileBufferReadWriteAtom struct {
+	lock *sync.Mutex
+}
+
+func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setIoReader(
+	fBufReadWrite *FileBufferReadWrite,
+	fBufReadWriteLabel string,
+	reader io.Reader,
+	readerLabel string,
+	readerBuffSize int,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fBuffReadWriteAtom.lock == nil {
+		fBuffReadWriteAtom.lock = new(sync.Mutex)
+	}
+
+	fBuffReadWriteAtom.lock.Lock()
+
+	defer fBuffReadWriteAtom.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileBufferReadWriteAtom." +
+		"setIoReader()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(fBufReadWriteLabel) == 0 {
+
+		fBufReadWriteLabel = "fBufReadWrite"
+	}
+
+	if len(readerLabel) == 0 {
+
+		readerLabel = "reader"
+	}
+
+	if fBufReadWrite == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is a nil pointer!\n"+
+			"%v is invalid.\n",
+			ePrefix.String(),
+			fBufReadWriteLabel,
+			fBufReadWriteLabel)
+
+		return err
+	}
+
+	err = new(fileBufferReadWriteElectron).closeReader(
+		fBufReadWrite,
+		fBufReadWriteLabel,
+		ePrefix.XCpy("Close-Reader"))
+
+	if err != nil {
+
+		return err
+	}
+
+	var newBuffReader FileBufferReader
+	var err2 error
+
+	err2 =
+		new(fileBufferReaderNanobot).setIoReader(
+			&newBuffReader,
+			"newBuffReader",
+			reader,
+			readerLabel,
+			readerBuffSize,
+			ePrefix.XCpy("newBuffReader<-reader"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while creating the new %v.reader.\n"+
+			"Error=\n%v\n",
+			funcName,
+			fBufReadWriteLabel,
+			err2.Error())
+
+		return err
+	}
+
+	fBufReadWrite.reader = &newBuffReader
+
+	return err
+}
+
+func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setIoWriter(
+	fBufReadWrite *FileBufferReadWrite,
+	fBufReadWriteLabel string,
+	writer io.Writer,
+	writerLabel string,
+	writerBuffSize int,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fBuffReadWriteAtom.lock == nil {
+		fBuffReadWriteAtom.lock = new(sync.Mutex)
+	}
+
+	fBuffReadWriteAtom.lock.Lock()
+
+	defer fBuffReadWriteAtom.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileBufferReadWriteAtom." +
+		"setIoWriter()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(fBufReadWriteLabel) == 0 {
+
+		fBufReadWriteLabel = "fBufReadWrite"
+	}
+
+	if len(fBufReadWriteLabel) == 0 {
+
+		fBufReadWriteLabel = "fBufReadWrite"
+	}
+
+	if len(writerLabel) == 0 {
+
+		writerLabel = "writer"
+	}
+
+	if fBufReadWrite == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is a nil pointer!\n"+
+			"%v is invalid.\n",
+			ePrefix.String(),
+			fBufReadWriteLabel,
+			fBufReadWriteLabel)
+
+		return err
+	}
+
+	err = new(fileBufferReadWriteElectron).closeWriter(
+		fBufReadWrite,
+		fBufReadWriteLabel,
+		ePrefix.XCpy("Close-Writer"))
+
+	if err != nil {
+
+		return err
+	}
+
+	var newBuffWriter FileBufferWriter
+	var err2 error
+
+	err2 =
+		new(fileBufferWriterNanobot).setIoWriter(
+			&newBuffWriter,
+			"newBuffWriter",
+			writer,
+			writerLabel,
+			writerBuffSize,
+			ePrefix.XCpy("newBuffWriter<-writer"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while creating the new %v.writer.\n"+
+			"Error=\n%v\n",
+			funcName,
+			fBufReadWriteLabel,
+			err2.Error())
+
+		return err
+
+	}
+
+	fBufReadWrite.writer = &newBuffWriter
+
+	return err
+}
+
+func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameReader(
+	fBufReadWrite *FileBufferReadWrite,
+	fBufReadWriteLabel string,
+	readerPathFileName string,
+	readerPathFileNameLabel string,
+	openReadFileReadWrite bool,
+	readerBuffSize int,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fBuffReadWriteAtom.lock == nil {
+		fBuffReadWriteAtom.lock = new(sync.Mutex)
+	}
+
+	fBuffReadWriteAtom.lock.Lock()
+
+	defer fBuffReadWriteAtom.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileBufferReadWriteAtom." +
+		"setPathFileNameReader()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
 	if len(fBufReadWriteLabel) == 0 {
 
 		fBufReadWriteLabel = "fBufReadWrite"
@@ -1974,11 +2186,6 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setPathFileNames(
 	if len(readerPathFileNameLabel) == 0 {
 
 		readerPathFileNameLabel = "readerPathFileName"
-	}
-
-	if len(writerPathFileNameLabel) == 0 {
-
-		writerPathFileNameLabel = "writerPathFileName"
 	}
 
 	if fBufReadWrite == nil {
@@ -2005,14 +2212,12 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setPathFileNames(
 		return err
 	}
 
-	if len(writerPathFileName) == 0 {
+	err = new(fileBufferReadWriteElectron).closeReader(
+		fBufReadWrite,
+		fBufReadWriteLabel,
+		ePrefix.XCpy("Close-Reader"))
 
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter '%v' is invalid!\n"+
-			"'%v' is an empty string with a length of zero (0).\n",
-			ePrefix.String(),
-			writerPathFileNameLabel,
-			writerPathFileNameLabel)
+	if err != nil {
 
 		return err
 	}
@@ -2042,7 +2247,93 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setPathFileNames(
 		return err
 	}
 
+	fBufReadWrite.reader = &newBuffReader
+	fBufReadWrite.readerFilePathName = readerPathFileName
+
+	return err
+}
+
+func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameWriter(
+	fBufReadWrite *FileBufferReadWrite,
+	fBufReadWriteLabel string,
+	writerPathFileName string,
+	writerPathFileNameLabel string,
+	openWriteFileReadWrite bool,
+	writerBuffSize int,
+	truncateExistingWriteFile bool,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fBuffReadWriteAtom.lock == nil {
+		fBuffReadWriteAtom.lock = new(sync.Mutex)
+	}
+
+	fBuffReadWriteAtom.lock.Lock()
+
+	defer fBuffReadWriteAtom.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileBufferReadWriteAtom." +
+		"setPathFileNameWriter()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(fBufReadWriteLabel) == 0 {
+
+		fBufReadWriteLabel = "fBufReadWrite"
+	}
+
+	if len(writerPathFileNameLabel) == 0 {
+
+		writerPathFileNameLabel = "writerPathFileName"
+	}
+
+	if fBufReadWrite == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is a nil pointer!\n"+
+			"%v is invalid.\n",
+			ePrefix.String(),
+			fBufReadWriteLabel,
+			fBufReadWriteLabel)
+
+		return err
+	}
+
+	if len(writerPathFileName) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is an empty string with a length of zero (0).\n",
+			ePrefix.String(),
+			writerPathFileNameLabel,
+			writerPathFileNameLabel)
+
+		return err
+	}
+
+	err = new(fileBufferReadWriteElectron).closeWriter(
+		fBufReadWrite,
+		fBufReadWriteLabel,
+		ePrefix.XCpy("Close-Writer"))
+
+	if err != nil {
+
+		return err
+	}
+
 	var newBuffWriter FileBufferWriter
+	var err2 error
 
 	err2 = new(fileBufferWriterNanobot).
 		setPathFileName(
@@ -2052,7 +2343,7 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setPathFileNames(
 			writerPathFileNameLabel,
 			openWriteFileReadWrite, // openFileReadWrite
 			writerBuffSize,
-			truncateExistingWriteFile, // truncateExistingFile
+			truncateExistingWriteFile,
 			ePrefix.XCpy("newBuffWriter<-writerPathFileName"))
 
 	if err2 != nil {
@@ -2065,11 +2356,7 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setPathFileNames(
 			err2.Error())
 
 		return err
-
 	}
-
-	fBufReadWrite.reader = &newBuffReader
-	fBufReadWrite.readerFilePathName = readerPathFileName
 
 	fBufReadWrite.writer = &newBuffWriter
 	fBufReadWrite.writerFilePathName = writerPathFileName
@@ -2077,7 +2364,7 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setPathFileNames(
 	return err
 }
 
-type fileBufferReadWriteMolecule struct {
+type fileBufferReadWriteElectron struct {
 	lock *sync.Mutex
 }
 
@@ -2154,24 +2441,24 @@ type fileBufferReadWriteMolecule struct {
 //	 	text passed by input parameter, 'errPrefDto'.
 //	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) closeReader(
+func (fBuffReadWriteElectron *fileBufferReadWriteElectron) closeReader(
 	fBufReadWrite *FileBufferReadWrite,
 	fBufReadWriteLabel string,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
-	if fBuffReadWriteMolecule.lock == nil {
-		fBuffReadWriteMolecule.lock = new(sync.Mutex)
+	if fBuffReadWriteElectron.lock == nil {
+		fBuffReadWriteElectron.lock = new(sync.Mutex)
 	}
 
-	fBuffReadWriteMolecule.lock.Lock()
+	fBuffReadWriteElectron.lock.Lock()
 
-	defer fBuffReadWriteMolecule.lock.Unlock()
+	defer fBuffReadWriteElectron.lock.Unlock()
 
 	var err error
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	funcName := "fileBufferReadWriteMolecule." +
+	funcName := "fileBufferReadWriteElectron." +
 		"closeReader()"
 
 	ePrefix,
@@ -2304,24 +2591,24 @@ func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) closeReader(
 //	 	text passed by input parameter, 'errPrefDto'.
 //	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) closeWriter(
+func (fBuffReadWriteElectron *fileBufferReadWriteElectron) closeWriter(
 	fBufReadWrite *FileBufferReadWrite,
 	fBufReadWriteLabel string,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
-	if fBuffReadWriteMolecule.lock == nil {
-		fBuffReadWriteMolecule.lock = new(sync.Mutex)
+	if fBuffReadWriteElectron.lock == nil {
+		fBuffReadWriteElectron.lock = new(sync.Mutex)
 	}
 
-	fBuffReadWriteMolecule.lock.Lock()
+	fBuffReadWriteElectron.lock.Lock()
 
-	defer fBuffReadWriteMolecule.lock.Unlock()
+	defer fBuffReadWriteElectron.lock.Unlock()
 
 	var err error
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	funcName := "fileBufferReadWriteMolecule." +
+	funcName := "fileBufferReadWriteElectron." +
 		"closeWriter()"
 
 	ePrefix,
