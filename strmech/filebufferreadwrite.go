@@ -1759,17 +1759,19 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) closeFileBufferReadWrite
 //		This parameter will accept any object
 //		implementing the io.Writer interface.
 //
-//		This object may be a file pointer of type *os.File.
-//		File pointers of this type implement the io.Writer
-//		interface.
+//		This object may be a file pointer of type
+//		*os.File. File pointers of this type implement
+//		the io.Writer interface.
 //
 //		A file pointer (*os.File) will facilitate writing
-//		file data to files residing on an attached
-//		storage drive. However, with this configuration,
-//		the user is responsible for manually closing the
-//		file and performing any other required clean-up
-//		operations in addition to calling local method
-//		FileBufferReadWrite.Close().
+//		output data to destination files residing on an
+//		attached storage drive. However, with this
+//		configuration, the user is responsible for
+//		manually closing the file and performing any
+//		other required clean-up operations in addition to
+//		calling local method:
+//
+//		FileBufferReadWrite.CloseFileBufferReadWrite()
 //
 //		While the 'write' services provided by the
 //		FileBufferReadWrite are primarily designed for
@@ -2158,8 +2160,9 @@ type fileBufferReadWriteMolecule struct {
 //
 //		The internal io.Reader object encapsulated in
 //		this instance of FileBufferReadWrite will be
-//		deleted and configured using the FileMgr instance
-//		passed as input parameter 'readerFileMgr'.
+//		deleted and reconfigured using the FileMgr
+//		instance passed as input parameter
+//		'readerFileMgr'.
 //
 //	fBufReadWriteLabel			string
 //
@@ -2831,6 +2834,129 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setIoReader(
 	return err
 }
 
+// setIoWriter
+//
+// Receives an instance of File Manager (FileMgr) which
+// will be used to configure an io.Writer object
+// encapsulated by the FileBufferReadWrite instance
+// passed as input parameter 'fBufReadWrite'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reconfigure
+//	the member variable io.Writer object encapsulated in
+//	the instance of FileBufferReadWrite passed as input
+//	parameter 'fBufReadWrite'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufReadWrite				*FileBufferReadWrite
+//
+//		A pointer to an instance of FileBufferWriter.
+//
+//		The internal io.Writer object encapsulated in
+//		this instance of FileBufferReadWrite will be
+//		deleted and reconfigured using the io.Writer
+//		object passed as input parameter 'writer'.
+//
+//	fBufReadWriteLabel			string
+//
+//		The name or label associated with input parameter
+//		'fBufReadWrite' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufReadWrite" will
+//		be automatically applied.
+//
+//	writer						io.Writer
+//
+//		This parameter will accept any object
+//		implementing the io.Writer interface.
+//
+//		This object may be a file pointer of type
+//		*os.File. File pointers of this type implement
+//		the io.Writer interface.
+//
+//		A file pointer (*os.File) will facilitate writing
+//		output data to destination files residing on an
+//		attached storage drive. However, with this
+//		configuration, the user is responsible for
+//		manually closing the file and performing any
+//		other required clean-up operations in addition to
+//		calling local method:
+//
+//		FileBufferReadWrite.CloseFileBufferReadWrite()
+//
+//		While the 'write' services provided by the
+//		FileBufferReadWrite are primarily designed for
+//		writing data to disk files, this type of 'writer'
+//		will in fact write data to any object
+//		implementing the io.Writer interface.
+//
+//	writerLabel					string
+//
+//		The name or label associated with input parameter
+//		'writer' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "writer" will be
+//		automatically applied.
+//
+//	writerBuffSize				int
+//
+//		This integer value controls the size of the
+//		'write' buffer created for the io.Writer
+//		object passed as input parameter 'writer'.
+//		This io.Writer object will in turn be configured
+//		and encapsulated in the FileBufferWriter
+//		instance passed as input parameter 'fBufReadWrite'.
+//
+//		'writerBuffSize' should be configured to maximize
+//		performance for 'write' operations subject to
+//		prevailing memory limitations.
+//
+//		The minimum write buffer size is 1-byte. If
+//		'writerBuffSize' is set to a size less than or
+//		equal to zero, it will be automatically reset to
+//		the default buffer size of 4096-bytes.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setIoWriter(
 	fBufReadWrite *FileBufferReadWrite,
 	fBufReadWriteLabel string,
