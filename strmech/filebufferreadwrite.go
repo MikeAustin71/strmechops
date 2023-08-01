@@ -47,9 +47,14 @@ type FileBufferReadWrite struct {
 //
 // # IMPORTANT
 //
-//	This method will effectively render the current
-//	instance of FileBufferReadWrite invalid and unusable
-//	for any future 'read' or 'write' operations.
+//	(1)	This method will effectively render the current
+//		instance of FileBufferReadWrite invalid and
+//		unusable for any future 'read' or 'write'
+//		operations.
+//
+//	(2) After completing all 'read' and 'write'
+//		operations, users MUST call this method in order
+//		to perform required clean-up operations.
 //
 // ----------------------------------------------------------------
 //
@@ -162,6 +167,59 @@ func (fBufReadWrite *FileBufferReadWrite) CloseFileBufferReadWrite(
 			ePrefix.XCpy("Close-Readers&Writers"))
 
 	return err
+}
+
+// New
+//
+// This method returns an empty or 'blank' instance of
+// FileBufferReadWrite. All the member variables in this
+// returned instance are initialized to their zero or
+// initial values. This means the returned instance is
+// invalid and unusable for standard 'read' and 'write'
+// operations.
+//
+// This technique for creating a new working instance of
+// FileBufferReadWrite requires two steps.
+//
+// Step-1
+//
+//	Call this method FileBufferReadWrite.New() to
+//	generate an empty version of FileBufferReadWrite.
+//
+// Step-2
+//
+//	Use this returned instance of FileBufferReadWrite and
+//	call the appropriate 'Setter' methods to individually
+//	configure the internal 'reader' and 'writer' objects.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	FileBufferReadWrite
+//
+//		This method returns an empty instance of
+//		FileBufferReadWrite. After receiving this
+//		instance, users must call 'Setter' methods
+//		to complete the 'reader' and 'writer'
+//		configuration process.
+func (fBufReadWrite *FileBufferReadWrite) New() FileBufferReadWrite {
+
+	if fBufReadWrite.lock == nil {
+		fBufReadWrite.lock = new(sync.Mutex)
+	}
+
+	fBufReadWrite.lock.Lock()
+
+	defer fBufReadWrite.lock.Unlock()
+
+	return FileBufferReadWrite{}
 }
 
 // NewIoReadWrite
