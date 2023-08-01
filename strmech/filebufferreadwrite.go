@@ -914,7 +914,7 @@ func (fBufReadWrite *FileBufferReadWrite) NewPathFileNames(
 	}
 
 	err = new(fileBufferReadWriteNanobot).
-		setReadWritePathFileNames(
+		setPathFileNamesReadWrite(
 			&newFBuffReadWrite,
 			"newFBuffReadWrite",
 			readerPathFileName,
@@ -1905,7 +1905,7 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setIoReaderWriter(
 	return err
 }
 
-// setReadWritePathFileNames
+// setPathFileNamesReadWrite
 //
 // Receives two strings as input parameters for the path
 // and file names identifying the io.Reader and io.Writer
@@ -2009,10 +2009,11 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setIoReaderWriter(
 //
 //		This integer value controls the size of the
 //		'write' buffer created for the io.Writer
-//		object created for the file identified by
-//		input parameter 'writerPathFileName' and
-//		encapsulated in the FileBufferReadWrite passed
-//		as input parameter 'fBufReadWrite'.
+//		object generated from the file identified by
+//		input parameter 'writerPathFileName'. This
+//		io.Writer object is encapsulated in the
+//		FileBufferReadWrite instance passed as input
+//		parameter 'fBufReadWrite'.
 //
 //		'writerBuffSize' should be configured to maximize
 //		performance for 'write' operations subject to
@@ -2068,7 +2069,7 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setIoReaderWriter(
 //	 	text passed by input parameter, 'errPrefDto'.
 //	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setReadWritePathFileNames(
+func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setPathFileNamesReadWrite(
 	fBufReadWrite *FileBufferReadWrite,
 	fBufReadWriteLabel string,
 	readerPathFileName string,
@@ -2095,7 +2096,7 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setReadWritePathFileName
 	var ePrefix *ePref.ErrPrefixDto
 
 	funcName := "fileBufferReadWriteNanobot." +
-		"setReadWritePathFileNames()"
+		"setPathFileNamesReadWrite()"
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -3071,9 +3072,9 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setIoWriter(
 // Receives an input parameter string specifying the path
 // and file name identifying the file which will be
 // configured as a data source for 'read' operations.
-// This will be configured as an internal io.Reader object
-// for FileBufferReadWrite instance passed as input
-// parameter 'fBufReadWrite'.
+// This file will be configured as an internal io.Reader
+// object for the FileBufferReadWrite instance passed as
+// input parameter 'fBufReadWrite'.
 //
 // ----------------------------------------------------------------
 //
@@ -3120,6 +3121,16 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setIoWriter(
 //		If this file does not currently exist on an
 //		attached storage drive, an error will be
 //		returned.
+//
+//	readerPathFileNameLabel		string
+//
+//		The name or label associated with input parameter
+//		'readerPathFileName' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "readerPathFileName"
+//		will be automatically applied.
 //
 //	openReadFileReadWrite		bool
 //
@@ -3290,6 +3301,142 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameReader(
 	return err
 }
 
+// setPathFileNameWriter
+//
+// Receives an input parameter string specifying the path
+// and file name identifying the file which will be
+// configured as an output destination for 'write'
+// operations. This file will be configured as an
+// internal io.Writer object for the FileBufferReadWrite
+// instance passed as input parameter 'fBufReadWrite'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reconfigure
+//	the member variable io.Writer object encapsulated in
+//	the instance of FileBufferReadWrite passed as input
+//	parameter 'fBufReadWrite'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufReadWrite				*FileBufferReadWrite
+//
+//		A pointer to an instance of FileBufferWriter.
+//
+//		The internal io.Writer object encapsulated in
+//		this instance of FileBufferReadWrite will be
+//		deleted and configured using the file identified
+//		by input parameter 'writerPathFileName'.
+//
+//	fBufReadWriteLabel			string
+//
+//		The name or label associated with input parameter
+//		'fBufReadWrite' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufReadWrite" will
+//		be automatically applied.
+//
+//	writerPathFileName			string
+//
+//		This string contains the path and file name of
+//		the target 'write' file which will be used as
+//		a data destination for 'write' operations.
+//
+//		If the target path and file do not currently
+//		exist on an attached storage drive, this method
+//		will attempt to create them.
+//
+//	writerPathFileNameLabel		string
+//
+//		The name or label associated with input parameter
+//		'writerPathFileName' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "writerPathFileName"
+//		will be automatically applied.
+//
+//	openWriteFileReadWrite		bool
+//
+//		If this parameter is set to 'true', the target
+//		'write' file identified by input parameter
+//		'writerPathFileName' will be opened for 'read'
+//		and 'write' operations.
+//
+//		If 'openWriteFileReadWrite' is set to 'false',
+//		the target write file will be opened for
+//		'write-only' operations.
+//
+//	writerBuffSize				int
+//
+//		This integer value controls the size of the
+//		'write' buffer created for the io.Writer
+//		object generated from the file identified by
+//		input parameter 'writerPathFileName'. This
+//		io.Writer object is encapsulated in the
+//		FileBufferReadWrite instance passed as input
+//		parameter 'fBufReadWrite'.
+//
+//		'writerBuffSize' should be configured to maximize
+//		performance for 'write' operations subject to
+//		prevailing memory limitations.
+//
+//		If 'writerBuffSize' is set to a value less than
+//		or equal to zero (0), it will be automatically
+//		reset to the default value of 4096-bytes.
+//
+//	truncateExistingWriteFile	bool
+//
+//		If this parameter is set to 'true', the target
+//		'write' file ('writerPathFileName') will be
+//		opened for write operations. If the target write
+//		file previously existed, it will be truncated.
+//		This means that the file's previous contents will
+//		be deleted.
+//
+//		If this parameter is set to 'false', the target
+//		'write' file will be opened for write operations.
+//		If the target 'write' file previously existed,
+//		the new text written to this file will be appended
+//		to the end of the previous file contents.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameWriter(
 	fBufReadWrite *FileBufferReadWrite,
 	fBufReadWriteLabel string,
