@@ -521,9 +521,11 @@ func (fBufReadWrite *FileBufferReadWrite) NewIoReadWrite(
 //	writerBuffSize				int
 //
 //		This integer value controls the size of the
-//		'write' buffer created for the internal io.Writer
-//		encapsulated in the returned instance of
-//		FileBufferReadWrite.
+//		'write' buffer created for the io.Writer
+//		object created from the file identified by
+//		'writerFileMgr'. This io.Writer object will
+//		in turn be configured and encapsulated in the
+//		returned instance of FileBufferWriter.
 //
 //		'writerBuffSize' should be configured to maximize
 //		performance for 'write' operations subject to
@@ -763,9 +765,11 @@ func (fBufReadWrite *FileBufferReadWrite) NewFileMgrs(
 //	writerBuffSize				int
 //
 //		This integer value controls the size of the
-//		'read' buffer created for the io.Writer
-//		associated with the file identified by
-//		'writerPathFileName'.
+//		'write' buffer created for the io.Writer
+//		object created for the file identified by
+//		input parameter 'writerPathFileName' and
+//		encapsulated in the returned instance of
+//		FileBufferReadWrite.
 //
 //		'writerBuffSize' should be configured to maximize
 //		performance for 'write' operations subject to
@@ -910,7 +914,7 @@ func (fBufReadWrite *FileBufferReadWrite) NewPathFileNames(
 	}
 
 	err = new(fileBufferReadWriteNanobot).
-		setPathFileNames(
+		setReadWritePathFileNames(
 			&newFBuffReadWrite,
 			"newFBuffReadWrite",
 			readerPathFileName,
@@ -1364,10 +1368,10 @@ type fileBufferReadWriteMicrobot struct {
 //	writerBuffSize				int
 //
 //		This integer value controls the size of the
-//		'write' buffer created for the io.Writer
-//		object created from the file identified by
-//		'writerFileMgr'. This io.Writer object will
-//		in turn be configured and encapsulated in the
+//		'write' buffer created for the io.Writer object
+//		generated from the file identified by
+//		'writerFileMgr'. This io.Writer object will in
+//		turn be configured and encapsulated in the
 //		FileBufferWriter instance passed as input
 //		parameter 'fBufReadWrite'.
 //
@@ -1792,8 +1796,11 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) closeFileBufferReadWrite
 //	writerBuffSize				int
 //
 //		This integer value controls the size of the
-//		buffer created for the io.Writer object passed as
-//		input parameter 'writer'.
+//		'write' buffer created for the io.Writer
+//		object passed as input parameter 'writer'.
+//		This io.Writer object will in turn be configured
+//		and encapsulated in the FileBufferWriter
+//		instance passed as input parameter 'fBufReadWrite'.
 //
 //		'writerBuffSize' should be configured to maximize
 //		performance for 'write' operations subject to
@@ -1898,7 +1905,7 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setIoReaderWriter(
 	return err
 }
 
-// setPathFileNames
+// setReadWritePathFileNames
 //
 // Receives two strings as input parameters for the path
 // and file names identifying the io.Reader and io.Writer
@@ -2001,9 +2008,11 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setIoReaderWriter(
 //	writerBuffSize				int
 //
 //		This integer value controls the size of the
-//		'read' buffer created for the io.Writer
-//		associated with the file identified by
-//		'writerPathFileName'.
+//		'write' buffer created for the io.Writer
+//		object created for the file identified by
+//		input parameter 'writerPathFileName' and
+//		encapsulated in the FileBufferReadWrite passed
+//		as input parameter 'fBufReadWrite'.
 //
 //		'writerBuffSize' should be configured to maximize
 //		performance for 'write' operations subject to
@@ -2059,7 +2068,7 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setIoReaderWriter(
 //	 	text passed by input parameter, 'errPrefDto'.
 //	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setPathFileNames(
+func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setReadWritePathFileNames(
 	fBufReadWrite *FileBufferReadWrite,
 	fBufReadWriteLabel string,
 	readerPathFileName string,
@@ -2086,7 +2095,7 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setPathFileNames(
 	var ePrefix *ePref.ErrPrefixDto
 
 	funcName := "fileBufferReadWriteNanobot." +
-		"setPathFileNames()"
+		"setReadWritePathFileNames()"
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -2443,10 +2452,10 @@ func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) setFileMgrReader(
 //	writerBuffSize				int
 //
 //		This integer value controls the size of the
-//		'write' buffer created for the io.Writer
-//		object created from the file identified by
-//		'writerFileMgr'. This io.Writer object will
-//		in turn be configured and encapsulated in the
+//		'write' buffer created for the io.Writer object
+//		generated from the file identified by
+//		'writerFileMgr'. This io.Writer object will in
+//		turn be configured and encapsulated in the
 //		FileBufferWriter instance passed as input
 //		parameter 'fBufReadWrite'.
 //
