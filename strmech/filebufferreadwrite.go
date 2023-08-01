@@ -3584,8 +3584,8 @@ type fileBufferReadWriteElectron struct {
 //		deleted as part of this 'close' operation.
 //
 //		Upon completion of this method, 'fBufReadWrite'
-//		will be invalid and unusable with respect to
-//		'read' operations.
+//		will be invalid and unusable for future 'read'
+//		operations.
 //
 //	fBufReadWriteLabel			string
 //
@@ -3719,7 +3719,8 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) closeReader(
 //	This method will effectively render the instance of
 //	FileBufferReadWrite, passed as input parameter
 //	'fBufReadWrite', invalid and unusable for any
-//	future 'write' operations.
+//	future 'write' operations. The io.Writer object
+//	configured for 'fBufReadWrite' will be deleted.
 //
 // ----------------------------------------------------------------
 //
@@ -3734,7 +3735,7 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) closeReader(
 //		deleted as part of this 'close' operation.
 //
 //		Upon completion of this method, 'fBufReadWrite'
-//		will be invalid and unusable with respect to
+//		will be invalid and unusable for any future
 //		'write' operations.
 //
 //	fBufReadWriteLabel			string
