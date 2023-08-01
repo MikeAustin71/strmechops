@@ -164,10 +164,11 @@ func (fBufReadWrite *FileBufferReadWrite) CloseFileBufferReadWrite(
 	return err
 }
 
-// New
+// NewIoReadWrite
 //
 // Creates and returns a new, fully configured instance
-// of FileBufferReadWrite
+// of FileBufferReadWrite using io.Reader and io.Writer
+// input parameters.
 //
 // ----------------------------------------------------------------
 //
@@ -186,7 +187,9 @@ func (fBufReadWrite *FileBufferReadWrite) CloseFileBufferReadWrite(
 //		drive. However, with this configuration, the user
 //		is responsible for manually closing the file and
 //		performing any other required clean-up operations
-//		in addition to calling FileBufferReadWrite.Close().
+//		in addition to calling local method:
+//
+//		FileBufferReadWrite.CloseFileBufferReadWrite()
 //
 //		While the 'read' services provided by
 //		FileBufferReadWrite are primarily designed to
@@ -219,12 +222,13 @@ func (fBufReadWrite *FileBufferReadWrite) CloseFileBufferReadWrite(
 //		interface.
 //
 //		A file pointer (*os.File) will facilitate writing
-//		file data to files residing on an attached
-//		storage drive. However, with this configuration,
-//		the user is responsible for manually closing the
-//		file and performing any other required clean-up
-//		operations in addition to calling local method
-//		FileBufferReadWrite.Close().
+//		data to files residing on an attached storage
+//		drive. However, with this configuration, the user
+//		is responsible for manually closing the file and
+//		performing any other required clean-up operations
+//		in addition to calling local method:
+//
+//		FileBufferReadWrite.CloseFileBufferReadWrite()
 //
 //		While the 'write' services provided by the
 //		FileBufferReadWrite are primarily designed for
@@ -328,7 +332,7 @@ func (fBufReadWrite *FileBufferReadWrite) CloseFileBufferReadWrite(
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fBufReadWrite *FileBufferReadWrite) New(
+func (fBufReadWrite *FileBufferReadWrite) NewIoReadWrite(
 	reader io.Reader,
 	readerBuffSize int,
 	writer io.Writer,
@@ -408,7 +412,7 @@ func (fBufReadWrite *FileBufferReadWrite) New(
 //	openReadFileReadWrite		bool
 //
 //		If this parameter is set to 'true', the target
-//		'read' file identified from input parameter
+//		'read' file identified by input parameter
 //		'readerFileMgr' will be opened for both 'read'
 //		and 'write' operations.
 //
@@ -442,8 +446,8 @@ func (fBufReadWrite *FileBufferReadWrite) New(
 //
 //		If the path and file name encapsulated by
 //		'writerFileMgr' do not currently exist on an
-//		attached storage drive, an error will be
-//		returned.
+//		attached storage drive, this method will attempt
+//		to create them.
 //
 //	openWriteFileReadWrite		bool
 //
@@ -476,13 +480,13 @@ func (fBufReadWrite *FileBufferReadWrite) New(
 //
 //		If this parameter is set to 'true', the target
 //		'write' file identified by 'writerFileMgr' will
-//		be opened for write operations. If the target
+//		be opened for 'write' operations. If the target
 //		file previously existed, it will be truncated.
 //		This means that the file's previous contents will
 //		be deleted.
 //
 //		If this parameter is set to 'false', the target
-//		write file will be opened for write operations.
+//		write file will be opened for 'write' operations.
 //		If the target file previously existed, the new
 //		text written to the file will be appended to the
 //		end of the previous file contents.

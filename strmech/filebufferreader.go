@@ -498,7 +498,7 @@ func (fBufReader *FileBufferReader) New(
 //	openFileReadWrite			bool
 //
 //		If this parameter is set to 'true', the target
-//		'read' file identified from input parameter
+//		'read' file identified by input parameter
 //		'fileMgr' will be opened for both 'read' and
 //		'write' operations.
 //

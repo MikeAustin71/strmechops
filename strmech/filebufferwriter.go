@@ -642,7 +642,7 @@ func (fBufWriter *FileBufferWriter) New(
 //	fileMgr						*FileMgr
 //
 //		A pointer to an instance of FileMgr. The file
-//		identified by 'fileMgr' will be used as a
+//		identified by 'fileMgr' will be used as an output
 //		destination for 'write' operations performed by
 //		method:
 //
@@ -682,10 +682,11 @@ func (fBufWriter *FileBufferWriter) New(
 //	truncateExistingFile			bool
 //
 //		If this parameter is set to 'true', the target
-//		'write' file will be opened for write operations.
-//		If the target file previously existed, it will be
-//		truncated. This means that the file's previous
-//		contents will be deleted.
+//		'write' file identified by 'fileMgr' will be
+//		opened for 'write' operations. If the target file
+//		previously existed, it will be truncated. This
+//		means that the file's previous contents will be
+//		deleted.
 //
 //		If this parameter is set to 'false', the target
 //		file will be opened for write operations. If the
