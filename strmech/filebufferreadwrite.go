@@ -717,7 +717,7 @@ func (fBufReadWrite *FileBufferReadWrite) NewFileMgrs(
 //	openReadFileReadWrite		bool
 //
 //		If this parameter is set to 'true', the target
-//		'read' file identified from input parameter
+//		'read' file identified by input parameter
 //		'readerPathFileName' will be opened for both
 //		'read' and 'write' operations.
 //
@@ -728,9 +728,11 @@ func (fBufReadWrite *FileBufferReadWrite) NewFileMgrs(
 //	readerBuffSize					int
 //
 //		This integer value controls the size of the
-//		'read' buffer created for the io.Reader
-//		associated with the file identified by
-//		'readerPathFileName'.
+//		'read' buffer created for the io.Reader object
+//		generated from the file identified by
+//		'readerPathFileName'. This io.Reader object is
+//		encapsulated in the FileBufferReadWrite instance
+//		returned by this method.
 //
 //		'readerBuffSize' should be configured to maximize
 //		performance for 'read' operations subject to
@@ -745,7 +747,7 @@ func (fBufReadWrite *FileBufferReadWrite) NewFileMgrs(
 //
 //		This string contains the path and file name of
 //		the target 'write' file which will be used as
-//		a data destination for 'write' operations.
+//		an output destination for 'write' operations.
 //
 //		If the target path and file do not currently
 //		exist on an attached storage drive, this method
@@ -766,10 +768,11 @@ func (fBufReadWrite *FileBufferReadWrite) NewFileMgrs(
 //
 //		This integer value controls the size of the
 //		'write' buffer created for the io.Writer
-//		object created for the file identified by
-//		input parameter 'writerPathFileName' and
-//		encapsulated in the returned instance of
-//		FileBufferReadWrite.
+//		object generated from the file identified by
+//		input parameter 'writerPathFileName'. This
+//		io.Writer object is encapsulated in the
+//		FileBufferReadWrite instance returned by this
+//		method.
 //
 //		'writerBuffSize' should be configured to maximize
 //		performance for 'write' operations subject to
@@ -3148,9 +3151,9 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setIoWriter(
 //		This integer value controls the size of the
 //		'read' buffer created for the io.Reader object
 //		generated from the file identified by
-//		'readerPathFileName' and encapsulated in the
-//		FileBufferReadWrite instance passed as input
-//		parameter 'fBufReadWrite'.
+//		'readerPathFileName'. This io.Reader object is
+//		encapsulated in the FileBufferReadWrite instance
+//		passed as input	parameter 'fBufReadWrite'.
 //
 //		'readerBuffSize' should be configured to maximize
 //		performance for 'read' operations subject to
