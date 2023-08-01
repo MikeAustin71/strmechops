@@ -499,8 +499,8 @@ func (fBufReader *FileBufferReader) New(
 //
 //		If this parameter is set to 'true', the target
 //		'read' file identified from input parameter
-//		'pathFileName' will be opened for both 'read'
-//		and 'write' operations.
+//		'fileMgr' will be opened for both 'read' and
+//		'write' operations.
 //
 //		If 'openFileReadWrite' is set to 'false', the
 //		target 'read' file will be opened for 'read-only'
@@ -519,7 +519,7 @@ func (fBufReader *FileBufferReader) New(
 //		The minimum reader buffer size is 16-bytes. If
 //		'bufSize' is set to a size less than "16", it
 //		will be automatically reset to the default buffer
-//		size of 4096.
+//		size of 4096-bytes.
 //
 //	errorPrefix					interface{}
 //

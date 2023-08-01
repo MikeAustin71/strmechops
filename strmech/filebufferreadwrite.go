@@ -377,6 +377,197 @@ func (fBufReadWrite *FileBufferReadWrite) New(
 	return newFBuffReadWrite, err
 }
 
+// NewFileMgrs
+//
+// Creates and returns a new instance of
+// FileBufferReadWrite.
+//
+// The internal io.Reader and io.Writer member variables
+// for this new instance of FileBufferReadWrite are
+// generated from input parameters specifying a 'reader'
+// and a 'writer' extracted from File Manager instances
+// (FileMgr).
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	readerFileMgr				*FileMgr
+//
+//		A pointer to an instance of FileMgr. The file
+//		identified by 'fileMgr' will be used as a data
+//		source for 'read' operations and will be
+//		configured as an internal io.Reader for the
+//		returned instance of FileBufferReadWrite.
+//
+//		If the path and file name encapsulated by
+//		'readerFileMgr' do not currently exist on an
+//		attached storage drive, an error will be
+//		returned.
+//
+//	openReadFileReadWrite		bool
+//
+//		If this parameter is set to 'true', the target
+//		'read' file identified from input parameter
+//		'readerFileMgr' will be opened for both 'read'
+//		and 'write' operations.
+//
+//		If 'openReadFileReadWrite' is set to 'false', the
+//		target 'read' file will be opened for 'read-only'
+//		operations.
+//
+//	readerBuffSize				int
+//
+//		This integer value controls the size of the
+//		'read' buffer created for the internal io.Reader
+//		encapsulated in the returned instance of
+//		FileBufferReadWrite.
+//
+//		'readerBuffSize' should be configured to maximize
+//		performance for 'read' operations subject to
+//		prevailing memory limitations.
+//
+//		The minimum reader buffer size is 16-bytes. If
+//		'readerBuffSize' is set to a size less than "16",
+//		it will be automatically reset to the default
+//		buffer size of 4096-bytes.
+//
+//	writerFileMgr				*FileMgr
+//
+//		A pointer to an instance of FileMgr. The file
+//		identified by 'fileMgr' will be used as an output
+//		destination for 'write' operations and will be
+//		configured as an internal io.Writer for the
+//		returned instance of FileBufferReadWrite.
+//
+//		If the path and file name encapsulated by
+//		'writerFileMgr' do not currently exist on an
+//		attached storage drive, an error will be
+//		returned.
+//
+//	openWriteFileReadWrite		bool
+//
+//		If this parameter is set to 'true', the target
+//		'write' file created from input parameter
+//		'writerFileMgr' will be opened for 'read' and
+//		'write' operations.
+//
+//		If 'openFileReadWrite' is set to 'false', the
+//		target write file will be opened for 'write-only'
+//		operations.
+//
+//	writerBuffSize				int
+//
+//		This integer value controls the size of the
+//		'write' buffer created for the internal io.Writer
+//		encapsulated in the returned instance of
+//		FileBufferReadWrite.
+//
+//		'writerBuffSize' should be configured to maximize
+//		performance for 'write' operations subject to
+//		prevailing memory limitations.
+//
+//		The minimum write buffer size is 1-byte. If
+//		'writerBuffSize' is set to a size less than or
+//		equal to zero, it will be automatically reset to
+//		the default buffer size of 4096-bytes.
+//
+//	truncateExistingFile			bool
+//
+//		If this parameter is set to 'true', the target
+//		'write' file identified by 'writerFileMgr' will
+//		be opened for write operations. If the target
+//		file previously existed, it will be truncated.
+//		This means that the file's previous contents will
+//		be deleted.
+//
+//		If this parameter is set to 'false', the target
+//		write file will be opened for write operations.
+//		If the target file previously existed, the new
+//		text written to the file will be appended to the
+//		end of the previous file contents.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	FileBufferReadWrite
+//
+//		If this method completes successfully, it will
+//		return a fully configured instance of
+//		FileBufferReadWrite.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fBufReadWrite *FileBufferReadWrite) NewFileMgrs(
 	readerFileMgr *FileMgr,
 	openReadFileReadWrite bool,
@@ -436,12 +627,14 @@ func (fBufReadWrite *FileBufferReadWrite) NewFileMgrs(
 
 // NewPathFileNames
 //
-// Opens a 'read' file and a 'write' file using path and
-// file name strings passed as input parameters. The
-// 'read' and 'write' files are then configured as
-// io.Reader and io.Writer instances. Finally, this
-// configuration is returned as a new and full populated
-// instance of FileBufferReadWrite
+// Creates and returns a new instance of
+// FileBufferReadWrite.
+//
+// The internal io.Reader and io.Writer member variables
+// for this new instance of FileBufferReadWrite are
+// generated from input parameters specifying 'reader'
+// and 'writer' files extracted from path and file name
+// strings.
 //
 // ----------------------------------------------------------------
 //
