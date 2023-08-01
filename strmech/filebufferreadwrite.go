@@ -1378,14 +1378,12 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 
 	var readErr, writeErr error
 	var numOfBytesRead, numOfBytesWritten, cycleCount int
-	//var fBufReadWriteMicrobot = new(fileBufferReadWriteMicrobot)
-
-	byteArray := make([]byte,
-		fBufReadWrite.reader.fileReader.Size())
-
 	var errs []error
 	var err2 error
 	var fBufReadWriteMicrobot = new(fileBufferReadWriteMicrobot)
+
+	byteArray := make([]byte,
+		fBufReadWrite.reader.fileReader.Size())
 
 	for {
 
@@ -1534,6 +1532,332 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 	}
 
 	return totalBytesRead, totalBytesWritten, err
+}
+
+// SetIoReader
+//
+// This method will close, delete and reconfigure the
+// internal io.Reader object encapsulated in the current
+// instance of FileBufferReadWrite. The internal
+// io.Reader object is used to 'read' data from a data
+// source such as a disk file.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	reader						io.Reader
+//
+//		An object which implements io.Reader interface.
+//
+//		This object may be a file pointer of type *os.File.
+//		File pointers of this type implement the io.Reader
+//		interface.
+//
+//		A file pointer (*os.File) will facilitate reading
+//		data from files residing on an attached storage
+//		drive. However, with this configuration, the user
+//		is responsible for manually closing the file and
+//		performing any other required clean-up operations
+//		in addition to calling local method:
+//
+//		FileBufferReadWrite.CloseFileBufferReadWrite()
+//
+//		While the 'read' services provided by
+//		FileBufferReadWrite are primarily designed to
+//		read data from disk files, this type of 'reader'
+//		will in fact read data from any object
+//		implementing the io.Reader interface.
+//
+//	readerBuffSize				int
+//
+//		This integer value controls the size of the
+//		buffer created for the io.Reader object passed as
+//		input parameter 'reader'.
+//
+//		'readerBuffSize' should be configured to maximize
+//		performance for 'read' operations subject to
+//		prevailing memory limitations.
+//
+//		The minimum reader buffer size is 16-bytes. If
+//		'readerBuffSize' is set to a value less than
+//		"16", it will be automatically reset to the
+//		default buffer size of 4096-bytes.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufReadWrite *FileBufferReadWrite) SetIoReader(
+	reader io.Reader,
+	readerBuffSize int,
+	errorPrefix interface{}) error {
+
+	if fBufReadWrite.lock == nil {
+		fBufReadWrite.lock = new(sync.Mutex)
+	}
+
+	fBufReadWrite.lock.Lock()
+
+	defer fBufReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	funcName := "FileBufferReadWrite." +
+		"SetIoReader()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(fileBufferReadWriteAtom).
+		setIoReader(
+			fBufReadWrite,
+			"fBufReadWrite",
+			reader,
+			"reader",
+			readerBuffSize,
+			ePrefix)
+}
+
+// SetIoWriter
+//
+// This method will close, delete and reconfigure the
+// internal io.Writer object encapsulated in the current
+// instance of FileBufferReadWrite. The internal
+// io.Writer object is used to 'write' data to an output
+// destination such as a disk file.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	writer						io.Writer
+//
+//		An object which implements io.Writer interface.
+//
+//		This object may be a file pointer of type *os.File.
+//		File pointers of this type implement the io.Writer
+//		interface.
+//
+//		A file pointer (*os.File) will facilitate writing
+//		data to files residing on an attached storage
+//		drive. However, with this configuration, the user
+//		is responsible for manually closing the file and
+//		performing any other required clean-up operations
+//		in addition to calling local method:
+//
+//		FileBufferReadWrite.CloseFileBufferReadWrite()
+//
+//		While the 'write' services provided by
+//		FileBufferReadWrite are primarily designed to
+//		write data to disk files, this type of 'writer'
+//		will in fact write data to any object
+//		implementing the io.Writer interface.
+//
+//	writerBuffSize				int
+//
+//		This integer value controls the size of the
+//		buffer created for the io.Writer object passed as
+//		input parameter 'writer'.
+//
+//		'writerBuffSize' should be configured to maximize
+//		performance for 'write' operations subject to
+//		prevailing memory limitations.
+//
+//		The minimum write buffer size is 1-byte. If
+//		'writerBuffSize' is set to a size less than or
+//		equal to zero, it will be automatically reset to
+//		the default buffer size of 4096-bytes.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufReadWrite *FileBufferReadWrite) SetIoWriter(
+	writer io.Writer,
+	writerBuffSize int,
+	errorPrefix interface{}) error {
+
+	if fBufReadWrite.lock == nil {
+		fBufReadWrite.lock = new(sync.Mutex)
+	}
+
+	fBufReadWrite.lock.Lock()
+
+	defer fBufReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	funcName := "FileBufferReadWrite." +
+		"SetIoWriter()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(fileBufferReadWriteAtom).
+		setIoWriter(
+			fBufReadWrite,
+			"fBufReadWrite",
+			writer,
+			"writer",
+			writerBuffSize,
+			ePrefix)
 }
 
 type fileBufferReadWriteMicrobot struct {
