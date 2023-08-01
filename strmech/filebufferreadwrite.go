@@ -416,31 +416,20 @@ func (fBufReadWrite *FileBufferReadWrite) NewFileMgrs(
 		return newFBuffReadWrite, err
 	}
 
-	var newFileBufReader FileBufferReader
-	var err2 error
-
-	err2 = new(fileBufferReaderMicrobot).
-		setFileMgr(
-			&newFileBufReader,
+	err = new(fileBufferReadWriteMicrobot).
+		setFileMgrs(
+			&newFBuffReadWrite,
 			"newFileBufReader",
 			readerFileMgr,
 			"readerFileMgr",
 			openReadFileReadWrite,
 			readerBuffSize,
-			ePrefix.XCpy(
-				"readerFileMgr"))
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"An error occurred while configuring the reader\n"+
-			"from input parameter 'readerFileMgr'.\n"+
-			"Error=\n%v\n",
-			funcName,
-			err2.Error())
-
-		return newFBuffReadWrite, err
-	}
+			writerFileMgr,
+			"writerFileMgr",
+			openWriteFileReadWrite,
+			writerBuffSize,
+			truncateExistingWriteFile,
+			ePrefix)
 
 	return newFBuffReadWrite, err
 }
@@ -1245,91 +1234,28 @@ func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) setFileMgrs(
 		return err
 	}
 
-	var err2 error
+	var fBuffReadWriteMolecule = new(fileBufferReadWriteMolecule)
 
-	err2 = new(fileMgrHelperAtom).isFileMgrValid(
-		readerFileMgr,
-		ePrefix.XCpy(readerFileMgrLabel))
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter %v is invalid.\n"+
-			"%v failed the validity test.\n"+
-			"Error=\n%v\n",
-			funcName,
-			readerFileMgrLabel,
-			readerFileMgrLabel,
-			err2.Error())
-
-		return err
-	}
-
-	err2 = new(fileMgrHelper).closeFile(
-		readerFileMgr,
-		ePrefix.XCpy(readerFileMgrLabel))
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"An error occurred while closing the file pointer.\n"+
-			"for FileMgr input parameter '%v'.\n"+
-			"Error=\n%v\n",
-			funcName,
-			readerFileMgrLabel,
-			err2.Error())
-
-		return err
-	}
-
-	readerFileMgrLabel += ".absolutePathFileName"
-
-	err2 = new(fileMgrHelperAtom).isFileMgrValid(
-		writerFileMgr,
-		ePrefix.XCpy(writerFileMgrLabel))
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter %v is invalid.\n"+
-			"%v failed the validity test.\n"+
-			"Error=\n%v\n",
-			funcName,
-			writerFileMgrLabel,
-			writerFileMgrLabel,
-			err2.Error())
-
-		return err
-	}
-
-	err2 = new(fileMgrHelper).closeFile(
-		writerFileMgr,
-		ePrefix.XCpy(writerFileMgrLabel))
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"An error occurred while closing the file pointer.\n"+
-			"for FileMgr input parameter '%v'.\n"+
-			"Error=\n%v\n",
-			funcName,
-			writerFileMgrLabel,
-			err2.Error())
-
-		return err
-	}
-
-	writerFileMgrLabel += ".absolutePathFileName"
-
-	err = new(fileBufferReadWriteNanobot).
-		setPathFileNames(
+	err = fBuffReadWriteMolecule.
+		setFileMgrReader(
 			fBufReadWrite,
 			fBufReadWriteLabel,
-			readerFileMgr.absolutePathFileName,
+			readerFileMgr,
 			readerFileMgrLabel,
 			openReadFileReadWrite,
 			readerBuffSize,
-			writerFileMgr.absolutePathFileName,
+			ePrefix)
+
+	if err != nil {
+
+		return err
+	}
+
+	err = fBuffReadWriteMolecule.
+		setFileMgrWriter(
+			fBufReadWrite,
+			fBufReadWriteLabel,
+			writerFileMgr,
 			writerFileMgrLabel,
 			openWriteFileReadWrite,
 			writerBuffSize,
@@ -1944,6 +1870,226 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setPathFileNames(
 
 type fileBufferReadWriteMolecule struct {
 	lock *sync.Mutex
+}
+
+func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) setFileMgrReader(
+	fBufReadWrite *FileBufferReadWrite,
+	fBufReadWriteLabel string,
+	readerFileMgr *FileMgr,
+	readerFileMgrLabel string,
+	openReadFileReadWrite bool,
+	readerBuffSize int,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fBuffReadWriteMolecule.lock == nil {
+		fBuffReadWriteMolecule.lock = new(sync.Mutex)
+	}
+
+	fBuffReadWriteMolecule.lock.Lock()
+
+	defer fBuffReadWriteMolecule.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileBufferReadWriteMolecule." +
+		"setFileMgrReader()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return err
+	}
+
+	if len(fBufReadWriteLabel) == 0 {
+
+		fBufReadWriteLabel = "fBufReadWrite"
+	}
+
+	if len(readerFileMgrLabel) == 0 {
+
+		readerFileMgrLabel = "readerFileMgr"
+	}
+
+	if fBufReadWrite == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is a nil pointer!\n"+
+			"%v is invalid.\n",
+			ePrefix.String(),
+			fBufReadWriteLabel,
+			fBufReadWriteLabel)
+
+		return err
+	}
+
+	var err2 error
+
+	err2 = new(fileMgrHelperAtom).isFileMgrValid(
+		readerFileMgr,
+		ePrefix.XCpy(readerFileMgrLabel))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter %v is invalid.\n"+
+			"%v failed the validity test.\n"+
+			"Error=\n%v\n",
+			funcName,
+			readerFileMgrLabel,
+			readerFileMgrLabel,
+			err2.Error())
+
+		return err
+	}
+
+	err2 = new(fileMgrHelper).closeFile(
+		readerFileMgr,
+		ePrefix.XCpy(readerFileMgrLabel))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while closing the file pointer.\n"+
+			"for FileMgr input parameter '%v'.\n"+
+			"Error=\n%v\n",
+			funcName,
+			readerFileMgrLabel,
+			err2.Error())
+
+		return err
+	}
+
+	readerFileMgrLabel += ".absolutePathFileName"
+
+	err = new(fileBufferReadWriteAtom).
+		setPathFileNameReader(
+			fBufReadWrite,
+			fBufReadWriteLabel,
+			readerFileMgr.absolutePathFileName,
+			readerFileMgrLabel,
+			openReadFileReadWrite,
+			readerBuffSize,
+			ePrefix)
+
+	return err
+}
+
+func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) setFileMgrWriter(
+	fBufReadWrite *FileBufferReadWrite,
+	fBufReadWriteLabel string,
+	writerFileMgr *FileMgr,
+	writerFileMgrLabel string,
+	openWriteFileReadWrite bool,
+	writerBuffSize int,
+	truncateExistingWriteFile bool,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fBuffReadWriteMolecule.lock == nil {
+		fBuffReadWriteMolecule.lock = new(sync.Mutex)
+	}
+
+	fBuffReadWriteMolecule.lock.Lock()
+
+	defer fBuffReadWriteMolecule.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileBufferReadWriteMolecule." +
+		"setFileMgrWriter()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return err
+	}
+
+	if len(fBufReadWriteLabel) == 0 {
+
+		fBufReadWriteLabel = "fBufReadWrite"
+	}
+
+	if len(writerFileMgrLabel) == 0 {
+
+		writerFileMgrLabel = "writerFileMgr"
+	}
+
+	if fBufReadWrite == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is a nil pointer!\n"+
+			"%v is invalid.\n",
+			ePrefix.String(),
+			fBufReadWriteLabel,
+			fBufReadWriteLabel)
+
+		return err
+	}
+
+	var err2 error
+
+	err2 = new(fileMgrHelperAtom).isFileMgrValid(
+		writerFileMgr,
+		ePrefix.XCpy(writerFileMgrLabel))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter %v is invalid.\n"+
+			"%v failed the validity test.\n"+
+			"Error=\n%v\n",
+			funcName,
+			writerFileMgrLabel,
+			writerFileMgrLabel,
+			err2.Error())
+
+		return err
+	}
+
+	err2 = new(fileMgrHelper).closeFile(
+		writerFileMgr,
+		ePrefix.XCpy(writerFileMgrLabel))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while closing the file pointer.\n"+
+			"for FileMgr input parameter '%v'.\n"+
+			"Error=\n%v\n",
+			funcName,
+			writerFileMgrLabel,
+			err2.Error())
+
+		return err
+	}
+
+	writerFileMgrLabel += ".absolutePathFileName"
+
+	err = new(fileBufferReadWriteAtom).
+		setPathFileNameWriter(
+			fBufReadWrite,
+			fBufReadWriteLabel,
+			writerFileMgr.absolutePathFileName,
+			writerFileMgrLabel,
+			openWriteFileReadWrite,
+			writerBuffSize,
+			truncateExistingWriteFile,
+			ePrefix)
+
+	return err
 }
 
 type fileBufferReadWriteAtom struct {
