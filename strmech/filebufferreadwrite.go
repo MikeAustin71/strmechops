@@ -2655,8 +2655,8 @@ type fileBufferReadWriteAtom struct {
 //
 //		The internal io.Reader object encapsulated in
 //		this instance of FileBufferReadWrite will be
-//		deleted and configured using the FileMgr instance
-//		passed as input parameter 'readerFileMgr'.
+//		deleted and configured using the io.Reader
+//		instance passed as input parameter 'reader'.
 //
 //	fBufReadWriteLabel			string
 //
@@ -3066,6 +3066,121 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setIoWriter(
 	return err
 }
 
+// setPathFileNameReader
+//
+// Receives an input parameter string specifying the path
+// and file name identifying the file which will be
+// configured as a data source for 'read' operations.
+// This will be configured as an internal io.Reader object
+// for FileBufferReadWrite instance passed as input
+// parameter 'fBufReadWrite'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reconfigure
+//	the member variable io.Reader object encapsulated in
+//	the instance of FileBufferReadWrite passed as input
+//	parameter 'fBufReadWrite'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufReadWrite				*FileBufferReadWrite
+//
+//		A pointer to an instance of FileBufferWriter.
+//
+//		The internal io.Reader object encapsulated in
+//		this instance of FileBufferReadWrite will be
+//		deleted and configured using the file identified
+//		by input parameter 'readerPathFileName'.
+//
+//	fBufReadWriteLabel			string
+//
+//		The name or label associated with input parameter
+//		'fBufReadWrite' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufReadWrite" will
+//		be automatically applied.
+//
+//	readerPathFileName			string
+//
+//		This string contains the path and file name of
+//		the file which will be configured as an io.Reader
+//		object encapsulated in the FileBufferReadWrite
+//		instance passed as input parameter
+//		'fBufReadWrite'. As such, the file identified by
+//		'readerPathFileName' will be used a data source
+//		for 'read' operations.
+//
+//		If this file does not currently exist on an
+//		attached storage drive, an error will be
+//		returned.
+//
+//	openReadFileReadWrite		bool
+//
+//		If this parameter is set to 'true', the target
+//		'read' file identified from input parameter
+//		'readerPathFileName' will be opened for both
+//		'read' and 'write' operations.
+//
+//		If 'openReadFileReadWrite' is set to 'false', the
+//		target 'read' file will be opened for 'read-only'
+//		operations.
+//
+//	readerBuffSize					int
+//
+//		This integer value controls the size of the
+//		'read' buffer created for the io.Reader object
+//		generated from the file identified by
+//		'readerPathFileName' and encapsulated in the
+//		FileBufferReadWrite instance passed as input
+//		parameter 'fBufReadWrite'.
+//
+//		'readerBuffSize' should be configured to maximize
+//		performance for 'read' operations subject to
+//		prevailing memory limitations.
+//
+//		The minimum read buffer size is 1-byte. If
+//		'bufSize' is set to a size less than or equal to
+//		zero, it will be automatically set to the default
+//		buffer size of 4096-bytes.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameReader(
 	fBufReadWrite *FileBufferReadWrite,
 	fBufReadWriteLabel string,
