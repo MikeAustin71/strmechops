@@ -1719,7 +1719,9 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) closeFileBufferReadWrite
 //		drive. However, with this configuration, the user
 //		is responsible for manually closing the file and
 //		performing any other required clean-up operations
-//		in addition to calling FileBufferReadWrite.Close().
+//		in addition to calling the local method:
+//
+//		FileBufferReadWrite.CloseFileBufferReadWrite()
 //
 //		While the 'read' services provided by
 //		FileBufferReadWrite are primarily designed to
@@ -2139,6 +2141,15 @@ type fileBufferReadWriteMolecule struct {
 //
 // ----------------------------------------------------------------
 //
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reconfigure
+//	the member variable io.Reader object encapsulated in
+//	the instance of FileBufferReadWrite passed as input
+//	parameter 'fBufReadWrite'.
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	fBufReadWrite				*FileBufferReadWrite
@@ -2199,8 +2210,9 @@ type fileBufferReadWriteMolecule struct {
 //
 //		This integer value controls the size of the
 //		'read' buffer created for the internal io.Reader
-//		encapsulated in the returned instance of
-//		FileBufferReadWrite.
+//		encapsulated in the instance of
+//		FileBufferReadWrite passed as input parameter
+//		'fBufReadWrite'.
 //
 //		'readerBuffSize' should be configured to maximize
 //		performance for 'read' operations subject to
@@ -2357,6 +2369,15 @@ func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) setFileMgrReader(
 // will be used to configure an io.Writer object
 // encapsulated by the FileBufferReadWrite instance
 // passed as input parameter 'fBufReadWrite'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reconfigure
+//	the member variable io.Writer object encapsulated in
+//	the instance of FileBufferReadWrite passed as input
+//	parameter 'fBufReadWrite'.
 //
 // ----------------------------------------------------------------
 //
@@ -2595,6 +2616,127 @@ type fileBufferReadWriteAtom struct {
 	lock *sync.Mutex
 }
 
+// setIoReader
+//
+// Receives an object which implements io.Reader
+// interface. This object is then used to configure
+// the internal io.Reader member variable encapsulated in
+// the FileBufferReadWrite instance passed as input
+// parameter 'fBufReadWrite'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reconfigure
+//	the member variable io.Reader object encapsulated in
+//	the instance of FileBufferReadWrite passed as input
+//	parameter 'fBufReadWrite'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufReadWrite				*FileBufferReadWrite
+//
+//		A pointer to an instance of FileBufferWriter.
+//
+//		The internal io.Reader object encapsulated in
+//		this instance of FileBufferReadWrite will be
+//		deleted and configured using the FileMgr instance
+//		passed as input parameter 'readerFileMgr'.
+//
+//	fBufReadWriteLabel			string
+//
+//		The name or label associated with input parameter
+//		'fBufReadWrite' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufReadWrite" will
+//		be automatically applied.
+//
+//	reader						io.Reader
+//
+//		An object which implements io.Reader interface.
+//
+//		This object may be a file pointer of type *os.File.
+//		File pointers of this type implement the io.Reader
+//		interface.
+//
+//		A file pointer (*os.File) will facilitate reading
+//		data from files residing on an attached storage
+//		drive. However, with this configuration, the user
+//		is responsible for manually closing the file and
+//		performing any other required clean-up operations
+//		in addition to calling the local method:
+//
+//		FileBufferReadWrite.CloseFileBufferReadWrite()
+//
+//		While the 'read' services provided by
+//		FileBufferReadWrite are primarily designed to
+//		read data from disk files, this type of 'reader'
+//		will in fact read data from any object
+//		implementing the io.Reader interface.
+//
+//	readerLabel					string
+//
+//		The name or label associated with input parameter
+//		'reader' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "reader" will
+//		be automatically applied.
+//
+//	readerBuffSize				int
+//
+//		This integer value controls the size of the
+//		'read' buffer created for the internal io.Reader
+//		encapsulated in the instance of
+//		FileBufferReadWrite passed as input parameter
+//		'fBufReadWrite'.
+//
+//		'readerBuffSize' should be configured to maximize
+//		performance for 'read' operations subject to
+//		prevailing memory limitations.
+//
+//		The minimum reader buffer size is 16-bytes. If
+//		'readerBuffSize' is set to a value less than
+//		"16", it will be automatically reset to the
+//		default buffer size of 4096-bytes.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setIoReader(
 	fBufReadWrite *FileBufferReadWrite,
 	fBufReadWriteLabel string,
