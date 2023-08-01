@@ -160,8 +160,8 @@ func (fBufReadWrite *FileBufferReadWrite) CloseFileBufferReadWrite(
 		return err
 	}
 
-	err = new(fileBufferReadWriteNanobot).
-		closeFileBufferReadWrite(
+	err = new(fileBufferReadWriteMicrobot).
+		closeReaderWriter(
 			fBufReadWrite,
 			"fBufReadWrite",
 			ePrefix.XCpy("Close-Readers&Writers"))
@@ -1088,6 +1088,8 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 		fBufReadWrite.reader.fileReader.Size())
 
 	var errs []error
+	var err2 error
+	var fBufReadWriteMicrobot = new(fileBufferReadWriteMicrobot)
 
 	for {
 
@@ -1100,44 +1102,40 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 		if readErr != nil &&
 			readErr != io.EOF {
 
-			var err2 error
-
-			err2 = fmt.Errorf("%v\n"+
-				"Error Reading Target Read File!\n"+
-				"Cycle Count= %v\n"+
-				"Error= \n%v\n",
-				ePrefix.String(),
-				cycleCount,
-				readErr.Error())
-
 			errs = append(
-				errs, err2)
+				errs,
+				fmt.Errorf("%v\n"+
+					"Error Reading Target Read File!\n"+
+					"Cycle Count= %v\n"+
+					"Error= \n%v\n",
+					funcName,
+					cycleCount,
+					readErr.Error()))
 
-			var err3 error
+			err2 = fBufReadWriteMicrobot.
+				closeReaderWriter(
+					fBufReadWrite,
+					"fBufReadWrite",
+					funcName)
 
-			err3 = fBufReadWrite.reader.Close(
-				ePrefix.XCpy("reader-Close"))
-
-			if err3 != nil {
+			if err2 != nil {
 
 				errs = append(
-					errs, err3)
+					errs,
+					fmt.Errorf("%v\n"+
+						"%v",
+						funcName,
+						err2.Error()))
 
 			}
 
-			var err4 error
+			if len(errs) > 0 {
 
-			err4 = fBufReadWrite.writer.Close(
-				ePrefix.XCpy("writer-Close"))
-
-			if err4 != nil {
-
-				errs = append(
-					errs, err4)
-
+				err = fmt.Errorf("%v\n"+
+					"%v",
+					ePrefix.String(),
+					new(StrMech).ConsolidateErrors(errs).Error())
 			}
-
-			err = new(StrMech).ConsolidateErrors(errs)
 
 			return totalBytesRead, totalBytesWritten, err
 		}
@@ -1152,42 +1150,38 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 
 			if writeErr != nil {
 
-				var err2 error
-
-				err2 = fmt.Errorf("%v\n"+
-					"Error Writing Bytes To File!\n"+
-					"Write Error=\n%v\n",
-					ePrefix.String(),
-					writeErr.Error())
-
 				errs = append(
-					errs, err2)
+					errs,
+					fmt.Errorf("%v\n"+
+						"Error Writing Bytes To File!\n"+
+						"Write Error=\n%v\n",
+						funcName,
+						writeErr.Error()))
 
-				var err3 error
+				err2 = fBufReadWriteMicrobot.
+					closeReaderWriter(
+						fBufReadWrite,
+						"fBufReadWrite",
+						funcName)
 
-				err3 = fBufReadWrite.reader.Close(
-					ePrefix.XCpy("reader-Close"))
-
-				if err3 != nil {
+				if err2 != nil {
 
 					errs = append(
-						errs, err3)
+						errs,
+						fmt.Errorf("%v\n"+
+							"%v",
+							funcName,
+							err2.Error()))
 
 				}
 
-				var err4 error
+				if len(errs) > 0 {
 
-				err4 = fBufReadWrite.writer.Close(
-					ePrefix.XCpy("writer-Close"))
-
-				if err4 != nil {
-
-					errs = append(
-						errs, err4)
-
+					err = fmt.Errorf("%v\n"+
+						"%v",
+						ePrefix.String(),
+						new(StrMech).ConsolidateErrors(errs).Error())
 				}
-
-				err = new(StrMech).ConsolidateErrors(errs)
 
 				return totalBytesRead, totalBytesWritten, err
 			}
@@ -1197,45 +1191,41 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 
 		if numOfBytesRead != numOfBytesWritten {
 
-			var err2 error
-
-			err2 = fmt.Errorf("%v\n"+
-				"Error Writing Bytes To File!\n"+
-				"numOfBytesRead != numOfBytesWritten\n"+
-				"numOfBytesRead = %v\n"+
-				"numOfBytesWritten = %v\n",
-				ePrefix.String(),
-				numOfBytesRead,
-				numOfBytesWritten)
-
 			errs = append(
-				errs, err2)
+				errs,
+				fmt.Errorf("%v\n"+
+					"Error Writing Bytes To File!\n"+
+					"numOfBytesRead != numOfBytesWritten\n"+
+					"numOfBytesRead = %v\n"+
+					"numOfBytesWritten = %v\n",
+					funcName,
+					numOfBytesRead,
+					numOfBytesWritten))
 
-			var err3 error
+			err2 = fBufReadWriteMicrobot.
+				closeReaderWriter(
+					fBufReadWrite,
+					"fBufReadWrite",
+					funcName)
 
-			err3 = fBufReadWrite.reader.Close(
-				ePrefix.XCpy("reader-Close"))
-
-			if err3 != nil {
+			if err2 != nil {
 
 				errs = append(
-					errs, err3)
+					errs,
+					fmt.Errorf("%v\n"+
+						"%v",
+						funcName,
+						err2.Error()))
 
 			}
 
-			var err4 error
+			if len(errs) > 0 {
 
-			err4 = fBufReadWrite.writer.Close(
-				ePrefix.XCpy("writer-Close"))
-
-			if err4 != nil {
-
-				errs = append(
-					errs, err4)
-
+				err = fmt.Errorf("%v\n"+
+					"%v",
+					ePrefix.String(),
+					new(StrMech).ConsolidateErrors(errs).Error())
 			}
-
-			err = new(StrMech).ConsolidateErrors(errs)
 
 			return totalBytesRead, totalBytesWritten, err
 		}
@@ -1255,10 +1245,104 @@ type fileBufferReadWriteMicrobot struct {
 }
 
 // closeReaderWriter
+//
+// This method is designed to perform clean up tasks
+// after completion of all 'read' and 'write' operations
+// associated with the instance of FileBufferReadWrite
+// passed as input parameter 'fBufReadWrite'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method will effectively render the
+//		FileBufferReadWrite instance passed as
+//		'fBufReadWrite' invalid and unusable for any
+//		future 'read' and/or 'write' operations.
+//
+//	(2) After completing all 'read' and 'write'
+//		operations, users MUST perform these required
+//		clean-up tasks.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) closeReaderWriter(
 	fBufReadWrite *FileBufferReadWrite,
 	fBufReadWriteLabel string,
-	errPrefDto *ePref.ErrPrefixDto) error {
+	errorPrefix interface{}) error {
 
 	if fBufReadWriteMicrobot.lock == nil {
 		fBufReadWriteMicrobot.lock = new(sync.Mutex)
@@ -1273,11 +1357,11 @@ func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) closeReaderWriter(
 	var ePrefix *ePref.ErrPrefixDto
 
 	funcName := "fileBufferReadWriteMicrobot." +
-		"setFileMgrs()"
+		"closeReaderWriter()"
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
 		funcName,
 		"")
 
@@ -1628,143 +1712,6 @@ func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) setFileMgrs(
 
 type fileBufferReadWriteNanobot struct {
 	lock *sync.Mutex
-}
-
-// closeFileBufferReadWrite
-//
-// This method is designed to perform clean up tasks
-// after completion of all 'read' and 'write' operations
-// associated with an instance of FileBufferReadWrite
-// passed as input parameter 'fBufReadWrite'.
-//
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-//	This method will effectively render the instance of
-//	FileBufferReadWrite, passed as input parameter
-//	'fBufReadWrite', invalid and unusable for any
-//	future 'read' or 'write' operations.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	fBufReadWrite				*FileBufferReadWrite
-//
-//		A pointer to an instance of FileBufferWriter.
-//
-//		The internal FileBufferReader and
-//		FileBufferWriter objects encapsulated in this
-//		instance of FileBufferReadWrite will be deleted
-//		as part of this 'close' operation.
-//
-//	fBufReadWriteLabel			string
-//
-//		The name or label associated with input parameter
-//		'fBufReadWrite' which will be used in error
-//		messages returned by this method.
-//
-//		If this parameter is submitted as an empty
-//		string, a default value of "fBufReadWrite" will
-//		be automatically applied.
-//
-//	errPrefDto					*ePref.ErrPrefixDto
-//
-//		This object encapsulates an error prefix string
-//		which is included in all returned error
-//		messages. Usually, it contains the name of the
-//		calling method or methods listed as a function
-//		chain.
-//
-//		If no error prefix information is needed, set
-//		this parameter to 'nil'.
-//
-//		Type ErrPrefixDto is included in the 'errpref'
-//		software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errPrefDto'.
-//	 	The 'errPrefDto' text will be prefixed or
-//	 	attached to the	beginning of the error message.
-func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) closeFileBufferReadWrite(
-	fBufReadWrite *FileBufferReadWrite,
-	fBufReadWriteLabel string,
-	errPrefDto *ePref.ErrPrefixDto) error {
-
-	if fBufReadWriteNanobot.lock == nil {
-		fBufReadWriteNanobot.lock = new(sync.Mutex)
-	}
-
-	fBufReadWriteNanobot.lock.Lock()
-
-	defer fBufReadWriteNanobot.lock.Unlock()
-
-	var err error
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	funcName := "fileBufferReadWriteNanobot." +
-		"closeFileBufferReadWrite()"
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		funcName,
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	if len(fBufReadWriteLabel) == 0 {
-
-		fBufReadWriteLabel = "fBufReadWrite"
-	}
-
-	if fBufReadWrite == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter '%v' is a nil pointer!\n"+
-			"%v is invalid.\n",
-			ePrefix.String(),
-			fBufReadWriteLabel,
-			fBufReadWriteLabel)
-
-		return err
-	}
-
-	fBuffReadWriteAtom := new(fileBufferReadWriteElectron)
-
-	err = fBuffReadWriteAtom.closeReader(
-		fBufReadWrite,
-		fBufReadWriteLabel,
-		ePrefix.XCpy("Close-Reader"))
-
-	if err != nil {
-
-		return err
-	}
-
-	err = fBuffReadWriteAtom.closeWriter(
-		fBufReadWrite,
-		fBufReadWriteLabel,
-		ePrefix.XCpy("Close-Writer"))
-
-	return err
 }
 
 // setIoReaderWriter
