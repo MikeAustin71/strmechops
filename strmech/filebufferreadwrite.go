@@ -946,8 +946,17 @@ func (fBufReadWrite *FileBufferReadWrite) NewPathFileNames(
 //
 // The 'read' and 'write' operations use the io.Reader
 // and io.Writer objects created when the current
-// instance of FileBufferReadWrite was initialized with
-// one of the 'New' methods.
+// instance of FileBufferReadWrite was initialized.
+//
+// Upon completion of all read and write operations, this
+// method will automatically perform all required clean-up
+// tasks. Clean-up tasks involve flushing the io.Writer
+// object, closing the io.Reader and io.Writer objects
+// and then deleting io.Reader and io.Writer structures
+// internal to the current FileBufferReadWrite instance.
+// When the Clean-up tasks are completed, the current
+// FileBufferReadWrite instance will be invalid and
+// unusable for future 'read' and/or 'write' operations.
 //
 // ----------------------------------------------------------------
 //
@@ -1073,6 +1082,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 
 	var readErr, writeErr error
 	var numOfBytesRead, numOfBytesWritten, cycleCount int
+	//var fBufReadWriteMicrobot = new(fileBufferReadWriteMicrobot)
 
 	byteArray := make([]byte,
 		fBufReadWrite.reader.fileReader.Size())
@@ -1242,6 +1252,92 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 
 type fileBufferReadWriteMicrobot struct {
 	lock *sync.Mutex
+}
+
+// closeReaderWriter
+func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) closeReaderWriter(
+	fBufReadWrite *FileBufferReadWrite,
+	fBufReadWriteLabel string,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fBufReadWriteMicrobot.lock == nil {
+		fBufReadWriteMicrobot.lock = new(sync.Mutex)
+	}
+
+	fBufReadWriteMicrobot.lock.Lock()
+
+	defer fBufReadWriteMicrobot.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileBufferReadWriteMicrobot." +
+		"setFileMgrs()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return err
+	}
+
+	if len(fBufReadWriteLabel) == 0 {
+
+		fBufReadWriteLabel = "fBufReadWrite"
+	}
+
+	if fBufReadWrite == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is a nil pointer!\n"+
+			"%v is invalid.\n",
+			ePrefix.String(),
+			fBufReadWriteLabel,
+			fBufReadWriteLabel)
+
+		return err
+	}
+
+	var errs []error
+	var err2 error
+	var fBuffReadWriteElectron = new(fileBufferReadWriteElectron)
+
+	err2 = fBuffReadWriteElectron.
+		closeReader(
+			fBufReadWrite,
+			fBufReadWriteLabel,
+			ePrefix)
+
+	if err2 != nil {
+		errs = append(
+			errs,
+			fmt.Errorf("%v", err2.Error()))
+	}
+
+	err2 = fBuffReadWriteElectron.
+		closeWriter(
+			fBufReadWrite,
+			fBufReadWriteLabel,
+			ePrefix)
+
+	if err2 != nil {
+		errs = append(
+			errs,
+			fmt.Errorf("%v", err2.Error()))
+	}
+
+	if len(errs) > 0 {
+
+		err = new(StrMech).ConsolidateErrors(errs)
+
+	}
+
+	return err
 }
 
 // setFileMgrs
