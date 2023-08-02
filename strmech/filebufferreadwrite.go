@@ -1579,7 +1579,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //
 //		This integer value controls the size of the
 //		'read' buffer created for the internal io.Reader
-//		encapsulated in the returned instance of
+//		encapsulated in the current instance of
 //		FileBufferReadWrite.
 //
 //		'readerBuffSize' should be configured to maximize
@@ -1619,7 +1619,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //
 //		This integer value controls the size of the
 //		'write' buffer created for the internal io.Writer
-//		object encapsulated in the returned instance of
+//		object encapsulated in the current instance of
 //		FileBufferReadWrite.
 //
 //		'writerBuffSize' should be configured to maximize
@@ -1769,6 +1769,188 @@ func (fBufReadWrite *FileBufferReadWrite) SetFileMgrReadWrite(
 			openWriteFileReadWrite,
 			writerBuffSize,
 			truncateExistingWriteFile,
+			ePrefix)
+}
+
+// SetFileMgrReader
+//
+// This method will close, delete and reconfigure the
+// internal io.Reader object encapsulated in the current
+// instance of FileBufferReadWrite. The internal
+// io.Reader object is used to 'read' data from a data
+// source such as a disk file.
+//
+// This internal io.Reader object will be reconfigured
+// using the file identified by a File Manager instance
+// passed as input parameter 'readerFileMgr'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reconfigure
+//	the member variable io.Reader object encapsulated in
+//	the current instance of FileBufferReadWrite.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	readerFileMgr				*FileMgr
+//
+//		A pointer to an instance of FileMgr. The file
+//		identified by 'readerFileMgr' will be used as a
+//		data source for 'read' operations and will be
+//		configured as an internal io.Reader for the
+//		FileBufferReadWrite instance passed as input
+//		parameter 'fBufReadWrite'.
+//
+//		If the path and file name encapsulated by
+//		'readerFileMgr' do not currently exist on an
+//		attached storage drive, an error will be
+//		returned.
+//
+//	openReadFileReadWrite		bool
+//
+//		If this parameter is set to 'true', the target
+//		'read' file identified by input parameter
+//		'readerFileMgr' will be opened for both 'read'
+//		and 'write' operations.
+//
+//		If 'openReadFileReadWrite' is set to 'false', the
+//		target 'read' file will be opened for 'read-only'
+//		operations.
+//
+//	readerBuffSize				int
+//
+//		This integer value controls the size of the
+//		'read' buffer created for the internal io.Reader
+//		encapsulated in the current instance of
+//		FileBufferReadWrite.
+//
+//		'readerBuffSize' should be configured to maximize
+//		performance for 'read' operations subject to
+//		prevailing memory limitations.
+//
+//		The minimum reader buffer size is 16-bytes. If
+//		'readerBuffSize' is set to a size less than "16",
+//		it will be automatically reset to the default
+//		buffer size of 4096-bytes.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufReadWrite *FileBufferReadWrite) SetFileMgrReader(
+	readerFileMgr *FileMgr,
+	openReadFileReadWrite bool,
+	readerBuffSize int,
+	errorPrefix interface{}) error {
+
+	if fBufReadWrite.lock == nil {
+		fBufReadWrite.lock = new(sync.Mutex)
+	}
+
+	fBufReadWrite.lock.Lock()
+
+	defer fBufReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	funcName := "FileBufferReadWrite." +
+		"SetFileMgrReadWrite()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return err
+	}
+
+	return new(fileBufferReadWriteMolecule).
+		setFileMgrReader(
+			fBufReadWrite,
+			"fBufReadWrite",
+			readerFileMgr,
+			"readerFileMgr",
+			openReadFileReadWrite,
+			readerBuffSize,
 			ePrefix)
 }
 
