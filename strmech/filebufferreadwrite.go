@@ -1930,7 +1930,7 @@ func (fBufReadWrite *FileBufferReadWrite) SetFileMgrReader(
 	var err error
 
 	funcName := "FileBufferReadWrite." +
-		"SetFileMgrReadWrite()"
+		"SetFileMgrReader()"
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -1951,6 +1951,205 @@ func (fBufReadWrite *FileBufferReadWrite) SetFileMgrReader(
 			"readerFileMgr",
 			openReadFileReadWrite,
 			readerBuffSize,
+			ePrefix)
+}
+
+// SetFileMgrWriter
+//
+// This method will close, delete and reconfigure the
+// internal io.Writer object encapsulated in the current
+// instance of FileBufferReadWrite. The internal
+// io.Writer object is used to 'write' to an output data
+// destination such as a disk file.
+//
+// This internal io.Writer object will be reconfigured
+// using the file identified by a File Manager instance
+// passed as input parameter 'writerFileMgr'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reconfigure
+//	the member variable io.Writer object encapsulated in
+//	the current instance of FileBufferReadWrite.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	writerFileMgr				*FileMgr
+//
+//		A pointer to an instance of FileMgr. The file
+//		identified by 'writerFileMgr' will be used as an
+//		output data destination for 'write' operations
+//		and will be configured as an internal io.Writer
+//		for the current instance of FileBufferReadWrite.
+//
+//		If the path and file name encapsulated by
+//		'writerFileMgr' do not currently exist on an
+//		attached storage drive, this method will attempt
+//		to create them.
+//
+//	openWriteFileReadWrite		bool
+//
+//		If this parameter is set to 'true', the target
+//		'write' file identified by input parameter
+//		'writerFileMgr' will be opened for 'read'
+//		and 'write' operations.
+//
+//		If 'openWriteFileReadWrite' is set to 'false',
+//		the target write file will be opened for
+//		'write-only' operations.
+//
+//	writerBuffSize				int
+//
+//		This integer value controls the size of the
+//		'write' buffer created for the io.Writer object
+//		generated from the file identified by
+//		'writerFileMgr'. This io.Writer object will in
+//		turn be configured and encapsulated in the
+//		current instance of FileBufferWriter.
+//
+//		'writerBuffSize' should be configured to maximize
+//		performance for 'write' operations subject to
+//		prevailing memory limitations.
+//
+//		If 'writerBuffSize' is set to a value less than
+//		or equal to zero (0), it will be automatically
+//		reset to the default value of 4096-bytes.
+//
+//	truncateExistingWriteFile	bool
+//
+//		If this parameter is set to 'true', the target
+//		'write' file ('writerFileMgr') will be opened for
+//		'write' operations. If the target 'write' file
+//		previously existed, it will be truncated. This
+//		means that the file's previous contents will be
+//		deleted.
+//
+//		If this parameter is set to 'false', the target
+//		'write' file will be opened for write operations.
+//		If the target 'write' file previously existed,
+//		the new text written to this file will be appended
+//		to the end of the previous file contents.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufReadWrite *FileBufferReadWrite) SetFileMgrWriter(
+	writerFileMgr *FileMgr,
+	openWriteFileReadWrite bool,
+	writerBuffSize int,
+	truncateExistingWriteFile bool,
+	errorPrefix interface{}) error {
+
+	if fBufReadWrite.lock == nil {
+		fBufReadWrite.lock = new(sync.Mutex)
+	}
+
+	fBufReadWrite.lock.Lock()
+
+	defer fBufReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	funcName := "FileBufferReadWrite." +
+		"SetFileMgrWriter()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return err
+	}
+
+	return new(fileBufferReadWriteMolecule).
+		setFileMgrWriter(
+			fBufReadWrite,
+			"fBufReadWrite",
+			writerFileMgr,
+			"writerFileMgr",
+			openWriteFileReadWrite,
+			writerBuffSize,
+			truncateExistingWriteFile,
 			ePrefix)
 }
 
