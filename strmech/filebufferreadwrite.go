@@ -11,10 +11,10 @@ import (
 //
 // This type implements both the io.Reader and
 // io.Writer interfaces. It is designed to provide a
-// read/write capability for files and any objects
-// supporting the io.Reader/io.Writer interfaces.
+// read and write capability for files and any objects
+// supporting the io.Reader or io.Writer interfaces.
 //
-// User can utilize this type to perform read and
+// Users can employ this type to perform read and
 // write operations in a single method call.
 //
 // Read and Write operations are performed using
@@ -23,10 +23,96 @@ import (
 //
 // ----------------------------------------------------------------
 //
+// # Best Practices
+//
+//	Initialization
+//
+//	Instances of FileBufferReadWrite are
+//	created using one of three types of
+//	input parameters:
+//
+//		(1)	io.Reader and io.Writer objects.
+//
+//		(2) File Manager objects (FileMgr).
+//
+//		(3) String parameters containing the
+//			paths and file names for files which
+//			will be converted to io.Reader and
+//			io.Writer objects.
+//
+//	There are two options for creating and
+//	initializing a new, valid instance of
+//	FileBufferReadWrite.
+//
+//		Option-1
+//
+//		Use one of the following 'New' methods to
+//		create a valid instance of FileBufferReadWrite
+//		by configuring both the internal io.Reader and
+//		the io.Writer simultaneously:
+//
+//		FileBufferReadWrite.NewIoReadWrite()
+//		FileBufferReadWrite.NewFileMgrs()
+//		FileBufferReadWrite.NewPathFileNames()
+//
+//		Option-2
+//
+//		This second option calls for configuring the
+//		internal io.Reader and io.Writer objects
+//		separately. This approach allows the user to
+//		choose different types of input parameters for
+//		configuring the internal io.Reader and io.Writer.
+//		This approach relies on calling 'Setter' methods.
+//
+//		(a)	Call the 'New' method to generate a blank
+//			or empty instance of FileBufferReadWrite.
+//
+//		(b) Next, call any appropriate combination of
+//			'Setter' methods to finalize the configuration
+//			of a valid FileBufferReadWrite instance:
+//
+//		FileBufferReadWrite.SetFileMgrReadWrite()
+//		FileBufferReadWrite.SetFileMgrReader()
+//		FileBufferReadWrite.SetFileMgrWriter()
+//		FileBufferReadWrite.SetIoReadWrite()
+//		FileBufferReadWrite.SetIoReader()
+//		FileBufferReadWrite.SetIoWriter()
+//		FileBufferReadWrite.SetPathFileNamesReadWrite()
+//		FileBufferReadWrite.SetPathFileNameReader()
+//		FileBufferReadWrite.SetFileMgrReadWrite()
+//		FileBufferReadWrite.SetPathFileNameWriter()
+//
+//
+//	Usage
+//
+//	There are three methods which are designed to
+//	provide 'read' and 'write' services:
+//
+//		FileBufferReadWrite.ReadWriteAll()
+//		FileBufferReadWrite.Read()
+//		FileBufferReadWrite.Write()
+//
+//
+//	Clean-Up
+//
+//	When all 'read' and 'write' operations have been
+//	completed, the user is responsible for performing
+//	Clean-Up operations by calling the following method:
+//
+//		FileBufferReadWrite.CloseFileBufferReadWrite()
+//
+//	NOTE -	This 'Close' method will also 'flush' the
+//			internal 'write' buffer.
+//
+// ----------------------------------------------------------------
+//
 // # IMPORTANT
 //
-//	To create a valid instance of FileBufferReadWrite,
-//	users MUST call one of the 'New' methods.
+//	When all 'read' and 'write' operations have been
+//	completed, the user is responsible for performing
+//	Clean-Up operations by calling the following method:
+//
+//		FileBufferReadWrite.CloseFileBufferReadWrite()
 type FileBufferReadWrite struct {
 	writer             *FileBufferWriter
 	reader             *FileBufferReader
@@ -1541,6 +1627,152 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 	}
 
 	return totalBytesRead, totalBytesWritten, err
+}
+
+// Read
+//
+// Reads a selection data from the pre-configured
+// io.Reader data source encapsulated in the current
+// instance of FileBufferReader.
+//
+// Method 'Read' reads data into the byte array,
+// 'bytesRead'. It returns the number of bytes read
+// into the byte array as return parameter,
+// 'numOfBytesRead'.
+//
+// Under certain circumstances, the number of bytes read
+// may be less than the length of the byte array
+// (len(bytesRead)) due to the length of the underlying
+// read buffer.
+//
+// To complete the read operation, repeat the call to
+// this method until the returned error is set to
+// 'io.EOF' signaling 'End of File'.
+//
+// See the io.Reader docs and 'Reference' section below.
+//
+// Once the 'read' operation has been completed, the user
+// MUST call the 'Close' method to ensure clean-up
+// operations are properly applied:
+//
+//	FileBufferReadWrite.CloseFileBufferReadWrite()
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method implements the io.Reader interface.
+//
+//	(2)	Keep calling this method until all the bytes have
+//		been read from the data source configured for the
+//		current instance of FileBufferReader and the
+//		returned error is set to 'io.EOF'.
+//
+//	(3)	Callers should always process the
+//		numOfBytesRead > 0 bytes returned before
+//		considering the error err. Doing so correctly
+//		handles I/O errors that happen after reading some
+//		bytes and also both of the allowed EOF behaviors
+//		(See the io.Reader docs and 'Reference' section
+//		below).
+//
+//	(4)	When all 'read' operations have been completed,
+//		call method:
+//
+//			FileBufferReader.Close()
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	Read(p []byte) (n int, err error)
+//	https://pkg.go.dev/bufio#Reader.Read
+//
+//	io.Reader
+//	https://pkg.go.dev/io#Reader
+//
+//	Reader is the interface that wraps the basic Read
+//	method.
+//
+//	Read reads up to len(p) bytes into p. It returns the
+//	number of bytes read (0 <= n <= len(p)) and any error
+//	encountered. Even if Read returns n < len(p), it may
+//	use all of p as scratch space during the call. If some
+//	data is available but not len(p) bytes, Read
+//	conventionally returns what is available instead of
+//	waiting for more.
+//
+//	When Read encounters an error or end-of-file
+//	condition after successfully reading n > 0 bytes, it
+//	returns the number of bytes read. It may return the
+//	(non-nil) error from the same call or return the
+//	error (and n == 0) from a subsequent call. An
+//	instance of this general case is that a Reader
+//	returning a non-zero number of bytes at the end of
+//	the input stream may return either err == EOF or
+//	err == nil. The next Read should return 0, EOF.
+//
+//	Callers should always process the n > 0 bytes returned
+//	before considering the error err. Doing so correctly
+//	handles I/O errors that happen after reading some bytes
+//	and also both of the allowed EOF behaviors.
+//
+//	Implementations of Read are discouraged from returning a
+//	zero byte count with a nil error, except when
+//	len(p) == 0. Callers should treat a return of 0 and nil
+//	as indicating that nothing happened; in particular it
+//	does not indicate EOF.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	bytesRead					[]byte
+//
+//		If the length of this byte array is less than
+//		16-bytes, an error will be returned.
+//
+//		Bytes will be read from the data source
+//		configured for the current instance of
+//		FileBufferReader.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numOfBytesRead				int
+//
+//		If this method completes successfully, the number
+//		of bytes read from the data source, and stored in
+//		the byte array passed as input parameter
+//		'bytesRead', will be returned through this
+//		parameter.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If processing errors are encountered, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		If an end of file is encountered (after reading
+//		all data source contents), this returned error
+//		will be set to 'io.EOF'. See the 'Reference'
+//		section for a discussion of 'io.EOF'. Disk files
+//		will return an 'io.EOF'. However, some other
+//		types of readers may not.
+func (fBufReadWrite *FileBufferReadWrite) Read(
+	bytesRead []byte) (
+	numOfBytesRead int,
+	err error) {
+
+	return numOfBytesRead, err
 }
 
 // SetFileMgrReadWrite

@@ -862,9 +862,9 @@ func (fBufReader *FileBufferReader) NewPathFileName(
 
 // Read
 //
-// Reads a selection data from the pre-configured data
-// source associated with the current instance of
-// FileBufferReader.
+// Reads a selection data from the pre-configured
+// io.Reader data source encapsulated in the current
+// instance of FileBufferReader.
 //
 // This method is a wrapper for the bufio 'Reader.Read'
 // method.
