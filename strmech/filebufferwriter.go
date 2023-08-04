@@ -1627,11 +1627,23 @@ func (fBufWriter *FileBufferWriter) SetWriter(
 //
 // ----------------------------------------------------------------
 //
+// # Reference:
+//
+//	https://pkg.go.dev/bufio
+//	https://pkg.go.dev/bufio#Writer
+//	https://pkg.go.dev/io#Writer
+//
+// ----------------------------------------------------------------
+//
 // # IMPORTANT
 //
-//	After all write operations have been completed, the
-//	user MUST call FileBufferWriter.Close() to perform
-//	necessary clean-up operations.
+//	(1) This method implements the io.Writer interface.
+//
+//	(2)	After all 'read' and 'write' operations have been
+//		completed, the user MUST call the 'Close' method
+//		to perform necessary clean-up operations:
+//
+//			FileBufferWriter.Close()
 //
 // ----------------------------------------------------------------
 //
