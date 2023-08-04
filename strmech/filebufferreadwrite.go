@@ -1361,14 +1361,25 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 		return totalBytesRead, totalBytesWritten, err
 	}
 
-	if fBufReadWrite.reader == nil ||
-		fBufReadWrite.writer == nil {
+	if fBufReadWrite.reader == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: The current instance of\n"+
-			"FileBufferReadWrite is invalid!\n"+
-			"Call one of the 'New' methods to\n"+
-			"create a valid instance of FileBufferReadWrite.\n",
+			"ERROR: The current instance of FileBufferReadWrite\n"+
+			"is invalid! The internal io.Reader object was never\n"+
+			"initialized. Call one of the 'New' methods or 'Setter'\n"+
+			"methods to create a valid instance of FileBufferReadWrite.\n",
+			ePrefix.String())
+
+		return totalBytesRead, totalBytesWritten, err
+	}
+
+	if fBufReadWrite.writer == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: The current instance of FileBufferReadWrite\n"+
+			"is invalid! The internal io.Writer object was never\n"+
+			"initialized. Call one of the 'New' methods or 'Setter'\n"+
+			"methods to create a valid instance of FileBufferReadWrite.\n",
 			ePrefix.String())
 
 		return totalBytesRead, totalBytesWritten, err
@@ -2958,7 +2969,7 @@ func (fBufReadWrite *FileBufferReadWrite) SetPathFileNamesReadWrite(
 			ePrefix)
 }
 
-// SetPathFileNameRead
+// SetPathFileNameReader
 //
 // Receives an input parameter string specifying the path
 // and file name identifying the file which will be
@@ -3096,7 +3107,7 @@ func (fBufReadWrite *FileBufferReadWrite) SetPathFileNamesReadWrite(
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fBufReadWrite *FileBufferReadWrite) SetPathFileNameRead(
+func (fBufReadWrite *FileBufferReadWrite) SetPathFileNameReader(
 	readerPathFileName string,
 	openReadFileReadWrite bool,
 	readerBuffSize int,
@@ -3117,7 +3128,7 @@ func (fBufReadWrite *FileBufferReadWrite) SetPathFileNameRead(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"FileBufferReadWrite."+
-			"SetPathFileNameRead()",
+			"SetPathFileNameReader()",
 		"")
 
 	if err != nil {
@@ -3132,6 +3143,201 @@ func (fBufReadWrite *FileBufferReadWrite) SetPathFileNameRead(
 			"readerPathFileName",
 			openReadFileReadWrite,
 			readerBuffSize,
+			ePrefix)
+}
+
+// SetPathFileNameWriter
+//
+// Receives an input parameter string specifying the path
+// and file name identifying the file which will be
+// configured as an output destination for 'write'
+// operations. This file will be configured as an
+// internal io.Writer object for the FileBufferReadWrite
+// instance passed as input parameter 'fBufReadWrite'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reconfigure
+//	the member variable io.Writer object encapsulated in
+//	the instance of FileBufferReadWrite passed as input
+//	parameter 'fBufReadWrite'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	writerPathFileName			string
+//
+//		This string contains the path and file name of
+//		the target 'write' file which will be used as
+//		a data destination for 'write' operations.
+//
+//		The target 'write' file will be configured
+//		as an io.Writer object encapsulated in the
+//		current FileBufferReadWrite instance.
+//
+//		If the target path and file do not currently
+//		exist on an attached storage drive, this method
+//		will attempt to create them.
+//
+//	openWriteFileReadWrite		bool
+//
+//		If this parameter is set to 'true', the target
+//		'write' file identified by input parameter
+//		'writerPathFileName' will be opened for 'read'
+//		and 'write' operations.
+//
+//		If 'openWriteFileReadWrite' is set to 'false',
+//		the target write file will be opened for
+//		'write-only' operations.
+//
+//	writerBuffSize				int
+//
+//		This integer value controls the size of the
+//		'write' buffer created for the io.Writer
+//		object generated from the file identified by
+//		input parameter 'writerPathFileName'. This
+//		io.Writer object is encapsulated in the
+//		current instance of FileBufferReadWrite.
+//
+//		'writerBuffSize' should be configured to maximize
+//		performance for 'write' operations subject to
+//		prevailing memory limitations.
+//
+//		If 'writerBuffSize' is set to a value less than
+//		or equal to zero (0), it will be automatically
+//		reset to the default value of 4096-bytes.
+//
+//	truncateExistingWriteFile	bool
+//
+//		If this parameter is set to 'true', the target
+//		'write' file ('writerPathFileName') will be
+//		opened for write operations. If the target write
+//		file previously existed, it will be truncated.
+//		This means that the file's previous contents will
+//		be deleted.
+//
+//		If this parameter is set to 'false', the target
+//		'write' file will be opened for write operations.
+//		If the target 'write' file previously existed,
+//		the new text written to this file will be appended
+//		to the end of the previous file contents.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufReadWrite *FileBufferReadWrite) SetPathFileNameWriter(
+	writerPathFileName string,
+	openWriteFileReadWrite bool,
+	writerBuffSize int,
+	truncateExistingWriteFile bool,
+	errorPrefix interface{}) error {
+
+	if fBufReadWrite.lock == nil {
+		fBufReadWrite.lock = new(sync.Mutex)
+	}
+
+	fBufReadWrite.lock.Lock()
+
+	defer fBufReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileBufferReadWrite."+
+			"SetPathFileNameWriter()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(fileBufferReadWriteAtom).
+		setPathFileNameWriter(
+			fBufReadWrite,
+			"fBufReadWrite",
+			writerPathFileName,
+			"writerPathFileName",
+			openWriteFileReadWrite,
+			writerBuffSize,
+			truncateExistingWriteFile,
 			ePrefix)
 }
 
