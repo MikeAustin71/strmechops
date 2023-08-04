@@ -869,15 +869,15 @@ func (fBufReader *FileBufferReader) NewPathFileName(
 // This method is a wrapper for the bufio 'Reader.Read'
 // method.
 //
-// Method 'Read' reads data into the byte array
-// 'bytesRead'. It returns the number of bytes read
-// into the byte array as return parameter,
+// Method 'Read' reads data into the input parameter
+// byte array, 'bytesRead'. It returns the number of
+// bytes read into the byte array as return parameter,
 // 'numOfBytesRead'.
 //
 // Under certain circumstances, the number of bytes read
-// may be less than the length of the byte array
-// (len(bytesRead)) due to the length of the underlying
-// read buffer.
+// into the byte array may be less than the length of the
+// byte array (len(bytesRead)) due to the length of the
+// underlying read buffer.
 //
 // To complete the read operation, repeat the call to
 // this method until the returned error is set to

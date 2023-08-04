@@ -23,6 +23,17 @@ import (
 //
 // ----------------------------------------------------------------
 //
+// # Reference:
+//
+//	https://pkg.go.dev/bufio
+//	https://pkg.go.dev/bufio#Reader
+//	https://pkg.go.dev/io#Reader
+//	https://pkg.go.dev/bufio
+//	https://pkg.go.dev/bufio#Writer
+//	https://pkg.go.dev/io#Writer
+//
+// ----------------------------------------------------------------
+//
 // # Best Practices
 //
 //	Initialization
@@ -1633,17 +1644,17 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //
 // Reads a selection data from the pre-configured
 // io.Reader data source encapsulated in the current
-// instance of FileBufferReader.
+// instance of FileBufferReadWrite.
 //
-// Method 'Read' reads data into the byte array,
-// 'bytesRead'. It returns the number of bytes read
-// into the byte array as return parameter,
+// Method 'Read' reads data into the input parameter
+// byte array, 'bytesRead'. It returns the number of
+// bytes read into the byte array as return parameter,
 // 'numOfBytesRead'.
 //
 // Under certain circumstances, the number of bytes read
-// may be less than the length of the byte array
-// (len(bytesRead)) due to the length of the underlying
-// read buffer.
+// into the byte array may be less than the length of the
+// byte array (len(bytesRead)) due to the length of the
+// underlying read buffer.
 //
 // To complete the read operation, repeat the call to
 // this method until the returned error is set to
@@ -1651,11 +1662,21 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //
 // See the io.Reader docs and 'Reference' section below.
 //
-// Once the 'read' operation has been completed, the user
-// MUST call the 'Close' method to ensure clean-up
-// operations are properly applied:
+// Once all 'read' and 'write' operations have been
+// completed for the current instance of
+// FileBufferReadWrite, the user MUST call the 'Close'
+// method to ensure clean-up operations are properly
+// applied:
 //
 //	FileBufferReadWrite.CloseFileBufferReadWrite()
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/bufio
+//	https://pkg.go.dev/bufio#Reader
+//	https://pkg.go.dev/io#Reader
 //
 // ----------------------------------------------------------------
 //
@@ -1664,9 +1685,9 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //	(1)	This method implements the io.Reader interface.
 //
 //	(2)	Keep calling this method until all the bytes have
-//		been read from the data source configured for the
-//		current instance of FileBufferReader and the
-//		returned error is set to 'io.EOF'.
+//		been read from the 'read' data source configured
+//		for the current instance of FileBufferReadWrite
+//		and the returned error is set to 'io.EOF'.
 //
 //	(3)	Callers should always process the
 //		numOfBytesRead > 0 bytes returned before
@@ -1676,10 +1697,10 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //		(See the io.Reader docs and 'Reference' section
 //		below).
 //
-//	(4)	When all 'read' operations have been completed,
-//		call method:
+//	(4)	When all 'read' and 'write' operations have been
+//		completed, call method:
 //
-//			FileBufferReader.Close()
+//			FileBufferReadWrite.CloseFileBufferReadWrite()
 //
 // ----------------------------------------------------------------
 //
@@ -1732,9 +1753,9 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //		If the length of this byte array is less than
 //		16-bytes, an error will be returned.
 //
-//		Bytes will be read from the data source
-//		configured for the current instance of
-//		FileBufferReader.
+//		Bytes will be read from the 'read' data source
+//		previously configured for the current instance of
+//		FileBufferReadWrite.
 //
 // ----------------------------------------------------------------
 //
@@ -1764,13 +1785,76 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //		If an end of file is encountered (after reading
 //		all data source contents), this returned error
 //		will be set to 'io.EOF'. See the 'Reference'
-//		section for a discussion of 'io.EOF'. Disk files
-//		will return an 'io.EOF'. However, some other
+//		section above for a discussion of 'io.EOF'. Disk
+//		files will return an 'io.EOF'. However, some other
 //		types of readers may not.
 func (fBufReadWrite *FileBufferReadWrite) Read(
 	bytesRead []byte) (
 	numOfBytesRead int,
 	err error) {
+
+	if fBufReadWrite.lock == nil {
+		fBufReadWrite.lock = new(sync.Mutex)
+	}
+
+	fBufReadWrite.lock.Lock()
+
+	defer fBufReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileBufferReadWrite."+
+			"Read()",
+		"")
+
+	if err != nil {
+
+		return numOfBytesRead, err
+	}
+
+	if fBufReadWrite.reader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: The current instance of FileBufferReadWrite\n"+
+			"is invalid! The internal io.Reader object was never\n"+
+			"initialized. Call one of the 'New' methods or 'Setter'\n"+
+			"methods to create a valid instance of FileBufferReadWrite.\n",
+			ePrefix.String())
+
+		return numOfBytesRead, err
+	}
+
+	var err2 error
+
+	numOfBytesRead,
+		err2 = fBufReadWrite.reader.
+		Read(bytesRead)
+
+	if err2 != nil {
+
+		if len(fBufReadWrite.readerFilePathName) > 0 {
+
+			err = fmt.Errorf("%v\n"+
+				"Error reading from 'read' data source.\n"+
+				"Read File Path and File Name: %v\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				fBufReadWrite.readerFilePathName,
+				err2.Error())
+
+		} else {
+
+			err = fmt.Errorf("%v\n"+
+				"Error reading from 'read' data source.\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				err2.Error())
+
+		}
+	}
 
 	return numOfBytesRead, err
 }
