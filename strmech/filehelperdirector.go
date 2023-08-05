@@ -3,6 +3,8 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"io"
+	"math"
 	"os"
 	"strings"
 	"sync"
@@ -12,7 +14,7 @@ type fileHelperDirector struct {
 	lock *sync.Mutex
 }
 
-// CopyFileByIoByLink
+// copyFileByIoByLink
 //
 // Copies a file from source to destination using one of
 // two techniques.
@@ -283,6 +285,322 @@ func (fHelpDirector *fileHelperDirector) copyFileByLinkByIo(
 	}
 
 	return err
+}
+
+// filesAreEqual
+func (fHelpDirector *fileHelperDirector) filesAreEqual(
+	pathFileNameOne string,
+	pathFileNameOneLabel string,
+	pathFileNameTwo string,
+	pathFileNameTwoLabel string,
+	errorPrefix interface{}) (
+	areEqual bool,
+	err error) {
+
+	if fHelpDirector.lock == nil {
+		fHelpDirector.lock = new(sync.Mutex)
+	}
+
+	fHelpDirector.lock.Lock()
+
+	defer fHelpDirector.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileHelperDirector." +
+		"filesAreEqual()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return areEqual, err
+	}
+
+	if len(pathFileNameOneLabel) == 0 {
+		pathFileNameOneLabel = "pathFileNameOne"
+	}
+
+	if len(pathFileNameTwoLabel) == 0 {
+		pathFileNameTwoLabel = "pathFileNameTwo"
+	}
+
+	if len(pathFileNameOne) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid.\n"+
+			"'%v' is an empty string with a string length of zero.\n",
+			ePrefix.String(),
+			pathFileNameOneLabel,
+			pathFileNameOneLabel)
+
+		return areEqual, err
+	}
+
+	if len(pathFileNameTwo) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid.\n"+
+			"'%v' is an empty string with a string length of zero.\n",
+			ePrefix.String(),
+			pathFileNameTwoLabel,
+			pathFileNameTwoLabel)
+
+		return areEqual, err
+	}
+
+	var fileInfoPlusOne FileInfoPlus
+	var err2 error
+
+	fileInfoPlusOne,
+		err2 = new(fileHelperNanobot).
+		getFileInfoPlus(
+			pathFileNameOne,
+			ePrefix.XCpy(pathFileNameOneLabel))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error occurred while testing for the existence\n"+
+			"of '%v'\n"+
+			"'%v'= %v\n"+
+			"Error=\n%v\n",
+			funcName,
+			pathFileNameOneLabel,
+			pathFileNameOneLabel,
+			pathFileNameOne,
+			err2.Error())
+
+		return areEqual, err
+	}
+
+	var fileInfoPlusTwo FileInfoPlus
+
+	fileInfoPlusTwo,
+		err2 = new(fileHelperNanobot).
+		getFileInfoPlus(
+			pathFileNameTwo,
+			ePrefix.XCpy(pathFileNameTwoLabel))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error occurred while testing for the existence\n"+
+			"of file '%v'\n"+
+			"'%v'= %v\n"+
+			"Error=\n%v\n",
+			funcName,
+			pathFileNameTwoLabel,
+			pathFileNameTwoLabel,
+			pathFileNameTwo,
+			err2.Error())
+
+		return areEqual, err
+	}
+
+	if fileInfoPlusOne.Size() !=
+		fileInfoPlusTwo.Size() {
+
+		// areEqual == 'false'
+		return areEqual, err
+	}
+
+	if fileInfoPlusOne.IsDir() !=
+		fileInfoPlusTwo.IsDir() {
+
+		// areEqual == 'false'
+		return areEqual, err
+	}
+
+	if fileInfoPlusOne.IsDir() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: '%v' is a directory.\n"+
+			"'%v' is a file.\n"+
+			"'%v'= %v\n"+
+			"'%v'= %v\n",
+			ePrefix.String(),
+			pathFileNameOneLabel,
+			pathFileNameTwoLabel,
+			pathFileNameOneLabel,
+			pathFileNameOne,
+			pathFileNameTwoLabel,
+			pathFileNameTwo)
+	}
+
+	if fileInfoPlusTwo.IsDir() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: '%v' is a file.\n"+
+			"'%v' is a directory.\n"+
+			"'%v'= %v\n"+
+			"'%v'= %v\n",
+			ePrefix.String(),
+			pathFileNameOneLabel,
+			pathFileNameTwoLabel,
+			pathFileNameOneLabel,
+			pathFileNameOne,
+			pathFileNameTwoLabel,
+			pathFileNameTwo)
+	}
+
+	var fileBufReaderOne FileBufferReader
+
+	err2 = new(fileBufferReaderNanobot).
+		setPathFileName(
+			&fileBufReaderOne,
+			"fileBufReaderOne",
+			pathFileNameOne,
+			pathFileNameOneLabel,
+			false, // openFileReadWrite
+			4096,
+			ePrefix)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while converting input\n"+
+			"parameter '%v' to a FileBufferReader.\n"+
+			"'%v' = %v\n"+
+			"Error=\n%v\n",
+			funcName,
+			pathFileNameOneLabel,
+			pathFileNameOneLabel,
+			pathFileNameOne,
+			err2.Error())
+
+		return areEqual, err
+	}
+
+	var fileBufReaderTwo FileBufferReader
+
+	err2 = new(fileBufferReaderNanobot).
+		setPathFileName(
+			&fileBufReaderTwo,
+			"fileBufReaderTwo",
+			pathFileNameTwo,
+			pathFileNameTwoLabel,
+			false, // openFileReadWrite
+			4096,
+			ePrefix)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while converting input\n"+
+			"parameter '%v' to a FileBufferReader.\n"+
+			"'%v' = %v\n"+
+			"Error=\n%v\n",
+			funcName,
+			pathFileNameTwoLabel,
+			pathFileNameTwoLabel,
+			pathFileNameTwo,
+			err2.Error())
+
+		return areEqual, err
+	}
+
+	var fileOneBytesRead = make([]byte, 4096)
+
+	var fileTwoBytesRead = make([]byte, 4096)
+
+	var fileOneNumBytesRead, fileTwoNumBytesRead int
+	var readCycle, maxCycle int64
+
+	maxCycle = int64(math.MaxInt)
+	var errReadOne, errReadTwo error
+
+	for {
+
+		readCycle++
+
+		if readCycle > maxCycle {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: The number of 'read' cycles exceeded the maximum!\n"+
+				"The maximum number of 'read' cycles is %v\n",
+				ePrefix.String(),
+				maxCycle)
+
+			return areEqual, err
+		}
+
+		fileOneNumBytesRead,
+			errReadOne = fileBufReaderOne.
+			Read(
+				fileOneBytesRead)
+
+		if errReadOne != nil &&
+			errReadOne != io.EOF {
+
+			err = fmt.Errorf("%v\n"+
+				"Error reading %v\n"+
+				"'%v'= %v\n"+
+				"Read Error=\n%v\n",
+				ePrefix.String(),
+				pathFileNameOneLabel,
+				pathFileNameOneLabel,
+				pathFileNameOne,
+				errReadOne.Error())
+
+			return areEqual, err
+		}
+
+		fileTwoNumBytesRead,
+			errReadTwo = fileBufReaderTwo.
+			Read(
+				fileTwoBytesRead)
+
+		if errReadTwo != nil &&
+			errReadTwo != io.EOF {
+
+			err = fmt.Errorf("%v\n"+
+				"Error reading %v\n"+
+				"'%v'= %v\n"+
+				"Read Error=\n%v\n",
+				ePrefix.String(),
+				pathFileNameTwoLabel,
+				pathFileNameTwoLabel,
+				pathFileNameTwo,
+				err2.Error())
+
+			return areEqual, err
+		}
+
+		if fileOneNumBytesRead != fileTwoNumBytesRead {
+
+			return areEqual, err
+		}
+
+		for i := 0; i < fileTwoNumBytesRead; i++ {
+
+			if fileOneBytesRead[i] != fileTwoBytesRead[i] {
+
+				return areEqual, err
+			}
+		}
+
+		if errReadOne == io.EOF &&
+			errReadTwo != io.EOF {
+
+			return areEqual, err
+		}
+
+		if errReadOne == io.EOF &&
+			errReadTwo == io.EOF {
+
+			break
+		}
+
+	}
+
+	areEqual = true
+
+	return areEqual, err
 }
 
 // getPathAndFileNameExt

@@ -799,7 +799,7 @@ func (fileHelpMech *fileHelperMechanics) copyFileByLink(
 //
 // # IMPORTANT
 //
-//	If all of the file selection criterion in the
+//	If all the file selection criterion in the
 //	FileSelectionCriteria object are 'Inactive' or
 //	'Not Set' (set to their zero or default values), then
 //	all the files processed in the directory tree WILL BE
@@ -1174,7 +1174,7 @@ func (fileHelpMech *fileHelperMechanics) deleteFilesWalkDirectory(
 //
 // # IMPORTANT
 //
-//	If all of the file selection criterion in the
+//	If all the file selection criterion in the
 //	FileSelectionCriteria object are 'Inactive' or
 //	'Not Set' (set to their zero or default values), then
 //	all the files processed in the directory tree will be
