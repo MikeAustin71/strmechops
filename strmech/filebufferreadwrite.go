@@ -1154,8 +1154,10 @@ func (fBufReadWrite *FileBufferReadWrite) NewFileMgrs(
 	writerBuffSize int,
 	truncateExistingWriteFile bool,
 	errorPrefix interface{}) (
-	FileBufferReadWrite,
-	error) {
+	readerFileInfoPlus FileInfoPlus,
+	writerFileInfoPlus FileInfoPlus,
+	newFBuffReadWrite FileBufferReadWrite,
+	err error) {
 
 	if fBufReadWrite.lock == nil {
 		fBufReadWrite.lock = new(sync.Mutex)
@@ -1166,9 +1168,6 @@ func (fBufReadWrite *FileBufferReadWrite) NewFileMgrs(
 	defer fBufReadWrite.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	var newFBuffReadWrite = FileBufferReadWrite{}
 
 	funcName := "FileBufferReadWrite." +
 		"NewFileMgrs()"
@@ -1181,11 +1180,16 @@ func (fBufReadWrite *FileBufferReadWrite) NewFileMgrs(
 
 	if err != nil {
 
-		return newFBuffReadWrite, err
+		return readerFileInfoPlus,
+			writerFileInfoPlus,
+			newFBuffReadWrite,
+			err
 	}
 
-	err = new(fileBufferReadWriteMicrobot).
-		setFileMgrs(
+	readerFileInfoPlus,
+		writerFileInfoPlus,
+		err = new(fileBufferReadWriteMicrobot).
+		setFileMgrsReadWrite(
 			&newFBuffReadWrite,
 			"newFileBufReader",
 			readerFileMgr,
@@ -1199,7 +1203,10 @@ func (fBufReadWrite *FileBufferReadWrite) NewFileMgrs(
 			truncateExistingWriteFile,
 			ePrefix)
 
-	return newFBuffReadWrite, err
+	return readerFileInfoPlus,
+		writerFileInfoPlus,
+		newFBuffReadWrite,
+		err
 }
 
 // NewPathFileNames
@@ -1373,13 +1380,89 @@ func (fBufReadWrite *FileBufferReadWrite) NewFileMgrs(
 //
 // # Return Values
 //
-//	FileBufferReadWrite
+//	readerFileInfoPlus			FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter
+//		'readerPathFileName'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	writerFileInfoPlus			FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter
+//		'writerPathFileName'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	newFBuffReadWrite			FileBufferReadWrite
 //
 //		If this method completes successfully, it will
 //		return a fully configured instance of
 //		FileBufferReadWrite.
 //
-//	error
+//	err							error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -1400,8 +1483,10 @@ func (fBufReadWrite *FileBufferReadWrite) NewPathFileNames(
 	writerBuffSize int,
 	truncateExistingWriteFile bool,
 	errorPrefix interface{}) (
-	FileBufferReadWrite,
-	error) {
+	readerFileInfoPlus FileInfoPlus,
+	writerFileInfoPlus FileInfoPlus,
+	newFBuffReadWrite FileBufferReadWrite,
+	err error) {
 
 	if fBufReadWrite.lock == nil {
 		fBufReadWrite.lock = new(sync.Mutex)
@@ -1412,9 +1497,6 @@ func (fBufReadWrite *FileBufferReadWrite) NewPathFileNames(
 	defer fBufReadWrite.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	var newFBuffReadWrite = FileBufferReadWrite{}
 
 	funcName := "FileBufferReadWrite." +
 		"NewPathFileNames()"
@@ -1426,10 +1508,16 @@ func (fBufReadWrite *FileBufferReadWrite) NewPathFileNames(
 		"")
 
 	if err != nil {
-		return newFBuffReadWrite, err
+
+		return readerFileInfoPlus,
+			writerFileInfoPlus,
+			newFBuffReadWrite,
+			err
 	}
 
-	err = new(fileBufferReadWriteNanobot).
+	readerFileInfoPlus,
+		writerFileInfoPlus,
+		err = new(fileBufferReadWriteNanobot).
 		setPathFileNamesReadWrite(
 			&newFBuffReadWrite,
 			"newFBuffReadWrite",
@@ -1444,7 +1532,10 @@ func (fBufReadWrite *FileBufferReadWrite) NewPathFileNames(
 			truncateExistingWriteFile,
 			ePrefix)
 
-	return newFBuffReadWrite, err
+	return readerFileInfoPlus,
+		writerFileInfoPlus,
+		newFBuffReadWrite,
+		err
 }
 
 // ReadWriteAll
@@ -2155,7 +2246,7 @@ func (fBufReadWrite *FileBufferReadWrite) Write(
 	return numBytesWritten, err
 }
 
-// SetFileMgrReadWrite
+// SetFileMgrsReadWrite
 //
 // Receives two instances of FileMgr as input parameters
 // identifying the io.Reader and io.Writer objects which
@@ -2332,7 +2423,81 @@ func (fBufReadWrite *FileBufferReadWrite) Write(
 //
 // # Return Values
 //
-//	error
+//	readerFileInfoPlus			FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter 'readerFileMgr'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	writerFileInfoPlus			FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter 'writerFileMgr'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	err							error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -2341,10 +2506,10 @@ func (fBufReadWrite *FileBufferReadWrite) Write(
 //		returned error Type will encapsulate an
 //		appropriate error message. This returned error
 //	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errorPrefix'.
-//	 	The 'errorPrefix' text will be prefixed or
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fBufReadWrite *FileBufferReadWrite) SetFileMgrReadWrite(
+func (fBufReadWrite *FileBufferReadWrite) SetFileMgrsReadWrite(
 	readerFileMgr *FileMgr,
 	openReadFileReadWrite bool,
 	readerBuffSize int,
@@ -2352,7 +2517,10 @@ func (fBufReadWrite *FileBufferReadWrite) SetFileMgrReadWrite(
 	openWriteFileReadWrite bool,
 	writerBuffSize int,
 	truncateExistingWriteFile bool,
-	errorPrefix interface{}) error {
+	errorPrefix interface{}) (
+	readerFileInfoPlus FileInfoPlus,
+	writerFileInfoPlus FileInfoPlus,
+	err error) {
 
 	if fBufReadWrite.lock == nil {
 		fBufReadWrite.lock = new(sync.Mutex)
@@ -2363,22 +2531,23 @@ func (fBufReadWrite *FileBufferReadWrite) SetFileMgrReadWrite(
 	defer fBufReadWrite.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"FileBufferReadWrite."+
-			"SetFileMgrReadWrite()",
+			"SetFileMgrsReadWrite()",
 		"")
 
 	if err != nil {
 
-		return err
+		return readerFileInfoPlus, writerFileInfoPlus, err
 	}
 
-	return new(fileBufferReadWriteMicrobot).
-		setFileMgrs(
+	readerFileInfoPlus,
+		writerFileInfoPlus,
+		err = new(fileBufferReadWriteMicrobot).
+		setFileMgrsReadWrite(
 			fBufReadWrite,
 			"fBufReadWrite",
 			readerFileMgr,
@@ -2391,6 +2560,8 @@ func (fBufReadWrite *FileBufferReadWrite) SetFileMgrReadWrite(
 			writerBuffSize,
 			truncateExistingWriteFile,
 			ePrefix)
+
+	return readerFileInfoPlus, writerFileInfoPlus, err
 }
 
 // SetFileMgrReader
@@ -2521,7 +2692,44 @@ func (fBufReadWrite *FileBufferReadWrite) SetFileMgrReadWrite(
 //
 // # Return Values
 //
-//	error
+//	readerFileInfoPlus			FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter 'readerFileMgr'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	err							error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -2530,14 +2738,16 @@ func (fBufReadWrite *FileBufferReadWrite) SetFileMgrReadWrite(
 //		returned error Type will encapsulate an
 //		appropriate error message. This returned error
 //	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errorPrefix'.
-//	 	The 'errorPrefix' text will be prefixed or
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (fBufReadWrite *FileBufferReadWrite) SetFileMgrReader(
 	readerFileMgr *FileMgr,
 	openReadFileReadWrite bool,
 	readerBuffSize int,
-	errorPrefix interface{}) error {
+	errorPrefix interface{}) (
+	readerFileInfoPlus FileInfoPlus,
+	err error) {
 
 	if fBufReadWrite.lock == nil {
 		fBufReadWrite.lock = new(sync.Mutex)
@@ -2548,7 +2758,6 @@ func (fBufReadWrite *FileBufferReadWrite) SetFileMgrReader(
 	defer fBufReadWrite.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -2559,10 +2768,11 @@ func (fBufReadWrite *FileBufferReadWrite) SetFileMgrReader(
 
 	if err != nil {
 
-		return err
+		return readerFileInfoPlus, err
 	}
 
-	return new(fileBufferReadWriteMolecule).
+	readerFileInfoPlus,
+		err = new(fileBufferReadWriteMolecule).
 		setFileMgrReader(
 			fBufReadWrite,
 			"fBufReadWrite",
@@ -2571,6 +2781,8 @@ func (fBufReadWrite *FileBufferReadWrite) SetFileMgrReader(
 			openReadFileReadWrite,
 			readerBuffSize,
 			ePrefix)
+
+	return readerFileInfoPlus, err
 }
 
 // SetFileMgrWriter
@@ -2716,7 +2928,44 @@ func (fBufReadWrite *FileBufferReadWrite) SetFileMgrReader(
 //
 // # Return Values
 //
-//	error
+//	writerFileInfoPlus			FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter 'writerFileMgr'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	err							error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -2725,15 +2974,17 @@ func (fBufReadWrite *FileBufferReadWrite) SetFileMgrReader(
 //		returned error Type will encapsulate an
 //		appropriate error message. This returned error
 //	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errorPrefix'.
-//	 	The 'errorPrefix' text will be prefixed or
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (fBufReadWrite *FileBufferReadWrite) SetFileMgrWriter(
 	writerFileMgr *FileMgr,
 	openWriteFileReadWrite bool,
 	writerBuffSize int,
 	truncateExistingWriteFile bool,
-	errorPrefix interface{}) error {
+	errorPrefix interface{}) (
+	writerFileInfoPlus FileInfoPlus,
+	err error) {
 
 	if fBufReadWrite.lock == nil {
 		fBufReadWrite.lock = new(sync.Mutex)
@@ -2744,7 +2995,6 @@ func (fBufReadWrite *FileBufferReadWrite) SetFileMgrWriter(
 	defer fBufReadWrite.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -2755,10 +3005,11 @@ func (fBufReadWrite *FileBufferReadWrite) SetFileMgrWriter(
 
 	if err != nil {
 
-		return err
+		return writerFileInfoPlus, err
 	}
 
-	return new(fileBufferReadWriteMolecule).
+	writerFileInfoPlus,
+		err = new(fileBufferReadWriteMolecule).
 		setFileMgrWriter(
 			fBufReadWrite,
 			"fBufReadWrite",
@@ -2768,6 +3019,8 @@ func (fBufReadWrite *FileBufferReadWrite) SetFileMgrWriter(
 			writerBuffSize,
 			truncateExistingWriteFile,
 			ePrefix)
+
+	return writerFileInfoPlus, err
 }
 
 // SetIoReadWrite
@@ -3521,7 +3774,83 @@ func (fBufReadWrite *FileBufferReadWrite) SetIoWriter(
 //
 // # Return Values
 //
-//	error
+//	readerFileInfoPlus			FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter
+//		'readerPathFileName'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	writerFileInfoPlus			FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter
+//		'writerPathFileName'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	err							error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -3530,8 +3859,8 @@ func (fBufReadWrite *FileBufferReadWrite) SetIoWriter(
 //		returned error Type will encapsulate an
 //		appropriate error message. This returned error
 //	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errorPrefix'.
-//	 	The 'errorPrefix' text will be prefixed or
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (fBufReadWrite *FileBufferReadWrite) SetPathFileNamesReadWrite(
 	readerPathFileName string,
@@ -3541,7 +3870,10 @@ func (fBufReadWrite *FileBufferReadWrite) SetPathFileNamesReadWrite(
 	openWriteFileReadWrite bool,
 	writerBuffSize int,
 	truncateExistingWriteFile bool,
-	errorPrefix interface{}) error {
+	errorPrefix interface{}) (
+	readerFileInfoPlus FileInfoPlus,
+	writerFileInfoPlus FileInfoPlus,
+	err error) {
 
 	if fBufReadWrite.lock == nil {
 		fBufReadWrite.lock = new(sync.Mutex)
@@ -3552,7 +3884,6 @@ func (fBufReadWrite *FileBufferReadWrite) SetPathFileNamesReadWrite(
 	defer fBufReadWrite.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -3562,10 +3893,13 @@ func (fBufReadWrite *FileBufferReadWrite) SetPathFileNamesReadWrite(
 		"")
 
 	if err != nil {
-		return err
+
+		return readerFileInfoPlus, writerFileInfoPlus, err
 	}
 
-	return new(fileBufferReadWriteNanobot).
+	readerFileInfoPlus,
+		writerFileInfoPlus,
+		err = new(fileBufferReadWriteNanobot).
 		setPathFileNamesReadWrite(
 			fBufReadWrite,
 			"fBufReadWrite",
@@ -3579,6 +3913,8 @@ func (fBufReadWrite *FileBufferReadWrite) SetPathFileNamesReadWrite(
 			writerBuffSize,
 			truncateExistingWriteFile,
 			ePrefix)
+
+	return readerFileInfoPlus, writerFileInfoPlus, err
 }
 
 // SetPathFileNameReader
@@ -3707,7 +4043,45 @@ func (fBufReadWrite *FileBufferReadWrite) SetPathFileNamesReadWrite(
 //
 // # Return Values
 //
-//	error
+//	readerFileInfoPlus			FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter
+//		'readerPathFileName'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	err							error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -3716,14 +4090,16 @@ func (fBufReadWrite *FileBufferReadWrite) SetPathFileNamesReadWrite(
 //		returned error Type will encapsulate an
 //		appropriate error message. This returned error
 //	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errorPrefix'.
-//	 	The 'errorPrefix' text will be prefixed or
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (fBufReadWrite *FileBufferReadWrite) SetPathFileNameReader(
 	readerPathFileName string,
 	openReadFileReadWrite bool,
 	readerBuffSize int,
-	errorPrefix interface{}) error {
+	errorPrefix interface{}) (
+	readerFileInfoPlus FileInfoPlus,
+	err error) {
 
 	if fBufReadWrite.lock == nil {
 		fBufReadWrite.lock = new(sync.Mutex)
@@ -3734,7 +4110,6 @@ func (fBufReadWrite *FileBufferReadWrite) SetPathFileNameReader(
 	defer fBufReadWrite.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -3744,10 +4119,12 @@ func (fBufReadWrite *FileBufferReadWrite) SetPathFileNameReader(
 		"")
 
 	if err != nil {
-		return err
+
+		return readerFileInfoPlus, err
 	}
 
-	return new(fileBufferReadWriteAtom).
+	readerFileInfoPlus,
+		err = new(fileBufferReadWriteAtom).
 		setPathFileNameReader(
 			fBufReadWrite,
 			"fBufReadWrite",
@@ -3756,6 +4133,8 @@ func (fBufReadWrite *FileBufferReadWrite) SetPathFileNameReader(
 			openReadFileReadWrite,
 			readerBuffSize,
 			ePrefix)
+
+	return readerFileInfoPlus, err
 }
 
 // SetPathFileNameWriter
@@ -3900,7 +4279,45 @@ func (fBufReadWrite *FileBufferReadWrite) SetPathFileNameReader(
 //
 // # Return Values
 //
-//	error
+//	writerFileInfoPlus			FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter
+//		'writerPathFileName'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	err							error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -3917,7 +4334,9 @@ func (fBufReadWrite *FileBufferReadWrite) SetPathFileNameWriter(
 	openWriteFileReadWrite bool,
 	writerBuffSize int,
 	truncateExistingWriteFile bool,
-	errorPrefix interface{}) error {
+	errorPrefix interface{}) (
+	writerFileInfoPlus FileInfoPlus,
+	err error) {
 
 	if fBufReadWrite.lock == nil {
 		fBufReadWrite.lock = new(sync.Mutex)
@@ -3928,7 +4347,6 @@ func (fBufReadWrite *FileBufferReadWrite) SetPathFileNameWriter(
 	defer fBufReadWrite.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -3938,10 +4356,12 @@ func (fBufReadWrite *FileBufferReadWrite) SetPathFileNameWriter(
 		"")
 
 	if err != nil {
-		return err
+
+		return writerFileInfoPlus, err
 	}
 
-	return new(fileBufferReadWriteAtom).
+	writerFileInfoPlus,
+		err = new(fileBufferReadWriteAtom).
 		setPathFileNameWriter(
 			fBufReadWrite,
 			"fBufReadWrite",
@@ -3951,6 +4371,8 @@ func (fBufReadWrite *FileBufferReadWrite) SetPathFileNameWriter(
 			writerBuffSize,
 			truncateExistingWriteFile,
 			ePrefix)
+
+	return writerFileInfoPlus, err
 }
 
 type fileBufferReadWriteMicrobot struct {
@@ -4137,7 +4559,7 @@ func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) closeReaderWriter(
 	return err
 }
 
-// setFileMgrs
+// setFileMgrsReadWrite
 //
 // Receives two instances of FileMgr as input parameters
 // identifying the io.Reader and io.Writer objects which
@@ -4313,7 +4735,81 @@ func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) closeReaderWriter(
 //
 // # Return Values
 //
-//	error
+//	readerFileInfoPlus			FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter 'readerFileMgr'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	writerFileInfoPlus			FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter 'writerFileMgr'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	err							error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -4325,7 +4821,7 @@ func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) closeReaderWriter(
 //	 	text passed by input parameter, 'errPrefDto'.
 //	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) setFileMgrs(
+func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) setFileMgrsReadWrite(
 	fBufReadWrite *FileBufferReadWrite,
 	fBufReadWriteLabel string,
 	readerFileMgr *FileMgr,
@@ -4337,7 +4833,10 @@ func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) setFileMgrs(
 	openWriteFileReadWrite bool,
 	writerBuffSize int,
 	truncateExistingWriteFile bool,
-	errPrefDto *ePref.ErrPrefixDto) error {
+	errPrefDto *ePref.ErrPrefixDto) (
+	readerFileInfoPlus FileInfoPlus,
+	writerFileInfoPlus FileInfoPlus,
+	err error) {
 
 	if fBufReadWriteMicrobot.lock == nil {
 		fBufReadWriteMicrobot.lock = new(sync.Mutex)
@@ -4347,12 +4846,10 @@ func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) setFileMgrs(
 
 	defer fBufReadWriteMicrobot.lock.Unlock()
 
-	var err error
-
 	var ePrefix *ePref.ErrPrefixDto
 
 	funcName := "fileBufferReadWriteMicrobot." +
-		"setFileMgrs()"
+		"setFileMgrsReadWrite()"
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -4362,7 +4859,7 @@ func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) setFileMgrs(
 
 	if err != nil {
 
-		return err
+		return readerFileInfoPlus, writerFileInfoPlus, err
 	}
 
 	if len(fBufReadWriteLabel) == 0 {
@@ -4389,12 +4886,13 @@ func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) setFileMgrs(
 			fBufReadWriteLabel,
 			fBufReadWriteLabel)
 
-		return err
+		return readerFileInfoPlus, writerFileInfoPlus, err
 	}
 
 	var fBuffReadWriteMolecule = new(fileBufferReadWriteMolecule)
 
-	err = fBuffReadWriteMolecule.
+	readerFileInfoPlus,
+		err = fBuffReadWriteMolecule.
 		setFileMgrReader(
 			fBufReadWrite,
 			fBufReadWriteLabel,
@@ -4406,10 +4904,11 @@ func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) setFileMgrs(
 
 	if err != nil {
 
-		return err
+		return readerFileInfoPlus, writerFileInfoPlus, err
 	}
 
-	err = fBuffReadWriteMolecule.
+	writerFileInfoPlus,
+		err = fBuffReadWriteMolecule.
 		setFileMgrWriter(
 			fBufReadWrite,
 			fBufReadWriteLabel,
@@ -4420,7 +4919,7 @@ func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) setFileMgrs(
 			truncateExistingWriteFile,
 			ePrefix)
 
-	return err
+	return readerFileInfoPlus, writerFileInfoPlus, err
 }
 
 type fileBufferReadWriteNanobot struct {
@@ -4816,7 +5315,83 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setIoReaderWriter(
 //
 // # Return Values
 //
-//	error
+//	readerFileInfoPlus			FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter
+//		'readerPathFileName'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	writerFileInfoPlus			FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter
+//		'writerPathFileName'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	err							error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -4840,7 +5415,10 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setPathFileNamesReadWrit
 	openWriteFileReadWrite bool,
 	writerBuffSize int,
 	truncateExistingWriteFile bool,
-	errPrefDto *ePref.ErrPrefixDto) error {
+	errPrefDto *ePref.ErrPrefixDto) (
+	readerFileInfoPlus FileInfoPlus,
+	writerFileInfoPlus FileInfoPlus,
+	err error) {
 
 	if fBufReadWriteNanobot.lock == nil {
 		fBufReadWriteNanobot.lock = new(sync.Mutex)
@@ -4849,8 +5427,6 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setPathFileNamesReadWrit
 	fBufReadWriteNanobot.lock.Lock()
 
 	defer fBufReadWriteNanobot.lock.Unlock()
-
-	var err error
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -4865,12 +5441,13 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setPathFileNamesReadWrit
 
 	if err != nil {
 
-		return err
+		return readerFileInfoPlus, writerFileInfoPlus, err
 	}
 
 	var fBufReadWriteMolecule = new(fileBufferReadWriteAtom)
 
-	err = fBufReadWriteMolecule.
+	readerFileInfoPlus,
+		err = fBufReadWriteMolecule.
 		setPathFileNameReader(
 			fBufReadWrite,
 			fBufReadWriteLabel,
@@ -4882,10 +5459,11 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setPathFileNamesReadWrit
 
 	if err != nil {
 
-		return err
+		return readerFileInfoPlus, writerFileInfoPlus, err
 	}
 
-	err = fBufReadWriteMolecule.
+	writerFileInfoPlus,
+		err = fBufReadWriteMolecule.
 		setPathFileNameWriter(
 			fBufReadWrite,
 			fBufReadWriteLabel,
@@ -4896,7 +5474,7 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setPathFileNamesReadWrit
 			truncateExistingWriteFile,
 			ePrefix)
 
-	return err
+	return readerFileInfoPlus, writerFileInfoPlus, err
 }
 
 type fileBufferReadWriteMolecule struct {
@@ -5014,7 +5592,44 @@ type fileBufferReadWriteMolecule struct {
 //
 // # Return Values
 //
-//	error
+//	fileInfoPlus				FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter 'readerFileMgr'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	err							error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -5033,7 +5648,9 @@ func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) setFileMgrReader(
 	readerFileMgrLabel string,
 	openReadFileReadWrite bool,
 	readerBuffSize int,
-	errPrefDto *ePref.ErrPrefixDto) error {
+	errPrefDto *ePref.ErrPrefixDto) (
+	fInfoPlus FileInfoPlus,
+	err error) {
 
 	if fBuffReadWriteMolecule.lock == nil {
 		fBuffReadWriteMolecule.lock = new(sync.Mutex)
@@ -5042,8 +5659,6 @@ func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) setFileMgrReader(
 	fBuffReadWriteMolecule.lock.Lock()
 
 	defer fBuffReadWriteMolecule.lock.Unlock()
-
-	var err error
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -5058,7 +5673,7 @@ func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) setFileMgrReader(
 
 	if err != nil {
 
-		return err
+		return fInfoPlus, err
 	}
 
 	if len(fBufReadWriteLabel) == 0 {
@@ -5080,7 +5695,7 @@ func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) setFileMgrReader(
 			fBufReadWriteLabel,
 			fBufReadWriteLabel)
 
-		return err
+		return fInfoPlus, err
 	}
 
 	var err2 error
@@ -5100,7 +5715,7 @@ func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) setFileMgrReader(
 			readerFileMgrLabel,
 			err2.Error())
 
-		return err
+		return fInfoPlus, err
 	}
 
 	err2 = new(fileMgrHelper).closeFile(
@@ -5117,12 +5732,13 @@ func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) setFileMgrReader(
 			readerFileMgrLabel,
 			err2.Error())
 
-		return err
+		return fInfoPlus, err
 	}
 
 	readerFileMgrLabel += ".absolutePathFileName"
 
-	err = new(fileBufferReadWriteAtom).
+	fInfoPlus,
+		err = new(fileBufferReadWriteAtom).
 		setPathFileNameReader(
 			fBufReadWrite,
 			fBufReadWriteLabel,
@@ -5132,7 +5748,7 @@ func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) setFileMgrReader(
 			readerBuffSize,
 			ePrefix)
 
-	return err
+	return fInfoPlus, err
 }
 
 // setFileMgrWriter
@@ -5261,7 +5877,44 @@ func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) setFileMgrReader(
 //
 // # Return Values
 //
-//	error
+//	fileInfoPlus				FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter 'writerFileMgr'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	err							error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -5281,7 +5934,9 @@ func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) setFileMgrWriter(
 	openWriteFileReadWrite bool,
 	writerBuffSize int,
 	truncateExistingWriteFile bool,
-	errPrefDto *ePref.ErrPrefixDto) error {
+	errPrefDto *ePref.ErrPrefixDto) (
+	fInfoPlus FileInfoPlus,
+	err error) {
 
 	if fBuffReadWriteMolecule.lock == nil {
 		fBuffReadWriteMolecule.lock = new(sync.Mutex)
@@ -5290,8 +5945,6 @@ func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) setFileMgrWriter(
 	fBuffReadWriteMolecule.lock.Lock()
 
 	defer fBuffReadWriteMolecule.lock.Unlock()
-
-	var err error
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -5306,7 +5959,7 @@ func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) setFileMgrWriter(
 
 	if err != nil {
 
-		return err
+		return fInfoPlus, err
 	}
 
 	if len(fBufReadWriteLabel) == 0 {
@@ -5328,7 +5981,7 @@ func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) setFileMgrWriter(
 			fBufReadWriteLabel,
 			fBufReadWriteLabel)
 
-		return err
+		return fInfoPlus, err
 	}
 
 	var err2 error
@@ -5348,7 +6001,7 @@ func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) setFileMgrWriter(
 			writerFileMgrLabel,
 			err2.Error())
 
-		return err
+		return fInfoPlus, err
 	}
 
 	err2 = new(fileMgrHelper).closeFile(
@@ -5365,12 +6018,13 @@ func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) setFileMgrWriter(
 			writerFileMgrLabel,
 			err2.Error())
 
-		return err
+		return fInfoPlus, err
 	}
 
 	writerFileMgrLabel += ".absolutePathFileName"
 
-	err = new(fileBufferReadWriteAtom).
+	fInfoPlus,
+		err = new(fileBufferReadWriteAtom).
 		setPathFileNameWriter(
 			fBufReadWrite,
 			fBufReadWriteLabel,
@@ -5381,7 +6035,7 @@ func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) setFileMgrWriter(
 			truncateExistingWriteFile,
 			ePrefix)
 
-	return err
+	return fInfoPlus, err
 }
 
 type fileBufferReadWriteAtom struct {
@@ -5920,7 +6574,45 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setIoWriter(
 //
 // # Return Values
 //
-//	error
+//	fileInfoPlus				FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter
+//		'readerPathFileName'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	err							error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -5939,7 +6631,9 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameReader(
 	readerPathFileNameLabel string,
 	openReadFileReadWrite bool,
 	readerBuffSize int,
-	errPrefDto *ePref.ErrPrefixDto) error {
+	errPrefDto *ePref.ErrPrefixDto) (
+	fInfoPlus FileInfoPlus,
+	err error) {
 
 	if fBuffReadWriteAtom.lock == nil {
 		fBuffReadWriteAtom.lock = new(sync.Mutex)
@@ -5948,8 +6642,6 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameReader(
 	fBuffReadWriteAtom.lock.Lock()
 
 	defer fBuffReadWriteAtom.lock.Unlock()
-
-	var err error
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -5963,7 +6655,8 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameReader(
 		"")
 
 	if err != nil {
-		return err
+
+		return fInfoPlus, err
 	}
 
 	if len(fBufReadWriteLabel) == 0 {
@@ -5985,7 +6678,7 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameReader(
 			fBufReadWriteLabel,
 			fBufReadWriteLabel)
 
-		return err
+		return fInfoPlus, err
 	}
 
 	if len(readerPathFileName) == 0 {
@@ -5997,7 +6690,7 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameReader(
 			readerPathFileNameLabel,
 			readerPathFileNameLabel)
 
-		return err
+		return fInfoPlus, err
 	}
 
 	err = new(fileBufferReadWriteElectron).closeReader(
@@ -6007,13 +6700,14 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameReader(
 
 	if err != nil {
 
-		return err
+		return fInfoPlus, err
 	}
 
 	var newBuffReader FileBufferReader
 	var err2 error
 
-	err2 = new(fileBufferReaderNanobot).
+	fInfoPlus,
+		err2 = new(fileBufferReaderNanobot).
 		setPathFileName(
 			&newBuffReader,
 			"newBuffReader",
@@ -6032,13 +6726,13 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameReader(
 			fBufReadWriteLabel,
 			err2.Error())
 
-		return err
+		return fInfoPlus, err
 	}
 
 	fBufReadWrite.reader = &newBuffReader
 	fBufReadWrite.readerFilePathName = readerPathFileName
 
-	return err
+	return fInfoPlus, err
 }
 
 // setPathFileNameWriter
@@ -6165,7 +6859,45 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameReader(
 //
 // # Return Values
 //
-//	error
+//	fileInfoPlus				FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter
+//		'writerPathFileName'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	err							error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -6185,7 +6917,9 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameWriter(
 	openWriteFileReadWrite bool,
 	writerBuffSize int,
 	truncateExistingWriteFile bool,
-	errPrefDto *ePref.ErrPrefixDto) error {
+	errPrefDto *ePref.ErrPrefixDto) (
+	fInfoPlus FileInfoPlus,
+	err error) {
 
 	if fBuffReadWriteAtom.lock == nil {
 		fBuffReadWriteAtom.lock = new(sync.Mutex)
@@ -6194,8 +6928,6 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameWriter(
 	fBuffReadWriteAtom.lock.Lock()
 
 	defer fBuffReadWriteAtom.lock.Unlock()
-
-	var err error
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -6209,7 +6941,8 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameWriter(
 		"")
 
 	if err != nil {
-		return err
+
+		return fInfoPlus, err
 	}
 
 	if len(fBufReadWriteLabel) == 0 {
@@ -6231,7 +6964,7 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameWriter(
 			fBufReadWriteLabel,
 			fBufReadWriteLabel)
 
-		return err
+		return fInfoPlus, err
 	}
 
 	if len(writerPathFileName) == 0 {
@@ -6243,7 +6976,7 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameWriter(
 			writerPathFileNameLabel,
 			writerPathFileNameLabel)
 
-		return err
+		return fInfoPlus, err
 	}
 
 	err = new(fileBufferReadWriteElectron).closeWriter(
@@ -6253,13 +6986,14 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameWriter(
 
 	if err != nil {
 
-		return err
+		return fInfoPlus, err
 	}
 
 	var newBuffWriter FileBufferWriter
 	var err2 error
 
-	err2 = new(fileBufferWriterNanobot).
+	fInfoPlus,
+		err2 = new(fileBufferWriterNanobot).
 		setPathFileName(
 			&newBuffWriter,
 			"newBuffWriter",
@@ -6279,13 +7013,13 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameWriter(
 			fBufReadWriteLabel,
 			err2.Error())
 
-		return err
+		return fInfoPlus, err
 	}
 
 	fBufReadWrite.writer = &newBuffWriter
 	fBufReadWrite.writerFilePathName = writerPathFileName
 
-	return err
+	return fInfoPlus, err
 }
 
 type fileBufferReadWriteElectron struct {
