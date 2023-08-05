@@ -1122,8 +1122,6 @@ func (fileHlprOpsTest008 MainFileHelperOpsTest008) FileBufWriter01() {
 				i,
 				err2.Error())
 
-			_ = fBufWriter.Flush(nil)
-
 			_ = fBufWriter.Close(nil)
 
 			return

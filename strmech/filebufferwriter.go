@@ -1645,6 +1645,10 @@ func (fBufWriter *FileBufferWriter) SetWriter(
 //
 //			FileBufferWriter.Close()
 //
+//	(3) This method WILL NOT VERIFY that the number of
+//		bytes written is equal to the length of the
+//		length of input parameter 'bytesToWrite'.
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -1662,11 +1666,9 @@ func (fBufWriter *FileBufferWriter) SetWriter(
 //		may be any object implementing the io.Writer
 //		interface.
 //
-//		If for any reason, the returned number of bytes
-//		written ('numBytesWritten') to the destination
-//		io.Writer object is less than the length of this
-//		byte array ('bytesToWrite'), an error containing
-//		an explanation for this event will be returned.
+//		This method WILL NOT VERIFY that the number of
+//		bytes written is equal to the length of the
+//		length of input parameter 'bytesToWrite'.
 //
 // ----------------------------------------------------------------
 //
@@ -1678,10 +1680,6 @@ func (fBufWriter *FileBufferWriter) SetWriter(
 //		written to the destination io.Writer object
 //		configured for the current instance of
 //		FileBufferWriter.
-//
-//		If 'numBytesWritten' is less than the length
-//		of the byte array input parameter 'bytesToWrite',
-//		an error will also be returned.
 //
 //	err							error
 //
@@ -1695,13 +1693,6 @@ func (fBufWriter *FileBufferWriter) SetWriter(
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-//
-//		If an end of file is encountered (after reading
-//		all data source contents), this returned error
-//		will be set to 'io.EOF'. See the 'Reference'
-//		section for a discussion of 'io.EOF'. Disk files
-//		will return an 'io.EOF'. However, some other
-//		types of readers may not.
 func (fBufWriter *FileBufferWriter) Write(
 	bytesToWrite []byte) (
 	numBytesWritten int,
