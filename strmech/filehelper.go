@@ -3247,7 +3247,7 @@ func (fh *FileHelper) DeleteDirPathAll(
 //
 // # IMPORTANT
 //
-//	If all of the file selection criterion in the
+//	If all the file selection criterion in the
 //	FileSelectionCriteria object are 'Inactive' or
 //	'Not Set' (set to their zero or default values), then
 //	all the files processed in the directory tree WILL BE
@@ -3442,7 +3442,7 @@ func (fh *FileHelper) DeleteDirPathAll(
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria object are
+//		If all the file selection criterion in the FileSelectionCriteria object are
 //		'Inactive' or 'Not Set' (set to their zero or default values), then all the
 //		files processed in the directory tree will be selected.
 //
@@ -4869,7 +4869,7 @@ func (fh *FileHelper) DoesThisFileExist(
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria object are
+//		If all the file selection criterion in the FileSelectionCriteria object are
 //		'Inactive' or 'Not Set' (set to their zero or default values), then all the
 //		files processed in the directory tree will be selected.
 //
@@ -5251,7 +5251,7 @@ func (fh *FileHelper) FindFilesInPath(
 //
 // # IMPORTANT
 //
-//	If all of the file selection criterion in the
+//	If all the file selection criterion in the
 //	FileSelectionCriteria object are 'Inactive' or
 //	'Not Set' (set to their zero or default values), then
 //	all the files processed in the directory tree will be
@@ -5440,7 +5440,7 @@ func (fh *FileHelper) FindFilesInPath(
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria object are
+//		If all the file selection criterion in the FileSelectionCriteria object are
 //		'Inactive' or 'Not Set' (set to their zero or default values), then all the
 //		files processed in the directory tree will be selected.
 //
@@ -12785,7 +12785,7 @@ func (fh *FileHelper) RemovePathSeparatorFromEndOfPathString(
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria object are
+//		If all the file selection criterion in the FileSelectionCriteria object are
 //		'Inactive' or 'Not Set' (set to their zero or default values), then all the
 //		files processed in the directory tree will be selected.
 //
@@ -13159,7 +13159,7 @@ func (fh *FileHelper) SearchFileModeMatch(
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria object are
+//		If all the file selection criterion in the FileSelectionCriteria object are
 //		'Inactive' or 'Not Set' (set to their zero or default values), then all the
 //		files processed in the directory tree will be selected.
 //
@@ -13443,7 +13443,7 @@ func (fh *FileHelper) SearchFileNewerThan(
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria object are
+//		If all the file selection criterion in the FileSelectionCriteria object are
 //		'Inactive' or 'Not Set' (set to their zero or default values), then all the
 //		files processed in the directory tree will be selected.
 //
@@ -13725,7 +13725,7 @@ func (fh *FileHelper) SearchFileOlderThan(
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria object are
+//		If all the file selection criterion in the FileSelectionCriteria object are
 //		'Inactive' or 'Not Set' (set to their zero or default values), then all the
 //		files processed in the directory tree will be selected and moved
 //		to the target directory.
@@ -14130,7 +14130,7 @@ func (fh *FileHelper) SearchFilePatternMatch(
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria object are
+//		If all the file selection criterion in the FileSelectionCriteria object are
 //		'Inactive' or 'Not Set' (set to their zero or default values), then all the
 //		files processed in the directory tree will be selected.
 //
