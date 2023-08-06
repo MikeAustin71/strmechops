@@ -772,9 +772,9 @@ func (fMgr *FileMgr) CompareFiles(
 		err = new(fileHelperDirector).
 		compareFiles(
 			fMgr.absolutePathFileName,
-			"fMgr-1",
+			"FileMgr-1",
 			fMgrTwo.absolutePathFileName,
-			"fMgr-2",
+			"FileMgr-2",
 			ePrefix)
 
 	return filesAreEqual, reasonFilesNotEqual, err
