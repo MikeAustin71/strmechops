@@ -69,7 +69,8 @@ func TestFileBufferWriter_Write_000100(t *testing.T) {
 
 	var fBufWriter FileBufferWriter
 
-	fBufWriter,
+	_,
+		fBufWriter,
 		err = new(FileBufferWriter).
 		NewPathFileName(
 			targetWriteFile,
@@ -110,7 +111,7 @@ func TestFileBufferWriter_Write_000100(t *testing.T) {
 
 			_ = fBufWriter.Flush(nil)
 
-			_ = fBufWriter.Close(nil)
+			_ = fBufWriter.FlushAndClose(nil)
 
 			return
 		}
@@ -135,7 +136,7 @@ func TestFileBufferWriter_Write_000100(t *testing.T) {
 		errs = append(errs, err)
 	}
 
-	err2 = fBufWriter.Close(ePrefix)
+	err2 = fBufWriter.FlushAndClose(ePrefix)
 
 	if err2 != nil {
 
@@ -174,10 +175,7 @@ func TestFileBufferWriter_Write_000100(t *testing.T) {
 		return
 	}
 
-	var lowLevelErr error
-
-	err2,
-		lowLevelErr = fHelper.DeleteDirFile(
+	err2 = fHelper.DeleteDirFile(
 		targetWriteFile,
 		ePrefix)
 
@@ -190,22 +188,6 @@ func TestFileBufferWriter_Write_000100(t *testing.T) {
 			ePrefix.String(),
 			targetWriteFile,
 			err2.Error())
-
-		errs = append(errs, err)
-
-	}
-
-	if lowLevelErr != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Low Level Error return from fHelper.DeleteDirFile(targetWriteFile)\n"+
-			"targetWriteFile = '%v'\n"+
-			"Low Level Error = \n%v\n",
-			ePrefix.String(),
-			targetWriteFile,
-			lowLevelErr.Error())
-
-		errs = append(errs, err)
 
 	}
 
@@ -288,7 +270,8 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 
 	var fBufWriter FileBufferWriter
 
-	fBufWriter,
+	_,
+		fBufWriter,
 		err = new(FileBufferWriter).
 		NewPathFileName(
 			targetWriteFile,
@@ -329,7 +312,7 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 
 			_ = fBufWriter.Flush(nil)
 
-			_ = fBufWriter.Close(nil)
+			_ = fBufWriter.FlushAndClose(nil)
 
 			return
 		}
@@ -354,7 +337,7 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 		errs = append(errs, err)
 	}
 
-	err2 = fBufWriter.Close(ePrefix)
+	err2 = fBufWriter.FlushAndClose(ePrefix)
 
 	if err2 != nil {
 
@@ -393,7 +376,8 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 		return
 	}
 
-	fBufWriter,
+	_,
+		fBufWriter,
 		err = new(FileBufferWriter).
 		NewPathFileName(
 			targetWriteFile,
@@ -430,7 +414,7 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 
 			_ = fBufWriter.Flush(nil)
 
-			_ = fBufWriter.Close(nil)
+			_ = fBufWriter.FlushAndClose(nil)
 
 			return
 		}
@@ -452,7 +436,7 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 		errs = append(errs, err)
 	}
 
-	err2 = fBufWriter.Close(ePrefix)
+	err2 = fBufWriter.FlushAndClose(ePrefix)
 
 	if err2 != nil {
 
@@ -507,52 +491,19 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 
 	}
 
-	var lowLevelErr error
-
-	err2,
-		lowLevelErr = fHelper.DeleteDirFile(
+	err2 = fHelper.DeleteDirFile(
 		targetWriteFile,
 		ePrefix)
 
 	if err2 != nil {
 
-		err = fmt.Errorf("%v\n"+
+		t.Errorf("%v\n"+
 			"Error return from fHelper.DeleteDirFile(targetWriteFile)\n"+
 			"targetWriteFile = '%v'\n"+
 			"Error = \n%v\n",
 			ePrefix.String(),
 			targetWriteFile,
 			err2.Error())
-
-		errs = append(errs, err)
-
-	}
-
-	if lowLevelErr != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Low Level Error return from fHelper.DeleteDirFile(targetWriteFile)\n"+
-			"targetWriteFile = '%v'\n"+
-			"Low Level Error = \n%v\n",
-			ePrefix.String(),
-			targetWriteFile,
-			lowLevelErr.Error())
-
-		errs = append(errs, err)
-
-	}
-
-	if len(errs) > 0 {
-
-		err2 = new(StrMech).ConsolidateErrors(errs)
-
-		t.Errorf("%v\n"+
-			"Errors returned from fHelper.DeleteDirFile(targetWriteFile)\n"+
-			"Errors= \n%v\n",
-			ePrefix.String(),
-			err2.Error())
-
-		return
 	}
 
 	return

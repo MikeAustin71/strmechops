@@ -3165,9 +3165,7 @@ func (fh *FileHelper) DeleteAllFilesInDirectory(
 //		to 'nil'.
 func (fh *FileHelper) DeleteDirFile(
 	pathFile string,
-	errorPrefix interface{}) (
-	msgError error,
-	lowLevelErr error) {
+	errorPrefix interface{}) (err error) {
 
 	if fh.lock == nil {
 		fh.lock = new(sync.Mutex)
@@ -3180,15 +3178,17 @@ func (fh *FileHelper) DeleteDirFile(
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
-		msgError = ePref.ErrPrefixDto{}.NewIEmpty(
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"FileHelper."+
 			"DeleteDirFile()",
 		"")
 
-	if msgError != nil {
-		return msgError, lowLevelErr
+	if err != nil {
+		return err
 	}
+
+	var msgError, lowLevelErr error
 
 	msgError,
 		lowLevelErr = new(fileHelperNanobot).
@@ -3197,7 +3197,31 @@ func (fh *FileHelper) DeleteDirFile(
 			ePrefix.XCpy(
 				"pathFile"))
 
-	return msgError, lowLevelErr
+	var errs []error
+
+	if msgError != nil {
+
+		errs = append(
+			errs,
+			fmt.Errorf("%v",
+				msgError.Error()))
+
+	}
+
+	if lowLevelErr != nil {
+
+		errs = append(
+			errs,
+			fmt.Errorf("%v",
+				lowLevelErr.Error()))
+	}
+
+	if len(errs) > 0 {
+
+		err = new(StrMech).ConsolidateErrors(errs)
+	}
+
+	return err
 }
 
 // DeleteDirPathAll

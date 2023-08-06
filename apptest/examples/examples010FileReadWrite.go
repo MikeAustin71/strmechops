@@ -287,11 +287,23 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite01() {
 	}
 
 	if !filesAreEqual {
+
 		fmt.Printf("%v\n"+
 			"Error: Read and Write Files are NOT equal!\n"+
 			"Reason: %v\n",
 			ePrefix.String(),
 			reasonFilesNotEqual)
+
+		return
+	}
+
+	err = fHelper.DeleteDirFile(
+		targetWriteFile,
+		ePrefix.XCpy("targetWriteFile"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
 		return
 	}
 
@@ -417,7 +429,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufWriter01() {
 				i,
 				err2.Error())
 
-			_ = fBufWriter.Close(nil)
+			_ = fBufWriter.FlushAndClose(nil)
 
 			return
 		}
@@ -440,7 +452,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufWriter01() {
 		errs = append(errs, err)
 	}
 
-	err2 = fBufWriter.Close(ePrefix)
+	err2 = fBufWriter.FlushAndClose(ePrefix)
 
 	if err2 != nil {
 

@@ -50,7 +50,7 @@ type numberStrKernelMechanics struct {
 //
 //	Telephone Number Example:
 //		NumStrFmtCharReplacementSpec.NumberFormat =
-//			"(NNN) NNN-NNNN
+//			"(NNN) NNN-NNNN"
 //
 //		NumStrFmtCharReplacementSpec.NumReplacementChar =
 //			'N'

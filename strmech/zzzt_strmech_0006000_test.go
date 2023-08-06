@@ -1038,7 +1038,7 @@ func TestStrMech_ReplaceBytes_07(t *testing.T) {
 
 	ePrefix := "TestStrMech_ReplaceBytes_07() "
 
-	testBytes := make([]byte, 0, 0)
+	testBytes := make([]byte, 0)
 
 	replaceBytes := make([][]byte, 5, 10)
 
@@ -1078,7 +1078,7 @@ func TestStrMech_ReplaceBytes_08(t *testing.T) {
 	testStr := "1a2b3c4d5e6"
 	testBytes := []byte(testStr)
 
-	replaceBytes := make([][]byte, 0, 0)
+	replaceBytes := make([][]byte, 0)
 
 	_, err := new(StrMech).ReplaceBytes(
 		testBytes,

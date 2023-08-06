@@ -144,14 +144,25 @@ type FileBufferReadWrite struct {
 //
 // # IMPORTANT
 //
-//	(1)	This method will effectively render the current
-//		instance of FileBufferReadWrite invalid and
-//		unusable for any future 'read' or 'write'
-//		operations.
+//	After completing all 'read' and 'write' operations,
+//	users MUST call this method in order to perform
+//	required clean-up operations.
 //
-//	(2) After completing all 'read' and 'write'
-//		operations, users MUST call this method in order
-//		to perform required clean-up operations.
+//	This method will:
+//
+//	(1)	'Flush' the write buffer thereby ensuring all
+//		data is written from the write buffer to the
+//		underlying io.Writer object.
+//
+//	(2) Properly 'Close' the 'write' file or io.Writer
+//		object.
+//
+//	(3) Properly 'Close' the 'read' file or io.Reader
+//		object.
+//
+//	(4) Effectively render the current instance of
+//		FileBufferReadWrite invalid and unusable for
+//		any future 'read' or 'write' operations.
 //
 // ----------------------------------------------------------------
 //
@@ -296,10 +307,15 @@ func (fBufReadWrite *FileBufferReadWrite) CloseFileBufferReadWrite(
 //
 // # IMPORTANT
 //
-//	This method will effectively render the internal
-//	io.Reader object, encapsulated by the current
-//	instance of FileBufferReadWrite, invalid and
-//	unusable for any future 'read' operations.
+//	This method will:
+//
+//	(1) Properly 'Close' the 'read' file or internal
+//		io.Reader object.
+//
+//	(2) Effectively render the internal io.Reader object,
+//		encapsulated by the current instance of
+//		FileBufferReadWrite, invalid and unusable for any
+//		future 'read' operations.
 //
 // ----------------------------------------------------------------
 //
@@ -420,6 +436,14 @@ func (fBufReadWrite *FileBufferReadWrite) CloseReader(
 // after completion of all 'write' operations associated
 // with the current instance of FileBufferReadWrite.
 //
+// These clean-up tasks include:
+//
+//	(a)	Flushing the write buffer to ensure all data
+//		is written from the write buffer to the
+//		underlying io.Writer object.
+//
+//	(b) Closing the 'write' file or io.Writer object.
+//
 // After calling this method, the clean-up tasks
 // performed will effectively render the internal
 // io.Writer object, encapsulated by the current
@@ -444,10 +468,19 @@ func (fBufReadWrite *FileBufferReadWrite) CloseReader(
 //
 // # IMPORTANT
 //
-//	This method will effectively render the internal
-//	io.Writer object, encapsulated by the current
-//	instance of FileBufferReadWrite, invalid and
-//	unusable for any future 'write' operations.
+//	This method will:
+//
+//	(1)	'Flush' the write buffer thereby ensuring all
+//		data is written from the write buffer to the
+//		underlying io.Writer object.
+//
+//	(2) Properly 'Close' the 'write' file or io.Writer
+//		object.
+//
+//	(3) Effectively render the internal io.Writer object,
+//		encapsulated by the current instance of
+//		FileBufferReadWrite, invalid and unusable for any
+//		future 'write' operations.
 //
 // ----------------------------------------------------------------
 //

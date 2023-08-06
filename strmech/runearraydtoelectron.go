@@ -598,7 +598,7 @@ func (runeDtoElectron *runeArrayDtoElectron) linearEndOfStringSearch(
 		k = i
 		j = 0
 
-		for true {
+		for {
 
 			if testInputParms.TestString.CharsArray[j] !=
 				targetInputParms.TargetString.CharsArray[k] {

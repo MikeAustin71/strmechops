@@ -4379,7 +4379,7 @@ func (numStrKernel *NumberStrKernel) NewFromStringDigits(
 //		might be located with the Raw Number String
 //		('rawNumStr').
 //
-//		This collections allows the flexibility for
+//		This collection allows the flexibility for
 //		locating such negative number signs as leading
 //		minus signs ('-'), trailing minus signs ('-'),
 //		parentheses ('()') or any other negative number

@@ -3542,7 +3542,7 @@ func (sMechQuark *strMechQuark) trimStringEnds(
 //
 // Return Values
 //
-//	string              string
+//	str							string
 //	   - This is copy of input parameter 'str' with the first
 //	     character converted to upper case (a.k.a. a capital
 //	     letter).

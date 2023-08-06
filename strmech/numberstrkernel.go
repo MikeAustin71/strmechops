@@ -1893,7 +1893,7 @@ func (numStrKernel *NumberStrKernel) ExtendIntegerDigitsArray(
 //
 //	Telephone Number Example:
 //		NumStrFmtCharReplacementSpec.NumberFormat =
-//			"(NNN) NNN-NNNN
+//			"(NNN) NNN-NNNN"
 //
 //		NumStrFmtCharReplacementSpec.NumReplacementChar =
 //			'N'

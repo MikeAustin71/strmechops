@@ -680,7 +680,7 @@ func (dMgrColHelper *dirMgrCollectionHelper) newEmptyDMgrCollection() DirMgrColl
 //		If this value is less than zero an error will be
 //		returned.
 //
-//		If 'idx' is exceeds the last index in the collection,
+//		If 'idx' exceeds the last index in the collection,
 //		an io.EOF (End-Of-File) error will be returned.
 //
 //	deleteIndex					bool

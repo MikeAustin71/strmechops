@@ -459,7 +459,7 @@ type DirMgr struct {
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria
+//		If all the file selection criterion in the FileSelectionCriteria
 //		object are 'Inactive' or 'Not Set' (set to their zero or default
 //		values), then all the files meeting the File Type requirements in the
 //		directory defined by the current DirMgr instance will be selected.
@@ -1145,7 +1145,7 @@ func (dMgr *DirMgr) CopyDirectoryFiles(
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria
+//		If all the file selection criterion in the FileSelectionCriteria
 //		object are 'Inactive' or 'Not Set' (set to their zero or default values),
 //		then all the files meeting the File Type requirements in the source
 //		directory will be selected.
@@ -1929,7 +1929,7 @@ func (dMgr *DirMgr) CopyOut(
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria
+//		If all the file selection criterion in the FileSelectionCriteria
 //		object are 'Inactive' or 'Not Set' (set to their zero or default values),
 //		then all the files meeting the File Type requirements in the source
 //		directory will be selected.
@@ -3227,7 +3227,7 @@ func (dMgr *DirMgr) DeleteAllSubDirectories(
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria object
+//		If all the file selection criterion in the FileSelectionCriteria object
 //		are 'Inactive' or 'Not Set' (set to their zero or default values), then all
 //		the files processed in the target directory tree will be selected and
 //		deleted.
@@ -3789,7 +3789,7 @@ func (dMgr *DirMgr) DeleteFilesByNamePattern(
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria object
+//		If all the file selection criterion in the FileSelectionCriteria object
 //		are 'Inactive' or 'Not Set' (set to their zero or default values), then all
 //		the files processed in the DirMgr parent directory will be selected and
 //		deleted.
@@ -4158,7 +4158,7 @@ func (dMgr *DirMgr) DeleteFilesBySelectionCriteria(
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria object
+//		If all the file selection criterion in the FileSelectionCriteria object
 //		are 'Inactive' or 'Not Set' (set to their zero or default values), then all
 //		the files processed in the target subdirectory tree will be selected and
 //		deleted.
@@ -4504,7 +4504,7 @@ func (dMgr *DirMgr) DeleteSubDirectoryTreeFiles(
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria object
+//		If all the file selection criterion in the FileSelectionCriteria object
 //		are 'Inactive' or 'Not Set' (set to their zero or default values), then all
 //		the files processed in the DirMgr directory tree will be selected and
 //		deleted.
@@ -5490,7 +5490,7 @@ func (dMgr *DirMgr) EqualPaths(dMgr2 *DirMgr) bool {
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria object
+//		If all the file selection criterion in the FileSelectionCriteria object
 //		are 'Inactive' or 'Not Set' (set to their zero or default values), then all
 //		the files processed in the DirMgr parent directory will be selected and
 //		subjected to the specified file operations (fileOps).
@@ -5927,7 +5927,7 @@ func (dMgr *DirMgr) ExecuteDirectoryFileOps(
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria object
+//		If all the file selection criterion in the FileSelectionCriteria object
 //		are 'Inactive' or 'Not Set' (set to their zero or default values), then all
 //		the files processed in the DirMgr parent directory will be selected and
 //		subjected to the specified file operations.
@@ -6357,7 +6357,7 @@ func (dMgr *DirMgr) ExecuteDirectoryTreeOps(
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria object
+//		If all the file selection criterion in the FileSelectionCriteria object
 //		are 'Inactive' or 'Not Set' (set to their zero or default values), then
 //		all the files processed in the directory tree will be selected and returned
 //		as 'Found Files'.
@@ -6886,7 +6886,7 @@ func (dMgr *DirMgr) FindFilesByNamePattern(
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria
+//		If all the file selection criterion in the FileSelectionCriteria
 //		object are 'Inactive' or 'Not Set' (set to their zero or default values),
 //		then all the files processed in the directory tree will be selected and
 //		returned as 'Found Files'.
@@ -7241,7 +7241,7 @@ func (dMgr *DirMgr) FindFilesBySelectCriteria(
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria
+//		If all the file selection criterion in the FileSelectionCriteria
 //		object are 'Inactive' or 'Not Set' (set to their zero or default values),
 //		then all the files processed in the target directory tree will be
 //		selected and returned as 'Found Files'.
@@ -7628,7 +7628,7 @@ func (dMgr *DirMgr) FindWalkDirFiles(
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria
+//		If all the file selection criterion in the FileSelectionCriteria
 //		object are 'Inactive' or 'Not Set' (set to their zero or default values),
 //		then all the files processed in the target directory tree will be
 //		selected and returned as 'Found Files'.
@@ -10874,7 +10874,7 @@ func (dMgr *DirMgr) GetPathWithSeparator() string {
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria
+//		If all the file selection criterion in the FileSelectionCriteria
 //		object are 'Inactive' or 'Not Set' (set to their zero or default values),
 //		then all the subdirectories meeting the File Type requirements in the
 //		directory tree defined by 'targetDMgr' will be selected.
@@ -13033,7 +13033,7 @@ func (dMgr *DirMgr) MakeDir(
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria
+//		If all the file selection criterion in the FileSelectionCriteria
 //		object are 'Inactive' or 'Not Set' (set to their zero or default values),
 //		then all the files meeting the File Type requirements in the directory
 //		defined by 'sourceDMgr' will be selected.

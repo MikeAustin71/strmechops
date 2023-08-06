@@ -31,7 +31,8 @@ func TestFileBufferReader_Read_000100(t *testing.T) {
 
 	var fBufReader FileBufferReader
 
-	fBufReader,
+	_,
+		fBufReader,
 		err = new(FileBufferReader).
 		NewPathFileName(
 			targetReadFile,

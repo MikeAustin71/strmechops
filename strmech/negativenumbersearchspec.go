@@ -1117,7 +1117,7 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) IsValidInstanceError(
 //
 // Return Values
 //
-//	NegativeNumberSearchSpec   NegativeNumberSearchSpec
+//	newLeadingNegNumSignSpec   NegativeNumberSearchSpec
 //	   - If the method completes successfully, a fully populated
 //	     instance of NegativeNumberSearchSpec will be configured as a
 //	     Leading Negative Number Search Specification and returned to
@@ -1256,7 +1256,7 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewLeadingNegNumSearchRunes(
 //
 // Return Values
 //
-//	NegativeNumberSearchSpec     NegativeNumberSearchSpec
+//	newLeadingNegNumSignSpec     NegativeNumberSearchSpec
 //	   - If the method completes successfully, a fully populated
 //	     instance of NegativeNumberSearchSpec will be configured as a
 //	     Leading Negative Number Search Specification and returned to
@@ -1411,14 +1411,14 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewLeadingNegNumSearchStr(
 //
 // Return Values
 //
-//	NegativeNumberSearchSpec     NegativeNumberSearchSpec
+//	leadingAndTrailingNegNumSignSpec     NegativeNumberSearchSpec
 //	   - If the method completes successfully, a fully populated
 //	     instance of NegativeNumberSearchSpec will be configured as a
 //	     Leading and Trailing Negative Number Search Specification
 //	     and returned to the calling function.
 //
 //
-//	err                        error
+//	err                        			error
 //	   - If the method completes successfully and no errors are
 //	     encountered, this return value is set to 'nil'. Otherwise,
 //	     if errors are encountered, this return value will contain
@@ -1565,14 +1565,14 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewLeadingAndTrailingNegNumSear
 //
 // Return Values
 //
-//	NegativeNumberSearchSpec     NegativeNumberSearchSpec
+//	leadingAndTrailingNegNumSignSpec     NegativeNumberSearchSpec
 //	   - If the method completes successfully, a fully populated
 //	     instance of NegativeNumberSearchSpec will be configured as a
 //	     Leading and Trailing Negative Number Search Specification
 //	     and returned to the calling function.
 //
 //
-//	err                        error
+//	err                        			error
 //	   - If the method completes successfully and no errors are
 //	     encountered, this return value is set to 'nil'. Otherwise,
 //	     if errors are encountered, this return value will contain
@@ -1707,14 +1707,14 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewLeadingAndTrailingNegNumSear
 //
 // Return Values
 //
-//	NegativeNumberSearchSpec     NegativeNumberSearchSpec
+//	trailingNegNumSignSpec		NegativeNumberSearchSpec
 //	   - If the method completes successfully, a fully populated
 //	     instance of NegativeNumberSearchSpec will be configured as a
 //	     Trailing Negative Number Search Specification and returned
 //	     to the calling function.
 //
 //
-//	err                        error
+//	err							error
 //	   - If the method completes successfully and no errors are
 //	     encountered, this return value is set to 'nil'. Otherwise,
 //	     if errors are encountered, this return value will contain
@@ -1843,14 +1843,14 @@ func (negNumSearchSpec NegativeNumberSearchSpec) NewTrailingNegNumSearchRunes(
 //
 // Return Values
 //
-//	NegativeNumberSearchSpec     NegativeNumberSearchSpec
+//	trailingNegNumSignSpec		NegativeNumberSearchSpec
 //	   - If the method completes successfully, a fully populated
 //	     instance of NegativeNumberSearchSpec will be configured as a
 //	     Trailing Negative Number Search Specification and returned
 //	     to the calling function.
 //
 //
-//	err                        error
+//	err							error
 //	   - If the method completes successfully and no errors are
 //	     encountered, this return value is set to 'nil'. Otherwise,
 //	     if errors are encountered, this return value will contain
@@ -3381,13 +3381,6 @@ func (negNumSearchSpec *NegativeNumberSearchSpec) SetTrailingNegNumSearchRunes(
 // -----------------------------------------------------------------
 //
 // Return Values
-//
-//	NegativeNumberSearchSpec     NegativeNumberSearchSpec
-//	   - If the method completes successfully, a fully populated
-//	     instance of NegativeNumberSearchSpec will be configured as
-//	     a Trailing Negative Number Search Specification and
-//	     returned to the calling function.
-//
 //
 //	err                        error
 //	   - If the method completes successfully and no errors are

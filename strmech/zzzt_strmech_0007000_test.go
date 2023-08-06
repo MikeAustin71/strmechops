@@ -762,7 +762,7 @@ func TestStrMech_ReplaceRunes_07(t *testing.T) {
 
 	ePrefix := "TestStrMech_ReplaceRunes_07() "
 
-	testRunes := make([]rune, 0, 0)
+	testRunes := make([]rune, 0)
 
 	replaceRunes := make([][2]rune, 5)
 

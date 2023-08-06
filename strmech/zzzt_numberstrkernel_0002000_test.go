@@ -2775,23 +2775,6 @@ func TestNumberStrKernel_SetFromNumericValue_000100(t *testing.T) {
 
 	var numberStrSearchResults CharSearchNumStrParseResultsDto
 
-	/*
-	   func (numStrKernel *NumberStrKernel) NewParseCustomNumberStr(
-	   	rawNumStr string,
-	   	startSearchIndex int,
-	   	characterSearchLength int,
-	   	negativeNumSignSearchSpecs NegNumSearchSpecCollection,
-	   	decimalSeparator DecimalSeparatorSpec,
-	   	numParsingTerminators []string,
-	   	requestRemainderString bool,
-	   	errorPrefix interface{}) (
-	   	numberStrSearchResults CharSearchNumStrParseResultsDto,
-	   	numberStrKernel NumberStrKernel,
-	   	err error) {
-
-
-	*/
-
 	numberStrSearchResults,
 		nStrKernel01,
 		err = new(NumberStrKernel).NewParseCustomNumberStr(

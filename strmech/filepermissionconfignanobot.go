@@ -362,7 +362,7 @@ func (fPermConfigNanobot *filePermissionConfigNanobot) setByFileMode(
 
 	mask := os.FileMode(0777)
 
-	// The &^ operator is bit clear (AND NOT):
+	// The &^ operator bit is clear (AND NOT):
 	// in the expression z = x &^ y, each bit of z is 0
 	// if the corresponding bit of y is 1; otherwise it
 	// equals the corresponding bit of x

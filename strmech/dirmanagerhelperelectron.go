@@ -847,7 +847,7 @@ func (dMgrHlprElectron *dirMgrHelperElectron) isPathStringEmptyOrBlank(
 //
 //			IMPORTANT:
 //
-//			If all of the file selection criterion in the FileSelectionCriteria
+//			If all the file selection criterion in the FileSelectionCriteria
 //			object are 'Inactive' or 'Not Set' (set to their zero or default values),
 //			then all the files meeting the File Type requirements in the directory
 //			defined by 'targetDMgr' will be selected.

@@ -340,28 +340,13 @@ func TestDirMgrCollection_GetDirProfile_000100(t *testing.T) {
 
 	fHelper := new(FileHelper)
 
-	var lowLevelErr error
-
-	err,
-		lowLevelErr = fHelper.DeleteDirFile(
+	err = fHelper.DeleteDirFile(
 		outputFile,
 		ePrefix.XCpy("outputFile"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
 			err.Error())
-		return
-	}
-
-	if lowLevelErr != nil {
-		t.Errorf("\n%v\n"+
-			"Low Level Error Returned by \n"+
-			"fHelper.DeleteDirFile(outputFile)\n"+
-			"outputFile= '%v'\n"+
-			"Low Level Error= \n%v\n",
-			ePrefix.String(),
-			outputFile,
-			lowLevelErr.Error())
 		return
 	}
 
@@ -542,26 +527,13 @@ func TestDirMgrCollection_GetDirProfile_000100(t *testing.T) {
 
 	}
 
-	err,
-		lowLevelErr = fHelper.DeleteDirFile(
+	err = fHelper.DeleteDirFile(
 		outputFile,
 		ePrefix.XCpy("Final Delete outputFile"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
 			err.Error())
-		return
-	}
-
-	if lowLevelErr != nil {
-		t.Errorf("\n%v\n"+
-			"Low Level Error Returned by \n"+
-			"fHelper.DeleteDirFile(outputFile)\n"+
-			"outputFile= '%v'\n"+
-			"Low Level Error= \n%v\n",
-			ePrefix.String(),
-			outputFile,
-			lowLevelErr.Error())
 		return
 	}
 

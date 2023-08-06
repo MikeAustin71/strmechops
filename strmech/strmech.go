@@ -1725,7 +1725,7 @@ func (sMech *StrMech) ExtractNumericDigits(
 //		might be located with the Raw Number String
 //		('rawNumStrRunes').
 //
-//		This collections allows the flexibility for
+//		This collection allows the flexibility for
 //		locating such negative number signs as leading
 //		minus signs ('-'), trailing minus signs ('-'),
 //		parentheses ('()') or any other negative number
@@ -7217,7 +7217,7 @@ func (sMech StrMech) TrimStringEnds(
 //
 // Return Values
 //
-//	string              string
+//	str							string
 //	   - This is copy of input parameter 'str' with the first
 //	     character converted to upper case (a.k.a. a capital
 //	     letter).

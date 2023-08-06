@@ -1071,7 +1071,7 @@ func (charsArrayDto *RuneArrayDto) CopyIn(
 //
 // Return Values
 //
-//	copyOfRuneArrayDto         copyOfRuneArrayDto
+//	copyOfRuneArrayDto         RuneArrayDto
 //	   - If this method completes successfully and no errors are
 //	     encountered, this parameter will return a deep copy of the
 //	     current RuneArrayDto instance.

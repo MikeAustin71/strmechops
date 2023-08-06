@@ -1781,7 +1781,7 @@ func (dHlpr *DirHelper) GetDirectoryTreeProfile(
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria
+//		If all the file selection criterion in the FileSelectionCriteria
 //		object are 'Inactive' or 'Not Set' (set to their zero or default values),
 //		then all the subdirectories meeting the File Type requirements in the
 //		directory tree defined by 'targetDMgr' will be selected.
@@ -2301,7 +2301,7 @@ func (dHlpr *DirHelper) GetSubdirectoriesDirTree(
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria
+//		If all the file selection criterion in the FileSelectionCriteria
 //		object are 'Inactive' or 'Not Set' (set to their zero or default values),
 //		then all the subdirectories meeting the File Type requirements in the
 //		directory tree defined by 'targetDMgr' will be selected.
@@ -3105,7 +3105,7 @@ func (dHlpr *DirHelper) GetSubdirectoriesParentDir(
 //
 //			IMPORTANT:
 //
-//			If all of the file selection criterion in the FileSelectionCriteria
+//			If all the file selection criterion in the FileSelectionCriteria
 //			object are 'Inactive' or 'Not Set' (set to their zero or default values),
 //			then all the files meeting the File Type requirements in the directory
 //			tree defined by 'directoryPath' will be selected.
@@ -4002,7 +4002,7 @@ func (dHlpr *DirHelper) GetSubDirsFilesInDirTree(
 //
 //			IMPORTANT:
 //
-//			If all of the file selection criterion in the FileSelectionCriteria
+//			If al the file selection criterion in the FileSelectionCriteria
 //			object are 'Inactive' or 'Not Set' (set to their zero or default values),
 //			then all the files meeting the File Type requirements in the directory
 //			defined by 'directoryPath' will be selected.

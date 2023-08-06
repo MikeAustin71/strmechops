@@ -447,7 +447,7 @@ type dirMgrHelperPlanck struct {
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria
+//		If all the file selection criterion in the FileSelectionCriteria
 //		object are 'Inactive' or 'Not Set' (set to their zero or default values),
 //		then all the files meeting the File Type requirements in the directory
 //		defined by 'sourceDMgr' will be selected.
@@ -1612,7 +1612,7 @@ func (dMgrHlprPlanck *dirMgrHelperPlanck) copyDirectoryFiles(
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria object
+//		If all the file selection criterion in the FileSelectionCriteria object
 //		are 'Inactive' or 'Not Set' (set to their zero or default values), then ALL
 //		THE FILES processed in the target directory will be selected and DELETED.
 //

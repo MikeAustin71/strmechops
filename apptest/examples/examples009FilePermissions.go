@@ -478,17 +478,16 @@ func (filePermissionsTest MainFilePermissionsTest009) PermissionStr02() {
 		fileModeChangeStr,
 		writeFInfo.Mode().Perm())
 
-	errs = make([]error, 0)
-
-	err,
-		writeErr = fHelper.DeleteDirFile(
+	err = fHelper.DeleteDirFile(
 		targetWriteFileName,
 		ePrefix.XCpy("targetWriteFileName"))
 
 	if err != nil {
 
-		errs = append(
-			errs, err)
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+
+		return
 
 	}
 

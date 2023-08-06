@@ -1592,7 +1592,7 @@ func (dMgrs *DirMgrCollection) Equal(
 //
 //		IMPORTANT:
 //
-//		If all of the file selection criterion in the FileSelectionCriteria object are
+//		If all the file selection criterion in the FileSelectionCriteria object are
 //		'Inactive' or 'Not Set' (set to their zero or default values), then all the
 //		files processed in the directory tree will be selected.
 //
@@ -3910,7 +3910,7 @@ func (dMgrs *DirMgrCollection) PopLastDirMgr(
 //		If this value is less than zero an error will be
 //		returned.
 //
-//		If 'idx' is exceeds the last index in the collection,
+//		If 'idx' exceeds the last index in the collection,
 //		an io.EOF (End-Of-File) error will be returned.
 //
 //	errorPrefix					interface{}

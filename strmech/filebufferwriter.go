@@ -110,7 +110,7 @@ type FileBufferWriter struct {
 	lock *sync.Mutex
 }
 
-// Close
+// FlushAndClose
 //
 // This method is used to close any open file pointers
 // and perform necessary clean-up operations after all
@@ -132,7 +132,15 @@ type FileBufferWriter struct {
 //	(1)	Call this method after completing all write
 //		operations. Calling this method is essential to
 //		performance of necessary clean-up tasks after
-//		completion of all 'write' operations.
+//		completion of all 'write' operations. Clean-up
+//		tasks consist of:
+//
+//		(a)	Flushing the 'write' buffer to ensure that
+//			all data is written from the 'write' buffer
+//			to the underlying io.Writer object.
+//
+//		(b)	Properly closing the 'write' file or
+//			io.Writer object.
 //
 //	(2)	Once this method completes the 'Close' operation,
 //		this instance of FileBufferWriter becomes
@@ -218,7 +226,7 @@ type FileBufferWriter struct {
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fBufWriter *FileBufferWriter) Close(
+func (fBufWriter *FileBufferWriter) FlushAndClose(
 	errorPrefix interface{}) error {
 
 	if fBufWriter.lock == nil {
@@ -447,7 +455,7 @@ func (fBufWriter *FileBufferWriter) Flush(
 //		the user is responsible for manually closing the
 //		file and performing any other required clean-up
 //		operations in addition to calling local method
-//		FileBufferWriter.Close().
+//		FileBufferWriter.FlushAndClose().
 //
 //		While the returned instance of FileBufferWriter
 //		is primarily designed for writing data to disk
@@ -1631,7 +1639,7 @@ func (fBufWriter *FileBufferWriter) SetPathFileName(
 //		the user is responsible for manually closing the
 //		file and performing any other required clean-up
 //		operations in addition to calling local method
-//		FileBufferWriter.Close().
+//		FileBufferWriter.FlushAndClose().
 //
 //		While the returned instance of FileBufferWriter
 //		is primarily designed for writing data to disk
@@ -1799,7 +1807,7 @@ func (fBufWriter *FileBufferWriter) SetIoWriter(
 //		completed, the user MUST call the 'Close' method
 //		to perform necessary clean-up operations:
 //
-//			FileBufferWriter.Close()
+//			FileBufferWriter.FlushAndClose()
 //
 //	(3) This method WILL NOT VERIFY that the number of
 //		bytes written is equal to the length of the
@@ -2280,7 +2288,7 @@ type fileBufferWriterNanobot struct {
 //		the user is responsible for manually closing the
 //		file and performing any other required clean-up
 //		operations in addition to calling local method
-//		FileBufferWriter.Close().
+//		FileBufferWriter.FlushAndClose().
 //
 //		While the configured instance of FileBufferWriter
 //		(fBufWriter) is primarily designed for writing
