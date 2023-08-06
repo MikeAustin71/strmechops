@@ -2670,10 +2670,10 @@ func (fBufWriterNanobot *fileBufferWriterNanobot) setPathFileName(
 	}
 
 	var err2 error
-	var pathFileDoesExist bool
+	// var pathFileDoesExist bool
 
 	pathFileName,
-		pathFileDoesExist,
+		_,
 		fInfoPlus,
 		err2 =
 		new(fileHelperMolecule).
@@ -2697,22 +2697,22 @@ func (fBufWriterNanobot *fileBufferWriterNanobot) setPathFileName(
 
 		return fInfoPlus, err
 	}
+	/*
+		if !pathFileDoesExist {
 
-	if !pathFileDoesExist {
+			err = fmt.Errorf("%v\n"+
+				"Error: Input parameter '%v' is invalid!\n"+
+				"The path and file name do NOT exist on an attached\n"+
+				"storage drive.\n"+
+				"%v= '%v'\n",
+				ePrefix.String(),
+				pathFileNameLabel,
+				pathFileNameLabel,
+				pathFileName)
 
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter '%v' is invalid!\n"+
-			"The path and file name do NOT exist on an attached\n"+
-			"storage drive.\n"+
-			"%v= '%v'\n",
-			ePrefix.String(),
-			pathFileNameLabel,
-			pathFileNameLabel,
-			pathFileName)
-
-		return fInfoPlus, err
-	}
-
+			return fInfoPlus, err
+		}
+	*/
 	var filePermissionCfg FilePermissionConfig
 
 	var filePermissionStr = "--w--w--w-"

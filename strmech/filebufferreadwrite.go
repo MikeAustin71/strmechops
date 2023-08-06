@@ -554,7 +554,7 @@ func (fBufReadWrite *FileBufferReadWrite) CloseWriter(
 	}
 
 	err = new(fileBufferReadWriteElectron).
-		closeWriter(
+		flushAndCloseWriter(
 			fBufReadWrite,
 			"fBufReadWrite",
 			ePrefix)
@@ -1803,56 +1803,61 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 				return totalBytesRead, totalBytesWritten, err
 			}
 
-			totalBytesWritten += numOfBytesWritten
-		}
-
-		if numOfBytesRead != numOfBytesWritten {
-
-			errs = append(
-				errs,
-				fmt.Errorf("%v\n"+
-					"Error Writing Bytes To File!\n"+
-					"numOfBytesRead != numOfBytesWritten\n"+
-					"numOfBytesRead = %v\n"+
-					"numOfBytesWritten = %v\n",
-					funcName,
-					numOfBytesRead,
-					numOfBytesWritten))
-
-			err2 = fBufReadWriteMicrobot.
-				closeReaderWriter(
-					fBufReadWrite,
-					"fBufReadWrite",
-					funcName)
-
-			if err2 != nil {
+			if numOfBytesRead != numOfBytesWritten {
 
 				errs = append(
 					errs,
 					fmt.Errorf("%v\n"+
-						"%v",
+						"Error Writing Bytes To File!\n"+
+						"numOfBytesRead != numOfBytesWritten\n"+
+						"numOfBytesRead = %v\n"+
+						"numOfBytesWritten = %v\n",
 						funcName,
-						err2.Error()))
+						numOfBytesRead,
+						numOfBytesWritten))
 
+				err2 = fBufReadWriteMicrobot.
+					closeReaderWriter(
+						fBufReadWrite,
+						"fBufReadWrite",
+						funcName)
+
+				if err2 != nil {
+
+					errs = append(
+						errs,
+						fmt.Errorf("%v\n"+
+							"%v",
+							funcName,
+							err2.Error()))
+
+				}
+
+				if len(errs) > 0 {
+
+					err = fmt.Errorf("%v\n"+
+						"%v",
+						ePrefix.String(),
+						new(StrMech).ConsolidateErrors(errs).Error())
+				}
+
+				return totalBytesRead, totalBytesWritten, err
 			}
 
-			if len(errs) > 0 {
-
-				err = fmt.Errorf("%v\n"+
-					"%v",
-					ePrefix.String(),
-					new(StrMech).ConsolidateErrors(errs).Error())
-			}
-
-			return totalBytesRead, totalBytesWritten, err
+			totalBytesWritten += numOfBytesWritten
 		}
 
 		if readErr == io.EOF {
-
 			break
 		}
 
 	}
+
+	err = fBufReadWriteMicrobot.
+		closeReaderWriter(
+			fBufReadWrite,
+			"fBufReadWrite",
+			ePrefix.XCpy("Close-Readers&Writers"))
 
 	return totalBytesRead, totalBytesWritten, err
 }
@@ -4539,7 +4544,7 @@ func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) closeReaderWriter(
 	}
 
 	err2 = fBuffReadWriteElectron.
-		closeWriter(
+		flushAndCloseWriter(
 			fBufReadWrite,
 			fBufReadWriteLabel,
 			ePrefix)
@@ -6440,7 +6445,7 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setIoWriter(
 		return err
 	}
 
-	err = new(fileBufferReadWriteElectron).closeWriter(
+	err = new(fileBufferReadWriteElectron).flushAndCloseWriter(
 		fBufReadWrite,
 		fBufReadWriteLabel,
 		ePrefix.XCpy("Close-Writer"))
@@ -6979,7 +6984,7 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameWriter(
 		return fInfoPlus, err
 	}
 
-	err = new(fileBufferReadWriteElectron).closeWriter(
+	err = new(fileBufferReadWriteElectron).flushAndCloseWriter(
 		fBufReadWrite,
 		fBufReadWriteLabel,
 		ePrefix.XCpy("Close-Writer"))
@@ -7176,7 +7181,7 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) closeReader(
 	return err
 }
 
-// closeWriter
+// flushAndCloseWriter
 //
 // This method is designed to perform clean up tasks
 // associated with the io.Writer configured for the
@@ -7250,7 +7255,7 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) closeReader(
 //	 	text passed by input parameter, 'errPrefDto'.
 //	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fBuffReadWriteElectron *fileBufferReadWriteElectron) closeWriter(
+func (fBuffReadWriteElectron *fileBufferReadWriteElectron) flushAndCloseWriter(
 	fBufReadWrite *FileBufferReadWrite,
 	fBufReadWriteLabel string,
 	errPrefDto *ePref.ErrPrefixDto) error {
@@ -7268,7 +7273,7 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) closeWriter(
 	var ePrefix *ePref.ErrPrefixDto
 
 	funcName := "fileBufferReadWriteElectron." +
-		"closeWriter()"
+		"flushAndCloseWriter()"
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -7298,10 +7303,27 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) closeWriter(
 	}
 
 	var err2 error
+	var fBufWriterMolecule = new(fileBufferWriterMolecule)
+	var errs []error
 
 	if fBufReadWrite.writer != nil {
 
-		err2 = new(fileBufferWriterMolecule).close(
+		err2 = fBufWriterMolecule.
+			flush(
+				fBufReadWrite.writer,
+				fBufReadWriteLabel+".writer",
+				ePrefix.XCpy(
+					fBufReadWriteLabel+".writer"))
+
+		if err2 != nil {
+
+			errs = append(
+				errs,
+				fmt.Errorf("%v",
+					err2.Error()))
+		}
+
+		err2 = fBufWriterMolecule.close(
 			fBufReadWrite.writer,
 			fBufReadWriteLabel+".writer",
 			ePrefix.XCpy(
@@ -7309,16 +7331,20 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) closeWriter(
 
 		if err2 != nil {
 
-			err = fmt.Errorf("%v\n"+
-				"An error occurred while closing %v.writer.\n"+
-				"Error=\n%v\n",
-				funcName,
-				fBufReadWriteLabel,
-				err2.Error())
-
-			return err
+			errs = append(
+				errs,
+				fmt.Errorf("%v\n"+
+					"An error occurred while closing %v.writer.\n"+
+					"Error=\n%v\n",
+					funcName,
+					fBufReadWriteLabel,
+					err2.Error()))
 		}
 
+		if len(errs) > 0 {
+
+			err = new(StrMech).ConsolidateErrors(errs)
+		}
 	}
 
 	fBufReadWrite.writer = nil
