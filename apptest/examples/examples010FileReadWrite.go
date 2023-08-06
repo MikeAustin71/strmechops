@@ -122,6 +122,381 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufferReader03() {
 	fmt.Printf("\n" + breakStr + "\n")
 }
 
+// FileBuffReadWrite01
+//
+// Example of FileBufferReadWrite
+func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite01() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainFileReadWriteTest010.FileBuffReadWrite01()",
+		"")
+
+	breakStr := " " + strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n\n\n")
+
+	var err error
+	var targetReadFile string
+	var exampleUtil = ExampleUtility{}
+
+	targetReadFile,
+		err = exampleUtil.GetCompositeDirectory(
+		"fileOpsTest\\filesForTest\\textFilesForTest\\splitFunc.txt",
+		ePrefix.XCpy("targetReadFile"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var targetWriteFile string
+
+	targetWriteFile,
+		err = exampleUtil.GetCompositeDirectory(
+		"\\fileOpsTest\\trashDirectory\\FileBuffReadWrite01.txt",
+		ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var newFBuffReadWrite strmech.FileBufferReadWrite
+	var readerFileInfoPlus strmech.FileInfoPlus
+	var writerFileInfoPlus strmech.FileInfoPlus
+
+	readerFileInfoPlus,
+		writerFileInfoPlus,
+		newFBuffReadWrite,
+		err = new(strmech.FileBufferReadWrite).
+		NewPathFileNames(
+			targetReadFile,
+			false, // openReadFileReadWrite,
+			512,   // readerBuffSize
+			targetWriteFile,
+			false, //openWriteFileReadWrite
+			512,   // writerBuffSize
+			true,  // truncateExistingWriteFile
+			ePrefix.XCpy("targetReadFile"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("\nFile Info Data\n"+
+		"newFBuffReadWrite\n"+
+		"Reader File Size= %v\n"+
+		"Writer File Size= %v\n\n",
+		readerFileInfoPlus.Size(),
+		writerFileInfoPlus.Size())
+
+	var totalBytesRead, totalBytesWritten int
+
+	totalBytesRead,
+		totalBytesWritten,
+		err = newFBuffReadWrite.ReadWriteAll(ePrefix.XCpy(
+		"newFBuffReadWrite"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	if totalBytesRead != totalBytesWritten {
+
+		fmt.Printf("%v\n"+
+			"Error: totalBytesRead != totalBytesWritten\n"+
+			" Read File= %v\n"+
+			"Write File= %v\n"+
+			"   Total Bytes Read= %v\n"+
+			"Total Bytes Written= %v\n",
+			ePrefix.String(),
+			targetReadFile,
+			targetWriteFile,
+			totalBytesRead,
+			totalBytesWritten)
+
+		return
+	}
+
+	var fHelper = new(strmech.FileHelper)
+	var doesFileExist bool
+
+	doesFileExist,
+		writerFileInfoPlus,
+		err = fHelper.DoesFileInfoPlusExist(
+		targetWriteFile,
+		ePrefix.XCpy("targetWriteFile"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	if !doesFileExist {
+
+		fmt.Printf("%v\n"+
+			"Error: Target Write File DOES NOT EXIST!\n"+
+			"Target Write File: %v\n",
+			ePrefix.String(),
+			targetWriteFile)
+
+		return
+	}
+
+	if writerFileInfoPlus.Size() != readerFileInfoPlus.Size() {
+
+		fmt.Printf("%v\n"+
+			"Error: The size of the Read and Write Files\n"+
+			"DO NOT MATCH!\n"+
+			"Read File Size= %v\n"+
+			"Write File Size= %v\n",
+			ePrefix.String(),
+			readerFileInfoPlus.Size(),
+			writerFileInfoPlus.Size())
+
+		return
+	}
+
+	var filesAreEqual bool
+	var reasonFilesNotEqual string
+
+	filesAreEqual,
+		reasonFilesNotEqual,
+		err = fHelper.CompareFiles(
+		targetReadFile,
+		targetWriteFile,
+		ePrefix.XCpy("Target Files"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	if !filesAreEqual {
+		fmt.Printf("%v\n"+
+			"Error: Read and Write Files are NOT equal!\n"+
+			"Reason: %v\n",
+			ePrefix.String(),
+			reasonFilesNotEqual)
+		return
+	}
+
+	// --------------------------------------------
+	// Successful Completion
+	// --------------------------------------------
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+}
+
+func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufWriter01() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainFileReadWriteTest010.FileBufWriter01()",
+		"")
+
+	breakStr := " " + strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	var targetReadFile string
+	var err error
+
+	var exUtil = ExampleUtility{}
+
+	targetReadFile,
+		err = exUtil.GetCompositeDirectory(
+		"\\fileOpsTest\\filesForTest\\textFilesForTest\\splitFunc.txt",
+		ePrefix.XCpy("targetInputFileName<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var targetWriteFile string
+
+	targetWriteFile,
+		err = exUtil.GetCompositeDirectory(
+		"\\fileOpsTest\\trashDirectory\\MainFileReadWriteTest010_FileBufWriter01.txt",
+		ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var fHelper = new(strmech.FileHelper)
+	var textLinesArray strmech.StringArrayDto
+	var numOfLinesRead, expectedNumOfBytesWritten int
+	var i64numOfBytesRead int64
+
+	_,
+		numOfLinesRead,
+		i64numOfBytesRead,
+		err = fHelper.ReadTextLines(
+		targetReadFile,
+		&textLinesArray,
+		ePrefix.XCpy("targetReadFile"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	textLinesArray.AppendSuffix("\n")
+
+	expectedNumOfBytesWritten =
+		int(i64numOfBytesRead) + numOfLinesRead
+
+	var fBufWriter strmech.FileBufferWriter
+
+	_,
+		fBufWriter,
+		err = new(strmech.FileBufferWriter).
+		NewPathFileName(
+			targetWriteFile,
+			false, // openFileReadWrite
+			512,
+			true,
+			ePrefix.XCpy("targetWriteFile"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var totalNumOfBytesWritten, localNumOfBytesWritten int
+	var err2 error
+	var bytesToWrite []byte
+
+	for i := 0; i < numOfLinesRead; i++ {
+
+		bytesToWrite = []byte(textLinesArray.StrArray[i])
+
+		localNumOfBytesWritten,
+			err2 =
+			fBufWriter.Write(bytesToWrite)
+
+		if err2 != nil {
+
+			fmt.Printf("%v\n"+
+				"Error returned by fBufWriter.Write(bytesToWrite)\n"+
+				"Bytes To Write = '%v'\n"+
+				"Index = '%v'\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				string(bytesToWrite),
+				i,
+				err2.Error())
+
+			_ = fBufWriter.Close(nil)
+
+			return
+		}
+
+		totalNumOfBytesWritten += localNumOfBytesWritten
+	}
+
+	var errs []error
+
+	err2 = fBufWriter.Flush(ePrefix)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by fBufWriter.Flush(ePrefix)\n"+
+			"Error = \n%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+		errs = append(errs, err)
+	}
+
+	err2 = fBufWriter.Close(ePrefix)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by fBufWriter.Close(ePrefix)\n"+
+			"Error = \n%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+		errs = append(errs, err)
+	}
+
+	if len(errs) > 0 {
+
+		err2 = new(strmech.StrMech).ConsolidateErrors(errs)
+
+		fmt.Printf("%v\n"+
+			"Errors returned from Flush() and Close()\n"+
+			"Errors= \n%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+		return
+	}
+
+	if expectedNumOfBytesWritten != totalNumOfBytesWritten {
+
+		fmt.Printf("%v\n"+
+			"Error: Expected Bytes Written != Actual Bytes Written\n"+
+			"Expected Bytes Written = '%v'\n"+
+			"  Actual Bytes Written = '%v'\n",
+			ePrefix.String(),
+			expectedNumOfBytesWritten,
+			totalNumOfBytesWritten)
+
+		return
+	}
+
+	fmt.Printf("\n\n%v\n"+
+		"Expected Number Of Bytes Written: %v\n"+
+		"  Actual Number of Bytes Written: %v\n",
+		ePrefix.String(),
+		expectedNumOfBytesWritten,
+		totalNumOfBytesWritten)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	return
+}
+
 // WriteFileBytes01
 //
 // Runs test on FileHelper.WriteFileBytes()
@@ -420,193 +795,4 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) WriteFileBytes02() {
 
 	fmt.Printf("\n" + breakStr + "\n")
 
-}
-
-func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufWriter01() {
-
-	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"MainFileReadWriteTest010.FileBufWriter01()",
-		"")
-
-	breakStr := " " + strings.Repeat("=", 50)
-
-	fmt.Printf("\n\n" + breakStr + "\n")
-
-	fmt.Printf("\n Starting Run!\n"+
-		" Function: %v\n",
-		ePrefix.String())
-
-	var targetReadFile string
-	var err error
-
-	var exUtil = ExampleUtility{}
-
-	targetReadFile,
-		err = exUtil.GetCompositeDirectory(
-		"\\fileOpsTest\\filesForTest\\textFilesForTest\\splitFunc.txt",
-		ePrefix.XCpy("targetInputFileName<-"))
-
-	if err != nil {
-		fmt.Printf("\n%v\n\n",
-			err.Error())
-		return
-	}
-
-	var targetWriteFile string
-
-	targetWriteFile,
-		err = exUtil.GetCompositeDirectory(
-		"\\fileOpsTest\\trashDirectory\\MainFileReadWriteTest010_FileBufWriter01.txt",
-		ePrefix)
-
-	if err != nil {
-		fmt.Printf("\n%v\n\n",
-			err.Error())
-		return
-	}
-
-	var fHelper = new(strmech.FileHelper)
-	var textLinesArray strmech.StringArrayDto
-	var numOfLinesRead, expectedNumOfBytesWritten int
-	var i64numOfBytesRead int64
-
-	_,
-		numOfLinesRead,
-		i64numOfBytesRead,
-		err = fHelper.ReadTextLines(
-		targetReadFile,
-		&textLinesArray,
-		ePrefix.XCpy("targetReadFile"))
-
-	if err != nil {
-		fmt.Printf("\n%v\n\n",
-			err.Error())
-		return
-	}
-
-	textLinesArray.AppendSuffix("\n")
-
-	expectedNumOfBytesWritten =
-		int(i64numOfBytesRead) + numOfLinesRead
-
-	var fBufWriter strmech.FileBufferWriter
-
-	_,
-		fBufWriter,
-		err = new(strmech.FileBufferWriter).
-		NewPathFileName(
-			targetWriteFile,
-			false, // openFileReadWrite
-			512,
-			true,
-			ePrefix.XCpy("targetWriteFile"))
-
-	if err != nil {
-		fmt.Printf("\n%v\n\n",
-			err.Error())
-		return
-	}
-
-	var totalNumOfBytesWritten, localNumOfBytesWritten int
-	var err2 error
-	var bytesToWrite []byte
-
-	for i := 0; i < numOfLinesRead; i++ {
-
-		bytesToWrite = []byte(textLinesArray.StrArray[i])
-
-		localNumOfBytesWritten,
-			err2 =
-			fBufWriter.Write(bytesToWrite)
-
-		if err2 != nil {
-
-			fmt.Printf("%v\n"+
-				"Error returned by fBufWriter.Write(bytesToWrite)\n"+
-				"Bytes To Write = '%v'\n"+
-				"Index = '%v'\n"+
-				"Error= \n%v\n",
-				ePrefix.String(),
-				string(bytesToWrite),
-				i,
-				err2.Error())
-
-			_ = fBufWriter.Close(nil)
-
-			return
-		}
-
-		totalNumOfBytesWritten += localNumOfBytesWritten
-	}
-
-	var errs []error
-
-	err2 = fBufWriter.Flush(ePrefix)
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error returned by fBufWriter.Flush(ePrefix)\n"+
-			"Error = \n%v\n",
-			ePrefix.String(),
-			err2.Error())
-
-		errs = append(errs, err)
-	}
-
-	err2 = fBufWriter.Close(ePrefix)
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error returned by fBufWriter.Close(ePrefix)\n"+
-			"Error = \n%v\n",
-			ePrefix.String(),
-			err2.Error())
-
-		errs = append(errs, err)
-	}
-
-	if len(errs) > 0 {
-
-		err2 = new(strmech.StrMech).ConsolidateErrors(errs)
-
-		fmt.Printf("%v\n"+
-			"Errors returned from Flush() and Close()\n"+
-			"Errors= \n%v\n",
-			ePrefix.String(),
-			err2.Error())
-
-		return
-	}
-
-	if expectedNumOfBytesWritten != totalNumOfBytesWritten {
-
-		fmt.Printf("%v\n"+
-			"Error: Expected Bytes Written != Actual Bytes Written\n"+
-			"Expected Bytes Written = '%v'\n"+
-			"  Actual Bytes Written = '%v'\n",
-			ePrefix.String(),
-			expectedNumOfBytesWritten,
-			totalNumOfBytesWritten)
-
-		return
-	}
-
-	fmt.Printf("\n\n%v\n"+
-		"Expected Number Of Bytes Written: %v\n"+
-		"  Actual Number of Bytes Written: %v\n",
-		ePrefix.String(),
-		expectedNumOfBytesWritten,
-		totalNumOfBytesWritten)
-
-	fmt.Printf("\n\n" + breakStr + "\n")
-
-	fmt.Printf("\n Successful Completion!\n"+
-		" Function: %v\n",
-		ePrefix.String())
-
-	fmt.Printf("\n" + breakStr + "\n")
-
-	return
 }

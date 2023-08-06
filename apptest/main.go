@@ -20,6 +20,7 @@ func main() {
 	//examples.MainFileReadWriteTest010{}.WriteFileBytes02()
 	//examples.MainFileReadWriteTest010{}.FileBufferReader03()
 	//examples.MainFileReadWriteTest010{}.FileBufWriter01()
+	// examples.MainFilePermissionsTest009{}.PermissionStr02()
 
-	examples.MainFilePermissionsTest009{}.PermissionStr02()
+	examples.MainFileReadWriteTest010{}.FileBuffReadWrite01()
 }

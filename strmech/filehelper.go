@@ -3986,7 +3986,7 @@ func (fh *FileHelper) DoesFileExist(pathFileName string) bool {
 //
 // This method returns a boolean value indicating whether
 // the path and file name passed to the function actually
-// exists.
+// exists on an attached storage drive.
 //
 // If the file actually exists, the function will return
 // the associated FileInfo structure.
@@ -4068,7 +4068,7 @@ func (fh *FileHelper) DoesFileExist(pathFileName string) bool {
 //
 // # Return Values
 //
-//	doesFInfoExist				bool
+//	doesFileExist				bool
 //
 //		If the file identified in input parameter
 //		'pathFileName' actually exists, this return
@@ -4124,7 +4124,7 @@ func (fh *FileHelper) DoesFileExist(pathFileName string) bool {
 func (fh *FileHelper) DoesFileInfoExist(
 	pathFileName string,
 	errorPrefix interface{}) (
-	doesFInfoExist bool,
+	doesFileExist bool,
 	fInfo os.FileInfo,
 	err error) {
 
@@ -4138,7 +4138,7 @@ func (fh *FileHelper) DoesFileInfoExist(
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	doesFInfoExist = false
+	doesFileExist = false
 
 	fInfo = nil
 
@@ -4150,31 +4150,34 @@ func (fh *FileHelper) DoesFileInfoExist(
 		"")
 
 	if err != nil {
-		return doesFInfoExist, fInfo, err
+		return doesFileExist, fInfo, err
 	}
 
-	doesFInfoExist,
+	doesFileExist,
 		fInfo,
 		err = new(fileHelperNanobot).
 		doesFileInfoExist(
 			pathFileName,
 			ePrefix)
 
-	return doesFInfoExist, fInfo, err
+	return doesFileExist, fInfo, err
 }
 
 // DoesFileInfoPlusExist
 //
 // This method returns a boolean value indicating whether
-// the path and file name passed to the function actually
-// exists.
+// the path and file name passed as input parameter
+// 'pathFileName' actually exists on an attached storage
+// drive.
 //
-// If 'pathFileName' does NOT exist, return parameters
-// 'doesFInfoExist' will be set to 'false' and the
+// If 'pathFileName' does NOT exist, return parameter
+// 'doesFileExist' will be set to 'false' and the
 // returned error value will be 'nil'.
 //
-// If the file actually exists, the function will return
-// the associated FileInfoPlus structure.
+// If the file actually exists, return parameter
+// 'doesFileExist' will be set to 'true' and the file's
+// associated FileInfoPlus structure will be fully
+// populated and returned to the caller.
 //
 // As its name implies, the returned type FileInfoPlus
 // provides methods and information which go beyond the
@@ -4256,7 +4259,7 @@ func (fh *FileHelper) DoesFileInfoExist(
 //
 // # Return Values
 //
-//	doesFInfoExist				bool
+//	doesFileExist				bool
 //
 //		If the file identified in input parameter
 //		'pathFileName' actually exists, this return
@@ -4320,7 +4323,7 @@ func (fh *FileHelper) DoesFileInfoExist(
 func (fh *FileHelper) DoesFileInfoPlusExist(
 	pathFileName string,
 	errorPrefix interface{}) (
-	doesFInfoExist bool,
+	doesFileExist bool,
 	fInfoPlus FileInfoPlus,
 	err error) {
 
@@ -4334,7 +4337,7 @@ func (fh *FileHelper) DoesFileInfoPlusExist(
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	doesFInfoExist = false
+	doesFileExist = false
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -4344,17 +4347,17 @@ func (fh *FileHelper) DoesFileInfoPlusExist(
 		"")
 
 	if err != nil {
-		return doesFInfoExist, fInfoPlus, err
+		return doesFileExist, fInfoPlus, err
 	}
 
-	doesFInfoExist,
+	doesFileExist,
 		fInfoPlus,
 		err = new(fileHelperNanobot).
 		doesFileInfoPlusExist(
 			pathFileName,
 			ePrefix)
 
-	return doesFInfoExist, fInfoPlus, err
+	return doesFileExist, fInfoPlus, err
 }
 
 // DoesPathFileExist
