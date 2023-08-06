@@ -287,14 +287,167 @@ func (fHelpDirector *fileHelperDirector) copyFileByLinkByIo(
 	return err
 }
 
-// filesAreEqual
-func (fHelpDirector *fileHelperDirector) filesAreEqual(
+// compareFiles
+//
+// Receives two strings containing the path and file
+// names of two files.
+//
+// The two files will be compared to determine if their
+// contents are identical.
+//
+// If the compared files are equal with respect to
+// content, this method will return a boolean value of
+// 'true'.
+//
+// If the two files differ in file size or file content,
+// this method will return 'false'.
+//
+// If no errors are encountered and the contents of the
+// two files are found to be 'NOT EQUAL', this method
+// will return a text description of the reason for this
+// inequality.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileNameOne				string
+//
+//		This string holds the path and file name of
+//		File-1. File-1 will be compared with File-2 to
+//		determine if the two files are equal in terms
+//		of content.
+//
+//	pathFileNameOneLabel		string
+//
+//		The name or label associated with input parameter
+//		'pathFileNameOne' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "pathFileNameOne" will
+//		be automatically applied.
+//
+//	pathFileNameTwo				string
+//
+//		This string holds the path and file name of
+//		File-2. File-2 will be compared with File-1 to
+//		determine if the two files are equal in terms
+//		of content.
+//
+//	pathFileNameTwoLabel		string
+//
+//		The name or label associated with input parameter
+//		'pathFileNameTwo' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "pathFileNameTwo" will
+//		be automatically applied.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	filesAreEqual				bool
+//
+//		If this return parameter is set to 'true', it
+//		signals that the contents of File-1 ('pathFileNameOne')
+//		and File-2 ('pathFileNameTwo') are equal.
+//
+//		If this return parameter is set to 'false', it
+//		signals that the contents of File-1 ('pathFileNameOne')
+//		and File-2 ('pathFileNameTwo') are NOT equal.
+//
+//	reasonFilesNotEqual			string
+//
+//		If the contents of File-1 ('pathFileNameOne') and
+//		File-2 ('pathFileNameTwo') are determined to be
+//		NOT EQUAL, this returned string will contain text
+//		describing the reason for this inequality.
+//
+//		If File-1 and File-2 are equal in terms of content,
+//		this string will be empty.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fHelpDirector *fileHelperDirector) compareFiles(
 	pathFileNameOne string,
 	pathFileNameOneLabel string,
 	pathFileNameTwo string,
 	pathFileNameTwoLabel string,
 	errorPrefix interface{}) (
-	areEqual bool,
+	filesAreEqual bool,
+	reasonFilesNotEqual string,
 	err error) {
 
 	if fHelpDirector.lock == nil {
@@ -308,7 +461,7 @@ func (fHelpDirector *fileHelperDirector) filesAreEqual(
 	var ePrefix *ePref.ErrPrefixDto
 
 	funcName := "fileHelperDirector." +
-		"filesAreEqual()"
+		"compareFiles()"
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -318,7 +471,7 @@ func (fHelpDirector *fileHelperDirector) filesAreEqual(
 
 	if err != nil {
 
-		return areEqual, err
+		return filesAreEqual, reasonFilesNotEqual, err
 	}
 
 	if len(pathFileNameOneLabel) == 0 {
@@ -338,7 +491,7 @@ func (fHelpDirector *fileHelperDirector) filesAreEqual(
 			pathFileNameOneLabel,
 			pathFileNameOneLabel)
 
-		return areEqual, err
+		return filesAreEqual, reasonFilesNotEqual, err
 	}
 
 	if len(pathFileNameTwo) == 0 {
@@ -350,107 +503,16 @@ func (fHelpDirector *fileHelperDirector) filesAreEqual(
 			pathFileNameTwoLabel,
 			pathFileNameTwoLabel)
 
-		return areEqual, err
+		return filesAreEqual, reasonFilesNotEqual, err
 	}
 
 	var fileInfoPlusOne FileInfoPlus
 	var err2 error
 
-	fileInfoPlusOne,
-		err2 = new(fileHelperNanobot).
-		getFileInfoPlus(
-			pathFileNameOne,
-			ePrefix.XCpy(pathFileNameOneLabel))
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error occurred while testing for the existence\n"+
-			"of '%v'\n"+
-			"'%v'= %v\n"+
-			"Error=\n%v\n",
-			funcName,
-			pathFileNameOneLabel,
-			pathFileNameOneLabel,
-			pathFileNameOne,
-			err2.Error())
-
-		return areEqual, err
-	}
-
-	var fileInfoPlusTwo FileInfoPlus
-
-	fileInfoPlusTwo,
-		err2 = new(fileHelperNanobot).
-		getFileInfoPlus(
-			pathFileNameTwo,
-			ePrefix.XCpy(pathFileNameTwoLabel))
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error occurred while testing for the existence\n"+
-			"of file '%v'\n"+
-			"'%v'= %v\n"+
-			"Error=\n%v\n",
-			funcName,
-			pathFileNameTwoLabel,
-			pathFileNameTwoLabel,
-			pathFileNameTwo,
-			err2.Error())
-
-		return areEqual, err
-	}
-
-	if fileInfoPlusOne.Size() !=
-		fileInfoPlusTwo.Size() {
-
-		// areEqual == 'false'
-		return areEqual, err
-	}
-
-	if fileInfoPlusOne.IsDir() !=
-		fileInfoPlusTwo.IsDir() {
-
-		// areEqual == 'false'
-		return areEqual, err
-	}
-
-	if fileInfoPlusOne.IsDir() {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: '%v' is a directory.\n"+
-			"'%v' is a file.\n"+
-			"'%v'= %v\n"+
-			"'%v'= %v\n",
-			ePrefix.String(),
-			pathFileNameOneLabel,
-			pathFileNameTwoLabel,
-			pathFileNameOneLabel,
-			pathFileNameOne,
-			pathFileNameTwoLabel,
-			pathFileNameTwo)
-	}
-
-	if fileInfoPlusTwo.IsDir() {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: '%v' is a file.\n"+
-			"'%v' is a directory.\n"+
-			"'%v'= %v\n"+
-			"'%v'= %v\n",
-			ePrefix.String(),
-			pathFileNameOneLabel,
-			pathFileNameTwoLabel,
-			pathFileNameOneLabel,
-			pathFileNameOne,
-			pathFileNameTwoLabel,
-			pathFileNameTwo)
-	}
-
 	var fileBufReaderOne FileBufferReader
 
-	err2 = new(fileBufferReaderNanobot).
+	fileInfoPlusOne,
+		err2 = new(fileBufferReaderNanobot).
 		setPathFileName(
 			&fileBufReaderOne,
 			"fileBufReaderOne",
@@ -473,12 +535,22 @@ func (fHelpDirector *fileHelperDirector) filesAreEqual(
 			pathFileNameOne,
 			err2.Error())
 
-		return areEqual, err
+		return filesAreEqual, reasonFilesNotEqual, err
 	}
 
 	var fileBufReaderTwo FileBufferReader
+	var fileInfoPlusTwo FileInfoPlus
+	var fileOneBytesRead = make([]byte, 4096)
+	var fileTwoBytesRead = make([]byte, 4096)
+	var fileOneNumBytesRead, fileTwoNumBytesRead int
+	var readCycle, maxCycle int64
+	maxCycle = int64(math.MaxInt)
+	var errReadOne, errReadTwo error
 
-	err2 = new(fileBufferReaderNanobot).
+	var errs []error
+
+	fileInfoPlusTwo,
+		err2 = new(fileBufferReaderNanobot).
 		setPathFileName(
 			&fileBufReaderTwo,
 			"fileBufReaderTwo",
@@ -490,29 +562,28 @@ func (fHelpDirector *fileHelperDirector) filesAreEqual(
 
 	if err2 != nil {
 
-		err = fmt.Errorf("%v\n"+
-			"An error occurred while converting input\n"+
-			"parameter '%v' to a FileBufferReader.\n"+
-			"'%v' = %v\n"+
-			"Error=\n%v\n",
-			funcName,
-			pathFileNameTwoLabel,
-			pathFileNameTwoLabel,
-			pathFileNameTwo,
-			err2.Error())
+		errs = append(
+			errs,
+			fmt.Errorf("%v\n"+
+				"An error occurred while converting input\n"+
+				"parameter '%v' to a FileBufferReader.\n"+
+				"'%v' = %v\n"+
+				"Error=\n%v\n",
+				funcName,
+				pathFileNameTwoLabel,
+				pathFileNameTwoLabel,
+				pathFileNameTwo,
+				err2.Error()))
 
-		return areEqual, err
+		goto finalExit
 	}
 
-	var fileOneBytesRead = make([]byte, 4096)
+	if fileInfoPlusOne.Size() != fileInfoPlusTwo.Size() {
 
-	var fileTwoBytesRead = make([]byte, 4096)
+		reasonFilesNotEqual = "The files sizes (in bytes) are NOT equal."
 
-	var fileOneNumBytesRead, fileTwoNumBytesRead int
-	var readCycle, maxCycle int64
-
-	maxCycle = int64(math.MaxInt)
-	var errReadOne, errReadTwo error
+		goto finalExit
+	}
 
 	for {
 
@@ -520,13 +591,15 @@ func (fHelpDirector *fileHelperDirector) filesAreEqual(
 
 		if readCycle > maxCycle {
 
-			err = fmt.Errorf("%v\n"+
-				"Error: The number of 'read' cycles exceeded the maximum!\n"+
-				"The maximum number of 'read' cycles is %v\n",
-				ePrefix.String(),
-				maxCycle)
+			errs = append(
+				errs,
+				fmt.Errorf("%v\n"+
+					"Error: The number of 'read' cycles exceeded the maximum!\n"+
+					"The maximum number of 'read' cycles is %v\n",
+					ePrefix.String(),
+					maxCycle))
 
-			return areEqual, err
+			goto finalExit
 		}
 
 		fileOneNumBytesRead,
@@ -537,17 +610,20 @@ func (fHelpDirector *fileHelperDirector) filesAreEqual(
 		if errReadOne != nil &&
 			errReadOne != io.EOF {
 
-			err = fmt.Errorf("%v\n"+
-				"Error reading %v\n"+
-				"'%v'= %v\n"+
-				"Read Error=\n%v\n",
-				ePrefix.String(),
-				pathFileNameOneLabel,
-				pathFileNameOneLabel,
-				pathFileNameOne,
-				errReadOne.Error())
+			errs =
+				append(
+					errs,
+					fmt.Errorf("%v\n"+
+						"Error reading %v\n"+
+						"'%v'= %v\n"+
+						"Read Error=\n%v\n",
+						ePrefix.String(),
+						pathFileNameOneLabel,
+						pathFileNameOneLabel,
+						pathFileNameOne,
+						errReadOne.Error()))
 
-			return areEqual, err
+			goto finalExit
 		}
 
 		fileTwoNumBytesRead,
@@ -558,36 +634,52 @@ func (fHelpDirector *fileHelperDirector) filesAreEqual(
 		if errReadTwo != nil &&
 			errReadTwo != io.EOF {
 
-			err = fmt.Errorf("%v\n"+
-				"Error reading %v\n"+
-				"'%v'= %v\n"+
-				"Read Error=\n%v\n",
-				ePrefix.String(),
-				pathFileNameTwoLabel,
-				pathFileNameTwoLabel,
-				pathFileNameTwo,
-				err2.Error())
+			errs = append(
+				errs,
+				fmt.Errorf("%v\n"+
+					"Error reading %v\n"+
+					"'%v'= %v\n"+
+					"Read Error=\n%v\n",
+					ePrefix.String(),
+					pathFileNameTwoLabel,
+					pathFileNameTwoLabel,
+					pathFileNameTwo,
+					err2.Error()))
 
-			return areEqual, err
+			goto finalExit
 		}
 
 		if fileOneNumBytesRead != fileTwoNumBytesRead {
 
-			return areEqual, err
+			reasonFilesNotEqual = "Number of bytes read from Files 1 & 2 are not equal"
+
+			goto finalExit
 		}
 
 		for i := 0; i < fileTwoNumBytesRead; i++ {
 
 			if fileOneBytesRead[i] != fileTwoBytesRead[i] {
 
-				return areEqual, err
+				reasonFilesNotEqual = "Files 1 & 2 content are not equal"
+
+				goto finalExit
 			}
 		}
 
 		if errReadOne == io.EOF &&
 			errReadTwo != io.EOF {
 
-			return areEqual, err
+			reasonFilesNotEqual = "Files 1 & 2 Read exits (io.EOF) are not equal"
+
+			goto finalExit
+		}
+
+		if errReadOne != io.EOF &&
+			errReadTwo == io.EOF {
+
+			reasonFilesNotEqual = "Files 1 & 2 Read exits (io.EOF) are not equal"
+
+			goto finalExit
 		}
 
 		if errReadOne == io.EOF &&
@@ -598,9 +690,47 @@ func (fHelpDirector *fileHelperDirector) filesAreEqual(
 
 	}
 
-	areEqual = true
+	filesAreEqual = true
 
-	return areEqual, err
+finalExit:
+
+	err2 = fileBufReaderOne.Close(
+		ePrefix.XCpy("fileBufReaderOne"))
+
+	if err2 != nil {
+
+		errs = append(
+			errs,
+			fmt.Errorf("%v\n"+
+				"Error Closing 'fileBufReaderOne'\n"+
+				"Error=\n%v\n",
+				funcName,
+				err2.Error()))
+
+	}
+
+	err2 = fileBufReaderTwo.Close(
+		ePrefix.XCpy("fileBufReaderTwo"))
+
+	if err2 != nil {
+
+		errs = append(
+			errs,
+			fmt.Errorf("%v\n"+
+				"Error Closing 'fileBufReaderTwo'\n"+
+				"Error=\n%v\n",
+				funcName,
+				err2.Error()))
+
+	}
+
+	if len(errs) > 0 {
+
+		err = new(StrMech).ConsolidateErrors(errs)
+
+	}
+
+	return filesAreEqual, reasonFilesNotEqual, err
 }
 
 // getPathAndFileNameExt

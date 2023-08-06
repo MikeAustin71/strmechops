@@ -663,6 +663,123 @@ func (fMgr *FileMgr) CloseThisFile(
 	return err
 }
 
+// CompareFiles
+//
+// This method receives a pointer to a second, incoming
+// File Manager ('fMgrTwo') and proceeds to compare the
+// contents of the two files identified by the current
+// instance of File Manager ('fMgr') and 'fMgrTwo'.
+//
+// The two files will be compared to determine if their
+// contents are identical.
+//
+// If the compared files are equal with respect to
+// content, this method will return a boolean value of
+// 'true'.
+//
+// If the two files differ in file size or file content,
+// this method will return 'false'.
+//
+// If no errors are encountered and the contents of the
+// two files are found to be 'NOT EQUAL', this method
+// will return a text description of the reason for this
+// inequality.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fMgrTwo						*FileMgr
+//
+//		A pointer to an incoming instance of File Manager
+//		('FileMgr')
+func (fMgr *FileMgr) CompareFiles(
+	fMgrTwo *FileMgr,
+	errorPrefix interface{}) (
+	filesAreEqual bool,
+	reasonFilesNotEqual string,
+	err error) {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "FileMgr.CompareFiles()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return filesAreEqual, reasonFilesNotEqual, err
+	}
+
+	if fMgrTwo == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fMgrTwo' is invalid!\n"+
+			"'fMgrTwo' is 'nil' pointer.\n",
+			ePrefix)
+
+		return filesAreEqual, reasonFilesNotEqual, err
+	}
+
+	fMgrHlpr := fileMgrHelper{}
+	var err2 error
+
+	err2 = fMgrHlpr.closeFile(fMgr,
+		ePrefix.XCpy("fMgr"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error occurred while the closing current\n"+
+			"instance of File Manager 'fMgr'.\n"+
+			"Error=\n%v\n",
+			funcName,
+			err2.Error())
+
+		return filesAreEqual, reasonFilesNotEqual, err
+	}
+
+	err2 = fMgrHlpr.closeFile(fMgrTwo,
+		ePrefix.XCpy("fMgrTwo"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error occurred while closing the second\n"+
+			"instance of File Manager passed as input\n"+
+			"parameter 'fMgrTwo'.\n"+
+			"Error=\n%v\n",
+			funcName,
+			err2.Error())
+
+		return filesAreEqual, reasonFilesNotEqual, err
+	}
+
+	filesAreEqual,
+		reasonFilesNotEqual,
+		err = new(fileHelperDirector).
+		compareFiles(
+			fMgr.absolutePathFileName,
+			"fMgr-1",
+			fMgrTwo.absolutePathFileName,
+			"fMgr-2",
+			ePrefix)
+
+	return filesAreEqual, reasonFilesNotEqual, err
+}
+
 // CopyFileMgrByIo
 //
 // Copies the file represented by the current File

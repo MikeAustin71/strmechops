@@ -1671,6 +1671,182 @@ func (fh *FileHelper) CleanPathStr(pathStr string) string {
 	return fp.Clean(pathStr)
 }
 
+// CompareFiles
+//
+// Receives two strings containing the path and file
+// names of two files.
+//
+// The two files will be compared to determine if their
+// contents are identical.
+//
+// If the compared files are equal with respect to
+// content, this method will return a boolean value of
+// 'true'.
+//
+// If the two files differ in file size or file content,
+// this method will return 'false'.
+//
+// If no errors are encountered and the contents of the
+// two files are found to be 'NOT EQUAL', this method
+// will return a text description of the reason for this
+// inequality.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileNameOne				string
+//
+//		This string holds the path and file name of
+//		File-1. File-1 will be compared with File-2 to
+//		determine if the two files are equal in terms
+//		of content.
+//
+//	pathFileNameTwo				string
+//
+//		This string holds the path and file name of
+//		File-2. File-2 will be compared with File-1 to
+//		determine if the two files are equal in terms
+//		of content.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	filesAreEqual				bool
+//
+//		If this return parameter is set to 'true', it
+//		signals that the contents of File-1 ('pathFileNameOne')
+//		and File-2 ('pathFileNameTwo') ARE EQUAL.
+//
+//		If this return parameter is set to 'false', it
+//		signals that the contents of File-1 ('pathFileNameOne')
+//		and File-2 ('pathFileNameTwo') are NOT EQUAL.
+//
+//	reasonFilesNotEqual			string
+//
+//		If the contents of File-1 ('pathFileNameOne') and
+//		File-2 ('pathFileNameTwo') are determined to be
+//		NOT EQUAL, this returned string will contain text
+//		describing the reason for this inequality.
+//
+//		If File-1 and File-2 are equal in terms of content,
+//		this string will be empty.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fh *FileHelper) CompareFiles(
+	pathFileNameOne string,
+	pathFileNameTwo string,
+	errorPrefix interface{}) (
+	filesAreEqual bool,
+	reasonFilesNotEqual string,
+	err error) {
+
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"CompareFiles()",
+		"")
+
+	if err != nil {
+
+		return filesAreEqual, reasonFilesNotEqual, err
+	}
+
+	filesAreEqual,
+		reasonFilesNotEqual,
+		err = new(fileHelperDirector).
+		compareFiles(
+			pathFileNameOne,
+			"pathFileNameOne",
+			pathFileNameTwo,
+			"pathFileNameTwo",
+			ePrefix)
+
+	return filesAreEqual, reasonFilesNotEqual, err
+}
+
 // ConsolidateErrors
 //
 // Receives an array of type error and converts the
