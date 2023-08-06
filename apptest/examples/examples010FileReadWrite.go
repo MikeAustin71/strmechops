@@ -270,6 +270,12 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite01() {
 		return
 	}
 
+	fmt.Printf("Final Read & Write File Sizes\n"+
+		"Read File Size= %v\n"+
+		"Write File Size= %v\n\n",
+		readerFileInfoPlus.Size(),
+		writerFileInfoPlus.Size())
+
 	var filesAreEqual bool
 	var reasonFilesNotEqual string
 
