@@ -1585,19 +1585,53 @@ func (fBufReadWrite *FileBufferReadWrite) NewPathFileNames(
 // and io.Writer objects created when the current
 // instance of FileBufferReadWrite was initialized.
 //
-// Upon completion of all read and write operations, this
-// method will automatically perform all required clean-up
-// tasks. Clean-up tasks involve flushing the io.Writer
-// object, closing the io.Reader and io.Writer objects
-// and then deleting io.Reader and io.Writer structures
-// internal to the current FileBufferReadWrite instance.
-// When the Clean-up tasks are completed, the current
-// FileBufferReadWrite instance will be invalid and
-// unusable for future 'read' and/or 'write' operations.
+// If input parameter 'autoFlushAndCloseOnExit' is set to
+// 'true', this method will automatically perform all
+// required clean-up tasks. Clean-up tasks involve
+// flushing the io.Writer object, closing the io.Reader
+// and io.Writer objects and then deleting io.Reader and
+// io.Writer structures internal to the current
+// FileBufferReadWrite instance. When these Clean-up tasks
+// are completed, the current FileBufferReadWrite instance
+// will be invalid and unusable for future 'read' and/or
+// 'write' operations.
+//
+// If input parameter 'autoFlushAndCloseOnExit' is set to
+// 'false', the user is responsible for performing
+// clean-up tasks by calling the local method:
+//
+//	FileBufferReadWrite.CloseFileBufferReadWrite()
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
+//
+//	autoFlushAndCloseOnExit		bool
+//
+//		When this parameter is set to 'true', this
+//		method will automatically perform the following
+//		clean-up tasks upon exit:
+//
+//		(1)	The write buffer will be flushed thereby
+//			ensuring that all remaining data in the
+//			'write' buffer will be written to the
+//			underlying io.Writer object.
+//
+//		(2)	The io.Reader and io.Writer objects will be
+//			properly closed.
+//
+//		(3) After performing these clean-up tasks, the
+//			current instance of FileBufferReadWrite will
+//			invalid and unusable for future 'read' and/or
+//			'write' operations.
+//
+//		If input parameter 'autoFlushAndCloseOnExit' is
+//		set to 'false', the user is responsible for
+//		performing clean-up tasks by calling the local
+//		method:
+//
+//			FileBufferReadWrite.CloseFileBufferReadWrite()
+//
 //
 //	errorPrefix					interface{}
 //
@@ -1679,6 +1713,7 @@ func (fBufReadWrite *FileBufferReadWrite) NewPathFileNames(
 //		is NOT equal to the number of bytes read from the
 //		source, an error will be returned.
 func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
+	autoFlushAndCloseOnExit bool,
 	errorPrefix interface{}) (
 	totalBytesRead int,
 	totalBytesWritten int,
@@ -1886,11 +1921,15 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 
 	}
 
-	err = fBufReadWriteMicrobot.
-		closeReaderWriter(
-			fBufReadWrite,
-			"fBufReadWrite",
-			ePrefix.XCpy("Close-Readers&Writers"))
+	if autoFlushAndCloseOnExit == true {
+
+		err = fBufReadWriteMicrobot.
+			closeReaderWriter(
+				fBufReadWrite,
+				"fBufReadWrite",
+				ePrefix.XCpy("Close-Readers&Writers"))
+
+	}
 
 	return totalBytesRead, totalBytesWritten, err
 }

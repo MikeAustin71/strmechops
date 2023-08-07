@@ -204,8 +204,10 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite01() {
 
 	totalBytesRead,
 		totalBytesWritten,
-		err = newFBuffReadWrite.ReadWriteAll(ePrefix.XCpy(
-		"newFBuffReadWrite"))
+		err = newFBuffReadWrite.ReadWriteAll(
+		true,
+		ePrefix.XCpy(
+			"newFBuffReadWrite"))
 
 	if err != nil {
 		fmt.Printf("\n%v\n\n",
