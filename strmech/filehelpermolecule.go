@@ -1894,19 +1894,15 @@ func (fHelpMolecule *fileHelperMolecule) readerScanLines(
 		return 0, nil, nil
 	})
 
-	var textLine string
-
-	for scanner.Scan() {
-
-		textLine = scanner.Text()
-
-		outputLinesArray.PushStr(textLine)
-
-		numOfBytesRead += int64(len(textLine))
-
-		numOfLinesRead++
-
-	}
+	numOfLinesRead,
+		numOfBytesRead,
+		err = new(fileHelperAtom).
+		readerScanMaxLines(
+			scanner,
+			readerLabel+"-scanner",
+			-1, // maxNumOfLines
+			outputLinesArray,
+			ePrefix)
 
 	return numOfLinesRead,
 		numOfBytesRead,

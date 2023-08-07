@@ -2312,6 +2312,19 @@ func (fHelperAtom *fileHelperAtom) makeDirPerm(
 //		string, a default value of "readerScanner" will
 //		be automatically applied.
 //
+//	maxNumOfLines				int
+//
+//		The maximum number of text lines which will be
+//		read by 'readerScanner'.
+//
+//		If this integer is set to a value less than one
+//		(+1), all text lines existing in the
+//		'readerScanner' will be read and processed.
+//
+//		Reading all the text lines in a file 'may' have
+//		memory implications depending on the memory
+//		resources available to your computer.
+//
 //	outputLinesArray *StringArrayDto,
 //
 //		A pointer to an instance of StringArrayDto.
@@ -2458,9 +2471,7 @@ func (fHelperAtom *fileHelperAtom) readerScanMaxLines(
 
 		numOfLinesRead++
 
-		if err2 == io.EOF {
-
-			err = io.EOF
+		if err2 == io.EOF || ok == false {
 
 			break
 		}
