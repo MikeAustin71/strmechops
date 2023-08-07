@@ -1740,6 +1740,11 @@ func (fHelpMolecule *fileHelperMolecule) stripLeadingDotSeparatorChars(
 //		io.Reader. For more information, see the
 //		'Reference' section for io.Reader above.
 //
+//		Data will be read from this io.Reader object
+//		and parsed as lines of text to be stored in
+//		the string array encapsulated by input
+//		parameter 'outputLinesArray'.
+//
 //		If this parameter is 'nil', an error will be
 //		returned.
 //
@@ -1753,7 +1758,7 @@ func (fHelpMolecule *fileHelperMolecule) stripLeadingDotSeparatorChars(
 //		string, a default value of "reader" will be
 //		automatically applied.
 //
-//	endOfLineDelimiters				*StringArrayDto
+//	endOfLineDelimiters			*StringArrayDto
 //
 //		A pointer to an instance of StringArrayDto.
 //		'endOfLineDelimiters' encapsulates a string
@@ -1765,7 +1770,7 @@ func (fHelpMolecule *fileHelperMolecule) stripLeadingDotSeparatorChars(
 //		end-of-line delimiters for used in parsing text
 //		lines extracted from the io.Reader object.
 //
-//	outputLinesArray *StringArrayDto,
+//	outputLinesArray 			*StringArrayDto,
 //
 //		A pointer to an instance of StringArrayDto.
 //		Lines of text read from the io.Reader object

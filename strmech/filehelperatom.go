@@ -1,8 +1,10 @@
 package strmech
 
 import (
+	"bufio"
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"io"
 	"os"
 	fp "path/filepath"
 	"strings"
@@ -2268,6 +2270,204 @@ func (fHelperAtom *fileHelperAtom) makeDirPerm(
 	}
 
 	return err
+}
+
+// readerScanMaxLines
+//
+// This method parses lines of text from a bufio.Scanner.
+// This instance of bufio.Scanner must have been previously
+// configured with a custom scanner Split function to
+// control the string parsing for text lines.
+//
+// Users can specify a maximum number of lines to read
+// using input parameter, 'maxNumOfLines'. If
+// 'maxNumOfLines' is set to a value less than one (+1),
+// all lines of text in the bufio.Scanner will be read
+// and processed.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	readerScanner				*bufio.Scanner
+//
+//		A valid, active and fully configured instance of
+//		bufio.Scanner.
+//
+//		Data will be read from this scanner object
+//		and parsed as lines of text to be stored in
+//		the string array encapsulated by input
+//		parameter 'outputLinesArray'.
+//
+//		If this parameter is 'nil', an error will be
+//		returned.
+//
+//	readerScannerLabel			string
+//
+//		The name or label associated with input parameter
+//		'readerScanner' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "readerScanner" will
+//		be automatically applied.
+//
+//	outputLinesArray *StringArrayDto,
+//
+//		A pointer to an instance of StringArrayDto.
+//		Lines of text read from the io.Reader object
+//		'reader' will be stored as individual strings in
+//		the string array encapsulated by 'outputLinesArray'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numOfLinesRead				int
+//
+//		This integer value contains the number of text
+//		lines read from the io.Reader object specified by
+//		input parameter 'reader'. This value also
+//		specifies the number of array elements added to
+//		the string array encapsulated by
+//		'outputLinesArray'.
+//
+//	numBytesRead				int64
+//
+//		If this method completes successfully, this
+//		integer value will equal the number of bytes
+//		read from the io.Reader object 'reader' and added
+//		to the string array encapsulated by
+//		'outputLinesArray'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fHelperAtom *fileHelperAtom) readerScanMaxLines(
+	readerScanner *bufio.Scanner,
+	readerScannerLabel string,
+	maxNumOfLines int,
+	outputLinesArray *StringArrayDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	numOfLinesRead int,
+	numOfBytesRead int64,
+	err error) {
+
+	if fHelperAtom.lock == nil {
+		fHelperAtom.lock = new(sync.Mutex)
+	}
+
+	fHelperAtom.lock.Lock()
+
+	defer fHelperAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperAtom."+
+			"readerScanMaxLines()",
+		"")
+
+	if err != nil {
+
+		return numOfLinesRead, numOfBytesRead, err
+	}
+
+	if len(readerScannerLabel) == 0 {
+
+		readerScannerLabel = "readerScanner"
+	}
+
+	if readerScanner == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid.\n"+
+			"The '%v' scanner is nil.\n",
+			ePrefix.String(),
+			readerScannerLabel,
+			readerScannerLabel)
+
+		return numOfLinesRead, numOfBytesRead, err
+	}
+
+	var textLine string
+	var ok bool
+	var err2 error
+
+	for {
+
+		if maxNumOfLines > 0 &&
+			numOfLinesRead >= maxNumOfLines {
+
+			break
+		}
+
+		err2 = nil
+
+		ok = readerScanner.Scan()
+
+		if !ok {
+
+			err2 = readerScanner.Err()
+
+			if err2 != nil &&
+				err2 != io.EOF {
+
+				err = fmt.Errorf("%v\n"+
+					"System Errror returned by readerScanner.Scan()\n"+
+					"Error=\n%v\n",
+					ePrefix.String(),
+					err2)
+
+				return numOfLinesRead, numOfBytesRead, err
+			}
+
+		}
+
+		textLine = readerScanner.Text()
+
+		outputLinesArray.PushStr(textLine)
+
+		numOfBytesRead += int64(len(textLine))
+
+		numOfLinesRead++
+
+		if err2 == io.EOF {
+
+			err = io.EOF
+
+			break
+		}
+
+	}
+
+	return numOfLinesRead, numOfBytesRead, err
 }
 
 // removePathSeparatorFromEndOfPathString
