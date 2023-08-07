@@ -1,7 +1,6 @@
 package strmech
 
 import (
-	"bufio"
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
@@ -2468,8 +2467,8 @@ func (fileHelpMech *fileHelperMechanics) makeDirAll(
 // input parameter 'endOfLineDelimiters', an instance of
 // StringArrayDto. 'endOfLineDelimiters' contains an
 // array of strings any one of which may be used to
-// identify and separate individual lines of text read
-// from the target file.
+// identify, delimit and separate individual lines of
+// text read from the target file.
 //
 // This method is designed to open a target file, read
 // the entire contents of that file, separate the file
@@ -2538,6 +2537,11 @@ func (fileHelpMech *fileHelperMechanics) makeDirAll(
 //		which will be used to identify and separate
 //		individual lines of text.
 //
+//		Users have the flexibility to specify multiple
+//		end-of-line delimiters for used in parsing text
+//		lines extracted from file identified by
+//		'pathFileName'.
+//
 //	outputLinesArray *StringArrayDto,
 //
 //		A pointer to an instance of StringArrayDto.
@@ -2585,18 +2589,19 @@ func (fileHelpMech *fileHelperMechanics) makeDirAll(
 //		This integer value contains the number of text
 //		lines read from the file specified by input
 //		parameter 'pathFileName'. This value also
-//		specifies the number of array elements in the
-//		string array returned by 'strArray'.
+//		specifies the number of array elements added to
+//		the string array encapsulated by
+//		'outputLinesArray'.
 //
 //	numBytesRead				int64
 //
 //		If this method completes successfully, this
 //		integer value will equal the number of bytes
 //		read from the target input file 'pathFileName'
-//		and stored the string array returned by
-//		parameter 'strArray'.
+//		and added to the string array encapsulated by
+//		'outputLinesArray'.
 //
-//	error
+//	err							error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'. If
@@ -2818,50 +2823,15 @@ func (fileHelpMech *fileHelperMechanics) readLines(
 			err
 	}
 
-	endOfLineDelimiters.SortByStrLengthLongestToShortest()
-
-	lenEndOfLineDelim := len(endOfLineDelimiters.StrArray)
-
-	scanner := bufio.NewScanner(filePtr)
-
-	scanner.Split(func(data []byte, atEOF bool) (advance int, token []byte, err error) {
-
-		if atEOF && len(data) == 0 {
-			return 0, nil, nil
-		}
-
-		if atEOF {
-			return len(data), data, nil
-		}
-
-		for i := 0; i < lenEndOfLineDelim; i++ {
-
-			if j := strings.Index(string(data),
-				endOfLineDelimiters.StrArray[i]); j >= 0 {
-
-				return j + len(endOfLineDelimiters.StrArray[i]),
-					data[0:j],
-					nil
-			}
-
-		}
-
-		return 0, nil, nil
-	})
-
-	var textLine string
-
-	for scanner.Scan() {
-
-		textLine = scanner.Text()
-
-		outputLinesArray.PushStr(textLine)
-
-		numOfBytesRead += int64(len(textLine))
-
-		numOfLinesRead++
-
-	}
+	numOfLinesRead,
+		numOfBytesRead,
+		err = new(fileHelperMolecule).
+		readerScanLines(
+			filePtr,
+			pathFileNameLabel,
+			endOfLineDelimiters,
+			outputLinesArray,
+			ePrefix.XCpy("filePtr->"))
 
 	return originalFileSize,
 		numOfLinesRead,

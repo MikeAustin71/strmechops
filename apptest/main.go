@@ -13,7 +13,7 @@ func main() {
 	//examples.MainDirOpsTest007{}.GetDirTreeProfile02()
 	//examples.MainFileHelperOpsTest008{}.ReadFiles01()
 	//examples.MainFileHelperOpsTest008{}.ReadFiles02()
-	//examples.MainFileHelperOpsTest008{}.ReadTextLines01()
+	examples.MainFileHelperOpsTest008{}.ReadTextLines01()
 	//examples.MainFileHelperOpsTest008{}.ReadLines02()
 	//examples.MainFilePermissionsTest009{}.PermissionStr01()
 	//examples.MainFileReadWriteTest010{}.WriteFileBytes01()
@@ -22,5 +22,5 @@ func main() {
 	//examples.MainFileReadWriteTest010{}.FileBufWriter01()
 	// examples.MainFilePermissionsTest009{}.PermissionStr02()
 
-	examples.MainFileReadWriteTest010{}.FileBuffReadWrite01()
+	//examples.MainFileReadWriteTest010{}.FileBuffReadWrite01()
 }

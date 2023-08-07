@@ -1,8 +1,10 @@
 package strmech
 
 import (
+	"bufio"
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
+	"io"
 	"os"
 	"path"
 	fp "path/filepath"
@@ -1676,4 +1678,232 @@ func (fHelpMolecule *fileHelperMolecule) stripLeadingDotSeparatorChars(
 	}
 
 	return pathName, strLen
+}
+
+// readerScanLines
+//
+// Receives an instance of io.Reader and proceeds to
+// read, extract and return each line of text read from
+// this object as an element in a string array.
+//
+// Custom end of line delimiters are utilized to
+// determine the end of each line of text read from the
+// target file. End of line delimiters are specified by
+// input parameter 'endOfLineDelimiters', an instance of
+// StringArrayDto. 'endOfLineDelimiters' contains an
+// array of strings any one of which may be used to
+// identify, delimit and separate individual lines of
+// text read from the target io.Reader object.
+//
+// The returned individual lines of text will NOT
+// include the end of line delimiters. End of line
+// delimiters will therefore be stripped and deleted
+// from the end of each configured text line.
+//
+// It follows that this method will read the entire
+// contents of the target file into memory when writing
+// said contents to the StringArrayDto instance.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/io#Reader
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method is designed to read the entire
+//		contents of the target io.Reader into memory.
+//
+//		BE CAREFUL when reading large files!
+//
+//		Depending on the memory resources available to
+//		your computer, you may run out of memory when
+//		reading large files and writing their contents
+//		to an instance of StringArrayDto.
+//
+//	(2)	This method will NOT close the target io.Reader.
+//
+//		The user is therefore separately responsible for
+//		performing operations required to manually close
+//		the io.Reader object.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	reader						io.Reader
+//
+//		An active and fully operational instance of
+//		io.Reader. For more information, see the
+//		'Reference' section for io.Reader above.
+//
+//		If this parameter is 'nil', an error will be
+//		returned.
+//
+//	readerLabel					string
+//
+//		The name or label associated with input parameter
+//		'reader' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "reader" will be
+//		automatically applied.
+//
+//	endOfLineDelimiters				*StringArrayDto
+//
+//		A pointer to an instance of StringArrayDto.
+//		'endOfLineDelimiters' encapsulates a string
+//		array which contains the end-of-line delimiters
+//		which will be used to identify and separate
+//		individual lines of text.
+//
+//		Users have the flexibility to specify multiple
+//		end-of-line delimiters for used in parsing text
+//		lines extracted from the io.Reader object.
+//
+//	outputLinesArray *StringArrayDto,
+//
+//		A pointer to an instance of StringArrayDto.
+//		Lines of text read from the io.Reader object
+//		'reader' will be stored as individual strings in
+//		the string array encapsulated by 'outputLinesArray'.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numOfLinesRead				int
+//
+//		This integer value contains the number of text
+//		lines read from the io.Reader object specified by
+//		input parameter 'reader'. This value also
+//		specifies the number of array elements added to
+//		the string array encapsulated by
+//		'outputLinesArray'.
+//
+//	numBytesRead				int64
+//
+//		If this method completes successfully, this
+//		integer value will equal the number of bytes
+//		read from the io.Reader object 'reader' and added
+//		to the string array encapsulated by
+//		'outputLinesArray'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (fHelpMolecule *fileHelperMolecule) readerScanLines(
+	reader io.Reader,
+	readerLabel string,
+	endOfLineDelimiters *StringArrayDto,
+	outputLinesArray *StringArrayDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	numOfLinesRead int,
+	numOfBytesRead int64,
+	err error) {
+
+	if fHelpMolecule.lock == nil {
+		fHelpMolecule.lock = new(sync.Mutex)
+	}
+
+	fHelpMolecule.lock.Lock()
+
+	defer fHelpMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperMolecule."+
+			"readerScanLines()",
+		"")
+
+	if err != nil {
+
+		return numOfLinesRead,
+			numOfBytesRead,
+			err
+	}
+
+	if len(readerLabel) == 0 {
+
+		readerLabel = "reader"
+	}
+
+	if reader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is 'nil'.\n",
+			ePrefix.String(),
+			readerLabel,
+			readerLabel)
+
+		return numOfLinesRead,
+			numOfBytesRead,
+			err
+	}
+
+	endOfLineDelimiters.SortByStrLengthLongestToShortest()
+
+	lenEndOfLineDelim := len(endOfLineDelimiters.StrArray)
+
+	scanner := bufio.NewScanner(reader)
+
+	scanner.Split(func(data []byte, atEOF bool) (advance int, token []byte, err error) {
+
+		if atEOF && len(data) == 0 {
+			return 0, nil, nil
+		}
+
+		if atEOF {
+			return len(data), data, nil
+		}
+
+		for i := 0; i < lenEndOfLineDelim; i++ {
+
+			if j := strings.Index(string(data),
+				endOfLineDelimiters.StrArray[i]); j >= 0 {
+
+				return j + len(endOfLineDelimiters.StrArray[i]),
+					data[0:j],
+					nil
+			}
+
+		}
+
+		return 0, nil, nil
+	})
+
+	var textLine string
+
+	for scanner.Scan() {
+
+		textLine = scanner.Text()
+
+		outputLinesArray.PushStr(textLine)
+
+		numOfBytesRead += int64(len(textLine))
+
+		numOfLinesRead++
+
+	}
+
+	return numOfLinesRead,
+		numOfBytesRead,
+		err
 }

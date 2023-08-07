@@ -12394,16 +12394,17 @@ func (fh *FileHelper) ReadFileStrBuilderOpenClose(
 //		This integer value contains the number of text
 //		lines read from the file specified by input
 //		parameter 'pathFileName'. This value also
-//		specifies the number of array elements in the
-//		string array returned by 'strArray'.
+//		specifies the number of array elements added to
+//		the string array encapsulated by
+//		'outputLinesArray'.
 //
 //	numBytesRead				int64
 //
 //		If this method completes successfully, this
 //		integer value will equal the number of bytes
 //		read from the target input file 'pathFileName'
-//		and stored the string array returned by
-//		parameter 'strArray'.
+//		and added to the string array encapsulated by
+//		'outputLinesArray'.
 //
 //	err							error
 //
@@ -12617,16 +12618,17 @@ func (fh *FileHelper) ReadLines(
 //		This integer value contains the number of text
 //		lines read from the file specified by input
 //		parameter 'pathFileName'. This value also
-//		specifies the number of array elements in the
-//		string array returned by 'strArray'.
+//		specifies the number of array elements added to
+//		the string array encapsulated by
+//		'outputLinesArray'.
 //
 //	numBytesRead				int64
 //
 //		If this method completes successfully, this
 //		integer value will equal the number of bytes
 //		read from the target input file 'pathFileName'
-//		and stored the string array returned by
-//		parameter 'strArray'.
+//		and added to the string array encapsulated by
+//		'outputLinesArray'.
 //
 //	err							error
 //
