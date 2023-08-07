@@ -12310,7 +12310,7 @@ func (fh *FileHelper) ReadFileStrBuilderOpenClose(
 //		A pointer to an instance of StringArrayDto.
 //		'endOfLineDelimiters' encapsulates a string
 //		array which contains the end-of-line delimiters
-//		which will be used to identify and separate
+//		that will be used to identify and separate
 //		individual lines of text.
 //
 //	outputLinesArray 			*StringArrayDto

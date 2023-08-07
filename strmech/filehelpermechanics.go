@@ -2461,11 +2461,11 @@ func (fileHelpMech *fileHelperMechanics) makeDirAll(
 // Reads a file and returns each line in a target file as
 // an element of a string array.
 //
-// Custom end of line delimiters are utilized to
-// determine the end of each line of text read from the
-// target file. End of line delimiters are specified by
-// input parameter 'endOfLineDelimiters', an instance of
-// StringArrayDto. 'endOfLineDelimiters' contains an
+// Multiple custom end of line delimiters may be utilized
+// to determine the end of each line of text read from
+// the target file. End of line delimiters are specified
+// by input parameter 'endOfLineDelimiters', an instance
+// of StringArrayDto. 'endOfLineDelimiters' contains an
 // array of strings any one of which may be used to
 // identify, delimit and separate individual lines of
 // text read from the target file.
@@ -2474,17 +2474,18 @@ func (fileHelpMech *fileHelperMechanics) makeDirAll(
 // the entire contents of that file, separate the file
 // contents into individual lines of text and return
 // those text lines in a string array encapsulated by
-// an instance of StringArrayDto passed as input
-// parameter 'outputLinesArray'.
+// an instance of StringArrayDto instance passed as
+// input parameter 'outputLinesArray'.
 //
 // The returned individual lines of text will NOT
 // include the end of line delimiters. End of line
 // delimiters will therefore be stripped and deleted
 // from the end of each configured text line.
 //
-// It follows that this method will read the entire
-// contents of the target file into memory when writing
-// said contents to the StringArrayDto instance.
+// It naturally follows that this method will read the
+// entire contents of the target file into memory when
+// writing said contents to the StringArrayDto instance
+// 'outputLinesArray'.
 //
 // ----------------------------------------------------------------
 //
@@ -2499,7 +2500,8 @@ func (fileHelpMech *fileHelperMechanics) makeDirAll(
 //		Depending on the memory resources available to
 //		your computer, you may run out of memory when
 //		reading large files and writing their contents
-//		to an instance of StringArrayDto.
+//		to the output  instance of StringArrayDto,
+//		'outputLinesArray'.
 //
 //	(2)	This method will open the target file, read the
 //		entire contents of that file and automatically
@@ -2534,7 +2536,7 @@ func (fileHelpMech *fileHelperMechanics) makeDirAll(
 //		A pointer to an instance of StringArrayDto.
 //		'endOfLineDelimiters' encapsulates a string
 //		array which contains the end-of-line delimiters
-//		which will be used to identify and separate
+//		that will be used to identify and separate
 //		individual lines of text.
 //
 //		Users have the flexibility to specify multiple
