@@ -719,6 +719,142 @@ func (fBufReadWrite *FileBufferReadWrite) FlushWriteBuffer(
 		Flush(ePrefix.XCpy("fBufReadWrite.writer"))
 }
 
+// IsValidInstanceError
+//
+// Analyzes the current FileBufferReadWrite instance to
+// determine if is invalid.
+//
+// If the current FileBufferReadWrite instance is found
+// to be invalid, an error is returned explaining the
+// reason for this finding.
+//
+// If the current FileBufferReadWrite instance is valid,
+// this method returns 'nil'
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If any of the internal member data variables
+//		contained in the current instance of
+//		FileBufferReadWrite are found to be invalid,
+//		this method will return an error configured
+//		with an appropriate message identifying the
+//		invalid	member data variable.
+//
+//		If all internal member data variables evaluate
+//		as valid, this returned error value will be set
+//		to 'nil'.
+//
+//		If errors are encountered during processing or if
+//		any FileBufferReadWrite internal member data
+//	 	values are found to be invalid, the returned error
+//	 	Type will encapsulate an appropriate error message.
+//	 	This returned error message will incorporate the
+//	 	method chain and text passed by input parameter,
+//	 	'errorPrefix'. The 'errorPrefix' text will be
+//	 	prefixed to the beginning of the error message.
+func (fBufReadWrite *FileBufferReadWrite) IsValidInstanceError(
+	errorPrefix interface{}) error {
+
+	if fBufReadWrite.lock == nil {
+		fBufReadWrite.lock = new(sync.Mutex)
+	}
+
+	fBufReadWrite.lock.Lock()
+
+	defer fBufReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileBufferReadWrite."+
+			"IsValidInstanceError()",
+		"")
+
+	if err != nil {
+
+		return err
+	}
+
+	_,
+		err = new(fileBufferReadWriteElectron).
+		isFileBufferReadWriteValid(
+			fBufReadWrite,
+			"current",
+			ePrefix.XCpy("fBufReadWrite"))
+
+	return err
+}
+
 // New
 //
 // This method returns an empty or 'blank' instance of
@@ -7919,4 +8055,151 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) flushAndCloseWriter(
 	fBufReadWrite.writerFilePathName = ""
 
 	return err
+}
+
+// isFileBufferReadWriteValid
+//
+// This method receives a pointer to an instance of
+// FileBufferReadWrite ('fBufReadWrite') which will be
+// analyzed to determine if all the member variables
+// contain valid values.
+//
+// If input parameter 'fBufReadWrite' is determined to be
+// invalid, this method returns a boolean value of
+// 'false' and an error containing a message describing
+// the reason why 'fBufReadWrite' is invalid.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufReadWrite				*FileBufferReadWrite
+//
+//		A pointer to an instance of FileBufferWriter.
+//
+//		The internal io.Writer object encapsulated
+//		in this instance of FileBufferReadWrite will be
+//		deleted as part of this 'close' operation.
+//
+//		Upon completion of this method, 'fBufReadWrite'
+//		will be invalid and unusable for any future
+//		'write' operations.
+//
+//	fBufReadWriteLabel			string
+//
+//		The name or label associated with input parameter
+//		'fBufReadWrite' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufReadWrite" will
+//		be automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If any of the internal member data variables
+//		contained in the instance of FileBufferReadWrite
+//		passed as 'fBufReadWrite' are found to be
+//		invalid, this method will return an error
+//		configured with an appropriate message
+//		identifying the invalid	member data variable.
+//
+//		If all internal member data variables evaluate
+//		as valid, this returned error value will be set
+//		to 'nil'.
+//
+//		If errors are encountered during processing or if
+//		any 'fBufReadWrite' internal member data values
+//		are found to be invalid, the returned error Type
+//		will encapsulate an appropriate error message.
+//	 	This returned error message will incorporate the
+//	 	method chain and text passed by input parameter,
+//	 	'errorPrefix'. The 'errorPrefix' text will be
+//	 	prefixed to the beginning of the error message.
+func (fBuffReadWriteElectron *fileBufferReadWriteElectron) isFileBufferReadWriteValid(
+	fBufReadWrite *FileBufferReadWrite,
+	fBufReadWriteLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	isValid bool,
+	err error) {
+
+	if fBuffReadWriteElectron.lock == nil {
+		fBuffReadWriteElectron.lock = new(sync.Mutex)
+	}
+
+	fBuffReadWriteElectron.lock.Lock()
+
+	defer fBuffReadWriteElectron.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileBufferReadWriteElectron."+
+			"isFileBufferReadWriteValid()",
+		"")
+
+	if err != nil {
+
+		return isValid, err
+	}
+
+	if len(fBufReadWriteLabel) == 0 {
+
+		fBufReadWriteLabel = "fBufReadWrite"
+	}
+
+	if fBufReadWrite.reader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: The %v instance of FileBufferReadWrite\n"+
+			"is invalid! The internal io.Reader object was never\n"+
+			"initialized. Call one of the 'New' methods or 'Setter'\n"+
+			"methods to create a valid instance of FileBufferReadWrite.\n",
+			ePrefix.String(),
+			fBufReadWriteLabel)
+
+	}
+
+	var err2 error
+
+	if fBufReadWrite.writer == nil {
+
+		err2 = fmt.Errorf("%v\n"+
+			"ERROR: The %v instance of FileBufferReadWrite\n"+
+			"is invalid! The internal io.Writer object was never\n"+
+			"initialized. Call one of the 'New' methods or 'Setter'\n"+
+			"methods to create a valid instance of FileBufferReadWrite.\n",
+			ePrefix.String(),
+			fBufReadWriteLabel)
+
+		err = errors.Join(err, err2)
+	}
+
+	if err == nil {
+
+		isValid = true
+	}
+
+	return isValid, err
 }

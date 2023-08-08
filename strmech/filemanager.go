@@ -7352,139 +7352,6 @@ func (fMgr *FileMgr) IsFileExtPopulated() bool {
 	return true
 }
 
-// IsValidInstanceError
-//
-// Analyzes the current FileMgr object. If the current
-// FileMgr object is INVALID, an error is returned.
-//
-// If the current FileMgr is VALID, this method returns
-// 'nil'
-//
-// ----------------------------------------------------------------
-//
-// # BE ADVISED
-//
-//	To be considered a valid FileMgr instance, the path
-//	and file name must be configured and that path and
-//	file name must exist on disk.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	errorPrefix					interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set
-//		this parameter to 'nil'.
-//
-//		This empty interface must be convertible to one
-//		of the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	error
-//
-//		If any of the internal member data variables
-//		contained in the current instance of FileMgr are
-//	 	found to be invalid, this method will return an
-//	 	error configured with an appropriate message
-//	 	identifying the invalid	member data variable.
-//
-//		If all internal member data variables evaluate
-//		as valid, this returned error value will be set
-//		to 'nil'.
-//
-//		If errors are encountered during processing or if
-//		any internal member data values are found to be
-//		invalid, the returned error Type will encapsulate
-//		an appropriate error message. This returned error
-//		message will incorporate the method chain and text
-//		passed by input parameter, 'errorPrefix'. The
-//		'errorPrefix' text will be attached to the
-//		beginning of the error message.
-func (fMgr *FileMgr) IsValidInstanceError(
-	errorPrefix interface{}) error {
-
-	if fMgr.lock == nil {
-		fMgr.lock = new(sync.Mutex)
-	}
-
-	fMgr.lock.Lock()
-
-	defer fMgr.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"FileMgr.IsValidInstanceError()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	return new(fileMgrHelperAtom).isFileMgrValid(
-		fMgr,
-		ePrefix.XCpy("fMgr"))
-}
-
 // IsFileNameExtPopulated
 //
 // Returns a boolean value indicating whether both the
@@ -7721,6 +7588,139 @@ func (fMgr *FileMgr) IsInitialized() bool {
 	defer fMgr.lock.Unlock()
 
 	return fMgr.isInitialized
+}
+
+// IsValidInstanceError
+//
+// Analyzes the current FileMgr object. If the current
+// FileMgr object is INVALID, an error is returned.
+//
+// If the current FileMgr is VALID, this method returns
+// 'nil'
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	To be considered a valid FileMgr instance, the path
+//	and file name must be configured and that path and
+//	file name must exist on disk.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If any of the internal member data variables
+//		contained in the current instance of FileMgr are
+//	 	found to be invalid, this method will return an
+//	 	error configured with an appropriate message
+//	 	identifying the invalid	member data variable.
+//
+//		If all internal member data variables evaluate
+//		as valid, this returned error value will be set
+//		to 'nil'.
+//
+//		If errors are encountered during processing or if
+//		any FileMgr internal member data values are found
+//		to be invalid, the returned error Type will
+//		encapsulate an appropriate error message. This
+//		returned error message will incorporate the method
+//		chain and text passed by input parameter,
+//		'errorPrefix'. The 'errorPrefix' text will be
+//		prefixed to the beginning of the error message.
+func (fMgr *FileMgr) IsValidInstanceError(
+	errorPrefix interface{}) error {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileMgr.IsValidInstanceError()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(fileMgrHelperAtom).isFileMgrValid(
+		fMgr,
+		ePrefix.XCpy("fMgr"))
 }
 
 // MoveFileToFileMgr
