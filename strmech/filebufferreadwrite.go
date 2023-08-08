@@ -2013,9 +2013,8 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 		return totalBytesRead, totalBytesWritten, err
 	}
 
-	var readErr, writeErr error
 	var numOfBytesRead, numOfBytesWritten, cycleCount int
-	var err2 error
+	var readErr, err2 error
 	var fBufReadWriteMicrobot = new(fileBufferReadWriteMicrobot)
 
 	byteArray := make([]byte,
@@ -2060,16 +2059,16 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 			totalBytesRead += numOfBytesRead
 
 			numOfBytesWritten,
-				writeErr = fBufReadWrite.writer.Write(
+				err2 = fBufReadWrite.writer.Write(
 				byteArray[0:numOfBytesRead])
 
-			if writeErr != nil {
+			if err2 != nil {
 
 				err = fmt.Errorf("%v\n"+
 					"Error Writing Bytes To File!\n"+
 					"Write Error=\n%v\n",
 					funcName,
-					writeErr.Error())
+					err2.Error())
 
 				err2 = fBufReadWriteMicrobot.
 					closeReaderWriter(
@@ -2460,7 +2459,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 			err
 	}
 
-	var err1, err2 error
+	var err1 error
 	var outputLinesArray StringArrayDto
 	var localNumOfLinesProcessed int
 	var localNumBytesRead int64
@@ -2538,7 +2537,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 
 		if err1 != nil {
 
-			err2 = fmt.Errorf("%v\n"+
+			err = fmt.Errorf("%v\n"+
 				"Error occurred while scanning read data!\n"+
 				"io.Reader= %v\n"+
 				"Batch Read No.= %v"+
@@ -2547,8 +2546,6 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 				readerLabel,
 				numTextLinesPerBatch,
 				err1.Error())
-
-			err = errors.Join(err2)
 
 			err1 = fBufReadWriteMicrobot.
 				closeReaderWriter(
@@ -2570,10 +2567,6 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 
 		numBytesRead += localNumBytesRead
 
-		if isExit {
-			break
-		}
-
 		if localNumBytesRead > 0 {
 
 			localNumBytesWritten,
@@ -2584,15 +2577,13 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 
 			if err1 != nil {
 
-				err2 = fmt.Errorf("%v\n"+
+				err = fmt.Errorf("%v\n"+
 					"Error Writing Bytes To File!\n"+
 					"io.Writer= %v\n"+
 					"Write Error=\n%v\n",
 					funcName,
 					writerLabel,
 					err1.Error())
-
-				err = errors.Join(err2)
 
 				err1 = fBufReadWriteMicrobot.
 					closeReaderWriter(
@@ -2611,6 +2602,10 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 
 			numBytesWritten +=
 				int64(localNumBytesWritten)
+		}
+
+		if isExit {
+			break
 		}
 
 	}
