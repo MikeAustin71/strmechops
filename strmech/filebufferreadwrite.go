@@ -7883,26 +7883,17 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) flushAndCloseWriter(
 		return err
 	}
 
-	var err2 error
+	var err2, err3 error
 	var fBufWriterMolecule = new(fileBufferWriterMolecule)
-	var errs []error
 
 	if fBufReadWrite.writer != nil {
 
-		err2 = fBufWriterMolecule.
+		err = fBufWriterMolecule.
 			flush(
 				fBufReadWrite.writer,
 				fBufReadWriteLabel+".writer",
 				ePrefix.XCpy(
 					fBufReadWriteLabel+".writer"))
-
-		if err2 != nil {
-
-			errs = append(
-				errs,
-				fmt.Errorf("%v",
-					err2.Error()))
-		}
 
 		err2 = fBufWriterMolecule.close(
 			fBufReadWrite.writer,
@@ -7912,20 +7903,16 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) flushAndCloseWriter(
 
 		if err2 != nil {
 
-			errs = append(
-				errs,
-				fmt.Errorf("%v\n"+
-					"An error occurred while closing %v.writer.\n"+
-					"Error=\n%v\n",
-					funcName,
-					fBufReadWriteLabel,
-					err2.Error()))
+			err3 = fmt.Errorf("%v\n"+
+				"An error occurred while closing %v.writer.\n"+
+				"Error=\n%v\n",
+				funcName,
+				fBufReadWriteLabel,
+				err2.Error())
+
+			err = errors.Join(err, err3)
 		}
 
-		if len(errs) > 0 {
-
-			err = new(StrMech).ConsolidateErrors(errs)
-		}
 	}
 
 	fBufReadWrite.writer = nil
