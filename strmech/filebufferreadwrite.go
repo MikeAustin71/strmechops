@@ -1,9 +1,12 @@
 package strmech
 
 import (
+	"bufio"
+	"errors"
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
+	"strings"
 	"sync"
 )
 
@@ -1812,24 +1815,34 @@ func (fBufReadWrite *FileBufferReadWrite) Read(
 //
 // If input parameter 'autoFlushAndCloseOnExit' is set to
 // 'true', this method will automatically perform all
-// required clean-up tasks. Clean-up tasks involve
-// flushing the io.Writer object, closing the io.Reader
-// and io.Writer objects and then deleting io.Reader and
-// io.Writer structures internal to the current
-// FileBufferReadWrite instance. When these Clean-up tasks
-// are completed, the current FileBufferReadWrite instance
-// will be invalid and unusable for future 'read' and/or
-// 'write' operations.
+// required clean-up tasks upon completion. Clean-up
+// tasks involve flushing the io.Writer object, closing
+// the io.Reader and io.Writer objects and then deleting
+// io.Reader and io.Writer structure values internal to
+// the current FileBufferReadWrite instance. When these
+// Clean-up tasks are completed, the current
+// FileBufferReadWrite instance will be invalid and
+// unusable for future 'read' and/or 'write' operations.
 //
 // If input parameter 'autoFlushAndCloseOnExit' is set to
 // 'false', this method will automatically flush the
 // 'write' buffer. This means that all data remaining in
 // the 'write' buffer will be written to the underlying
-// io.Write output destination. Most importantly, the
+// io.Writer output destination. Most importantly, the
 // user is then responsible for performing the 'Close'
 // operation by calling the local method:
 //
 //	FileBufferReadWrite.Close()
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	If input parameter 'autoFlushAndCloseOnExit' is set
+//	to 'false', the user is responsible for calling local
+//	method FileBufferReadWrite.Close() in order to
+//	perform the required clean-up operations on the
+//	current instance of FileBufferReadWrite.
 //
 // ----------------------------------------------------------------
 //
@@ -2002,7 +2015,6 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 
 	var readErr, writeErr error
 	var numOfBytesRead, numOfBytesWritten, cycleCount int
-	var errs []error
 	var err2 error
 	var fBufReadWriteMicrobot = new(fileBufferReadWriteMicrobot)
 
@@ -2020,15 +2032,13 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 		if readErr != nil &&
 			readErr != io.EOF {
 
-			errs = append(
-				errs,
-				fmt.Errorf("%v\n"+
-					"Error Reading Target Read File!\n"+
-					"Cycle Count= %v\n"+
-					"Error= \n%v\n",
-					funcName,
-					cycleCount,
-					readErr.Error()))
+			err = fmt.Errorf("%v\n"+
+				"Error Reading Target Read File!\n"+
+				"Cycle Count= %v\n"+
+				"Error= \n%v\n",
+				funcName,
+				cycleCount,
+				readErr.Error())
 
 			err2 = fBufReadWriteMicrobot.
 				closeReaderWriter(
@@ -2038,21 +2048,8 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 
 			if err2 != nil {
 
-				errs = append(
-					errs,
-					fmt.Errorf("%v\n"+
-						"%v",
-						funcName,
-						err2.Error()))
+				err = errors.Join(err, err2)
 
-			}
-
-			if len(errs) > 0 {
-
-				err = fmt.Errorf("%v\n"+
-					"%v",
-					ePrefix.String(),
-					new(StrMech).ConsolidateErrors(errs).Error())
 			}
 
 			return totalBytesRead, totalBytesWritten, err
@@ -2068,13 +2065,11 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 
 			if writeErr != nil {
 
-				errs = append(
-					errs,
-					fmt.Errorf("%v\n"+
-						"Error Writing Bytes To File!\n"+
-						"Write Error=\n%v\n",
-						funcName,
-						writeErr.Error()))
+				err = fmt.Errorf("%v\n"+
+					"Error Writing Bytes To File!\n"+
+					"Write Error=\n%v\n",
+					funcName,
+					writeErr.Error())
 
 				err2 = fBufReadWriteMicrobot.
 					closeReaderWriter(
@@ -2084,21 +2079,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 
 				if err2 != nil {
 
-					errs = append(
-						errs,
-						fmt.Errorf("%v\n"+
-							"%v",
-							funcName,
-							err2.Error()))
-
-				}
-
-				if len(errs) > 0 {
-
-					err = fmt.Errorf("%v\n"+
-						"%v",
-						ePrefix.String(),
-						new(StrMech).ConsolidateErrors(errs).Error())
+					err = errors.Join(err, err2)
 				}
 
 				return totalBytesRead, totalBytesWritten, err
@@ -2106,16 +2087,14 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 
 			if numOfBytesRead != numOfBytesWritten {
 
-				errs = append(
-					errs,
-					fmt.Errorf("%v\n"+
-						"Error Writing Bytes To File!\n"+
-						"numOfBytesRead != numOfBytesWritten\n"+
-						"numOfBytesRead = %v\n"+
-						"numOfBytesWritten = %v\n",
-						funcName,
-						numOfBytesRead,
-						numOfBytesWritten))
+				err = fmt.Errorf("%v\n"+
+					"Error Writing Bytes To File!\n"+
+					"numOfBytesRead != numOfBytesWritten\n"+
+					"numOfBytesRead = %v\n"+
+					"numOfBytesWritten = %v\n",
+					funcName,
+					numOfBytesRead,
+					numOfBytesWritten)
 
 				err2 = fBufReadWriteMicrobot.
 					closeReaderWriter(
@@ -2125,21 +2104,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 
 				if err2 != nil {
 
-					errs = append(
-						errs,
-						fmt.Errorf("%v\n"+
-							"%v",
-							funcName,
-							err2.Error()))
-
-				}
-
-				if len(errs) > 0 {
-
-					err = fmt.Errorf("%v\n"+
-						"%v",
-						ePrefix.String(),
-						new(StrMech).ConsolidateErrors(errs).Error())
+					err = errors.Join(err, err2)
 				}
 
 				return totalBytesRead, totalBytesWritten, err
@@ -2160,7 +2125,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 			closeReaderWriter(
 				fBufReadWrite,
 				"fBufReadWrite",
-				ePrefix.XCpy("Close-Readers&Writers"))
+				ePrefix.XCpy("FlushClose-Readers&Writers"))
 
 	} else {
 
@@ -2170,6 +2135,506 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 	}
 
 	return totalBytesRead, totalBytesWritten, err
+}
+
+// ReadWriteTextLines
+//
+// This method reads all available data from the internal
+// io.Reader object previously configured for this
+// instance of FileBufferReadWrite. It then parses this
+// data into lines of text based on the end-of-line
+// delimiter characters passed as input parameter
+// 'endOfLineDelimiters'.
+//
+// After parsing and converting the data to lines of
+// text, this method proceeds to write this text data to
+// the internal io.Writer object previously configured
+// for the current instance of FileBufferReadWrite.
+//
+// The process of writing text lines to the internal
+// io.Writer object is performed incrementally, in
+// batches of text lines. The number of text lines in
+// each batch is determined by input parameter
+// 'numTextLinesPerBatch'. This 'batch' technique is
+// important because it allows for the reading and
+// writing of very large files. The 'batch' technique
+// means that the amount of memory used in the read/write
+// procedure is minimized, because the entire contents of
+// the io.Reader object are never stored in memory at one
+// time.
+//
+// If input parameter 'autoFlushAndCloseOnExit' is set to
+// 'true', this method will automatically perform all
+// required clean-up tasks upon completion. Clean-up
+// tasks involve flushing the io.Writer object, closing
+// the io.Reader and io.Writer objects and then deleting
+// io.Reader and io.Writer structure values internal to
+// the current FileBufferReadWrite instance. When these
+// Clean-up tasks are completed, the current
+// FileBufferReadWrite instance will be invalid and
+// unusable for future 'read' and/or 'write' operations.
+//
+// If input parameter 'autoFlushAndCloseOnExit' is set to
+// 'false', this method will automatically flush the
+// 'write' buffer. This means that all data remaining in
+// the 'write' buffer will be written to the underlying
+// io.Writer output destination. Most importantly, the
+// user is then responsible for performing the 'Close'
+// operation by calling the local method:
+//
+//	FileBufferReadWrite.Close()
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	End-of-line characters specified by input
+//		parameter 'endOfLineDelimiters' are used to parse
+//		raw data read from the io.Reader object and
+//		extract individual lines of text.
+//
+//		The end-of-line delimiters specified by
+//		'endOfLineDelimiters' are NOT written to the
+//	 	output destination io.Writer object. They are
+//	 	stripped off before being written to the
+//	 	io.Writer object. The text lines actually written
+//	 	to the io.Writer object are arbitrarily
+//	 	terminated with a single new line character
+//	 	('\n').
+//
+//	(2)	If input parameter 'autoFlushAndCloseOnExit' is
+//		set to 'false', the user is responsible for
+//		calling local method FileBufferReadWrite.Close()
+//		in order to perform the required clean-up
+//		operations on the current instance of
+//		FileBufferReadWrite.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	endOfLineDelimiters			*StringArrayDto
+//
+//		A pointer to an instance of StringArrayDto.
+//		'endOfLineDelimiters' encapsulates a string
+//		array which contains the end-of-line delimiters
+//		that will be used to identify and separate
+//		individual lines of text.
+//
+//						NOTE
+//		The end-of-line delimiters specified by
+//		'endOfLineDelimiters' are NOT written to the
+//	 	output destination io.Writer object. They are
+//	 	stripped off before being written to the
+//	 	io.Writer object. The text lines actually written
+//	 	to the io.Writer object are arbitrarily
+//	 	terminated with a single new line character
+//	 	('\n').
+//
+//	numTextLinesPerBatch		int
+//
+//		This value specifies the number of lines of text
+//		that will be processed with each batch of text
+//		lines extracted from the io.Reader object and
+//		written to the io.Writer object.
+//
+//		Use this parameter to efficiently control memory
+//		usage. The smaller the value for
+//		'numTextLinesPerBatch', the smaller the memory
+//		footprint used in the read/write operation. Of
+//		course, smaller 'numTextLinesPerBatch' values means
+//		that more processing time may be required.
+//
+//	autoFlushAndCloseOnExit		bool
+//
+//		When this parameter is set to 'true', this
+//		method will automatically perform the following
+//		clean-up tasks upon exit:
+//
+//		(1)	The write buffer will be flushed thereby
+//			ensuring that all remaining data in the
+//			'write' buffer will be written to the
+//			underlying io.Writer object.
+//
+//		(2)	The io.Reader and io.Writer objects will be
+//			properly closed.
+//
+//		(3) After performing these clean-up tasks, the
+//			current instance of FileBufferReadWrite will
+//			invalid and unusable for future 'read' and/or
+//			'write' operations.
+//
+//		If input parameter 'autoFlushAndCloseOnExit' is
+//		set to 'false', this method will automatically
+//		flush the 'write' buffer. This means that all
+//		data remaining in the 'write' buffer will be
+//		written to the underlying io.Writer output
+//		destination. Most importantly, the user is
+//		then responsible for performing the 'Close'
+//		operation by calling the local method:
+//
+//			FileBufferReadWrite.Close()
+//
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numOfLinesProcessed			int
+//
+//		This integer value contains the number of text
+//		lines read and parsed from the internal io.Reader
+//		object and written to the io.Writer object.
+//
+//	numOfBatchesProcessed		int
+//
+//		The number of read and write cycles required to
+//		process all io.Reader data.
+//
+//	numBytesRead				int64
+//
+//		If this method completes successfully, this
+//		parameter will return the number of bytes read
+//		from the io.Reader object. Remember that this
+//		number includes the end-of-line delimiters
+//		specified by input parameter 'numBytesWritten'
+//		which are stripped off and deleted before being
+//		written to the io.Writer object.
+//
+//		See description of return parameter
+//		'numBytesWritten' below.
+//
+//	numBytesWritten				int64
+//
+//		If this method completes successfully, this
+//		integer value will equal the number of bytes
+//		written to the io.Writer object. Text lines
+//		written to the io.Writer object have a new
+//		character automatically added to the end of
+//		the text line string. 'numBytesWritten'
+//		therefore includes one extra byte per line.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		If the number of bytes written to the destination
+//		is NOT equal to the number of bytes read from the
+//		source, an error will be returned.
+func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
+	endOfLineDelimiters *StringArrayDto,
+	numTextLinesPerBatch int,
+	autoFlushAndCloseOnExit bool,
+	errorPrefix interface{}) (
+	numOfLinesProcessed int,
+	numOfBatchesProcessed int,
+	numBytesRead int64,
+	numBytesWritten int64,
+	err error) {
+
+	if fBufReadWrite.lock == nil {
+		fBufReadWrite.lock = new(sync.Mutex)
+	}
+
+	fBufReadWrite.lock.Lock()
+
+	defer fBufReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "FileBufferReadWrite." +
+		"ReadWriteTextLines()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return numOfLinesProcessed,
+			numOfBatchesProcessed,
+			numBytesRead,
+			numBytesWritten,
+			err
+	}
+
+	if fBufReadWrite.reader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: The current instance of FileBufferReadWrite\n"+
+			"is invalid! The internal io.Reader object was never\n"+
+			"initialized. Call one of the 'New' methods or 'Setter'\n"+
+			"methods to create a valid instance of FileBufferReadWrite.\n",
+			ePrefix.String())
+
+		return numOfLinesProcessed,
+			numOfBatchesProcessed,
+			numBytesRead,
+			numBytesWritten,
+			err
+	}
+
+	if fBufReadWrite.writer == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: The current instance of FileBufferReadWrite\n"+
+			"is invalid! The internal io.Writer object was never\n"+
+			"initialized. Call one of the 'New' methods or 'Setter'\n"+
+			"methods to create a valid instance of FileBufferReadWrite.\n",
+			ePrefix.String())
+
+		return numOfLinesProcessed,
+			numOfBatchesProcessed,
+			numBytesRead,
+			numBytesWritten,
+			err
+	}
+
+	var err1, err2 error
+	var outputLinesArray StringArrayDto
+	var localNumOfLinesProcessed int
+	var localNumBytesRead int64
+	var localNumBytesWritten int
+	var readerLabel, writerLabel string
+	var isExit bool
+
+	var fBufReadWriteMicrobot = new(fileBufferReadWriteMicrobot)
+
+	if len(fBufReadWrite.readerFilePathName) == 0 {
+
+		readerLabel = "fBufReadWrite.IoReader"
+
+	} else {
+
+		readerLabel = fBufReadWrite.readerFilePathName
+	}
+
+	if len(fBufReadWrite.writerFilePathName) == 0 {
+
+		writerLabel = "fBufReadWrite.IoWriter"
+
+	} else {
+
+		writerLabel = fBufReadWrite.writerFilePathName
+	}
+
+	endOfLineDelimiters.SortByStrLengthLongestToShortest()
+
+	lenEndOfLineDelim := len(endOfLineDelimiters.StrArray)
+
+	scanner := bufio.NewScanner(fBufReadWrite.reader)
+
+	scanner.Split(func(data []byte, atEOF bool) (advance int, token []byte, err error) {
+
+		if atEOF && len(data) == 0 {
+			return 0, nil, nil
+		}
+
+		if atEOF {
+			return len(data), data, nil
+		}
+
+		for i := 0; i < lenEndOfLineDelim; i++ {
+
+			if j := strings.Index(string(data),
+				endOfLineDelimiters.StrArray[i]); j >= 0 {
+
+				return j + len(endOfLineDelimiters.StrArray[i]),
+					data[0:j],
+					nil
+			}
+
+		}
+
+		return 0, nil, nil
+	})
+
+	for {
+
+		numOfBatchesProcessed++
+
+		outputLinesArray.StrArray = make([]string, 0, numTextLinesPerBatch)
+
+		localNumOfLinesProcessed,
+			localNumBytesRead,
+			isExit,
+			err1 = new(fileHelperAtom).
+			readerScanMaxLines(
+				scanner,
+				"scanner",
+				numTextLinesPerBatch, // maxNumOfLines
+				&outputLinesArray,
+				ePrefix)
+
+		if err1 != nil {
+
+			err2 = fmt.Errorf("%v\n"+
+				"Error occurred while scanning read data!\n"+
+				"io.Reader= %v\n"+
+				"Batch Read No.= %v"+
+				"Error=\n%v\n",
+				funcName,
+				readerLabel,
+				numTextLinesPerBatch,
+				err1.Error())
+
+			err = errors.Join(err2)
+
+			err1 = fBufReadWriteMicrobot.
+				closeReaderWriter(
+					fBufReadWrite,
+					"readerScanMaxLines-error exit",
+					funcName)
+
+			err = errors.Join(err, err1)
+
+			return numOfLinesProcessed,
+				numOfBatchesProcessed,
+				numBytesRead,
+				numBytesWritten,
+				err
+
+		}
+
+		numOfLinesProcessed += localNumOfLinesProcessed
+
+		numBytesRead += localNumBytesRead
+
+		if isExit {
+			break
+		}
+
+		if localNumBytesRead > 0 {
+
+			localNumBytesWritten,
+				err1 = fBufReadWrite.writer.Write(
+				[]byte(
+					outputLinesArray.
+						ConcatenateStrings("\n")))
+
+			if err1 != nil {
+
+				err2 = fmt.Errorf("%v\n"+
+					"Error Writing Bytes To File!\n"+
+					"io.Writer= %v\n"+
+					"Write Error=\n%v\n",
+					funcName,
+					writerLabel,
+					err1.Error())
+
+				err = errors.Join(err2)
+
+				err1 = fBufReadWriteMicrobot.
+					closeReaderWriter(
+						fBufReadWrite,
+						"readerScanMaxLines-error exit",
+						funcName)
+
+				err = errors.Join(err, err1)
+
+				return numOfLinesProcessed,
+					numOfBatchesProcessed,
+					numBytesRead,
+					numBytesWritten,
+					err
+			}
+
+			numBytesWritten +=
+				int64(localNumBytesWritten)
+		}
+
+	}
+
+	if autoFlushAndCloseOnExit == true {
+
+		err = fBufReadWriteMicrobot.
+			closeReaderWriter(
+				fBufReadWrite,
+				"fBufReadWrite",
+				ePrefix.XCpy("Success Flush/Close-Readers&Writers"))
+
+	} else {
+
+		err = fBufReadWrite.writer.
+			Flush(ePrefix.XCpy("Success Flush fBufReadWrite.writer"))
+
+	}
+
+	return numOfLinesProcessed,
+		numOfBatchesProcessed,
+		numBytesRead,
+		numBytesWritten,
+		err
 }
 
 // Write
@@ -4479,14 +4944,61 @@ type fileBufferReadWriteMicrobot struct {
 //
 // # IMPORTANT
 //
-//	(1)	This method will effectively render the
+//	(1) This method will
+//
+//		(a)	Close the internal io.Reader object
+//			encapsulated by input parameter
+//			'fBufReadWrite'.
+//
+//		(b) Flush the internal io.Writer object
+//			encapsulated by input parameter
+//			'fBufReadWrite'. This means that any data
+//			remaining in the 'write' buffer will be
+//			written to the underlying io.Writer object.
+//
+//		(a)	Close the internal io.Writer object
+//			encapsulated by input parameter
+//			'fBufReadWrite'.
+//
+//	(2)	This method will effectively render the
 //		FileBufferReadWrite instance passed as
 //		'fBufReadWrite' invalid and unusable for any
 //		future 'read' and/or 'write' operations.
 //
-//	(2) After completing all 'read' and 'write'
+//	(3) After completing all 'read' and 'write'
 //		operations, users MUST perform these required
 //		clean-up tasks.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufReadWrite				*FileBufferReadWrite
+//
+//		A pointer to an instance of FileBufferWriter.
+//
+//		The internal io.Reader object encapsulated in
+//		this FileBufferReadWrite instance be closed and
+//		deleted.
+//
+//		The internal io.Writer object encapsulated in
+//		this FileBufferReadWrite instance be flushed,
+//		closed and deleted.
+//
+//		This method will effectively render the
+//		FileBufferReadWrite instance 'fBufReadWrite'
+//		invalid and unusable for any future 'read' and/or
+//		'write' operations.
+//
+//	fBufReadWriteLabel			string
+//
+//		The name or label associated with input parameter
+//		'fBufReadWrite' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufReadWrite" will
+//		be automatically applied.
 //
 //	errorPrefix					interface{}
 //
@@ -4611,7 +5123,6 @@ func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) closeReaderWriter(
 		return err
 	}
 
-	var errs []error
 	var err2 error
 	var fBuffReadWriteElectron = new(fileBufferReadWriteElectron)
 
@@ -4622,9 +5133,7 @@ func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) closeReaderWriter(
 			ePrefix)
 
 	if err2 != nil {
-		errs = append(
-			errs,
-			fmt.Errorf("%v", err2.Error()))
+		err = errors.Join(err2)
 	}
 
 	err2 = fBuffReadWriteElectron.
@@ -4634,15 +5143,8 @@ func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) closeReaderWriter(
 			ePrefix)
 
 	if err2 != nil {
-		errs = append(
-			errs,
-			fmt.Errorf("%v", err2.Error()))
-	}
 
-	if len(errs) > 0 {
-
-		err = new(StrMech).ConsolidateErrors(errs)
-
+		err = errors.Join(err, err2)
 	}
 
 	return err

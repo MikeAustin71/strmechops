@@ -2368,6 +2368,12 @@ func (fHelperAtom *fileHelperAtom) makeDirPerm(
 //		to the string array encapsulated by
 //		'outputLinesArray'.
 //
+//	isExit						bool
+//
+//		If this return parameter is set to 'true', it
+//		signals that the scanner has reached the
+//		end-of-file and there is no more data to process.
+//
 //	err							error
 //
 //		If this method completes successfully, the
@@ -2388,6 +2394,7 @@ func (fHelperAtom *fileHelperAtom) readerScanMaxLines(
 	errPrefDto *ePref.ErrPrefixDto) (
 	numOfLinesRead int,
 	numOfBytesRead int64,
+	isExit bool,
 	err error) {
 
 	if fHelperAtom.lock == nil {
@@ -2409,7 +2416,10 @@ func (fHelperAtom *fileHelperAtom) readerScanMaxLines(
 
 	if err != nil {
 
-		return numOfLinesRead, numOfBytesRead, err
+		return numOfLinesRead,
+			numOfBytesRead,
+			isExit,
+			err
 	}
 
 	if len(readerScannerLabel) == 0 {
@@ -2426,7 +2436,10 @@ func (fHelperAtom *fileHelperAtom) readerScanMaxLines(
 			readerScannerLabel,
 			readerScannerLabel)
 
-		return numOfLinesRead, numOfBytesRead, err
+		return numOfLinesRead,
+			numOfBytesRead,
+			isExit,
+			err
 	}
 
 	var textLine string
@@ -2458,7 +2471,10 @@ func (fHelperAtom *fileHelperAtom) readerScanMaxLines(
 					ePrefix.String(),
 					err2)
 
-				return numOfLinesRead, numOfBytesRead, err
+				return numOfLinesRead,
+					numOfBytesRead,
+					isExit,
+					err
 			}
 
 		}
@@ -2473,12 +2489,13 @@ func (fHelperAtom *fileHelperAtom) readerScanMaxLines(
 
 		if err2 == io.EOF || ok == false {
 
+			isExit = true
 			break
 		}
 
 	}
 
-	return numOfLinesRead, numOfBytesRead, err
+	return numOfLinesRead, numOfBytesRead, isExit, err
 }
 
 // removePathSeparatorFromEndOfPathString

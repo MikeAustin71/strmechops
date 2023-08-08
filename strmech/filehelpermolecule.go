@@ -1896,6 +1896,7 @@ func (fHelpMolecule *fileHelperMolecule) readerScanLines(
 
 	numOfLinesRead,
 		numOfBytesRead,
+		_,
 		err = new(fileHelperAtom).
 		readerScanMaxLines(
 			scanner,
