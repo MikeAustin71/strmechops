@@ -845,8 +845,7 @@ func (fBufReadWrite *FileBufferReadWrite) IsValidInstanceError(
 		return err
 	}
 
-	_,
-		err = new(fileBufferReadWriteElectron).
+	err = new(fileBufferReadWriteElectron).
 		isFileBufferReadWriteValid(
 			fBufReadWrite,
 			"current",
@@ -2125,29 +2124,11 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 		return totalBytesRead, totalBytesWritten, err
 	}
 
-	if fBufReadWrite.reader == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: The current instance of FileBufferReadWrite\n"+
-			"is invalid! The internal io.Reader object was never\n"+
-			"initialized. Call one of the 'New' methods or 'Setter'\n"+
-			"methods to create a valid instance of FileBufferReadWrite.\n",
-			ePrefix.String())
-
-		return totalBytesRead, totalBytesWritten, err
-	}
-
-	if fBufReadWrite.writer == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: The current instance of FileBufferReadWrite\n"+
-			"is invalid! The internal io.Writer object was never\n"+
-			"initialized. Call one of the 'New' methods or 'Setter'\n"+
-			"methods to create a valid instance of FileBufferReadWrite.\n",
-			ePrefix.String())
-
-		return totalBytesRead, totalBytesWritten, err
-	}
+	err = new(fileBufferReadWriteElectron).
+		isFileBufferReadWriteValid(
+			fBufReadWrite,
+			"current",
+			ePrefix.XCpy("fBufReadWrite"))
 
 	var numOfBytesRead, numOfBytesWritten, cycleCount int
 	var readErr, err2 error
@@ -8138,9 +8119,7 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) flushAndCloseWriter(
 func (fBuffReadWriteElectron *fileBufferReadWriteElectron) isFileBufferReadWriteValid(
 	fBufReadWrite *FileBufferReadWrite,
 	fBufReadWriteLabel string,
-	errPrefDto *ePref.ErrPrefixDto) (
-	isValid bool,
-	err error) {
+	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if fBuffReadWriteElectron.lock == nil {
 		fBuffReadWriteElectron.lock = new(sync.Mutex)
@@ -8152,6 +8131,8 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) isFileBufferReadWrite
 
 	var ePrefix *ePref.ErrPrefixDto
 
+	var err error
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
@@ -8161,12 +8142,27 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) isFileBufferReadWrite
 
 	if err != nil {
 
-		return isValid, err
+		return err
 	}
 
 	if len(fBufReadWriteLabel) == 0 {
 
 		fBufReadWriteLabel = "fBufReadWrite"
+	}
+
+	if fBufReadWrite.reader == nil &&
+		fBufReadWrite.writer == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: The %v instance of FileBufferReadWrite\n"+
+			"is invalid! The internal io.Reader and io.Writer objects\n"+
+			"were never initialized. Call one of the 'New' methods or\n"+
+			"'Setter' methods to create a valid instance of\n"+
+			"FileBufferReadWrite.\n",
+			ePrefix.String(),
+			fBufReadWriteLabel)
+
+		return err
 	}
 
 	if fBufReadWrite.reader == nil {
@@ -8179,13 +8175,12 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) isFileBufferReadWrite
 			ePrefix.String(),
 			fBufReadWriteLabel)
 
+		return err
 	}
-
-	var err2 error
 
 	if fBufReadWrite.writer == nil {
 
-		err2 = fmt.Errorf("%v\n"+
+		err = fmt.Errorf("%v\n"+
 			"ERROR: The %v instance of FileBufferReadWrite\n"+
 			"is invalid! The internal io.Writer object was never\n"+
 			"initialized. Call one of the 'New' methods or 'Setter'\n"+
@@ -8193,13 +8188,7 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) isFileBufferReadWrite
 			ePrefix.String(),
 			fBufReadWriteLabel)
 
-		err = errors.Join(err, err2)
 	}
 
-	if err == nil {
-
-		isValid = true
-	}
-
-	return isValid, err
+	return err
 }
