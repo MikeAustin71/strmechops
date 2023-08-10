@@ -16,7 +16,7 @@ type MainFileReadWriteTest010 struct {
 func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufferReader03() {
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"MainFileReadWriteTest010.ReadLines02()",
+		"MainFileReadWriteTest010.FileBufferReader03()",
 		"")
 
 	breakStr := " " + strings.Repeat("=", 50)
@@ -318,6 +318,166 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite01() {
 	// --------------------------------------------
 	// Successful Completion
 	// --------------------------------------------
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+}
+
+// FileBuffReadWrite02
+//
+// Reads text lines
+func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02() {
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		"MainFileReadWriteTest010.FileBuffReadWrite02()",
+		"")
+
+	breakStr := " " + strings.Repeat("=", 50)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n\n\n")
+
+	var err error
+	var targetReadFile string
+	var exampleUtil = ExampleUtility{}
+
+	targetReadFile,
+		err = exampleUtil.GetCompositeDirectory(
+		"fileOpsTest\\filesForTest\\textFilesForTest\\splitFunc.txt",
+		ePrefix.XCpy("targetReadFile"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var targetWriteFile string
+
+	targetWriteFile,
+		err = exampleUtil.GetCompositeDirectory(
+		"fileOpsTest\\trashDirectory\\FileBuffReadWrite02.txt",
+		ePrefix.XCpy("targetReadFile"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var newFBuffReadWrite strmech.FileBufferReadWrite
+	var readerFileInfoPlus, writerFileInfoPlus strmech.FileInfoPlus
+
+	readerFileInfoPlus,
+		writerFileInfoPlus,
+		newFBuffReadWrite,
+		err = new(strmech.FileBufferReadWrite).
+		NewPathFileNames(
+			targetReadFile,
+			false, // openReadFileReadWrite,
+			512,   // readerBuffSize
+			targetWriteFile,
+			false, //openWriteFileReadWrite
+			512,   // writerBuffSize
+			true,  // truncateExistingWriteFile
+			ePrefix.XCpy("targetReadFile"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("\nStats From NewPathFileNames\n"+
+		"Reader File Size: %v\n"+
+		"Writer File Size: %v\n\n",
+		readerFileInfoPlus.Size(),
+		writerFileInfoPlus.Size())
+
+	var numOfBytesWritten, numOfBytesRead int64
+	var numOfLinesProcessed, numOfBatchesProcessed int
+	var endOfLineDelimiters strmech.StringArrayDto
+
+	endOfLineDelimiters.AddManyStrings(
+		"\r",
+		"\r\r",
+		"[EOL]")
+
+	linesPerBatch := 15
+
+	numOfLinesProcessed,
+		numOfBatchesProcessed,
+		numOfBytesRead,
+		numOfBytesWritten,
+		err = newFBuffReadWrite.
+		ReadWriteTextLines(
+			&endOfLineDelimiters,
+			linesPerBatch, // numTextLinesPerBatch
+			true,          // autoFlushAndCloseOnExit
+			ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("Stats From newFBuffReadWrite.ReadWriteTextLines()\n"+
+		"  Number Of Lines Processed: %v\n"+
+		"Number Of Batches Processed: %v\n"+
+		"       Lines Per Batch Spec: %v\n"+
+		"       Number Of Bytes Read: %v\n"+
+		"    Number Of Bytes Written: %v\n\n",
+		numOfLinesProcessed,
+		numOfBatchesProcessed,
+		linesPerBatch,
+		numOfBytesRead,
+		numOfBytesWritten)
+
+	fHelper := new(strmech.FileHelper)
+
+	var doesFileExist bool
+
+	doesFileExist,
+		writerFileInfoPlus,
+		err = fHelper.
+		DoesFileInfoPlusExist(
+			targetWriteFile,
+			ePrefix.XCpy("targetWriteFile"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("Write File Stats\n"+
+		"   Write File Does Exist: %v\n"+
+		"Write File Size in Bytes: %v\n"+
+		"         Write File Name: %v\n\n",
+		doesFileExist,
+		writerFileInfoPlus.Size(),
+		writerFileInfoPlus.Name())
+
+	err = newFBuffReadWrite.IsValidInstanceError(
+		ePrefix)
+
+	fmt.Printf("newFBuffReadWrite Status\n"+
+		"Error= \n%v\n\n",
+		err.Error())
+
+	// ------ Trailing Marquee
+
 	fmt.Printf("\n\n" + breakStr + "\n")
 
 	fmt.Printf("\n Successful Completion!\n"+

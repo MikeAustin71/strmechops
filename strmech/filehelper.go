@@ -12472,8 +12472,8 @@ func (fh *FileHelper) ReadLines(
 
 // ReadTextLines
 //
-// Reads a file and returns each line in a target file as
-// an element of a string array.
+// Reads a target file and returns each line in that
+// target file as an element of a string array.
 //
 // The end of line delimiters may be either a new line
 // character ('\n') or a combination of carriage return

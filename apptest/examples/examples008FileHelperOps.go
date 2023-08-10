@@ -415,7 +415,7 @@ func (fileHlprOpsTest008 MainFileHelperOpsTest008) ReadTextLines01() {
 
 	targetOutputFile,
 		err = exampleUtil.GetCompositeDirectory(
-		"fileOpsTest\\trashDirectory\\testOutput.txt",
+		"fileOpsTest\\trashDirectory\\ReadTextLines01.txt",
 		ePrefix.XCpy("readFileAddOn"))
 
 	if err != nil {

@@ -2487,7 +2487,13 @@ func (fHelperAtom *fileHelperAtom) readerScanMaxLines(
 
 		numOfLinesRead++
 
-		if err2 == io.EOF || ok == false {
+		if err2 == io.EOF {
+
+			isExit = true
+			break
+		}
+
+		if ok == false {
 
 			isExit = true
 			break

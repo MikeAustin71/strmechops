@@ -2690,7 +2690,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 				err1 = fBufReadWrite.writer.Write(
 				[]byte(
 					outputLinesArray.
-						ConcatenateStrings("\n")))
+						ConcatenateStrings("")))
 
 			if err1 != nil {
 
@@ -8154,11 +8154,12 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) isFileBufferReadWrite
 		fBufReadWrite.writer == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: The %v instance of FileBufferReadWrite\n"+
-			"is invalid! The internal io.Reader and io.Writer objects\n"+
-			"were never initialized. Call one of the 'New' methods or\n"+
-			"'Setter' methods to create a valid instance of\n"+
-			"FileBufferReadWrite.\n",
+			" -----------------------------------------------------------\n"+
+			" ERROR: The %v instance of FileBufferReadWrite\n"+
+			" is invalid! The internal io.Reader and io.Writer objects\n"+
+			" were never initialized. Call one of the 'New' methods or\n"+
+			" 'Setter' methods to create a valid instance of\n"+
+			" FileBufferReadWrite.\n",
 			ePrefix.String(),
 			fBufReadWriteLabel)
 
@@ -8168,10 +8169,11 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) isFileBufferReadWrite
 	if fBufReadWrite.reader == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: The %v instance of FileBufferReadWrite\n"+
-			"is invalid! The internal io.Reader object was never\n"+
-			"initialized. Call one of the 'New' methods or 'Setter'\n"+
-			"methods to create a valid instance of FileBufferReadWrite.\n",
+			" -----------------------------------------------------------\n"+
+			" ERROR: The %v instance of FileBufferReadWrite\n"+
+			" is invalid! The internal io.Reader object was never\n"+
+			" initialized. Call one of the 'New' methods or 'Setter'\n"+
+			" methods to create a valid instance of FileBufferReadWrite.\n",
 			ePrefix.String(),
 			fBufReadWriteLabel)
 
@@ -8181,10 +8183,11 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) isFileBufferReadWrite
 	if fBufReadWrite.writer == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: The %v instance of FileBufferReadWrite\n"+
-			"is invalid! The internal io.Writer object was never\n"+
-			"initialized. Call one of the 'New' methods or 'Setter'\n"+
-			"methods to create a valid instance of FileBufferReadWrite.\n",
+			" -----------------------------------------------------------\n"+
+			" ERROR: The %v instance of FileBufferReadWrite\n"+
+			" is invalid! The internal io.Writer object was never\n"+
+			" initialized. Call one of the 'New' methods or 'Setter'\n"+
+			" methods to create a valid instance of FileBufferReadWrite.\n",
 			ePrefix.String(),
 			fBufReadWriteLabel)
 
