@@ -2358,8 +2358,13 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //		usage. The smaller the value for
 //		'numTextLinesPerBatch', the smaller the memory
 //		footprint used in the read/write operation. Of
-//		course, smaller 'numTextLinesPerBatch' values means
-//		that more processing time may be required.
+//		course, smaller 'numTextLinesPerBatch' values
+//		means that more processing time may be required.
+//
+//		If the value of 'numTextLinesPerBatch' is less
+//		than one (+1), this parameter will
+//		be automatically defaulted to 8,192 (lines per
+//		batch).
 //
 //	autoFlushAndCloseOnExit		bool
 //
@@ -2634,6 +2639,11 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 
 		return 0, nil, nil
 	})
+
+	if numTextLinesPerBatch < 0 {
+
+		numTextLinesPerBatch = 8192
+	}
 
 	for {
 

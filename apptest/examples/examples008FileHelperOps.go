@@ -457,12 +457,25 @@ func (fileHlprOpsTest008 MainFileHelperOpsTest008) ReadTextLines01() {
 
 	var numBytesWritten int64
 
+	var numOfLinesToWrite int
+	var numOfBytesToWrite int64
+	strArrayDto.AppendSuffix("\n")
+
+	numOfLinesToWrite = strArrayDto.GetStringArrayLength()
+	numOfBytesToWrite = strArrayDto.GetTotalBytesInStrings()
+
+	fmt.Printf("strArrayDto Stats Before File Write\n"+
+		"Number of Lines To Write: %v\n"+
+		"Number of Bytes To Write: %v\n\n",
+		numOfLinesToWrite,
+		numOfBytesToWrite)
+
 	numBytesWritten,
 		err = fHelper.WriteStrOpenClose(
 		targetOutputFile,
 		true,
 		true,
-		strArrayDto.ConcatenateStrings("\n"),
+		strArrayDto.ConcatenateStrings(""),
 		ePrefix.XCpy("targetOutputFile<-"))
 
 	if err != nil {

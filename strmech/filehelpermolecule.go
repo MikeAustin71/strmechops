@@ -2,6 +2,7 @@ package strmech
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
@@ -1904,6 +1905,20 @@ func (fHelpMolecule *fileHelperMolecule) readerScanLines(
 			-1, // maxNumOfLines
 			outputLinesArray,
 			ePrefix)
+
+	lastLineIdx :=
+		outputLinesArray.GetStringArrayLength() - 1
+
+	if len(outputLinesArray.StrArray[lastLineIdx]) == 0 {
+		var err2 error
+
+		err2 = outputLinesArray.DeleteAtIndex(
+			lastLineIdx,
+			ePrefix)
+
+		err = errors.Join(err, err2)
+
+	}
 
 	return numOfLinesRead,
 		numOfBytesRead,
