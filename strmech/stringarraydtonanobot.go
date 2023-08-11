@@ -10,6 +10,79 @@ type stringArrayDtoNanobot struct {
 	lock *sync.Mutex
 }
 
+// concatenateStrArray
+//
+// Returns a single string made up of concatenated string
+// array elements taken from the string array
+// encapsulated from the instance of StringArrayDto
+// passed as input parameter 'strArray'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	insertStr					string
+//
+//		If 'insertStr' has a string length greater than
+//		zero, it will be appended to the end of each
+//		string extracted for concatenation from the
+//		string array encapsulated by the current
+//		StringArrayDto instance.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		The strings contained in the internal string
+//		array encapsulated by StringArrayDto input
+//		parameter 'strArray' will be concatenated
+//		together and returned as a single string
+//		through this parameter.
+func (strArrayDtoNanobot *stringArrayDtoNanobot) concatenateStrArray(
+	strArray *StringArrayDto,
+	insertStr string) string {
+
+	if strArrayDtoNanobot.lock == nil {
+		strArrayDtoNanobot.lock = new(sync.Mutex)
+	}
+
+	strArrayDtoNanobot.lock.Lock()
+
+	defer strArrayDtoNanobot.lock.Unlock()
+
+	if strArray == nil {
+		return ""
+	}
+
+	lenStrArray := len(strArray.StrArray)
+
+	if lenStrArray == 0 {
+		return ""
+	}
+
+	lenInsertStr := len(insertStr)
+
+	conCatStr := ""
+
+	for i := 0; i < lenStrArray; i++ {
+
+		if len(strArray.StrArray[i]) == 0 &&
+			lenInsertStr == 0 {
+			continue
+		}
+
+		conCatStr += strArray.StrArray[i]
+
+		if lenInsertStr > 0 {
+			conCatStr += insertStr
+		}
+	}
+
+	return conCatStr
+}
+
 // copyStringArrayDto - Copies all data from input parameter
 // 'sourceStrArray' to input parameter 'destinationStrArray'.
 //

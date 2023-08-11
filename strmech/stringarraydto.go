@@ -441,7 +441,7 @@ func (strArrayDto *StringArrayDto) AppendSuffix(
 //		If 'insertStr' has a string length greater than
 //		zero, it will be appended to the end of each
 //		string extracted for concatenation from the
-//		internal string array maintained by the current
+//		string array encapsulated by the current
 //		StringArrayDto instance.
 //
 // ----------------------------------------------------------------
@@ -466,25 +466,10 @@ func (strArrayDto *StringArrayDto) ConcatenateStrings(
 
 	defer strArrayDto.lock.Unlock()
 
-	lenInsertStr := len(insertStr)
-
-	conCatStr := ""
-
-	for i := 0; i < len(strArrayDto.StrArray); i++ {
-
-		if len(strArrayDto.StrArray[i]) == 0 &&
-			lenInsertStr == 0 {
-			continue
-		}
-
-		conCatStr += strArrayDto.StrArray[i]
-
-		if lenInsertStr > 0 {
-			conCatStr += insertStr
-		}
-	}
-
-	return conCatStr
+	return new(stringArrayDtoNanobot).
+		concatenateStrArray(
+			strArrayDto,
+			insertStr)
 }
 
 // ConvertToNonPrintableChars
@@ -1592,6 +1577,187 @@ func (strArrayDto *StringArrayDto) GetStringArray() []string {
 	}
 
 	return strArray
+}
+
+// GetReader
+//
+// Returns an instance of strings.Reader using a string
+// made up of concatenated string array elements from the
+// current instance of StringArrayDto.
+//
+// The returned instance of strings.Reader implements the
+// io.Reader and io.WriterTo interfaces. Several other
+// useful interfaces are also implemented by
+// strings.Reader.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	strings.Reader
+//		https://pkg.go.dev/strings#Reader
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	insertStr					string
+//
+//		If 'insertStr' has a string length greater than
+//		zero, it will be appended to the end of each
+//		string extracted for concatenation from the
+//		string array encapsulated by the current
+//		StringArrayDto instance.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	*strings.Reader
+//
+//		If this method completes successfully, this
+//		parameter will return a pointer to an instance
+//		of strings.Reader.
+//
+//		strings.Reader implements the io.Reader and
+//		io.WriteTo interfaces, among others. See the
+//		'Reference' section above for more information.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (strArrayDto *StringArrayDto) GetReader(
+	insertStr string,
+	errorPrefix interface{}) (
+	*strings.Reader,
+	error) {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var strReader *strings.Reader
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StringArrayDto."+
+			"GetReader()",
+		"")
+
+	if err != nil {
+
+		return strReader, err
+	}
+
+	if len(strArrayDto.StrArray) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"-------------------------------\n"+
+			"Error: Length Of String Array is zero ('0').\n"+
+			"The String Array is empty.\n",
+			ePrefix.String())
+
+		return strReader, err
+	}
+
+	var conCatStr string
+
+	conCatStr = new(stringArrayDtoNanobot).
+		concatenateStrArray(
+			strArrayDto,
+			insertStr)
+
+	if len(conCatStr) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"-------------------------------\n"+
+			"Error: All of the String Array elements\n"+
+			"had string lengths of zero ('0'). This\n"+
+			"means that every string in the string\n"+
+			"array is an empty string.\n",
+			ePrefix.String())
+
+		return strReader, err
+	}
+
+	strReader = strings.NewReader(conCatStr)
+
+	return strReader, err
 }
 
 // GetRuneArrayCollection - Returns an instance of
