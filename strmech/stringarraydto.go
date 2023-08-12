@@ -8,9 +8,32 @@ import (
 	"sync"
 )
 
-// StringArrayDto - The String Array Data Transfer Object is
-// designed to support the creation, management and transfer
-// of a string array.
+// StringArrayDto
+//
+// Type String Array Data Transfer is designed to support
+// the creation, management and transfer of a string
+// array.
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	(1) This Type includes a method which implements the
+//		io.Writer interface. See method:
+//
+//				StringArrayDto.Write()
+//
+//	(2)	To acquire an io.Reader for the current instance
+//		of StringArrayDto, call method:
+//
+//				StringArrayDto.GetReader()
+//
+//	(3) This Type includes methods designed to sort the
+//		elements in the internal string array:
+//
+//				StringArrayDto.SortAlphabetically()
+//				StringArrayDto.SortAlphabeticalReverseOrder()
+//				StringArrayDto.SortByStrLengthLongestToShortest()
+//				StringArrayDto.SortByStrLengthShortestToLongest()
 type StringArrayDto struct {
 	StrArray []string
 
@@ -3985,4 +4008,78 @@ func (strArrayDto *StringArrayDto) TrimSuffix(
 
 	}
 
+}
+
+// Write
+//
+// This method implements the io.Writer interface.
+//
+// The 'Write' method receives a byte array (p []byte)
+// as an input parameter and proceeds to convert these
+// bytes to a string which is then appended to the end
+// of the internal string array encapsulated by the
+// current StringArrayDto instance. Therefore, each call
+// to the 'Write' method effectively adds one new string
+// array element to the end of the internal string array.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	p							[]byte
+//
+//		The bytes contained in this byte array will be
+//		converted to a string and appended as a new
+//		string array element to the end of the string
+//		array encapsulated by the current instance of
+//		StringArrayDto.
+//
+//		If 'p' is submitted as a zero length byte array,
+//		no string will be added to the string array, no
+//		error will be returned and return parameter n will
+//		be set to zero.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	n
+//
+//		This parameter returns the number of bytes
+//		written to the new string which was appended to
+//		the end of the string array encapsulated by the
+//		current StringArrayDto instance.
+//
+//	error
+//
+//		Due to the structure of a StringArrayDto
+//		instance, no error will ever be returned. This
+//		error return parameter is provided in order to
+//		conform to the requirements of the io.Writer
+//		interface.
+func (strArrayDto *StringArrayDto) Write(
+	p []byte) (
+	n int,
+	err error) {
+
+	if strArrayDto.lock == nil {
+		strArrayDto.lock = new(sync.Mutex)
+	}
+
+	strArrayDto.lock.Lock()
+
+	defer strArrayDto.lock.Unlock()
+
+	lenByteArray := len(p)
+
+	if lenByteArray == 0 {
+
+		return 0, err
+	}
+
+	strArrayDto.StrArray =
+		append(strArrayDto.StrArray,
+			string(p[:]))
+
+	return lenByteArray, err
 }
