@@ -12477,7 +12477,10 @@ func (fh *FileHelper) ReadLines(
 //
 // The end of line delimiters may be either a new line
 // character ('\n') or a combination of carriage return
-// and new line characters ('\r\n').
+// and new line characters ('\r\n'). If a line read from
+// the file identified by input parameter 'pathFileName'
+// contains either one of these end-of-line delimiters,
+// that line will be parsed as a separate line of text.
 //
 // This method is designed to open a target file, read
 // the entire contents of that file, separate the file

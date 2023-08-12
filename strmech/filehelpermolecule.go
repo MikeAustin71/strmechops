@@ -1850,10 +1850,12 @@ func (fHelpMolecule *fileHelperMolecule) readerScanLines(
 		readerLabel = "reader"
 	}
 
+	var fHelperAtom = new(fileHelperAtom)
+
 	var textLineScanner *bufio.Scanner
 
 	textLineScanner,
-		err = new(fileHelperAtom).
+		err = fHelperAtom.
 		getStdTextLineScanner(
 			reader,
 			readerLabel,
@@ -1870,7 +1872,7 @@ func (fHelpMolecule *fileHelperMolecule) readerScanLines(
 	numOfLinesRead,
 		numOfBytesRead,
 		_,
-		err = new(fileHelperAtom).
+		err = fHelperAtom.
 		readerScanMaxLines(
 			textLineScanner,
 			readerLabel+"-scanner",

@@ -472,9 +472,18 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02() {
 	err = newFBuffReadWrite.IsValidInstanceError(
 		ePrefix)
 
-	fmt.Printf("newFBuffReadWrite Status\n"+
-		"Error= \n%v\n\n",
-		err.Error())
+	if err == nil {
+
+		fmt.Printf("%v\n"+
+			"newFBuffReadWrite Status Error\n"+
+			"It was expected that 'newFBuffReadWrite' would\n"+
+			"be closed and invalid. However, after being\n"+
+			"closed, 'newFBuffReadWrite' is showing as valid.\n"+
+			"This is an error condition!\n",
+			ePrefix)
+
+		return
+	}
 
 	// ------ Trailing Marquee
 
@@ -633,9 +642,67 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 	err = newFBuffReadWrite.IsValidInstanceError(
 		ePrefix)
 
-	fmt.Printf("newFBuffReadWrite Status\n"+
-		"Error= \n%v\n\n",
-		err.Error())
+	if err == nil {
+
+		fmt.Printf("%v\n"+
+			"newFBuffReadWrite Status Error\n"+
+			"It was expected that 'newFBuffReadWrite' would\n"+
+			"be closed and invalid. However, after being\n"+
+			"closed, 'newFBuffReadWrite' is showing as valid.\n"+
+			"This is an error condition!\n",
+			ePrefix)
+
+		return
+	}
+
+	var reasonFilesNotEqual string
+	var filesAreEqual bool
+	/*
+		var targetOutputFile1 string
+
+		targetOutputFile1,
+			err = exampleUtil.GetCompositeDirectory(
+			"\\fileOpsTest\\trashDirectory\\ReadTextLines01.txt",
+			ePrefix)
+
+		if err != nil {
+			fmt.Printf("\n%v\n\n",
+				err.Error())
+			return
+		}
+
+		filesAreEqual,
+			reasonFilesNotEqual,
+			err = fHelper.CompareFiles(
+			targetOutputFile1,
+			targetWriteFile,
+			ePrefix.XCpy("Target Files Comparison"))
+
+		if err != nil {
+
+			fmt.Printf("%v\n"+
+				"Error Return from fHelper.CompareFiles()\n"+
+				"targetOutputFile1= %v\n"+
+				"  targetWriteFile= %v\n"+
+				"Reason: %v\n",
+				ePrefix.String(),
+				targetOutputFile1,
+				targetWriteFile,
+				reasonFilesNotEqual)
+
+			return
+		}
+	*/
+	if !filesAreEqual {
+
+		fmt.Printf("%v\n"+
+			"Error: Read and Write Files are NOT equal!\n"+
+			"Reason: %v\n",
+			ePrefix.String(),
+			reasonFilesNotEqual)
+
+		return
+	}
 
 	// ------ Trailing Marquee
 

@@ -6,7 +6,6 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
-	"strings"
 	"sync"
 )
 
@@ -2609,36 +2608,17 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 		writerLabel = fBufReadWrite.writerFilePathName
 	}
 
-	endOfLineDelimiters.SortByStrLengthLongestToShortest()
+	var fHelperAtom = new(fileHelperAtom)
 
-	lenEndOfLineDelim := len(endOfLineDelimiters.StrArray)
+	var textLineScanner *bufio.Scanner
 
-	scanner := bufio.NewScanner(fBufReadWrite.reader)
-
-	scanner.Split(func(data []byte, atEOF bool) (advance int, token []byte, err error) {
-
-		if atEOF && len(data) == 0 {
-			return 0, nil, nil
-		}
-
-		if atEOF {
-			return len(data), data, nil
-		}
-
-		for i := 0; i < lenEndOfLineDelim; i++ {
-
-			if j := strings.Index(string(data),
-				endOfLineDelimiters.StrArray[i]); j >= 0 {
-
-				return j + len(endOfLineDelimiters.StrArray[i]),
-					data[0:j],
-					nil
-			}
-
-		}
-
-		return 0, nil, nil
-	})
+	textLineScanner,
+		err = fHelperAtom.
+		getStdTextLineScanner(
+			fBufReadWrite.reader,
+			"fBufReadWrite.reader",
+			endOfLineDelimiters,
+			ePrefix.XCpy("textLineScanner<-"))
 
 	if numTextLinesPerBatch < 0 {
 
@@ -2656,8 +2636,8 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 			isExit,
 			err1 = new(fileHelperAtom).
 			readerScanMaxLines(
-				scanner,
-				"scanner",
+				textLineScanner,
+				"textLineScanner",
 				numTextLinesPerBatch, // maxNumOfLines
 				&outputLinesArray,
 				ePrefix)
