@@ -1918,6 +1918,188 @@ func (fHelperAtom *fileHelperAtom) getPathSeparatorIndexesInPathStr(
 	return slashIdxs, err
 }
 
+// getStdTextLineScanner
+//
+// Receives an io.Reader instances and uses it to create
+// and return a standard text line scanner. The
+// end-of-line delimiters used in generating this scanner
+// are provided by a user input parameter
+// 'endOfLineDelimiters'.
+//
+// 'endOfLineDelimiters' encapsulates a string array
+// allowing users to customize the end-of-line delimiters
+// used in defining text lines for the returned text line
+// scanner.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/io#Reader
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	reader						io.Reader
+//
+//		An active and fully operational instance of
+//		io.Reader. For more information, see the
+//		'Reference' section for io.Reader above.
+//
+//		Data will be read from this io.Reader object
+//		and parsed as lines of text to be stored in
+//		the string array encapsulated by input
+//		parameter 'outputLinesArray'.
+//
+//		If this parameter is 'nil', an error will be
+//		returned.
+//
+//	readerLabel					string
+//
+//		The name or label associated with input parameter
+//		'reader' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "reader" will be
+//		automatically applied.
+//
+//	endOfLineDelimiters			*StringArrayDto
+//
+//		A pointer to an instance of StringArrayDto.
+//		'endOfLineDelimiters' encapsulates a string
+//		array which contains the end-of-line delimiters
+//		which will be used to identify and separate
+//		individual lines of text.
+//
+//		Users have the flexibility to specify multiple
+//		end-of-line delimiters for used in parsing text
+//		lines extracted from the io.Reader object.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	textLineScanner				*bufio.Scanner
+//
+//		If this method completes successfully, this
+//		parameter will return a pointer to a
+//		bufio.Scanner. This scanner is designed to
+//		parse and extract text lines from a string.
+//		The end-of-line delimiters for this parsing
+//		operation were provided by input parameter
+//		'endOfLineDelimiters'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fHelperAtom *fileHelperAtom) getStdTextLineScanner(
+	reader io.Reader,
+	readerLabel string,
+	endOfLineDelimiters *StringArrayDto,
+	errPrefDto *ePref.ErrPrefixDto) (
+	textLineScanner *bufio.Scanner,
+	err error) {
+
+	if fHelperAtom.lock == nil {
+		fHelperAtom.lock = new(sync.Mutex)
+	}
+
+	fHelperAtom.lock.Lock()
+
+	defer fHelperAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileHelperAtom."+
+			"readerScanMaxLines()",
+		"")
+
+	if err != nil {
+
+		return textLineScanner, err
+	}
+
+	if len(readerLabel) == 0 {
+
+		readerLabel = "reader"
+	}
+
+	if reader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is 'nil'.\n",
+			ePrefix.String(),
+			readerLabel,
+			readerLabel)
+
+		return textLineScanner, err
+	}
+
+	endOfLineDelimiters.SortByStrLengthLongestToShortest()
+
+	lenEndOfLineDelim := len(endOfLineDelimiters.StrArray)
+
+	textLineScanner = bufio.NewScanner(reader)
+
+	textLineScanner.
+		Split(func(data []byte, atEOF bool) (advance int, token []byte, err error) {
+
+			if atEOF && len(data) == 0 {
+				return 0, nil, nil
+			}
+
+			if atEOF {
+				return len(data), data, nil
+			}
+
+			for i := 0; i < lenEndOfLineDelim; i++ {
+
+				if j := strings.Index(string(data),
+					endOfLineDelimiters.StrArray[i]); j >= 0 {
+
+					return j + len(endOfLineDelimiters.StrArray[i]),
+						data[0:j],
+						nil
+				}
+
+			}
+
+			return 0, nil, nil
+		})
+
+	return textLineScanner, err
+}
+
 // getVolumeName
 //
 // Returns the volume name of associated with a given

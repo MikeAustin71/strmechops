@@ -1850,57 +1850,29 @@ func (fHelpMolecule *fileHelperMolecule) readerScanLines(
 		readerLabel = "reader"
 	}
 
-	if reader == nil {
+	var textLineScanner *bufio.Scanner
 
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter '%v' is invalid!\n"+
-			"'%v' is 'nil'.\n",
-			ePrefix.String(),
+	textLineScanner,
+		err = new(fileHelperAtom).
+		getStdTextLineScanner(
+			reader,
 			readerLabel,
-			readerLabel)
+			endOfLineDelimiters,
+			ePrefix.XCpy("textLineScanner"))
+
+	if err != nil {
 
 		return numOfLinesRead,
 			numOfBytesRead,
 			err
 	}
 
-	endOfLineDelimiters.SortByStrLengthLongestToShortest()
-
-	lenEndOfLineDelim := len(endOfLineDelimiters.StrArray)
-
-	scanner := bufio.NewScanner(reader)
-
-	scanner.Split(func(data []byte, atEOF bool) (advance int, token []byte, err error) {
-
-		if atEOF && len(data) == 0 {
-			return 0, nil, nil
-		}
-
-		if atEOF {
-			return len(data), data, nil
-		}
-
-		for i := 0; i < lenEndOfLineDelim; i++ {
-
-			if j := strings.Index(string(data),
-				endOfLineDelimiters.StrArray[i]); j >= 0 {
-
-				return j + len(endOfLineDelimiters.StrArray[i]),
-					data[0:j],
-					nil
-			}
-
-		}
-
-		return 0, nil, nil
-	})
-
 	numOfLinesRead,
 		numOfBytesRead,
 		_,
 		err = new(fileHelperAtom).
 		readerScanMaxLines(
-			scanner,
+			textLineScanner,
 			readerLabel+"-scanner",
 			-1, // maxNumOfLines
 			outputLinesArray,
