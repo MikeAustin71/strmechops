@@ -440,8 +440,8 @@ func (strArrayDto *StringArrayDto) AppendSuffix(
 //
 //		If 'insertStr' has a string length greater than
 //		zero, it will be appended to the end of each
-//		string extracted for concatenation from the
-//		string array encapsulated by the current
+//		string array element extracted for concatenation
+//		from the string array encapsulated by the current
 //		StringArrayDto instance.
 //
 // ----------------------------------------------------------------
@@ -1605,8 +1605,8 @@ func (strArrayDto *StringArrayDto) GetStringArray() []string {
 //
 //		If 'insertStr' has a string length greater than
 //		zero, it will be appended to the end of each
-//		string extracted for concatenation from the
-//		string array encapsulated by the current
+//		string array element extracted for concatenation
+//		from the string array encapsulated by the current
 //		StringArrayDto instance.
 //
 //	errorPrefix					interface{}

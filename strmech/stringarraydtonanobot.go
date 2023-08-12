@@ -19,14 +19,26 @@ type stringArrayDtoNanobot struct {
 //
 // ----------------------------------------------------------------
 //
+// # BE ADVISED
+//
+//	(1)	This method correctly process string array
+//		element members with zero length strings.
+//
+//	(2)	This method is useful when adding new line
+//		characters ('\n') to the end of string array
+//		member strings without modifying the original
+//		string array.
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	insertStr					string
 //
 //		If 'insertStr' has a string length greater than
 //		zero, it will be appended to the end of each
-//		string extracted for concatenation from the
-//		string array encapsulated by the current
+//		string array element extracted for concatenation
+//		from the string array encapsulated by the current
 //		StringArrayDto instance.
 //
 // ----------------------------------------------------------------
