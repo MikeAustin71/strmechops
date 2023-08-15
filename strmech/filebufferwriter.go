@@ -13,13 +13,15 @@ import (
 // FileBufferWriter
 //
 // Type FileBufferWriter is a wrapper for bufio.Writer.
+// It is designed to write data to a destination
+// io.Writer object using a buffer.
 //
-// This structure and the associated methods are designed
-// to facilitate data 'write' operations. The most common
-// destination for these 'write' operations is assumed to
-// be a data file residing on an attached storage drive.
-// However, any object implementing the io.Writer
-// interface may be used as a 'write' destination.
+// This structure and the associated methods facilitate
+// data 'write' operations. The most common destination
+// for these 'write' operations is assumed to be a data
+// file residing on an attached storage drive. However,
+// any object implementing the io.Writer interface may be
+// used as a 'write' destination.
 //
 // The FileBufferWriter type is a wrapper for
 // 'bufio.Writer'. As such, FileBufferWriter supports
