@@ -694,23 +694,22 @@ func (fHelpDirector *fileHelperDirector) compareFiles(
 
 finalExit:
 
-	err2 = fileBufReaderOne.Close(
-		ePrefix.XCpy("fileBufReaderOne"))
+	err2 = fileBufReaderOne.Close()
 
 	if err2 != nil {
 
 		errs = append(
 			errs,
 			fmt.Errorf("%v\n"+
+				"--------------------------------\n"+
 				"Error Closing 'fileBufReaderOne'\n"+
 				"Error=\n%v\n",
-				funcName,
+				ePrefix,
 				err2.Error()))
 
 	}
 
-	err2 = fileBufReaderTwo.Close(
-		ePrefix.XCpy("fileBufReaderTwo"))
+	err2 = fileBufReaderTwo.Close()
 
 	if err2 != nil {
 
@@ -719,7 +718,7 @@ finalExit:
 			fmt.Errorf("%v\n"+
 				"Error Closing 'fileBufReaderTwo'\n"+
 				"Error=\n%v\n",
-				funcName,
+				ePrefix,
 				err2.Error()))
 
 	}
