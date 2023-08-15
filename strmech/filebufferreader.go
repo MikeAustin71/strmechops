@@ -140,6 +140,12 @@ type FileBufferReader struct {
 //
 // ----------------------------------------------------------------
 //
+// # BE ADVISED
+//
+//	This method implements the io.Closer interface.
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	errorPrefix					interface{}
