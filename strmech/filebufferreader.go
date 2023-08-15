@@ -11,17 +11,17 @@ import (
 
 // FileBufferReader
 //
+// The FileBufferReader type is a wrapper for
+// 'bufio.Reader'. As such, FileBufferReader supports
+// incremental or buffered read operations from the target
+// data source.
+//
 // This structure and its associated methods are designed
 // to facilitate data 'read' operations. The most common
 // data source for these read operations is assumed to be
 // a data file residing on an attached storage drive.
 // However, any object implementing the io.Reader
 // interface may be used as a data source.
-//
-// The FileBufferReader type is a wrapper for
-// 'bufio.Reader'. As such, FileBufferReader supports
-// incremental or buffered read operations from the target
-// data source.
 //
 // ----------------------------------------------------------------
 //
@@ -35,8 +35,8 @@ import (
 //
 // # IMPORTANT
 //
-//	(1)	Use methods 'New' and 'NewPathFileName' to create
-//		new instances of FileBufferReader.
+//	(1)	Use the 'New' and 'Setter' methods to create
+//		valid instances of FileBufferReader.
 //
 //	(2)	FileBufferReader implements the io.Reader
 //		interface.
