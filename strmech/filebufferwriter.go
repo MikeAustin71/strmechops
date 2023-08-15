@@ -12,6 +12,8 @@ import (
 
 // FileBufferWriter
 //
+// Type FileBufferWriter is a wrapper for bufio.Writer.
+//
 // This structure and the associated methods are designed
 // to facilitate data 'write' operations. The most common
 // destination for these 'write' operations is assumed to
@@ -112,6 +114,43 @@ type FileBufferWriter struct {
 	targetWriteFileName string
 
 	lock *sync.Mutex
+}
+
+// Available
+//
+// This method returns the number of bytes that are
+// unused in the write buffer.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	int
+//
+//		This returned integer value specifies the number
+//		of bytes that are unused in the 'write' buffer.
+func (fBufWriter *FileBufferWriter) Available() int {
+
+	if fBufWriter.lock == nil {
+		fBufWriter.lock = new(sync.Mutex)
+	}
+
+	fBufWriter.lock.Lock()
+
+	defer fBufWriter.lock.Unlock()
+
+	if fBufWriter.fileWriter == nil {
+
+		return 0
+	}
+
+	return fBufWriter.fileWriter.Available()
 }
 
 // Close
