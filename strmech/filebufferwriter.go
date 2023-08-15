@@ -263,40 +263,11 @@ func (fBufWriter *FileBufferWriter) Close() error {
 		return err
 	}
 
-	var err2 error
-	var errs []error
-	var fBufWriterMolecule = new(fileBufferWriterMolecule)
-
-	err2 = fBufWriterMolecule.
-		flush(
+	err = new(fileBufferWriterNanobot).
+		flushAndClose(
 			fBufWriter,
 			"fBufWriter",
 			ePrefix.XCpy("fBufWriter"))
-
-	if err2 != nil {
-
-		errs = append(errs,
-			fmt.Errorf("%v", err2.Error()))
-
-	}
-
-	err2 = fBufWriterMolecule.
-		close(fBufWriter,
-			"fBufWriter",
-			ePrefix.XCpy("fBufWriter"))
-
-	if err2 != nil {
-
-		errs = append(errs,
-			fmt.Errorf("%v", err2.Error()))
-
-	}
-
-	if len(errs) > 0 {
-
-		err = new(StrMech).ConsolidateErrors(errs)
-
-	}
 
 	return err
 }
