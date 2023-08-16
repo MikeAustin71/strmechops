@@ -423,6 +423,14 @@ func (fBufReader *FileBufferReader) NewIoReader(
 //
 // ----------------------------------------------------------------
 //
+// # IMPORTANT
+//
+//	As a precaution, the incoming 'fileMgr' object
+//	will be closed before configuring 'fIoReader'
+//	with a new internal io.Reader object.
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	fileMgr						*FileMgr
@@ -442,6 +450,14 @@ func (fBufReader *FileBufferReader) NewIoReader(
 //		method will configure the file identified by
 //		'fileMgr' as the data source for file 'read'
 //		operations.
+//
+//		As a precaution, the incoming 'fileMgr' object
+//		will be closed before configuring 'fIoReader'
+//		with a new internal io.Reader object.
+//
+//		If the path and file name specified by 'fileMgr'
+//		does NOT exist on an attached storage drive, an
+//		error will be returned.
 //
 //	openFileReadWrite			bool
 //
@@ -1992,10 +2008,14 @@ type fileBufferReaderMicrobot struct {
 //
 // # IMPORTANT
 //
-//	This method will delete, overwrite and reset all
-//	pre-existing data values in the instance of
-//	FileBufferReader passed as input parameter
-//	'fBufReader'.
+//	(1) This method will delete, overwrite and reset all
+//		pre-existing data values in the instance of
+//		FileBufferReader passed as input parameter
+//		'fBufReader'.
+//
+//	(2) As a precaution, the incoming 'fileMgr' object
+//		will be closed before configuring 'fBufReader'
+//		with a new internal io.Reader object.
 //
 // ----------------------------------------------------------------
 //
