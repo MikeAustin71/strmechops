@@ -657,7 +657,8 @@ func (fBufReader *FileBufferReader) NewFileMgr(
 // NewPathFileName
 //
 // Receives a path and file name as an input parameter
-// string, 'pathFileName'.
+// string, 'pathFileName” and returns a new, fully
+// configured instance of FileBufferReader.
 //
 // The target 'read' file identified by 'pathFileName'
 // is opened for either 'read-only' or 'read/write'
@@ -669,11 +670,6 @@ func (fBufReader *FileBufferReader) NewFileMgr(
 // in turn will be used to configure the internal
 // bufio.Reader.
 //
-// This target 'read' file identified by 'fileMgr' will
-// be used to create a file pointer (*os.File) which in
-// turn will be used to configure the internal
-// bufio.Reader.
-//
 // The size of the internal 'read' buffer is controlled by
 // input parameter 'bufSize'. The minimum buffer size is
 // 16-bytes. If 'bufSize' is set to a value less than
@@ -683,9 +679,6 @@ func (fBufReader *FileBufferReader) NewFileMgr(
 // If the target path and file identified by
 // 'pathFileName' do not currently exist on an attached
 // storage drive, an error will be returned.
-//
-// Upon completion, this method returns a fully
-// configured instance of FileBufferReader.
 //
 // ----------------------------------------------------------------
 //
