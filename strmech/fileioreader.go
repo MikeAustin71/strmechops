@@ -319,6 +319,13 @@ func (fIoReader *FileIoReader) NewIoReader(
 //		implements a direct read protocol using
 //		io.Reader.
 //
+//	(3)	When all read operations have been completed and
+//		there is no further need for the returned
+//		instance of FileIoReader, the user is responsible
+//		for 'closing' and releasing the associated memory
+//		resources by calling the method
+//		FileIoReader.Close().
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -1609,7 +1616,7 @@ func (fIoReader *FileIoReader) ReadAllToString(
 //
 //	(1)	This method will delete, overwrite and reset all
 //		pre-existing data values in the current instance
-//		of FileBufferReader.
+//		of FileIoReader.
 //
 //	(2)	The user is responsible for 'closing' the
 //		instance of io.Reader passed as input parameter
@@ -1755,6 +1762,231 @@ func (fIoReader *FileIoReader) SetIoReader(
 			ePrefix.XCpy("fIoReader"))
 
 	return err
+}
+
+// SetFileMgr
+//
+// This method will completely re-initialize the current
+// instance of FileIoReader using the path and file
+// name identified by the FileMgr instance passed as
+// input parameter 'fileMgr'.
+//
+// The file identified by 'fileMgr' will be used to
+// reconfigure the internal bufio.Reader encapsulated in
+// the current instance of FileIoReader.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/io#Reader
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method will delete, overwrite and reset all
+//		pre-existing data values in the current instance
+//		of FileIoReader.
+//
+//	(2)	As a precaution, the incoming 'fileMgr' object
+//		will be closed before configuring the current
+//		FileIoReader instance with a new, internal
+//		io.Reader object.
+//
+//	(3)	When all read operations have been completed and
+//		there is no further need for the current instance
+//		of FileIoReader, the user is responsible for
+//		'closing' and releasing the associated memory
+//		resources by calling the method
+//		FileIoReader.Close().
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fileMgr						*FileMgr
+//
+//		A pointer to an instance of FileMgr. The file
+//		identified by 'fileMgr' will be used as a data
+//		source for 'read' operations performed by
+//		method:
+//
+//			FileIoReader.Read()
+//
+//		If the path and file name encapsulated by
+//		'fileMgr' do not currently exist on an attached
+//		storage drive, an error will be returned.
+//
+//		The instance of FileIoReader returned by this
+//		method will configure the file identified by
+//		'fileMgr' as the data source for file 'read'
+//		operations.
+//
+//	openFileReadWrite			bool
+//
+//		If this parameter is set to 'true', the target
+//		'read' file identified from input parameter
+//		'pathFileName' will be opened for both 'read'
+//		and 'write' operations.
+//
+//		If 'openFileReadWrite' is set to 'false', the
+//		target 'read' file will be opened for 'read-only'
+//		operations.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	fileInfoPlus				FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter 'fileMgr'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fIoReader *FileIoReader) SetFileMgr(
+	fileMgr *FileMgr,
+	openFileReadWrite bool,
+	errorPrefix interface{}) (
+	fInfoPlus FileInfoPlus,
+	err error) {
+
+	if fIoReader.lock == nil {
+		fIoReader.lock = new(sync.Mutex)
+	}
+
+	fIoReader.lock.Lock()
+
+	defer fIoReader.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileIoReader."+
+			"SetFileMgr()",
+		"")
+
+	if err != nil {
+
+		return fInfoPlus, err
+	}
+
+	fInfoPlus,
+		err = new(fileIoReaderMicrobot).
+		setFileMgr(
+			fIoReader,
+			"fIoReader",
+			fileMgr,
+			"fileMgr",
+			openFileReadWrite,
+			ePrefix.XCpy(
+				"fileMgr"))
+
+	return fInfoPlus, err
 }
 
 type fileIoReaderMicrobot struct {

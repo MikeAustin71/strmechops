@@ -440,9 +440,17 @@ func (fBufReader *FileBufferReader) NewIoReader(
 //
 // # IMPORTANT
 //
-//	As a precaution, the incoming 'fileMgr' object
-//	will be closed before configuring 'fIoReader'
-//	with a new internal io.Reader object.
+//	(1)	As a precaution, the incoming 'fileMgr' object
+//		will be closed before configuring the internal
+//		io.Reader object for the returned instance of
+//		FileBufferReader.
+//
+//	(2)	When all read operations have been completed and
+//		there is no further need for the returned
+//		instance of FileBufferReader, the user is
+//		responsible for 'closing' and releasing the
+//		associated memory resources by calling the method
+//		FileIoReader.Close().
 //
 // ----------------------------------------------------------------
 //
@@ -1955,19 +1963,31 @@ func (fBufReader *FileBufferReader) SetIoReader(
 //
 // ----------------------------------------------------------------
 //
-// # IMPORTANT
-//
-//	This method will delete, overwrite and reset all
-//	pre-existing data values in the current instance of
-//	FileBufferReader.
-//
-// ----------------------------------------------------------------
-//
 // # Reference:
 //
 //	https://pkg.go.dev/bufio
 //	https://pkg.go.dev/bufio#Reader
 //	https://pkg.go.dev/io#Reader
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method will delete, overwrite and reset all
+//		pre-existing data values in the current instance
+//		of FileBufferReader.
+//
+//	(2)	As a precaution, the incoming 'fileMgr' object
+//		will be closed before configuring the current
+//		FileBufferReader instance with a new, internal
+//		io.Reader object.
+//
+//	(3)	When all read operations have been completed and
+//		there is no further need for the current instance
+//		of FileBufferReader, the user is responsible for
+//		'closing' and releasing the associated memory
+//		resources by calling the method
+//		FileIoReader.Close().
 //
 // ----------------------------------------------------------------
 //
