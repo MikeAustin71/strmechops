@@ -6,6 +6,7 @@ import (
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
 	"os"
+	"strings"
 	"sync"
 )
 
@@ -1356,6 +1357,195 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 		err
 }
 
+// ReadAllStrBuilder
+//
+// Reads the entire contents of the internal io.Reader
+// for the current instance of FileBufferReader as
+// a string. This string is then stored and returned
+// through an instance of strings.Builder passed as input
+// parameter 'strBuilder'.
+//
+// If a processing error is encountered, an appropriate
+// error with an error message will be returned. When
+// the end-of-file is encountered during the 'read'
+// process, the returned error object will be set to
+// 'nil' and no error will be returned.
+//
+// It naturally follows that this method will read the
+// entire contents of the target io.Reader object into
+// memory when writing said contents to the
+// strings.Builder instance 'strBuilder'. Depending
+// on the size of the target 'read' file, local memory
+// constraints should be considered.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method is designed to read the entire
+//		contents of the internal io.Reader object,
+//		encapsulated by the current instance of
+//		FileBufferReader, into memory.
+//
+//		BE CAREFUL when reading large files!
+//
+//		Depending on the memory resources available to
+//		your computer, you may run out of memory when
+//		reading large files and writing their contents
+//		to the strings.Builder input parameter,
+//		'strBuilder'.
+//
+//	(2)	This method will NOT automatically close the
+//		io.Reader object upon completion.
+//
+//		The user is responsible for performing required
+//		clean-up tasks by calling the local method:
+//
+//			FileBufferReader.Close()
+//
+//	(3)	If the current instance of FileBufferReader has
+//		NOT been properly initialized, an error will be
+//		returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	strBuilder					*strings.Builder
+//
+//		A pointer to an instance of strings.Builder. The
+//		entire contents of the internal io.Reader for the
+//		current instance of FileBufferReader and stores the
+//		resulting string in 'strBuilder'.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numBytesRead				int64
+//
+//		If this method completes successfully, this
+//		integer value will equal the number of bytes
+//		read from the internal io.Reader object
+//		encapsulated by the current instance of
+//		FileBufferReader.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		An error will only be returned if a processing
+//		or system error was encountered. When the
+//		end-of-file is encountered during the 'read'
+//		process, the returned error object will be set
+//		to 'nil' and no error will be returned.
+func (fBufReader *FileBufferReader) ReadAllStrBuilder(
+	strBuilder *strings.Builder,
+	errorPrefix interface{}) (
+	numOfBytesRead int64,
+	err error) {
+
+	if fBufReader.lock == nil {
+		fBufReader.lock = new(sync.Mutex)
+	}
+
+	fBufReader.lock.Lock()
+
+	defer fBufReader.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileBufferReader."+
+			"ReadAllStrBuilder()",
+		"")
+
+	if err != nil {
+
+		return numOfBytesRead, err
+	}
+
+	numOfBytesRead,
+		err = new(fileBufferReaderMicrobot).
+		readAllStrBuilder(
+			fBufReader,
+			"fBufReader",
+			strBuilder,
+			ePrefix)
+
+	return numOfBytesRead, err
+}
+
 // SetIoReader
 //
 // This method will completely re-initialize the current
@@ -1991,6 +2181,185 @@ func (fBufReader *FileBufferReader) SetPathFileName(
 
 type fileBufferReaderMicrobot struct {
 	lock *sync.Mutex
+}
+
+// readAllStrBuilder
+//
+// Reads the entire contents of the internal io.Reader
+// for instance of FileBufferReader passed as input
+// parameter 'fBufReader'. These contents are converted
+// to a string which is then stored and returned through
+// an instance of strings.Builder passed as input
+// parameter 'strBuilder'.
+//
+// If a processing error is encountered, an appropriate
+// error with an error message will be returned. When
+// the end-of-file is encountered during the 'read'
+// process, the returned error object will be set to
+// 'nil' and no error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufReader					*FileBufferReader
+//
+//		A pointer to an instance of FileBufferReader.
+//
+//		The entire contents of the io.Reader object
+//		encapsulated in this FileBufferReader instance
+//		will be extracted and returned as a string
+//		through input parameter 'strBuilder'.
+//
+//	fBufReaderLabel				string
+//
+//		The name or label associated with input parameter
+//		'fBufReader' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufReader" will be
+//		automatically applied.
+//
+//	strBuilder					*strings.Builder
+//
+//		A pointer to an instance of strings.Builder. The
+//		entire contents of the internal io.Reader for the
+//		FileBufferReader instance passed as 'fBufReader'
+//		will be extracted and stored as a string in
+//		'strBuilder'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numBytesRead				int64
+//
+//		If this method completes successfully, this
+//		integer value will equal the number of bytes
+//		read from the internal io.Reader object
+//		encapsulated by the FileBufferReader instance
+//		passed as input parameter 'fBufReader'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		An error will only be returned if a processing
+//		or system error was encountered. When the
+//		end-of-file is encountered during the 'read'
+//		process, the returned error object will be set
+//		to 'nil' and no error will be returned.
+func (fBufReaderMicrobot *fileBufferReaderMicrobot) readAllStrBuilder(
+	fBufReader *FileBufferReader,
+	fBufReaderLabel string,
+	strBuilder *strings.Builder,
+	errPrefDto *ePref.ErrPrefixDto) (
+	numOfBytesRead int64,
+	err error) {
+
+	if fBufReaderMicrobot.lock == nil {
+		fBufReaderMicrobot.lock = new(sync.Mutex)
+	}
+
+	fBufReaderMicrobot.lock.Lock()
+
+	defer fBufReaderMicrobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileBufferReaderMicrobot."+
+			"readAllStrBuilder()",
+		"")
+
+	if err != nil {
+
+		return numOfBytesRead, err
+	}
+
+	if len(fBufReaderLabel) == 0 {
+
+		fBufReaderLabel = "fBufReader"
+	}
+
+	if fBufReader.fileReader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of 'FileBufferReader' (%v) is invalid!\n"+
+			"The internal '%v' io.Reader object has NOT been initialized.\n"+
+			"Call one of the 'New' or 'Setter' methods when creating\n"+
+			"an instance of 'FileBufferReader'\n",
+			ePrefix.String(),
+			fBufReaderLabel,
+			fBufReaderLabel)
+
+		return numOfBytesRead, err
+	}
+
+	var bytesRead = make([]byte, 4096)
+	var localBytesRead int
+	var err2 error
+
+	for {
+
+		localBytesRead,
+			err2 = fBufReader.fileReader.Read(bytesRead)
+
+		if localBytesRead > 0 {
+
+			strBuilder.Write(bytesRead[:localBytesRead])
+
+			numOfBytesRead += int64(localBytesRead)
+
+		}
+
+		if err2 == io.EOF {
+
+			break
+
+		}
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error returned by fBufReader.fileReader.Read(bytesRead).\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				err2.Error())
+
+			break
+		}
+
+	}
+
+	return numOfBytesRead, err
 }
 
 // setFileMgr

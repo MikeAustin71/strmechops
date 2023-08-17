@@ -1598,10 +1598,11 @@ type fileIoReaderMicrobot struct {
 // readAllStrBuilder
 //
 // Reads the entire contents of the internal io.Reader
-// for the current instance of FileIoReader as
-// a string. This string is then stored and returned
-// through an instance of strings.Builder passed as input
-// parameter 'strBuilder'.
+// for instance of FileIoReader passed as input parameter
+// 'fIoReader'. These contents are converted to a string
+// which is then stored and returned through an instance
+// of strings.Builder passed as input parameter
+// 'strBuilder'.
 //
 // If a processing error is encountered, an appropriate
 // error with an error message will be returned. When
@@ -1613,12 +1614,32 @@ type fileIoReaderMicrobot struct {
 //
 // # Input Parameters
 //
+//	fIoReader					*FileIoReader
+//
+//		A pointer to an instance of FileIoReader.
+//
+//		The entire contents of the io.Reader object
+//		encapsulated in this FileIoReader instance
+//		will be extracted and returned as a string
+//		through input parameter 'strBuilder'.
+//
+//	fIoReaderLabel				string
+//
+//		The name or label associated with input parameter
+//		'fIoReader' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fIoReader" will be
+//		automatically applied.
+//
 //	strBuilder					*strings.Builder
 //
 //		A pointer to an instance of strings.Builder. The
 //		entire contents of the internal io.Reader for the
-//		current instance of FileIoReader and stores the
-//		resulting string in 'strBuilder'.
+//		FileIoReader instance passed as 'fIoReader' will
+//		be extracted and stored as a string in
+//		'strBuilder'.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -1643,9 +1664,9 @@ type fileIoReaderMicrobot struct {
 //
 //		If this method completes successfully, this
 //		integer value will equal the number of bytes
-//		read from the target input file 'pathFileName'
-//		and added to the string array encapsulated by
-//		'outputLinesArray'.
+//		read from the internal io.Reader object
+//		encapsulated by the FileIoReader instance passed
+//		as input parameter 'fIoReader'.
 //
 //	err							error
 //
@@ -1698,6 +1719,16 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readAllStrBuilder(
 	if len(fIoReaderLabel) == 0 {
 
 		fIoReaderLabel = "fIoReader"
+	}
+
+	if strBuilder == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' is invalid!\n"+
+			"'strBuilder' is a 'nil' pointer.\n",
+			ePrefix)
+
+		return numOfBytesRead, err
 	}
 
 	if fIoReader.ioReader == nil {
