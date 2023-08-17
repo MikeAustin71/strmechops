@@ -1077,7 +1077,7 @@ func (fBufReader *FileBufferReader) Read(
 
 		err = fmt.Errorf("%v\n"+
 			"Error: This instance of 'FileBufferReader' is invalid!\n"+
-			"The internal bufio.Reader has NOT been initialized.\n"+
+			"The internal bufio.Reader object has NOT been initialized.\n"+
 			"Call one of the 'New' or 'Setter' methods when creating\n"+
 			"an instance of 'FileBufferReader'\n",
 			ePrefix.String())
