@@ -241,10 +241,12 @@ func (fBufReader *FileBufferReader) Close() error {
 //	reader						io.Reader
 //
 //		An object which implements io.Reader interface.
+//		This object will be used as a data source for
+//		'read' operations.
 //
-//		This object may be a file pointer of type *os.File.
-//		File pointers of this type implement the io.Reader
-//		interface.
+//		The io.Reader object may be a file pointer of
+//		type *os.File because file pointers of this type
+//		implement the io.Reader interface.
 //
 //		A file pointer (*os.File) will facilitate reading
 //		data from files residing on an attached storage
@@ -460,10 +462,7 @@ func (fBufReader *FileBufferReader) NewIoReader(
 //
 //		A pointer to an instance of FileMgr. The file
 //		identified by 'fileMgr' will be used as a data
-//		source for 'read' operations performed by
-//		method:
-//
-//			FileBufferReader.Read()
+//		source for 'read' operations.
 //
 //		If the path and file name encapsulated by
 //		'fileMgr' do not currently exist on an attached
@@ -718,9 +717,8 @@ func (fBufReader *FileBufferReader) NewFileMgr(
 //	pathFileName				string
 //
 //		This string contains the path and file name of
-//		the file which will be used a data source for
-//		'read' operations performed by method:
-//			FileBufferReader.Read()
+//		the file which will be configured as a new data
+//		source for 'read' operations.
 //
 //		If this file does not currently exist on an
 //		attached storage drive, an error will be
@@ -1798,11 +1796,14 @@ func (fBufReader *FileBufferReader) ReadAllToString(
 //
 //	reader						io.Reader
 //
-//		An object which implements io.Reader interface.
 //
-//		This object may be a file pointer of type *os.File.
-//		File pointers of this type implement the io.Reader
-//		interface.
+//		An object which implements io.Reader interface.
+//		This object will be used as a data source for
+//		'read' operations.
+//
+//		The io.Reader object may be a file pointer of
+//		type *os.File because file pointers of this type
+//		implement the io.Reader interface.
 //
 //		A file pointer (*os.File) will facilitate reading
 //		data from files residing on an attached storage
@@ -1986,7 +1987,7 @@ func (fBufReader *FileBufferReader) SetIoReader(
 //		there is no further need for the current instance
 //		of FileBufferReader, the user is responsible for
 //		'closing' and releasing the associated memory
-//		resources by calling the method
+//		resources by calling the local method
 //		FileIoReader.Close().
 //
 // ----------------------------------------------------------------
@@ -1997,10 +1998,7 @@ func (fBufReader *FileBufferReader) SetIoReader(
 //
 //		A pointer to an instance of FileMgr. The file
 //		identified by 'fileMgr' will be used as a data
-//		source for 'read' operations performed by
-//		method:
-//
-//			FileBufferReader.Read()
+//		source for 'read' operations.
 //
 //		If the path and file name encapsulated by
 //		'fileMgr' do not currently exist on an attached
@@ -2207,19 +2205,26 @@ func (fBufReader *FileBufferReader) SetFileMgr(
 //
 // ----------------------------------------------------------------
 //
-// # IMPORTANT
-//
-//	This method will delete, overwrite and reset all
-//	pre-existing data values in the current instance of
-//	FileBufferReader.
-//
-// ----------------------------------------------------------------
-//
 // # Reference:
 //
 //	https://pkg.go.dev/bufio
 //	https://pkg.go.dev/bufio#Reader
 //	https://pkg.go.dev/io#Reader
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method will delete, overwrite and reset all
+//		pre-existing data values in the current instance
+//		of FileBufferReader.
+//
+//	(2)	When all read operations have been completed and
+//		there is no further need for the current instance
+//		of FileBufferReader, the user is responsible for
+//		'closing' and releasing the associated memory
+//		resources by calling the method
+//		FileBufferReader.Close().
 //
 // ----------------------------------------------------------------
 //
@@ -2229,9 +2234,7 @@ func (fBufReader *FileBufferReader) SetFileMgr(
 //
 //		This string contains the path and file name of
 //		the file which will be configured as a new data
-//		source for 'read' operations performed by method:
-//
-//			FileBufferReader.Read()
+//		source for 'read' operations.
 //
 //		If this file does not currently exist on an
 //		attached storage drive, an error will be

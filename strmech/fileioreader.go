@@ -19,8 +19,9 @@ import (
 // io.Reader interface may be used as a data source.
 //
 // The methods associated with this type do NOT employ
-// buffered read techniques. Direct data reads are
-// performed by means of the internal io.Reader object.
+// buffered read techniques. Instead, direct data reads
+// are performed by means of the internal io.Reader
+// object.
 //
 // For more information on 'buffered' data reads, see
 // type 'FileBufferReader'
@@ -30,6 +31,23 @@ import (
 // # Reference:
 //
 //	https://pkg.go.dev/io#Reader
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	When all read operations have been completed and
+//	there is no further need for the FileIoReader
+//	instance, the user is responsible for 'closing' and
+//	releasing the associated memory resources.
+//
+//	For FileIoReader instances created with a Path and
+//	File Name or a File Manager (FileMgr), the user must
+//	call the local method FileIoReader.Close().
+//
+//	For FileIoReader instances created with an external
+//	io.Reader object, the user need to apply any
+//	required 'close' or clean-up operations externally.
 type FileIoReader struct {
 	ioReader           *io.Reader
 	filePtr            *os.File
@@ -143,10 +161,12 @@ func (fIoReader *FileIoReader) Close() error {
 //	reader						io.Reader
 //
 //		An object which implements io.Reader interface.
+//		This object will be used as a data source for
+//		'read' operations.
 //
-//		This object may be a file pointer of type *os.File.
-//		File pointers of this type implement the io.Reader
-//		interface.
+//		The io.Reader object may be a file pointer of
+//		type *os.File because file pointers of this type
+//		implement the io.Reader interface.
 //
 //		A file pointer (*os.File) will facilitate reading
 //		data from files residing on an attached storage
@@ -323,7 +343,7 @@ func (fIoReader *FileIoReader) NewIoReader(
 //		there is no further need for the returned
 //		instance of FileIoReader, the user is responsible
 //		for 'closing' and releasing the associated memory
-//		resources by calling the method
+//		resources by calling the local method
 //		FileIoReader.Close().
 //
 // ----------------------------------------------------------------
@@ -334,10 +354,7 @@ func (fIoReader *FileIoReader) NewIoReader(
 //
 //		A pointer to an instance of FileMgr. The file
 //		identified by 'fileMgr' will be used as a data
-//		source for 'read' operations performed by
-//		method:
-//
-//			FileIoReader.Read()
+//		source for 'read' operations.
 //
 //		If the path and file name encapsulated by
 //		'fileMgr' do not currently exist on an attached
@@ -561,9 +578,17 @@ func (fIoReader *FileIoReader) NewFileMgr(
 //
 // # IMPORTANT
 //
-//	The returned instance of FileIoReader does NOT use
-//	buffered read techniques. Instead, it implements a
-//	direct read protocol using io.Reader.
+//	(1)	The returned instance of FileIoReader does NOT
+//		use buffered read techniques. Instead, it
+//		implements a direct read protocol using
+//		io.Reader.
+//
+//	(2)	When all read operations have been completed and
+//		there is no further need for the returned
+//		instance of FileIoReader, the user is responsible
+//		for 'closing' and releasing the associated memory
+//		resources by calling the local method
+//		FileIoReader.Close().
 //
 // ----------------------------------------------------------------
 //
@@ -573,9 +598,7 @@ func (fIoReader *FileIoReader) NewFileMgr(
 //
 //		This string contains the path and file name of
 //		the file which will be used a data source for
-//		'read' operations performed by method:
-//
-//			FileIoReader.Read()
+//		'read' operations.
 //
 //		If this file does not currently exist on an
 //		attached storage drive, an error will be
@@ -1630,10 +1653,12 @@ func (fIoReader *FileIoReader) ReadAllToString(
 //	reader						io.Reader
 //
 //		An object which implements io.Reader interface.
+//		This object will be used as a data source for
+//		'read' operations.
 //
-//		This object may be a file pointer of type *os.File.
-//		File pointers of this type implement the io.Reader
-//		interface.
+//		The io.Reader object may be a file pointer of
+//		type *os.File because file pointers of this type
+//		implement the io.Reader interface.
 //
 //		A file pointer (*os.File) will facilitate reading
 //		data from files residing on an attached storage
@@ -1798,7 +1823,7 @@ func (fIoReader *FileIoReader) SetIoReader(
 //		there is no further need for the current instance
 //		of FileIoReader, the user is responsible for
 //		'closing' and releasing the associated memory
-//		resources by calling the method
+//		resources by calling the local method
 //		FileIoReader.Close().
 //
 // ----------------------------------------------------------------
@@ -1809,10 +1834,7 @@ func (fIoReader *FileIoReader) SetIoReader(
 //
 //		A pointer to an instance of FileMgr. The file
 //		identified by 'fileMgr' will be used as a data
-//		source for 'read' operations performed by
-//		method:
-//
-//			FileIoReader.Read()
+//		source for 'read' operations.
 //
 //		If the path and file name encapsulated by
 //		'fileMgr' do not currently exist on an attached
@@ -1985,6 +2007,218 @@ func (fIoReader *FileIoReader) SetFileMgr(
 			openFileReadWrite,
 			ePrefix.XCpy(
 				"fileMgr"))
+
+	return fInfoPlus, err
+}
+
+// SetPathFileName
+//
+// This method will completely re-initialize the current
+// instance of FileIoReader using the path and file
+// name passed as input parameter 'pathFileName'.
+//
+// The path and file name specified by 'pathFileName'
+// will be used to reconfigure the internal bufio.Reader
+// encapsulated in the current instance of
+// FileIoReader.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/io#Reader
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method will delete, overwrite and reset all
+//		pre-existing data values in the current instance
+//		of FileIoReader.
+//
+//	(2)	When all read operations have been completed and
+//		there is no further need for the current instance
+//		of FileIoReader, the user is responsible for
+//		'closing' and releasing the associated memory
+//		resources by calling the local method
+//		FileIoReader.Close().
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName				string
+//
+//		This string contains the path and file name of
+//		the file which will be configured as a new data
+//		source for 'read' operations.
+//
+//		If this file does not currently exist on an
+//		attached storage drive, an error will be
+//		returned.
+//
+//	openFileReadWrite			bool
+//
+//		If this parameter is set to 'true', the target
+//		'read' file identified from input parameter
+//		'pathFileName' will be opened for both 'read'
+//		and 'write' operations.
+//
+//		If 'openFileReadWrite' is set to 'false', the
+//		target 'read' file will be opened for 'read-only'
+//		operations.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	fileInfoPlus				FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter 'pathFileName'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fIoReader *FileIoReader) SetPathFileName(
+	pathFileName string,
+	openFileReadWrite bool,
+	errorPrefix interface{}) (
+	fInfoPlus FileInfoPlus,
+	err error) {
+
+	if fIoReader.lock == nil {
+		fIoReader.lock = new(sync.Mutex)
+	}
+
+	fIoReader.lock.Lock()
+
+	defer fIoReader.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileIoReader."+
+			"SetPathFileName()",
+		"")
+
+	if err != nil {
+
+		return fInfoPlus, err
+	}
+
+	fInfoPlus,
+		err = new(fileIoReaderNanobot).
+		setPathFileName(
+			fIoReader,
+			"fIoReader",
+			pathFileName,
+			"pathFileName",
+			openFileReadWrite,
+			ePrefix.XCpy(
+				pathFileName))
 
 	return fInfoPlus, err
 }
