@@ -657,7 +657,7 @@ func (fBufReader *FileBufferReader) NewFileMgr(
 // NewPathFileName
 //
 // Receives a path and file name as an input parameter
-// string, 'pathFileName” and returns a new, fully
+// string, 'pathFileName' and returns a new, fully
 // configured instance of FileBufferReader.
 //
 // The target 'read' file identified by 'pathFileName'
@@ -1139,7 +1139,9 @@ func (fBufReader *FileBufferReader) Read(
 // It naturally follows that this method will read the
 // entire contents of the target io.Reader object into
 // memory when writing said contents to the
-// StringArrayDto instance 'outputLinesArray'.
+// StringArrayDto instance 'outputLinesArray'. Depending
+// on the size of the target 'read' file, local memory
+// constraints should be considered.
 //
 // ----------------------------------------------------------------
 //
@@ -1324,7 +1326,7 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 
 		err = fmt.Errorf("%v\n"+
 			"Error: This instance of 'FileBufferReader' is invalid!\n"+
-			"The internal bufio.Reader has NOT been initialized.\n"+
+			"The internal bufio.Reader object has NOT been initialized.\n"+
 			"Call one of the 'New' or 'Setter' methods when creating\n"+
 			"an instance of 'FileBufferReader'\n",
 			ePrefix.String())
