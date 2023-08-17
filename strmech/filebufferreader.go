@@ -227,6 +227,15 @@ func (fBufReader *FileBufferReader) Close() error {
 //
 // ----------------------------------------------------------------
 //
+// # IMPORTANT
+//
+//	The user is responsible for 'closing' the instance of
+//	io.Reader passed as input parameter 'reader'. The
+//	FileBufferReader.Close() method	will NOT close the
+//	'reader' object.
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	reader						io.Reader
@@ -248,6 +257,11 @@ func (fBufReader *FileBufferReader) Close() error {
 //		is primarily designed for reading data from disk
 //		files, this 'reader' will in fact read data from
 //		any object implementing the io.Reader interface.
+//
+//		Remember that the user is responsible for
+//		'closing' this io.Reader object. The
+//		FileBufferReader.Close() method will NOT close
+//		this io.Reader object.
 //
 //	bufSize						int
 //
@@ -1753,9 +1767,14 @@ func (fBufReader *FileBufferReader) ReadAllToString(
 //
 // # IMPORTANT
 //
-//	This method will delete, overwrite and reset all
-//	pre-existing data values in the current instance of
-//	FileBufferReader.
+//	(1)	This method will delete, overwrite and reset all
+//		pre-existing data values in the current instance
+//		of FileBufferReader.
+//
+//	(2)	The user is responsible for 'closing' the
+//		instance of io.Reader passed as input parameter
+//		'reader'. The FileBufferReader.Close() method
+//		will NOT close the 'reader' object.
 //
 // ----------------------------------------------------------------
 //
@@ -1788,6 +1807,11 @@ func (fBufReader *FileBufferReader) ReadAllToString(
 //		is primarily designed for reading data from disk
 //		files, this 'reader' will in fact read data from
 //		any object implementing the io.Reader interface.
+//
+//		Remember that the user is responsible for
+//		'closing' this io.Reader object. The FileIoReader
+//		method 'Close()' will NOT close this io.Reader
+//		object.
 //
 //	bufSize						int
 //
