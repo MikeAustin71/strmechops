@@ -8,7 +8,7 @@ import (
 
 func TestFileBufferReader_Read_000100(t *testing.T) {
 
-	funcName := "TestFileHelper_ReadLines_000100()"
+	funcName := "TestFileBufferReader_Read_000100()"
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
 		funcName,

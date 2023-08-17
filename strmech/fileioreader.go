@@ -2468,10 +2468,7 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readAllStrBuilder(
 //
 //		A pointer to an instance of FileMgr. The file
 //		identified by 'fileMgr' will be used as a
-//		data source for 'read' operations performed by
-//		method:
-//
-//			FileIoReader.Read()
+//		data source for 'read' operations.
 //
 //		If the path and file name encapsulated by
 //		'fileMgr' do not currently exist on an attached
@@ -2891,8 +2888,7 @@ func (fIoReaderNanobot *fileIoReaderNanobot) setIoReader(
 //
 //		This string contains the path and file name of
 //		the file which will be used a data source for
-//		'read' operations performed by method:
-//			FileIoReader.Read()
+//		'read' operations.
 //
 //		If this file does not currently exist on an
 //		attached storage drive, an error will be

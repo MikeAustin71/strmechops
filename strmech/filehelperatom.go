@@ -2667,8 +2667,6 @@ func (fHelperAtom *fileHelperAtom) readerScanMaxLines(
 
 		numOfBytesRead += int64(len(textLine))
 
-		numOfLinesRead++
-
 		if err2 == io.EOF {
 
 			isExit = true
@@ -2682,6 +2680,8 @@ func (fHelperAtom *fileHelperAtom) readerScanMaxLines(
 		}
 
 	}
+
+	numOfLinesRead = len(outputLinesArray.StrArray)
 
 	return numOfLinesRead, numOfBytesRead, isExit, err
 }

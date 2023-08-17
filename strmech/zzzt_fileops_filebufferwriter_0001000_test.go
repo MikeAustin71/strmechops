@@ -45,12 +45,11 @@ func TestFileBufferWriter_Write_000100(t *testing.T) {
 
 	var fHelper = new(FileHelper)
 	var textLinesArray StringArrayDto
-	var numOfLinesRead, expectedNumOfBytesWritten int
-	var i64numOfBytesRead int64
+	var expectedNumOfBytesWritten int
 
 	_,
-		numOfLinesRead,
-		i64numOfBytesRead,
+		_,
+		_,
 		err = fHelper.ReadTextLines(
 		targetReadFile,
 		&textLinesArray,
@@ -65,7 +64,7 @@ func TestFileBufferWriter_Write_000100(t *testing.T) {
 	textLinesArray.AppendSuffix("\n")
 
 	expectedNumOfBytesWritten =
-		int(i64numOfBytesRead) + numOfLinesRead
+		int(textLinesArray.GetTotalBytesInStrings())
 
 	var fBufWriter FileBufferWriter
 
@@ -89,7 +88,11 @@ func TestFileBufferWriter_Write_000100(t *testing.T) {
 
 	var bytesToWrite []byte
 
-	for i := 0; i < numOfLinesRead; i++ {
+	lenStrArray := len(textLinesArray.StrArray)
+
+	for i := 0; i < lenStrArray; i++ {
+
+		bytesToWrite = make([]byte, 0)
 
 		bytesToWrite = []byte(textLinesArray.StrArray[i])
 
