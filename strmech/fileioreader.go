@@ -756,9 +756,9 @@ func (fIoReader *FileIoReader) NewPathFileName(
 // This method is a wrapper for the 'io.Reader.Read'
 // method.
 //
-// Method 'Read' reads data into the input parameter
-// byte array, 'bytesRead'. It returns the number of
-// bytes read into the byte array as return parameter,
+// This method reads data into the input parameter byte
+// array, 'bytesRead'. It returns the number of bytes
+// read into the byte array as return parameter,
 // 'numOfBytesRead'.
 //
 // Under certain circumstances, the number of bytes read
@@ -960,8 +960,11 @@ func (fIoReader *FileIoReader) Read(
 // ReadAllTextLines
 //
 // Reads text lines from the internal io.Reader object
-// encapsulated in the current instance of
-// FileIoReader.
+// encapsulated in the current instance of FileIoReader.
+// The entire contents of the io.Reader object are
+// parsed and stored as individual lines of text in
+// the instance of StringArrayDto passed as input
+// parameter 'outputLinesArray'.
 //
 // Multiple custom end of line delimiters may be utilized
 // to determine the end of each line of text read from
@@ -1120,9 +1123,14 @@ func (fIoReader *FileIoReader) Read(
 //
 //		If this method completes successfully, this
 //		integer value will equal the number of bytes
-//		read from the target input file 'pathFileName'
-//		and added to the string array encapsulated by
-//		'outputLinesArray'.
+//		read from the internal io.Reader object
+//		encapsulated by the current instance of
+//		FileIoReader.
+//
+//		Remember that the number of bytes read
+//		includes the end-of-line delimiters which
+//		were stripped off and deleted before the
+//		text lines were stored in 'outputLinesArray'.
 //
 //	err							error
 //
@@ -1211,6 +1219,42 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 // process, the returned error object will be set to
 // 'nil' and no error will be returned.
 //
+// It naturally follows that this method will read the
+// entire contents of the target io.Reader object into
+// memory when writing said contents to the
+// strings.Builder instance 'strBuilder'. Depending
+// on the size of the target 'read' file, local memory
+// constraints should be considered.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method is designed to read the entire
+//		contents of the internal io.Reader object,
+//		encapsulated by the current instance of
+//		FileIoReader, into memory.
+//
+//		BE CAREFUL when reading large files!
+//
+//		Depending on the memory resources available to
+//		your computer, you may run out of memory when
+//		reading large files and writing their contents
+//		to the strings.Builder input parameter,
+//		'strBuilder'.
+//
+//	(2)	This method will NOT automatically close the
+//		io.Reader object upon completion.
+//
+//		The user is responsible for performing required
+//		clean-up tasks by calling the local method:
+//
+//			FileIoReader.Close()
+//
+//	(3)	If the current instance of FileIoReader has
+//		NOT been properly initialized, an error will be
+//		returned.
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -1289,9 +1333,9 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 //
 //		If this method completes successfully, this
 //		integer value will equal the number of bytes
-//		read from the target input file 'pathFileName'
-//		and added to the string array encapsulated by
-//		'outputLinesArray'.
+//		read from the internal io.Reader object
+//		encapsulated by the current instance of
+//		FileIoReader.
 //
 //	err							error
 //
@@ -1331,7 +1375,7 @@ func (fIoReader *FileIoReader) ReadAllStrBuilder(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"FileIoReader."+
-			"ReadAllTextLines()",
+			"ReadAllStrBuilder()",
 		"")
 
 	if err != nil {
@@ -1348,6 +1392,203 @@ func (fIoReader *FileIoReader) ReadAllStrBuilder(
 			ePrefix)
 
 	return numOfBytesRead, err
+}
+
+// ReadAllToString
+//
+// Reads the entire contents of the internal io.Reader
+// for the current instance of FileIoReader and returns
+// these contents as a single string ('contentsStr').
+//
+// If a processing error is encountered, an appropriate
+// error with an error message will be returned. When
+// the end-of-file is encountered during the 'read'
+// process, the returned error object will be set to
+// 'nil' and no error will be returned.
+//
+// It naturally follows that this method will read the
+// entire contents of the target io.Reader object into
+// memory when writing said contents to the returned
+// string parameter 'contentsStr'. Depending on the size
+// of the target 'read' file, local memory constraints
+// should be considered.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method is designed to read the entire
+//		contents of the internal io.Reader object,
+//		encapsulated by the current instance of
+//		FileIoReader, into memory.
+//
+//		BE CAREFUL when reading large files!
+//
+//		Depending on the memory resources available to
+//		your computer, you may run out of memory when
+//		reading large files and returning their contents
+//		as a single string ('contentsStr').
+//
+//	(2)	This method will NOT automatically close the
+//		io.Reader object upon completion.
+//
+//		The user is responsible for performing required
+//		clean-up tasks by calling the local method:
+//
+//			FileIoReader.Close()
+//
+//	(3)	If the current instance of FileIoReader has
+//		NOT been properly initialized, an error will be
+//		returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numBytesRead				int64
+//
+//		If this method completes successfully, this
+//		integer value will equal the number of bytes
+//		read from the internal io.Reader object
+//		encapsulated by the current instance of
+//		FileIoReader.
+//
+//		This integer value should also equal the
+//		string length of the returned string,
+//		'contentsStr'.
+//
+//	contentsStr					string
+//
+//		If this method completes successfully, the entire
+//		contents if the internal io.Reader object
+//		encapsulated by the current instance of
+//		FileIoReader will be returned in this string.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		An error will only be returned if a processing
+//		or system error was encountered. When the
+//		end-of-file is encountered during the 'read'
+//		process, the returned error object will be set
+//		to 'nil' and no error will be returned.
+func (fIoReader *FileIoReader) ReadAllToString(
+	errorPrefix interface{}) (
+	numOfBytesRead int64,
+	contentsStr string,
+	err error) {
+
+	if fIoReader.lock == nil {
+		fIoReader.lock = new(sync.Mutex)
+	}
+
+	fIoReader.lock.Lock()
+
+	defer fIoReader.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileIoReader."+
+			"ReadAllToString()",
+		"")
+
+	if err != nil {
+
+		return numOfBytesRead, contentsStr, err
+	}
+
+	strBuilder := new(strings.Builder)
+
+	numOfBytesRead,
+		err = new(fileIoReaderMicrobot).
+		readAllStrBuilder(
+			fIoReader,
+			"fIoReader",
+			strBuilder,
+			ePrefix)
+
+	if err == nil {
+
+		contentsStr = strBuilder.String()
+	}
+
+	return numOfBytesRead, contentsStr, err
 }
 
 type fileIoReaderMicrobot struct {

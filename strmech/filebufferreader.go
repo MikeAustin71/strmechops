@@ -1264,19 +1264,24 @@ func (fBufReader *FileBufferReader) Read(
 //	numOfLinesRead				int
 //
 //		This integer value contains the number of text
-//		lines read from the file specified by input
-//		parameter 'pathFileName'. This value also
-//		specifies the number of array elements added to
-//		the string array encapsulated by
+//		lines read from the internal io.Reader object
+//		encapsulated by the current instance of
+//		FileBufferReader. This number also specifies
+//		the number of string array elements stored in
 //		'outputLinesArray'.
 //
 //	numBytesRead				int64
 //
 //		If this method completes successfully, this
 //		integer value will equal the number of bytes
-//		read from the target input file 'pathFileName'
-//		and added to the string array encapsulated by
-//		'outputLinesArray'.
+//		read from the internal io.Reader object
+//		encapsulated by the current instance of
+//		FileBufferReader.
+//
+//		Remember that the number of bytes read
+//		includes the end-of-line delimiters which
+//		were stripped off and deleted before the
+//		text lines were stored in 'outputLinesArray'.
 //
 //	err							error
 //
