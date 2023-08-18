@@ -2232,7 +2232,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 			break
 		}
 
-		clear[[]byte](byteArray)
+		clear(byteArray)
 	}
 
 	if autoFlushAndCloseOnExit == true {

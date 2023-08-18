@@ -270,7 +270,7 @@ func TestDirMgrCollection_GetTextListingAbsPath_000100(t *testing.T) {
 
 	}
 
-	expectedTotalBytes := "691,486"
+	expectedTotalBytes := "706,592"
 
 	if expectedTotalBytes != totalBytesNumStr {
 

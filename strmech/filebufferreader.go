@@ -2625,7 +2625,7 @@ func (fBufReaderMicrobot *fileBufferReaderMicrobot) readAllStrBuilder(
 			break
 		}
 
-		clear[[]byte](bytesRead)
+		clear(bytesRead)
 
 	}
 
