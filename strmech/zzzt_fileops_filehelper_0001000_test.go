@@ -71,8 +71,9 @@ func TestFileHelper_ReadLines_000100(t *testing.T) {
 	originalFileSize,
 		numOfLinesRead,
 		numOfBytesRead,
-		err = fHelper.ReadLines(
+		err = fHelper.ReadTextLines(
 		targetReadFile,
+		-1,
 		&endOfLineDelimiters,
 		&outputLinesArray,
 		ePrefix.XCpy("outputLinesArray"))
@@ -234,8 +235,9 @@ func TestFileHelper_ReadTextLines_000100(t *testing.T) {
 	originalFileSize,
 		numOfLinesRead,
 		numOfBytesRead,
-		err = fHelper.ReadTextLines(
+		err = fHelper.ReadLines(
 		targetReadFile,
+		-1,
 		&outputLinesArray,
 		ePrefix.XCpy("outputLinesArray"))
 

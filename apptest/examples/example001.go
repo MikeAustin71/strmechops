@@ -1968,14 +1968,14 @@ func (mt MainTest) RegExFindSingleTimeDigitsExample01() {
 	}
 
 	hrs, _ := strconv.Atoi(result[0])
-	min, _ := strconv.Atoi(result[1])
+	minimum, _ := strconv.Atoi(result[1])
 	sec, _ := strconv.Atoi(result[2])
 
 	fmt.Println("Printing Formatted Time String")
-	fmt.Printf("%02d:%02d:%02d\n", hrs, min, sec)
+	fmt.Printf("%02d:%02d:%02d\n", hrs, minimum, sec)
 
 	fmt.Println("Reprint with 2-digit seconds")
-	fmt.Printf("%02d:%02d:%02d\n", hrs, min, 14)
+	fmt.Printf("%02d:%02d:%02d\n", hrs, minimum, 14)
 
 }
 

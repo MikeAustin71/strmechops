@@ -433,8 +433,9 @@ func (fileHlprOpsTest008 MainFileHelperOpsTest008) ReadTextLines01() {
 	originalFileSize,
 		numOfLinesRead,
 		numOfBytesRead,
-		err = fHelper.ReadTextLines(
+		err = fHelper.ReadLines(
 		targetReadFile,
+		-1,
 		&strArrayDto,
 		ePrefix.XCpy("strArrayDto"))
 
@@ -562,8 +563,9 @@ func (fileHlprOpsTest008 MainFileHelperOpsTest008) ReadLines02() {
 	originalFileSize,
 		numOfLinesRead,
 		numOfBytesRead,
-		err = fHelper.ReadLines(
+		err = fHelper.ReadTextLines(
 		targetReadFile,
+		-1,
 		&endOfLineDelimiters,
 		&outputLinesArray,
 		ePrefix.XCpy("outputLinesArray"))

@@ -50,8 +50,9 @@ func TestFileBufferWriter_Write_000100(t *testing.T) {
 	_,
 		_,
 		_,
-		err = fHelper.ReadTextLines(
+		err = fHelper.ReadLines(
 		targetReadFile,
+		-1,
 		&textLinesArray,
 		ePrefix.XCpy("targetReadFile"))
 
@@ -255,8 +256,9 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 	_,
 		numOfLinesRead,
 		i64numOfBytesRead,
-		err = fHelper.ReadTextLines(
+		err = fHelper.ReadLines(
 		targetReadFile,
+		-1,
 		&textLinesArray,
 		ePrefix.XCpy("targetReadFile"))
 
@@ -294,6 +296,8 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 	var bytesToWrite []byte
 
 	for i := 0; i < numOfLinesRead; i++ {
+
+		bytesToWrite = make([]byte, 0)
 
 		bytesToWrite = []byte(textLinesArray.StrArray[i])
 

@@ -2531,6 +2531,27 @@ func (fileHelpMech *fileHelperMechanics) makeDirAll(
 //		ready in all respects for future read/write
 //		operations.
 //
+//	maxNumOfLines				int
+//
+//		Specifies the maximum number of text lines which
+//		will be read from the file identified by
+//		'pathFileName'.
+//
+//		If 'maxNumOfLines' is set to a value less than
+//		zero (0) (Example: minus-one (-1) ),
+//		'maxNumOfLines' will be automatically reset to
+//		math.MaxInt(). This means all text lines existing
+//		in the file identified by 'pathFileName' will be
+//		read and processed. Reading all the text lines in
+//		a file 'may' have memory implications depending
+//		on the size of the file and the memory resources
+//		available to your computer.
+//
+//		If 'maxNumOfLines' is set to a value of zero
+//		('0'), no text lines will be read from the file
+//		identified by 'pathFileName', and no error will be
+//		returned.
+//
 //	endOfLineDelimiters				*StringArrayDto
 //
 //		A pointer to an instance of StringArrayDto.
@@ -2617,6 +2638,7 @@ func (fileHelpMech *fileHelperMechanics) makeDirAll(
 //		the error message.
 func (fileHelpMech *fileHelperMechanics) readLines(
 	pathFileName string,
+	maxNumOfLines int,
 	endOfLineDelimiters *StringArrayDto,
 	outputLinesArray *StringArrayDto,
 	pathFileNameLabel string,
@@ -2831,6 +2853,7 @@ func (fileHelpMech *fileHelperMechanics) readLines(
 		readerScanLines(
 			filePtr,
 			pathFileNameLabel,
+			maxNumOfLines,
 			endOfLineDelimiters,
 			outputLinesArray,
 			ePrefix.XCpy("filePtr->"))

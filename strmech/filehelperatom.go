@@ -5,6 +5,7 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
+	"math"
 	"os"
 	fp "path/filepath"
 	"strings"
@@ -2496,16 +2497,23 @@ func (fHelperAtom *fileHelperAtom) makeDirPerm(
 //
 //	maxNumOfLines				int
 //
-//		The maximum number of text lines which will be
-//		read by 'readerScanner'.
+//		Specifies the maximum number of text lines which
+//		will be read by 'readerScanner'.
 //
-//		If this integer is set to a value less than one
-//		(+1), all text lines existing in the
-//		'readerScanner' will be read and processed.
+//		If 'maxNumOfLines' is set to a value less than
+//		zero (0) (Example: minus-one (-1) ),
+//		'maxNumOfLines' will be automatically reset to
+//		math.MaxInt(). This means all text lines existing
+//		in the 'readerScanner' will be read and
+//		processed. Reading all the text lines in a file
+//		'may' have memory implications depending on the
+//		size of the file and the memory resources
+//		available to your computer.
 //
-//		Reading all the text lines in a file 'may' have
-//		memory implications depending on the memory
-//		resources available to your computer.
+//		If 'maxNumOfLines' is set to a value of zero
+//		('0'), no text lines will be read from
+//		'readerScanner', no error will be returned and
+//		return parameter 'isExit' will be set to 'false'.
 //
 //	outputLinesArray *StringArrayDto,
 //
@@ -2624,17 +2632,25 @@ func (fHelperAtom *fileHelperAtom) readerScanMaxLines(
 			err
 	}
 
+	if maxNumOfLines < 0 {
+
+		maxNumOfLines = math.MaxInt - 1
+
+	} else if maxNumOfLines == 0 {
+
+		return numOfLinesRead,
+			numOfBytesRead,
+			isExit,
+			err
+
+	}
+
 	var textLine string
+	var lenTextLine int
 	var ok bool
 	var err2 error
 
-	for {
-
-		if maxNumOfLines > 0 &&
-			numOfLinesRead >= maxNumOfLines {
-
-			break
-		}
+	for numOfLinesRead < maxNumOfLines {
 
 		err2 = nil
 
@@ -2663,17 +2679,22 @@ func (fHelperAtom *fileHelperAtom) readerScanMaxLines(
 
 		textLine = readerScanner.Text()
 
-		outputLinesArray.PushStr(textLine)
+		lenTextLine = len(textLine)
 
-		numOfBytesRead += int64(len(textLine))
-
-		if err2 == io.EOF {
+		if lenTextLine == 0 &&
+			(err2 == io.EOF ||
+				ok == false) {
 
 			isExit = true
 			break
 		}
 
-		if ok == false {
+		outputLinesArray.PushStr(textLine)
+
+		numOfBytesRead += int64(len(textLine))
+
+		if err2 == io.EOF ||
+			ok == false {
 
 			isExit = true
 			break

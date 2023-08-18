@@ -1055,6 +1055,28 @@ func (fIoReader *FileIoReader) Read(
 //
 // # Input Parameters
 //
+//	maxNumOfLines				int
+//
+//		Specifies the maximum number of text lines which
+//		will be read from the internal io.Reader
+//		encapsulated by the current instance of
+//		FileIoReader.
+//
+//		If 'maxNumOfLines' is set to a value less than
+//		zero (0) (Example: minus-one (-1) ),
+//		'maxNumOfLines' will be automatically reset to
+//		math.MaxInt(). This means all text lines existing
+//		in the internal io.Reader object will be read
+//		and processed. Reading all the text lines in a
+//		file 'may' have memory implications depending on
+//		the size of the file and the memory resources
+//		available to your computer.
+//
+//		If 'maxNumOfLines' is set to a value of zero
+//		('0'), no text lines will be read from
+//		the internal io.Reader, and no error will be
+//		returned.
+//
 //	endOfLineDelimiters				*StringArrayDto
 //
 //		A pointer to an instance of StringArrayDto.
@@ -1175,6 +1197,7 @@ func (fIoReader *FileIoReader) Read(
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (fIoReader *FileIoReader) ReadAllTextLines(
+	maxNumOfLines int,
 	endOfLineDelimiters *StringArrayDto,
 	outputLinesArray *StringArrayDto,
 	errorPrefix interface{}) (
@@ -1226,6 +1249,7 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 		readerScanLines(
 			*fIoReader.ioReader,
 			"fIoReader.fileReader",
+			maxNumOfLines,
 			endOfLineDelimiters,
 			outputLinesArray,
 			ePrefix.XCpy("fIoReader.fileReader"))

@@ -1197,6 +1197,28 @@ func (fBufReader *FileBufferReader) Read(
 //
 // # Input Parameters
 //
+//	maxNumOfLines				int
+//
+//		Specifies the maximum number of text lines which
+//		will be read from the internal bufio.Reader
+//		encapsulated by the current instance of
+//		FileBufferReader.
+//
+//		If 'maxNumOfLines' is set to a value less than
+//		zero (0) (Example: minus-one (-1) ),
+//		'maxNumOfLines' will be automatically reset to
+//		math.MaxInt(). This means all text lines existing
+//		in the internal bufio.Reader object will be read
+//		and processed. Reading all the text lines in a
+//		file 'may' have memory implications depending on
+//		the size of the file and the memory resources
+//		available to your computer.
+//
+//		If 'maxNumOfLines' is set to a value of zero
+//		('0'), no text lines will be read from
+//		the internal bufio.Reader, and no error will be
+//		returned.
+//
 //	endOfLineDelimiters				*StringArrayDto
 //
 //		A pointer to an instance of StringArrayDto.
@@ -1317,6 +1339,7 @@ func (fBufReader *FileBufferReader) Read(
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (fBufReader *FileBufferReader) ReadAllTextLines(
+	maxNumOfLines int,
 	endOfLineDelimiters *StringArrayDto,
 	outputLinesArray *StringArrayDto,
 	errorPrefix interface{}) (
@@ -1368,6 +1391,7 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 		readerScanLines(
 			fBufReader.fileReader,
 			"fBufReader.fileReader",
+			maxNumOfLines,
 			endOfLineDelimiters,
 			outputLinesArray,
 			ePrefix.XCpy("fBufReader.fileReader"))

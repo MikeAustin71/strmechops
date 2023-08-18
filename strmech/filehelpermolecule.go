@@ -2,7 +2,6 @@ package strmech
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
@@ -1759,6 +1758,26 @@ func (fHelpMolecule *fileHelperMolecule) stripLeadingDotSeparatorChars(
 //		string, a default value of "reader" will be
 //		automatically applied.
 //
+//	maxNumOfLines				int
+//
+//		Specifies the maximum number of text lines which
+//		will be read by the io.Reader object, 'reader'.
+//
+//		If 'maxNumOfLines' is set to a value less than
+//		zero (0) (Example: minus-one (-1) ),
+//		'maxNumOfLines' will be automatically reset to
+//		math.MaxInt(). This means all text lines existing
+//		in the io.Reader object ('reader') will be read
+//		and processed. Reading all the text lines in a
+//		file 'may' have memory implications depending on
+//		the size of the file and the memory resources
+//		available to your computer.
+//
+//		If 'maxNumOfLines' is set to a value of zero
+//		('0'), no text lines will be read from
+//		'readerScanner', no error will be returned and
+//		return parameter 'isExit' will be set to 'false'.
+//
 //	endOfLineDelimiters			*StringArrayDto
 //
 //		A pointer to an instance of StringArrayDto.
@@ -1814,6 +1833,7 @@ func (fHelpMolecule *fileHelperMolecule) stripLeadingDotSeparatorChars(
 func (fHelpMolecule *fileHelperMolecule) readerScanLines(
 	reader io.Reader,
 	readerLabel string,
+	maxNumOfLines int,
 	endOfLineDelimiters *StringArrayDto,
 	outputLinesArray *StringArrayDto,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -1876,23 +1896,9 @@ func (fHelpMolecule *fileHelperMolecule) readerScanLines(
 		readerScanMaxLines(
 			textLineScanner,
 			readerLabel+"-scanner",
-			-1, // maxNumOfLines
+			maxNumOfLines, // maxNumOfLines
 			outputLinesArray,
 			ePrefix)
-
-	lastLineIdx :=
-		outputLinesArray.GetStringArrayLength() - 1
-
-	if len(outputLinesArray.StrArray[lastLineIdx]) == 0 {
-		var err2 error
-
-		err2 = outputLinesArray.DeleteAtIndex(
-			lastLineIdx,
-			ePrefix)
-
-		err = errors.Join(err, err2)
-
-	}
 
 	return numOfLinesRead,
 		numOfBytesRead,
