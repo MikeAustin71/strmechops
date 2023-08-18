@@ -2232,6 +2232,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 			break
 		}
 
+		clear[[]byte](byteArray)
 	}
 
 	if autoFlushAndCloseOnExit == true {
@@ -2619,11 +2620,6 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 			"fBufReadWrite.reader",
 			endOfLineDelimiters,
 			ePrefix.XCpy("textLineScanner<-"))
-
-	if numTextLinesPerBatch < 0 {
-
-		numTextLinesPerBatch = 8192
-	}
 
 	for {
 

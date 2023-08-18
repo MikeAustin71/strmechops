@@ -2436,6 +2436,8 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readAllStrBuilder(
 			break
 		}
 
+		clear[[]byte](bytesRead)
+
 	}
 
 	return numOfBytesRead, err
