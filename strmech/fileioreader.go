@@ -1192,6 +1192,15 @@ func (fIoReader *FileIoReader) Read(
 //		the string array encapsulated by
 //		'outputLinesArray'.
 //
+//		When displayed in editors, the end-of-file
+//		character is displayed on a separate line.
+//		The returned 'numOfLinesRead' value does
+//		not include this empty line containing an
+//		end-of-file character. Therefore, the
+//		returned 'numOfLinesRead' value will always
+//		be one less than the number of lines shown
+//		in a text editor.
+//
 //	numBytesRead				int64
 //
 //		If this method completes successfully, this
@@ -1575,6 +1584,27 @@ func (fIoReader *FileIoReader) ReadAllStrBuilder(
 //
 // # Input Parameters
 //
+//	autoCloseOnExit				bool
+//
+//		When this parameter is set to 'true', this
+//		method will automatically perform all required
+//		clean-up tasks for the current instance of
+//		FileIoReader. Specifically, the internal
+//		io.Reader object will be properly 'closed'. Upon
+//		completion of this 'close' operation, the current
+//		instance of FileIoReader will be invalid and
+//		unusable for all future 'read' operations.
+//
+//		If input parameter 'autoCloseOnExit' is
+//		set to 'false', this method will NOT
+//		automatically 'close' the internal io.Reader
+//		object for the current instance of
+//		FileBufferReader. Consequently, the user will be
+//		responsible for 'closing' the internal io.Reader
+//		object by calling the local method:
+//
+//				FileIoReader.Close()
+//
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
@@ -1676,6 +1706,7 @@ func (fIoReader *FileIoReader) ReadAllStrBuilder(
 //		process, the returned error object will be set
 //		to 'nil' and no error will be returned.
 func (fIoReader *FileIoReader) ReadAllToString(
+	autoCloseOnExit bool,
 	errorPrefix interface{}) (
 	numOfBytesRead int64,
 	contentsStr string,
@@ -1713,9 +1744,22 @@ func (fIoReader *FileIoReader) ReadAllToString(
 			strBuilder,
 			ePrefix)
 
-	if err == nil {
+	if err != nil {
+
+		return numOfBytesRead, contentsStr, err
+
+	} else {
 
 		contentsStr = strBuilder.String()
+	}
+
+	if autoCloseOnExit == true {
+
+		err = new(fileIoReaderMolecule).close(
+			fIoReader,
+			"fIoReader",
+			ePrefix.XCpy("fIoReader"))
+
 	}
 
 	return numOfBytesRead, contentsStr, err
