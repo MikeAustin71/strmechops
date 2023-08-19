@@ -1200,6 +1200,7 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 	maxNumOfLines int,
 	endOfLineDelimiters *StringArrayDto,
 	outputLinesArray *StringArrayDto,
+	autoCloseOnExit bool,
 	errorPrefix interface{}) (
 	numOfLinesRead int,
 	numOfBytesRead int64,
@@ -1253,6 +1254,23 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 			endOfLineDelimiters,
 			outputLinesArray,
 			ePrefix.XCpy("fIoReader.fileReader"))
+
+	if err != nil {
+
+		return numOfLinesRead,
+			numOfBytesRead,
+			err
+
+	}
+
+	if autoCloseOnExit == true {
+
+		err = new(fileIoReaderMolecule).close(
+			fIoReader,
+			"fIoReader",
+			ePrefix.XCpy("fIoReader"))
+
+	}
 
 	return numOfLinesRead,
 		numOfBytesRead,

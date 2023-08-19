@@ -1418,6 +1418,14 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 			outputLinesArray,
 			ePrefix.XCpy("fBufReader.fileReader"))
 
+	if err != nil {
+
+		return numOfLinesRead,
+			numOfBytesRead,
+			err
+
+	}
+
 	if autoCloseOnExit == true {
 
 		err = new(fileBufferReaderMolecule).close(
