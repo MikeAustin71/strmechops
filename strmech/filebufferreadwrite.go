@@ -2134,7 +2134,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 	var fBufReadWriteMicrobot = new(fileBufferReadWriteMicrobot)
 
 	byteArray := make([]byte,
-		fBufReadWrite.reader.fileReader.Size())
+		fBufReadWrite.reader.bufioReader.Size())
 
 	for {
 

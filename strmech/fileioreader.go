@@ -1279,11 +1279,11 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 		err = new(fileHelperMolecule).
 		readerScanLines(
 			*fIoReader.ioReader,
-			"fIoReader.fileReader",
+			"fIoReader.ioReader",
 			maxNumOfLines,
 			endOfLineDelimiters,
 			outputLinesArray,
-			ePrefix.XCpy("fIoReader.fileReader"))
+			ePrefix.XCpy("fIoReader.ioReader"))
 
 	if err != nil {
 

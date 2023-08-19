@@ -59,9 +59,10 @@ import (
 //			method.
 //
 //			Under this scenario, the user is independently
-//			responsible for clean-up of the io.Reader
-//			object after FileBufferReader 'read'
-//			operations have been completed.
+//			responsible for clean-up of the internal
+//			bufio.Reader object after all 'read' operations
+//			have been completed for the current instance
+//			of FileBufferReader.
 //
 //			Once all FileBufferReader 'read' operations
 //			have been completed, call method Close() to
@@ -99,9 +100,9 @@ import (
 //
 //	(2)	After creating an instance of FileBufferReader,
 //		the user calls the Read() method to read bytes
-//		of data from the target io.Reader object. This
-//		'read' target may be a file or any other object
-//		which implements the io.Reader interface.
+//		of data from the internal bufio.Reader object.
+//		This 'read' target may be a file or any other
+//		object which implements the io.Reader interface.
 //
 //		The Read() method should be called repeatedly
 //		until all data has been read from the underlying
@@ -112,7 +113,7 @@ import (
 //		tasks.
 //
 //	(3)	After all data bytes have been read from the
-//		target io.Reader object, the user must call
+//		internal bufio.Reader object, the user must call
 //		method Close() to perform necessary clean-up
 //		tasks.
 //
@@ -120,7 +121,7 @@ import (
 //		FileBufferReader instance becomes unusable and
 //		should be discarded.
 type FileBufferReader struct {
-	fileReader         *bufio.Reader
+	bufioReader        *bufio.Reader
 	filePtr            *os.File
 	targetReadFileName string
 
@@ -474,8 +475,8 @@ func (fBufReader *FileBufferReader) NewIoReader(
 //		operations.
 //
 //		As a precaution, the incoming 'fileMgr' object
-//		will be closed before configuring 'fIoReader'
-//		with a new internal io.Reader object.
+//		will be closed before configuring the returned
+//		FileBufferReader with a new internal bufio.Reader object.
 //
 //		If the path and file name specified by 'fileMgr'
 //		does NOT exist on an attached storage drive, an
@@ -917,8 +918,8 @@ func (fBufReader *FileBufferReader) NewPathFileName(
 // Read
 //
 // Reads a selection data from the pre-configured
-// io.Reader data source encapsulated in the current
-// instance of FileBufferReader.
+// internal bufio.Reader data source encapsulated in the
+// current instance of FileBufferReader.
 //
 // This method is a wrapper for the bufio 'Reader.Read'
 // method.
@@ -1094,7 +1095,7 @@ func (fBufReader *FileBufferReader) Read(
 		return numOfBytesRead, err
 	}
 
-	if fBufReader.fileReader == nil {
+	if fBufReader.bufioReader == nil {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: This instance of 'FileBufferReader' is invalid!\n"+
@@ -1109,14 +1110,14 @@ func (fBufReader *FileBufferReader) Read(
 	var err2 error
 
 	numOfBytesRead,
-		err2 = fBufReader.fileReader.Read(bytesRead)
+		err2 = fBufReader.bufioReader.Read(bytesRead)
 
 	if err2 != nil {
 
 		if err2 != io.EOF {
 
 			err = fmt.Errorf("%v\n"+
-				"Error returned by fBufReader.fileReader.Read(bytesRead).\n"+
+				"Error returned by fBufReader.bufioReader.Read(bytesRead).\n"+
 				"Error=\n%v\n",
 				ePrefix.String(),
 				err2.Error())
@@ -1134,19 +1135,20 @@ func (fBufReader *FileBufferReader) Read(
 
 // ReadAllTextLines
 //
-// Reads text lines from the internal io.Reader object
+// Reads text lines from the internal bufio.Reader object
 // encapsulated in the current instance of
 // FileBufferReader.
 //
 // Multiple custom end of line delimiters may be utilized
 // to determine the end of each line of text read from
-// the internal io.Reader object. End of line delimiters
+// the internal bufio.Reader object. End of line delimiters
 // are specified by input parameter
 // 'endOfLineDelimiters', an instance of StringArrayDto.
 // 'endOfLineDelimiters' contains an array of strings any
 // one of which may be used to identify, delimit and
-// separate individual lines of text read from the target
-// io.Reader object.
+// separate individual lines of text read from the internal
+// bufio.Reader object configured for the current
+// instance of FileBufferReader.
 //
 // The extracted lines of text will be added to the
 // StringArrayDto instance passed as input parameter
@@ -1158,18 +1160,19 @@ func (fBufReader *FileBufferReader) Read(
 // from the end of each configured text line.
 //
 // It naturally follows that this method will read the
-// entire contents of the target io.Reader object into
-// memory when writing said contents to the
-// StringArrayDto instance 'outputLinesArray'. Depending
-// on the size of the target 'read' file, local memory
-// constraints should be considered.
+// entire contents of the FileBufferReader internal
+// bufio.Reader object into memory when writing said
+// contents to the StringArrayDto instance
+// 'outputLinesArray'. Depending on the size of the
+// target 'read' file, local memory constraints should
+// be considered.
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
 //	(1)	This method is designed to read the entire
-//		contents of the internal io.Reader object,
+//		contents of the internal bufio.Reader object,
 //		encapsulated by the current instance of
 //		FileBufferReader, into memory.
 //
@@ -1235,7 +1238,7 @@ func (fBufReader *FileBufferReader) Read(
 //	outputLinesArray 			*StringArrayDto
 //
 //		A pointer to an instance of StringArrayDto.
-//		Lines of text read from the internal io.Reader
+//		Lines of text read from the internal bufio.Reader
 //		object configured for the current instance of
 //		FileBufferReader will be stored as individual
 //		strings in the string array encapsulated by
@@ -1254,10 +1257,10 @@ func (fBufReader *FileBufferReader) Read(
 //
 //		If input parameter 'autoCloseOnExit' is
 //		set to 'false', this method will NOT
-//		automatically 'close' the internal io.Reader
+//		automatically 'close' the internal bufio.Reader
 //		object for the current instance of
 //		FileBufferReader. Consequently, the user will be
-//		responsible for 'closing' the internal io.Reader
+//		responsible for 'closing' the internal bufio.Reader
 //		object by calling the local method:
 //
 //			FileBufferReadWrite.Close()
@@ -1328,17 +1331,26 @@ func (fBufReader *FileBufferReader) Read(
 //	numOfLinesRead				int
 //
 //		This integer value contains the number of text
-//		lines read from the internal io.Reader object
+//		lines read from the internal bufio.Reader object
 //		encapsulated by the current instance of
 //		FileBufferReader. This number also specifies
 //		the number of string array elements stored in
 //		'outputLinesArray'.
 //
+//		When displayed in editors, the end-of-file
+//		character is displayed on a separate line.
+//		The returned 'numOfLinesRead' value does
+//		not include this empty line containing an
+//		end-of-file character. Therefore, the
+//		returned 'numOfLinesRead' value will always
+//		be one less than the number of lines shown
+//		in a text editor.
+//
 //	numBytesRead				int64
 //
 //		If this method completes successfully, this
 //		integer value will equal the number of bytes
-//		read from the internal io.Reader object
+//		read from the internal bufio.Reader object
 //		encapsulated by the current instance of
 //		FileBufferReader.
 //
@@ -1393,7 +1405,7 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 			err
 	}
 
-	if fBufReader.fileReader == nil {
+	if fBufReader.bufioReader == nil {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: This instance of 'FileBufferReader' is invalid!\n"+
@@ -1411,12 +1423,12 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 		numOfBytesRead,
 		err = new(fileHelperMolecule).
 		readerScanLines(
-			fBufReader.fileReader,
-			"fBufReader.fileReader",
+			fBufReader.bufioReader,
+			"fBufReader.bufioReader",
 			maxNumOfLines,
 			endOfLineDelimiters,
 			outputLinesArray,
-			ePrefix.XCpy("fBufReader.fileReader"))
+			ePrefix.XCpy("fBufReader.bufioReader"))
 
 	if err != nil {
 
@@ -1442,7 +1454,7 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 
 // ReadAllStrBuilder
 //
-// Reads the entire contents of the internal io.Reader
+// Reads the entire contents of the internal bufio.Reader
 // for the current instance of FileBufferReader as
 // a string. This string is then stored and returned
 // through an instance of strings.Builder passed as input
@@ -1455,18 +1467,18 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 // 'nil' and no error will be returned.
 //
 // It naturally follows that this method will read the
-// entire contents of the target io.Reader object into
-// memory when writing said contents to the
-// strings.Builder instance 'strBuilder'. Depending
-// on the size of the target 'read' file, local memory
-// constraints should be considered.
+// entire contents of the FileBufferReader internal
+// bufio.Reader object into memory when writing said
+// contents to the strings.Builder instance 'strBuilder'.
+// Depending on the size of the target 'read' data
+// source, local memory constraints should be considered.
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
 //	(1)	This method is designed to read the entire
-//		contents of the internal io.Reader object,
+//		contents of the internal bufio.Reader object,
 //		encapsulated by the current instance of
 //		FileBufferReader, into memory.
 //
@@ -1497,7 +1509,7 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 //	strBuilder					*strings.Builder
 //
 //		A pointer to an instance of strings.Builder. The
-//		entire contents of the internal io.Reader for the
+//		entire contents of the internal bufio.Reader for the
 //		current instance of FileBufferReader and stores the
 //		resulting string in 'strBuilder'.
 //
@@ -1568,7 +1580,7 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 //
 //		If this method completes successfully, this
 //		integer value will equal the number of bytes
-//		read from the internal io.Reader object
+//		read from the internal bufio.Reader object
 //		encapsulated by the current instance of
 //		FileBufferReader.
 //
@@ -1631,7 +1643,7 @@ func (fBufReader *FileBufferReader) ReadAllStrBuilder(
 
 // ReadAllToString
 //
-// Reads the entire contents of the internal io.Reader
+// Reads the entire contents of the internal bufio.Reader
 // for the current instance of FileBufferReader and returns
 // these contents as a single string ('contentsStr').
 //
@@ -1642,18 +1654,19 @@ func (fBufReader *FileBufferReader) ReadAllStrBuilder(
 // 'nil' and no error will be returned.
 //
 // It naturally follows that this method will read the
-// entire contents of the target io.Reader object into
-// memory when writing said contents to the returned
-// string parameter 'contentsStr'. Depending on the size
-// of the target 'read' file, local memory constraints
-// should be considered.
+// entire contents of the FileBufferReader internal
+// bufio.Reader object into memory when writing said
+// contents to the returned string parameter
+// 'contentsStr'. Depending on the size of the target
+// 'read' data source, local memory constraints should be
+// considered.
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
 //	(1)	This method is designed to read the entire
-//		contents of the internal io.Reader object,
+//		contents of the internal bufio.Reader object,
 //		encapsulated by the current instance of
 //		FileBufferReader, into memory.
 //
@@ -1747,7 +1760,7 @@ func (fBufReader *FileBufferReader) ReadAllStrBuilder(
 //
 //		If this method completes successfully, this
 //		integer value will equal the number of bytes
-//		read from the internal io.Reader object
+//		read from the internal bufio.Reader object
 //		encapsulated by the current instance of
 //		FileBufferReader.
 //
@@ -1758,7 +1771,7 @@ func (fBufReader *FileBufferReader) ReadAllStrBuilder(
 //	contentsStr					string
 //
 //		If this method completes successfully, the entire
-//		contents if the internal io.Reader object
+//		contents if the internal bufio.Reader object
 //		encapsulated by the current instance of
 //		FileBufferReader will be returned in this string.
 //
@@ -2492,7 +2505,7 @@ type fileBufferReaderMicrobot struct {
 
 // readAllStrBuilder
 //
-// Reads the entire contents of the internal io.Reader
+// Reads the entire contents of the internal bufio.Reader
 // for instance of FileBufferReader passed as input
 // parameter 'fBufReader'. These contents are converted
 // to a string which is then stored and returned through
@@ -2513,10 +2526,10 @@ type fileBufferReaderMicrobot struct {
 //
 //		A pointer to an instance of FileBufferReader.
 //
-//		The entire contents of the io.Reader object
-//		encapsulated in this FileBufferReader instance
-//		will be extracted and returned as a string
-//		through input parameter 'strBuilder'.
+//		The entire contents of the internal bufio.Reader
+//		object encapsulated in this FileBufferReader
+//		instance will be extracted and returned as a
+//		string through input parameter 'strBuilder'.
 //
 //	fBufReaderLabel				string
 //
@@ -2531,7 +2544,7 @@ type fileBufferReaderMicrobot struct {
 //	strBuilder					*strings.Builder
 //
 //		A pointer to an instance of strings.Builder. The
-//		entire contents of the internal io.Reader for the
+//		entire contents of the internal bufio.Reader for the
 //		FileBufferReader instance passed as 'fBufReader'
 //		will be extracted and stored as a string in
 //		'strBuilder'.
@@ -2559,7 +2572,7 @@ type fileBufferReaderMicrobot struct {
 //
 //		If this method completes successfully, this
 //		integer value will equal the number of bytes
-//		read from the internal io.Reader object
+//		read from the internal bufio.Reader object
 //		encapsulated by the FileBufferReader instance
 //		passed as input parameter 'fBufReader'.
 //
@@ -2616,11 +2629,11 @@ func (fBufReaderMicrobot *fileBufferReaderMicrobot) readAllStrBuilder(
 		fBufReaderLabel = "fBufReader"
 	}
 
-	if fBufReader.fileReader == nil {
+	if fBufReader.bufioReader == nil {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: This instance of 'FileBufferReader' (%v) is invalid!\n"+
-			"The internal '%v' io.Reader object has NOT been initialized.\n"+
+			"The internal '%v' bufio.Reader object has NOT been initialized.\n"+
 			"Call one of the 'New' or 'Setter' methods when creating\n"+
 			"an instance of 'FileBufferReader'\n",
 			ePrefix.String(),
@@ -2637,7 +2650,7 @@ func (fBufReaderMicrobot *fileBufferReaderMicrobot) readAllStrBuilder(
 	for {
 
 		localBytesRead,
-			err2 = fBufReader.fileReader.Read(bytesRead)
+			err2 = fBufReader.bufioReader.Read(bytesRead)
 
 		if localBytesRead > 0 {
 
@@ -2656,7 +2669,7 @@ func (fBufReaderMicrobot *fileBufferReaderMicrobot) readAllStrBuilder(
 		if err2 != nil {
 
 			err = fmt.Errorf("%v\n"+
-				"Error returned by fBufReader.fileReader.Read(bytesRead).\n"+
+				"Error returned by fBufReader.bufioReader.Read(bytesRead).\n"+
 				"Error=\n%v\n",
 				ePrefix.String(),
 				err2.Error())
@@ -2678,9 +2691,10 @@ func (fBufReaderMicrobot *fileBufferReaderMicrobot) readAllStrBuilder(
 // instance of FileBufferReader passed as input parameter
 // 'fBufReader'.
 //
-// The new io.Reader object assigned to 'fBufReader' is
-// generated from the File Manager (FileMgr) instance
-// passed as input parameter 'fileMgr'.
+// The new internal bufio.Reader object assigned to
+// 'fBufReader' is generated from the File Manager
+// (FileMgr) instance passed as input parameter
+// 'fileMgr'.
 //
 // ----------------------------------------------------------------
 //
@@ -2693,7 +2707,7 @@ func (fBufReaderMicrobot *fileBufferReaderMicrobot) readAllStrBuilder(
 //
 //	(2) As a precaution, the incoming 'fileMgr' object
 //		will be closed before configuring 'fBufReader'
-//		with a new internal io.Reader object.
+//		with a new internal bufio.Reader object.
 //
 // ----------------------------------------------------------------
 //
@@ -3136,7 +3150,7 @@ func (fBufReaderNanobot *fileBufferReaderNanobot) setIoReader(
 		bufSize = 4096
 	}
 
-	fBufReader.fileReader = bufio.NewReaderSize(
+	fBufReader.bufioReader = bufio.NewReaderSize(
 		reader,
 		bufSize)
 
@@ -3485,7 +3499,7 @@ func (fBufReaderNanobot *fileBufferReaderNanobot) setPathFileName(
 
 	fBufReader.targetReadFileName = pathFileName
 
-	fBufReader.fileReader = bufio.NewReaderSize(
+	fBufReader.bufioReader = bufio.NewReaderSize(
 		fBufReader.filePtr,
 		bufSize)
 
@@ -3649,7 +3663,7 @@ func (fBuffReaderMolecule *fileBufferReaderMolecule) close(
 
 	fBufReader.filePtr = nil
 
-	fBufReader.fileReader = nil
+	fBufReader.bufioReader = nil
 
 	return err
 }
