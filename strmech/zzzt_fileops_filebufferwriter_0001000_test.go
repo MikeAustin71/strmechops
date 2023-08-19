@@ -317,8 +317,6 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 				i,
 				err.Error())
 
-			_ = fBufWriter.Flush(nil)
-
 			_ = fBufWriter.FlushAndClose(nil)
 
 			return
@@ -329,41 +327,13 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 	}
 
 	var err2 error
-	var errs []error
-
-	err2 = fBufWriter.Flush(ePrefix)
+	err2 = fBufWriter.Close()
 
 	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error returned by fBufWriter.Flush(ePrefix)\n"+
-			"Error = \n%v\n",
-			ePrefix.String(),
-			err2.Error())
-
-		errs = append(errs, err)
-	}
-
-	err2 = fBufWriter.FlushAndClose(ePrefix)
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error returned by fBufWriter.Close(ePrefix)\n"+
-			"Error = \n%v\n",
-			ePrefix.String(),
-			err2.Error())
-
-		errs = append(errs, err)
-	}
-
-	if len(errs) > 0 {
-
-		err2 = new(StrMech).ConsolidateErrors(errs)
 
 		t.Errorf("%v\n"+
-			"Errors returned from Flush() and Close()\n"+
-			"Errors= \n%v\n",
+			"Error returned by fBufWriter.Close(ePrefix)\n"+
+			"Error = \n%v\n",
 			ePrefix.String(),
 			err2.Error())
 
@@ -430,39 +400,13 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 
 	}
 
-	err2 = fBufWriter.Flush(ePrefix)
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error returned by fBufWriter.Flush(ePrefix) #2\n"+
-			"Error = \n%v\n",
-			ePrefix.String(),
-			err2.Error())
-
-		errs = append(errs, err)
-	}
-
 	err2 = fBufWriter.FlushAndClose(ePrefix)
 
 	if err2 != nil {
 
-		err = fmt.Errorf("%v\n"+
+		t.Errorf("%v\n"+
 			"Error returned by fBufWriter.Close(ePrefix) #2\n"+
 			"Error = \n%v\n",
-			ePrefix.String(),
-			err2.Error())
-
-		errs = append(errs, err)
-	}
-
-	if len(errs) > 0 {
-
-		err2 = new(StrMech).ConsolidateErrors(errs)
-
-		t.Errorf("%v\n"+
-			"Errors returned from Flush() and Close() #2\n"+
-			"Errors= \n%v\n",
 			ePrefix.String(),
 			err2.Error())
 
@@ -511,6 +455,215 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 			ePrefix.String(),
 			targetWriteFile,
 			err2.Error())
+	}
+
+	return
+}
+
+func TestFileBufferWriter_Write_000300(t *testing.T) {
+
+	funcName := "TestFileBufferWriter_Write_000300()"
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		funcName,
+		"")
+
+	var targetReadFile string
+	var err error
+
+	targetReadFile,
+		err = new(fileOpsTestUtility).
+		GetCompositeDir(
+			"\\fileOpsTest\\filesForTest\\textFilesForTest\\splitFunc.txt",
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var targetWriteFile string
+
+	targetWriteFile,
+		err = new(fileOpsTestUtility).
+		GetCompositeDir(
+			"\\fileOpsTest\\trashDirectory\\TestFileBufferWriter_Write_000300.txt",
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var newFBuffReadWrite FileBufferReadWrite
+	var readerFileInfoPlus FileInfoPlus
+
+	readerFileInfoPlus,
+		_,
+		newFBuffReadWrite,
+		err = new(FileBufferReadWrite).
+		NewPathFileNames(
+			targetReadFile,
+			false,
+			512,
+			targetWriteFile,
+			false,
+			1024,
+			true,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var endOfLineDelimiters = &StringArrayDto{}
+	endOfLineDelimiters.PushStr("\r\n")
+	endOfLineDelimiters.PushStr("\n")
+
+	var numOfLinesProcessed, numOfBatchesProcessed int
+	var numBytesRead, numBytesWritten int64
+	var expectedBytes = 1184
+	var expectedLines = 22
+
+	numOfLinesProcessed,
+		numOfBatchesProcessed,
+		numBytesRead,
+		numBytesWritten,
+		err = newFBuffReadWrite.
+		ReadWriteTextLines(
+			endOfLineDelimiters,
+			-1,
+			true,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if expectedLines != numOfLinesProcessed {
+
+		t.Errorf("\n%v\n"+
+			"Error: newFBuffReadWrite.ReadWriteTextLines()\n"+
+			"expectedLines NOT EQUAL TO numOfLinesProcessed\n"+
+			"      expectedLines= '%v'\n"+
+			"numOfLinesProcessed= '%v'\n",
+			ePrefix.String(),
+			expectedLines,
+			numOfLinesProcessed)
+
+		return
+	}
+
+	if int64(expectedBytes) != numBytesRead {
+
+		t.Errorf("\n%v\n"+
+			"Error: newFBuffReadWrite.ReadWriteTextLines()\n"+
+			"expectedBytes NOT EQUAL TO readerFileInfoPlus.Size\n"+
+			"expectedBytes= '%v'\n"+
+			"readerFileInfoPlus.Size= '%v'\n"+
+			" Target Read File= '%v'\n"+
+			"Target Write File= '%v'\n",
+			ePrefix.String(),
+			expectedBytes,
+			readerFileInfoPlus.Size(),
+			targetReadFile,
+			targetWriteFile)
+
+		return
+	}
+
+	if numOfBatchesProcessed < 1 {
+
+		t.Errorf("\n%v\n"+
+			"Error: newFBuffReadWrite.ReadWriteTextLines()\n"+
+			"Number Of Batches Processed is INVALID!\n"+
+			"numOfBatchesProcessed= '%v'\n"+
+			" Target Read File= '%v'\n"+
+			"Target Write File= '%v'\n",
+			ePrefix.String(),
+			numOfBatchesProcessed,
+			targetReadFile,
+			targetWriteFile)
+
+		return
+
+	}
+
+	if int64(expectedBytes) != numBytesWritten {
+
+		t.Errorf("\n%v\n"+
+			"Error: newFBuffReadWrite.ReadWriteTextLines()\n"+
+			"expectedBytes NOT EQUAL TO numBytesWritten\n"+
+			"  expectedBytes= '%v'\n"+
+			"numBytesWritten= '%v'\n"+
+			" Target Read File= '%v'\n"+
+			"Target Write File= '%v'\n",
+			ePrefix.String(),
+			expectedBytes,
+			numBytesWritten,
+			targetReadFile,
+			targetWriteFile)
+
+		return
+	}
+
+	var filesAreEqual = false
+	var reasonFilesNotEqual string
+	var fHelper = new(FileHelper)
+
+	filesAreEqual,
+		reasonFilesNotEqual,
+		err = fHelper.
+		CompareFiles(
+			targetReadFile,
+			targetWriteFile,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !filesAreEqual {
+
+		t.Errorf("\n%v\n"+
+			"Error: FileHelper.CompareFiles()\n"+
+			"Target Read and Write Files ARE NOT EQUAL!\n"+
+			"Reason Files Are NOT Equal= '%v'\n"+
+			" Target Read File= '%v'\n"+
+			"Target Write File= '%v'\n",
+			ePrefix.String(),
+			reasonFilesNotEqual,
+			targetReadFile,
+			targetWriteFile)
+
+		return
+
+	}
+
+	err = fHelper.DeleteDirFile(
+		targetWriteFile,
+		ePrefix)
+
+	if err != nil {
+
+		t.Errorf("%v\n"+
+			"Error return from fHelper.DeleteDirFile(targetWriteFile)\n"+
+			"Attempted Target File Deletion FAILED!\n"+
+			"targetWriteFile = '%v'\n"+
+			"Error = \n%v\n",
+			ePrefix.String(),
+			targetWriteFile,
+			err.Error())
+
+		return
 	}
 
 	return

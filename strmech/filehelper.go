@@ -2,6 +2,7 @@ package strmech
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
@@ -3197,28 +3198,14 @@ func (fh *FileHelper) DeleteDirFile(
 			ePrefix.XCpy(
 				"pathFile"))
 
-	var errs []error
-
 	if msgError != nil {
 
-		errs = append(
-			errs,
-			fmt.Errorf("%v",
-				msgError.Error()))
-
+		err = errors.Join(err, msgError)
 	}
 
 	if lowLevelErr != nil {
 
-		errs = append(
-			errs,
-			fmt.Errorf("%v",
-				lowLevelErr.Error()))
-	}
-
-	if len(errs) > 0 {
-
-		err = new(StrMech).ConsolidateErrors(errs)
+		err = errors.Join(err, lowLevelErr)
 	}
 
 	return err

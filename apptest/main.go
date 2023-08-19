@@ -19,12 +19,13 @@ func main() {
 	//examples.MainFileReadWriteTest010{}.WriteFileBytes01()
 	//examples.MainFileReadWriteTest010{}.WriteFileBytes02()
 	//examples.MainFileReadWriteTest010{}.FileBufferReader03()
-	examples.MainFileReadWriteTest010{}.FileBufferReader04()
+	//examples.MainFileReadWriteTest010{}.FileBufferReader04()
 	//examples.MainFileReadWriteTest010{}.FileBufWriter01()
 	// examples.MainFilePermissionsTest009{}.PermissionStr02()
 
 	//examples.MainFileReadWriteTest010{}.FileBuffReadWrite01()
 	//examples.MainFileReadWriteTest010{}.FileBuffReadWrite02()
+	examples.MainFileReadWriteTest010{}.FileBuffReadWrite02B()
 	//examples.MainFileReadWriteTest010{}.FileBuffReadWrite03()
 
 }

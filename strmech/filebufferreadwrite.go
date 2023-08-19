@@ -2625,7 +2625,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 
 		numOfBatchesProcessed++
 
-		outputLinesArray.StrArray = make([]string, 0, numTextLinesPerBatch)
+		outputLinesArray.StrArray = make([]string, 0)
 
 		localNumOfLinesProcessed,
 			localNumBytesRead,
@@ -2676,7 +2676,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 				err1 = fBufReadWrite.writer.Write(
 				[]byte(
 					outputLinesArray.
-						ConcatenateStrings("")))
+						ConcatenateStrings("\n")))
 
 			if err1 != nil {
 
