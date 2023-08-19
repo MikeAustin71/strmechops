@@ -66,6 +66,7 @@ func TestFileIoReader_Read_000100(t *testing.T) {
 		err = fIoReader.
 		ReadAllStrBuilder(
 			strBuilder,
+			false,
 			ePrefix.XCpy("strBuilder"))
 
 	if err != nil {

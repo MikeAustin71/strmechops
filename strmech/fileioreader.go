@@ -1099,6 +1099,27 @@ func (fIoReader *FileIoReader) Read(
 //		strings in the string array encapsulated by
 //		'outputLinesArray'.
 //
+//	autoCloseOnExit				bool
+//
+//		When this parameter is set to 'true', this
+//		method will automatically perform all required
+//		clean-up tasks for the current instance of
+//		FileIoReader. Specifically, the internal
+//		io.Reader object will be properly 'closed'. Upon
+//		completion of this 'close' operation, the current
+//		instance of FileIoReader will be invalid and
+//		unusable for all future 'read' operations.
+//
+//		If input parameter 'autoCloseOnExit' is
+//		set to 'false', this method will NOT
+//		automatically 'close' the internal io.Reader
+//		object for the current instance of
+//		FileBufferReader. Consequently, the user will be
+//		responsible for 'closing' the internal io.Reader
+//		object by calling the local method:
+//
+//				FileIoReader.Close()
+//
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
@@ -1338,6 +1359,27 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 //		current instance of FileIoReader and stores the
 //		resulting string in 'strBuilder'.
 //
+//	autoCloseOnExit				bool
+//
+//		When this parameter is set to 'true', this
+//		method will automatically perform all required
+//		clean-up tasks for the current instance of
+//		FileIoReader. Specifically, the internal
+//		io.Reader object will be properly 'closed'. Upon
+//		completion of this 'close' operation, the current
+//		instance of FileIoReader will be invalid and
+//		unusable for all future 'read' operations.
+//
+//		If input parameter 'autoCloseOnExit' is
+//		set to 'false', this method will NOT
+//		automatically 'close' the internal io.Reader
+//		object for the current instance of
+//		FileBufferReader. Consequently, the user will be
+//		responsible for 'closing' the internal io.Reader
+//		object by calling the local method:
+//
+//				FileIoReader.Close()
+//
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
@@ -1429,6 +1471,7 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 //		to 'nil' and no error will be returned.
 func (fIoReader *FileIoReader) ReadAllStrBuilder(
 	strBuilder *strings.Builder,
+	autoCloseOnExit bool,
 	errorPrefix interface{}) (
 	numOfBytesRead int64,
 	err error) {
@@ -1462,6 +1505,21 @@ func (fIoReader *FileIoReader) ReadAllStrBuilder(
 			"fIoReader",
 			strBuilder,
 			ePrefix)
+
+	if err != nil {
+
+		return numOfBytesRead, err
+
+	}
+
+	if autoCloseOnExit == true {
+
+		err = new(fileIoReaderMolecule).close(
+			fIoReader,
+			"fIoReader",
+			ePrefix.XCpy("fIoReader"))
+
+	}
 
 	return numOfBytesRead, err
 }

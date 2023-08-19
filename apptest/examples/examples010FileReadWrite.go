@@ -888,6 +888,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02B() {
 		-1,
 		&endOfLineDelimiters,
 		outputLinesArray,
+		true, // autoCloseOnExit
 		ePrefix)
 
 	if err != nil {
@@ -1114,6 +1115,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 		-1,
 		&endOfLineDelimiters,
 		outputLinesArray,
+		true, // autoCloseOnExit
 		ePrefix)
 
 	if err != nil {

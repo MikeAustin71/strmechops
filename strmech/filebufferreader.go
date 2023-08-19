@@ -1245,12 +1245,12 @@ func (fBufReader *FileBufferReader) Read(
 //
 //		When this parameter is set to 'true', this
 //		method will automatically perform all required
-//		clean-up for the current instance of
+//		clean-up tasks for the current instance of
 //		FileBufferReader. Specifically, the internal
-//		io.Reader object will be properly 'closed'. This
-//		means that the current instance of
-//		FileBufferReader will be invalid and unusable for
-//		all future 'read' operations.
+//		io.Reader object will be properly 'closed'. Upon
+//		completion of the 'close' operation, the current
+//		instance of FileBufferReader will be invalid and
+//		unusable for all future 'read' operations.
 //
 //		If input parameter 'autoCloseOnExit' is
 //		set to 'false', this method will NOT
