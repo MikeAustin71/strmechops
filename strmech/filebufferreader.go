@@ -1241,6 +1241,27 @@ func (fBufReader *FileBufferReader) Read(
 //		strings in the string array encapsulated by
 //		'outputLinesArray'.
 //
+//	autoCloseOnExit				bool
+//
+//		When this parameter is set to 'true', this
+//		method will automatically perform all required
+//		clean-up for the current instance of
+//		FileBufferReader. Specifically, the internal
+//		io.Reader object will be properly 'closed'. This
+//		means that the current instance of
+//		FileBufferReader will be invalid and unusable for
+//		all future 'read' operations.
+//
+//		If input parameter 'autoCloseOnExit' is
+//		set to 'false', this method will NOT
+//		automatically 'close' the internal io.Reader
+//		object for the current instance of
+//		FileBufferReader. Consequently, the user will be
+//		responsible for 'closing' the internal io.Reader
+//		object by calling the local method:
+//
+//			FileBufferReadWrite.Close()
+//
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
@@ -1342,6 +1363,7 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 	maxNumOfLines int,
 	endOfLineDelimiters *StringArrayDto,
 	outputLinesArray *StringArrayDto,
+	autoCloseOnExit bool,
 	errorPrefix interface{}) (
 	numOfLinesRead int,
 	numOfBytesRead int64,
@@ -1395,6 +1417,15 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 			endOfLineDelimiters,
 			outputLinesArray,
 			ePrefix.XCpy("fBufReader.fileReader"))
+
+	if autoCloseOnExit == true {
+
+		err = new(fileBufferReaderMolecule).close(
+			fBufReader,
+			"fBufReader",
+			ePrefix.XCpy("fBufReader"))
+
+	}
 
 	return numOfLinesRead,
 		numOfBytesRead,

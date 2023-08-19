@@ -2396,7 +2396,6 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //
 //			FileBufferReadWrite.Close()
 //
-//
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
