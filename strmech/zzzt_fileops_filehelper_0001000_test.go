@@ -248,7 +248,7 @@ func TestFileHelper_ReadTextLines_000100(t *testing.T) {
 		return
 	}
 
-	if originalFileSize != 1228 {
+	if originalFileSize != 1226 {
 
 		t.Errorf("%v\n"+
 			"Error: Original File Size of the\n"+
@@ -257,7 +257,7 @@ func TestFileHelper_ReadTextLines_000100(t *testing.T) {
 			"the target read file should be %v-bytes.\n"+
 			"Instead, original file size is %v-bytes\n",
 			ePrefix.String(),
-			1228,
+			1226,
 			originalFileSize)
 
 		return

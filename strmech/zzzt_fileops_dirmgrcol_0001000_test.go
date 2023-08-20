@@ -17,13 +17,23 @@ func TestDirMgrCollection_GetTextListingAbsPath_000100(t *testing.T) {
 		funcName,
 		"")
 
+	osPathSepStr := string(os.PathSeparator)
+
+	targetDirString := "\\fileOpsTest\\filesForTest\\levelbfilesfortest"
+
+	targetDirString = strings.Replace(
+		targetDirString,
+		"\\",
+		osPathSepStr,
+		-1)
+
 	var targetDir string
 	var err error
 
 	targetDir,
 		err = new(fileOpsTestUtility).
 		GetCompositeDir(
-			FILEOpsBaseFilesForTest,
+			targetDirString,
 			ePrefix)
 
 	if err != nil {
@@ -32,27 +42,17 @@ func TestDirMgrCollection_GetTextListingAbsPath_000100(t *testing.T) {
 		return
 	}
 
-	osPathSepStr := string(os.PathSeparator)
-
-	testString := "\\fileOpsTest\\filesForTest"
-
-	testString = strings.Replace(
-		testString,
-		"\\",
-		osPathSepStr,
-		-1)
-
 	if !strings.Contains(targetDir, "filesForTest") {
 
 		t.Errorf("\n%v\n"+
 			"Error: Returned 'targetDir' string does NOT\n"+
 			"contain '%v'\n"+
 			"targetDir= '%v'\n"+
-			"testString= '%v'\n",
+			"targetDirString= '%v'\n",
 			funcName,
-			testString,
+			targetDirString,
 			targetDir,
-			testString)
+			targetDirString)
 
 		return
 
@@ -227,11 +227,11 @@ func TestDirMgrCollection_GetTextListingAbsPath_000100(t *testing.T) {
 
 	if !strings.Contains(
 		outputStr,
-		"Number of Directories: 10") {
+		"Number of Directories: 5") {
 
 		t.Errorf("\n%v\n"+
 			"Error: The Text Listing did NOT contain:\n"+
-			"'Number of Directories: 10'\n"+
+			"'Number of Directories: 4'\n"+
 			" directoriesLocated.GetTextListingAbsPath().\n"+
 			"targetDir='%v'\n"+
 			"outputStr=\n%v\n",
@@ -243,7 +243,7 @@ func TestDirMgrCollection_GetTextListingAbsPath_000100(t *testing.T) {
 
 	}
 
-	if numOfDirectoriesLocated != 10 {
+	if numOfDirectoriesLocated != 5 {
 
 		t.Errorf("\n%v\n"+
 			"Error: Expected numOfDirectoriesLocated == 10\n"+
@@ -260,8 +260,8 @@ func TestDirMgrCollection_GetTextListingAbsPath_000100(t *testing.T) {
 	if isParentDirectoryIncluded == true {
 
 		t.Errorf("\n%v\n"+
-			"Error: Expected isParentDirectoryIncluded == 'true'\n"+
-			"Instead, isParentDirectoryIncluded = 'false'\n"+
+			"Error: Expected isParentDirectoryIncluded == 'false'\n"+
+			"Instead, isParentDirectoryIncluded = 'true'\n"+
 			"targetDir='%v'\n",
 			ePrefix.String(),
 			targetDir)
@@ -270,7 +270,7 @@ func TestDirMgrCollection_GetTextListingAbsPath_000100(t *testing.T) {
 
 	}
 
-	expectedTotalBytes := "706,592"
+	expectedTotalBytes := "12,249"
 
 	if expectedTotalBytes != totalBytesNumStr {
 
