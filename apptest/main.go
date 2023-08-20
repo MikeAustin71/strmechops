@@ -7,6 +7,17 @@ import "github.com/MikeAustin71/strmechops/apptest/examples"
 
 func main() {
 
+	/*
+		=== RUN   TestFileBufferWriter_Write_000300
+		zzzt_fileops_filebufferwriter_0001000_test.go:657:
+		TestFileBufferWriter_Write_000300()
+		Error: FileHelper.CompareFiles()
+		Target Read and Write Files ARE NOT EQUAL!
+			Reason Files Are NOT Equal= 'The files sizes (in bytes) are NOT equal.'
+		Target Read File= 'd:\goprojects\mikeaustin71\strmechops\fileOpsTest\filesForTest\textFilesForTest\splitFunc.txt'
+		Target Write File= 'd:\goprojects\mikeaustin71\strmechops\fileOpsTest\trashDirectory\TestFileBufferWriter_Write_000300.txt'
+	*/
+
 	//examples.MainDirOpsTest007{}.GetDirProfile01()
 	//examples.MainDirOpsTest007{}.GetDirs01()
 	//examples.MainDirOpsTest007{}.GetDirTreeProfile01()
