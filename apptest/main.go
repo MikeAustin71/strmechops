@@ -36,7 +36,7 @@ func main() {
 
 	//examples.MainFileReadWriteTest010{}.FileBuffReadWrite01()
 	//examples.MainFileReadWriteTest010{}.FileBuffReadWrite02()
-	examples.MainFileReadWriteTest010{}.FileBuffReadWrite02B()
-	//examples.MainFileReadWriteTest010{}.FileBuffReadWrite03()
+	//examples.MainFileReadWriteTest010{}.FileBuffReadWrite02B()
+	examples.MainFileReadWriteTest010{}.FileBuffReadWrite03()
 
 }

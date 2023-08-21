@@ -2302,21 +2302,52 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //
 // ----------------------------------------------------------------
 //
+// # BE ADVISED
+//
+//	  Platform Conventions For Text End-Of-Line Characters
+//
+//	The line termination or end-of-line character, or
+//	characters, written to the io.Writer output
+//	destination are specified by input parameter
+//	'writeEndOfLineChars'.
+//
+//	The following are the various line termination
+//	conventions:
+//
+//	On Windows, line-endings are terminated with a
+//	combination of a carriage return (ASCII 0x0d or \r)
+//	and a newline(\n), also referred to as CR/LF (\r\n).
+//
+//	On UNIX, text file line-endings are terminated with a
+//	newline character (ASCII 0x0a, represented by the \n
+//	escape sequence in most languages), also referred to
+//	as a linefeed (LF).
+//
+//	On the Mac Classic (Mac systems using any system prior
+//	to Mac OS X), line-endings are terminated with a single
+//	carriage return (\r or CR). (Mac OS X uses the UNIX
+//	convention.)
+//
+//	Reference
+//		portal.perforce.com/s/article/3096
+//
+// ----------------------------------------------------------------
+//
 // # IMPORTANT
 //
-//	(1)	End-of-line characters specified by input
-//		parameter 'endOfLineDelimiters' are used to parse
-//		raw data read from the io.Reader object and
+//	(1)	'Read' End-of-line characters specified by input
+//		parameter 'readEndOfLineDelimiters' are used to
+//		parse raw data read from the io.Reader object and
 //		extract individual lines of text.
 //
 //		The end-of-line delimiters specified by
-//		'endOfLineDelimiters' are NOT written to the
+//		'readEndOfLineDelimiters' are NOT written to the
 //	 	output destination io.Writer object. They are
 //	 	stripped off before being written to the
 //	 	io.Writer object. The text lines actually written
-//	 	to the io.Writer object are arbitrarily
-//	 	terminated with a single new line character
-//	 	('\n').
+//	 	to the io.Writer object are terminated with the
+//	 	end-of-line characters specified by input parameter
+//	 	'writeEndOfLineChars'.
 //
 //	(2)	If input parameter 'autoFlushAndCloseOnExit' is
 //		set to 'false', the user is responsible for
@@ -2329,23 +2360,50 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //
 // # Input Parameters
 //
-//	endOfLineDelimiters			*StringArrayDto
+//	readEndOfLineDelimiters		*StringArrayDto
 //
 //		A pointer to an instance of StringArrayDto.
 //		'endOfLineDelimiters' encapsulates a string
 //		array which contains the end-of-line delimiters
-//		that will be used to identify and separate
-//		individual lines of text.
+//		that used to identify and separate individual
+//		lines of text.
 //
 //						NOTE
-//		The end-of-line delimiters specified by
+//		The 'read' end-of-line delimiters specified by
 //		'endOfLineDelimiters' are NOT written to the
 //	 	output destination io.Writer object. They are
 //	 	stripped off before being written to the
 //	 	io.Writer object. The text lines actually written
-//	 	to the io.Writer object are arbitrarily
-//	 	terminated with a single new line character
-//	 	('\n').
+//	 	to the io.Writer object are controlled by the
+//		'write' end-of-line characters specified by input
+//		parameter 'writeEndOfLineChars'.
+//
+//	writeEndOfLineChars			string
+//
+//		This string contains the end-of-line characters
+//		which will be configured for each line of text
+//		written to the output destination specified by
+//		the internal io.Writer object.
+//
+//		On Windows, line-endings are terminated with a
+//		combination of a carriage return (ASCII 0x0d or
+//		\r) and a newline(\n), also referred to as CR/LF
+//		(\r\n).
+//
+//		On UNIX, text file line-endings are terminated
+//		with a newline character (ASCII 0x0a, represented
+//		by the \n escape sequence in most languages),
+//		also referred to as a linefeed (LF).
+//
+//		On the Mac Classic (Mac systems using any system
+//		prior to Mac OS X), line-endings are terminated
+//		with a single carriage return (\r or CR). (Mac OS
+//		X uses the UNIX convention.)
+//
+//		If 'writeEndOfLineChars' is submitted as an empty
+//		or zero length string, no end-of-line characters
+//		will be written to the io.Writer output
+//		destination and no error will be returned.
 //
 //	numTextLinesPerBatch		int
 //
@@ -2510,7 +2568,8 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //		is NOT equal to the number of bytes read from the
 //		source, an error will be returned.
 func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
-	endOfLineDelimiters *StringArrayDto,
+	readEndOfLineDelimiters *StringArrayDto,
+	writeEndOfLineChars string,
 	numTextLinesPerBatch int,
 	autoFlushAndCloseOnExit bool,
 	errorPrefix interface{}) (
@@ -2617,7 +2676,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 		getStdTextLineScanner(
 			fBufReadWrite.reader,
 			"fBufReadWrite.reader",
-			endOfLineDelimiters,
+			readEndOfLineDelimiters,
 			ePrefix.XCpy("textLineScanner<-"))
 
 	for {
@@ -2675,7 +2734,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 				err1 = fBufReadWrite.writer.Write(
 				[]byte(
 					outputLinesArray.
-						ConcatenateStrings("\n")))
+						ConcatenateStrings(writeEndOfLineChars)))
 
 			if err1 != nil {
 

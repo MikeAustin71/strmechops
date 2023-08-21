@@ -520,9 +520,10 @@ func TestFileBufferWriter_Write_000300(t *testing.T) {
 		return
 	}
 
-	var endOfLineDelimiters = &StringArrayDto{}
-	endOfLineDelimiters.PushStr("\r\n")
-	endOfLineDelimiters.PushStr("\n")
+	var readEndOfLineDelimiters = &StringArrayDto{}
+	var writeEndOfLineChars = "\r\n"
+	readEndOfLineDelimiters.PushStr("\r\n")
+	readEndOfLineDelimiters.PushStr("\n")
 
 	var numOfLinesProcessed, numOfBatchesProcessed int
 	var numBytesRead, numBytesWritten int64
@@ -538,7 +539,8 @@ func TestFileBufferWriter_Write_000300(t *testing.T) {
 		numBytesWritten,
 		err = newFBuffReadWrite.
 		ReadWriteTextLines(
-			endOfLineDelimiters,
+			readEndOfLineDelimiters,
+			writeEndOfLineChars,
 			-1,
 			true,
 			ePrefix)
@@ -634,42 +636,40 @@ func TestFileBufferWriter_Write_000300(t *testing.T) {
 		return
 	}
 
-	/*
-		var filesAreEqual = false
-		var reasonFilesNotEqual string
-		var fHelper = new(FileHelper)
+	var filesAreEqual = false
+	var reasonFilesNotEqual string
+	var fHelper = new(FileHelper)
 
-		filesAreEqual,
+	filesAreEqual,
+		reasonFilesNotEqual,
+		err = fHelper.
+		CompareFiles(
+			targetReadFile,
+			targetWriteFile,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if !filesAreEqual {
+
+		t.Errorf("\n%v\n"+
+			"Error: FileHelper.CompareFiles()\n"+
+			"Target Read and Write Files ARE NOT EQUAL!\n"+
+			"Reason Files Are NOT Equal= '%v'\n"+
+			" Target Read File= '%v'\n"+
+			"Target Write File= '%v'\n",
+			ePrefix.String(),
 			reasonFilesNotEqual,
-			err = fHelper.
-			CompareFiles(
-				targetReadFile,
-				targetWriteFile,
-				ePrefix)
+			targetReadFile,
+			targetWriteFile)
 
-		if err != nil {
-			t.Errorf("\n%v\n",
-				err.Error())
-			return
-		}
+		return
 
-		if !filesAreEqual {
-
-			t.Errorf("\n%v\n"+
-				"Error: FileHelper.CompareFiles()\n"+
-				"Target Read and Write Files ARE NOT EQUAL!\n"+
-				"Reason Files Are NOT Equal= '%v'\n"+
-				" Target Read File= '%v'\n"+
-				"Target Write File= '%v'\n",
-				ePrefix.String(),
-				reasonFilesNotEqual,
-				targetReadFile,
-				targetWriteFile)
-
-			return
-
-		}
-	*/
+	}
 
 	err = new(FileHelper).DeleteDirFile(
 		targetWriteFile,

@@ -379,12 +379,16 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite01() {
 		return
 	}
 
-	fmt.Printf("\nFile Info Data\n"+
-		"newFBuffReadWrite\n"+
+	fmt.Printf("\nNew File Stats\n"+
+		"FileBufferReadWrite.NewPathFileNames()\n"+
 		"Reader File Size= %v\n"+
-		"Writer File Size= %v\n\n",
+		"Writer File Size= %v\n"+
+		" Target Read File: %v\n"+
+		"Target Write File: %v\n\n",
 		readerFileInfoPlus.Size(),
-		writerFileInfoPlus.Size())
+		writerFileInfoPlus.Size(),
+		targetReadFile,
+		targetWriteFile)
 
 	var totalBytesRead, totalBytesWritten int
 
@@ -595,9 +599,10 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02() {
 
 	var numOfBytesWritten, numOfBytesRead int64
 	var numOfLinesProcessed, numOfBatchesProcessed int
-	var endOfLineDelimiters strmech.StringArrayDto
+	var readEndOfLineDelimiters strmech.StringArrayDto
+	var writeEndOfLineChars = "\r\n"
 
-	endOfLineDelimiters.AddManyStrings(
+	readEndOfLineDelimiters.AddManyStrings(
 		"\r",
 		"\r\r",
 		"[EOL]")
@@ -610,7 +615,8 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02() {
 		numOfBytesWritten,
 		err = newFBuffReadWrite.
 		ReadWriteTextLines(
-			&endOfLineDelimiters,
+			&readEndOfLineDelimiters,
+			writeEndOfLineChars,
 			linesPerBatch, // numTextLinesPerBatch
 			true,          // autoFlushAndCloseOnExit
 			ePrefix)
@@ -759,17 +765,23 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02B() {
 		return
 	}
 
-	fmt.Printf("\nStats From NewPathFileNames\n"+
-		"Reader File Size: %v\n"+
-		"Writer File Size: %v\n\n",
+	fmt.Printf("\nNew File Stats\n"+
+		"FileBufferReadWrite.NewPathFileNames()\n"+
+		"Reader File Size= %v\n"+
+		"Writer File Size= %v\n"+
+		" Target Read File: %v\n"+
+		"Target Write File: %v\n\n",
 		readerFileInfoPlus.Size(),
-		writerFileInfoPlus.Size())
+		writerFileInfoPlus.Size(),
+		targetReadFile,
+		targetWriteFile)
 
 	var numOfBytesWritten, numOfBytesRead int64
 	var numOfLinesProcessed, numOfBatchesProcessed int
-	var endOfLineDelimiters strmech.StringArrayDto
+	var readEndOfLineDelimiters strmech.StringArrayDto
+	var writeEndOfLineChars = "\r\n"
 
-	endOfLineDelimiters.AddManyStrings(
+	readEndOfLineDelimiters.AddManyStrings(
 		"\r",
 		"\r\r",
 		"[EOL]")
@@ -782,7 +794,8 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02B() {
 		numOfBytesWritten,
 		err = newFBuffReadWrite.
 		ReadWriteTextLines(
-			&endOfLineDelimiters,
+			&readEndOfLineDelimiters,
+			writeEndOfLineChars,
 			linesPerBatch, // numTextLinesPerBatch
 			true,          // autoFlushAndCloseOnExit
 			ePrefix)
@@ -875,9 +888,9 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02B() {
 
 	var numOfLinesRead int
 	var outputLinesArray = &strmech.StringArrayDto{}
-	endOfLineDelimiters.Empty()
+	readEndOfLineDelimiters.Empty()
 
-	endOfLineDelimiters.AddManyStrings(
+	readEndOfLineDelimiters.AddManyStrings(
 		"\n",
 		"\r\n",
 		"[EOL]")
@@ -886,7 +899,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02B() {
 		numOfBytesRead,
 		err = newFileIoReader.ReadAllTextLines(
 		-1,
-		&endOfLineDelimiters,
+		&readEndOfLineDelimiters,
 		outputLinesArray,
 		true, // autoCloseOnExit
 		ePrefix)
@@ -992,21 +1005,23 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 		return
 	}
 
-	fmt.Printf("\nStats From FileBufferReadWrite.NewPathFileNames\n"+
+	fmt.Printf("\nNew File Stats\n"+
+		"FileBufferReadWrite.NewPathFileNames()\n"+
+		"Reader File Size= %v\n"+
+		"Writer File Size= %v\n"+
 		" Target Read File: %v\n"+
-		" Reader File Size: %v\n"+
-		" Writer File Size: %v\n"+
-		"Target Write File: %v\n",
-		targetReadFile,
+		"Target Write File: %v\n\n",
 		readerFileInfoPlus.Size(),
 		writerFileInfoPlus.Size(),
+		targetReadFile,
 		targetWriteFile)
 
 	var numOfBytesWritten, numOfBytesRead int64
 	var numOfLinesProcessed, numOfBatchesProcessed int
-	var endOfLineDelimiters strmech.StringArrayDto
+	var readEndOfLineDelimiters strmech.StringArrayDto
+	var writeEndOfLineChars = "\r\n"
 
-	endOfLineDelimiters.AddManyStrings(
+	readEndOfLineDelimiters.AddManyStrings(
 		"\n",
 		"\r\n",
 		"[EOL]")
@@ -1019,7 +1034,8 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 		numOfBytesWritten,
 		err = newFBuffReadWrite.
 		ReadWriteTextLines(
-			&endOfLineDelimiters,
+			&readEndOfLineDelimiters,
+			writeEndOfLineChars,
 			linesPerBatch, // numTextLinesPerBatch
 			true,          // autoFlushAndCloseOnExit
 			ePrefix)
@@ -1113,7 +1129,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 		numOfBytesRead,
 		err = newFileIoReader.ReadAllTextLines(
 		-1,
-		&endOfLineDelimiters,
+		&readEndOfLineDelimiters,
 		outputLinesArray,
 		true, // autoCloseOnExit
 		ePrefix)
