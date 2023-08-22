@@ -6,6 +6,7 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
+	"math"
 	"sync"
 )
 
@@ -2260,24 +2261,18 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 // instance of FileBufferReadWrite. It then parses this
 // data into lines of text based on the end-of-line
 // delimiter characters passed as input parameter
-// 'endOfLineDelimiters'.
+// 'endOfLineDelimiters'. These end-of-line delimiters
+// are stripped off the ends of all text lines processed.
+// New line termination or end-of-line characters will
+// then be appended to the text lines before they are
+// written to the output destination io.Writer object
+// configured for the current instance of
+// FileBufferReadWrite.
 //
-// After parsing and converting the data to lines of
-// text, this method proceeds to write this text data to
-// the internal io.Writer object previously configured
-// for the current instance of FileBufferReadWrite.
-//
-// The process of writing text lines to the internal
-// io.Writer object is performed incrementally, in
-// batches of text lines. The number of text lines in
-// each batch is determined by input parameter
-// 'numTextLinesPerBatch'. This 'batch' technique is
-// important because it allows for the reading and
-// writing of very large files. The 'batch' technique
-// means that the amount of memory used in the read/write
-// procedure is minimized, because the entire contents of
-// the io.Reader object are never stored in memory at one
-// time.
+// When writing final text lines to the internal io.Writer
+// object, the line termination or end-of-line characters
+// appended to each text line will be specified by input
+// parameter 'writeEndOfLineChars'.
 //
 // If input parameter 'autoFlushAndCloseOnExit' is set to
 // 'true', this method will automatically perform all
@@ -2363,19 +2358,19 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //	readEndOfLineDelimiters		*StringArrayDto
 //
 //		A pointer to an instance of StringArrayDto.
-//		'endOfLineDelimiters' encapsulates a string
+//		'readEndOfLineDelimiters' encapsulates a string
 //		array which contains the end-of-line delimiters
-//		that used to identify and separate individual
+//		used to identify, parse and separate individual
 //		lines of text.
 //
-//						NOTE
 //		The 'read' end-of-line delimiters specified by
-//		'endOfLineDelimiters' are NOT written to the
-//	 	output destination io.Writer object. They are
-//	 	stripped off before being written to the
-//	 	io.Writer object. The text lines actually written
-//	 	to the io.Writer object are controlled by the
-//		'write' end-of-line characters specified by input
+//		this parameter are NOT written to the output
+//		destination io.Writer object. They are stripped
+//		off before being written to the io.Writer object.
+//		The text lines termination or end-of-line
+//		characters actually written to the output
+//		io.Writer object are controlled by the 'write'
+//		end-of-line characters specified by input
 //		parameter 'writeEndOfLineChars'.
 //
 //	writeEndOfLineChars			string
@@ -2405,24 +2400,29 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //		will be written to the io.Writer output
 //		destination and no error will be returned.
 //
-//	numTextLinesPerBatch		int
+//	maxNumOfTextLines			int
 //
-//		This value specifies the number of lines of text
-//		that will be processed with each batch of text
-//		lines extracted from the io.Reader object and
-//		written to the io.Writer object.
+//		Specifies the maximum number of text lines which
+//		will be read and processed.
 //
-//		Use this parameter to efficiently control memory
-//		usage. The smaller the value for
-//		'numTextLinesPerBatch', the smaller the memory
-//		footprint used in the read/write operation. Of
-//		course, smaller 'numTextLinesPerBatch' values
-//		means that more processing time may be required.
+//		If this parameter is set to a value less than
+//		zero (0) (Example: minus-one (-1) ),
+//		'maxNumOfLines' will be automatically reset to
+//		the maximum positive integer value of
+//		(+2,147,483,647). This effectively means that all
+//		text lines existing in the internal io.Reader
+//		will be read and processed.
 //
-//		If the value of 'numTextLinesPerBatch' is less
-//		than one (+1), this parameter will
-//		be automatically defaulted to 8,192 (lines per
-//		batch).
+//		If 'maxNumOfLines' is set to a value of zero
+//		('0'), no text lines will be read from
+//		the internal io.Reader and no error will be
+//		returned.
+//
+//		When 'maxNumOfLines' is set to a value greater
+//		than zero (0), it effectively limits the
+//		maximum number of text lines which will be
+//		parsed and written to the internal io.Writer
+//		object.
 //
 //	autoFlushAndCloseOnExit		bool
 //
@@ -2430,27 +2430,27 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //		method will automatically perform the following
 //		clean-up tasks upon exit:
 //
-//		(1)	The write buffer will be flushed thereby
-//			ensuring that all remaining data in the
-//			'write' buffer will be written to the
-//			underlying io.Writer object.
+//		(1)	The write buffer for the internal io.Writer
+//			object will be flushed thereby ensuring that
+//			all remaining data in the 'write' buffer will
+//			be written to the underlying io.Writer object.
 //
 //		(2)	The io.Reader and io.Writer objects will be
 //			properly closed.
 //
 //		(3) After performing these clean-up tasks, the
 //			current instance of FileBufferReadWrite will
-//			invalid and unusable for future 'read' and/or
-//			'write' operations.
+//			become invalid and unusable for future 'read'
+//			and/or 'write' operations.
 //
 //		If input parameter 'autoFlushAndCloseOnExit' is
 //		set to 'false', this method will automatically
 //		flush the 'write' buffer. This means that all
 //		data remaining in the 'write' buffer will be
-//		written to the underlying io.Writer output
-//		destination. Most importantly, the user is
-//		then responsible for performing the 'Close'
-//		operation by calling the local method:
+//		written to the underlying io.Writer object. Most
+//		importantly, the user is then responsible for
+//		performing the 'Close' operation by calling the
+//		local method:
 //
 //			FileBufferReadWrite.Close()
 //
@@ -2523,20 +2523,20 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //		lines read and parsed from the internal io.Reader
 //		object and written to the io.Writer object.
 //
-//	numOfBatchesProcessed		int
-//
-//		The number of read and write cycles required to
-//		process all io.Reader data.
-//
-//	numBytesRead				int64
+//	numTextLineBytes			int64
 //
 //		If this method completes successfully, this
 //		parameter will return the number of bytes read
-//		from the io.Reader object. Remember that this
-//		number includes the end-of-line delimiters
-//		specified by input parameter 'numBytesWritten'
-//		which are stripped off and deleted before being
-//		written to the io.Writer object.
+//		as discrete lines of text. Remember that this
+//		number excludes the end-of-line delimiters
+//		specified by input parameter
+//		'readEndOfLineDelimiters' which are stripped off
+//		and deleted.
+//
+//		This means that in many if not most cases,
+//		the number of text line bytes
+//		('numTextLineBytes') will NOT match the number
+//		of bytes written ('numBytesWritten').
 //
 //		See description of return parameter
 //		'numBytesWritten' below.
@@ -2545,11 +2545,14 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //
 //		If this method completes successfully, this
 //		integer value will equal the number of bytes
-//		written to the io.Writer object. Text lines
-//		written to the io.Writer object have a new
-//		character automatically added to the end of
-//		the text line string. 'numBytesWritten'
-//		therefore includes one extra byte per line.
+//		written to the internal io.Writer object. Text
+//		lines written to the io.Writer object have new
+//		line termination or end-of-line characters
+//		('writeEndOfLineChars') automatically added
+//		to the end of the text line string.
+//		'numBytesWritten' therefore includes the
+//		length of these end-of-line characters
+//		('writeEndOfLineChars').
 //
 //	err							error
 //
@@ -2570,7 +2573,238 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 	readEndOfLineDelimiters *StringArrayDto,
 	writeEndOfLineChars string,
-	numTextLinesPerBatch int,
+	maxNumOfTextLines int,
+	autoFlushAndCloseOnExit bool,
+	errorPrefix interface{}) (
+	numOfLinesProcessed int,
+	numTextLineBytes int64,
+	numBytesWritten int64,
+	err error) {
+
+	if fBufReadWrite.lock == nil {
+		fBufReadWrite.lock = new(sync.Mutex)
+	}
+
+	fBufReadWrite.lock.Lock()
+
+	defer fBufReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "FileBufferReadWrite." +
+		"ReadWriteTextLines()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return numOfLinesProcessed,
+			numTextLineBytes,
+			numBytesWritten,
+			err
+	}
+
+	if fBufReadWrite.reader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: The current instance of FileBufferReadWrite\n"+
+			"is invalid! The internal io.Reader object was never\n"+
+			"initialized. Call one of the 'New' methods or 'Setter'\n"+
+			"methods to create a valid instance of FileBufferReadWrite.\n",
+			ePrefix.String())
+
+		return numOfLinesProcessed,
+			numTextLineBytes,
+			numBytesWritten,
+			err
+	}
+
+	if fBufReadWrite.writer == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: The current instance of FileBufferReadWrite\n"+
+			"is invalid! The internal io.Writer object was never\n"+
+			"initialized. Call one of the 'New' methods or 'Setter'\n"+
+			"methods to create a valid instance of FileBufferReadWrite.\n",
+			ePrefix.String())
+
+		return numOfLinesProcessed,
+			numTextLineBytes,
+			numBytesWritten,
+			err
+	}
+
+	var localNumBytesWritten int
+	var readerLabel, writerLabel string
+
+	var fBufReadWriteMicrobot = new(fileBufferReadWriteMicrobot)
+
+	if len(fBufReadWrite.readerFilePathName) == 0 {
+
+		readerLabel = "FileBufferReadWrite.IoReader"
+
+	} else {
+
+		readerLabel = fBufReadWrite.readerFilePathName
+	}
+
+	if len(fBufReadWrite.writerFilePathName) == 0 {
+
+		writerLabel = "FileBufferReadWrite.IoWriter"
+
+	} else {
+
+		writerLabel = fBufReadWrite.writerFilePathName
+	}
+
+	if maxNumOfTextLines < 0 {
+
+		maxNumOfTextLines = math.MaxInt - 1
+
+	} else if maxNumOfTextLines == 0 {
+
+		return numOfLinesProcessed,
+			numTextLineBytes,
+			numBytesWritten,
+			err
+
+	}
+
+	var textLineScanner *bufio.Scanner
+
+	textLineScanner,
+		err = new(fileHelperAtom).
+		getStdTextLineScanner(
+			fBufReadWrite.reader,
+			readerLabel,
+			readEndOfLineDelimiters,
+			ePrefix.XCpy("textLineScanner<-"))
+
+	var textLine string
+	var lenTextLine int
+	var ok bool
+	var err2 error
+
+	for numOfLinesProcessed < maxNumOfTextLines {
+
+		err2 = nil
+
+		ok = textLineScanner.Scan()
+
+		if !ok {
+
+			err2 = textLineScanner.Err()
+
+			if err2 != nil &&
+				err2 != io.EOF {
+
+				err = fmt.Errorf("%v\n"+
+					"System Errror returned by textLineScanner.Scan()\n"+
+					"Error=\n%v\n",
+					ePrefix.String(),
+					err2)
+
+				break
+			}
+		}
+
+		textLine = textLineScanner.Text()
+
+		lenTextLine = len(textLine)
+
+		numTextLineBytes += int64(lenTextLine)
+
+		if lenTextLine == 0 &&
+			(err2 == io.EOF ||
+				ok == false) {
+
+			break
+		}
+
+		textLine += writeEndOfLineChars
+
+		if len(textLine) > 0 {
+
+			localNumBytesWritten,
+				err2 = fBufReadWrite.writer.Write(
+				[]byte(textLine))
+
+			if err2 != nil {
+
+				err = fmt.Errorf("%v\n"+
+					"Error Writing Bytes To File!\n"+
+					"io.Writer= %v\n"+
+					"Write Error=\n%v\n",
+					funcName,
+					writerLabel,
+					err2.Error())
+
+				break
+			}
+
+			numOfLinesProcessed++
+
+			numBytesWritten += int64(localNumBytesWritten)
+
+		} // if len(textLine) > 0
+
+	} // for numOfLinesProcessed < maxNumOfTextLines
+
+	var cleanUpStatus string
+
+	if err != nil {
+
+		cleanUpStatus = "After Processing Error"
+
+	} else {
+
+		cleanUpStatus = "Success"
+	}
+
+	if autoFlushAndCloseOnExit == true {
+
+		err2 = fBufReadWriteMicrobot.
+			closeReaderWriter(
+				fBufReadWrite,
+				"fBufReadWrite",
+				ePrefix.XCpy(fmt.Sprintf(
+					"%v Flush/Close-Readers & Writers",
+					cleanUpStatus)))
+
+		if err2 != nil {
+
+			err = errors.Join(err, err2)
+		}
+
+	} else {
+
+		err2 = fBufReadWrite.writer.
+			Flush(ePrefix.XCpy(fmt.Sprintf(
+				"%v Flush fBufReadWrite.writer",
+				cleanUpStatus)))
+
+		if err2 != nil {
+
+			err = errors.Join(err, err2)
+		}
+
+	}
+
+	return numOfLinesProcessed,
+		numTextLineBytes,
+		numBytesWritten,
+		err
+}
+
+/*
+func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
+	readEndOfLineDelimiters *StringArrayDto,
+	writeEndOfLineChars string,
+	maxNumOfTextLines int,
 	autoFlushAndCloseOnExit bool,
 	errorPrefix interface{}) (
 	numOfLinesProcessed int,
@@ -2667,6 +2901,20 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 		writerLabel = fBufReadWrite.writerFilePathName
 	}
 
+	if maxNumOfTextLines < 0 {
+
+		maxNumOfTextLines = math.MaxInt - 1
+
+	} else if maxNumOfTextLines == 0 {
+
+		return numOfLinesProcessed,
+			numOfBatchesProcessed,
+			numBytesRead,
+			numBytesWritten,
+			err
+
+	}
+
 	var fHelperAtom = new(fileHelperAtom)
 
 	var textLineScanner *bufio.Scanner
@@ -2692,7 +2940,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 			readerScanMaxLines(
 				textLineScanner,
 				"textLineScanner",
-				numTextLinesPerBatch, // maxNumOfLines
+			maxNumOfTextLines, // maxNumOfLines
 				&outputLinesArray,
 				ePrefix)
 
@@ -2705,7 +2953,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 				"Error=\n%v\n",
 				funcName,
 				readerLabel,
-				numTextLinesPerBatch,
+				maxNumOfTextLines,
 				err1.Error())
 
 			err1 = fBufReadWriteMicrobot.
@@ -2792,7 +3040,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 		numBytesWritten,
 		err
 }
-
+*/
 // Write
 //
 // Writes the contents of the byte array input paramter

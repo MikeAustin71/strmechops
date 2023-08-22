@@ -340,7 +340,7 @@ func TestDirMgrCollection_GetDirProfile_000100(t *testing.T) {
 
 	fHelper := new(FileHelper)
 
-	err = fHelper.DeleteDirFile(
+	err = fHelper.DeleteDirOrFile(
 		outputFile,
 		ePrefix.XCpy("outputFile"))
 
@@ -527,7 +527,7 @@ func TestDirMgrCollection_GetDirProfile_000100(t *testing.T) {
 
 	}
 
-	err = fHelper.DeleteDirFile(
+	err = fHelper.DeleteDirOrFile(
 		outputFile,
 		ePrefix.XCpy("Final Delete outputFile"))
 

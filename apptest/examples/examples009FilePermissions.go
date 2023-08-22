@@ -478,7 +478,7 @@ func (filePermissionsTest MainFilePermissionsTest009) PermissionStr02() {
 		fileModeChangeStr,
 		writeFInfo.Mode().Perm())
 
-	err = fHelper.DeleteDirFile(
+	err = fHelper.DeleteDirOrFile(
 		targetWriteFileName,
 		ePrefix.XCpy("targetWriteFileName"))
 
@@ -495,7 +495,7 @@ func (filePermissionsTest MainFilePermissionsTest009) PermissionStr02() {
 
 		errs = append(errs,
 			fmt.Errorf("%v\n"+
-				"Error From fHelper.DeleteDirFile(targetWriteFileName)\n"+
+				"Error From fHelper.DeleteDirOrFile(targetWriteFileName)\n"+
 				"Target Write File = '%v'\n"+
 				"Error = \n%v\n",
 				ePrefix.String(),

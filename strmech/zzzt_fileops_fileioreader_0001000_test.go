@@ -46,10 +46,10 @@ func TestFileIoReader_Read_000100(t *testing.T) {
 		return
 	}
 
-	if fInfoPlus.Size() != 1226 {
+	if fInfoPlus.Size() != 1228 {
 
 		t.Errorf("\n%v\n"+
-			"Error: Test file should contain 1226-bytes.\n"+
+			"Error: Test file should contain 1228-bytes.\n"+
 			"Instead test file contains %v-bytes.\n"+
 			"Target Read File= %v\n",
 			ePrefix.String(),
@@ -83,12 +83,12 @@ func TestFileIoReader_Read_000100(t *testing.T) {
 		return
 	}
 
-	if numOfBytesRead != 1226 {
+	if numOfBytesRead != 1228 {
 
 		t.Errorf("\n%v\n"+
 			"Error: Failed to read correct number\n"+
 			"of bytes from the target read file.\n"+
-			"The expected number of bytes is 1226-bytes.\n"+
+			"The expected number of bytes is 1228-bytes.\n"+
 			"The actual number of bytes read is %v-bytes.\n"+
 			"Target Read File= %v\n",
 			ePrefix.String(),
@@ -98,7 +98,7 @@ func TestFileIoReader_Read_000100(t *testing.T) {
 		return
 	}
 
-	if strBuilder.Len() != 1226 {
+	if strBuilder.Len() != 1228 {
 
 		t.Errorf("\n%v\n"+
 			"Error: String Builder contains the wrong number\n"+

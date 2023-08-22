@@ -3030,7 +3030,7 @@ func (fh *FileHelper) DeleteAllFilesInDirectory(
 	return msgError, lowLevelErr
 }
 
-// DeleteDirFile
+// DeleteDirOrFile
 //
 // Wrapper function for os.Remove.
 //
@@ -3164,7 +3164,7 @@ func (fh *FileHelper) DeleteAllFilesInDirectory(
 //
 //		If no *PathError occurs, 'lowLevelErr' will be set
 //		to 'nil'.
-func (fh *FileHelper) DeleteDirFile(
+func (fh *FileHelper) DeleteDirOrFile(
 	pathFile string,
 	errorPrefix interface{}) (err error) {
 
@@ -3182,7 +3182,7 @@ func (fh *FileHelper) DeleteDirFile(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"FileHelper."+
-			"DeleteDirFile()",
+			"DeleteDirOrFile()",
 		"")
 
 	if err != nil {

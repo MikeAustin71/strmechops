@@ -96,11 +96,11 @@ func TestFileBufferReader_Read_000100(t *testing.T) {
 		}
 	}
 
-	if totalBytesRead != 1226 {
+	if totalBytesRead != 1228 {
 
 		t.Errorf("\n%v\n"+
 			"Error Reading File!\n"+
-			"Expected to read 1,226 bytes.\n"+
+			"Expected to read 1,228 bytes.\n"+
 			"Instead, total bytes read = '%v'\n"+
 			"Target File = '%v'\n",
 			ePrefix.String(),

@@ -495,7 +495,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite01() {
 		return
 	}
 
-	err = fHelper.DeleteDirFile(
+	err = fHelper.DeleteDirOrFile(
 		targetWriteFile,
 		ePrefix.XCpy("targetWriteFile"))
 
@@ -607,18 +607,17 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02() {
 		"\r\r",
 		"[EOL]")
 
-	linesPerBatch := 15
+	maxNumOfTextLines := -1
 
 	numOfLinesProcessed,
-		numOfBatchesProcessed,
 		numOfBytesRead,
 		numOfBytesWritten,
 		err = newFBuffReadWrite.
 		ReadWriteTextLines(
 			&readEndOfLineDelimiters,
 			writeEndOfLineChars,
-			linesPerBatch, // numTextLinesPerBatch
-			true,          // autoFlushAndCloseOnExit
+			maxNumOfTextLines, // numTextLinesPerBatch
+			true,              // autoFlushAndCloseOnExit
 			ePrefix)
 
 	if err != nil {
@@ -628,14 +627,14 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02() {
 	}
 
 	fmt.Printf("Stats From newFBuffReadWrite.ReadWriteTextLines()\n"+
-		"  Number Of Lines Processed: %v\n"+
-		"Number Of Batches Processed: %v\n"+
-		"       Lines Per Batch Spec: %v\n"+
-		"       Number Of Bytes Read: %v\n"+
-		"    Number Of Bytes Written: %v\n\n",
+		"   Number Of Lines Processed: %v\n"+
+		" Number Of Batches Processed: %v\n"+
+		"Maximum Number of Text Lines: %v\n"+
+		"        Number Of Bytes Read: %v\n"+
+		"     Number Of Bytes Written: %v\n\n",
 		numOfLinesProcessed,
 		numOfBatchesProcessed,
-		linesPerBatch,
+		maxNumOfTextLines,
 		numOfBytesRead,
 		numOfBytesWritten)
 
@@ -786,18 +785,17 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02B() {
 		"\r\r",
 		"[EOL]")
 
-	linesPerBatch := 15
+	maxNumOfTextLines := -1
 
 	numOfLinesProcessed,
-		numOfBatchesProcessed,
 		numOfBytesRead,
 		numOfBytesWritten,
 		err = newFBuffReadWrite.
 		ReadWriteTextLines(
 			&readEndOfLineDelimiters,
 			writeEndOfLineChars,
-			linesPerBatch, // numTextLinesPerBatch
-			true,          // autoFlushAndCloseOnExit
+			maxNumOfTextLines, // numTextLinesPerBatch
+			true,              // autoFlushAndCloseOnExit
 			ePrefix)
 
 	if err != nil {
@@ -807,16 +805,16 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02B() {
 	}
 
 	fmt.Printf("\nStats From newFBuffReadWrite.ReadWriteTextLines()\n"+
-		"  Number Of Lines Processed: %v\n"+
-		"Number Of Batches Processed: %v\n"+
-		"       Lines Per Batch Spec: %v\n"+
-		"       Number Of Bytes Read: %v\n"+
-		"    Number Of Bytes Written: %v\n"+
+		"   Number Of Lines Processed: %v\n"+
+		" Number Of Batches Processed: %v\n"+
+		"Maximum Number Of Text Lines: %v\n"+
+		"        Number Of Bytes Read: %v\n"+
+		"     Number Of Bytes Written: %v\n"+
 		" Target Read File: %v\n"+
 		"Target Wriet File: %v\n",
 		numOfLinesProcessed,
 		numOfBatchesProcessed,
-		linesPerBatch,
+		maxNumOfTextLines,
 		numOfBytesRead,
 		numOfBytesWritten,
 		targetReadFile,
@@ -933,7 +931,6 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02B() {
 // FileBuffReadWrite03
 //
 // Reads text lines
-// linesPerBatch := 4096
 func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 
 	funcName := "MainFileReadWriteTest010.FileBuffReadWrite03()"
@@ -974,7 +971,20 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 	targetWriteFile,
 		err = exampleUtil.GetCompositeDirectory(
 		"fileOpsTest\\trashDirectory\\FileBuffReadWrite03.txt",
-		ePrefix.XCpy("targetReadFile"))
+		ePrefix.XCpy("targetWriteFile"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fHelper := new(strmech.FileHelper)
+
+	err = fHelper.
+		DeleteDirOrFile(
+			targetWriteFile,
+			ePrefix.XCpy("targetWriteFile"))
 
 	if err != nil {
 		fmt.Printf("\n%v\n\n",
@@ -984,6 +994,11 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 
 	var newFBuffReadWrite strmech.FileBufferReadWrite
 	var readerFileInfoPlus, writerFileInfoPlus strmech.FileInfoPlus
+	var shouldReadAndWriteFilesBeEqual,
+		useWindowsOutputFormat bool
+
+	shouldReadAndWriteFilesBeEqual = true
+	useWindowsOutputFormat = true
 
 	readerFileInfoPlus,
 		writerFileInfoPlus,
@@ -1005,39 +1020,50 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 		return
 	}
 
-	fmt.Printf("\nNew File Stats\n"+
-		"FileBufferReadWrite.NewPathFileNames()\n"+
-		"Reader File Size= %v\n"+
-		"Writer File Size= %v\n"+
-		" Target Read File: %v\n"+
-		"Target Write File: %v\n\n",
+	fmt.Printf("\n %v\n"+
+		" New File Stats\n"+
+		" FileBufferReadWrite.NewPathFileNames()\n"+
+		" Reader File Size= %v\n"+
+		" Writer File Size= %v\n"+
+		"  Target Read File: %v\n"+
+		" Target Write File: %v\n\n",
+		ePrefix.String(),
 		readerFileInfoPlus.Size(),
 		writerFileInfoPlus.Size(),
 		targetReadFile,
 		targetWriteFile)
 
-	var numOfBytesWritten, numOfBytesRead int64
-	var numOfLinesProcessed, numOfBatchesProcessed int
+	var numOfBytesWritten, numOfTextLineBytes int64
+	var numOfLinesProcessed int
 	var readEndOfLineDelimiters strmech.StringArrayDto
-	var writeEndOfLineChars = "\r\n"
+	var writeEndOfLineChars string
+
+	if useWindowsOutputFormat {
+		// Windows Output Format
+		writeEndOfLineChars = "\r\n"
+
+	} else {
+
+		// Unix Output Format
+		writeEndOfLineChars = "\n"
+	}
 
 	readEndOfLineDelimiters.AddManyStrings(
 		"\n",
 		"\r\n",
 		"[EOL]")
 
-	linesPerBatch := 4096
+	maxNumOfTextLines := -1
 
 	numOfLinesProcessed,
-		numOfBatchesProcessed,
-		numOfBytesRead,
+		numOfTextLineBytes,
 		numOfBytesWritten,
 		err = newFBuffReadWrite.
 		ReadWriteTextLines(
 			&readEndOfLineDelimiters,
 			writeEndOfLineChars,
-			linesPerBatch, // numTextLinesPerBatch
-			true,          // autoFlushAndCloseOnExit
+			maxNumOfTextLines, // numTextLinesPerBatch
+			true,              // autoFlushAndCloseOnExit
 			ePrefix)
 
 	if err != nil {
@@ -1046,19 +1072,21 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 		return
 	}
 
-	fmt.Printf("\nStats From newFBuffReadWrite.ReadWriteTextLines()\n"+
-		"  Number Of Lines Processed: %v\n"+
-		"Number Of Batches Processed: %v\n"+
-		"       Lines Per Batch Spec: %v\n"+
-		"       Number Of Bytes Read: %v\n"+
-		"    Number Of Bytes Written: %v\n",
+	fmt.Printf(" %v\n"+
+		" Stats From newFBuffReadWrite.ReadWriteTextLines()\n"+
+		" Number Of Text Lines Processed: %v\n"+
+		"   Maximum Number of Text Lines: %v\n"+
+		"      Number Of Text Line Bytes: %v\n"+
+		"        Number Of Bytes Written: %v\n"+
+		"  Target Read File: %v\n"+
+		" Target Write File: %v\n\n",
+		ePrefix.String(),
 		numOfLinesProcessed,
-		numOfBatchesProcessed,
-		linesPerBatch,
-		numOfBytesRead,
-		numOfBytesWritten)
-
-	fHelper := new(strmech.FileHelper)
+		maxNumOfTextLines,
+		numOfTextLineBytes,
+		numOfBytesWritten,
+		targetReadFile,
+		targetWriteFile)
 
 	var doesFileExist bool
 
@@ -1075,13 +1103,17 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 		return
 	}
 
-	fmt.Printf("\nWrite File Stats from FileHelper.DoesFileInfoPlusExist()\n"+
-		"   Write File Does Exist: %v\n"+
-		"Write File Size in Bytes: %v\n"+
-		"         Write File Name: %v\n",
+	fmt.Printf(" %v\n"+
+		" Write File Stats from FileHelper.DoesFileInfoPlusExist()\n"+
+		"    Write File Does Exist: %v\n"+
+		" Write File Size in Bytes: %v\n"+
+		"          Write File Name: %v\n"+
+		"	 	Target Write File: %v\n\n",
+		ePrefix.String(),
 		doesFileExist,
 		writerFileInfoPlus.Size(),
-		writerFileInfoPlus.Name())
+		writerFileInfoPlus.Name(),
+		targetWriteFile)
 
 	err = newFBuffReadWrite.IsValidInstanceError(
 		ePrefix)
@@ -1099,88 +1131,28 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 		return
 	}
 
-	var finalWriteFileInfo strmech.FileInfoPlus
-	var newFileIoReader strmech.FileIoReader
-
-	finalWriteFileInfo,
-		newFileIoReader,
-		err = new(strmech.FileIoReader).
-		NewPathFileName(
-			targetWriteFile,
-			false,
-			ePrefix)
-
-	if err != nil {
-		fmt.Printf("\n%v\n\n",
-			err.Error())
-		return
-	}
-
-	fmt.Printf("\nWrite File Stats from FileIoReader\n"+
-		"Final Write File Size: %v\n"+
-		"         Write File Name: %v\n\n",
-		finalWriteFileInfo.Size(),
-		targetWriteFile)
-
-	var numOfLinesRead int
-	var outputLinesArray = &strmech.StringArrayDto{}
-
-	numOfLinesRead,
-		numOfBytesRead,
-		err = newFileIoReader.ReadAllTextLines(
-		-1,
-		&readEndOfLineDelimiters,
-		outputLinesArray,
-		true, // autoCloseOnExit
-		ePrefix)
-
-	if err != nil {
-		fmt.Printf("\n%v\n\n",
-			err.Error())
-		return
-	}
-
-	fmt.Printf("\nWrite File Stats from FileIoReader.ReadAllTextLines()\n"+
-		" numOfLinesRead: %v\n"+
-		" numOfBytesRead: %v\n"+
-		"Write File Name: %v\n\n",
-		numOfLinesRead,
-		numOfBytesRead,
-		targetWriteFile)
-
-	/*
+	if shouldReadAndWriteFilesBeEqual == true {
 
 		var reasonFilesNotEqual string
 		var filesAreEqual bool
-		var targetOutputFile1 string
-
-		targetOutputFile1,
-			err = exampleUtil.GetCompositeDirectory(
-			"\\fileOpsTest\\trashDirectory\\ReadTextLines01.txt",
-			ePrefix)
-
-		if err != nil {
-			fmt.Printf("\n%v\n\n",
-				err.Error())
-			return
-		}
 
 		filesAreEqual,
 			reasonFilesNotEqual,
 			err = fHelper.CompareFiles(
-			targetOutputFile1,
+			targetReadFile,
 			targetWriteFile,
-			ePrefix.XCpy("Target Files Comparison"))
+			ePrefix.XCpy(
+				"Target Files Comparison"))
 
 		if err != nil {
 
-			fmt.Printf("%v\n"+
+			fmt.Printf(" %v\n"+
 				"Error Return from fHelper.CompareFiles()\n"+
-				"targetOutputFile1= %v\n"+
-				"  targetWriteFile= %v\n"+
+				"  targetReadFile= %v\n"+
+				" targetWriteFile= %v\n"+
 				"Reason: %v\n",
 				ePrefix.String(),
-				targetOutputFile1,
+				targetReadFile,
 				targetWriteFile,
 				reasonFilesNotEqual)
 
@@ -1196,9 +1168,19 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 				reasonFilesNotEqual)
 
 			return
-		}
 
-	*/
+		} else {
+
+			fmt.Printf(" %v\n"+
+				" SUCCESS! Files are EQUAL!\n"+
+				"  Target Read File: %v\n"+
+				" Target Write File: %v\n\n",
+				ePrefix.String(),
+				targetReadFile,
+				targetWriteFile)
+
+		}
+	}
 
 	// ------ Trailing Marquee
 

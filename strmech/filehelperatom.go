@@ -2495,7 +2495,7 @@ func (fHelperAtom *fileHelperAtom) makeDirPerm(
 //		string, a default value of "readerScanner" will
 //		be automatically applied.
 //
-//	maxNumOfLines				int
+//	maxNumOfTextLines			int
 //
 //		Specifies the maximum number of text lines which
 //		will be read by 'readerScanner'.
@@ -2579,7 +2579,7 @@ func (fHelperAtom *fileHelperAtom) makeDirPerm(
 func (fHelperAtom *fileHelperAtom) readerScanMaxLines(
 	readerScanner *bufio.Scanner,
 	readerScannerLabel string,
-	maxNumOfLines int,
+	maxNumOfTextLines int,
 	outputLinesArray *StringArrayDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	numOfLinesRead int,
@@ -2632,11 +2632,11 @@ func (fHelperAtom *fileHelperAtom) readerScanMaxLines(
 			err
 	}
 
-	if maxNumOfLines < 0 {
+	if maxNumOfTextLines < 0 {
 
-		maxNumOfLines = math.MaxInt - 1
+		maxNumOfTextLines = math.MaxInt - 1
 
-	} else if maxNumOfLines == 0 {
+	} else if maxNumOfTextLines == 0 {
 
 		return numOfLinesRead,
 			numOfBytesRead,
@@ -2650,7 +2650,7 @@ func (fHelperAtom *fileHelperAtom) readerScanMaxLines(
 	var ok bool
 	var err2 error
 
-	for numOfLinesRead < maxNumOfLines {
+	for numOfLinesRead < maxNumOfTextLines {
 
 		err2 = nil
 

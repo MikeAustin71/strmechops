@@ -179,14 +179,14 @@ func TestFileBufferWriter_Write_000100(t *testing.T) {
 		return
 	}
 
-	err2 = fHelper.DeleteDirFile(
+	err2 = fHelper.DeleteDirOrFile(
 		targetWriteFile,
 		ePrefix)
 
 	if err2 != nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error return from fHelper.DeleteDirFile(targetWriteFile)\n"+
+			"Error return from fHelper.DeleteDirOrFile(targetWriteFile)\n"+
 			"targetWriteFile = '%v'\n"+
 			"Error = \n%v\n",
 			ePrefix.String(),
@@ -200,7 +200,7 @@ func TestFileBufferWriter_Write_000100(t *testing.T) {
 		err2 = new(StrMech).ConsolidateErrors(errs)
 
 		t.Errorf("%v\n"+
-			"Errors returned from fHelper.DeleteDirFile(targetWriteFile)\n"+
+			"Errors returned from fHelper.DeleteDirOrFile(targetWriteFile)\n"+
 			"Errors= \n%v\n",
 			ePrefix.String(),
 			err2.Error())
@@ -442,14 +442,14 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 
 	}
 
-	err2 = fHelper.DeleteDirFile(
+	err2 = fHelper.DeleteDirOrFile(
 		targetWriteFile,
 		ePrefix)
 
 	if err2 != nil {
 
 		t.Errorf("%v\n"+
-			"Error return from fHelper.DeleteDirFile(targetWriteFile)\n"+
+			"Error return from fHelper.DeleteDirOrFile(targetWriteFile)\n"+
 			"targetWriteFile = '%v'\n"+
 			"Error = \n%v\n",
 			ePrefix.String(),
@@ -525,16 +525,15 @@ func TestFileBufferWriter_Write_000300(t *testing.T) {
 	readEndOfLineDelimiters.PushStr("\r\n")
 	readEndOfLineDelimiters.PushStr("\n")
 
-	var numOfLinesProcessed, numOfBatchesProcessed int
+	var numOfLinesProcessed int
 	var numBytesRead, numBytesWritten int64
 	var expectedBytesRead = 1184
-	var expectedFileSize = 1226
-	var expectedBytesWritten = 1206
+	var expectedFileSize = 1228
+	var expectedBytesWritten = 1228
 
 	var expectedLines = 22
 
 	numOfLinesProcessed,
-		numOfBatchesProcessed,
 		numBytesRead,
 		numBytesWritten,
 		err = newFBuffReadWrite.
@@ -601,23 +600,6 @@ func TestFileBufferWriter_Write_000300(t *testing.T) {
 		return
 	}
 
-	if numOfBatchesProcessed < 1 {
-
-		t.Errorf("\n%v\n"+
-			"Error: newFBuffReadWrite.ReadWriteTextLines()\n"+
-			"Number Of Batches Processed is INVALID!\n"+
-			"numOfBatchesProcessed= '%v'\n"+
-			" Target Read File= '%v'\n"+
-			"Target Write File= '%v'\n",
-			ePrefix.String(),
-			numOfBatchesProcessed,
-			targetReadFile,
-			targetWriteFile)
-
-		return
-
-	}
-
 	if int64(expectedBytesWritten) != numBytesWritten {
 
 		t.Errorf("\n%v\n"+
@@ -671,14 +653,14 @@ func TestFileBufferWriter_Write_000300(t *testing.T) {
 
 	}
 
-	err = new(FileHelper).DeleteDirFile(
+	err = new(FileHelper).DeleteDirOrFile(
 		targetWriteFile,
 		ePrefix)
 
 	if err != nil {
 
 		t.Errorf("%v\n"+
-			"Error return from fHelper.DeleteDirFile(targetWriteFile)\n"+
+			"Error return from fHelper.DeleteDirOrFile(targetWriteFile)\n"+
 			"Attempted Target File Deletion FAILED!\n"+
 			"targetWriteFile = '%v'\n"+
 			"Error = \n%v\n",

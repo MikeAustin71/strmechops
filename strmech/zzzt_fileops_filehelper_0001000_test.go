@@ -248,7 +248,7 @@ func TestFileHelper_ReadTextLines_000100(t *testing.T) {
 		return
 	}
 
-	if originalFileSize != 1226 {
+	if originalFileSize != 1228 {
 
 		t.Errorf("%v\n"+
 			"Error: Original File Size of the\n"+
@@ -257,7 +257,7 @@ func TestFileHelper_ReadTextLines_000100(t *testing.T) {
 			"the target read file should be %v-bytes.\n"+
 			"Instead, original file size is %v-bytes\n",
 			ePrefix.String(),
-			1226,
+			1228,
 			originalFileSize)
 
 		return
@@ -301,7 +301,7 @@ func TestFileHelper_ReadTextLines_000100(t *testing.T) {
 		outputFile,
 		true,
 		true,
-		outputLinesArray.ConcatenateStrings("\n"),
+		outputLinesArray.ConcatenateStrings("\r\n"),
 		ePrefix.XCpy("outputFile<-"))
 
 	if err != nil {
@@ -310,7 +310,7 @@ func TestFileHelper_ReadTextLines_000100(t *testing.T) {
 		return
 	}
 
-	if numBytesWritten != 1206 {
+	if numBytesWritten != 1228 {
 
 		t.Errorf("%v\n"+
 			"Error: Number of bytes written to output\n"+
@@ -320,7 +320,7 @@ func TestFileHelper_ReadTextLines_000100(t *testing.T) {
 			"Instead, Number of Bytes Written= '%v'\n",
 			ePrefix.String(),
 			numBytesWritten,
-			1206)
+			1228)
 
 		return
 	}
