@@ -201,6 +201,49 @@ func (fBufReader *FileBufferReader) Close() error {
 	return err
 }
 
+// Buffered
+//
+// This method returns the number of bytes that can be
+// read from the current 'read' buffer.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/bufio#Reader.Buffered
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	int
+//
+//		This return value contains the number of bytes
+//		which can be read from the current 'read' buffer.
+func (fBufReader *FileBufferReader) Buffered() int {
+
+	if fBufReader.lock == nil {
+		fBufReader.lock = new(sync.Mutex)
+	}
+
+	fBufReader.lock.Lock()
+
+	defer fBufReader.lock.Unlock()
+
+	if fBufReader.bufioReader == nil {
+
+		return 0
+	}
+
+	return fBufReader.bufioReader.Buffered()
+}
+
 // Discard
 //
 // This method skips the next 'numBytesToDiscard' bytes,
@@ -221,7 +264,7 @@ func (fBufReader *FileBufferReader) Close() error {
 //
 // # Reference:
 //
-//	https://pkg.go.dev/bufio#Reader
+//	https://pkg.go.dev/bufio#Reader.Discard
 //
 // ----------------------------------------------------------------
 //
