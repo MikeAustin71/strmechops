@@ -2,6 +2,7 @@ package strmech
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
@@ -1249,21 +1250,22 @@ func (fBufReader *FileBufferReader) Read(
 //		When this parameter is set to 'true', this
 //		method will automatically perform all required
 //		clean-up tasks for the current instance of
-//		FileBufferReader. Specifically, the internal
-//		io.Reader object will be properly 'closed'. Upon
-//		completion of the 'close' operation, the current
-//		instance of FileBufferReader will be invalid and
-//		unusable for all future 'read' operations.
+//		FileBufferReader upon completion. Specifically,
+//		the internal bufio.Reader object will be properly
+//		'closed'. After completing the 'close' operation,
+//		the current instance of FileBufferReader will be
+//		invalid and unusable for all future 'read'
+//		operations.
 //
-//		If input parameter 'autoCloseOnExit' is
-//		set to 'false', this method will NOT
-//		automatically 'close' the internal bufio.Reader
-//		object for the current instance of
-//		FileBufferReader. Consequently, the user will be
-//		responsible for 'closing' the internal bufio.Reader
-//		object by calling the local method:
+//		If input parameter 'autoCloseOnExit' is set to
+//		'false', this method will NOT automatically
+//		'close' the internal bufio.Reader object for the
+//		current instance of FileBufferReader. Consequently,
+//		the user will then be responsible for 'closing' the
+//		internal bufio.Reader object by calling the local
+//		method:
 //
-//			FileBufferReadWrite.Close()
+//			FileBufferReader.Close()
 //
 //	errorPrefix					interface{}
 //
@@ -1419,9 +1421,11 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 			err
 	}
 
+	var err1 error
+
 	numOfLinesRead,
 		numOfBytesRead,
-		err = new(fileHelperMolecule).
+		err1 = new(fileHelperMolecule).
 		readerScanLines(
 			fBufReader.bufioReader,
 			"fBufReader.bufioReader",
@@ -1430,22 +1434,18 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 			outputLinesArray,
 			ePrefix.XCpy("fBufReader.bufioReader"))
 
-	if err != nil {
-
-		return numOfLinesRead,
-			numOfBytesRead,
-			err
-
-	}
+	var err2 error
 
 	if autoCloseOnExit == true {
 
-		err = new(fileBufferReaderMolecule).close(
+		err2 = new(fileBufferReaderMolecule).close(
 			fBufReader,
 			"fBufReader",
 			ePrefix.XCpy("fBufReader"))
 
 	}
+
+	err = errors.Join(err1, err2)
 
 	return numOfLinesRead,
 		numOfBytesRead,
@@ -1512,6 +1512,28 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 //		entire contents of the internal bufio.Reader for the
 //		current instance of FileBufferReader and stores the
 //		resulting string in 'strBuilder'.
+//
+//	autoCloseOnExit				bool
+//
+//		When this parameter is set to 'true', this
+//		method will automatically perform all required
+//		clean-up tasks for the current instance of
+//		FileBufferReader upon completion. Specifically,
+//		the internal bufio.Reader object will be properly
+//		'closed'. After completing the 'close' operation,
+//		the current instance of FileBufferReader will be
+//		invalid and unusable for all future 'read'
+//		operations.
+//
+//		If input parameter 'autoCloseOnExit' is set to
+//		'false', this method will NOT automatically
+//		'close' the internal bufio.Reader object for the
+//		current instance of FileBufferReader. Consequently,
+//		the user will then be responsible for 'closing' the
+//		internal bufio.Reader object by calling the local
+//		method:
+//
+//			FileBufferReader.Close()
 //
 //	errorPrefix					interface{}
 //
@@ -1604,6 +1626,7 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 //		to 'nil' and no error will be returned.
 func (fBufReader *FileBufferReader) ReadAllStrBuilder(
 	strBuilder *strings.Builder,
+	autoCloseOnExit bool,
 	errorPrefix interface{}) (
 	numOfBytesRead int64,
 	err error) {
@@ -1630,13 +1653,28 @@ func (fBufReader *FileBufferReader) ReadAllStrBuilder(
 		return numOfBytesRead, err
 	}
 
+	var err1 error
+
 	numOfBytesRead,
-		err = new(fileBufferReaderMicrobot).
+		err1 = new(fileBufferReaderMicrobot).
 		readAllStrBuilder(
 			fBufReader,
 			"fBufReader",
 			strBuilder,
 			ePrefix)
+
+	var err2 error
+
+	if autoCloseOnExit == true {
+
+		err2 = new(fileBufferReaderMolecule).close(
+			fBufReader,
+			"fBufReader",
+			ePrefix.XCpy("fBufReader"))
+
+	}
+
+	err = errors.Join(err1, err2)
 
 	return numOfBytesRead, err
 }
@@ -1692,6 +1730,28 @@ func (fBufReader *FileBufferReader) ReadAllStrBuilder(
 // ----------------------------------------------------------------
 //
 // # Input Parameters
+//
+//	autoCloseOnExit				bool
+//
+//		When this parameter is set to 'true', this
+//		method will automatically perform all required
+//		clean-up tasks for the current instance of
+//		FileBufferReader upon completion. Specifically,
+//		the internal bufio.Reader object will be properly
+//		'closed'. After completing the 'close' operation,
+//		the current instance of FileBufferReader will be
+//		invalid and unusable for all future 'read'
+//		operations.
+//
+//		If input parameter 'autoCloseOnExit' is set to
+//		'false', this method will NOT automatically
+//		'close' the internal bufio.Reader object for the
+//		current instance of FileBufferReader. Consequently,
+//		the user will then be responsible for 'closing' the
+//		internal bufio.Reader object by calling the local
+//		method:
+//
+//			FileBufferReader.Close()
 //
 //	errorPrefix					interface{}
 //
@@ -1794,6 +1854,7 @@ func (fBufReader *FileBufferReader) ReadAllStrBuilder(
 //		process, the returned error object will be set
 //		to 'nil' and no error will be returned.
 func (fBufReader *FileBufferReader) ReadAllToString(
+	autoCloseOnExit bool,
 	errorPrefix interface{}) (
 	numOfBytesRead int64,
 	contentsStr string,
@@ -1822,19 +1883,33 @@ func (fBufReader *FileBufferReader) ReadAllToString(
 	}
 
 	strBuilder := new(strings.Builder)
+	var err1 error
 
 	numOfBytesRead,
-		err = new(fileBufferReaderMicrobot).
+		err1 = new(fileBufferReaderMicrobot).
 		readAllStrBuilder(
 			fBufReader,
 			"fBufReader",
 			strBuilder,
 			ePrefix)
 
-	if err == nil {
+	if err1 == nil {
 
 		contentsStr = strBuilder.String()
 	}
+
+	var err2 error
+
+	if autoCloseOnExit == true {
+
+		err2 = new(fileBufferReaderMolecule).close(
+			fBufReader,
+			"fBufReader",
+			ePrefix.XCpy("fBufReader"))
+
+	}
+
+	err = errors.Join(err1, err2)
 
 	return numOfBytesRead, contentsStr, err
 }
