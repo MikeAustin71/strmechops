@@ -2194,26 +2194,26 @@ func (fBufWriter *FileBufferWriter) Write(
 //			underlying bufio.Writer object.
 //
 //		(2)	The internal bufio.Writer object will be
-//			properly closed and there will be need
+//			properly closed and there will be no need
 //			to make a separate call to local method,
-//			FileBufferReadWrite.Close().
+//			FileBufferWriter.Close().
 //
 //		(3) After performing these clean-up tasks, the
-//			current instance of FileBufferReadWrite will
+//			current instance of FileBufferWriter will
 //			invalid and unusable for future 'write'
 //			operations.
 //
 //		If input parameter 'autoFlushAndCloseOnExit' is
 //		set to 'false', this method will automatically
 //		flush the 'write' buffer, but it will NOT close
-//		internal bufio.Writer object. This means that all
-//		data remaining in the 'write' buffer will be
+//		the internal bufio.Writer object. This means that
+//		all data remaining in the 'write' buffer will be
 //		written to the underlying bufio.Writer output
 //		destination. However, most importantly, the user
 //	 	is then responsible for performing the 'Close'
 //		operation by calling the local method:
 //
-//			FileBufferReadWrite.Close()
+//			FileBufferWriter.Close()
 //
 //	errorPrefix					interface{}
 //
@@ -2374,7 +2374,7 @@ func (fBufWriter *FileBufferWriter) WriteTextLines(
 
 	var str string
 	var localNumBytesWritten int
-	var err2 error
+	var err1, err2 error
 
 	for i := 0; i < lenStrArray; i++ {
 
@@ -2390,7 +2390,7 @@ func (fBufWriter *FileBufferWriter) WriteTextLines(
 
 		if err2 != nil {
 
-			err = fmt.Errorf("%v\n"+
+			err1 = fmt.Errorf("%v\n"+
 				"Error returned by fBufWriter.fileWriter.Write(bytesToWrite).\n"+
 				"String Array Index= %v\n"+
 				"Error=\n%v\n",
@@ -2403,49 +2403,16 @@ func (fBufWriter *FileBufferWriter) WriteTextLines(
 
 		numBytesWritten += localNumBytesWritten
 		numOfLinesWritten++
-	}
 
-	var cleanUpStatus string
+	} // for i := 0; i < lenStrArray; i++
 
-	if err != nil {
-
-		cleanUpStatus = "After Processing Error"
-
-	} else {
-
-		cleanUpStatus = "Success"
-	}
-
-	if autoFlushAndCloseOnExit == true {
-
-		err2 = new(fileBufferWriterNanobot).flushAndClose(
+	err = new(fileBufferWriterMicrobot).
+		performAutoFlushAndClose(
 			fBufWriter,
 			"fBufWriter",
-			ePrefix.XCpy(fmt.Sprintf(
-				"%v Flush/Close-Readers & Writers",
-				cleanUpStatus)))
-
-		if err2 != nil {
-
-			err = errors.Join(err, err2)
-		}
-
-	} else {
-
-		err2 = new(fileBufferWriterMolecule).
-			flush(
-				fBufWriter,
-				"fBufWriter",
-				ePrefix.XCpy(fmt.Sprintf(
-					"%v Flush/Close-Readers & Writers",
-					cleanUpStatus)))
-
-		if err2 != nil {
-
-			err = errors.Join(err, err2)
-		}
-
-	}
+			autoFlushAndCloseOnExit,
+			err1,
+			ePrefix)
 
 	return numBytesWritten, numOfLinesWritten, err
 }
@@ -2509,26 +2476,26 @@ func (fBufWriter *FileBufferWriter) WriteTextLines(
 //			underlying bufio.Writer object.
 //
 //		(2)	The internal bufio.Writer object will be
-//			properly closed and there will be need
+//			properly closed and there will be no need
 //			to make a separate call to local method,
-//			FileBufferReadWrite.Close().
+//			FileBufferWriter.Close().
 //
 //		(3) After performing these clean-up tasks, the
-//			current instance of FileBufferReadWrite will
+//			current instance of FileBufferWriter will
 //			invalid and unusable for future 'write'
 //			operations.
 //
 //		If input parameter 'autoFlushAndCloseOnExit' is
 //		set to 'false', this method will automatically
 //		flush the 'write' buffer, but it will NOT close
-//		internal bufio.Writer object. This means that all
-//		data remaining in the 'write' buffer will be
+//		the internal bufio.Writer object. This means that
+//		all data remaining in the 'write' buffer will be
 //		written to the underlying bufio.Writer output
 //		destination. However, most importantly, the user
-//		is then responsible for performing the 'Close'
+//	 	is then responsible for performing the 'Close'
 //		operation by calling the local method:
 //
-//			FileBufferReadWrite.Close()
+//			FileBufferWriter.Close()
 //
 //	errorPrefix					interface{}
 //
@@ -2675,7 +2642,7 @@ func (fBufWriter *FileBufferWriter) WriteStrBuilder(
 		return numBytesWritten, err
 	}
 
-	var err2 error
+	var err1, err2 error
 	var localNumBytesWritten int
 
 	localNumBytesWritten,
@@ -2684,7 +2651,7 @@ func (fBufWriter *FileBufferWriter) WriteStrBuilder(
 
 	if err2 != nil {
 
-		err = fmt.Errorf("%v\n"+
+		err1 = fmt.Errorf("%v\n"+
 			"Error returned by fBufWriter.fileWriter.Write(strBuilder).\n"+
 			"Error=\n%v\n",
 			ePrefix.String(),
@@ -2695,29 +2662,243 @@ func (fBufWriter *FileBufferWriter) WriteStrBuilder(
 		numBytesWritten = int64(localNumBytesWritten)
 	}
 
-	var cleanUpStatus string
+	err = new(fileBufferWriterMicrobot).
+		performAutoFlushAndClose(
+			fBufWriter,
+			"fBufWriter",
+			autoFlushAndCloseOnExit,
+			err1,
+			ePrefix)
 
-	if err != nil {
+	return numBytesWritten, err
+}
 
-		cleanUpStatus = "After Processing Error"
+type fileBufferWriterMicrobot struct {
+	lock *sync.Mutex
+}
+
+// performAutoFlushAndClose
+//
+// Receives an instance of FileBufferWriter and performs
+// clean-up operations as specified by input parameter
+// 'autoFlushAndCloseOnExit'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufWriter					*FileBufferWriter
+//
+//		A pointer to an instance of FileBufferWriter.
+//
+//		All internal member variable data values in
+//		this instance will be deleted and initialized
+//		to new values based on the following input
+//		parameters.
+//
+//	fBufWriterLabel				string
+//
+//		The name or label associated with input parameter
+//		'fBufWriter' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufWriter" will be
+//		automatically applied.
+//
+//	autoFlushAndCloseOnExit		bool
+//
+//		When this parameter is set to 'true', this
+//		method will automatically perform the following
+//		clean-up tasks upon exit, even if processing
+//		errors are encountered:
+//
+//		(1)	The write buffer will be flushed thereby
+//			ensuring that all remaining data in the
+//			'write' buffer will be written to the
+//			underlying bufio.Writer object.
+//
+//		(2)	The internal bufio.Writer object will be
+//			properly closed and there will be no need
+//			to make a separate call to local method,
+//			FileBufferWriter.Close().
+//
+//		(3) After performing these clean-up tasks, the
+//			current instance of FileBufferWriter will
+//			invalid and unusable for future 'write'
+//			operations.
+//
+//		If input parameter 'autoFlushAndCloseOnExit' is
+//		set to 'false', this method will automatically
+//		flush the 'write' buffer, but it will NOT close
+//		the internal bufio.Writer object. This means that
+//		all data remaining in the 'write' buffer will be
+//		written to the underlying bufio.Writer output
+//		destination. However, most importantly, the user
+//	 	is then responsible for performing the 'Close'
+//		operation by calling the local method:
+//
+//			FileBufferWriter.Close()
+//
+//	accumulatedErrors			error
+//
+//		This parameter includes any errors accumulated
+//		to this point by the calling method. Any errors
+//		encountered while performing the clean-up
+//		operation on 'fBufWriter' will be added or
+//		'joined' to 'accumulatedErrors' and returned as
+//		a single error by this method.
+//
+//		It is assumed that this method will be called by
+//		high level methods which may have already
+//		encountered and recorded processing errors. If
+//		this is the case, this parameter will contain one
+//		or more processing errors. If this method produces
+//		any additional errors, they will be joined to
+//		'accumulatedErrors' and all errors will be
+//		returned to the caller.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//		Remember that any errors encountered by this
+//		method will be joined to existing errors passed
+//		as input parameter 'accumulatedErrors'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufWriterMicrobot *fileBufferWriterMicrobot) performAutoFlushAndClose(
+	fBufWriter *FileBufferWriter,
+	fBufWriterLabel string,
+	autoFlushAndCloseOnExit bool,
+	accumulatedErrors error,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if fBufWriterMicrobot.lock == nil {
+		fBufWriterMicrobot.lock = new(sync.Mutex)
+	}
+
+	fBufWriterMicrobot.lock.Lock()
+
+	defer fBufWriterMicrobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err2 error
+
+	funcName := "fileBufferWriterMicrobot." +
+		"performAutoFlushAndClose()"
+
+	if accumulatedErrors == nil {
+
+		ePrefix,
+			err2 = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+			errPrefDto,
+			funcName,
+			"")
 
 	} else {
 
-		cleanUpStatus = "Success"
+		ePrefix,
+			err2 = ePref.ErrPrefixDto{}.NewIEmpty(
+			nil,
+			funcName,
+			"")
+
+	}
+
+	if err2 != nil {
+
+		err = errors.Join(accumulatedErrors, err2)
+
+		return err
+	}
+
+	if len(fBufWriterLabel) == 0 {
+
+		fBufWriterLabel = "fBufWriter"
+	}
+
+	if fBufWriter == nil {
+
+		err2 = fmt.Errorf("%v\n"+
+			"Error: The FileBufferWriter instance passed\n"+
+			"as input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' pointer.\n",
+			ePrefix.String(),
+			fBufWriterLabel,
+			fBufWriterLabel)
+
+		err = errors.Join(accumulatedErrors, err2)
+
+		return err
+	}
+
+	if fBufWriter.fileWriter == nil {
+
+		err2 = fmt.Errorf("%v\n"+
+			"-------------------------------------------------------\n"+
+			"Error: This instance of 'FileBufferWriter' is invalid!\n"+
+			"The internal bufio.Writer has NOT been initialized.\n"+
+			"Call one of the 'New' or 'Setter' methods when creating\n"+
+			"a new valid instance of 'FileBufferWriter'\n",
+			ePrefix.String())
+
+		err = errors.Join(accumulatedErrors, err2)
+
+		return err
+	}
+
+	var cleanUpStatus string
+
+	if accumulatedErrors != nil {
+
+		cleanUpStatus = "Processing Error"
+
+	} else {
+
+		cleanUpStatus = "Successful Completion"
+
 	}
 
 	if autoFlushAndCloseOnExit == true {
 
 		err2 = new(fileBufferWriterNanobot).flushAndClose(
 			fBufWriter,
-			"fBufWriter",
+			fBufWriterLabel,
 			ePrefix.XCpy(fmt.Sprintf(
 				"%v Flush/Close-Readers & Writers",
 				cleanUpStatus)))
 
 		if err2 != nil {
 
-			err = errors.Join(err, err2)
+			err = errors.Join(accumulatedErrors, err2)
 		}
 
 	} else {
@@ -2725,23 +2906,19 @@ func (fBufWriter *FileBufferWriter) WriteStrBuilder(
 		err2 = new(fileBufferWriterMolecule).
 			flush(
 				fBufWriter,
-				"fBufWriter",
+				fBufWriterLabel,
 				ePrefix.XCpy(fmt.Sprintf(
 					"%v Flush/Close-Readers & Writers",
 					cleanUpStatus)))
 
 		if err2 != nil {
 
-			err = errors.Join(err, err2)
+			err = errors.Join(accumulatedErrors, err2)
 		}
 
 	}
 
-	return numBytesWritten, err
-}
-
-type fileBufferWriterMicrobot struct {
-	lock *sync.Mutex
+	return err
 }
 
 // setFileMgr
