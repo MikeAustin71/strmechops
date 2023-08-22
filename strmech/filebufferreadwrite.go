@@ -2281,17 +2281,19 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 // the io.Reader and io.Writer objects and then deleting
 // io.Reader and io.Writer structure values internal to
 // the current FileBufferReadWrite instance. When these
-// Clean-up tasks are completed, the current
+// clean-up tasks are completed, the current
 // FileBufferReadWrite instance will be invalid and
-// unusable for future 'read' and/or 'write' operations.
+// unavailable for future 'read' and/or 'write'
+// operations.
 //
 // If input parameter 'autoFlushAndCloseOnExit' is set to
 // 'false', this method will automatically flush the
 // 'write' buffer. This means that all data remaining in
 // the 'write' buffer will be written to the underlying
-// io.Writer output destination. Most importantly, the
-// user is then responsible for performing the 'Close'
-// operation by calling the local method:
+// io.Writer output destination. However, most
+// importantly, the user is then responsible for
+// performing the 'Close' operation by calling the local
+// method:
 //
 //	FileBufferReadWrite.Close()
 //

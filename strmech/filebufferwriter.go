@@ -2110,6 +2110,33 @@ func (fBufWriter *FileBufferWriter) Write(
 // the internal bufio.Writer object encapsulated in the
 // current instance of FileBufferWriter.
 //
+// When writing final text lines to the internal
+// bufio.Writer object, the line termination or
+// end-of-line characters appended to each text line will
+// be specified by input parameter 'writeEndOfLineChars'.
+//
+// If input parameter 'autoFlushAndCloseOnExit' is set to
+// 'true', this method will automatically perform all
+// required clean-up tasks upon completion. Clean-up
+// tasks involve flushing the bufio.Writer object,
+// closing the bufio.Writer object and then deleting
+// the bufio.Writer structure values internal to
+// the current FileBufferWriter instance. When these
+// clean-up tasks are completed, the current
+// FileBufferWriter instance will be invalid and
+// unavailable for future 'write' operations.
+//
+// If input parameter 'autoFlushAndCloseOnExit' is set to
+// 'false', this method will automatically flush the
+// 'write' buffer. This means that all data remaining in
+// the 'write' buffer will be written to the underlying
+// bufio.Writer output destination. However, most
+// importantly, the user is then responsible for
+// performing the 'Close' operation by calling the local
+// method:
+//
+//	FileBufferWriter.Close()
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -2126,21 +2153,32 @@ func (fBufWriter *FileBufferWriter) Write(
 //		contains zero string array elements, an error is
 //		returned.
 //
-//	endOfLineInsertChars		string
+//	writeEndOfLineChars			string
 //
-//		If the length of this string is greater than zero,
-//		these end-of-line characters will be appended to
-//		the end of each string element extracted from the
-//		'outputLinesArray' string array and written to
-//		bufio.Writer object.
+//		This string contains the end-of-line characters
+//		which will be configured for each line of text
+//		written to the output destination specified by
+//		the internal bufio.Writer object.
 //
-//		If 'endOfLineInsertChars' is an empty string, no
-//		end-of-line characters will be appended to each
-//		string written to the bufio.Writer object.
+//		On Windows, line-endings are terminated with a
+//		combination of a carriage return (ASCII 0x0d or
+//		\r) and a newline(\n), also referred to as CR/LF
+//		(\r\n).
 //
-//		This parameter is typically used to add new line
-//		characters ('\n') to the end of each string in
-//		the string array passed as 'outputLinesArray'.
+//		On UNIX, text file line-endings are terminated
+//		with a newline character (ASCII 0x0a, represented
+//		by the \n escape sequence in most languages),
+//		also referred to as a linefeed (LF).
+//
+//		On the Mac Classic (Mac systems using any system
+//		prior to Mac OS X), line-endings are terminated
+//		with a single carriage return (\r or CR). (Mac OS
+//		X uses the UNIX convention.)
+//
+//		If 'writeEndOfLineChars' is submitted as an empty
+//		or zero length string, no end-of-line characters
+//		will be written to the bufio.Writer output
+//		destination and no error will be returned.
 //
 //	autoFlushAndCloseOnExit		bool
 //
@@ -2265,7 +2303,7 @@ func (fBufWriter *FileBufferWriter) Write(
 //	 	attached to the	beginning of the error message.
 func (fBufWriter *FileBufferWriter) WriteTextLines(
 	outputLinesArray *StringArrayDto,
-	endOfLineInsertChars string,
+	writeEndOfLineChars string,
 	autoFlushAndCloseOnExit bool,
 	errorPrefix interface{}) (
 	numBytesWritten int,
@@ -2338,7 +2376,7 @@ func (fBufWriter *FileBufferWriter) WriteTextLines(
 	for i := 0; i < lenStrArray; i++ {
 
 		str = outputLinesArray.StrArray[i] +
-			endOfLineInsertChars
+			writeEndOfLineChars
 
 		if len(str) == 0 {
 			continue
