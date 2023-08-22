@@ -7,6 +7,7 @@ import (
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
 	"os"
+	"strings"
 	"sync"
 )
 
@@ -2184,7 +2185,8 @@ func (fBufWriter *FileBufferWriter) Write(
 //
 //		When this parameter is set to 'true', this
 //		method will automatically perform the following
-//		clean-up tasks upon exit:
+//		clean-up tasks upon exit, even if processing
+//		errors are encountered:
 //
 //		(1)	The write buffer will be flushed thereby
 //			ensuring that all remaining data in the
@@ -2207,8 +2209,8 @@ func (fBufWriter *FileBufferWriter) Write(
 //		internal bufio.Writer object. This means that all
 //		data remaining in the 'write' buffer will be
 //		written to the underlying bufio.Writer output
-//		destination. Most importantly, the user is
-//		then responsible for performing the 'Close'
+//		destination. However, most importantly, the user
+//	 	is then responsible for performing the 'Close'
 //		operation by calling the local method:
 //
 //			FileBufferReadWrite.Close()
@@ -2372,6 +2374,7 @@ func (fBufWriter *FileBufferWriter) WriteTextLines(
 
 	var str string
 	var localNumBytesWritten int
+	var err2 error
 
 	for i := 0; i < lenStrArray; i++ {
 
@@ -2381,8 +2384,6 @@ func (fBufWriter *FileBufferWriter) WriteTextLines(
 		if len(str) == 0 {
 			continue
 		}
-
-		var err2 error
 
 		localNumBytesWritten,
 			err2 = fBufWriter.fileWriter.Write([]byte(str))
@@ -2397,31 +2398,346 @@ func (fBufWriter *FileBufferWriter) WriteTextLines(
 				i,
 				err2.Error())
 
-			return numBytesWritten, numOfLinesWritten, err
+			break
 		}
 
 		numBytesWritten += localNumBytesWritten
 		numOfLinesWritten++
 	}
 
-	if autoFlushAndCloseOnExit == true {
+	var cleanUpStatus string
 
-		err = new(fileBufferWriterNanobot).flushAndClose(
-			fBufWriter,
-			"fBufWriter",
-			ePrefix)
+	if err != nil {
+
+		cleanUpStatus = "After Processing Error"
 
 	} else {
 
-		err = new(fileBufferWriterMolecule).
+		cleanUpStatus = "Success"
+	}
+
+	if autoFlushAndCloseOnExit == true {
+
+		err2 = new(fileBufferWriterNanobot).flushAndClose(
+			fBufWriter,
+			"fBufWriter",
+			ePrefix.XCpy(fmt.Sprintf(
+				"%v Flush/Close-Readers & Writers",
+				cleanUpStatus)))
+
+		if err2 != nil {
+
+			err = errors.Join(err, err2)
+		}
+
+	} else {
+
+		err2 = new(fileBufferWriterMolecule).
 			flush(
 				fBufWriter,
 				"fBufWriter",
-				ePrefix)
+				ePrefix.XCpy(fmt.Sprintf(
+					"%v Flush/Close-Readers & Writers",
+					cleanUpStatus)))
+
+		if err2 != nil {
+
+			err = errors.Join(err, err2)
+		}
 
 	}
 
 	return numBytesWritten, numOfLinesWritten, err
+}
+
+// WriteStrBuilder
+//
+// Receives an instance of strings.Builder and proceeds
+// to write all the string data contained therein to the
+// previously configured internal bufio.writer
+// destination configured for the current instance of
+// FileBufferWriter.
+//
+// If input parameter 'autoFlushAndCloseOnExit' is set to
+// 'true', this method will automatically perform all
+// required clean-up tasks upon completion. Clean-up
+// tasks involve flushing the bufio.Writer object,
+// closing the bufio.Writer object and then deleting
+// the bufio.Writer structure values internal to
+// the current FileBufferWriter instance. When these
+// clean-up tasks are completed, the current
+// FileBufferWriter instance will be invalid and
+// unavailable for future 'write' operations.
+//
+// If input parameter 'autoFlushAndCloseOnExit' is set to
+// 'false', this method will automatically flush the
+// 'write' buffer. This means that all data remaining in
+// the 'write' buffer will be written to the underlying
+// bufio.Writer output destination. However, most
+// importantly, the user is then responsible for
+// performing the 'Close' operation by calling the local
+// method:
+//
+//	FileBufferWriter.Close()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	strBuilder					*strings.Builder
+//
+//		A pointer to an instance of strings.Builder. The
+//		entire string contents of 'strBuilder' will be
+//		written to the internal bufio.Writer destination
+//		encapsulated by the current instance of
+//		FileBufferWriter.
+//
+//		If the string contained in 'strBuilder' is empty,
+//		or a zero length string, an error will be
+//		returned.
+//
+//	autoFlushAndCloseOnExit		bool
+//
+//		When this parameter is set to 'true', this
+//		method will automatically perform the following
+//		clean-up tasks upon exit, even if processing
+//		errors are encountered:
+//
+//		(1)	The write buffer will be flushed thereby
+//			ensuring that all remaining data in the
+//			'write' buffer will be written to the
+//			underlying bufio.Writer object.
+//
+//		(2)	The internal bufio.Writer object will be
+//			properly closed and there will be need
+//			to make a separate call to local method,
+//			FileBufferReadWrite.Close().
+//
+//		(3) After performing these clean-up tasks, the
+//			current instance of FileBufferReadWrite will
+//			invalid and unusable for future 'write'
+//			operations.
+//
+//		If input parameter 'autoFlushAndCloseOnExit' is
+//		set to 'false', this method will automatically
+//		flush the 'write' buffer, but it will NOT close
+//		internal bufio.Writer object. This means that all
+//		data remaining in the 'write' buffer will be
+//		written to the underlying bufio.Writer output
+//		destination. However, most importantly, the user
+//		is then responsible for performing the 'Close'
+//		operation by calling the local method:
+//
+//			FileBufferReadWrite.Close()
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numBytesWritten				int
+//
+//		Returns the number of bytes extracted from
+//		input parameter 'strBuilder' and written to the
+//		internal bufio.Writer object encapsulated by the
+//		current instance of FileBufferWriter.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufWriter *FileBufferWriter) WriteStrBuilder(
+	strBuilder *strings.Builder,
+	autoFlushAndCloseOnExit bool,
+	errorPrefix interface{}) (
+	numBytesWritten int64,
+	err error) {
+
+	if fBufWriter.lock == nil {
+		fBufWriter.lock = new(sync.Mutex)
+	}
+
+	fBufWriter.lock.Lock()
+
+	defer fBufWriter.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileBufferWriter."+
+			"WriteStrBuilder()",
+		"")
+
+	if err != nil {
+
+		return numBytesWritten, err
+	}
+
+	if fBufWriter.fileWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"-------------------------------------------------------\n"+
+			"Error: This instance of 'FileBufferWriter' is invalid!\n"+
+			"The internal bufio.Writer has NOT been initialized.\n"+
+			"Call one of the 'New' or 'Setter' methods when creating\n"+
+			"a new valid instance of 'FileBufferWriter'\n",
+			ePrefix.String())
+
+		return numBytesWritten, err
+	}
+
+	if strBuilder == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"-------------------------------------------------------\n"+
+			"Error: Input parameter 'strBuilder' is invalid!\n"+
+			"'strBuilder' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return numBytesWritten, err
+	}
+
+	if strBuilder.Len() == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' is invalid!\n"+
+			"'strBuilder' contains an empty or zero length string.\n",
+			ePrefix.String())
+
+		return numBytesWritten, err
+	}
+
+	var err2 error
+	var localNumBytesWritten int
+
+	localNumBytesWritten,
+		err2 = fBufWriter.fileWriter.Write(
+		[]byte(strBuilder.String()))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by fBufWriter.fileWriter.Write(strBuilder).\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+	} else {
+
+		numBytesWritten = int64(localNumBytesWritten)
+	}
+
+	var cleanUpStatus string
+
+	if err != nil {
+
+		cleanUpStatus = "After Processing Error"
+
+	} else {
+
+		cleanUpStatus = "Success"
+	}
+
+	if autoFlushAndCloseOnExit == true {
+
+		err2 = new(fileBufferWriterNanobot).flushAndClose(
+			fBufWriter,
+			"fBufWriter",
+			ePrefix.XCpy(fmt.Sprintf(
+				"%v Flush/Close-Readers & Writers",
+				cleanUpStatus)))
+
+		if err2 != nil {
+
+			err = errors.Join(err, err2)
+		}
+
+	} else {
+
+		err2 = new(fileBufferWriterMolecule).
+			flush(
+				fBufWriter,
+				"fBufWriter",
+				ePrefix.XCpy(fmt.Sprintf(
+					"%v Flush/Close-Readers & Writers",
+					cleanUpStatus)))
+
+		if err2 != nil {
+
+			err = errors.Join(err, err2)
+		}
+
+	}
+
+	return numBytesWritten, err
 }
 
 type fileBufferWriterMicrobot struct {
@@ -3642,14 +3958,18 @@ func (fBufWriterMolecule *fileBufferWriterMolecule) close(
 // This method performs one function. Namely, it flushes
 // all data from the write file effectively ensuring that
 // all data in the buffer is written to the file or
-// underlying device defined as an bufio.Writer.
+// underlying device defined by the internal bufio.Writer
+// encapsulated in the FileBufferWriter instance passed
+// as input parameter 'fBufWriter'.
 //
 // Specifically, this method does NOT 'close' the
-// FileBufferWriter instance passed as input parameter
-// 'fBufWriter'. As such, this method does not delete
-// member variable data contained in 'fBufWriter'. To
-// fully close the 'fBufWriter' instance, make a separate
-// call to method 'fileBufferWriterMolecule.close()'.
+// 'fBufWriter' FileBufferWriter instance. As such, this
+// method does not delete member variable data contained
+// in 'fBufWriter'. To fully close the 'fBufWriter'
+// instance, make a separate call to local method:
+//
+//	fileBufferWriterMolecule.close()'.
+//
 // ----------------------------------------------------------------
 //
 // # BE ADVISED
