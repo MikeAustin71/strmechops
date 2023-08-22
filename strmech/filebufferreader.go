@@ -225,7 +225,9 @@ func (fBufReader *FileBufferReader) Close() error {
 //	int
 //
 //		This return value contains the number of bytes
-//		which can be read from the current 'read' buffer.
+//		which can be read from the current 'read' buffer
+//		encapsulated by the current instance of
+//		FileBufferReader.
 func (fBufReader *FileBufferReader) Buffered() int {
 
 	if fBufReader.lock == nil {
@@ -345,6 +347,11 @@ func (fBufReader *FileBufferReader) Buffered() int {
 //		The number of bytes discarded. If this value is
 //		not equal to input parameter 'numBytesToDiscard',
 //		an error will also be returned.
+//
+//		Remember that the number of bytes 'discarded'
+//		repositions the 'reader' to begin the next read
+//		operation at the next byte beyond the bytes
+//		'discarded'.
 //
 //	err							error
 //
@@ -2830,6 +2837,50 @@ func (fBufReader *FileBufferReader) SetPathFileName(
 				pathFileName))
 
 	return fInfoPlus, err
+}
+
+// Size
+//
+// This method returns the size of the underlying 'read'
+// buffer in bytes.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/bufio#Reader.Size
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	int
+//
+//		This return value contains the size of the
+//		underlying 'read' buffer in bytes for the current
+//		instance of FileBufferReader.
+func (fBufReader *FileBufferReader) Size() int {
+
+	if fBufReader.lock == nil {
+		fBufReader.lock = new(sync.Mutex)
+	}
+
+	fBufReader.lock.Lock()
+
+	defer fBufReader.lock.Unlock()
+
+	if fBufReader.bufioReader == nil {
+
+		return 0
+	}
+
+	return fBufReader.bufioReader.Size()
 }
 
 type fileBufferReaderMicrobot struct {
