@@ -1252,18 +1252,23 @@ func (fBufReader *FileBufferReader) Read(
 //		clean-up tasks for the current instance of
 //		FileBufferReader upon completion. Specifically,
 //		the internal bufio.Reader object will be properly
-//		'closed'. After completing the 'close' operation,
-//		the current instance of FileBufferReader will be
-//		invalid and unusable for all future 'read'
+//		'closed' and there will be no need to make a
+//		separate call to the local method:
+//
+//			FileBufferReader.Close()
+//
+//		After completing the 'close' operation, the
+//		current instance of FileBufferReader will be
+//		invalid and unavailable for all future 'read'
 //		operations.
 //
 //		If input parameter 'autoCloseOnExit' is set to
 //		'false', this method will NOT automatically
 //		'close' the internal bufio.Reader object for the
-//		current instance of FileBufferReader. Consequently,
-//		the user will then be responsible for 'closing' the
-//		internal bufio.Reader object by calling the local
-//		method:
+//		current instance of FileBufferReader.
+//		Consequently, the user will then be responsible
+//		for 'closing' the internal bufio.Reader object by
+//		calling the local method:
 //
 //			FileBufferReader.Close()
 //
@@ -1509,9 +1514,9 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 //	strBuilder					*strings.Builder
 //
 //		A pointer to an instance of strings.Builder. The
-//		entire contents of the internal bufio.Reader for the
-//		current instance of FileBufferReader and stores the
-//		resulting string in 'strBuilder'.
+//		entire contents of the internal bufio.Reader for
+//		the current instance of FileBufferReader will be
+//		read and stored in 'strBuilder'.
 //
 //	autoCloseOnExit				bool
 //
@@ -1520,18 +1525,23 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 //		clean-up tasks for the current instance of
 //		FileBufferReader upon completion. Specifically,
 //		the internal bufio.Reader object will be properly
-//		'closed'. After completing the 'close' operation,
-//		the current instance of FileBufferReader will be
-//		invalid and unusable for all future 'read'
+//		'closed' and there will be no need to make a
+//		separate call to the local method:
+//
+//			FileBufferReader.Close()
+//
+//		After completing the 'close' operation, the
+//		current instance of FileBufferReader will be
+//		invalid and unavailable for all future 'read'
 //		operations.
 //
 //		If input parameter 'autoCloseOnExit' is set to
 //		'false', this method will NOT automatically
 //		'close' the internal bufio.Reader object for the
-//		current instance of FileBufferReader. Consequently,
-//		the user will then be responsible for 'closing' the
-//		internal bufio.Reader object by calling the local
-//		method:
+//		current instance of FileBufferReader.
+//		Consequently, the user will then be responsible
+//		for 'closing' the internal bufio.Reader object by
+//		calling the local method:
 //
 //			FileBufferReader.Close()
 //
@@ -1605,6 +1615,10 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 //		read from the internal bufio.Reader object
 //		encapsulated by the current instance of
 //		FileBufferReader.
+//
+//		This returned value will also be equal to the
+//		number of bytes added to the strings.Builder
+//		instance, 'strBuilder'.
 //
 //	err							error
 //
@@ -1738,18 +1752,23 @@ func (fBufReader *FileBufferReader) ReadAllStrBuilder(
 //		clean-up tasks for the current instance of
 //		FileBufferReader upon completion. Specifically,
 //		the internal bufio.Reader object will be properly
-//		'closed'. After completing the 'close' operation,
-//		the current instance of FileBufferReader will be
-//		invalid and unusable for all future 'read'
+//		'closed' and there will be no need to make a
+//		separate call to the local method:
+//
+//			FileBufferReader.Close()
+//
+//		After completing the 'close' operation, the
+//		current instance of FileBufferReader will be
+//		invalid and unavailable for all future 'read'
 //		operations.
 //
 //		If input parameter 'autoCloseOnExit' is set to
 //		'false', this method will NOT automatically
 //		'close' the internal bufio.Reader object for the
-//		current instance of FileBufferReader. Consequently,
-//		the user will then be responsible for 'closing' the
-//		internal bufio.Reader object by calling the local
-//		method:
+//		current instance of FileBufferReader.
+//		Consequently, the user will then be responsible
+//		for 'closing' the internal bufio.Reader object by
+//		calling the local method:
 //
 //			FileBufferReader.Close()
 //
