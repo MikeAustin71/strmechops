@@ -40,8 +40,8 @@ import (
 //	(1)	Use the 'New' and 'Setter' methods to create
 //		valid instances of FileBufferReader.
 //
-//	(2)	FileBufferReader implements the io.Reader
-//		interface.
+//	(2)	FileBufferReader implements the io.Reader and
+//		io.Closer interfaces.
 //
 // ----------------------------------------------------------------
 //

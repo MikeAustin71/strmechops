@@ -112,7 +112,7 @@ import (
 //		FileBufferWriter instance becomes unusable
 //		and should be discarded.
 type FileBufferWriter struct {
-	fileWriter          *bufio.Writer
+	bufioWriter         *bufio.Writer
 	filePtr             *os.File
 	targetWriteFileName string
 
@@ -148,12 +148,12 @@ func (fBufWriter *FileBufferWriter) Available() int {
 
 	defer fBufWriter.lock.Unlock()
 
-	if fBufWriter.fileWriter == nil {
+	if fBufWriter.bufioWriter == nil {
 
 		return 0
 	}
 
-	return fBufWriter.fileWriter.Available()
+	return fBufWriter.bufioWriter.Available()
 }
 
 // Close
@@ -2065,7 +2065,7 @@ func (fBufWriter *FileBufferWriter) Write(
 		return numBytesWritten, err
 	}
 
-	if fBufWriter.fileWriter == nil {
+	if fBufWriter.bufioWriter == nil {
 
 		err = fmt.Errorf("%v\n"+
 			"-------------------------------------------------------\n"+
@@ -2091,12 +2091,12 @@ func (fBufWriter *FileBufferWriter) Write(
 	var err2 error
 
 	numBytesWritten,
-		err2 = fBufWriter.fileWriter.Write(bytesToWrite)
+		err2 = fBufWriter.bufioWriter.Write(bytesToWrite)
 
 	if err2 != nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error returned by fBufWriter.fileWriter.Write(bytesToWrite).\n"+
+			"Error returned by fBufWriter.bufioWriter.Write(bytesToWrite).\n"+
 			"Error=\n%v\n",
 			ePrefix.String(),
 			err2.Error())
@@ -2345,7 +2345,7 @@ func (fBufWriter *FileBufferWriter) WriteTextLines(
 		return numBytesWritten, numOfLinesWritten, err
 	}
 
-	if fBufWriter.fileWriter == nil {
+	if fBufWriter.bufioWriter == nil {
 
 		err = fmt.Errorf("%v\n"+
 			"-------------------------------------------------------\n"+
@@ -2386,12 +2386,12 @@ func (fBufWriter *FileBufferWriter) WriteTextLines(
 		}
 
 		localNumBytesWritten,
-			err2 = fBufWriter.fileWriter.Write([]byte(str))
+			err2 = fBufWriter.bufioWriter.Write([]byte(str))
 
 		if err2 != nil {
 
 			err1 = fmt.Errorf("%v\n"+
-				"Error returned by fBufWriter.fileWriter.Write(bytesToWrite).\n"+
+				"Error returned by fBufWriter.bufioWriter.Write(bytesToWrite).\n"+
 				"String Array Index= %v\n"+
 				"Error=\n%v\n",
 				ePrefix.String(),
@@ -2608,7 +2608,7 @@ func (fBufWriter *FileBufferWriter) WriteStrBuilder(
 		return numBytesWritten, err
 	}
 
-	if fBufWriter.fileWriter == nil {
+	if fBufWriter.bufioWriter == nil {
 
 		err = fmt.Errorf("%v\n"+
 			"-------------------------------------------------------\n"+
@@ -2646,13 +2646,13 @@ func (fBufWriter *FileBufferWriter) WriteStrBuilder(
 	var localNumBytesWritten int
 
 	localNumBytesWritten,
-		err2 = fBufWriter.fileWriter.Write(
+		err2 = fBufWriter.bufioWriter.Write(
 		[]byte(strBuilder.String()))
 
 	if err2 != nil {
 
 		err1 = fmt.Errorf("%v\n"+
-			"Error returned by fBufWriter.fileWriter.Write(strBuilder).\n"+
+			"Error returned by fBufWriter.bufioWriter.Write(strBuilder).\n"+
 			"Error=\n%v\n",
 			ePrefix.String(),
 			err2.Error())
@@ -2861,7 +2861,7 @@ func (fBufWriter *FileBufferWriter) WriteString(
 		return numBytesWritten, err
 	}
 
-	if fBufWriter.fileWriter == nil {
+	if fBufWriter.bufioWriter == nil {
 
 		err = fmt.Errorf("%v\n"+
 			"-------------------------------------------------------\n"+
@@ -2888,13 +2888,13 @@ func (fBufWriter *FileBufferWriter) WriteString(
 	var localNumBytesWritten int
 
 	localNumBytesWritten,
-		err2 = fBufWriter.fileWriter.Write(
+		err2 = fBufWriter.bufioWriter.Write(
 		[]byte(strToWrite))
 
 	if err2 != nil {
 
 		err1 = fmt.Errorf("%v\n"+
-			"Error returned by fBufWriter.fileWriter.Write(strToWrite).\n"+
+			"Error returned by fBufWriter.bufioWriter.Write(strToWrite).\n"+
 			"Error=\n%v\n",
 			ePrefix.String(),
 			err2.Error())
@@ -3102,7 +3102,7 @@ func (fBufWriterMicrobot *fileBufferWriterMicrobot) performAutoFlushAndClose(
 		return err
 	}
 
-	if fBufWriter.fileWriter == nil {
+	if fBufWriter.bufioWriter == nil {
 
 		err2 = fmt.Errorf("%v\n"+
 			"-------------------------------------------------------\n"+
@@ -3807,7 +3807,7 @@ func (fBufWriterNanobot *fileBufferWriterNanobot) setIoWriter(
 		bufSize = 4096
 	}
 
-	fBufWriter.fileWriter = bufio.NewWriterSize(
+	fBufWriter.bufioWriter = bufio.NewWriterSize(
 		writer,
 		bufSize)
 
@@ -4183,7 +4183,7 @@ func (fBufWriterNanobot *fileBufferWriterNanobot) setPathFileName(
 
 	fBufWriter.targetWriteFileName = pathFileName
 
-	fBufWriter.fileWriter = bufio.NewWriterSize(
+	fBufWriter.bufioWriter = bufio.NewWriterSize(
 		fBufWriter.filePtr,
 		bufSize)
 
@@ -4330,7 +4330,7 @@ func (fBufWriterMolecule *fileBufferWriterMolecule) close(
 		return err
 	}
 
-	if fBufWriter.fileWriter == nil {
+	if fBufWriter.bufioWriter == nil {
 
 		err = fmt.Errorf("%v\n"+
 			"-------------------------------------------\n"+
@@ -4367,7 +4367,7 @@ func (fBufWriterMolecule *fileBufferWriterMolecule) close(
 
 	fBufWriter.filePtr = nil
 
-	fBufWriter.fileWriter = nil
+	fBufWriter.bufioWriter = nil
 
 	return err
 }
@@ -4498,7 +4498,7 @@ func (fBufWriterMolecule *fileBufferWriterMolecule) flush(
 		return err
 	}
 
-	if fBufWriter.fileWriter == nil {
+	if fBufWriter.bufioWriter == nil {
 
 		err = fmt.Errorf("%v\n"+
 			"-------------------------------------------\n"+
@@ -4513,13 +4513,13 @@ func (fBufWriterMolecule *fileBufferWriterMolecule) flush(
 
 	var err2 error
 
-	err2 = fBufWriter.fileWriter.Flush()
+	err2 = fBufWriter.bufioWriter.Flush()
 
 	if err2 != nil {
 
 		err = fmt.Errorf("%v\n"+
 			"Error returned while flushing the 'write' buffer!\n"+
-			"%v.fileWriter.Flush()\n"+
+			"%v.bufioWriter.Flush()\n"+
 			"Error = \n%v\n",
 			ePrefix.String(),
 			fBufWriterLabel,
