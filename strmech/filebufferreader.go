@@ -17,8 +17,8 @@ import (
 // incremental or buffered read operations from the target
 // data source.
 //
-// This structure and its associated methods are designed
-// to facilitate data 'read' operations. The most common
+// This type and its associated methods are designed to
+// facilitate data 'read' operations. The most common
 // data source for these read operations is assumed to be
 // a data file residing on an attached storage drive.
 // However, any object implementing the io.Reader

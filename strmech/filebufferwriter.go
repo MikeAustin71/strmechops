@@ -75,8 +75,8 @@ import (
 //		(b)	The NewPathFileName() method allows for the
 //			creation of an internal file pointer to a
 //			file passed as a path and file name by the
-//			user. This file serves at the target
-//			io.Writer object to which data will be
+//			user. This file serves as the internal target
+//			bufio.Writer object to which data will be
 //			written.
 //
 //			Under this scenario, the user simply calls
@@ -90,20 +90,20 @@ import (
 //
 //	(2)	After creating an instance of FileBufferWriter,
 //		the user calls the Write() method to write bytes
-//		of data to target io.Writer object. This 'write'
-//		target may be a file or any other object which
-//		implements the io.Writer interface.
+//		of data to the internal target bufio.Writer object.
+//		This 'write' target may be a file or any other
+//		object which implements the io.Writer interface.
 //
 //		The Write() method should be called repeatedly
 //		until all data has been written to the underlying
-//		io.Writer object.
+//		bufio.Writer object.
 //
 //		Upon completion of the 'write' operation, call
 //		methods Flush() and Close() in sequence to
 //		perform required clean-up tasks.
 //
 //	(3)	After all data bytes have been written to the
-//		target io.Writer object, the user must call
+//		internal bufio.Writer object, the user must call
 //		methods Flush() and Close() to perform necessary
 //		clean-up operations.
 //
@@ -159,12 +159,12 @@ func (fBufWriter *FileBufferWriter) Available() int {
 //
 // This method is used to close any open file pointers
 // and perform necessary clean-up operations after all
-// data has been written to the destination io.Writer
-// object.
+// data has been written to the internal destination
+// bufio.Writer object.
 //
 // These clean-up operations include flushing the
 // write buffer to ensure that all data is written to
-// the destination io.Writer object.
+// the destination bufio.Writer object.
 //
 // After calling this method, the current instance of
 // FileBufferWriter will be unusable and should be
@@ -191,10 +191,10 @@ func (fBufWriter *FileBufferWriter) Available() int {
 //
 //		(a)	Flushing the 'write' buffer to ensure that
 //			all data is written from the 'write' buffer
-//			to the underlying io.Writer object.
+//			to the underlying bufio.Writer object.
 //
 //		(b)	Properly closing the 'write' file or
-//			io.Writer object.
+//			bufio.Writer object.
 //
 //	(2)	Once this method completes the 'Close' operation,
 //		this instance of FileBufferWriter becomes
@@ -317,18 +317,18 @@ func (fBufWriter *FileBufferWriter) Close() error {
 //
 // This method is used to perform all necessary clean-up
 // operations after all data has been written to the
-// destination io.Writer object.
+// internal destination bufio.Writer object.
 //
 // These clean-up operations consist of:
 //
 //	(1)	Flushing the write buffer to ensure that all
-//		data is written to the destination io.Writer
-//		object.
+//		data is written to the internal destination
+//		bufio.Writer object.
 //
 //				AND
 //
-//	(2) Closing the internal io.Writer object thereby
-//		it invalid and unavailable for any future
+//	(2) Closing the internal bufio.Writer object thereby
+//		renders it invalid and unavailable for any future
 //		'write' operations.
 //
 // After calling this method, the current instance of
@@ -347,10 +347,10 @@ func (fBufWriter *FileBufferWriter) Close() error {
 //
 //		(a)	Flushing the 'write' buffer to ensure that
 //			all data is written from the 'write' buffer
-//			to the underlying io.Writer object.
+//			to the underlying bufio.Writer object.
 //
 //		(b)	Properly closing the 'write' file or
-//			io.Writer object.
+//			internal bufio.Writer object.
 //
 //	(2)	Once this method completes the 'Close' operation,
 //		this instance of FileBufferWriter becomes invalid
@@ -472,8 +472,8 @@ func (fBufWriter *FileBufferWriter) FlushAndClose(
 // Flush
 //
 // Calling this method ensures that all remaining data in
-// 'write' buffer will be written to the destination
-// io.Writer object.
+// 'write' buffer will be written to the internal
+// destination bufio.Writer object.
 //
 // ----------------------------------------------------------------
 //
@@ -813,7 +813,7 @@ func (fBufWriter *FileBufferWriter) NewIoWriter(
 // # BE ADVISED
 //
 //	The returned type, 'FileBufferWriter', implements the
-//	io.Writer interface.
+//	io.Writer and io.Closer interfaces.
 //
 // ----------------------------------------------------------------
 //
@@ -1072,7 +1072,7 @@ func (fBufWriter *FileBufferWriter) NewFileMgr(
 // # BE ADVISED
 //
 //	The returned type, 'FileBufferWriter', implements the
-//	io.Writer interface.
+//	io.Writer and io.Closer interfaces.
 //
 // ----------------------------------------------------------------
 //
@@ -1958,16 +1958,16 @@ func (fBufWriter *FileBufferWriter) SetIoWriter(
 // Write
 //
 // Writes the contents of the byte array input paramter
-// ('bytesToWrite') to the destination io.Writer object
-// previously configured for this instance of
-// FileBufferWriter.
+// ('bytesToWrite') to the internal destination
+// bufio.Writer object previously configured for this
+// instance of FileBufferWriter.
 //
 // If for any reason, the returned number of bytes
-// written ('numBytesWritten') to the destination
-// io.Writer object is less than the length of the byte
-// array passed as input parameter 'bytesToWrite', an
-// error containing an explanation for this event will
-// be returned.
+// written ('numBytesWritten') to the internal
+// destination bufio.Writer object is less than the length
+// of the byte array passed as input parameter
+// 'bytesToWrite', an error containing an explanation for
+// this difference will be returned.
 //
 // ----------------------------------------------------------------
 //
@@ -2000,15 +2000,15 @@ func (fBufWriter *FileBufferWriter) SetIoWriter(
 //	bytesToWrite				[]byte
 //
 //		The contents of this byte array will be written
-//		to the destination io.Writer object previously
-//		configured for the current instance of
+//		to the internal destination bufio.Writer object
+//		previously configured for the current instance of
 //		FileBufferWriter.
 //
-//		Typically, the destination io.Writer object will
-//		be a data file existing on an attached storage
-//		drive. However, the destination io.Writer object
-//		may be any object implementing the io.Writer
-//		interface.
+//		Typically, the internal destination bufio.Writer
+//		object will be a data file existing on an attached
+//		storage drive. However, the destination
+//		bufio.Writer object may be any object implementing
+//		the io.Writer interface.
 //
 //		This method WILL NOT VERIFY that the number of
 //		bytes written is equal to the length of the
@@ -2021,8 +2021,8 @@ func (fBufWriter *FileBufferWriter) SetIoWriter(
 //	numBytesWritten				int
 //
 //		This parameter returns the number of bytes
-//		written to the destination io.Writer object
-//		configured for the current instance of
+//		written to the internal destination bufio.Writer
+//		object configured for the current instance of
 //		FileBufferWriter.
 //
 //	err							error
@@ -2107,7 +2107,7 @@ func (fBufWriter *FileBufferWriter) Write(
 // WriteTextLines
 //
 // Writes all the string elements of a string array to
-// the internal io.Writer object encapsulated in the
+// the internal bufio.Writer object encapsulated in the
 // current instance of FileBufferWriter.
 //
 // ----------------------------------------------------------------
@@ -2118,9 +2118,9 @@ func (fBufWriter *FileBufferWriter) Write(
 //
 //		This instance of StringArrayDto encapsulates a
 //		string array. All the string elements of this
-//		array will be written to the underlying io.Writer
-//		object contained in the current instance of
-//		FileBufferWriter.
+//		array will be written to the underlying
+//		bufio.Writer object contained in the current
+//		instance of FileBufferWriter.
 //
 //		If the encapsulated string array is empty and
 //		contains zero string array elements, an error is
@@ -2132,11 +2132,11 @@ func (fBufWriter *FileBufferWriter) Write(
 //		these end-of-line characters will be appended to
 //		the end of each string element extracted from the
 //		'outputLinesArray' string array and written to
-//		io.Writer object.
+//		bufio.Writer object.
 //
 //		If 'endOfLineInsertChars' is an empty string, no
 //		end-of-line characters will be appended to each
-//		string written to the io.Writer object.
+//		string written to the bufio.Writer object.
 //
 //		This parameter is typically used to add new line
 //		characters ('\n') to the end of each string in
@@ -2151,9 +2151,9 @@ func (fBufWriter *FileBufferWriter) Write(
 //		(1)	The write buffer will be flushed thereby
 //			ensuring that all remaining data in the
 //			'write' buffer will be written to the
-//			underlying io.Writer object.
+//			underlying bufio.Writer object.
 //
-//		(2)	The internal io.Writer object will be
+//		(2)	The internal bufio.Writer object will be
 //			properly closed and there will be need
 //			to make a separate call to local method,
 //			FileBufferReadWrite.Close().
@@ -2166,9 +2166,9 @@ func (fBufWriter *FileBufferWriter) Write(
 //		If input parameter 'autoFlushAndCloseOnExit' is
 //		set to 'false', this method will automatically
 //		flush the 'write' buffer, but it will NOT close
-//		internal io.Writer object. This means that all
+//		internal bufio.Writer object. This means that all
 //		data remaining in the 'write' buffer will be
-//		written to the underlying io.Writer output
+//		written to the underlying bufio.Writer output
 //		destination. Most importantly, the user is
 //		then responsible for performing the 'Close'
 //		operation by calling the local method:
@@ -2241,14 +2241,14 @@ func (fBufWriter *FileBufferWriter) Write(
 //	numBytesWritten				int
 //
 //		Returns the number of bytes written to the
-//		io.Writer object encapsulated by the current
+//		bufio.Writer object encapsulated by the current
 //		instance of FileBufferWriter.
 //
 //	numOfLinesWritten			int
 //
 //		Returns the number to text lines extracted from
 //		the 'outputLinesArray' string array and written
-//		to the io.Writer object encapsulated by the
+//		to the bufio.Writer object encapsulated by the
 //		current instance of FileBufferWriter.
 //
 //	err							error
@@ -2397,7 +2397,7 @@ type fileBufferWriterMicrobot struct {
 // instance of FileBufferWriter passed as input parameter
 // 'fBufWriter'.
 //
-// The new io.Writer object assigned to 'fBufWriter' is
+// The new bufio.Writer object assigned to 'fBufWriter' is
 // generated from the File Manager (FileMgr) instance
 // passed as input parameter 'fileMgr'.
 //
@@ -2699,17 +2699,17 @@ type fileBufferWriterNanobot struct {
 //
 // This method is used to perform all necessary clean-up
 // operations after all data has been written to the
-// destination io.Writer object.
+// internal destination bufio.Writer object.
 //
 // These clean-up operations consist of:
 //
 //	(1)	Flushing the write buffer to ensure that all
-//		data is written to the destination io.Writer
-//		object.
+//		data is written to the internal destination
+//		bufio.Writer object.
 //
 //				AND
 //
-//	(2) Closing the internal io.Writer object thereby
+//	(2) Closing the internal bufio.Writer object thereby
 //		it invalid and unavailable for any future
 //		'write' operations.
 //
@@ -2728,10 +2728,10 @@ type fileBufferWriterNanobot struct {
 //
 //		(a)	Flushing the 'write' buffer to ensure that
 //			all data is written from the 'write' buffer
-//			to the underlying io.Writer object.
+//			to the underlying bufio.Writer object.
 //
 //		(b)	Properly closing the 'write' file or
-//			io.Writer object.
+//			bufio.Writer object.
 //
 //	(2)	Once this method completes the 'Close' operation,
 //		this instance of FileBufferWriter becomes
@@ -3048,7 +3048,7 @@ func (fBufWriterNanobot *fileBufferWriterNanobot) setIoWriter(
 // instance of FileBufferWriter passed as input parameter
 // 'fBufWriter'.
 //
-// The new io.Writer object assigned to 'fBufWriter' is
+// The new bufio.Writer object assigned to 'fBufWriter' is
 // generated from the file name passed as input parameter
 // 'pathFileName'
 //
@@ -3563,7 +3563,7 @@ func (fBufWriterMolecule *fileBufferWriterMolecule) close(
 			"-------------------------------------------\n"+
 			"Error: The FileBufferReader instance passed\n"+
 			"as input parameter '%v' is invalid!\n"+
-			"The internal io.Writer object is a 'nil' pointer.\n",
+			"The internal bufio.Writer object is a 'nil' pointer.\n",
 			ePrefix.String(),
 			fBufWriterLabel)
 
@@ -3604,7 +3604,7 @@ func (fBufWriterMolecule *fileBufferWriterMolecule) close(
 // This method performs one function. Namely, it flushes
 // all data from the write file effectively ensuring that
 // all data in the buffer is written to the file or
-// underlying device defined as an io.Writer.
+// underlying device defined as an bufio.Writer.
 //
 // Specifically, this method does NOT 'close' the
 // FileBufferWriter instance passed as input parameter
@@ -3727,7 +3727,7 @@ func (fBufWriterMolecule *fileBufferWriterMolecule) flush(
 			"-------------------------------------------\n"+
 			"Error: The FileBufferReader instance passed\n"+
 			"as input parameter '%v' is invalid!\n"+
-			"The internal io.Writer object is a 'nil' pointer.\n",
+			"The internal bufio.Writer object is a 'nil' pointer.\n",
 			ePrefix.String(),
 			fBufWriterLabel)
 
