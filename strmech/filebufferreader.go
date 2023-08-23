@@ -1139,6 +1139,182 @@ func (fBufReader *FileBufferReader) NewPathFileName(
 	return fInfoPlus, newFileBufReader, err
 }
 
+// Peek
+//
+// This method returns the next n bytes without advancing
+// the reader. The bytes stop being valid at the next
+// read call.
+//
+// If Peek returns fewer bytes than 'nextBytes' value, it
+// also returns an error explaining why the read is
+// short.
+//
+// If 'nextBytes' value is larger than the buffer size
+// for the current FileBufferReader, the error
+// 'ErrBufferFull' will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	nextBytes					int
+//
+//		The 'Peek' operation performed by this method
+//		will return the number of bytes specified by
+//		'nextBytes' without advancing the reader.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufReader *FileBufferReader) Peek(
+	nextBytes int,
+	errorPrefix interface{}) (
+	peekBytes []byte,
+	err error) {
+
+	if fBufReader.lock == nil {
+		fBufReader.lock = new(sync.Mutex)
+	}
+
+	fBufReader.lock.Lock()
+
+	defer fBufReader.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileBufferReader."+
+			"Peek()",
+		"")
+
+	if err != nil {
+
+		return peekBytes, err
+	}
+
+	if fBufReader.bufioReader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of 'FileBufferReader' is invalid!\n"+
+			"The internal bufio.Reader object has NOT been initialized.\n"+
+			"Call one of the 'New' or 'Setter' methods when creating\n"+
+			"an instance of 'FileBufferReader'\n",
+			ePrefix.String())
+
+		return peekBytes, err
+	}
+
+	var err2 error
+
+	peekBytes,
+		err2 = fBufReader.bufioReader.Peek(nextBytes)
+
+	if err2 != nil {
+
+		if errors.Is(err2, bufio.ErrBufferFull) {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: %v\n"+
+				"The input parameter 'nextBytes' is greater\n"+
+				"than the length of the FileBufferReader buffer.\n"+
+				" Input parameter 'nextBytes'= %v-bytes\n"+
+				"FileBufferReader Buffer Size= %v-bytes\n",
+				ePrefix.String(),
+				bufio.ErrBufferFull.Error(),
+				nextBytes,
+				fBufReader.bufioReader.Size())
+
+		} else {
+
+			err = fmt.Errorf("%v\n"+
+				"Error returned by fBufReader.bufioReader.Peek()\n"+
+				"Input parameter 'nextBytes'= %v-bytes\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				nextBytes,
+				err2.Error())
+
+		}
+
+	}
+
+	return peekBytes, err
+}
+
 // Read
 //
 // Reads a selection data from the pre-configured
