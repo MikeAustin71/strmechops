@@ -6,6 +6,7 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
+	"math"
 	"os"
 	"strings"
 	"sync"
@@ -1267,18 +1268,7 @@ func (fBufReader *FileBufferReader) NewPathFileName(
 //
 //		If processing errors are encountered, the
 //		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errorPrefix'.
-//	 	The 'errorPrefix' text will be prefixed or
-//	 	attached to the	beginning of the error message.
-//
-//		If an end of file is encountered (after reading
-//		all data source contents), this returned error
-//		will be set to 'io.EOF'. See the 'Reference'
-//		section for a discussion of 'io.EOF'. Disk files
-//		will return an 'io.EOF'. However, some other
-//		types of readers may not.
+//		appropriate error message.
 func (fBufReader *FileBufferReader) Read(
 	bytesRead []byte) (
 	numOfBytesRead int,
@@ -1611,7 +1601,9 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 	err error) {
 
 	if fBufReader.lock == nil {
+
 		fBufReader.lock = new(sync.Mutex)
+
 	}
 
 	fBufReader.lock.Lock()
@@ -2881,6 +2873,170 @@ func (fBufReader *FileBufferReader) Size() int {
 	}
 
 	return fBufReader.bufioReader.Size()
+}
+
+// WriteTo
+//
+// This method implements the io.WriterTo interface.
+//
+// Input parameter 'writer' passes an io.Writer object.
+// This method will then proceed to read the entire
+// contents of the bufio.Reader object encapsulated by
+// the current instance of FileBufferReader and write
+// this data to the io.Writer object.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method implements the io.WriterTo interface.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	writer						io.Writer
+//
+//		This instance of io.Writer will be used as the
+//		'write' destination for all data read from the
+//		bufio.Reader object encapsulated by the current
+//		instance of FileBufferReader.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numOfBytesProcessed			int64
+//
+//		The number of bytes read from the internal
+//		bufio.Reader and written to the destination
+//		io.Writer object passed as input parameter
+//		'writer'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message.
+func (fBufReader *FileBufferReader) WriteTo(
+	writer io.Writer) (
+	numOfBytesProcessed int64,
+	err error) {
+
+	if fBufReader.lock == nil {
+		fBufReader.lock = new(sync.Mutex)
+	}
+
+	fBufReader.lock.Lock()
+
+	defer fBufReader.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileBufferReader."+
+			"WriteTo()",
+		"")
+
+	if err != nil {
+
+		return numOfBytesProcessed, err
+	}
+
+	if fBufReader.bufioReader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of 'FileBufferReader' is invalid!\n"+
+			"The internal bufio.Reader object has NOT been initialized.\n"+
+			"Call one of the 'New' or 'Setter' methods when creating\n"+
+			"an instance of 'FileBufferReader'\n",
+			ePrefix.String())
+
+		return numOfBytesProcessed, err
+	}
+
+	bufSize := fBufReader.bufioReader.Size()
+
+	if bufSize < 16 {
+		// Reset to default buffer size of 4096
+		fBufReader.bufioReader.Reset(nil)
+
+		bufSize = fBufReader.bufioReader.Size()
+
+	}
+
+	if bufSize < 16 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The attempt to reset buffer size to 4096-bytes Failed!\n",
+			ePrefix.String())
+
+		return numOfBytesProcessed, err
+	}
+
+	var bytesRead = make([]byte, bufSize)
+	var numBytesRead, numBytesWritten int
+	var err1 error
+	var maxCycle = math.MaxInt - 1
+	var cycleCnt int
+
+	for {
+
+		cycleCnt++
+
+		if cycleCnt >= maxCycle {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Infinite Loop!\n"+
+				"The 'Read' operation failed locate io.EOF\n"+
+				"otherwise known as the end-of-file for this\n"+
+				"underlying io.Reader object.\n"+
+				"Read Cycle Count= %v\n",
+				ePrefix.String(),
+				cycleCnt)
+
+			break
+		}
+
+		numBytesRead,
+			err1 = fBufReader.bufioReader.Read(bytesRead)
+
+		if err1 != nil &&
+			err1 != io.EOF {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: fBufReader.bufioReader.Read(bytesRead)\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				err1.Error())
+
+			break
+
+		}
+
+		if numBytesRead > 0 {
+
+			numBytesWritten,
+				err = writer.Write(bytesRead[:numBytesRead])
+
+			numOfBytesProcessed += int64(numBytesWritten)
+		}
+
+		if err1 == io.EOF {
+
+			break
+		}
+
+		clear(bytesRead)
+
+	} // for
+
+	return numOfBytesProcessed, err
 }
 
 type fileBufferReaderMicrobot struct {
