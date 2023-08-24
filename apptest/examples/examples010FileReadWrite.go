@@ -995,10 +995,11 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 	var newFBuffReadWrite strmech.FileBufferReadWrite
 	var readerFileInfoPlus, writerFileInfoPlus strmech.FileInfoPlus
 	var shouldReadAndWriteFilesBeEqual,
-		useWindowsOutputFormat bool
+		useWindowsLineTerminationChars bool
 
 	shouldReadAndWriteFilesBeEqual = true
-	useWindowsOutputFormat = true
+
+	useWindowsLineTerminationChars = true
 
 	readerFileInfoPlus,
 		writerFileInfoPlus,
@@ -1038,7 +1039,8 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 	var readEndOfLineDelimiters strmech.StringArrayDto
 	var writeEndOfLineChars string
 
-	if useWindowsOutputFormat {
+	if useWindowsLineTerminationChars {
+
 		// Windows Output Format
 		writeEndOfLineChars = "\r\n"
 

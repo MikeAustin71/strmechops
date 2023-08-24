@@ -2456,7 +2456,7 @@ func (fileHelpMech *fileHelperMechanics) makeDirAll(
 	return nil
 }
 
-// readLines
+// readTextLines
 //
 // Reads a file and returns each line in a target file as
 // an element of a string array.
@@ -2554,33 +2554,6 @@ func (fileHelpMech *fileHelperMechanics) makeDirAll(
 //		lines extracted from file identified by
 //		'pathFileName'.
 //
-//	writeEndOfLineChars			string
-//
-//		This string contains the end-of-line characters
-//		which will be configured for each line of text
-//		written to the output destination specified by
-//		the internal io.Writer object.
-//
-//		On Windows, line-endings are terminated with a
-//		combination of a carriage return (ASCII 0x0d or
-//		\r) and a newline(\n), also referred to as CR/LF
-//		(\r\n).
-//
-//		On UNIX, text file line-endings are terminated
-//		with a newline character (ASCII 0x0a, represented
-//		by the \n escape sequence in most languages),
-//		also referred to as a linefeed (LF).
-//
-//		On the Mac Classic (Mac systems using any system
-//		prior to Mac OS X), line-endings are terminated
-//		with a single carriage return (\r or CR). (Mac OS
-//		X uses the UNIX convention.)
-//
-//		If 'writeEndOfLineChars' is submitted as an empty
-//		or zero length string, no end-of-line characters
-//		will be written to the io.Writer output
-//		destination and no error will be returned.
-//
 //	outputLinesArray *StringArrayDto,
 //
 //		A pointer to an instance of StringArrayDto.
@@ -2588,6 +2561,20 @@ func (fileHelpMech *fileHelperMechanics) makeDirAll(
 //		by 'pathFileName' will be stored as
 //		individual strings in the string array
 //		encapsulated by 'outputLinesArray'.
+//
+//		-------------------------------------------------
+//					IMPORTANT
+//		-------------------------------------------------
+//		The line termination or end-of-line delimiter
+//		characters identified from 'endOfLineDelimiters'
+//		will be stripped off and deleted from the end of
+//		each line of text stored in the string array
+//		encapsulated by 'outputLinesArray'. As such, the
+//		text lines stored here are pure strings of text
+//		without any line termination or end-of-line
+//		delimiter characters.
+//
+//
 //
 //	maxNumOfLines				int
 //
@@ -2663,11 +2650,10 @@ func (fileHelpMech *fileHelperMechanics) makeDirAll(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
-func (fileHelpMech *fileHelperMechanics) readLines(
+func (fileHelpMech *fileHelperMechanics) readTextLines(
 	pathFileName string,
 	pathFileNameLabel string,
 	endOfLineDelimiters *StringArrayDto,
-	writeEndOfLineChars string,
 	outputLinesArray *StringArrayDto,
 	maxNumOfLines int,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -2686,7 +2672,7 @@ func (fileHelpMech *fileHelperMechanics) readLines(
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	funcName := "fileHelperMechanics.readLines()"
+	funcName := "fileHelperMechanics.readTextLines()"
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -2816,6 +2802,27 @@ func (fileHelpMech *fileHelperMechanics) readLines(
 	}
 
 	originalFileSize = fInfoPlus.Size()
+
+	if originalFileSize == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"---------------------------------------------------\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is an empty file containing zero bytes."+
+			"Therefore, no text lines can be read from this file.\n"+
+			"%v = '%v'\n",
+			ePrefix.String(),
+			pathFileNameLabel,
+			pathFileNameLabel,
+			pathFileNameLabel,
+			pathFileName)
+
+		return originalFileSize,
+			numOfLinesRead,
+			numOfBytesRead,
+			err
+
+	}
 
 	var filePermissionCfg FilePermissionConfig
 
