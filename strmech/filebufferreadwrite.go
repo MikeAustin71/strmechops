@@ -2739,7 +2739,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 	var textLine string
 	var lenTextLine int
 	var ok bool
-	var err2 error
+	var err2, err3 error
 
 	for numOfLinesProcessed < maxNumOfTextLines {
 
@@ -2784,10 +2784,10 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 		if lenTextLine > 0 {
 
 			localNumBytesWritten,
-				err2 = fBufReadWrite.writer.Write(
+				err3 = fBufReadWrite.writer.Write(
 				[]byte(textLine))
 
-			if err2 != nil {
+			if err3 != nil {
 
 				err = fmt.Errorf("%v\n"+
 					"Error Writing Bytes To File!\n"+
@@ -2795,7 +2795,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 					"Write Error=\n%v\n",
 					funcName,
 					writerLabel,
-					err2.Error())
+					err3.Error())
 
 				break
 			}
@@ -2803,6 +2803,12 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 			numOfLinesProcessed++
 
 			numBytesWritten += int64(localNumBytesWritten)
+
+			if errors.Is(err2, io.EOF) == true ||
+				ok == false {
+
+				break
+			}
 
 		} // if len(textLine) > 0
 

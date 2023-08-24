@@ -415,12 +415,16 @@ func (fileHlprOpsTest008 MainFileHelperOpsTest008) ReadTextLines01() {
 	shouldFinalDeleteWriteFile = true
 
 	var err error
-	var targetReadFile string
+	var targetReadFile, readFileBaseStr string
 	var exampleUtil = ExampleUtility{}
+
+	readFileBaseStr = "fileOpsTest\\filesForTest\\textFilesForTest\\splitFunc.txt"
+
+	//readFileBaseStr = "fileOpsTest\\filesForTest\\textFilesForTest\\txtFileBlankLastLine.txt"
 
 	targetReadFile,
 		err = exampleUtil.GetCompositeDirectory(
-		"fileOpsTest\\filesForTest\\textFilesForTest\\splitFunc.txt",
+		readFileBaseStr,
 		ePrefix.XCpy("targetReadFile"))
 
 	if err != nil {
@@ -525,7 +529,7 @@ func (fileHlprOpsTest008 MainFileHelperOpsTest008) ReadTextLines01() {
 		" outputLinesArray Stats Before File Write\n"+
 		" Number of Lines To Write: %v\n"+
 		" Number of Bytes To Write: %v\n"+
-		" Text Line Terminator: %v\n",
+		" Text Line Terminator: %v\n\n",
 		ePrefix,
 		dashLineStr,
 		numOfLinesToWrite,
@@ -549,7 +553,7 @@ func (fileHlprOpsTest008 MainFileHelperOpsTest008) ReadTextLines01() {
 
 	fmt.Printf(" %v\n"+
 		"%v\n"+
-		" After fHelper.WriteStrOpenClose()"+
+		" After fHelper.WriteStrOpenClose()\n"+
 		" Number of Bytes Written= %v\n"+
 		" Target Write File= %v\n\n",
 		ePrefix.String(),
