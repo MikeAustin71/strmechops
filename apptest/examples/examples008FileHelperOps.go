@@ -660,9 +660,28 @@ func (fileHlprOpsTest008 MainFileHelperOpsTest008) ReadTextLines01() {
 				ePrefix.XCpy("Final Delete-targetWriteFile"))
 
 		if err != nil {
-			fmt.Printf("\n%v\n\n",
+
+			fmt.Printf(" %v\n"+
+				"Error returned from DeleteDirOrFile(targetWriteFile)\n"+
+				"Target Write File: %v\n"+
+				"Error= \n%v\n",
+				funcName,
+				targetWriteFile,
 				err.Error())
+
 			return
+
+		} else {
+
+			fmt.Printf(" %v\n"+
+				"%v\n"+
+				" The Target Write File on the Trash Directory\n"+
+				" was successfully deleted.\n"+
+				" Deleted Target Write File: %v\n\n",
+				ePrefix.String(),
+				dashLineStr,
+				targetWriteFile)
+
 		}
 	}
 
@@ -703,18 +722,24 @@ func (fileHlprOpsTest008 MainFileHelperOpsTest008) ReadTextLines02() {
 
 	var err error
 	var targetReadFile, targetWriteFile,
-		compareFile string
+		compareFile, readFileBaseStr,
+		compareFileBaseStr string
 	var exampleUtil = ExampleUtility{}
 	var shouldReadAndWriteFilesBeEqual,
-		useWindowsLineTerminationChars bool
+		useWindowsLineTerminationChars,
+		shouldFinalDeleteWriteFile bool
 
 	shouldReadAndWriteFilesBeEqual = true
 
 	useWindowsLineTerminationChars = true
 
+	shouldFinalDeleteWriteFile = false
+
+	readFileBaseStr = "fileOpsTest\\filesForTest\\textFilesForTest\\splitFunc2.txt"
+
 	targetReadFile,
 		err = exampleUtil.GetCompositeDirectory(
-		"fileOpsTest\\filesForTest\\textFilesForTest\\splitFunc2.txt",
+		readFileBaseStr,
 		ePrefix.XCpy("targetReadFile"))
 
 	if err != nil {
@@ -734,9 +759,12 @@ func (fileHlprOpsTest008 MainFileHelperOpsTest008) ReadTextLines02() {
 		return
 	}
 
+	// splitFuncBlankLastLine
+	compareFileBaseStr = "fileOpsTest\\filesForTest\\textFilesForTest\\splitFuncBlankLastLine.txt"
+
 	compareFile,
 		err = exampleUtil.GetCompositeDirectory(
-		"fileOpsTest\\filesForTest\\textFilesForTest\\splitFunc.txt",
+		compareFileBaseStr,
 		ePrefix.XCpy("compareFile"))
 
 	if err != nil {
@@ -922,6 +950,39 @@ func (fileHlprOpsTest008 MainFileHelperOpsTest008) ReadTextLines02() {
 
 		}
 
+	}
+
+	if shouldFinalDeleteWriteFile == true {
+
+		err = fHelper.
+			DeleteDirOrFile(
+				targetWriteFile,
+				ePrefix.XCpy("Final Delete-targetWriteFile"))
+
+		if err != nil {
+
+			fmt.Printf(" %v\n"+
+				"Error returned from DeleteDirOrFile(targetWriteFile)\n"+
+				"Target Write File: %v\n"+
+				"Error= \n%v\n",
+				funcName,
+				targetWriteFile,
+				err.Error())
+
+			return
+
+		} else {
+
+			fmt.Printf(" %v\n"+
+				"%v\n"+
+				" The Target Write File on the Trash Directory\n"+
+				" was successfully deleted.\n"+
+				" Deleted Target Write File: %v\n\n",
+				ePrefix.String(),
+				dashLineStr,
+				targetWriteFile)
+
+		}
 	}
 
 	fmt.Printf("\n\n" + breakStr + "\n")
