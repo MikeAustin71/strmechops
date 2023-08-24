@@ -2541,7 +2541,7 @@ func (fileHelpMech *fileHelperMechanics) makeDirAll(
 //		string, a default value of "pathFileName" will be
 //		automatically applied.
 //
-//	endOfLineDelimiters				*StringArrayDto
+//	readEndOfLineDelimiters		*StringArrayDto
 //
 //		A pointer to an instance of StringArrayDto.
 //		'endOfLineDelimiters' encapsulates a string
@@ -2550,9 +2550,37 @@ func (fileHelpMech *fileHelperMechanics) makeDirAll(
 //		individual lines of text.
 //
 //		Users have the flexibility to specify multiple
-//		end-of-line delimiters for used in parsing text
+//		end-of-line delimiters for use in parsing text
 //		lines extracted from file identified by
 //		'pathFileName'.
+//
+//		Typical text line termination, or end-of-line
+//		delimiters, which may be appropriate for use
+//		with a given target 'read' file are listed as
+//		follows:
+//
+//		Windows
+//			Line-endings are terminated with a
+//			combination of a carriage return (ASCII 0x0d
+//			or \r) and a newline(\n), also referred to as
+//			carriage return/line feed or CR/LF (\r\n).
+//
+//		UNIX/Linux
+//			Text file line-endings are terminated with a
+//			newline character (ASCII 0x0a, represented
+//			by the \n escape sequence in most languages),
+//			also referred to as a linefeed (LF).
+//
+//		Mac Classic Prior to Mac OS X
+//			Text Line-endings are terminated with a single
+//			carriage return (\r or CR).
+//
+//		Mac OS X or Later
+//			Line termination uses the UNIX convention.
+//			Text file line-endings are terminated with a
+//			newline character (ASCII 0x0a, represented
+//			by the \n escape sequence in most languages),
+//			also referred to as a linefeed (LF).
 //
 //	outputLinesArray *StringArrayDto,
 //
@@ -2573,8 +2601,6 @@ func (fileHelpMech *fileHelperMechanics) makeDirAll(
 //		text lines stored here are pure strings of text
 //		without any line termination or end-of-line
 //		delimiter characters.
-//
-//
 //
 //	maxNumOfLines				int
 //
@@ -2653,7 +2679,7 @@ func (fileHelpMech *fileHelperMechanics) makeDirAll(
 func (fileHelpMech *fileHelperMechanics) readTextLines(
 	pathFileName string,
 	pathFileNameLabel string,
-	endOfLineDelimiters *StringArrayDto,
+	readEndOfLineDelimiters *StringArrayDto,
 	outputLinesArray *StringArrayDto,
 	maxNumOfLines int,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -2691,48 +2717,6 @@ func (fileHelpMech *fileHelperMechanics) readTextLines(
 	if len(pathFileNameLabel) == 0 {
 
 		pathFileNameLabel = "pathFileName"
-	}
-
-	if endOfLineDelimiters == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'endOfLineDelimiters' is invalid!\n"+
-			"endOfLineDelimiters' is a nil pointer.\n",
-			ePrefix.String())
-
-		return originalFileSize,
-			numOfLinesRead,
-			numOfBytesRead,
-			err
-	}
-
-	if len(endOfLineDelimiters.StrArray) == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'endOfLineDelimiters' is invalid!\n"+
-			"endOfLineDelimiters' contains a zero length string array.\n"+
-			"There are no End-Of-Line delimiters available for text\n"+
-			"line separation and identification.\n",
-			ePrefix.String())
-
-		return originalFileSize,
-			numOfLinesRead,
-			numOfBytesRead,
-			err
-
-	}
-
-	if outputLinesArray == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'outputLinesArray' is invalid!\n"+
-			"outputLinesArray' is a nil pointer.\n",
-			ePrefix.String())
-
-		return originalFileSize,
-			numOfLinesRead,
-			numOfBytesRead,
-			err
 	}
 
 	var fInfoPlus FileInfoPlus
@@ -2888,8 +2872,7 @@ func (fileHelpMech *fileHelperMechanics) readTextLines(
 		readerScanLines(
 			filePtr,
 			pathFileNameLabel,
-			endOfLineDelimiters,
-			writeEndOfLineChars,
+			readEndOfLineDelimiters,
 			outputLinesArray,
 			maxNumOfLines,
 			ePrefix.XCpy("filePtr->"))

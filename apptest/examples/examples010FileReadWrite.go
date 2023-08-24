@@ -125,11 +125,17 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufferReader03() {
 
 func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufferReader04() {
 
+	funcName := "MainFileReadWriteTest010.FileBuffReadWrite03()"
+
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"MainFileReadWriteTest010.FileReader04()",
+		funcName,
 		"")
 
-	breakStr := " " + strings.Repeat("=", 50)
+	breakStr := " " + strings.Repeat("=",
+		len(funcName)+6)
+
+	dashLineStr := " " + strings.Repeat("-",
+		len(funcName)+6)
 
 	fmt.Printf("\n\n" + breakStr + "\n")
 
@@ -159,7 +165,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufferReader04() {
 	targetWriteFile,
 		err = exampleUtil.GetCompositeDirectory(
 		"\\fileOpsTest\\trashDirectory\\"+
-			"MainFileReadWriteTest010FileReader04.txt",
+			"Main010FileReader04.txt",
 		ePrefix)
 
 	if err != nil {
@@ -169,17 +175,57 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufferReader04() {
 	}
 
 	var fHelper = new(strmech.FileHelper)
-	var textLinesArray strmech.StringArrayDto
+
+	err = fHelper.
+		DeleteDirOrFile(
+			targetWriteFile,
+			ePrefix.XCpy("targetWriteFile"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var readEndOfLineDelimiters,
+		outputLinesArray strmech.StringArrayDto
 	var expectedNumOfBytesWritten, numOfLinesRead int
 	var originalFileSize, numOfBytesRead int64
+	var shouldReadAndWriteFilesBeEqual,
+		useWindowsLineTerminationChars,
+		shouldFinalDeleteWriteFile bool
+	var writeEndOfLineChars string
+
+	shouldReadAndWriteFilesBeEqual = true
+
+	useWindowsLineTerminationChars = true
+
+	shouldFinalDeleteWriteFile = true
+
+	if useWindowsLineTerminationChars {
+
+		// Windows Output Format
+		writeEndOfLineChars = "\r\n"
+
+	} else {
+
+		// Unix Output Format
+		writeEndOfLineChars = "\n"
+	}
+
+	readEndOfLineDelimiters.AddManyStrings(
+		"\n",
+		"\r\n",
+		"[EOL]")
 
 	originalFileSize,
 		numOfLinesRead,
 		numOfBytesRead,
-		err = fHelper.ReadLines(
+		err = fHelper.ReadTextLines(
 		targetReadFile,
-		-1,
-		&textLinesArray,
+		&readEndOfLineDelimiters,
+		&outputLinesArray,
+		-1, // maxNumOfTextLines
 		ePrefix.XCpy("targetReadFile"))
 
 	if err != nil {
@@ -188,26 +234,28 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufferReader04() {
 		return
 	}
 
-	lenTextLineArray := len(textLinesArray.StrArray)
+	lenTextLineArray := len(outputLinesArray.StrArray)
 
-	fmt.Printf("\n   %v\n"+
-		"---  fHelper.ReadTextLines() Stats ---\n"+
-		"               originalFileSize = %v\n"+
-		"                 numOfBytesRead = %v\n"+
-		"Number of Bytes Text Line Array = %v\n"+
-		"                 numOfLinesRead = %v\n"+
-		"  Actual length Text Line Array = %v\n",
+	fmt.Printf("\n %v\n"+
+		"%v\n"+
+		" fHelper.ReadTextLines() Stats\n"+
+		"                originalFileSize = %v\n"+
+		"                  numOfBytesRead = %v\n"+
+		" Number of Bytes Text Line Array = %v\n"+
+		"                  numOfLinesRead = %v\n"+
+		"   Actual length Text Line Array = %v\n\n",
 		ePrefix.String(),
+		dashLineStr,
 		originalFileSize,
 		numOfBytesRead,
-		textLinesArray.GetTotalBytesInStrings(),
+		outputLinesArray.GetTotalBytesInStrings(),
 		numOfLinesRead,
 		lenTextLineArray)
 
-	textLinesArray.AppendSuffix("\n")
+	outputLinesArray.AppendSuffix(writeEndOfLineChars)
 
 	expectedNumOfBytesWritten =
-		int(textLinesArray.GetTotalBytesInStrings())
+		int(outputLinesArray.GetTotalBytesInStrings())
 
 	var fBufWriter strmech.FileBufferWriter
 
@@ -231,13 +279,13 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufferReader04() {
 
 	var bytesToWrite []byte
 	var err2, err3 error
-	lenStrArray := len(textLinesArray.StrArray)
+	lenStrArray := len(outputLinesArray.StrArray)
 
 	for i := 0; i < lenStrArray; i++ {
 
 		bytesToWrite = make([]byte, 0)
 
-		bytesToWrite = []byte(textLinesArray.StrArray[i])
+		bytesToWrite = []byte(outputLinesArray.StrArray[i])
 
 		localNumOfBytesWritten,
 			err3 =
@@ -275,7 +323,8 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufferReader04() {
 
 	}
 
-	err = fBufWriter.FlushAndClose(ePrefix)
+	err = fBufWriter.FlushAndClose(
+		ePrefix.XCpy("fBufWriter"))
 
 	if err != nil {
 
@@ -287,13 +336,80 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufferReader04() {
 
 	}
 
-	fmt.Printf("\n%v\n"+
-		"  --- Write Stats ---\n"+
+	fmt.Printf("\n %v\n"+
+		"%v"+
+		" Write Stats\n"+
 		"Expected Num Of Bytes Written = %v\n"+
 		"  Actual Num Of Bytes Written = %v\n\n",
 		ePrefix.String(),
+		dashLineStr,
 		expectedNumOfBytesWritten,
 		totalNumOfBytesWritten)
+
+	if shouldReadAndWriteFilesBeEqual == true {
+
+		var reasonFilesNotEqual string
+		var filesAreEqual bool
+
+		filesAreEqual,
+			reasonFilesNotEqual,
+			err = fHelper.CompareFiles(
+			targetReadFile,
+			targetWriteFile,
+			ePrefix.XCpy(
+				"Target Files Comparison"))
+
+		if err != nil {
+
+			fmt.Printf(" %v\n"+
+				"Error Return from fHelper.CompareFiles()\n"+
+				"  targetReadFile= %v\n"+
+				" targetWriteFile= %v\n"+
+				"Reason: %v\n",
+				ePrefix.String(),
+				targetReadFile,
+				targetWriteFile,
+				reasonFilesNotEqual)
+
+			return
+		}
+
+		if !filesAreEqual {
+
+			fmt.Printf("%v\n"+
+				"Error: Read and Write Files are NOT equal!\n"+
+				"Reason: %v\n",
+				ePrefix.String(),
+				reasonFilesNotEqual)
+
+			return
+
+		} else {
+
+			fmt.Printf(" %v\n"+
+				" SUCCESS! Files are EQUAL!\n"+
+				"  Target Read File: %v\n"+
+				" Target Write File: %v\n\n",
+				ePrefix.String(),
+				targetReadFile,
+				targetWriteFile)
+
+		}
+	}
+
+	if shouldFinalDeleteWriteFile == true {
+
+		err = fHelper.
+			DeleteDirOrFile(
+				targetWriteFile,
+				ePrefix.XCpy("targetWriteFile"))
+
+		if err != nil {
+			fmt.Printf("\n%v\n\n",
+				err.Error())
+			return
+		}
+	}
 
 	// --------------------------------------------
 	// Successful Completion
@@ -896,9 +1012,9 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02B() {
 	numOfLinesRead,
 		numOfBytesRead,
 		err = newFileIoReader.ReadAllTextLines(
-		-1,
 		&readEndOfLineDelimiters,
 		outputLinesArray,
+		-1,   // maxNumOfTextLines
 		true, // autoCloseOnExit
 		ePrefix)
 
@@ -942,6 +1058,9 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 	breakStr := " " + strings.Repeat("=",
 		len(funcName)+6)
 
+	dashLineStr := " " + strings.Repeat("-",
+		len(funcName)+6)
+
 	fmt.Printf("\n\n" + breakStr + "\n")
 
 	fmt.Printf("\n Starting Run!\n"+
@@ -950,6 +1069,16 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 		ePrefix.String())
 
 	fmt.Printf("\n" + breakStr + "\n\n\n")
+
+	var shouldReadAndWriteFilesBeEqual,
+		useWindowsLineTerminationChars,
+		shouldFinalDeleteWriteFile bool
+
+	shouldReadAndWriteFilesBeEqual = true
+
+	useWindowsLineTerminationChars = true
+
+	shouldFinalDeleteWriteFile = true
 
 	var err error
 	var targetReadFile string
@@ -994,12 +1123,6 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 
 	var newFBuffReadWrite strmech.FileBufferReadWrite
 	var readerFileInfoPlus, writerFileInfoPlus strmech.FileInfoPlus
-	var shouldReadAndWriteFilesBeEqual,
-		useWindowsLineTerminationChars bool
-
-	shouldReadAndWriteFilesBeEqual = true
-
-	useWindowsLineTerminationChars = true
 
 	readerFileInfoPlus,
 		writerFileInfoPlus,
@@ -1022,6 +1145,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 	}
 
 	fmt.Printf("\n %v\n"+
+		"%v\n"+
 		" New File Stats\n"+
 		" FileBufferReadWrite.NewPathFileNames()\n"+
 		" Reader File Size= %v\n"+
@@ -1029,6 +1153,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 		"  Target Read File: %v\n"+
 		" Target Write File: %v\n\n",
 		ePrefix.String(),
+		dashLineStr,
 		readerFileInfoPlus.Size(),
 		writerFileInfoPlus.Size(),
 		targetReadFile,
@@ -1075,6 +1200,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 	}
 
 	fmt.Printf(" %v\n"+
+		"%v"+
 		" Stats From newFBuffReadWrite.ReadWriteTextLines()\n"+
 		" Number Of Text Lines Processed: %v\n"+
 		"   Maximum Number of Text Lines: %v\n"+
@@ -1083,6 +1209,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 		"  Target Read File: %v\n"+
 		" Target Write File: %v\n\n",
 		ePrefix.String(),
+		dashLineStr,
 		numOfLinesProcessed,
 		maxNumOfTextLines,
 		numOfTextLineBytes,
@@ -1106,12 +1233,14 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 	}
 
 	fmt.Printf(" %v\n"+
-		" Write File Stats from FileHelper.DoesFileInfoPlusExist()\n"+
+		"%v\n"+
+		" Write File Stats from DoesFileInfoPlusExist()\n"+
 		"    Write File Does Exist: %v\n"+
 		" Write File Size in Bytes: %v\n"+
 		"          Write File Name: %v\n"+
 		"	 	Target Write File: %v\n\n",
 		ePrefix.String(),
+		dashLineStr,
 		doesFileExist,
 		writerFileInfoPlus.Size(),
 		writerFileInfoPlus.Name(),
@@ -1163,24 +1292,46 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 
 		if !filesAreEqual {
 
-			fmt.Printf("%v\n"+
-				"Error: Read and Write Files are NOT equal!\n"+
-				"Reason: %v\n",
+			fmt.Printf(" %v\n"+
+				"%v\n"+
+				" Error: Read and Write Files are NOT equal!\n"+
+				" Reason: %v\n"+
+				"  Target Read File: %v\n"+
+				" Target Write File: %v\n\n",
 				ePrefix.String(),
-				reasonFilesNotEqual)
+				dashLineStr,
+				reasonFilesNotEqual,
+				targetReadFile,
+				targetWriteFile)
 
 			return
 
 		} else {
 
 			fmt.Printf(" %v\n"+
+				"%v\n"+
 				" SUCCESS! Files are EQUAL!\n"+
 				"  Target Read File: %v\n"+
 				" Target Write File: %v\n\n",
 				ePrefix.String(),
+				dashLineStr,
 				targetReadFile,
 				targetWriteFile)
 
+		}
+	}
+
+	if shouldFinalDeleteWriteFile == true {
+
+		err = fHelper.
+			DeleteDirOrFile(
+				targetWriteFile,
+				ePrefix.XCpy("Final Delete-targetWriteFile"))
+
+		if err != nil {
+			fmt.Printf("\n%v\n\n",
+				err.Error())
+			return
 		}
 	}
 
@@ -1198,17 +1349,33 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 
 func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufWriter01() {
 
+	funcName := "Main010.FileBufWriter01()"
+
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		"MainFileReadWriteTest010.FileBufWriter01()",
+		funcName,
 		"")
 
-	breakStr := " " + strings.Repeat("=", 50)
+	breakStr := " " + strings.Repeat("=",
+		len(funcName)+6)
+
+	dashLineStr := " " + strings.Repeat("-",
+		len(funcName)+6)
 
 	fmt.Printf("\n\n" + breakStr + "\n")
 
 	fmt.Printf("\n Starting Run!\n"+
 		" Function: %v\n",
 		ePrefix.String())
+
+	var shouldReadAndWriteFilesBeEqual,
+		useWindowsLineTerminationChars,
+		shouldFinalDeleteWriteFile bool
+
+	shouldReadAndWriteFilesBeEqual = true
+
+	useWindowsLineTerminationChars = true
+
+	shouldFinalDeleteWriteFile = true
 
 	var targetReadFile string
 	var err error
@@ -1230,7 +1397,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufWriter01() {
 
 	targetWriteFile,
 		err = exUtil.GetCompositeDirectory(
-		"\\fileOpsTest\\trashDirectory\\MainFileReadWriteTest010_FileBufWriter01.txt",
+		"\\fileOpsTest\\trashDirectory\\Main010FileBufWriter01.txt",
 		ePrefix)
 
 	if err != nil {
@@ -1240,17 +1407,37 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufWriter01() {
 	}
 
 	var fHelper = new(strmech.FileHelper)
-	var textLinesArray strmech.StringArrayDto
+	var outputLinesArray strmech.StringArrayDto
 	var numOfLinesRead, expectedNumOfBytesWritten int
 	var i64numOfBytesRead int64
+	var readEndOfLineDelimiters strmech.StringArrayDto
+	var writeEndOfLineChars string
+
+	if useWindowsLineTerminationChars {
+
+		// Windows Output Format
+		writeEndOfLineChars = "\r\n"
+
+	} else {
+
+		// Unix Output Format
+		writeEndOfLineChars = "\n"
+
+	}
+
+	readEndOfLineDelimiters.AddManyStrings(
+		"\n",
+		"\r\n",
+		"[EOL]")
 
 	_,
 		numOfLinesRead,
 		i64numOfBytesRead,
-		err = fHelper.ReadLines(
+		err = fHelper.ReadTextLines(
 		targetReadFile,
+		&readEndOfLineDelimiters,
+		&outputLinesArray,
 		-1,
-		&textLinesArray,
 		ePrefix.XCpy("targetReadFile"))
 
 	if err != nil {
@@ -1259,7 +1446,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufWriter01() {
 		return
 	}
 
-	textLinesArray.AppendSuffix("\n")
+	outputLinesArray.AppendSuffix(writeEndOfLineChars)
 
 	expectedNumOfBytesWritten =
 		int(i64numOfBytesRead) + numOfLinesRead
@@ -1288,7 +1475,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufWriter01() {
 
 	for i := 0; i < numOfLinesRead; i++ {
 
-		bytesToWrite = []byte(textLinesArray.StrArray[i])
+		bytesToWrite = []byte(outputLinesArray.StrArray[i])
 
 		localNumOfBytesWritten,
 			err2 =
@@ -1296,17 +1483,22 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufWriter01() {
 
 		if err2 != nil {
 
-			fmt.Printf("%v\n"+
-				"Error returned by fBufWriter.Write(bytesToWrite)\n"+
-				"Bytes To Write = '%v'\n"+
-				"Index = '%v'\n"+
-				"Error= \n%v\n",
+			err = fmt.Errorf(" %v\n"+
+				" Error returned by fBufWriter.Write(bytesToWrite)\n"+
+				" Bytes To Write = '%v'\n"+
+				" Index = '%v'\n"+
+				" Error= \n%v\n",
 				ePrefix.String(),
 				string(bytesToWrite),
 				i,
 				err2.Error())
 
-			_ = fBufWriter.FlushAndClose(nil)
+			err2 = fBufWriter.FlushAndClose(nil)
+
+			err = errors.Join(err, err2)
+
+			fmt.Printf("%v\n",
+				err.Error())
 
 			return
 		}
@@ -1314,66 +1506,152 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufWriter01() {
 		totalNumOfBytesWritten += localNumOfBytesWritten
 	}
 
-	var errs []error
+	var err3 error
 
-	err2 = fBufWriter.Flush(ePrefix)
+	err3 = fBufWriter.Flush(ePrefix)
 
-	if err2 != nil {
+	if err3 != nil {
 
-		err = fmt.Errorf("%v\n"+
+		err2 = fmt.Errorf("%v\n"+
 			"Error returned by fBufWriter.Flush(ePrefix)\n"+
 			"Error = \n%v\n",
 			ePrefix.String(),
-			err2.Error())
+			err3.Error())
 
-		errs = append(errs, err)
+		err = errors.Join(err, err2)
 	}
 
-	err2 = fBufWriter.FlushAndClose(ePrefix)
+	err3 = fBufWriter.FlushAndClose(ePrefix)
 
-	if err2 != nil {
+	if err3 != nil {
 
-		err = fmt.Errorf("%v\n"+
+		err2 = fmt.Errorf("%v\n"+
 			"Error returned by fBufWriter.Close(ePrefix)\n"+
 			"Error = \n%v\n",
 			ePrefix.String(),
-			err2.Error())
+			err3.Error())
 
-		errs = append(errs, err)
+		err = errors.Join(err, err2)
 	}
 
-	if len(errs) > 0 {
-
-		err2 = new(strmech.StrMech).ConsolidateErrors(errs)
+	if err != nil {
 
 		fmt.Printf("%v\n"+
 			"Errors returned from Flush() and Close()\n"+
 			"Errors= \n%v\n",
 			ePrefix.String(),
-			err2.Error())
+			err.Error())
 
 		return
 	}
 
 	if expectedNumOfBytesWritten != totalNumOfBytesWritten {
 
-		fmt.Printf("%v\n"+
-			"Error: Expected Bytes Written != Actual Bytes Written\n"+
-			"Expected Bytes Written = '%v'\n"+
-			"  Actual Bytes Written = '%v'\n",
+		fmt.Printf(" %v\n"+
+			"%v\n"+
+			" Error: Expected Bytes Written != Actual Bytes Written\n"+
+			" Expected Bytes Written = '%v'\n"+
+			"   Actual Bytes Written = '%v'\n"+
+			"  Target Read File: %v\n"+
+			" Target Write File: %v\n",
 			ePrefix.String(),
+			dashLineStr,
 			expectedNumOfBytesWritten,
-			totalNumOfBytesWritten)
+			totalNumOfBytesWritten,
+			targetReadFile,
+			targetWriteFile)
 
 		return
 	}
 
-	fmt.Printf("\n\n%v\n"+
-		"Expected Number Of Bytes Written: %v\n"+
-		"  Actual Number of Bytes Written: %v\n",
+	fmt.Printf(" %v\n"+
+		"%v\n"+
+		" After fBufWriter.Write() Sequence\n"+
+		" Expected Number Of Bytes Written: %v\n"+
+		"   Actual Number of Bytes Written: %v\n"+
+		"  Target Read File: %v\n"+
+		" Target Write File: %v\n\n",
 		ePrefix.String(),
+		dashLineStr,
 		expectedNumOfBytesWritten,
-		totalNumOfBytesWritten)
+		totalNumOfBytesWritten,
+		targetReadFile,
+		targetWriteFile)
+
+	var filesAreEqual bool
+
+	if shouldReadAndWriteFilesBeEqual == true {
+
+		var reasonFilesNotEqual string
+
+		filesAreEqual,
+			reasonFilesNotEqual,
+			err = fHelper.CompareFiles(
+			targetReadFile,
+			targetWriteFile,
+			ePrefix.XCpy(
+				"Target Files Comparison"))
+
+		if err != nil {
+
+			fmt.Printf(" %v\n"+
+				" Error Return from fHelper.CompareFiles()\n"+
+				"  targetReadFile= %v\n"+
+				" targetWriteFile= %v\n"+
+				" Reason: %v\n",
+				ePrefix.String(),
+				targetReadFile,
+				targetWriteFile,
+				reasonFilesNotEqual)
+
+			return
+		}
+
+		if !filesAreEqual {
+
+			fmt.Printf(" %v\n"+
+				"%v\n"+
+				" Error: Read and Write Files are NOT equal!\n"+
+				" Reason: %v\n"+
+				"  Target Read File: %v\n"+
+				" Target Write File: %v\n\n",
+				ePrefix.String(),
+				dashLineStr,
+				reasonFilesNotEqual,
+				targetReadFile,
+				targetWriteFile)
+
+			return
+
+		} else {
+
+			fmt.Printf(" %v\n"+
+				"%v\n"+
+				" SUCCESS! Files are EQUAL!\n"+
+				"  Target Read File: %v\n"+
+				" Target Write File: %v\n\n",
+				ePrefix.String(),
+				dashLineStr,
+				targetReadFile,
+				targetWriteFile)
+
+		}
+
+	}
+
+	if shouldFinalDeleteWriteFile == true {
+
+		err = fHelper.
+			DeleteDirOrFile(
+				targetWriteFile,
+				ePrefix.XCpy("Final Delete-targetWriteFile"))
+
+		if err != nil {
+			fmt.Printf("\n%v\n\n",
+				err.Error())
+			return
+		}
+	}
 
 	fmt.Printf("\n\n" + breakStr + "\n")
 

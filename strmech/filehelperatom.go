@@ -1967,17 +1967,46 @@ func (fHelperAtom *fileHelperAtom) getPathSeparatorIndexesInPathStr(
 //		string, a default value of "reader" will be
 //		automatically applied.
 //
-//	endOfLineDelimiters			*StringArrayDto
+//	readEndOfLineDelimiters		*StringArrayDto
 //
 //		A pointer to an instance of StringArrayDto.
 //		'endOfLineDelimiters' encapsulates a string
 //		array which contains the end-of-line delimiters
-//		which will be used to identify and separate
+//		that will be used to identify and separate
 //		individual lines of text.
 //
 //		Users have the flexibility to specify multiple
 //		end-of-line delimiters for used in parsing text
-//		lines extracted from the io.Reader object.
+//		lines extracted from file identified by
+//		'pathFileName'.
+//
+//		Typical text line termination, or end-of-line
+//		delimiters, which may be appropriate for use
+//		with a given target 'read' file are listed as
+//		follows:
+//
+//		Windows
+//			Line-endings are terminated with a
+//			combination of a carriage return (ASCII 0x0d
+//			or \r) and a newline(\n), also referred to as
+//			carriage return/line feed or CR/LF (\r\n).
+//
+//		UNIX/Linux
+//			Text file line-endings are terminated with a
+//			newline character (ASCII 0x0a, represented
+//			by the \n escape sequence in most languages),
+//			also referred to as a linefeed (LF).
+//
+//		Mac Classic Prior to Mac OS X
+//			Text Line-endings are terminated with a single
+//			carriage return (\r or CR).
+//
+//		Mac OS X or Later
+//			Line termination uses the UNIX convention.
+//			Text file line-endings are terminated with a
+//			newline character (ASCII 0x0a, represented
+//			by the \n escape sequence in most languages),
+//			also referred to as a linefeed (LF).
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -2023,7 +2052,7 @@ func (fHelperAtom *fileHelperAtom) getPathSeparatorIndexesInPathStr(
 func (fHelperAtom *fileHelperAtom) getStdTextLineScanner(
 	reader io.Reader,
 	readerLabel string,
-	endOfLineDelimiters *StringArrayDto,
+	readEndOfLineDelimiters *StringArrayDto,
 	errPrefDto *ePref.ErrPrefixDto) (
 	textLineScanner *bufio.Scanner,
 	err error) {
@@ -2067,9 +2096,31 @@ func (fHelperAtom *fileHelperAtom) getStdTextLineScanner(
 		return textLineScanner, err
 	}
 
-	endOfLineDelimiters.SortByStrLengthLongestToShortest()
+	if readEndOfLineDelimiters == nil {
 
-	lenEndOfLineDelim := len(endOfLineDelimiters.StrArray)
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'readEndOfLineDelimiters' is invalid!\n"+
+			"readEndOfLineDelimiters' is a nil pointer.\n",
+			ePrefix.String())
+
+		return textLineScanner, err
+	}
+
+	if len(readEndOfLineDelimiters.StrArray) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'readEndOfLineDelimiters' is invalid!\n"+
+			"readEndOfLineDelimiters' contains a zero length string array.\n"+
+			"There are no End-Of-Line delimiters available for text\n"+
+			"line separation and identification.\n",
+			ePrefix.String())
+
+		return textLineScanner, err
+	}
+
+	readEndOfLineDelimiters.SortByStrLengthLongestToShortest()
+
+	lenEndOfLineDelim := len(readEndOfLineDelimiters.StrArray)
 
 	textLineScanner = bufio.NewScanner(reader)
 
@@ -2087,9 +2138,9 @@ func (fHelperAtom *fileHelperAtom) getStdTextLineScanner(
 			for i := 0; i < lenEndOfLineDelim; i++ {
 
 				if j := strings.Index(string(data),
-					endOfLineDelimiters.StrArray[i]); j >= 0 {
+					readEndOfLineDelimiters.StrArray[i]); j >= 0 {
 
-					return j + len(endOfLineDelimiters.StrArray[i]),
+					return j + len(readEndOfLineDelimiters.StrArray[i]),
 						data[0:j],
 						nil
 				}
@@ -2496,39 +2547,26 @@ func (fHelperAtom *fileHelperAtom) makeDirPerm(
 //		string, a default value of "readerScanner" will
 //		be automatically applied.
 //
-//	writeEndOfLineChars			string
-//
-//		This string contains the end-of-line characters
-//		which will be configured for each line of text
-//		written to the output destination specified by
-//		the internal io.Writer object.
-//
-//		On Windows, line-endings are terminated with a
-//		combination of a carriage return (ASCII 0x0d or
-//		\r) and a newline(\n), also referred to as CR/LF
-//		(\r\n).
-//
-//		On UNIX, text file line-endings are terminated
-//		with a newline character (ASCII 0x0a, represented
-//		by the \n escape sequence in most languages),
-//		also referred to as a linefeed (LF).
-//
-//		On the Mac Classic (Mac systems using any system
-//		prior to Mac OS X), line-endings are terminated
-//		with a single carriage return (\r or CR). (Mac OS
-//		X uses the UNIX convention.)
-//
-//		If 'writeEndOfLineChars' is submitted as an empty
-//		or zero length string, no end-of-line characters
-//		will be written to the io.Writer output
-//		destination and no error will be returned.
-//
-//	outputLinesArray *StringArrayDto,
+//	outputLinesArray 			*StringArrayDto
 //
 //		A pointer to an instance of StringArrayDto.
-//		Lines of text read from the io.Reader object
-//		'reader' will be stored as individual strings in
-//		the string array encapsulated by 'outputLinesArray'.
+//		Lines of text read from the file specified
+//		by 'pathFileName' will be stored as
+//		individual strings in the string array
+//		encapsulated by 'outputLinesArray'.
+//
+//		-------------------------------------------------
+//					IMPORTANT
+//		-------------------------------------------------
+//		The line termination or end-of-line delimiter
+//		characters identified from 'endOfLineDelimiters'
+//		will be stripped off and deleted from the end of
+//		each line of text stored in the string array
+//		encapsulated by 'outputLinesArray'. As such, the
+//		text lines stored here are pure strings of text
+//		without any line termination or end-of-line
+//		delimiter characters append to the end of the
+//		string.
 //
 //	maxNumOfTextLines			int
 //
@@ -2607,7 +2645,6 @@ func (fHelperAtom *fileHelperAtom) makeDirPerm(
 func (fHelperAtom *fileHelperAtom) readerScanMaxLines(
 	readerScanner *bufio.Scanner,
 	readerScannerLabel string,
-	writeEndOfLineChars string,
 	outputLinesArray *StringArrayDto,
 	maxNumOfTextLines int,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -2661,6 +2698,19 @@ func (fHelperAtom *fileHelperAtom) readerScanMaxLines(
 			err
 	}
 
+	if outputLinesArray == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'outputLinesArray' is invalid!\n"+
+			"outputLinesArray' is a nil pointer.\n",
+			ePrefix.String())
+
+		return numOfLinesRead,
+			numOfBytesRead,
+			isExit,
+			err
+	}
+
 	if maxNumOfTextLines < 0 {
 
 		maxNumOfTextLines = math.MaxInt - 1
@@ -2671,7 +2721,6 @@ func (fHelperAtom *fileHelperAtom) readerScanMaxLines(
 			numOfBytesRead,
 			isExit,
 			err
-
 	}
 
 	var textLine string
@@ -2719,8 +2768,6 @@ func (fHelperAtom *fileHelperAtom) readerScanMaxLines(
 		}
 
 		numOfBytesRead += int64(len(textLine))
-
-		textLine += writeEndOfLineChars
 
 		outputLinesArray.PushStr(textLine)
 

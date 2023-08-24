@@ -1055,29 +1055,7 @@ func (fIoReader *FileIoReader) Read(
 //
 // # Input Parameters
 //
-//	maxNumOfLines				int
-//
-//		Specifies the maximum number of text lines which
-//		will be read from the internal io.Reader
-//		encapsulated by the current instance of
-//		FileIoReader.
-//
-//		If 'maxNumOfLines' is set to a value less than
-//		zero (0) (Example: minus-one (-1) ),
-//		'maxNumOfLines' will be automatically reset to
-//		math.MaxInt(). This means all text lines existing
-//		in the internal io.Reader object will be read
-//		and processed. Reading all the text lines in a
-//		file 'may' have memory implications depending on
-//		the size of the file and the memory resources
-//		available to your computer.
-//
-//		If 'maxNumOfLines' is set to a value of zero
-//		('0'), no text lines will be read from
-//		the internal io.Reader, and no error will be
-//		returned.
-//
-//	endOfLineDelimiters				*StringArrayDto
+//	readEndOfLineDelimiters		*StringArrayDto
 //
 //		A pointer to an instance of StringArrayDto.
 //		'endOfLineDelimiters' encapsulates a string
@@ -1090,14 +1068,75 @@ func (fIoReader *FileIoReader) Read(
 //		lines extracted from file identified by
 //		'pathFileName'.
 //
+//		Typical text line termination, or end-of-line
+//		delimiters, which may be appropriate for use
+//		with a given target 'read' file are listed as
+//		follows:
+//
+//		Windows
+//			Line-endings are terminated with a
+//			combination of a carriage return (ASCII 0x0d
+//			or \r) and a newline(\n), also referred to as
+//			carriage return/line feed or CR/LF (\r\n).
+//
+//		UNIX/Linux
+//			Text file line-endings are terminated with a
+//			newline character (ASCII 0x0a, represented
+//			by the \n escape sequence in most languages),
+//			also referred to as a linefeed (LF).
+//
+//		Mac Classic Prior to Mac OS X
+//			Text Line-endings are terminated with a single
+//			carriage return (\r or CR).
+//
+//		Mac OS X or Later
+//			Line termination uses the UNIX convention.
+//			Text file line-endings are terminated with a
+//			newline character (ASCII 0x0a, represented
+//			by the \n escape sequence in most languages),
+//			also referred to as a linefeed (LF).
+//
 //	outputLinesArray 			*StringArrayDto
 //
 //		A pointer to an instance of StringArrayDto.
-//		Lines of text read from the internal io.Reader
-//		object configured for the current instance of
-//		FileIoReader will be stored as individual
-//		strings in the string array encapsulated by
-//		'outputLinesArray'.
+//		Lines of text read from the file specified
+//		by 'pathFileName' will be stored as
+//		individual strings in the string array
+//		encapsulated by 'outputLinesArray'.
+//
+//		-------------------------------------------------
+//					IMPORTANT
+//		-------------------------------------------------
+//		The line termination or end-of-line delimiter
+//		characters identified from 'endOfLineDelimiters'
+//		will be stripped off and deleted from the end of
+//		each line of text stored in the string array
+//		encapsulated by 'outputLinesArray'. As such, the
+//		text lines stored here are pure strings of text
+//		without any line termination or end-of-line
+//		delimiter characters append to the end of the
+//		string.
+//
+//	maxNumOfTextLines			int
+//
+//		Specifies the maximum number of text lines which
+//		will be read from the file identified by
+//		'pathFileName'.
+//
+//		If 'maxNumOfLines' is set to a value less than
+//		zero (0) (Example: minus-one (-1) ),
+//		'maxNumOfLines' will be automatically reset to
+//		math.MaxInt(). This means all text lines existing
+//		in the file identified by 'pathFileName' will be
+//		read and processed. Reading all the text lines in
+//		a file 'may' have memory implications depending
+//		on the size of the file and the memory resources
+//		available to your computer.
+//
+//		If 'maxNumOfLines' is set to a value of zero
+//		('0'), no text lines will be read from the file
+//		identified by 'pathFileName', and no error will be
+//		returned.
 //
 //	autoCloseOnExit				bool
 //
@@ -1227,9 +1266,9 @@ func (fIoReader *FileIoReader) Read(
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (fIoReader *FileIoReader) ReadAllTextLines(
-	maxNumOfLines int,
-	endOfLineDelimiters *StringArrayDto,
+	readEndOfLineDelimiters *StringArrayDto,
 	outputLinesArray *StringArrayDto,
+	maxNumOfTextLines int,
 	autoCloseOnExit bool,
 	errorPrefix interface{}) (
 	numOfLinesRead int,
@@ -1280,9 +1319,9 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 		readerScanLines(
 			*fIoReader.ioReader,
 			"fIoReader.ioReader",
-			maxNumOfLines,
-			endOfLineDelimiters,
+			readEndOfLineDelimiters,
 			outputLinesArray,
+			maxNumOfTextLines,
 			ePrefix.XCpy("fIoReader.ioReader"))
 
 	if err != nil {

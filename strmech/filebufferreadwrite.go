@@ -2130,6 +2130,11 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 			"current",
 			ePrefix.XCpy("fBufReadWrite"))
 
+	if err != nil {
+
+		return totalBytesRead, totalBytesWritten, err
+	}
+
 	var numOfBytesRead, numOfBytesWritten, cycleCount int
 	var readErr, err2 error
 	var fBufReadWriteMicrobot = new(fileBufferReadWriteMicrobot)
@@ -2257,7 +2262,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 // ReadWriteTextLines
 //
 // This method reads all available data from the internal
-// io.Reader object previously configured for this
+// bufio.Reader object previously configured for this
 // instance of FileBufferReadWrite. It then parses this
 // data into lines of text based on the end-of-line
 // delimiter characters passed as input parameter
@@ -2365,15 +2370,51 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //		used to identify, parse and separate individual
 //		lines of text.
 //
+//		Users have the flexibility to specify multiple
+//		end-of-line delimiters for use in parsing text
+//		lines extracted from file identified by
+//		internal bufio.Reader object encapsulated by
+//		the current instance of FileBufferReadWrite.
+//
+//		Typical text line termination, or end-of-line
+//		delimiters, which may be appropriate for use
+//		with a given target bufio.Reader object are
+//		listed as follows:
+//
+//		Windows
+//			Line-endings are terminated with a
+//			combination of a carriage return (ASCII 0x0d
+//			or \r) and a newline(\n), also referred to as
+//			carriage return/line feed or CR/LF (\r\n).
+//
+//		UNIX/Linux
+//			Text file line-endings are terminated with a
+//			newline character (ASCII 0x0a, represented
+//			by the \n escape sequence in most languages),
+//			also referred to as a linefeed (LF).
+//
+//		Mac Classic Prior to Mac OS X
+//			Text Line-endings are terminated with a single
+//			carriage return (\r or CR).
+//
+//		Mac OS X or Later
+//			Line termination uses the UNIX convention.
+//			Text file line-endings are terminated with a
+//			newline character (ASCII 0x0a, represented
+//			by the \n escape sequence in most languages),
+//			also referred to as a linefeed (LF).
+//
 //		The 'read' end-of-line delimiters specified by
 //		this parameter are NOT written to the output
-//		destination io.Writer object. They are stripped
-//		off before being written to the io.Writer object.
-//		The text lines termination or end-of-line
-//		characters actually written to the output
-//		io.Writer object are controlled by the 'write'
-//		end-of-line characters specified by input
-//		parameter 'writeEndOfLineChars'.
+//		destination bufio.Writer object. They are
+//		stripped off before being written to the
+//		bufio.Writer object.
+//
+//		The text line termination, or end-of-line
+//		characters, actually written to the output
+//		bufio.Writer object are controlled by the
+//		'write' end-of-line characters specified by
+//		input parameter 'writeEndOfLineChars'.
 //
 //	writeEndOfLineChars			string
 //
@@ -2685,6 +2726,15 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 			readerLabel,
 			readEndOfLineDelimiters,
 			ePrefix.XCpy("textLineScanner<-"))
+
+	if err != nil {
+
+		return numOfLinesProcessed,
+			numTextLineBytes,
+			numBytesWritten,
+			err
+
+	}
 
 	var textLine string
 	var lenTextLine int

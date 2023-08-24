@@ -1758,7 +1758,7 @@ func (fHelpMolecule *fileHelperMolecule) stripLeadingDotSeparatorChars(
 //		string, a default value of "reader" will be
 //		automatically applied.
 //
-//	endOfLineDelimiters			*StringArrayDto
+//	readEndOfLineDelimiters		*StringArrayDto
 //
 //		A pointer to an instance of StringArrayDto.
 //		'endOfLineDelimiters' encapsulates a string
@@ -1770,32 +1770,46 @@ func (fHelpMolecule *fileHelperMolecule) stripLeadingDotSeparatorChars(
 //		end-of-line delimiters for used in parsing text
 //		lines extracted from the io.Reader object.
 //
-//	writeEndOfLineChars			string
+//	readEndOfLineDelimiters		*StringArrayDto
 //
-//		This string contains the end-of-line characters
-//		which will be configured for each line of text
-//		written to the output destination specified by
-//		the internal io.Writer object.
+//		A pointer to an instance of StringArrayDto.
+//		'endOfLineDelimiters' encapsulates a string
+//		array which contains the end-of-line delimiters
+//		that will be used to identify and separate
+//		individual lines of text.
 //
-//		On Windows, line-endings are terminated with a
-//		combination of a carriage return (ASCII 0x0d or
-//		\r) and a newline(\n), also referred to as CR/LF
-//		(\r\n).
+//		Users have the flexibility to specify multiple
+//		end-of-line delimiters for used in parsing text
+//		lines extracted from file identified by
+//		'pathFileName'.
 //
-//		On UNIX, text file line-endings are terminated
-//		with a newline character (ASCII 0x0a, represented
-//		by the \n escape sequence in most languages),
-//		also referred to as a linefeed (LF).
+//		Typical text line termination, or end-of-line
+//		delimiters, which may be appropriate for use
+//		with a given target 'read' file are listed as
+//		follows:
 //
-//		On the Mac Classic (Mac systems using any system
-//		prior to Mac OS X), line-endings are terminated
-//		with a single carriage return (\r or CR). (Mac OS
-//		X uses the UNIX convention.)
+//		Windows
+//			Line-endings are terminated with a
+//			combination of a carriage return (ASCII 0x0d
+//			or \r) and a newline(\n), also referred to as
+//			carriage return/line feed or CR/LF (\r\n).
 //
-//		If 'writeEndOfLineChars' is submitted as an empty
-//		or zero length string, no end-of-line characters
-//		will be written to the io.Writer output
-//		destination and no error will be returned.
+//		UNIX/Linux
+//			Text file line-endings are terminated with a
+//			newline character (ASCII 0x0a, represented
+//			by the \n escape sequence in most languages),
+//			also referred to as a linefeed (LF).
+//
+//		Mac Classic Prior to Mac OS X
+//			Text Line-endings are terminated with a single
+//			carriage return (\r or CR).
+//
+//		Mac OS X or Later
+//			Line termination uses the UNIX convention.
+//			Text file line-endings are terminated with a
+//			newline character (ASCII 0x0a, represented
+//			by the \n escape sequence in most languages),
+//			also referred to as a linefeed (LF).
 //
 //	outputLinesArray 			*StringArrayDto,
 //
@@ -1804,25 +1818,26 @@ func (fHelpMolecule *fileHelperMolecule) stripLeadingDotSeparatorChars(
 //		'reader' will be stored as individual strings in
 //		the string array encapsulated by 'outputLinesArray'.
 //
-//	maxNumOfLines				int
+//	maxNumOfTextLines			int
 //
 //		Specifies the maximum number of text lines which
-//		will be read by the io.Reader object, 'reader'.
+//		will be read from the file identified by
+//		'pathFileName'.
 //
 //		If 'maxNumOfLines' is set to a value less than
 //		zero (0) (Example: minus-one (-1) ),
 //		'maxNumOfLines' will be automatically reset to
 //		math.MaxInt(). This means all text lines existing
-//		in the io.Reader object ('reader') will be read
-//		and processed. Reading all the text lines in a
-//		file 'may' have memory implications depending on
-//		the size of the file and the memory resources
+//		in the file identified by 'pathFileName' will be
+//		read and processed. Reading all the text lines in
+//		a file 'may' have memory implications depending
+//		on the size of the file and the memory resources
 //		available to your computer.
 //
 //		If 'maxNumOfLines' is set to a value of zero
-//		('0'), no text lines will be read from
-//		'readerScanner', no error will be returned and
-//		return parameter 'isExit' will be set to 'false'.
+//		('0'), no text lines will be read from the file
+//		identified by 'pathFileName', and no error will be
+//		returned.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -1875,10 +1890,9 @@ func (fHelpMolecule *fileHelperMolecule) stripLeadingDotSeparatorChars(
 func (fHelpMolecule *fileHelperMolecule) readerScanLines(
 	reader io.Reader,
 	readerLabel string,
-	endOfLineDelimiters *StringArrayDto,
-	writeEndOfLineChars string,
+	readEndOfLineDelimiters *StringArrayDto,
 	outputLinesArray *StringArrayDto,
-	maxNumOfLines int,
+	maxNumOfTextLines int,
 	errPrefDto *ePref.ErrPrefixDto) (
 	numOfLinesRead int,
 	numOfBytesRead int64,
@@ -1922,7 +1936,7 @@ func (fHelpMolecule *fileHelperMolecule) readerScanLines(
 		getStdTextLineScanner(
 			reader,
 			readerLabel,
-			endOfLineDelimiters,
+			readEndOfLineDelimiters,
 			ePrefix.XCpy("textLineScanner"))
 
 	if err != nil {
@@ -1939,9 +1953,8 @@ func (fHelpMolecule *fileHelperMolecule) readerScanLines(
 		readerScanMaxLines(
 			textLineScanner,
 			readerLabel+"-scanner",
-			writeEndOfLineChars,
 			outputLinesArray,
-			maxNumOfLines,
+			maxNumOfTextLines,
 			ePrefix)
 
 	return numOfLinesRead,

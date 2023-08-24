@@ -25,7 +25,7 @@ func main() {
 	//examples.MainFileHelperOpsTest008{}.ReadFiles01()
 	//examples.MainFileHelperOpsTest008{}.ReadFiles02()
 	examples.MainFileHelperOpsTest008{}.ReadTextLines01()
-	//examples.MainFileHelperOpsTest008{}.ReadLines02()
+	//examples.MainFileHelperOpsTest008{}.ReadTextLines02()
 	//examples.MainFilePermissionsTest009{}.PermissionStr01()
 	//examples.MainFileReadWriteTest010{}.WriteFileBytes01()
 	//examples.MainFileReadWriteTest010{}.WriteFileBytes02()

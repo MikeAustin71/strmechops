@@ -1824,9 +1824,9 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 		readerScanLines(
 			fBufReader.bufioReader,
 			"fBufReader.bufioReader",
-			maxNumOfLines,
 			endOfLineDelimiters,
 			outputLinesArray,
+			maxNumOfLines,
 			ePrefix.XCpy("fBufReader.bufioReader"))
 
 	var err2 error

@@ -44,16 +44,22 @@ func TestFileBufferWriter_Write_000100(t *testing.T) {
 	}
 
 	var fHelper = new(FileHelper)
-	var textLinesArray StringArrayDto
+	var outputLinesArray, readEndOfLineDelimiters StringArrayDto
 	var expectedNumOfBytesWritten int
+
+	readEndOfLineDelimiters.AddManyStrings(
+		"\r\n",
+		"\r\r",
+		"[EOL]")
 
 	_,
 		_,
 		_,
-		err = fHelper.ReadLines(
+		err = fHelper.ReadTextLines(
 		targetReadFile,
-		-1,
-		&textLinesArray,
+		&readEndOfLineDelimiters,
+		&outputLinesArray,
+		-1, // maxNumOfLines
 		ePrefix.XCpy("targetReadFile"))
 
 	if err != nil {
@@ -62,10 +68,10 @@ func TestFileBufferWriter_Write_000100(t *testing.T) {
 		return
 	}
 
-	textLinesArray.AppendSuffix("\n")
+	outputLinesArray.AppendSuffix("\n")
 
 	expectedNumOfBytesWritten =
-		int(textLinesArray.GetTotalBytesInStrings())
+		int(outputLinesArray.GetTotalBytesInStrings())
 
 	var fBufWriter FileBufferWriter
 
@@ -89,13 +95,13 @@ func TestFileBufferWriter_Write_000100(t *testing.T) {
 
 	var bytesToWrite []byte
 
-	lenStrArray := len(textLinesArray.StrArray)
+	lenStrArray := len(outputLinesArray.StrArray)
 
 	for i := 0; i < lenStrArray; i++ {
 
 		bytesToWrite = make([]byte, 0)
 
-		bytesToWrite = []byte(textLinesArray.StrArray[i])
+		bytesToWrite = []byte(outputLinesArray.StrArray[i])
 
 		localNumOfBytesWritten,
 			err =
@@ -249,17 +255,23 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 	}
 
 	var fHelper = new(FileHelper)
-	var textLinesArray StringArrayDto
+	var outputLinesArray, readEndOfLineDelimiters StringArrayDto
 	var numOfLinesRead, expectedNumOfBytesWritten int
 	var i64numOfBytesRead int64
+
+	readEndOfLineDelimiters.AddManyStrings(
+		"\r\n",
+		"\r\r",
+		"[EOL]")
 
 	_,
 		numOfLinesRead,
 		i64numOfBytesRead,
-		err = fHelper.ReadLines(
+		err = fHelper.ReadTextLines(
 		targetReadFile,
+		&readEndOfLineDelimiters,
+		&outputLinesArray,
 		-1,
-		&textLinesArray,
 		ePrefix.XCpy("targetReadFile"))
 
 	if err != nil {
@@ -268,7 +280,7 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 		return
 	}
 
-	textLinesArray.AppendSuffix("\n")
+	outputLinesArray.AppendSuffix("\n")
 
 	expectedNumOfBytesWritten =
 		int(i64numOfBytesRead) + numOfLinesRead
@@ -299,7 +311,7 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 
 		bytesToWrite = make([]byte, 0)
 
-		bytesToWrite = []byte(textLinesArray.StrArray[i])
+		bytesToWrite = []byte(outputLinesArray.StrArray[i])
 
 		localNumOfBytesWritten,
 			err =
@@ -371,7 +383,7 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 
 	for i := 0; i < numOfLinesRead; i++ {
 
-		bytesToWrite = []byte(textLinesArray.StrArray[i])
+		bytesToWrite = []byte(outputLinesArray.StrArray[i])
 
 		localNumOfBytesWritten,
 			err =
