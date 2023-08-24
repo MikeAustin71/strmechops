@@ -2,6 +2,7 @@ package strmech
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
@@ -2495,6 +2496,40 @@ func (fHelperAtom *fileHelperAtom) makeDirPerm(
 //		string, a default value of "readerScanner" will
 //		be automatically applied.
 //
+//	writeEndOfLineChars			string
+//
+//		This string contains the end-of-line characters
+//		which will be configured for each line of text
+//		written to the output destination specified by
+//		the internal io.Writer object.
+//
+//		On Windows, line-endings are terminated with a
+//		combination of a carriage return (ASCII 0x0d or
+//		\r) and a newline(\n), also referred to as CR/LF
+//		(\r\n).
+//
+//		On UNIX, text file line-endings are terminated
+//		with a newline character (ASCII 0x0a, represented
+//		by the \n escape sequence in most languages),
+//		also referred to as a linefeed (LF).
+//
+//		On the Mac Classic (Mac systems using any system
+//		prior to Mac OS X), line-endings are terminated
+//		with a single carriage return (\r or CR). (Mac OS
+//		X uses the UNIX convention.)
+//
+//		If 'writeEndOfLineChars' is submitted as an empty
+//		or zero length string, no end-of-line characters
+//		will be written to the io.Writer output
+//		destination and no error will be returned.
+//
+//	outputLinesArray *StringArrayDto,
+//
+//		A pointer to an instance of StringArrayDto.
+//		Lines of text read from the io.Reader object
+//		'reader' will be stored as individual strings in
+//		the string array encapsulated by 'outputLinesArray'.
+//
 //	maxNumOfTextLines			int
 //
 //		Specifies the maximum number of text lines which
@@ -2514,13 +2549,6 @@ func (fHelperAtom *fileHelperAtom) makeDirPerm(
 //		('0'), no text lines will be read from
 //		'readerScanner', no error will be returned and
 //		return parameter 'isExit' will be set to 'false'.
-//
-//	outputLinesArray *StringArrayDto,
-//
-//		A pointer to an instance of StringArrayDto.
-//		Lines of text read from the io.Reader object
-//		'reader' will be stored as individual strings in
-//		the string array encapsulated by 'outputLinesArray'.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -2579,8 +2607,9 @@ func (fHelperAtom *fileHelperAtom) makeDirPerm(
 func (fHelperAtom *fileHelperAtom) readerScanMaxLines(
 	readerScanner *bufio.Scanner,
 	readerScannerLabel string,
-	maxNumOfTextLines int,
+	writeEndOfLineChars string,
 	outputLinesArray *StringArrayDto,
+	maxNumOfTextLines int,
 	errPrefDto *ePref.ErrPrefixDto) (
 	numOfLinesRead int,
 	numOfBytesRead int64,
@@ -2661,7 +2690,7 @@ func (fHelperAtom *fileHelperAtom) readerScanMaxLines(
 			err2 = readerScanner.Err()
 
 			if err2 != nil &&
-				err2 != io.EOF {
+				errors.Is(err2, io.EOF) == false {
 
 				err = fmt.Errorf("%v\n"+
 					"System Errror returned by readerScanner.Scan()\n"+
@@ -2682,18 +2711,20 @@ func (fHelperAtom *fileHelperAtom) readerScanMaxLines(
 		lenTextLine = len(textLine)
 
 		if lenTextLine == 0 &&
-			(err2 == io.EOF ||
+			(errors.Is(err2, io.EOF) == true ||
 				ok == false) {
 
 			isExit = true
 			break
 		}
 
-		outputLinesArray.PushStr(textLine)
-
 		numOfBytesRead += int64(len(textLine))
 
-		if err2 == io.EOF ||
+		textLine += writeEndOfLineChars
+
+		outputLinesArray.PushStr(textLine)
+
+		if errors.Is(err2, io.EOF) == true ||
 			ok == false {
 
 			isExit = true

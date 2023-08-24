@@ -2531,6 +2531,64 @@ func (fileHelpMech *fileHelperMechanics) makeDirAll(
 //		ready in all respects for future read/write
 //		operations.
 //
+//	pathFileNameLabel			string
+//
+//		The name or label associated with input parameter
+//		'pathFileName' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "pathFileName" will be
+//		automatically applied.
+//
+//	endOfLineDelimiters				*StringArrayDto
+//
+//		A pointer to an instance of StringArrayDto.
+//		'endOfLineDelimiters' encapsulates a string
+//		array which contains the end-of-line delimiters
+//		that will be used to identify and separate
+//		individual lines of text.
+//
+//		Users have the flexibility to specify multiple
+//		end-of-line delimiters for used in parsing text
+//		lines extracted from file identified by
+//		'pathFileName'.
+//
+//	writeEndOfLineChars			string
+//
+//		This string contains the end-of-line characters
+//		which will be configured for each line of text
+//		written to the output destination specified by
+//		the internal io.Writer object.
+//
+//		On Windows, line-endings are terminated with a
+//		combination of a carriage return (ASCII 0x0d or
+//		\r) and a newline(\n), also referred to as CR/LF
+//		(\r\n).
+//
+//		On UNIX, text file line-endings are terminated
+//		with a newline character (ASCII 0x0a, represented
+//		by the \n escape sequence in most languages),
+//		also referred to as a linefeed (LF).
+//
+//		On the Mac Classic (Mac systems using any system
+//		prior to Mac OS X), line-endings are terminated
+//		with a single carriage return (\r or CR). (Mac OS
+//		X uses the UNIX convention.)
+//
+//		If 'writeEndOfLineChars' is submitted as an empty
+//		or zero length string, no end-of-line characters
+//		will be written to the io.Writer output
+//		destination and no error will be returned.
+//
+//	outputLinesArray *StringArrayDto,
+//
+//		A pointer to an instance of StringArrayDto.
+//		Lines of text read from the file specified
+//		by 'pathFileName' will be stored as
+//		individual strings in the string array
+//		encapsulated by 'outputLinesArray'.
+//
 //	maxNumOfLines				int
 //
 //		Specifies the maximum number of text lines which
@@ -2551,37 +2609,6 @@ func (fileHelpMech *fileHelperMechanics) makeDirAll(
 //		('0'), no text lines will be read from the file
 //		identified by 'pathFileName', and no error will be
 //		returned.
-//
-//	endOfLineDelimiters				*StringArrayDto
-//
-//		A pointer to an instance of StringArrayDto.
-//		'endOfLineDelimiters' encapsulates a string
-//		array which contains the end-of-line delimiters
-//		that will be used to identify and separate
-//		individual lines of text.
-//
-//		Users have the flexibility to specify multiple
-//		end-of-line delimiters for used in parsing text
-//		lines extracted from file identified by
-//		'pathFileName'.
-//
-//	outputLinesArray *StringArrayDto,
-//
-//		A pointer to an instance of StringArrayDto.
-//		Lines of text read from the file specified
-//		by 'pathFileName' will be stored as
-//		individual strings in the string array
-//		encapsulated by 'outputLinesArray'.
-//
-//	pathFileNameLabel			string
-//
-//		The name or label associated with input parameter
-//		'pathFileName' which will be used in error messages
-//		returned by this method.
-//
-//		If this parameter is submitted as an empty
-//		string, a default value of "pathFileName" will be
-//		automatically applied.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -2638,10 +2665,11 @@ func (fileHelpMech *fileHelperMechanics) makeDirAll(
 //		the error message.
 func (fileHelpMech *fileHelperMechanics) readLines(
 	pathFileName string,
-	maxNumOfLines int,
-	endOfLineDelimiters *StringArrayDto,
-	outputLinesArray *StringArrayDto,
 	pathFileNameLabel string,
+	endOfLineDelimiters *StringArrayDto,
+	writeEndOfLineChars string,
+	outputLinesArray *StringArrayDto,
+	maxNumOfLines int,
 	errPrefDto *ePref.ErrPrefixDto) (
 	originalFileSize int64,
 	numOfLinesRead int,
@@ -2853,9 +2881,10 @@ func (fileHelpMech *fileHelperMechanics) readLines(
 		readerScanLines(
 			filePtr,
 			pathFileNameLabel,
-			maxNumOfLines,
 			endOfLineDelimiters,
+			writeEndOfLineChars,
 			outputLinesArray,
+			maxNumOfLines,
 			ePrefix.XCpy("filePtr->"))
 
 	return originalFileSize,

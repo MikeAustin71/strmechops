@@ -2729,6 +2729,8 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 
 		textLine += writeEndOfLineChars
 
+		lenTextLine = len(textLine)
+
 		if lenTextLine > 0 {
 
 			localNumBytesWritten,

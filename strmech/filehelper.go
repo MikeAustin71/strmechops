@@ -12566,7 +12566,50 @@ func (fh *FileHelper) ReadLines(
 //		ready in all respects for future read/write
 //		operations.
 //
-//	maxNumOfLines				int
+//	endOfLineDelimiters			*StringArrayDto
+//
+//		A pointer to an instance of StringArrayDto.
+//		'endOfLineDelimiters' encapsulates a string
+//		array which contains the end-of-line delimiters
+//		that will be used to identify and separate
+//		individual lines of text.
+//
+//	writeEndOfLineChars			string
+//
+//		This string contains the end-of-line characters
+//		which will be configured for each line of text
+//		written to the output destination specified by
+//		the internal io.Writer object.
+//
+//		On Windows, line-endings are terminated with a
+//		combination of a carriage return (ASCII 0x0d or
+//		\r) and a newline(\n), also referred to as CR/LF
+//		(\r\n).
+//
+//		On UNIX, text file line-endings are terminated
+//		with a newline character (ASCII 0x0a, represented
+//		by the \n escape sequence in most languages),
+//		also referred to as a linefeed (LF).
+//
+//		On the Mac Classic (Mac systems using any system
+//		prior to Mac OS X), line-endings are terminated
+//		with a single carriage return (\r or CR). (Mac OS
+//		X uses the UNIX convention.)
+//
+//		If 'writeEndOfLineChars' is submitted as an empty
+//		or zero length string, no end-of-line characters
+//		will be written to the io.Writer output
+//		destination and no error will be returned.
+//
+//	outputLinesArray 			*StringArrayDto
+//
+//		A pointer to an instance of StringArrayDto.
+//		Lines of text read from the file specified
+//		by 'pathFileName' will be stored as
+//		individual strings in the string array
+//		encapsulated by 'outputLinesArray'.
+//
+//	maxNumOfTextLines			int
 //
 //		Specifies the maximum number of text lines which
 //		will be read from the file identified by
@@ -12586,22 +12629,6 @@ func (fh *FileHelper) ReadLines(
 //		('0'), no text lines will be read from the file
 //		identified by 'pathFileName', and no error will be
 //		returned.
-//
-//	endOfLineDelimiters			*StringArrayDto
-//
-//		A pointer to an instance of StringArrayDto.
-//		'endOfLineDelimiters' encapsulates a string
-//		array which contains the end-of-line delimiters
-//		that will be used to identify and separate
-//		individual lines of text.
-//
-//	outputLinesArray 			*StringArrayDto
-//
-//		A pointer to an instance of StringArrayDto.
-//		Lines of text read from the file specified
-//		by 'pathFileName' will be stored as
-//		individual strings in the string array
-//		encapsulated by 'outputLinesArray'.
 //
 //	errorPrefix					interface{}
 //
@@ -12702,9 +12729,10 @@ func (fh *FileHelper) ReadLines(
 //	 	attached to the	beginning of the error message.
 func (fh *FileHelper) ReadTextLines(
 	pathFileName string,
-	maxNumOfLines int,
 	endOfLineDelimiters *StringArrayDto,
+	writeEndOfLineChars string,
 	outputLinesArray *StringArrayDto,
+	maxNumOfTextLines int,
 	errorPrefix interface{}) (
 	originalFileSize int64,
 	numOfLinesRead int,
@@ -12742,7 +12770,7 @@ func (fh *FileHelper) ReadTextLines(
 		numOfBytesRead,
 		err = new(fileHelperMechanics).readLines(
 		pathFileName,
-		maxNumOfLines,
+		maxNumOfTextLines,
 		endOfLineDelimiters,
 		outputLinesArray,
 		"pathFileName",
