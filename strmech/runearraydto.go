@@ -429,6 +429,64 @@ func (charsArrayDto *RuneArrayDto) AddStrings(
 		charStrsToAdd...)
 }
 
+// AddManyRunes
+//
+// This method is a variadic function which receives a
+// variable number of input arguments.
+//
+// Users may pass one or more runes through input
+// parameter 'runesToAdd'. These runes will be appended
+// to the end of the rune array encapsulated by the
+// current instance of RuneArrayDto.
+//
+// ----------------------------------------------------------------
+//
+//	# Input Parameters
+//
+//	runesToAdd 					...rune
+//
+//		This parameter accepts a variable number of rune
+//		arguments. Each rune argument passed through this
+//		parameter will be appended to the end of the rune
+//		array maintained by the current instance of
+//		RuneArrayDto.
+//
+//		Users may pass zero, one or more runes through
+//		this parameter.
+//
+//		No data validation is performed on this input
+//		parameter. If a rune value passed through
+//		'runesToAdd' is a zero ('0') value, that value
+//		will be appended to the end of the internal rune
+//		array maintained by RuneArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	--- NONE ---
+func (charsArrayDto *RuneArrayDto) AddManyRunes(
+	runesToAdd ...rune) {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	for _, newRune := range runesToAdd {
+
+		charsArrayDto.CharsArray =
+			append(charsArrayDto.CharsArray,
+				newRune)
+
+	}
+
+	return
+}
+
 //	AddRunes
 //
 //	Receives an array of rune text characters and

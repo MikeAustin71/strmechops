@@ -176,17 +176,19 @@ func (strArrayDto *StringArrayDto) AddString(
 // Input Parameters
 //
 //	stringsToAdd               ...string
-//	   - This parameter accepts a variable number of string
-//	     arguments. Each string argument passed through this
-//	     parameter will be appended to the end of the string
-//	     array maintained by the current instance of
-//	     StringArrayDto.
 //
-//	     No data validation is performed on this input
-//	     parameter. If a string value passed through
-//	    'stringsToAdd' is an empty string, an empty string
-//	    will be appended to the end of the internal string
-//	    array maintained by StringArrayDto.
+//		This parameter accepts a variable number of
+//		string arguments. Each string argument passed
+//		through this parameter will be appended to the
+//		end of the string array maintained by the current
+//		instance of StringArrayDto.
+//
+//		No data validation is performed on this input
+//		parameter. If a string value passed through
+//		'stringsToAdd' is an empty string, an empty
+//		string will be appended to the end of the
+//		internal string array maintained by
+//		StringArrayDto.
 //
 // ----------------------------------------------------------------
 //
