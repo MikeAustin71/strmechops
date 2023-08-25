@@ -453,9 +453,13 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 	}
 
 	var outputLinesArray, readEndOfLineDelimiters StringArrayDto
-	var numOfLinesRead, expectedNumOfBytesWritten int
+	var numOfLinesRead int
 	var i64numOfBytesRead int64
 	var writeFileTextLineTerminator = "\r\n"
+	var expectedNumOfLinesRead = int64(23)
+	var expectedNumOfBytesWritten = compareFileInfo.Size()
+	var expectedNumOfTextLineBytesRead = expectedNumOfBytesWritten -
+		(expectedNumOfLinesRead * int64(len(writeFileTextLineTerminator)))
 
 	readEndOfLineDelimiters.AddManyStrings(
 		"\r\n",
@@ -478,7 +482,7 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 		return
 	}
 
-	if i64numOfBytesRead != targetReadFileInfo.Size() {
+	if i64numOfBytesRead != expectedNumOfTextLineBytesRead {
 
 		t.Errorf("\n%v\n"+
 			"Error: Number of Bytes Read from Target Read File\n"+
@@ -494,9 +498,6 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 
 	outputLinesArray.AppendSuffix(
 		writeFileTextLineTerminator)
-
-	expectedNumOfBytesWritten =
-		int(compareFileInfo.Size())
 
 	var fBufWriter FileBufferWriter
 
@@ -524,7 +525,8 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 
 	}()
 
-	var totalNumOfBytesWritten, localNumOfBytesWritten int
+	var localNumOfBytesWritten int
+	var totalNumOfBytesWritten int64
 	var err2 error
 
 	var bytesToWrite []byte
@@ -562,7 +564,7 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 			return
 		}
 
-		totalNumOfBytesWritten += localNumOfBytesWritten
+		totalNumOfBytesWritten += int64(localNumOfBytesWritten)
 
 	}
 
@@ -609,7 +611,7 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 
 	actualFileSize = fileInfoPlus.Size()
 
-	if int64(totalNumOfBytesWritten) != actualFileSize {
+	if totalNumOfBytesWritten != actualFileSize {
 
 		t.Errorf("\n%v\n"+
 			"Error: totalNumOfBytesWritten != actualFileSize\n"+
@@ -656,7 +658,7 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 			" Target Write File: %v\n\n",
 			ePrefix.String(),
 			reasonFilesNotEqual,
-			targetReadFile,
+			compareFile,
 			targetWriteFile)
 
 		return
