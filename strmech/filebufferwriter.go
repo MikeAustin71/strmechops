@@ -6,6 +6,7 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
+	"math"
 	"os"
 	"strings"
 	"sync"
@@ -49,7 +50,7 @@ import (
 //
 //			io.Writer
 //			io.Closer
-//			io.WriterTo
+//			io.ReadFrom
 //
 // ----------------------------------------------------------------
 //
@@ -1304,6 +1305,215 @@ func (fBufWriter *FileBufferWriter) NewPathFileName(
 			ePrefix.XCpy("pathFileName"))
 
 	return fInfoPlus, newFileBufWriter, err
+}
+
+// ReadFrom
+//
+// Implements the io.ReadFrom interface.
+//
+// This method will read data from the io.Reader object
+// passed as input parameter 'reader' and write that data
+// to bufio.Writer encapsulated by the current instance of
+// FileBufferWriter.
+//
+// The data is read from 'reader' using an internal byte
+// array equal in length to the buffer configured for the
+// current instance of FileBufferWriter.
+//
+// The return parameter 'numOfBytesProcessed' records the
+// number of bytes read from 'reader' and written to
+// the FileBufferWriter bufio.Writer object. If the
+// number of bytes read fails to match the number of
+// bytes written, an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	reader						io.Reader
+//
+//		An object which implements the io.Reader interface.
+//		This method will read the entire contents of this
+//		io.Reader object and write the data to the
+//		bufio.Writer object encapsulated by the current
+//		instance of FileBufferWriter.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numOfBytesProcessed			int64
+//
+//		This return parameter documents the number of
+//		bytes read from 'reader' and written to the
+//		FileBufferWriter bufio.Writer object. If the
+//		number of bytes read fails to match the number
+//		bytes written, an error will be returned.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message.
+func (fBufWriter *FileBufferWriter) ReadFrom(
+	reader io.Reader) (
+	numOfBytesProcessed int64,
+	err error) {
+
+	if fBufWriter.lock == nil {
+		fBufWriter.lock = new(sync.Mutex)
+	}
+
+	fBufWriter.lock.Lock()
+
+	defer fBufWriter.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileBufferReader."+
+			"WriteTo()",
+		"")
+
+	if err != nil {
+
+		return numOfBytesProcessed, err
+	}
+
+	if fBufWriter.bufioWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of 'FileBufferWriter' is invalid!\n"+
+			"The internal bufio.Writer object has NOT been initialized.\n"+
+			"Call one of the 'New' or 'Setter' methods to create a\n"+
+			"valid instance of 'FileBufferWriter'\n",
+			ePrefix.String())
+
+		return numOfBytesProcessed, err
+	}
+
+	if reader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'reader' is invalid!\n"+
+			"'reader' has a 'nil' value.\n",
+			ePrefix.String())
+
+		return numOfBytesProcessed, err
+	}
+
+	bufSize := fBufWriter.bufioWriter.Size()
+
+	if bufSize <= 0 {
+
+		// Reset to default buffer size of 4096
+		fBufWriter.bufioWriter.Reset(nil)
+
+		bufSize = fBufWriter.bufioWriter.Size()
+	}
+
+	if bufSize <= 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The attempt to reset the bufio.Writer buffer\n"+
+			"size to 4096-bytes Failed!\n",
+			ePrefix.String())
+
+		return numOfBytesProcessed, err
+	}
+
+	var bytesRead = make([]byte, bufSize)
+	var numBytesRead, numBytesWritten int
+	var err1, err2 error
+	var maxCycle = math.MaxInt - 1
+	var cycleCnt int
+
+	for {
+
+		cycleCnt++
+
+		if cycleCnt >= maxCycle {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Infinite Loop!\n"+
+				"The 'Read' operation failed to locate io.EOF\n"+
+				"otherwise known as the end-of-file for this\n"+
+				"underlying io.Reader object.\n"+
+				"Read Cycle Count= %v\n",
+				ePrefix.String(),
+				cycleCnt)
+
+			break
+		}
+
+		numBytesRead,
+			err1 = reader.Read(bytesRead)
+
+		if err1 != nil &&
+			err1 != io.EOF {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: reader.Read(bytesRead)\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				err1.Error())
+
+			break
+
+		}
+
+		if numBytesRead > 0 {
+
+			numBytesWritten,
+				err2 = fBufWriter.bufioWriter.Write(
+				bytesRead[:numBytesRead])
+
+			if err2 != nil {
+
+				err = fmt.Errorf("%v\n"+
+					"Error returned by fBufWriter.bufioWriter.Write(bytesRead[:numBytesRead])\n"+
+					"numBytesRead= '%v'\n"+
+					"Error=\n%v\n",
+					ePrefix.String(),
+					numBytesRead,
+					err2.Error())
+
+				break
+			}
+
+			if numBytesWritten != numBytesRead {
+
+				err = fmt.Errorf("%v\n"+
+					"Error: Number of bytes read does NOT\n"+
+					"match the number of bytes written.\n"+
+					"Write Cycle Number: %v\n"+
+					"   Number of Bytes Read: %v\n"+
+					"Number of Bytes Written: %v\n",
+					ePrefix.String(),
+					cycleCnt,
+					numBytesRead,
+					numBytesWritten)
+
+				break
+			}
+
+			numOfBytesProcessed += int64(numBytesWritten)
+		}
+
+		if err1 == io.EOF {
+
+			break
+		}
+
+		clear(bytesRead)
+	}
+
+	return numOfBytesProcessed, err
 }
 
 // SetFileMgr

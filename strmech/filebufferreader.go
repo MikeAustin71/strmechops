@@ -41,8 +41,12 @@ import (
 //	(1)	Use the 'New' and 'Setter' methods to create
 //		valid instances of FileBufferReader.
 //
-//	(2)	FileBufferReader implements the io.Reader and
-//		io.Closer interfaces.
+//	(2)	FileBufferReader implements the following
+//		interfaces:
+//
+//			io.Reader
+//			io.Closer
+//			io.WriterTo
 //
 // ----------------------------------------------------------------
 //
@@ -3129,8 +3133,18 @@ func (fBufReader *FileBufferReader) WriteTo(
 		err = fmt.Errorf("%v\n"+
 			"Error: This instance of 'FileBufferReader' is invalid!\n"+
 			"The internal bufio.Reader object has NOT been initialized.\n"+
-			"Call one of the 'New' or 'Setter' methods when creating\n"+
-			"an instance of 'FileBufferReader'\n",
+			"Call one of the 'New' or 'Setter' methods to create a\n"+
+			"valid instance of 'FileBufferReader'\n",
+			ePrefix.String())
+
+		return numOfBytesProcessed, err
+	}
+
+	if writer == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'writer' is invalid!\n"+
+			"'writer' has a 'nil' value.\n",
 			ePrefix.String())
 
 		return numOfBytesProcessed, err
@@ -3149,7 +3163,8 @@ func (fBufReader *FileBufferReader) WriteTo(
 	if bufSize < 16 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: The attempt to reset buffer size to 4096-bytes Failed!\n",
+			"Error: The attempt to reset the bufio.Reader buffer\n"+
+			"size to 4096-bytes Failed!\n",
 			ePrefix.String())
 
 		return numOfBytesProcessed, err
@@ -3157,7 +3172,7 @@ func (fBufReader *FileBufferReader) WriteTo(
 
 	var bytesRead = make([]byte, bufSize)
 	var numBytesRead, numBytesWritten int
-	var err1 error
+	var err1, err2 error
 	var maxCycle = math.MaxInt - 1
 	var cycleCnt int
 
@@ -3198,7 +3213,36 @@ func (fBufReader *FileBufferReader) WriteTo(
 		if numBytesRead > 0 {
 
 			numBytesWritten,
-				err = writer.Write(bytesRead[:numBytesRead])
+				err2 = writer.Write(bytesRead[:numBytesRead])
+
+			if err2 != nil {
+
+				err = fmt.Errorf("%v\n"+
+					"Error returned by writer.Write(bytesRead[:numBytesRead])\n"+
+					"numBytesRead= '%v'\n"+
+					"Error=\n%v\n",
+					ePrefix.String(),
+					numBytesRead,
+					err2.Error())
+
+				break
+			}
+
+			if numBytesWritten != numBytesRead {
+
+				err = fmt.Errorf("%v\n"+
+					"Error: Number of bytes read does NOT\n"+
+					"match the number of bytes written.\n"+
+					"Write Cycle Number: %v\n"+
+					"   Number of Bytes Read: %v\n"+
+					"Number of Bytes Written: %v\n",
+					ePrefix.String(),
+					cycleCnt,
+					numBytesRead,
+					numBytesWritten)
+
+				break
+			}
 
 			numOfBytesProcessed += int64(numBytesWritten)
 		}
