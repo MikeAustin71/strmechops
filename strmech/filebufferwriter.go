@@ -1957,6 +1957,43 @@ func (fBufWriter *FileBufferWriter) SetIoWriter(
 	return err
 }
 
+// Size
+//
+// This method returns the size of the underlying 'write'
+// buffer in bytes.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	int
+//
+//		This integer value returns the size of the
+//		underlying 'write' buffer in bytes.
+func (fBufWriter *FileBufferWriter) Size() int {
+
+	if fBufWriter.lock == nil {
+		fBufWriter.lock = new(sync.Mutex)
+	}
+
+	fBufWriter.lock.Lock()
+
+	defer fBufWriter.lock.Unlock()
+
+	if fBufWriter.bufioWriter == nil {
+
+		return 0
+	}
+
+	return fBufWriter.bufioWriter.Size()
+}
+
 // Write
 //
 // Writes the contents of the byte array input paramter
