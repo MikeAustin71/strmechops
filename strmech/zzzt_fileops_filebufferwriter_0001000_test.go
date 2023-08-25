@@ -1,6 +1,7 @@
 package strmech
 
 import (
+	"errors"
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"testing"
@@ -14,11 +15,37 @@ func TestFileBufferWriter_Write_000100(t *testing.T) {
 		funcName,
 		"")
 
-	var targetReadFile string
+	var trashDirectory string
 	var err error
 
+	var fOpsTestUtil = new(fileOpsTestUtility)
+
+	trashDirectory,
+		err = fOpsTestUtil.
+		GetCompositeDir(
+			FILEOpsBaseTrashDirectory,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = new(DirHelper).DeleteAllInParentDirectory(
+		trashDirectory,
+		ePrefix.XCpy("trashDirectory"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var targetReadFile string
+
 	targetReadFile,
-		err = new(fileOpsTestUtility).
+		err = fOpsTestUtil.
 		GetCompositeDir(
 			"\\fileOpsTest\\filesForTest\\textFilesForTest\\splitFunc.txt",
 			ePrefix)
@@ -29,10 +56,40 @@ func TestFileBufferWriter_Write_000100(t *testing.T) {
 		return
 	}
 
+	var fHelper = new(FileHelper)
+
+	var doesFileExist bool
+	var readerFileInfoPlus FileInfoPlus
+
+	doesFileExist,
+		readerFileInfoPlus,
+		err = fHelper.
+		DoesFileInfoPlusExist(
+			targetReadFile,
+			ePrefix.XCpy("targetReadFile"))
+
+	if err != nil {
+		t.Errorf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	if doesFileExist == false {
+
+		t.Errorf("%v\n"+
+			"Error: The Target Read File Does NOT Exist!\n"+
+			"Target Read File was not found on attached storage drive.\n"+
+			"Target Read File: %v\n",
+			ePrefix.String(),
+			targetReadFile)
+
+		return
+	}
+
 	var targetWriteFile string
 
 	targetWriteFile,
-		err = new(fileOpsTestUtility).
+		err = fOpsTestUtil.
 		GetCompositeDir(
 			"\\fileOpsTest\\trashDirectory\\TestFileBufferWriter_Write_000100.txt",
 			ePrefix)
@@ -43,9 +100,9 @@ func TestFileBufferWriter_Write_000100(t *testing.T) {
 		return
 	}
 
-	var fHelper = new(FileHelper)
 	var outputLinesArray, readEndOfLineDelimiters StringArrayDto
 	var expectedNumOfBytesWritten int
+	var writeFileTextLineTerminator = "\r\n"
 
 	readEndOfLineDelimiters.AddManyStrings(
 		"\r\n",
@@ -68,10 +125,11 @@ func TestFileBufferWriter_Write_000100(t *testing.T) {
 		return
 	}
 
-	outputLinesArray.AppendSuffix("\n")
+	outputLinesArray.AppendSuffix(
+		writeFileTextLineTerminator)
 
 	expectedNumOfBytesWritten =
-		int(outputLinesArray.GetTotalBytesInStrings())
+		int(readerFileInfoPlus.Size())
 
 	var fBufWriter FileBufferWriter
 
@@ -95,6 +153,8 @@ func TestFileBufferWriter_Write_000100(t *testing.T) {
 
 	var bytesToWrite []byte
 
+	var err2 error
+
 	lenStrArray := len(outputLinesArray.StrArray)
 
 	for i := 0; i < lenStrArray; i++ {
@@ -104,12 +164,12 @@ func TestFileBufferWriter_Write_000100(t *testing.T) {
 		bytesToWrite = []byte(outputLinesArray.StrArray[i])
 
 		localNumOfBytesWritten,
-			err =
+			err2 =
 			fBufWriter.Write(bytesToWrite)
 
-		if err != nil {
+		if err2 != nil {
 
-			t.Errorf("%v\n"+
+			err = fmt.Errorf("%v\n"+
 				"Error returned by fBufWriter.Write(bytesToWrite)\n"+
 				"Bytes To Write = '%v'\n"+
 				"Index = '%v'\n"+
@@ -117,11 +177,21 @@ func TestFileBufferWriter_Write_000100(t *testing.T) {
 				ePrefix.String(),
 				string(bytesToWrite),
 				i,
-				err.Error())
+				err2.Error())
 
-			_ = fBufWriter.Flush(nil)
+			err2 = fBufWriter.Flush("After Error: fBufWriter")
 
-			_ = fBufWriter.FlushAndClose(nil)
+			if err2 != nil {
+				err = errors.Join(err, err2)
+			}
+
+			err2 = fBufWriter.FlushAndClose("After Error: fBufWriter")
+
+			if err2 != nil {
+				err = errors.Join(err, err2)
+			}
+
+			t.Errorf("%v\n", err.Error())
 
 			return
 		}
@@ -130,44 +200,40 @@ func TestFileBufferWriter_Write_000100(t *testing.T) {
 
 	}
 
-	var err2 error
-	var errs []error
-
-	err2 = fBufWriter.Flush(ePrefix)
+	err2 = fBufWriter.Flush(ePrefix.XCpy(
+		"After Loop fBufWriter"))
 
 	if err2 != nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error returned by fBufWriter.Flush(ePrefix)\n"+
+			"Error returned by fBufWriter.Flush()\n"+
 			"Error = \n%v\n",
 			ePrefix.String(),
 			err2.Error())
 
-		errs = append(errs, err)
+		err = errors.Join(err, err2)
 	}
 
-	err2 = fBufWriter.FlushAndClose(ePrefix)
+	err2 = fBufWriter.Close()
 
 	if err2 != nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error returned by fBufWriter.Close(ePrefix)\n"+
+			"Error returned by fBufWriter.Close()\n"+
 			"Error = \n%v\n",
 			ePrefix.String(),
 			err2.Error())
 
-		errs = append(errs, err)
+		err = errors.Join(err, err2)
 	}
 
-	if len(errs) > 0 {
-
-		err2 = new(StrMech).ConsolidateErrors(errs)
+	if err != nil {
 
 		t.Errorf("%v\n"+
 			"Errors returned from Flush() and Close()\n"+
 			"Errors= \n%v\n",
 			ePrefix.String(),
-			err2.Error())
+			err.Error())
 
 		return
 	}
@@ -185,33 +251,97 @@ func TestFileBufferWriter_Write_000100(t *testing.T) {
 		return
 	}
 
-	err2 = fHelper.DeleteDirOrFile(
-		targetWriteFile,
-		ePrefix)
+	defer func() {
 
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error return from fHelper.DeleteDirOrFile(targetWriteFile)\n"+
-			"targetWriteFile = '%v'\n"+
-			"Error = \n%v\n",
-			ePrefix.String(),
+		_ = fHelper.DeleteDirOrFile(
 			targetWriteFile,
-			err2.Error())
+			nil)
 
+	}()
+
+	var writerFileInfoPlus FileInfoPlus
+
+	doesFileExist,
+		writerFileInfoPlus,
+		err = fHelper.
+		DoesFileInfoPlusExist(
+			targetWriteFile,
+			ePrefix.XCpy("targetWriteFile"))
+
+	if err != nil {
+		t.Errorf("\n%v\n\n",
+			err.Error())
+		return
 	}
 
-	if len(errs) > 0 {
-
-		err2 = new(StrMech).ConsolidateErrors(errs)
+	if !doesFileExist {
 
 		t.Errorf("%v\n"+
-			"Errors returned from fHelper.DeleteDirOrFile(targetWriteFile)\n"+
-			"Errors= \n%v\n",
+			"Error: Target Write File Does NOT Exist!\n"+
+			"The Target Write File Was NOT Found on attached storage drives\n"+
+			"Target Write File: %v\n",
 			ePrefix.String(),
-			err2.Error())
+			targetWriteFile)
 
 		return
+	}
+
+	if int64(expectedNumOfBytesWritten) != writerFileInfoPlus.Size() {
+
+		t.Errorf("%v\n"+
+			"Error: The Expected Number Of Bytes Written\n"+
+			"Does NOT match the size of the 'write' file.\n"+
+			"  Expected Number Of Bytes Written= '%v'\n"+
+			"Size Of Target Write File in Bytes= '%v'\n"+
+			"Target Write File: %v\n",
+			ePrefix.String(),
+			expectedNumOfBytesWritten,
+			writerFileInfoPlus.Size(),
+			targetWriteFile)
+
+		return
+	}
+
+	var reasonFilesNotEqual string
+	var filesAreEqual bool
+
+	filesAreEqual,
+		reasonFilesNotEqual,
+		err = fHelper.CompareFiles(
+		targetReadFile,
+		targetWriteFile,
+		ePrefix.XCpy(
+			"Target Files Comparison"))
+
+	if err != nil {
+
+		t.Errorf(" %v\n"+
+			"Error Return from fHelper.CompareFiles()\n"+
+			"  targetReadFile= %v\n"+
+			" targetWriteFile= %v\n"+
+			"Reason: %v\n",
+			ePrefix.String(),
+			targetReadFile,
+			targetWriteFile,
+			reasonFilesNotEqual)
+
+		return
+	}
+
+	if !filesAreEqual {
+
+		t.Errorf(" %v\n"+
+			" Error: Read and Write Files are NOT equal!\n"+
+			" Reason: %v\n"+
+			"  Target Read File: %v\n"+
+			" Target Write File: %v\n\n",
+			ePrefix.String(),
+			reasonFilesNotEqual,
+			targetReadFile,
+			targetWriteFile)
+
+		return
+
 	}
 
 	return
@@ -225,18 +355,86 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 		funcName,
 		"")
 
-	var targetReadFile string
+	var targetReadFile, compareFile string
 	var err error
 
 	targetReadFile,
 		err = new(fileOpsTestUtility).
 		GetCompositeDir(
-			"\\fileOpsTest\\filesForTest\\textFilesForTest\\splitFunc.txt",
-			ePrefix)
+			"\\fileOpsTest\\filesForTest\\textFilesForTest\\splitFunc2.txt",
+			ePrefix.XCpy("targetReadFile"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
 			err.Error())
+		return
+	}
+
+	var doesFileExist bool
+	var fHelper = new(FileHelper)
+	var targetReadFileInfo FileInfoPlus
+
+	doesFileExist,
+		targetReadFileInfo,
+		err = fHelper.
+		DoesFileInfoPlusExist(
+			targetReadFile,
+			ePrefix.XCpy("targetReadFile"))
+
+	if err != nil {
+		t.Errorf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	if doesFileExist == false {
+
+		t.Errorf("%v\n"+
+			"Error: The Target Read File Does NOT Exist!\n"+
+			"Target Read File was not found on attached storage drive.\n"+
+			"Target Read File: %v\n",
+			ePrefix.String(),
+			targetReadFile)
+
+		return
+	}
+
+	compareFile,
+		err = new(fileOpsTestUtility).
+		GetCompositeDir(
+			"\\fileOpsTest\\filesForTest\\textFilesForTest\\splitFuncBlankLastLine.txt",
+			ePrefix.XCpy("compareFile"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var compareFileInfo FileInfoPlus
+
+	doesFileExist,
+		compareFileInfo,
+		err = fHelper.
+		DoesFileInfoPlusExist(
+			compareFile,
+			ePrefix.XCpy("compareFile"))
+
+	if err != nil {
+		t.Errorf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	if doesFileExist == false {
+
+		t.Errorf("%v\n"+
+			"Error: The Comparison Read File Does NOT Exist!\n"+
+			"The Comparison File was not found on attached storage drive.\n"+
+			"Comparison File: %v\n",
+			ePrefix.String(),
+			compareFile)
+
 		return
 	}
 
@@ -246,7 +444,7 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 		err = new(fileOpsTestUtility).
 		GetCompositeDir(
 			"\\fileOpsTest\\trashDirectory\\TestFileBufferWriter_Write_000200.txt",
-			ePrefix)
+			ePrefix.XCpy("targetWriteFile"))
 
 	if err != nil {
 		t.Errorf("\n%v\n",
@@ -254,10 +452,10 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 		return
 	}
 
-	var fHelper = new(FileHelper)
 	var outputLinesArray, readEndOfLineDelimiters StringArrayDto
 	var numOfLinesRead, expectedNumOfBytesWritten int
 	var i64numOfBytesRead int64
+	var writeFileTextLineTerminator = "\r\n"
 
 	readEndOfLineDelimiters.AddManyStrings(
 		"\r\n",
@@ -280,10 +478,25 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 		return
 	}
 
-	outputLinesArray.AppendSuffix("\n")
+	if i64numOfBytesRead != targetReadFileInfo.Size() {
+
+		t.Errorf("\n%v\n"+
+			"Error: Number of Bytes Read from Target Read File\n"+
+			"Does NOT match the number of bytes in Target Read File.\n"+
+			"            Target Read File Size in Bytes= %v\n"+
+			"Number of Bytes Read from Target Read File= %v\n",
+			ePrefix.String(),
+			targetReadFileInfo.Size(),
+			i64numOfBytesRead)
+
+		return
+	}
+
+	outputLinesArray.AppendSuffix(
+		writeFileTextLineTerminator)
 
 	expectedNumOfBytesWritten =
-		int(i64numOfBytesRead) + numOfLinesRead
+		int(compareFileInfo.Size())
 
 	var fBufWriter FileBufferWriter
 
@@ -303,7 +516,16 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 		return
 	}
 
+	defer func() {
+
+		_ = fHelper.DeleteDirOrFile(
+			targetWriteFile,
+			nil)
+
+	}()
+
 	var totalNumOfBytesWritten, localNumOfBytesWritten int
+	var err2 error
 
 	var bytesToWrite []byte
 
@@ -314,12 +536,12 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 		bytesToWrite = []byte(outputLinesArray.StrArray[i])
 
 		localNumOfBytesWritten,
-			err =
+			err2 =
 			fBufWriter.Write(bytesToWrite)
 
-		if err != nil {
+		if err2 != nil {
 
-			t.Errorf("%v\n"+
+			err = fmt.Errorf("%v\n"+
 				"Error returned by fBufWriter.Write(bytesToWrite)\n"+
 				"Bytes To Write = '%v'\n"+
 				"Index = '%v'\n"+
@@ -327,9 +549,15 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 				ePrefix.String(),
 				string(bytesToWrite),
 				i,
-				err.Error())
+				err2.Error())
 
-			_ = fBufWriter.FlushAndClose(nil)
+			err2 = fBufWriter.FlushAndClose(ePrefix.XCpy(
+				"After Error-fBufWriter"))
+
+			err = errors.Join(err, err2)
+
+			t.Errorf("%v\n",
+				err.Error())
 
 			return
 		}
@@ -338,7 +566,6 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 
 	}
 
-	var err2 error
 	err2 = fBufWriter.Close()
 
 	if err2 != nil {
@@ -361,66 +588,6 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 			ePrefix.String(),
 			expectedNumOfBytesWritten,
 			totalNumOfBytesWritten)
-
-		return
-	}
-
-	_,
-		fBufWriter,
-		err = new(FileBufferWriter).
-		NewPathFileName(
-			targetWriteFile,
-			false, // openFileReadWrite
-			512,
-			false,
-			ePrefix.XCpy("targetWriteFile"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
-	for i := 0; i < numOfLinesRead; i++ {
-
-		bytesToWrite = []byte(outputLinesArray.StrArray[i])
-
-		localNumOfBytesWritten,
-			err =
-			fBufWriter.Write(bytesToWrite)
-
-		if err != nil {
-
-			t.Errorf("%v\n"+
-				"Error returned by fBufWriter.Write(bytesToWrite)\n"+
-				"Bytes To Write = '%v'\n"+
-				"Index = '%v'\n"+
-				"Error= \n%v\n",
-				ePrefix.String(),
-				string(bytesToWrite),
-				i,
-				err.Error())
-
-			_ = fBufWriter.Flush(nil)
-
-			_ = fBufWriter.FlushAndClose(nil)
-
-			return
-		}
-
-		totalNumOfBytesWritten += localNumOfBytesWritten
-
-	}
-
-	err2 = fBufWriter.FlushAndClose(ePrefix)
-
-	if err2 != nil {
-
-		t.Errorf("%v\n"+
-			"Error returned by fBufWriter.Close(ePrefix) #2\n"+
-			"Error = \n%v\n",
-			ePrefix.String(),
-			err2.Error())
 
 		return
 	}
@@ -454,19 +621,46 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 
 	}
 
-	err2 = fHelper.DeleteDirOrFile(
+	var reasonFilesNotEqual string
+	var filesAreEqual bool
+
+	filesAreEqual,
+		reasonFilesNotEqual,
+		err = fHelper.CompareFiles(
+		compareFile,
 		targetWriteFile,
-		ePrefix)
+		ePrefix.XCpy(
+			"compareFile vs targetWriteFile"))
 
-	if err2 != nil {
+	if err != nil {
 
-		t.Errorf("%v\n"+
-			"Error return from fHelper.DeleteDirOrFile(targetWriteFile)\n"+
-			"targetWriteFile = '%v'\n"+
-			"Error = \n%v\n",
+		t.Errorf(" %v\n"+
+			"Error Return from fHelper.CompareFiles()\n"+
+			"     compareFile= %v\n"+
+			" targetWriteFile= %v\n"+
+			"Reason: %v\n",
 			ePrefix.String(),
+			compareFile,
 			targetWriteFile,
-			err2.Error())
+			reasonFilesNotEqual)
+
+		return
+	}
+
+	if !filesAreEqual {
+
+		t.Errorf(" %v\n"+
+			" Error: Comparison File and Write File are NOT equal!\n"+
+			" Reason: %v\n"+
+			"   Comparison File: %v\n"+
+			" Target Write File: %v\n\n",
+			ePrefix.String(),
+			reasonFilesNotEqual,
+			targetReadFile,
+			targetWriteFile)
+
+		return
+
 	}
 
 	return
@@ -492,6 +686,35 @@ func TestFileBufferWriter_Write_000300(t *testing.T) {
 	if err != nil {
 		t.Errorf("\n%v\n",
 			err.Error())
+		return
+	}
+
+	var fHelper = new(FileHelper)
+	var doesFileExist bool
+	var originalReaderFileInfoPlus FileInfoPlus
+
+	doesFileExist,
+		originalReaderFileInfoPlus,
+		err = fHelper.
+		DoesFileInfoPlusExist(
+			targetReadFile,
+			ePrefix.XCpy("targetReadFile"))
+
+	if err != nil {
+		t.Errorf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	if doesFileExist == false {
+
+		t.Errorf("%v\n"+
+			"Error: The Target Read File Does NOT Exist!\n"+
+			"Target Read File was not found on attached storage drive.\n"+
+			"Target Read File: %v\n",
+			ePrefix.String(),
+			targetReadFile)
+
 		return
 	}
 
@@ -532,6 +755,24 @@ func TestFileBufferWriter_Write_000300(t *testing.T) {
 		return
 	}
 
+	if originalReaderFileInfoPlus.Size() !=
+		readerFileInfoPlus.Size() {
+
+		t.Errorf("%v\n"+
+			"Error: The original 'reader' file size in bytes\n"+
+			"does NOT match the file size returned by method\n"+
+			"FileBufferReadWrite).NewPathFileNames().\n"+
+			"Target Read File: %v\n"+
+			"Original Size in Bytes: %v\n"+
+			"NewPathFileNames() File Size in Bytes: %v\n",
+			ePrefix.String(),
+			targetReadFile,
+			originalReaderFileInfoPlus.Size(),
+			readerFileInfoPlus.Size())
+
+		return
+	}
+
 	var readEndOfLineDelimiters = &StringArrayDto{}
 	var writeEndOfLineChars = "\r\n"
 	readEndOfLineDelimiters.PushStr("\r\n")
@@ -539,11 +780,21 @@ func TestFileBufferWriter_Write_000300(t *testing.T) {
 
 	var numOfLinesProcessed int
 	var numBytesRead, numBytesWritten int64
-	var expectedBytesRead = 1184
-	var expectedFileSize = 1228
-	var expectedBytesWritten = 1228
-
 	var expectedLines = 22
+
+	var expectedReadFileSize = int(originalReaderFileInfoPlus.Size())
+
+	var expectedBytesRead = expectedReadFileSize - (expectedLines * len(writeEndOfLineChars))
+
+	var expectedBytesWritten = expectedReadFileSize
+
+	defer func() {
+
+		_ = fHelper.DeleteDirOrFile(
+			targetWriteFile,
+			nil)
+
+	}()
 
 	numOfLinesProcessed,
 		numBytesRead,
@@ -594,17 +845,17 @@ func TestFileBufferWriter_Write_000300(t *testing.T) {
 		return
 	}
 
-	if int64(expectedFileSize) != readerFileInfoPlus.Size() {
+	if int64(expectedReadFileSize) != readerFileInfoPlus.Size() {
 
 		t.Errorf("\n%v\n"+
 			"Error: newFBuffReadWrite.ReadWriteTextLines()\n"+
-			"expectedFileSize NOT EQUAL TO readerFileInfoPlus.Size()\n"+
+			"expectedReadFileSize NOT EQUAL TO readerFileInfoPlus.Size()\n"+
 			"          expectedBytes= '%v'\n"+
 			"readerFileInfoPlus.Size= '%v'\n"+
 			" Target Read File= '%v'\n"+
 			"Target Write File= '%v'\n",
 			ePrefix.String(),
-			expectedFileSize,
+			expectedReadFileSize,
 			readerFileInfoPlus.Size(),
 			targetReadFile,
 			targetWriteFile)
@@ -632,7 +883,6 @@ func TestFileBufferWriter_Write_000300(t *testing.T) {
 
 	var filesAreEqual = false
 	var reasonFilesNotEqual string
-	var fHelper = new(FileHelper)
 
 	filesAreEqual,
 		reasonFilesNotEqual,
@@ -663,24 +913,6 @@ func TestFileBufferWriter_Write_000300(t *testing.T) {
 
 		return
 
-	}
-
-	err = new(FileHelper).DeleteDirOrFile(
-		targetWriteFile,
-		ePrefix)
-
-	if err != nil {
-
-		t.Errorf("%v\n"+
-			"Error return from fHelper.DeleteDirOrFile(targetWriteFile)\n"+
-			"Attempted Target File Deletion FAILED!\n"+
-			"targetWriteFile = '%v'\n"+
-			"Error = \n%v\n",
-			ePrefix.String(),
-			targetWriteFile,
-			err.Error())
-
-		return
 	}
 
 	return

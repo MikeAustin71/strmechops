@@ -4146,8 +4146,8 @@ func (fBufReaderNanobot *fileBufferReaderNanobot) setPathFileName(
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter '%v' is invalid!\n"+
-			"The path and file name do NOT exist on an attached\n"+
-			"storage drive.\n"+
+			"The 'reader' path and file name do NOT exist\n"+
+			"on an attached storage drive.\n"+
 			"%v= '%v'\n",
 			ePrefix.String(),
 			pathFileNameLabel,
