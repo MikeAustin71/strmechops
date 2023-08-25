@@ -3296,10 +3296,12 @@ func (fBufWriter *FileBufferWriter) WriteString(
 //
 //	numOfBytesWritten			int64
 //
-//		Returns the number of bytes extracted from
-//		input parameter 'strBuilder' and written to the
-//		internal bufio.Writer object encapsulated by the
-//		current instance of FileBufferWriter.
+//
+//		Returns the number of bytes extracted from the
+//		string array contained in input parameter
+//		'strArrayDto' and written to the internal
+//		bufio.Writer object encapsulated by the current
+//		instance of FileBufferWriter.
 //
 //	err							error
 //
@@ -3335,7 +3337,7 @@ func (fBufWriter *FileBufferWriter) WriteStringArrayDto(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"FileBufferWriter."+
-			"WriteStrBuilder()",
+			"WriteStringArrayDto()",
 		"")
 
 	if err != nil {
@@ -3380,6 +3382,240 @@ func (fBufWriter *FileBufferWriter) WriteStringArrayDto(
 			fBufWriter,
 			"fBufWriter",
 			strArrayDto.StrArray,
+			"strArrayDto",
+			autoFlushAndCloseOnExit,
+			ePrefix)
+
+	return numOfStringsWritten,
+		numOfBytesWritten,
+		err
+}
+
+// WriteStringArray
+//
+// Receives a string array and proceeds to write all
+// strings contained therein to the bufio.Writer object
+// configured for the current instance of
+// FileBufferWriter.
+//
+// No line termination characters will be added to the
+// strings before being written to the current
+// FileBufferWriter bufio.Writer object.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	strArray					[]string
+//
+//		All strings contained in this string array will
+//		be written to the internal bufio.Writer destination
+//	 	encapsulated by the current instance of
+//	 	FileBufferWriter.
+//
+//		No line termination characters will be added to
+//		the strings before being written to the
+//		bufio.Writer object.
+//
+//		If an individual string element from this string
+//		array consists of an empty string, it will be
+//		skipped, nothing will be written to the
+//		bufio.Writer and no error will be returned.
+//
+//		If this string array is empty, or consists of a
+//		zero length string array, an error will be
+//		returned.
+//
+//	autoFlushAndCloseOnExit		bool
+//
+//		When this parameter is set to 'true', this
+//		method will automatically perform the following
+//		clean-up tasks upon exit, even if processing
+//		errors are encountered:
+//
+//		(1)	The write buffer will be flushed thereby
+//			ensuring that all remaining data in the
+//			'write' buffer will be written to the
+//			underlying bufio.Writer object.
+//
+//		(2)	The internal bufio.Writer object will be
+//			properly closed and there will be no need
+//			to make a separate call to local method,
+//			FileBufferWriter.Close().
+//
+//		(3) After performing these clean-up tasks, the
+//			current instance of FileBufferWriter will
+//			invalid and unusable for future 'write'
+//			operations.
+//
+//		If input parameter 'autoFlushAndCloseOnExit' is
+//		set to 'false', this method will automatically
+//		flush the 'write' buffer, but it will NOT close
+//		the internal bufio.Writer object. This means that
+//		all data remaining in the 'write' buffer will be
+//		written to the underlying bufio.Writer output
+//		destination. However, most importantly, the user
+//	 	is then responsible for performing the 'Close'
+//		operation by calling the local method:
+//
+//			FileBufferWriter.Close()
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numOfStringsWritten			int64
+//
+//		Returns the number of strings written to the
+//		bufio.Writer object encapsulated by the current
+//		instance of FileBufferWriter.
+//
+//	numOfBytesWritten			int64
+//
+//		Returns the number of bytes extracted from the
+//		string array input parameter 'strArray' and
+//		written to the internal bufio.Writer object
+//		encapsulated by the current instance of
+//		FileBufferWriter.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufWriter *FileBufferWriter) WriteStringArray(
+	strArray []string,
+	autoFlushAndCloseOnExit bool,
+	errorPrefix interface{}) (
+	numOfStringsWritten int64,
+	numOfBytesWritten int64,
+	err error) {
+
+	if fBufWriter.lock == nil {
+		fBufWriter.lock = new(sync.Mutex)
+	}
+
+	fBufWriter.lock.Lock()
+
+	defer fBufWriter.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileBufferWriter."+
+			"WriteStringArray()",
+		"")
+
+	if err != nil {
+
+		return numOfStringsWritten,
+			numOfBytesWritten,
+			err
+	}
+
+	if fBufWriter.bufioWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"-------------------------------------------------------\n"+
+			"Error: This instance of 'FileBufferWriter' is invalid!\n"+
+			"The internal bufio.Writer has NOT been initialized.\n"+
+			"Call one of the 'New' or 'Setter' methods when creating\n"+
+			"a new valid instance of 'FileBufferWriter'\n",
+			ePrefix.String())
+
+		return numOfStringsWritten,
+			numOfBytesWritten,
+			err
+	}
+
+	if len(strArray) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"-------------------------------------------------------\n"+
+			"Error: Input parameter 'strArray' is invalid!\n"+
+			"'strArray' is an empty or zero length string array.\n",
+			ePrefix.String())
+
+		return numOfStringsWritten,
+			numOfBytesWritten,
+			err
+	}
+
+	numOfStringsWritten,
+		numOfBytesWritten,
+		err = new(fileBufferWriterMechanics).
+		writeStringArray(
+			fBufWriter,
+			"fBufWriter",
+			strArray,
 			"strArrayDto",
 			autoFlushAndCloseOnExit,
 			ePrefix)
@@ -3755,8 +3991,9 @@ type fileBufferWriterMechanics struct {
 //		skipped, nothing will be written to the
 //		bufio.Writer and no error will be returned.
 //
-//		If this string array is empty, or consists of a zero
-//		length string array, an error will be returned.
+//		If this string array is empty, or consists of a
+//		zero length string array, an error will be
+//		returned.
 //
 //	strArrayLabel				string
 //
@@ -3830,10 +4067,11 @@ type fileBufferWriterMechanics struct {
 //
 //	numOfBytesWritten			int64
 //
-//		Returns the number of bytes extracted from
-//		input parameter 'strBuilder' and written to the
-//		internal bufio.Writer object encapsulated by the
-//		current instance of FileBufferWriter.
+//		Returns the number of bytes extracted from the
+//		string array input parameter 'strArray' and
+//		written to the internal bufio.Writer object
+//		encapsulated by the instance of FileBufferWriter
+//		passed as input parameter 'fBufWriter'.
 //
 //	err							error
 //
