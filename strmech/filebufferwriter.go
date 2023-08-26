@@ -56,63 +56,38 @@ import (
 //
 // # Best Practice
 //
-//	(1)	Create a new instance of FileBufferWriter using
-//		either the New() method or the NewPathFileName()
-//		method.
+//	(1)	Create a new, valid instance of FileBufferWriter
+//		using one of the 'New' or 'Setter' methods. These
+//		methods internally configure FileBufferWriter's
+//		bufio.Writer object using a file or io.Writer
+//		object.
 //
-//		(a)	The New() method is used when an instance of
-//			io.Writer is created externally by the user
-//			and passed to the FileBufferWriter.New()
-//			method.
+//	(2)	After creating a valid instance of
+//		FileBufferWriter, the user calls one of the
+//		'Write' methods to write data to the internal
+//		bufio.Writer object encapsulated by
+//		FileBufferWriter. The 'Write' methods write data
+//		to the target file or io.Writer object configured
+//		by the 'New' or 'Setter' methods discussed above.
 //
-//			Under this scenario, the user is independently
-//			responsible for clean-up of the io.Writer
-//			object after FileBufferWriter 'write'
-//			operations have been completed.
+//	(3)	Upon completion of all 'write' operations, the
+//		'Flush' and 'Close' tasks must be executed in
+//		sequence to perform required clean-up tasks.
 //
-//			Once all FileBufferWriter 'write' operations
-//			have been completed, call methods Flush() and
-//			Close() to perform local FileBufferWriter
-//			clean-up tasks.
+//		a.	The 'Flush' task can be performed by calling
+//			the local method:
 //
-//		(b)	The NewPathFileName() method allows for the
-//			creation of an internal file pointer to a
-//			file passed as a path and file name by the
-//			user. This file serves as the internal target
-//			bufio.Writer object to which data will be
-//			written.
+//				FileBufferWriter.Flush()
 //
-//			Under this scenario, the user simply calls
-//			methods Flush() and Close() in sequence to
-//			perform all required clean-up tasks after
-//			'write' operations have been completed.
+//		b.	The 'Close' and 'Flush' tasks can be
+//			performed jointly by calling one local
+//			method:
 //
-//			Once method Close() is called, the current
-//			FileBufferWriter instance becomes unusable
-//			and should be discarded.
+//				FileBufferWriter.Close()
 //
-//	(2)	After creating an instance of FileBufferWriter,
-//		the user calls the Write() method to write bytes
-//		of data to the internal target bufio.Writer object.
-//		This 'write' target may be a file or any other
-//		object which implements the io.Writer interface.
-//
-//		The Write() method should be called repeatedly
-//		until all data has been written to the underlying
-//		bufio.Writer object.
-//
-//		Upon completion of the 'write' operation, call
-//		methods Flush() and Close() in sequence to
-//		perform required clean-up tasks.
-//
-//	(3)	After all data bytes have been written to the
-//		internal bufio.Writer object, the user must call
-//		methods Flush() and Close() to perform necessary
-//		clean-up operations.
-//
-//		Once method Close() is called, the current
-//		FileBufferWriter instance becomes unusable
-//		and should be discarded.
+//	(4)	Once method Close() is called, the current
+//		FileBufferWriter instance becomes invalid
+//		and unusable for future 'write' operations.
 type FileBufferWriter struct {
 	bufioWriter         *bufio.Writer
 	filePtr             *os.File
