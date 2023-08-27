@@ -14,10 +14,11 @@ import (
 
 // FileBufferReader
 //
-// The FileBufferReader type is a wrapper for
-// 'bufio.Reader'. As such, FileBufferReader supports
-// incremental or buffered read operations from the target
-// data source.
+// Type FileBufferReader is a wrapper for 'bufio.Reader'.
+// It is designed read data from a source io.Reader
+// object using a buffer. As such, FileBufferReader
+// supports incremental or buffered read operations
+// from the target data source.
 //
 // This type and its associated methods are designed to
 // facilitate data 'read' operations. The most common
@@ -38,8 +39,8 @@ import (
 //
 // # IMPORTANT
 //
-//	(1)	Use the 'New' and 'Setter' methods to create
-//		valid instances of FileBufferReader.
+//	(1)	Use the 'New' and 'Setter' methods to create and
+//		configure valid instances of FileBufferReader.
 //
 //	(2)	FileBufferReader implements the following
 //		interfaces:
@@ -52,80 +53,30 @@ import (
 //
 // # Best Practice
 //
-//	(1)	Create a new instance of FileBufferReader using
-//		any of the 'New' methods:
+//	(1)	Create a new, valid instance of FileBufferReader
+//		using one of the 'New' or 'Setter' methods. These
+//		methods internally configure FileBufferReader's
+//		bufio.Reader object using a file or io.Writer
+//		object.
 //
-//		FileBufferReader.New()
-//		FileBufferReader.NewFileMgr()
-//		FileBufferReader.NewPathFileName()
+//	(2)	After creating a valid instance of
+//		FileBufferReader, the user calls one of the
+//		'Read' methods to read data from the internal
+//		bufio.Reader object encapsulated by
+//		FileBufferReader. The 'Read' methods read data
+//		from target file or io.Writer object configured
+//		by the 'New' or 'Setter' methods discussed above.
 //
-//		(a)	The New() method is used when an instance of
-//			io.Reader is created externally by the user
-//			and passed to the FileBufferReader.New()
-//			method.
+//	(3)	Upon completion of all 'read' operations, the
+//		'Close' tasks must be executed to perform
+//		required clean-up tasks. This 'Close' task
+//		can be executed by calling local method:
 //
-//			Under this scenario, the user is independently
-//			responsible for clean-up of the internal
-//			bufio.Reader object after all 'read' operations
-//			have been completed for the current instance
-//			of FileBufferReader.
-//
-//			Once all FileBufferReader 'read' operations
-//			have been completed, call method Close() to
-//			perform local FileBufferReader clean-up tasks.
-//
-//		(b)	The NewFileMgr() method receives an instance
-//			of FileMgr which identifies a path and file
-//			name which will be configured as data source
-//			for subsequent file 'read' operations.
-//
-//			Under this scenario, the user simply calls
-//			method Close() to perform all required
-//			clean-up tasks after 'read' operations have
-//			been completed.
-//
-//			Once method Close() is called, the current
-//			FileBufferReader instance becomes unusable
-//			and should be discarded.
-//
-//		(c)	The NewPathFileName() method allows for the
-//			creation of an internal file pointer to a
-//			file passed as a path and file name by the
-//			user. This file serves at the target
-//			io.Reader object from which data will be
-//			read.
-//
-//			Under this scenario, the user simply calls
-//			method Close() to perform all required
-//			clean-up tasks after 'read' operations have
-//			been completed.
-//
-//			Once method Close() is called, the current
-//			FileBufferReader instance becomes unusable
-//			and should be discarded.
-//
-//	(2)	After creating an instance of FileBufferReader,
-//		the user calls the Read() method to read bytes
-//		of data from the internal bufio.Reader object.
-//		This 'read' target may be a file or any other
-//		object which implements the io.Reader interface.
-//
-//		The Read() method should be called repeatedly
-//		until all data has been read from the underlying
-//		io.Reader object.
-//
-//		Upon completion of the 'read' operation, call
-//		method Close() to perform required clean-up
-//		tasks.
-//
-//	(3)	After all data bytes have been read from the
-//		internal bufio.Reader object, the user must call
-//		method Close() to perform necessary clean-up
-//		tasks.
+//			FileBufferReader.Close()
 //
 //		Once method Close() is called, the current
-//		FileBufferReader instance becomes unusable and
-//		should be discarded.
+//		FileBufferReader instance becomes invalid and
+//		unusable for all future 'read' operations.
 type FileBufferReader struct {
 	bufioReader        *bufio.Reader
 	filePtr            *os.File
@@ -261,7 +212,7 @@ func (fBufReader *FileBufferReader) Buffered() int {
 //
 // If 0 <= discardedBytes <= FileBufferReader.Buffered(),
 // Discard is guaranteed to succeed without reading from
-// the underlying io.Reader.
+// the underlying bufio.Reader.
 //
 // Effectively, this method provides a means of
 // repositioning the 'reader' to beginning reading at the
@@ -1342,7 +1293,7 @@ func (fBufReader *FileBufferReader) Peek(
 // this method until the returned error is set to
 // 'io.EOF' signaling 'End of File'.
 //
-// See the io.Reader docs and 'Reference' section below.
+// See the bufio.Reader docs and 'Reference' section below.
 //
 // Once the 'read' operation has been completed, the user
 // MUST call the 'Close' method to ensure clean-up

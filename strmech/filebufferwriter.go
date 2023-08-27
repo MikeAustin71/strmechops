@@ -14,9 +14,11 @@ import (
 
 // FileBufferWriter
 //
-// Type FileBufferWriter is a wrapper for bufio.Writer.
+// Type FileBufferWriter is a wrapper for 'bufio.Writer'.
 // It is designed to write data to a destination
-// io.Writer object using a buffer.
+// io.Writer object using a buffer. As such,
+// FileBufferWriter supports incremental or buffered
+// 'write' operations to the target output destination.
 //
 // This structure and the associated methods facilitate
 // data 'write' operations. The most common destination
@@ -24,11 +26,6 @@ import (
 // file residing on an attached storage drive. However,
 // any object implementing the io.Writer interface may be
 // used as a 'write' destination.
-//
-// The FileBufferWriter type is a wrapper for
-// 'bufio.Writer'. As such, FileBufferWriter supports
-// incremental or buffered 'write' operations to the
-// target output destination.
 //
 // ----------------------------------------------------------------
 //
@@ -43,7 +40,8 @@ import (
 // # IMPORTANT
 //
 //	(1)	Use the methods 'New' and 'Setter' methods to
-//		configure valid instances of FileBufferWriter.
+//		create and configure valid instances of
+//		FileBufferWriter.
 //
 //	(2)	FileBufferWriter implements the following
 //		interfaces:
@@ -101,6 +99,12 @@ type FileBufferWriter struct {
 // This method returns the number of bytes that are
 // unused in the write buffer.
 //
+// To acquire the 'size' of the buffer configured for the
+// current instance of FileBufferWriter, call local
+// method:
+//
+//	FileBufferWriter.Size()
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -131,6 +135,63 @@ func (fBufWriter *FileBufferWriter) Available() int {
 	}
 
 	return fBufWriter.bufioWriter.Available()
+}
+
+// AvailableBuffer
+//
+// This method returns an empty byte array buffer with
+// FileBufferWriter.Available() capacity. This buffer is
+// intended to be appended to and passed to an
+// immediately succeeding Write call.
+//
+// The buffer is only valid until the next write
+// operation on FileBufferWriter.
+//
+// If the current instance of FileBufferWriter is invalid
+// or uninitialized, this method will return a zero
+// length byte array.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	[]byte
+//
+//		An empty byte array buffer with
+//		FileBufferWriter.Available() capacity. This
+//		buffer is intended to be appended to and
+//		passed to an immediately succeeding Write
+//		call.
+//
+//		This buffer is only valid until the next write
+//		operation performed by FileBufferWriter.
+//
+//		If the current instance of FileBufferWriter is
+//		invalid or uninitialized, this byte array will
+//		be empty with a zero length.
+func (fBufWriter *FileBufferWriter) AvailableBuffer() []byte {
+
+	if fBufWriter.lock == nil {
+		fBufWriter.lock = new(sync.Mutex)
+	}
+
+	fBufWriter.lock.Lock()
+
+	defer fBufWriter.lock.Unlock()
+
+	if fBufWriter.bufioWriter == nil {
+
+		return make([]byte, 0)
+	}
+
+	return fBufWriter.bufioWriter.AvailableBuffer()
+
 }
 
 // Close
@@ -2146,6 +2207,12 @@ func (fBufWriter *FileBufferWriter) SetIoWriter(
 //
 // This method returns the size of the underlying 'write'
 // buffer in bytes.
+//
+// To acquire the number of bytes unused in the buffer
+// configured for the current instance of
+// FileBufferWriter, call local method:
+//
+//	FileBufferWriter.Available()
 //
 // ----------------------------------------------------------------
 //
