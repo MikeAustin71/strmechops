@@ -1557,8 +1557,13 @@ func (fBufWriter *FileBufferWriter) ReadFrom(
 // Seek
 //
 // This method sets the offset for the next 'write'
-// operation to the offset, interpreted according to
-// input parameter 'whence'.
+// operation within the 'write' file. This method only
+// succeeds if the current FileBufferWriter instance
+// was created as a file with a path and file name string
+// or a File Manager object (FileMgr).
+//
+// This target offset is interpreted according to input
+// parameter 'whence'.
 //
 // 'whence' is an integer value designating whether the
 // input parameter 'targetOffset' is interpreted to mean
@@ -1567,15 +1572,16 @@ func (fBufWriter *FileBufferWriter) ReadFrom(
 // of the file. The 'whence' parameter must be passed as
 // one of the following 'io' constant values:
 //
-//	io.SeekStart	- means relative to the start of the
-//						file
+//	io.SeekStart = 0	- Means relative to the start of
+//							the file.
 //
-//	io.SeekCurrent	- means relative to the current file
-//						offset
+//	io.SeekCurrent = 1	- Means relative to the current
+//							file offset.
 //
-//	io.SeekEnd		- means relative to the end (for
-//						example, offset = -2 specifies the
-//						penultimate byte of the file).
+//	io.SeekEnd = 2		- Means relative to the end (for
+//							example, offset = -2 specifies
+//							the penultimate byte of the
+//							file).
 //
 // If the Seek method completes successfully, the next
 // 'write' operation will occur at the new offset
@@ -1592,7 +1598,8 @@ func (fBufWriter *FileBufferWriter) ReadFrom(
 //
 //	(1)	If the current instance of FileBufferWriter was
 //		NOT initialized with a path and file name or a
-//		File Manager object, it will return an error.
+//		File Manager (FileMgr) object, it will return an
+//		error.
 //
 //		Said another way, if the current instance of
 //		FileBufferWriter was initialized with a call to
@@ -1716,7 +1723,8 @@ func (fBufWriter *FileBufferWriter) Seek(
 	if fBufWriter.filePtr == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: FileBufferWriter was not initialized as a file!\n"+
+			"Error: Seek is called on an io.Writer object.\n"+
+			"FileBufferWriter was NOT initialized as a file!\n"+
 			"FileBufferWriter was initialized as an io.Writer object.\n"+
 			"The 'Seek' method cannot be called on an io.Writer object.\n",
 			ePrefix.String())
