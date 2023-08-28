@@ -50,6 +50,7 @@ import (
 //			io.Closer
 //			io.ReadFrom
 //			io.Seeker
+//			io.WriteSeeker
 //
 // ----------------------------------------------------------------
 //
