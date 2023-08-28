@@ -49,6 +49,7 @@ import (
 //			io.Writer
 //			io.Closer
 //			io.ReadFrom
+//			io.Seeker
 //
 // ----------------------------------------------------------------
 //
@@ -1550,6 +1551,202 @@ func (fBufWriter *FileBufferWriter) ReadFrom(
 	}
 
 	return numOfBytesProcessed, err
+}
+
+// Seek
+//
+// This method sets the offset for the next 'write'
+// operation to the offset, interpreted according to
+// input parameter 'whence'.
+//
+// 'whence' is an integer value designating whether the
+// input parameter 'targetOffset' is interpreted to mean
+// an offset from the start of the file, an offset from
+// the current offset position or an offset from the end
+// of the file. The 'whence' parameter must be passed as
+// one of the following 'io' constant values:
+//
+//	io.SeekStart	- means relative to the start of the
+//						file
+//
+//	io.SeekCurrent	- means relative to the current file
+//						offset
+//
+//	io.SeekEnd		- means relative to the end (for
+//						example, offset = -2 specifies the
+//						penultimate byte of the file).
+//
+// If the Seek method completes successfully, the next
+// 'write' operation will occur at the new offset
+// position.
+//
+// Seek returns the new offset relative to the start of the
+// file or an error, if any.
+//
+// Seek implements the 'io.Seeker' interface.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	If the current instance of FileBufferWriter was
+//		NOT initialized with a path and file name or a
+//		File Manager object, it will return an error.
+//
+//		Said another way, if the current instance of
+//		FileBufferWriter was initialized with a call to
+//		one of the following local methods, an error will
+//		be returned.
+//
+//			FileBufferWriter.NewIoWriter()
+//			FileBufferWriter.SetIoWriter()
+//
+//	(2)	Seeking to an offset before the start of the file
+//		is an error.
+//
+//	(3) If input parameter 'whence' is not set to one of
+//		these three constant integer values, an error
+//		will be returned.
+//
+//			io.SeekStart
+//				Means relative to the start of the file.
+//
+//			io.SeekCurrent
+//				Means relative to the current file
+//				offset.
+//
+//			io.SeekEnd
+//				Means relative to the end (for example,
+//				offset = -2 specifies the penultimate
+//				byte of the file).
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	targetOffset				int64
+//
+//		The number of bytes used to reset the file
+//		offset for the next 'write' operation.
+//
+//		This offset value is interpreted according to
+//		input parameter 'whence'.
+//
+//	whence						int
+//
+//		'whence' is an integer value designating whether
+//		the input parameter 'targetOffset' is interpreted
+//		to mean an offset from the start of the file, an
+//		offset from the current offset position or an
+//		offset from the end of the file. The 'whence'
+//		parameter must be passed as one of the following
+//		'io' constant values:
+//
+//			io.SeekStart
+//				Means relative to the start of the file.
+//
+//			io.SeekCurrent
+//				Means relative to the current file
+//				offset.
+//
+//			io.SeekEnd
+//				Means relative to the end (for example,
+//				offset = -2 specifies the penultimate
+//				byte of the file).
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	offsetFromFileStart			int64
+//
+//		If this method completes successfully, this
+//		parameter will return the new file offset
+//		in bytes from the beginning of the file.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message.
+func (fBufWriter *FileBufferWriter) Seek(
+	targetOffset int64,
+	whence int) (
+	offsetFromFileStart int64,
+	err error) {
+
+	if fBufWriter.lock == nil {
+		fBufWriter.lock = new(sync.Mutex)
+	}
+
+	fBufWriter.lock.Lock()
+
+	defer fBufWriter.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileBufferReader."+
+			"WriteTo()",
+		"")
+
+	if err != nil {
+
+		return offsetFromFileStart, err
+	}
+
+	if fBufWriter.bufioWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of 'FileBufferWriter' is invalid!\n"+
+			"The internal bufio.Writer object has NOT been initialized.\n"+
+			"Call one of the 'New' or 'Setter' methods to create a\n"+
+			"valid instance of 'FileBufferWriter'\n",
+			ePrefix.String())
+
+		return offsetFromFileStart, err
+	}
+
+	if fBufWriter.filePtr == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: FileBufferWriter was not initialized as a file!\n"+
+			"FileBufferWriter was initialized as an io.Writer object.\n"+
+			"The 'Seek' method cannot be called on an io.Writer object.\n",
+			ePrefix.String())
+
+		return offsetFromFileStart, err
+	}
+
+	if whence != io.SeekStart &&
+		whence != io.SeekCurrent &&
+		whence != io.SeekEnd {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'whence' is invalid!\n"+
+			"'whence' MUST be equal to one of the following\n"+
+			"constant values:\n"+
+			"  io.SeekStart = 0\n"+
+			"  io.SeekCurrent = 1\n"+
+			"  io.SeekEnd = 2\n"+
+			"'whence' = %v\n",
+			ePrefix.String(),
+			whence)
+
+		return offsetFromFileStart, err
+	}
+
+	offsetFromFileStart,
+		err = fBufWriter.filePtr.Seek(
+		targetOffset,
+		whence)
+
+	return offsetFromFileStart, err
 }
 
 // SetFileMgr
@@ -5138,6 +5335,21 @@ func (fBufWriterNanobot *fileBufferWriterNanobot) setIoWriter(
 		return err
 	}
 
+	var fBufWriterMolecule = new(fileBufferWriterMolecule)
+
+	// Flush the old fBufWriter
+
+	_ = fBufWriterMolecule.flush(
+		fBufWriter,
+		"",
+		nil)
+
+	// Close the old fBufWriter
+	_ = fBufWriterMolecule.close(
+		fBufWriter,
+		"",
+		nil)
+
 	if bufSize <= 0 {
 
 		bufSize = 4096
@@ -5396,6 +5608,21 @@ func (fBufWriterNanobot *fileBufferWriterNanobot) setPathFileName(
 
 	}
 
+	var fBufWriterMolecule = new(fileBufferWriterMolecule)
+
+	// Flush the old fBufWriter
+
+	_ = fBufWriterMolecule.flush(
+		fBufWriter,
+		"",
+		nil)
+
+	// Close the old fBufWriter
+	_ = fBufWriterMolecule.close(
+		fBufWriter,
+		"",
+		nil)
+
 	if bufSize <= 0 {
 
 		bufSize = 4096
@@ -5429,22 +5656,7 @@ func (fBufWriterNanobot *fileBufferWriterNanobot) setPathFileName(
 
 		return fInfoPlus, err
 	}
-	/*
-		if !pathFileDoesExist {
 
-			err = fmt.Errorf("%v\n"+
-				"Error: Input parameter '%v' is invalid!\n"+
-				"The path and file name do NOT exist on an attached\n"+
-				"storage drive.\n"+
-				"%v= '%v'\n",
-				ePrefix.String(),
-				pathFileNameLabel,
-				pathFileNameLabel,
-				pathFileName)
-
-			return fInfoPlus, err
-		}
-	*/
 	var filePermissionCfg FilePermissionConfig
 
 	var filePermissionStr = "--w--w--w-"
@@ -5666,19 +5878,6 @@ func (fBufWriterMolecule *fileBufferWriterMolecule) close(
 		return err
 	}
 
-	if fBufWriter.bufioWriter == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"-------------------------------------------\n"+
-			"Error: The FileBufferReader instance passed\n"+
-			"as input parameter '%v' is invalid!\n"+
-			"The internal bufio.Writer object is a 'nil' pointer.\n",
-			ePrefix.String(),
-			fBufWriterLabel)
-
-		return err
-	}
-
 	if fBufWriter.filePtr != nil {
 
 		var err2 error
@@ -5689,10 +5888,11 @@ func (fBufWriterMolecule *fileBufferWriterMolecule) close(
 
 			err = fmt.Errorf("%v\n"+
 				"Error returned while closing the target 'target' file!\n"+
-				"fBufWriter.filePtr.Close()\n"+
+				"%v.filePtr.Close()\n"+
 				"Target Read File = '%v'\n"+
 				"Error = \n%v\n",
 				ePrefix.String(),
+				fBufWriterLabel,
 				fBufWriter.targetWriteFileName,
 				err2.Error())
 
@@ -5834,33 +6034,23 @@ func (fBufWriterMolecule *fileBufferWriterMolecule) flush(
 		return err
 	}
 
-	if fBufWriter.bufioWriter == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"-------------------------------------------\n"+
-			"Error: The FileBufferReader instance passed\n"+
-			"as input parameter '%v' is invalid!\n"+
-			"The internal bufio.Writer object is a 'nil' pointer.\n",
-			ePrefix.String(),
-			fBufWriterLabel)
-
-		return err
-	}
-
 	var err2 error
 
-	err2 = fBufWriter.bufioWriter.Flush()
+	if fBufWriter.bufioWriter != nil {
 
-	if err2 != nil {
+		err2 = fBufWriter.bufioWriter.Flush()
 
-		err = fmt.Errorf("%v\n"+
-			"Error returned while flushing the 'write' buffer!\n"+
-			"%v.bufioWriter.Flush()\n"+
-			"Error = \n%v\n",
-			ePrefix.String(),
-			fBufWriterLabel,
-			err2.Error())
+		if err2 != nil {
 
+			err = fmt.Errorf("%v\n"+
+				"Error returned while flushing the 'write' buffer!\n"+
+				"%v.bufioWriter.Flush()\n"+
+				"Error = \n%v\n",
+				ePrefix.String(),
+				fBufWriterLabel,
+				err2.Error())
+
+		}
 	}
 
 	return err
