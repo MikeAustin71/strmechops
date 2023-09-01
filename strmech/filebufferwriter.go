@@ -5342,6 +5342,19 @@ func (fBufWriterNanobot *fileBufferWriterNanobot) setIoWriter(
 		return err
 	}
 
+	if writer == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' value.\n",
+			ePrefix.String(),
+			writerLabel,
+			writerLabel)
+
+		return err
+
+	}
+
 	var fBufWriterMolecule = new(fileBufferWriterMolecule)
 
 	// Flush the old fBufWriter
