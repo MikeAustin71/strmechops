@@ -2321,16 +2321,16 @@ func (fBufReader *FileBufferReader) ReadAllToString(
 // of the file. The 'whence' parameter must be passed as
 // one of the following 'io' constant values:
 //
-//	io.SeekStart = 0	- Means relative to the start of
-//							the file.
+//	io.SeekStart = 0
+//		Means relative to the start of the file.
 //
-//	io.SeekCurrent = 1	- Means relative to the current
-//							file offset.
+//	io.SeekCurrent = 1
+//		Means relative to the current file offset.
 //
-//	io.SeekEnd = 2		- Means relative to the end (for
-//							example, offset = -2 specifies
-//							the penultimate byte of the
-//							file).
+//	io.SeekEnd = 2
+//		Means relative to the end (for example,
+//		offset = -2 specifies the penultimate byte of
+//		the file).
 //
 // If the Seek method completes successfully, the next
 // 'read' operation will occur at the new offset
@@ -2365,17 +2365,16 @@ func (fBufReader *FileBufferReader) ReadAllToString(
 //		these three constant integer values, an error
 //		will be returned.
 //
-//			io.SeekStart
-//				Means relative to the start of the file.
+//		io.SeekStart = 0
+//			Means relative to the start of the file.
 //
-//			io.SeekCurrent
-//				Means relative to the current file
-//				offset.
+//		io.SeekCurrent = 1
+//			Means relative to the current file offset.
 //
-//			io.SeekEnd
-//				Means relative to the end (for example,
-//				offset = -2 specifies the penultimate
-//				byte of the file).
+//		io.SeekEnd = 2
+//			Means relative to the end (for example,
+//			offset = -2 specifies the penultimate byte of
+//			the file).
 //
 // ----------------------------------------------------------------
 //
@@ -2399,17 +2398,16 @@ func (fBufReader *FileBufferReader) ReadAllToString(
 //		parameter must be passed as one of the following
 //		'io' constant values:
 //
-//			io.SeekStart
-//				Means relative to the start of the file.
+//		io.SeekStart = 0
+//			Means relative to the start of the file.
 //
-//			io.SeekCurrent
-//				Means relative to the current file
-//				offset.
+//		io.SeekCurrent = 1
+//			Means relative to the current file offset.
 //
-//			io.SeekEnd
-//				Means relative to the end (for example,
-//				offset = -2 specifies the penultimate
-//				byte of the file).
+//		io.SeekEnd = 2
+//			Means relative to the end (for example,
+//			offset = -2 specifies the penultimate byte of
+//			the file).
 //
 // ----------------------------------------------------------------
 //

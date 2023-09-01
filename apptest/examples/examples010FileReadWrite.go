@@ -1347,6 +1347,184 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 
 }
 
+// FileBuffReadWrite04
+//
+// Testing the seek method
+func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite04() {
+
+	funcName := "MainFileReadWriteTest010.FileBuffReadWrite04()"
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		funcName,
+		"")
+
+	breakStr := " " + strings.Repeat("=",
+		len(funcName)+6)
+
+	dashLineStr := " " + strings.Repeat("-",
+		len(funcName)+6)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		" Function:\n"+
+		"    %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n\n\n")
+
+	var err error
+	var targetReadFile string
+	var exampleUtil = ExampleUtility{}
+
+	targetReadFile,
+		err = exampleUtil.GetCompositeDirectory(
+		"fileOpsTest\\filesForTest\\textFilesForTest\\smallTextFile.txt",
+		ePrefix.XCpy("targetReadFile"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var targetWriteFile string
+
+	targetWriteFile,
+		err = exampleUtil.GetCompositeDirectory(
+		"fileOpsTest\\trashDirectory\\Main10FileBuffReadWrite04.txt",
+		ePrefix.XCpy("targetWriteFile"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fHelper := new(strmech.FileHelper)
+
+	err = fHelper.
+		DeleteDirOrFile(
+			targetWriteFile,
+			ePrefix.XCpy("targetWriteFile"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var fBufReader strmech.FileBufferReader
+	var fBufWriter strmech.FileBufferWriter
+
+	_,
+		fBufReader,
+		err = new(strmech.FileBufferReader).
+		NewPathFileName(
+			targetReadFile,
+			false, // Open File Read/Write
+			512,   // bufSize
+			ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	_,
+		fBufWriter,
+		err = new(strmech.FileBufferWriter).
+		NewPathFileName(
+			targetWriteFile,
+			false,
+			512,
+			false,
+			ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var targetOffset, offsetFromFileStart int64
+
+	targetOffset = 122
+
+	offsetFromFileStart,
+		err = fBufReader.Seek(
+		targetOffset,
+		io.SeekStart)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	if offsetFromFileStart != targetOffset {
+
+		fmt.Printf("%v\n"+
+			"Error: fBufReader.Seek()\n"+
+			"The target offset is NOT equal to\n"+
+			"the actual file offset.\n"+
+			"Target File Offset: %v\n"+
+			"Actual File Offset: %v\n",
+			ePrefix.String(),
+			targetOffset,
+			offsetFromFileStart)
+
+		return
+	}
+
+	var strBuilder strings.Builder
+	var numOfBytesRead, numOfBytesWritten int64
+
+	numOfBytesRead,
+		err = fBufReader.ReadAllStrBuilder(
+		&strBuilder,
+		true,
+		ePrefix.XCpy("fBufReader"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	numOfBytesWritten,
+		err = fBufWriter.WriteStrBuilder(
+		&strBuilder,
+		true,
+		ePrefix.XCpy("fBufWriter"))
+
+	if numOfBytesRead != numOfBytesWritten {
+		fmt.Printf(" %v\n"+
+			"%v\n"+
+			" Error: numOfBytesRead != numOfBytesWritten\n"+
+			"    numOfBytesRead = %v\n"+
+			" numOfBytesWritten = %v\n",
+			ePrefix.String(),
+			dashLineStr,
+			numOfBytesRead,
+			numOfBytesWritten)
+
+		return
+	}
+
+	// ------ Trailing Marquee
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+}
+
 func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufWriter01() {
 
 	funcName := "Main010.FileBufWriter01()"
