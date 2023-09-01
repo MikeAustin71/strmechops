@@ -5875,7 +5875,7 @@ func (fBufWriterMolecule *fileBufferWriterMolecule) close(
 
 		err = fmt.Errorf("%v\n"+
 			"-------------------------------------------\n"+
-			"Error: The FileBufferReader instance passed\n"+
+			"Error: The FileBufferWriter instance passed\n"+
 			"as input parameter '%v' is invalid!\n"+
 			"'%v' is a 'nil' pointer.\n",
 			ePrefix.String(),

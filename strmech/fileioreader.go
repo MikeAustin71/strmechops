@@ -65,8 +65,8 @@ type FileIoReader struct {
 // operations have been completed.
 //
 // After calling this method, the current instance of
-// FileIoReader will be unusable and should be
-// discarded.
+// FileIoReader will be invalid and unavailable for
+// future 'read' operations.
 //
 // ----------------------------------------------------------------
 //
