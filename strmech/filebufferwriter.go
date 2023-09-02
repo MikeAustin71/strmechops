@@ -2457,13 +2457,6 @@ func (fBufWriter *FileBufferWriter) Size() int {
 // bufio.Writer object previously configured for this
 // instance of FileBufferWriter.
 //
-// If for any reason, the returned number of bytes
-// written ('numBytesWritten') to the internal
-// destination bufio.Writer object is less than the length
-// of the byte array passed as input parameter
-// 'bytesToWrite', an error containing an explanation for
-// this difference will be returned.
-//
 // ----------------------------------------------------------------
 //
 // # Reference:
@@ -2572,7 +2565,7 @@ func (fBufWriter *FileBufferWriter) Write(
 		return numBytesWritten, err
 	}
 
-	if len(bytesToWrite) <= 0 {
+	if len(bytesToWrite) == 0 {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'bytesToWrite' is invalid!\n"+

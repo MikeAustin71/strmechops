@@ -1355,6 +1355,149 @@ func (fIoWriter *FileIoWriter) SetPathFileName(
 	return fInfoPlus, err
 }
 
+// Write
+//
+// Writes the contents of the byte array input paramter
+// ('bytesToWrite') to the internal destination
+// io.Writer object previously configured for this
+// instance of FileIoWriter.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/io
+//	https://pkg.go.dev/io#Writer
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1) This method implements the io.Writer interface.
+//
+//	(2)	After all 'read' and 'write' operations have been
+//		completed, the user MUST call the 'Close' method
+//		to perform necessary clean-up operations:
+//
+//			FileIoWriter.Close()
+//
+//	(3) This method WILL NOT VERIFY that the number of
+//		bytes written is equal to the length of the
+//		length of input parameter 'bytesToWrite'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	bytesToWrite				[]byte
+//
+//		The contents of this byte array will be written
+//		to the internal destination io.Writer object
+//		previously configured for the current instance of
+//		FileIoWriter.
+//
+//		Typically, the internal destination io.Writer
+//		object will be a data file existing on an attached
+//		storage drive. However, the destination
+//		io.Writer object may be any object implementing
+//		the io.Writer interface.
+//
+//		This method WILL NOT VERIFY that the number of
+//		bytes written is equal to the length of the
+//		length of input parameter 'bytesToWrite'.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numBytesWritten				int
+//
+//		This parameter returns the number of bytes
+//		written to the internal destination io.Writer
+//		object configured for the current instance of
+//		FileIoWriter.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If processing errors are encountered, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fIoWriter *FileIoWriter) Write(
+	bytesToWrite []byte) (
+	numBytesWritten int,
+	err error) {
+
+	if fIoWriter.lock == nil {
+		fIoWriter.lock = new(sync.Mutex)
+	}
+
+	fIoWriter.lock.Lock()
+
+	defer fIoWriter.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileIoWriter."+
+			"Write()",
+		"")
+
+	if err != nil {
+
+		return numBytesWritten, err
+	}
+
+	if fIoWriter.ioWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"-------------------------------------------------------\n"+
+			"Error: This instance of 'FileIoWriter' is invalid!\n"+
+			"The internal io.Writer has NOT been initialized.\n"+
+			"Call one of the 'New' or 'Setter' methods when creating\n"+
+			"a new valid instance of 'FileIoWriter'\n",
+			ePrefix.String())
+
+		return numBytesWritten, err
+	}
+
+	if len(bytesToWrite) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'bytesToWrite' is invalid!\n"+
+			"The 'bytesToWrite' byte array is empty. It has zero bytes.\n",
+			ePrefix.String())
+
+		return numBytesWritten, err
+	}
+
+	var err2 error
+
+	var writer = *fIoWriter.ioWriter
+
+	numBytesWritten,
+		err2 = writer.Write(bytesToWrite)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by fIoWriter.ioWriter.Write(bytesToWrite).\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			err2.Error())
+	}
+
+	return numBytesWritten, err
+}
+
 type fileIoWriterMicrobot struct {
 	lock *sync.Mutex
 }
