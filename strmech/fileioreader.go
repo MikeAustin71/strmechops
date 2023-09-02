@@ -142,11 +142,25 @@ func (fIoReader *FileIoReader) Close() error {
 //
 // ----------------------------------------------------------------
 //
-// # BE ADVISED
+// # IMPORTANT
 //
-//	The returned instance of FileIoReader does NOT use
-//	buffered read techniques. Instead, it implements a
-//	direct read protocol using io.Reader.
+//	(1)	The returned instance of FileIoReader does NOT
+//		use buffered read techniques. Instead, it
+//		implements a direct read protocol using
+//		io.Reader.
+//
+//	(2)	Input parameter 'reader' will accept a pointer to
+//		an instance of os.File because os.File implements
+//		the io.Reader interface.
+//
+//	(3) The returned instance of FileIoReader will retain
+//		a pointer reference to input parameter 'reader'.
+//		Be sure to close and release this pointer when the
+//		returned instance of FileIoReader is no longer
+//		needed. To perform the 'close' operation, call the
+//		local method:
+//
+//			FileIoReader.Close()
 //
 // ----------------------------------------------------------------
 //
@@ -2886,10 +2900,19 @@ type fileIoReaderNanobot struct {
 //
 // # IMPORTANT
 //
-//	This method will delete, overwrite and reset all
-//	pre-existing data values in the instance of
-//	FileIoReader passed as input parameter
-//	'fIoReader'.
+//	(1)	This method will delete, overwrite and reset all
+//		pre-existing data values in the instance of
+//		FileIoReader passed as input parameter
+//		'fIoReader'.
+//
+//	(2) The instance of FileIoReader passed as input
+//		parameter 'fIoReader' will retain a pointer
+//		reference to input parameter 'reader'. Be sure to
+//		close and release this pointer when 'fIoReader'
+//		is no longer needed. To perform the 'close'
+//		operation, call the local method:
+//
+//			FileIoReader.Close()
 //
 // ----------------------------------------------------------------
 //
