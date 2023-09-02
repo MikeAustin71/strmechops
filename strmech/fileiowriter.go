@@ -1,6 +1,7 @@
 package strmech
 
 import (
+	"errors"
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
@@ -1480,7 +1481,6 @@ func (fIoWriter *FileIoWriter) Write(
 	}
 
 	var err2 error
-
 	var writer = *fIoWriter.ioWriter
 
 	numBytesWritten,
@@ -1489,7 +1489,7 @@ func (fIoWriter *FileIoWriter) Write(
 	if err2 != nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error returned by fIoWriter.ioWriter.Write(bytesToWrite).\n"+
+			"Error returned by writer.Write(bytesToWrite).\n"+
 			"Error=\n%v\n",
 			ePrefix.String(),
 			err2.Error())
@@ -1498,8 +1498,508 @@ func (fIoWriter *FileIoWriter) Write(
 	return numBytesWritten, err
 }
 
+// WriteRunes
+//
+// Receives a rune array in the form of a RuneArrayDto
+// instance and proceeds to write all the runes contained
+// therein to the underlying io.Writer encapsulated by
+// the current instance of FileIoWriter.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	runeArray					*RuneArrayDto
+//
+//		A pointer to an instance of RuneArrayDto. The
+//		rune array contained in this RuneArrayDto
+//		instance will be written to the io.Writer
+//		encapsulated by the current instance of
+//		FileIoWriter.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numOfBytesWritten			int
+//
+//		Returns the number of bytes extracted from
+//		input parameter 'runeArray' and written to the
+//		internal io.Writer object encapsulated by the
+//		current instance of FileIoWriter.
+//
+//	autoCloseOnExit				bool
+//
+//		When this parameter is set to 'true', this
+//		method will automatically perform the following
+//		clean-up tasks upon exit, even if processing
+//		errors are encountered:
+//
+//		(1)	The internal io.Writer object will be
+//			properly closed and there will be no need
+//			to make a separate call to local method,
+//			FileIoWriter.Close().
+//
+//		(2) After performing this clean-up operation, the
+//			current instance of FileIoWriter will invalid
+//			and unusable for future 'write' operations.
+//
+//		If input parameter 'autoCloseOnExit' is
+//		set to 'false', this method will NOT close
+//		the internal io.Writer object. This means the user
+//	 	is then responsible for performing the 'Close'
+//		operation by calling the local method:
+//
+//			FileIoWriter.Close()
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numOfBytesWritten			int64
+//
+//		Returns the number of bytes extracted from
+//		input parameter 'strBuilder' and written to the
+//		internal io.Writer object encapsulated by the
+//		current instance of FileIoWriter.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fIoWriter *FileIoWriter) WriteRunes(
+	runeArray *RuneArrayDto,
+	autoCloseOnExit bool,
+	errorPrefix interface{}) (
+	numOfBytesWritten int64,
+	err error) {
+
+	if fIoWriter.lock == nil {
+		fIoWriter.lock = new(sync.Mutex)
+	}
+
+	fIoWriter.lock.Lock()
+
+	defer fIoWriter.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileIoWriter."+
+			"WriteRunes()",
+		"")
+
+	if err != nil {
+
+		return numOfBytesWritten, err
+	}
+
+	if fIoWriter.ioWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"-------------------------------------------------------\n"+
+			"Error: This instance of 'FileIoWriter' is invalid!\n"+
+			"The internal io.Writer has NOT been initialized.\n"+
+			"Call one of the 'New' or 'Setter' methods when creating\n"+
+			"a new valid instance of 'FileIoWriter'\n",
+			ePrefix.String())
+
+		return numOfBytesWritten, err
+	}
+
+	if runeArray == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"-------------------------------------------------------\n"+
+			"Error: Input parameter 'runeArray' is invalid!\n"+
+			"'runeArray' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return numOfBytesWritten, err
+	}
+
+	if runeArray.GetRuneArrayLength() == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"-------------------------------------------------------\n"+
+			"Error: Input parameter 'runeArray' is invalid!\n"+
+			"'runeArray' contains an empty or zero length rune array.\n",
+			ePrefix.String())
+
+		return numOfBytesWritten, err
+	}
+
+	var err1, err2 error
+	var localNumBytesWritten int
+	var writer = *fIoWriter.ioWriter
+
+	localNumBytesWritten,
+		err2 = writer.Write(
+		[]byte(runeArray.String()))
+
+	if err2 != nil {
+
+		err1 = fmt.Errorf("%v\n"+
+			"Error returned by writer.Write((runeArray).\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+	} else {
+
+		numOfBytesWritten = int64(localNumBytesWritten)
+	}
+
+	err = new(fileIoWriterMicrobot).
+		performAutoClose(
+			fIoWriter,
+			"fIoWriter",
+			autoCloseOnExit,
+			err1,
+			ePrefix)
+
+	return numOfBytesWritten, err
+}
+
 type fileIoWriterMicrobot struct {
 	lock *sync.Mutex
+}
+
+// performAutoClose
+//
+// Receives an instance of FileIoWriter and performs
+// clean-up operations as specified by input parameter
+// 'autoCloseOnExit'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fIoWriter					*FileIoWriter
+//
+//		A pointer to an instance of FileIoWriter.
+//
+//		All internal member variable data values in
+//		this instance will be deleted and initialized
+//		to new values based on the following input
+//		parameters.
+//
+//	fIoWriterLabel				string
+//
+//		The name or label associated with input parameter
+//		'fIoWriter' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fIoWriter" will be
+//		automatically applied.
+//
+//	autoCloseOnExit				bool
+//
+//		When this parameter is set to 'true', this
+//		method will automatically perform the following
+//		clean-up tasks upon exit, even if processing
+//		errors are encountered:
+//
+//		(1)	The internal io.Writer object will be
+//			properly closed and there will be no need
+//			to make a separate call to local method,
+//			FileIoWriter.Close().
+//
+//		(2) After performing this clean-up operation, the
+//			current instance of FileIoWriter will invalid
+//			and unusable for future 'write' operations.
+//
+//		If input parameter 'autoCloseOnExit' is
+//		set to 'false', this method will NOT close
+//		the internal io.Writer object. This means the user
+//	 	is then responsible for performing the 'Close'
+//		operation by calling the local method:
+//
+//			FileIoWriter.Close()
+//
+//	accumulatedErrors			error
+//
+//		This parameter includes any errors accumulated
+//		to this point by the calling method. Any errors
+//		encountered while performing the clean-up
+//		operation on 'fIoWriter' will be added or
+//		'joined' to 'accumulatedErrors' and returned as
+//		a single error by this method.
+//
+//		It is assumed that this method will be called by
+//		high level methods which may have already
+//		encountered and recorded processing errors. If
+//		this is the case, this parameter will contain one
+//		or more processing errors. If this method produces
+//		any additional errors, they will be joined to
+//		'accumulatedErrors' and all errors will be
+//		returned to the caller.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//		Remember that any errors encountered by this
+//		method will be joined to existing errors passed
+//		as input parameter 'accumulatedErrors'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fIoWriterMicrobot *fileIoWriterMicrobot) performAutoClose(
+	fIoWriter *FileIoWriter,
+	fIoWriterLabel string,
+	autoCloseOnExit bool,
+	accumulatedErrors error,
+	errPrefDto *ePref.ErrPrefixDto) (
+	err error) {
+
+	if fIoWriterMicrobot.lock == nil {
+		fIoWriterMicrobot.lock = new(sync.Mutex)
+	}
+
+	fIoWriterMicrobot.lock.Lock()
+
+	defer fIoWriterMicrobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err2 error
+
+	funcName := "fileIoWriterMicrobot." +
+		"performAutoClose()"
+
+	err = errors.Join(err, accumulatedErrors)
+
+	ePrefix,
+		err2 = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err2 != nil {
+
+		err = errors.Join(err, err2)
+
+		return err
+	}
+
+	if len(fIoWriterLabel) == 0 {
+
+		fIoWriterLabel = "fIoWriter"
+	}
+
+	if fIoWriter == nil {
+
+		err2 = fmt.Errorf("%v\n"+
+			"Error: The FileIoWriter instance passed\n"+
+			"as input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' pointer.\n",
+			ePrefix.String(),
+			fIoWriterLabel,
+			fIoWriterLabel)
+
+		err = errors.Join(err, err2)
+
+		return err
+	}
+
+	if fIoWriter.ioWriter == nil {
+
+		err2 = fmt.Errorf("%v\n"+
+			"-------------------------------------------------------\n"+
+			"Error: This instance of 'FileIoWriter' is invalid!\n"+
+			"The internal io.Writer has NOT been initialized.\n"+
+			"Call one of the 'New' or 'Setter' methods when creating\n"+
+			"a new valid instance of 'FileIoWriter'\n",
+			ePrefix.String())
+
+		err = errors.Join(err, err2)
+
+		return err
+	}
+
+	var cleanUpStatus string
+
+	if accumulatedErrors != nil {
+
+		cleanUpStatus = "Processing Error"
+
+	} else {
+
+		cleanUpStatus = "Successful Completion"
+
+	}
+
+	if autoCloseOnExit == true {
+
+		err2 = new(fileIoWriterMolecule).close(
+			fIoWriter,
+			fIoWriterLabel,
+			ePrefix.XCpy(fmt.Sprintf(
+				"%v Close-Writer",
+				cleanUpStatus)))
+
+		if err2 != nil {
+
+			err = errors.Join(err, err2)
+		}
+
+	}
+
+	return err
 }
 
 // setFileMgr

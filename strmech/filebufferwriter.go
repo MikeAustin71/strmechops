@@ -4585,32 +4585,22 @@ func (fBufWriterMicrobot *fileBufferWriterMicrobot) performAutoFlushAndClose(
 
 	var ePrefix *ePref.ErrPrefixDto
 
+	err = errors.Join(err, accumulatedErrors)
+
 	var err2 error
 
 	funcName := "fileBufferWriterMicrobot." +
 		"performAutoFlushAndClose()"
 
-	if accumulatedErrors == nil {
-
-		ePrefix,
-			err2 = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-			errPrefDto,
-			funcName,
-			"")
-
-	} else {
-
-		ePrefix,
-			err2 = ePref.ErrPrefixDto{}.NewIEmpty(
-			nil,
-			funcName,
-			"")
-
-	}
+	ePrefix,
+		err2 = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
 
 	if err2 != nil {
 
-		err = errors.Join(accumulatedErrors, err2)
+		err = errors.Join(err, err2)
 
 		return err
 	}
@@ -4630,7 +4620,7 @@ func (fBufWriterMicrobot *fileBufferWriterMicrobot) performAutoFlushAndClose(
 			fBufWriterLabel,
 			fBufWriterLabel)
 
-		err = errors.Join(accumulatedErrors, err2)
+		err = errors.Join(err, err2)
 
 		return err
 	}
@@ -4645,7 +4635,7 @@ func (fBufWriterMicrobot *fileBufferWriterMicrobot) performAutoFlushAndClose(
 			"a new valid instance of 'FileBufferWriter'\n",
 			ePrefix.String())
 
-		err = errors.Join(accumulatedErrors, err2)
+		err = errors.Join(err, err2)
 
 		return err
 	}
@@ -4673,7 +4663,7 @@ func (fBufWriterMicrobot *fileBufferWriterMicrobot) performAutoFlushAndClose(
 
 		if err2 != nil {
 
-			err = errors.Join(accumulatedErrors, err2)
+			err = errors.Join(err, err2)
 		}
 
 	} else {
@@ -4683,12 +4673,12 @@ func (fBufWriterMicrobot *fileBufferWriterMicrobot) performAutoFlushAndClose(
 				fBufWriter,
 				fBufWriterLabel,
 				ePrefix.XCpy(fmt.Sprintf(
-					"%v Flush/Close-Readers & Writers",
+					"%v Flush/Close-Writers",
 					cleanUpStatus)))
 
 		if err2 != nil {
 
-			err = errors.Join(accumulatedErrors, err2)
+			err = errors.Join(err, err2)
 		}
 
 	}
