@@ -753,6 +753,174 @@ func (fIoWriter *FileIoWriter) NewPathFileName(
 	return fInfoPlus, newFileIoWriter, err
 }
 
+// SetIoWriter
+//
+// This method will completely re-initialize the current
+// instance of FileIoWriter using the io.Writer object
+// passed as input parameter 'writer'.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/io#Writer
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method will delete, overwrite and reset all
+//		pre-existing data values in the current instance
+//		of FileIoWriter.
+//
+//	(2)	The user is responsible for 'closing' the
+//		instance of io.Writer passed as input parameter
+//		'writer'. The FileIoWriter.Close() method will
+//		NOT close the 'writer' object.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	writer						io.Writer
+//
+//		An object which implements io.Writer interface.
+//		This object will be used as a data source for
+//		'write' operations.
+//
+//		The io.Writer object may be a file pointer of
+//		type *os.File because file pointers of this type
+//		implement the io.Writer interface.
+//
+//		A file pointer (*os.File) will facilitate writing
+//		data from files residing on an attached storage
+//		drive. However, with this configuration, the user
+//		is responsible for manually closing the file and
+//		performing any other required clean-up operations
+//		in addition to calling FileIoWriter.Close().
+//
+//		While the returned instance of FileIoWriter
+//		is primarily designed for writing data from disk
+//		files, this 'writer' will in fact write data from
+//		any object implementing the io.Writer interface.
+//
+//		Remember that the user is responsible for
+//		'closing' this io.Writer object. The FileIoWriter
+//		method 'Close()' will NOT close this io.Writer
+//		object.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fIoWriter *FileIoWriter) SetIoWriter(
+	writer io.Writer,
+	errorPrefix interface{}) error {
+
+	if fIoWriter.lock == nil {
+		fIoWriter.lock = new(sync.Mutex)
+	}
+
+	fIoWriter.lock.Lock()
+
+	defer fIoWriter.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileIoWriter."+
+			"SetIoWriter()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	err = new(fileIoWriterNanobot).
+		setIoWriter(
+			fIoWriter,
+			"fIoWriter",
+			writer,
+			"writer",
+			ePrefix.XCpy("fIoWriter"))
+
+	return err
+}
+
 type fileIoWriterMicrobot struct {
 	lock *sync.Mutex
 }
