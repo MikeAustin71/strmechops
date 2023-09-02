@@ -524,6 +524,235 @@ func (fIoWriter *FileIoWriter) NewFileMgr(
 	return fInfoPlus, newFileIoWriter, err
 }
 
+// NewPathFileName
+//
+// Receives a path and file name as an input parameter
+// string, 'pathFileName' and returns a new, fully
+// configured instance of FileIoWriter.
+//
+// The target 'write' file identified by 'pathFileName'
+// is opened for either 'write-only' or 'write/write'
+// operations depending on input parameter
+// 'openFileReadWrite'.
+//
+// This target 'write' file identified by 'pathFileName'
+// will be used to create a file pointer (*os.File) which
+// in turn will be used to configure the internal
+// io.Writer.
+//
+// If the target path and file identified by
+// 'pathFileName' do not currently exist on an attached
+// storage drive, an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/io#Writer
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	The returned instance of FileIoWriter does NOT
+//		use buffered write techniques. Instead, it
+//		implements a direct write protocol using
+//		io.Writer.
+//
+//	(2)	When all write operations have been completed and
+//		there is no further need for the returned
+//		instance of FileIoWriter, the user is responsible
+//		for 'closing' and releasing the associated memory
+//		resources by calling the local method
+//		FileIoWriter.Close().
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	pathFileName				string
+//
+//		This string contains the path and file name of
+//		the file which will be used a data source for
+//		'write' operations.
+//
+//		If this file does not currently exist on an
+//		attached storage drive, an error will be
+//		returned.
+//
+//	openFileReadWrite			bool
+//
+//		If this parameter is set to 'true', the target
+//		'write' file identified from input parameter
+//		'pathFileName' will be opened for both 'write'
+//		and 'write' operations.
+//
+//		If 'openFileReadWrite' is set to 'false', the
+//		target 'write' file will be opened for 'write-only'
+//		operations.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	fileInfoPlus				FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter 'pathFileName'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	newFileIoWriter			FileIoWriter
+//
+//		If this method completes successfully, a fully
+//		configured instance of FileIoWriter will
+//		be returned.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fIoWriter *FileIoWriter) NewPathFileName(
+	pathFileName string,
+	openFileReadWrite bool,
+	errorPrefix interface{}) (
+	fInfoPlus FileInfoPlus,
+	newFileIoWriter FileIoWriter,
+	err error) {
+
+	if fIoWriter.lock == nil {
+		fIoWriter.lock = new(sync.Mutex)
+	}
+
+	fIoWriter.lock.Lock()
+
+	defer fIoWriter.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileIoWriter."+
+			"NewPathFileName()",
+		"")
+
+	if err != nil {
+
+		return fInfoPlus, newFileIoWriter, err
+	}
+
+	fInfoPlus,
+		err = new(fileIoWriterNanobot).
+		setPathFileName(
+			&newFileIoWriter,
+			"newFileIoWriter",
+			pathFileName,
+			"pathFileName",
+			openFileReadWrite,
+			ePrefix.XCpy(
+				pathFileName))
+
+	return fInfoPlus, newFileIoWriter, err
+}
+
 type fileIoWriterMicrobot struct {
 	lock *sync.Mutex
 }
