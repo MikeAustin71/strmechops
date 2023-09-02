@@ -6,6 +6,7 @@ import (
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
 	"os"
+	"strings"
 	"sync"
 )
 
@@ -1769,6 +1770,254 @@ func (fIoWriter *FileIoWriter) WriteRunes(
 
 		err1 = fmt.Errorf("%v\n"+
 			"Error returned by writer.Write((runeArray).\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+	} else {
+
+		numOfBytesWritten = int64(localNumBytesWritten)
+	}
+
+	err = new(fileIoWriterMicrobot).
+		performAutoClose(
+			fIoWriter,
+			"fIoWriter",
+			autoCloseOnExit,
+			err1,
+			ePrefix)
+
+	return numOfBytesWritten, err
+}
+
+// WriteStrBuilder
+//
+// Receives an instance of strings.Builder and proceeds
+// to write all the string data contained therein to the
+// previously configured internal io.writer
+// destination configured for the current instance of
+// FileIoWriter.
+//
+// If input parameter 'autoCloseOnExit' is set to
+// 'true', this method will automatically perform all
+// required clean-up tasks upon completion. Clean-up
+// tasks involve flushing the io.Writer object,
+// closing the io.Writer object and then deleting
+// the io.Writer structure values internal to
+// the current FileIoWriter instance. When these
+// clean-up tasks are completed, the current
+// FileIoWriter instance will be invalid and
+// unavailable for future 'write' operations.
+//
+// If input parameter 'autoCloseOnExit' is set to
+// 'false', this method will automatically flush the
+// 'write' buffer. This means that all data remaining in
+// the 'write' buffer will be written to the underlying
+// io.Writer output destination. However, most
+// importantly, the user is then responsible for
+// performing the 'Close' operation by calling the local
+// method:
+//
+//	FileIoWriter.Close()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	strBuilder					*strings.Builder
+//
+//		A pointer to an instance of strings.Builder. The
+//		entire string contents of 'strBuilder' will be
+//		written to the internal io.Writer destination
+//		encapsulated by the current instance of
+//		FileIoWriter.
+//
+//		If the string contained in 'strBuilder' is empty,
+//		or a zero length string, an error will be
+//		returned.
+//
+//	autoCloseOnExit		bool
+//
+//		When this parameter is set to 'true', this
+//		method will automatically perform the following
+//		clean-up tasks upon exit, even if processing
+//		errors are encountered:
+//
+//		(1)	The internal io.Writer object will be
+//			properly closed and there will be no need
+//			to make a separate call to local method,
+//			FileIoWriter.Close().
+//
+//		(2) After performing this clean-up operation, the
+//			current instance of FileIoWriter will invalid
+//			and unusable for future 'write' operations.
+//
+//		If input parameter 'autoCloseOnExit' is
+//		set to 'false', this method will NOT close
+//		the internal io.Writer object. This means the user
+//	 	is then responsible for performing the 'Close'
+//		operation by calling the local method:
+//
+//			FileIoWriter.Close()
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numOfBytesWritten			int64
+//
+//		Returns the number of bytes extracted from
+//		input parameter 'strBuilder' and written to the
+//		internal io.Writer object encapsulated by the
+//		current instance of FileIoWriter.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fIoWriter *FileIoWriter) WriteStrBuilder(
+	strBuilder *strings.Builder,
+	autoCloseOnExit bool,
+	errorPrefix interface{}) (
+	numOfBytesWritten int64,
+	err error) {
+
+	if fIoWriter.lock == nil {
+		fIoWriter.lock = new(sync.Mutex)
+	}
+
+	fIoWriter.lock.Lock()
+
+	defer fIoWriter.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileIoWriter."+
+			"WriteStrBuilder()",
+		"")
+
+	if err != nil {
+
+		return numOfBytesWritten, err
+	}
+
+	if fIoWriter.ioWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"-------------------------------------------------------\n"+
+			"Error: This instance of 'FileIoWriter' is invalid!\n"+
+			"The internal io.Writer has NOT been initialized.\n"+
+			"Call one of the 'New' or 'Setter' methods when creating\n"+
+			"a new valid instance of 'FileIoWriter'\n",
+			ePrefix.String())
+
+		return numOfBytesWritten, err
+	}
+
+	if strBuilder == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"-------------------------------------------------------\n"+
+			"Error: Input parameter 'strBuilder' is invalid!\n"+
+			"'strBuilder' is a 'nil' pointer.\n",
+			ePrefix.String())
+
+		return numOfBytesWritten, err
+	}
+
+	if strBuilder.Len() == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"-------------------------------------------------------\n"+
+			"Error: Input parameter 'strBuilder' is invalid!\n"+
+			"'strBuilder' contains an empty or zero length string.\n",
+			ePrefix.String())
+
+		return numOfBytesWritten, err
+	}
+
+	var err1, err2 error
+	var localNumBytesWritten int
+	var writer = *fIoWriter.ioWriter
+
+	localNumBytesWritten,
+		err2 = writer.Write(
+		[]byte(strBuilder.String()))
+
+	if err2 != nil {
+
+		err1 = fmt.Errorf("%v\n"+
+			"Error returned by fIoWriter.writer.Write(strBuilder).\n"+
 			"Error=\n%v\n",
 			ePrefix.String(),
 			err2.Error())
