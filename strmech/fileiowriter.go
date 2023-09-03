@@ -2046,19 +2046,26 @@ type fileIoWriterMechanics struct {
 //
 // This method will accept the following types:
 //
+//	[]byte
+//	*[]byte
 //	string
 //	*string
 //	[]string
-//	rune
 //	[]rune
+//	*[]rune
+//	RuneArrayDto
+//	*RuneArrayDto
+//	ITextFieldFormatDto
+//	ITextFieldSpecification
+//	ITextLineSpecification
 //	float32
 //	*float32
 //	float64
 //	*float64
-//	*BigFloatDto
 //	BigFloatDto
-//	*big.Float
+//	*BigFloatDto
 //	big.Float
+//	*big.Float
 //	big.Rat
 //	*big.Rat
 //	int8
@@ -2180,6 +2187,66 @@ func (fIoWriterMech *fileIoWriterMechanics) writeCharacters(
 
 	switch charsToWrite.(type) {
 
+	case []byte:
+
+		var byteArray []byte
+
+		byteArray, ok = charsToWrite.([]byte)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"Input parameter '%v' is ERROR!\n"+
+				"'%v' was identified as a byte array []byte.\n"+
+				"The cast from '%v' to []byte Failed.\n",
+				ePrefix.String(),
+				charsToWriteLabel,
+				charsToWriteLabel,
+				charsToWriteLabel)
+
+			return numOfBytesWritten, err
+		}
+
+		numOfBytesWritten,
+			err = fIoWriterAtom.writeBytes(
+			fIoWriter,
+			"fIoWriter",
+			byteArray,
+			"byteArray",
+			endOfLineTerminator,
+			ePrefix.XCpy("byteArray<-[]byte"))
+
+	case *[]byte:
+
+		var byteArrayPtr *[]byte
+
+		byteArrayPtr, ok = charsToWrite.(*[]byte)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"Input parameter '%v' is ERROR!\n"+
+				"'%v' was identified as a byte array ponter (*[]byte).\n"+
+				"The cast from '%v' to *[]byte Failed.\n",
+				ePrefix.String(),
+				charsToWriteLabel,
+				charsToWriteLabel,
+				charsToWriteLabel)
+
+			return numOfBytesWritten, err
+		}
+
+		numOfBytesWritten,
+			err = fIoWriterAtom.writeBytes(
+			fIoWriter,
+			"fIoWriter",
+			*byteArrayPtr,
+			"byteArrayPtr",
+			endOfLineTerminator,
+			ePrefix.XCpy("byteArray<-*[]byte"))
+
 	case string:
 		// string
 
@@ -2191,7 +2258,7 @@ func (fIoWriterMech *fileIoWriterMechanics) writeCharacters(
 				"-------------------------------------------------------\n"+
 				"Input parameter '%v' is ERROR!\n"+
 				"'%v' was identified as a string.\n"+
-				"string cast from '%v' to 'stringToWrite' Failed.\n",
+				"The cast from '%v' to string Failed.\n",
 				ePrefix.String(),
 				charsToWriteLabel,
 				charsToWriteLabel,
@@ -2334,41 +2401,11 @@ func (fIoWriterMech *fileIoWriterMechanics) writeCharacters(
 				endOfLineTerminator,
 				ePrefix.XCpy("strArray<-*StringArrayDto"))
 
-	case rune:
-
-		var runeToWrite rune
-
-		runeToWrite, ok = charsToWrite.(rune)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"-------------------------------------------------------\n"+
-				"Input parameter '%v' is ERROR!\n"+
-				"'%v' was identified as a rune.\n"+
-				"rune cast from '%v' to rune Failed.\n",
-				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
-
-			return numOfBytesWritten, err
-		}
-
-		numOfBytesWritten,
-			err = fIoWriterAtom.writeBytes(
-			fIoWriter,
-			"fIoWriter",
-			[]byte(string(runeToWrite)),
-			"runeToWrite",
-			endOfLineTerminator,
-			ePrefix.XCpy("byteArray<-runeToWrite"))
-
 	case []rune:
 
-		var runeArray []rune
+		var runesToWrite []rune
 
-		runeArray, ok = charsToWrite.([]rune)
+		runesToWrite, ok = charsToWrite.([]rune)
 
 		if !ok {
 
@@ -2376,7 +2413,7 @@ func (fIoWriterMech *fileIoWriterMechanics) writeCharacters(
 				"-------------------------------------------------------\n"+
 				"Input parameter '%v' is ERROR!\n"+
 				"'%v' was identified as a rune array ([]rune).\n"+
-				"rune array cast from '%v' to 'runeArray' Failed.\n",
+				"The cast from '%v' to []rune Failed.\n",
 				ePrefix.String(),
 				charsToWriteLabel,
 				charsToWriteLabel,
@@ -2389,20 +2426,241 @@ func (fIoWriterMech *fileIoWriterMechanics) writeCharacters(
 			err = fIoWriterAtom.writeBytes(
 			fIoWriter,
 			"fIoWriter",
-			[]byte(string(runeArray)),
+			[]byte(string(runesToWrite)),
+			"runesToWrite",
+			endOfLineTerminator,
+			ePrefix.XCpy("byteArray<-runeToWrite"))
+
+	case *[]rune:
+
+		var runeArrayPtr *[]rune
+
+		runeArrayPtr, ok = charsToWrite.(*[]rune)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"Input parameter '%v' is ERROR!\n"+
+				"'%v' was identified as a rune array pointer (*[]rune).\n"+
+				"The cast from '%v' to *[]rune Failed.\n",
+				ePrefix.String(),
+				charsToWriteLabel,
+				charsToWriteLabel,
+				charsToWriteLabel)
+
+			return numOfBytesWritten, err
+		}
+
+		numOfBytesWritten,
+			err = fIoWriterAtom.writeBytes(
+			fIoWriter,
+			"fIoWriter",
+			[]byte(string(*runeArrayPtr)),
 			"runeArray",
 			endOfLineTerminator,
 			ePrefix.XCpy("byteArray<-runeArray"))
 
+	case RuneArrayDto:
+
+		var runesToWriteDto RuneArrayDto
+
+		runesToWriteDto, ok = charsToWrite.(RuneArrayDto)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"Input parameter '%v' is ERROR!\n"+
+				"'%v' was identified as a type RuneArrayDto.\n"+
+				"The cast from '%v' to RuneArrayDto Failed.\n",
+				ePrefix.String(),
+				charsToWriteLabel,
+				charsToWriteLabel,
+				charsToWriteLabel)
+
+			return numOfBytesWritten, err
+		}
+
+		numOfBytesWritten,
+			err = fIoWriterAtom.writeBytes(
+			fIoWriter,
+			"fIoWriter",
+			[]byte(string(runesToWriteDto.CharsArray)),
+			"runesToWrite",
+			endOfLineTerminator,
+			ePrefix.XCpy("byteArray<-runeToWrite"))
+
+	case *RuneArrayDto:
+
+		var runesToWriteDtoPtr *RuneArrayDto
+
+		runesToWriteDtoPtr, ok = charsToWrite.(*RuneArrayDto)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"Input parameter '%v' is ERROR!\n"+
+				"'%v' was identified as a type *RuneArrayDto.\n"+
+				"The cast from '%v' to *RuneArrayDto Failed.\n",
+				ePrefix.String(),
+				charsToWriteLabel,
+				charsToWriteLabel,
+				charsToWriteLabel)
+
+			return numOfBytesWritten, err
+		}
+
+		numOfBytesWritten,
+			err = fIoWriterAtom.writeBytes(
+			fIoWriter,
+			"fIoWriter",
+			[]byte(string(runesToWriteDtoPtr.CharsArray)),
+			"runesToWrite",
+			endOfLineTerminator,
+			ePrefix.XCpy("byteArray<-runeToWrite"))
+
+	case ITextFieldFormatDto:
+
+		var textFileFormatDto ITextFieldFormatDto
+
+		textFileFormatDto, ok = charsToWrite.(ITextFieldFormatDto)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"Input parameter '%v' is ERROR!\n"+
+				"'%v' was identified as a type ITextFieldFormatDto.\n"+
+				"The cast from '%v' to ITextFieldFormatDto Failed.\n",
+				ePrefix.String(),
+				charsToWriteLabel,
+				charsToWriteLabel,
+				charsToWriteLabel)
+
+			return numOfBytesWritten, err
+		}
+
+		stringToWrite,
+			err = textFileFormatDto.
+			GetFormattedTextFieldStr(
+				ePrefix.XCpy("textFileFormatDto"))
+
+		if err != nil {
+
+			return numOfBytesWritten, err
+
+		}
+
+		numOfBytesWritten,
+			err = fIoWriterAtom.writeBytes(
+			fIoWriter,
+			"fIoWriter",
+			[]byte(stringToWrite),
+			"runesToWrite",
+			endOfLineTerminator,
+			ePrefix.XCpy("byteArray<-ITextFieldFormatDto"))
+
+	case ITextFieldSpecification:
+
+		var textFieldSpecification ITextFieldSpecification
+
+		textFieldSpecification, ok =
+			charsToWrite.(ITextFieldSpecification)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"Input parameter '%v' is ERROR!\n"+
+				"'%v' was identified as a type ITextFieldSpecification.\n"+
+				"The cast from '%v' to ITextFieldSpecification Failed.\n",
+				ePrefix.String(),
+				charsToWriteLabel,
+				charsToWriteLabel,
+				charsToWriteLabel)
+
+			return numOfBytesWritten, err
+		}
+
+		var fieldSpecStrBuilder strings.Builder
+
+		err = textFieldSpecification.
+			TextBuilder(
+				&fieldSpecStrBuilder,
+				ePrefix.XCpy("ITextFieldSpecification"))
+
+		if err != nil {
+
+			return numOfBytesWritten, err
+
+		}
+
+		numOfBytesWritten,
+			err = fIoWriterAtom.writeBytes(
+			fIoWriter,
+			"fIoWriter",
+			[]byte(fieldSpecStrBuilder.String()),
+			"ITextFieldSpecification",
+			endOfLineTerminator,
+			ePrefix.XCpy("byteArray<-ITextFieldSpecification"))
+
+	case ITextLineSpecification:
+
+		var texLineSpecification ITextLineSpecification
+
+		texLineSpecification, ok =
+			charsToWrite.(ITextLineSpecification)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"Input parameter '%v' is ERROR!\n"+
+				"'%v' was identified as a type ITextLineSpecification.\n"+
+				"The cast from '%v' to ITextLineSpecification Failed.\n",
+				ePrefix.String(),
+				charsToWriteLabel,
+				charsToWriteLabel,
+				charsToWriteLabel)
+
+			return numOfBytesWritten, err
+		}
+
+		var fieldSpecStrBuilder strings.Builder
+
+		err = texLineSpecification.
+			TextBuilder(
+				&fieldSpecStrBuilder,
+				ePrefix.XCpy("ITextLineSpecification"))
+
+		if err != nil {
+
+			return numOfBytesWritten, err
+
+		}
+
+		numOfBytesWritten,
+			err = fIoWriterAtom.writeBytes(
+			fIoWriter,
+			"fIoWriter",
+			[]byte(fieldSpecStrBuilder.String()),
+			"ITextLineSpecification",
+			endOfLineTerminator,
+			ePrefix.XCpy("byteArray<-ITextLineSpecification"))
+
 	case float32, *float32, float64, *float64, *BigFloatDto,
 		BigFloatDto, *big.Float, big.Float, big.Rat, *big.Rat,
-		int8, *int8, int16, *int16, int, *int, //int32,
+		int8, *int8, int16, *int16, int, *int, int32,
 		*int32, int64, *int64, uint8, *uint8, uint16,
 		*uint16, uint, *uint, uint32, *uint32, uint64,
 		*uint64, big.Int, *big.Int, TextFieldFormatDtoFloat64,
 		*TextFieldFormatDtoFloat64, TextFieldFormatDtoBigFloat,
 		*TextFieldFormatDtoBigFloat, NumberStrKernel,
 		*NumberStrKernel:
+
+		// Writes numerical data to io.Writer
 
 		stringToWrite,
 			err = new(mathHelperNanobot).
