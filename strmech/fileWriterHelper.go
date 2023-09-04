@@ -114,7 +114,9 @@ type fileWriterHelperMicrobot struct {
 //			  49.	TextFieldFormatDtoBigFloat
 //			  50.	*TextFieldFormatDtoBigFloat
 //			  51.	NumberStrKernel
-//			  52	*NumberStrKernel
+//			  52.	*NumberStrKernel
+//			  53.	[]NumberStrKernel
+//			  54.	*[]NumberStrKernel
 //
 //	charsToWriteLabel			string
 //
@@ -846,6 +848,190 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 			"Number String",
 			writeEndOfLineChars+writeEndOfTextChars,
 			ePrefix.XCpy("byteArray<-number string"))
+
+	case []NumberStrKernel:
+
+		var numStrKernelArray []NumberStrKernel
+
+		numStrKernelArray, ok =
+			charsToWrite.([]NumberStrKernel)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"ERROR: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a type []NumberStrKernel.\n"+
+				"The cast from '%v' to []NumberStrKernel Failed.\n",
+				ePrefix.String(),
+				charsToWriteLabel,
+				charsToWriteLabel,
+				charsToWriteLabel)
+
+			return numOfBytesWritten, err
+		}
+
+		lastNumStrIdx := len(numStrKernelArray) - 1
+
+		if lastNumStrIdx < 0 {
+
+			err = fmt.Errorf("%v\n"+
+				"--------------------------------------------------------------\n"+
+				"ERROR: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a type []NumberStrKernel.\n"+
+				"However, '%v' is empty and contains zero array elements.\n",
+				ePrefix.String(),
+				charsToWriteLabel,
+				charsToWriteLabel,
+				charsToWriteLabel)
+
+			return numOfBytesWritten, err
+		}
+
+		var localNumBytesWritten int64
+
+		for i := 0; i <= lastNumStrIdx; i++ {
+
+			stringToWrite,
+				_,
+				err = numStrKernelArray[i].FmtNumStrNative(
+				NumRoundType.NoRounding(),
+				0,
+				ePrefix.XCpy(
+					fmt.Sprintf(
+						"numStrKernelArray[%v]", i)))
+
+			if err != nil {
+
+				return numOfBytesWritten,
+					fmt.Errorf("%v\n"+
+						"Error returned by numStrKernelArray[%v].FmtNumStrNative()\n"+
+						"Error=\n%v\n",
+						funcName,
+						i,
+						err.Error())
+
+			}
+
+			stringToWrite += writeEndOfLineChars
+
+			if i == lastNumStrIdx {
+
+				stringToWrite += writeEndOfTextChars
+			}
+
+			localNumBytesWritten,
+				err = fWriterHlprAtom.writeBytes(
+				ioWriter,
+				"ioWriter",
+				[]byte(stringToWrite),
+				"byteArray",
+				writeEndOfTextChars,
+				ePrefix.XCpy(
+					fmt.Sprintf(
+						"byteArray<-numStrKernelArray[%v]", i)))
+
+			if err != nil {
+
+				return numOfBytesWritten, err
+			}
+
+			numOfBytesWritten += localNumBytesWritten
+		}
+
+	case *[]NumberStrKernel:
+
+		var numStrKernelArrayPtr *[]NumberStrKernel
+
+		numStrKernelArrayPtr, ok =
+			charsToWrite.(*[]NumberStrKernel)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"ERROR: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a type *[]NumberStrKernel.\n"+
+				"The cast from '%v' to *[]NumberStrKernel Failed.\n",
+				ePrefix.String(),
+				charsToWriteLabel,
+				charsToWriteLabel,
+				charsToWriteLabel)
+
+			return numOfBytesWritten, err
+		}
+
+		var numStrKernelArray []NumberStrKernel
+
+		numStrKernelArray = *numStrKernelArrayPtr
+
+		lastNumStrIdx := len(numStrKernelArray) - 1
+
+		if lastNumStrIdx < 0 {
+
+			err = fmt.Errorf("%v\n"+
+				"--------------------------------------------------------------\n"+
+				"ERROR: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a type *[]NumberStrKernel.\n"+
+				"However, '%v' is empty and contains zero array elements.\n",
+				ePrefix.String(),
+				charsToWriteLabel,
+				charsToWriteLabel,
+				charsToWriteLabel)
+
+			return numOfBytesWritten, err
+		}
+
+		var localNumBytesWritten int64
+
+		for i := 0; i <= lastNumStrIdx; i++ {
+
+			stringToWrite,
+				_,
+				err = numStrKernelArray[i].FmtNumStrNative(
+				NumRoundType.NoRounding(),
+				0,
+				ePrefix.XCpy(
+					fmt.Sprintf(
+						"numStrKernelArray[%v]", i)))
+
+			if err != nil {
+
+				return numOfBytesWritten,
+					fmt.Errorf("%v\n"+
+						"Error returned by numStrKernelArray[%v].FmtNumStrNative()\n"+
+						"Error=\n%v\n",
+						funcName,
+						i,
+						err.Error())
+
+			}
+
+			stringToWrite += writeEndOfLineChars
+
+			if i == lastNumStrIdx {
+
+				stringToWrite += writeEndOfTextChars
+			}
+
+			localNumBytesWritten,
+				err = fWriterHlprAtom.writeBytes(
+				ioWriter,
+				"ioWriter",
+				[]byte(stringToWrite),
+				"byteArray",
+				writeEndOfTextChars,
+				ePrefix.XCpy(
+					fmt.Sprintf(
+						"byteArray<-*numStrKernelArray[%v]", i)))
+
+			if err != nil {
+
+				return numOfBytesWritten, err
+			}
+
+			numOfBytesWritten += localNumBytesWritten
+		}
 
 	default:
 
