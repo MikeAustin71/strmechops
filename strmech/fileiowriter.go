@@ -5,9 +5,7 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
-	"math/big"
 	"os"
-	"strings"
 	"sync"
 )
 
@@ -1485,9 +1483,9 @@ func (fIoWriter *FileIoWriter) Write(
 	var i64NumOfBytesWritten int64
 
 	i64NumOfBytesWritten,
-		err = new(fileIoWriterAtom).
+		err = new(fileWriterHelperAtom).
 		writeBytes(
-			fIoWriter,
+			fIoWriter.ioWriter,
 			"fIoWriter",
 			bytesToWrite,
 			"bytesToWrite",
@@ -1499,105 +1497,133 @@ func (fIoWriter *FileIoWriter) Write(
 	return numBytesWritten, err
 }
 
-// WriteRunes
+// WriteTextOrNumbers
 //
-// Receives a rune array in the form of a RuneArrayDto
-// instance and proceeds to write all the runes contained
-// therein to the underlying io.Writer encapsulated by
-// the current instance of FileIoWriter.
+// This method will accept many different text or numeric
+// data types which are then converted to a byte or
+// string array and written to the io.Writer object
+// configured for the current instance of FileIoWriter.
+//
+// The text or numeric data type passed as input
+// parameter 'charsToWrite' must match one of over fifty
+// eligible data types.
+//
+// If 'charsToWrite' is set to an ineligible data type,
+// an error will be returned.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	runeArray					*RuneArrayDto
+//	charsToWrite				interface{}
 //
-//		A pointer to an instance of RuneArrayDto. The
-//		rune array contained in this RuneArrayDto
-//		instance will be written to the io.Writer
-//		encapsulated by the current instance of
-//		FileIoWriter.
+//		This empty interface is used to transmit an
+//		eligible text or numeric data type which will be
+//		to a string or byte array and written to the
+//		io.Writer object passed as input parameter
+//		'ioWriter'.
 //
-//	errorPrefix					interface{}
+//		If the type transmitted through this parameter
+//		does not one of the following data types, an
+//		error will be returned.
 //
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
+//				Eligible Data Types
 //
-//		If no error prefix information is needed, set
-//		this parameter to 'nil'.
+//			   1.	[]byte
+//			   2.	*[]byte
+//			   3.	string
+//			   4.	*string
+//			   5.	[]string
+//		 	   6.	StringArrayDto
+//			   7.	*StringArrayDto
+//			   8.	[]rune
+//			   9.	*[]rune
+//			  10.	RuneArrayDto
+//			  11.	*RuneArrayDto
+//			  12.	ITextFieldFormatDto
+//			  13.	ITextFieldSpecification
+//			  14.	ITextLineSpecification
+//			  15.	float32
+//			  16.	*float32
+//			  17.	float64
+//			  18.	*float64
+//			  19.	BigFloatDto
+//			  20.	*BigFloatDto
+//			  21.	big.Float
+//			  22.	*big.Float
+//			  23.	big.Rat
+//			  24.	*big.Rat
+//			  25.	int8
+//			  26.	*int8
+//			  27.	int16
+//			  28.	*int16
+//			  29.	int
+//			  30.	*int
+//			  31.	int32
+//			  32.	*int32
+//			  33.	int64
+//			  34.	*int64
+//			  35.	uint8
+//			  36.	*uint8
+//			  37.	uint16
+//			  38.	*uint16
+//			  39.	uint
+//			  40.	*uint
+//			  41.	uint32
+//			  42.	*uint32
+//			  43.	uint64,
+//			  44.	*uint64
+//			  45.	big.Int
+//			  46.	*big.Int
+//			  47.	TextFieldFormatDtoFloat64
+//			  48.	*TextFieldFormatDtoFloat64
+//			  49.	TextFieldFormatDtoBigFloat
+//			  50.	*TextFieldFormatDtoBigFloat
+//			  51.	NumberStrKernel
+//			  52.	*NumberStrKernel
+//			  53.	[]NumberStrKernel
+//			  54.	*[]NumberStrKernel
 //
-//		This empty interface must be convertible to one
-//		of the following types:
+//	writeEndOfLineChars			string
 //
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
+//		This character string is appended to each line of
+//		text written to the io.Writer object. This
+//		capability is more useful when processing string
+//		arrays when each element of the array is written
+//		separately to the io.Writer object.
 //
-//		2.	string
-//				A string containing error prefix
-//				information.
+//		Remember that on Windows, line-endings are
+//		terminated with a combination of a carriage
+//		return (ASCII 0x0d or \r) and a newline(\n), also
+//		referred to as CR/LF (\r\n).
 //
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
+//		On UNIX or Linux, text file line-endings are
+//		terminated with a newline character (ASCII 0x0a,
+//		represented by the \n escape sequence in most
+//		languages), also referred to as a linefeed (LF).
 //
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
+//		If 'writeEndOfLineChars' is set to an empty
+//		string, it will be ignored and no additional
+//		characters will be appended to each line written
+//		to the io.Writer object.
 //
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
+//	writeEndOfTextChars			string
 //
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	numOfBytesWritten			int
-//
-//		Returns the number of bytes extracted from
-//		input parameter 'runeArray' and written to the
-//		internal io.Writer object encapsulated by the
-//		current instance of FileIoWriter.
+//		A character string which will be written to the
+//		io.Writer object after all other text from
+//		'charsToWrite' and 'writeEndOfLineChars' have
+//		been processed and written.
 //
 //	autoCloseOnExit				bool
 //
-//		When this parameter is set to 'true', this
-//		method will automatically perform the following
-//		clean-up tasks upon exit, even if processing
-//		errors are encountered:
+//		When this parameter is set to 'true' and no
+//		processing errors are encountered, this method
+//		will automatically perform the following clean-up
+//		tasks upon exit:
 //
-//		(1)	The internal io.Writer object will be
-//			properly closed and there will be no need
-//			to make a separate call to local method,
+//		(1)	The FileIoWriter internal io.Writer object
+//			will be properly closed and there will be no
+//			need to make a separate call to local method,
 //			FileIoWriter.Close().
 //
 //		(2) After performing this clean-up operation, the
@@ -1607,8 +1633,9 @@ func (fIoWriter *FileIoWriter) Write(
 //		If input parameter 'autoCloseOnExit' is
 //		set to 'false', this method will NOT close
 //		the internal io.Writer object. This means the user
-//	 	is then responsible for performing the 'Close'
-//		operation by calling the local method:
+//	 	is then responsible for performing the clean-up
+//		tasks when all 'write' operations have been
+//		completed by calling the local method:
 //
 //			FileIoWriter.Close()
 //
@@ -1677,259 +1704,10 @@ func (fIoWriter *FileIoWriter) Write(
 //
 //	numOfBytesWritten			int64
 //
-//		Returns the number of bytes extracted from
-//		input parameter 'strBuilder' and written to the
-//		internal io.Writer object encapsulated by the
-//		current instance of FileIoWriter.
-//
-//	err							error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errorPrefix'.
-//	 	The 'errorPrefix' text will be prefixed or
-//	 	attached to the	beginning of the error message.
-func (fIoWriter *FileIoWriter) WriteRunes(
-	runeArray *RuneArrayDto,
-	autoCloseOnExit bool,
-	errorPrefix interface{}) (
-	numOfBytesWritten int64,
-	err error) {
-
-	if fIoWriter.lock == nil {
-		fIoWriter.lock = new(sync.Mutex)
-	}
-
-	fIoWriter.lock.Lock()
-
-	defer fIoWriter.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"FileIoWriter."+
-			"WriteRunes()",
-		"")
-
-	if err != nil {
-
-		return numOfBytesWritten, err
-	}
-
-	if fIoWriter.ioWriter == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"-------------------------------------------------------\n"+
-			"Error: This instance of 'FileIoWriter' is invalid!\n"+
-			"The internal io.Writer has NOT been initialized.\n"+
-			"Call one of the 'New' or 'Setter' methods when creating\n"+
-			"a new valid instance of 'FileIoWriter'\n",
-			ePrefix.String())
-
-		return numOfBytesWritten, err
-	}
-
-	if runeArray == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"-------------------------------------------------------\n"+
-			"Error: Input parameter 'runeArray' is invalid!\n"+
-			"'runeArray' is a 'nil' pointer.\n",
-			ePrefix.String())
-
-		return numOfBytesWritten, err
-	}
-
-	if runeArray.GetRuneArrayLength() == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"-------------------------------------------------------\n"+
-			"Error: Input parameter 'runeArray' is invalid!\n"+
-			"'runeArray' contains an empty or zero length rune array.\n",
-			ePrefix.String())
-
-		return numOfBytesWritten, err
-	}
-
-	var err1, err2 error
-	var localNumBytesWritten int
-	var writer = *fIoWriter.ioWriter
-
-	localNumBytesWritten,
-		err2 = writer.Write(
-		[]byte(runeArray.String()))
-
-	if err2 != nil {
-
-		err1 = fmt.Errorf("%v\n"+
-			"Error returned by writer.Write((runeArray).\n"+
-			"Error=\n%v\n",
-			ePrefix.String(),
-			err2.Error())
-
-	} else {
-
-		numOfBytesWritten = int64(localNumBytesWritten)
-	}
-
-	err = new(fileIoWriterMicrobot).
-		performAutoClose(
-			fIoWriter,
-			"fIoWriter",
-			autoCloseOnExit,
-			err1,
-			ePrefix)
-
-	return numOfBytesWritten, err
-}
-
-// WriteStrBuilder
-//
-// Receives an instance of strings.Builder and proceeds
-// to write all the string data contained therein to the
-// previously configured internal io.writer
-// destination configured for the current instance of
-// FileIoWriter.
-//
-// If input parameter 'autoCloseOnExit' is set to
-// 'true', this method will automatically perform all
-// required clean-up tasks upon completion. Clean-up
-// tasks involve flushing the io.Writer object,
-// closing the io.Writer object and then deleting
-// the io.Writer structure values internal to
-// the current FileIoWriter instance. When these
-// clean-up tasks are completed, the current
-// FileIoWriter instance will be invalid and
-// unavailable for future 'write' operations.
-//
-// If input parameter 'autoCloseOnExit' is set to
-// 'false', this method will automatically flush the
-// 'write' buffer. This means that all data remaining in
-// the 'write' buffer will be written to the underlying
-// io.Writer output destination. However, most
-// importantly, the user is then responsible for
-// performing the 'Close' operation by calling the local
-// method:
-//
-//	FileIoWriter.Close()
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	strBuilder					*strings.Builder
-//
-//		A pointer to an instance of strings.Builder. The
-//		entire string contents of 'strBuilder' will be
-//		written to the internal io.Writer destination
-//		encapsulated by the current instance of
+//		The number of bytes written to the io.Writer
+//		object configured for the current instance of
 //		FileIoWriter.
 //
-//		If the string contained in 'strBuilder' is empty,
-//		or a zero length string, an error will be
-//		returned.
-//
-//	autoCloseOnExit		bool
-//
-//		When this parameter is set to 'true', this
-//		method will automatically perform the following
-//		clean-up tasks upon exit, even if processing
-//		errors are encountered:
-//
-//		(1)	The internal io.Writer object will be
-//			properly closed and there will be no need
-//			to make a separate call to local method,
-//			FileIoWriter.Close().
-//
-//		(2) After performing this clean-up operation, the
-//			current instance of FileIoWriter will invalid
-//			and unusable for future 'write' operations.
-//
-//		If input parameter 'autoCloseOnExit' is
-//		set to 'false', this method will NOT close
-//		the internal io.Writer object. This means the user
-//	 	is then responsible for performing the 'Close'
-//		operation by calling the local method:
-//
-//			FileIoWriter.Close()
-//
-//	errorPrefix					interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set
-//		this parameter to 'nil'.
-//
-//		This empty interface must be convertible to one
-//		of the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	numOfBytesWritten			int64
-//
-//		Returns the number of bytes extracted from
-//		input parameter 'strBuilder' and written to the
-//		internal io.Writer object encapsulated by the
-//		current instance of FileIoWriter.
-//
 //	err							error
 //
 //		If this method completes successfully, the
@@ -1942,8 +1720,10 @@ func (fIoWriter *FileIoWriter) WriteRunes(
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fIoWriter *FileIoWriter) WriteStrBuilder(
-	strBuilder *strings.Builder,
+func (fIoWriter *FileIoWriter) WriteTextOrNumbers(
+	charsToWrite interface{},
+	writeEndOfLineChars string,
+	writeEndOfTextChars string,
 	autoCloseOnExit bool,
 	errorPrefix interface{}) (
 	numOfBytesWritten int64,
@@ -1963,7 +1743,7 @@ func (fIoWriter *FileIoWriter) WriteStrBuilder(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"FileIoWriter."+
-			"WriteStrBuilder()",
+			"WriteTextOrNumbers()",
 		"")
 
 	if err != nil {
@@ -1984,720 +1764,16 @@ func (fIoWriter *FileIoWriter) WriteStrBuilder(
 		return numOfBytesWritten, err
 	}
 
-	if strBuilder == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"-------------------------------------------------------\n"+
-			"Error: Input parameter 'strBuilder' is invalid!\n"+
-			"'strBuilder' is a 'nil' pointer.\n",
-			ePrefix.String())
-
-		return numOfBytesWritten, err
-	}
-
-	if strBuilder.Len() == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"-------------------------------------------------------\n"+
-			"Error: Input parameter 'strBuilder' is invalid!\n"+
-			"'strBuilder' contains an empty or zero length string.\n",
-			ePrefix.String())
-
-		return numOfBytesWritten, err
-	}
-
-	var err1, err2 error
-	var localNumBytesWritten int
-	var writer = *fIoWriter.ioWriter
-
-	localNumBytesWritten,
-		err2 = writer.Write(
-		[]byte(strBuilder.String()))
-
-	if err2 != nil {
-
-		err1 = fmt.Errorf("%v\n"+
-			"Error returned by fIoWriter.writer.Write(strBuilder).\n"+
-			"Error=\n%v\n",
-			ePrefix.String(),
-			err2.Error())
-
-	} else {
-
-		numOfBytesWritten = int64(localNumBytesWritten)
-	}
-
-	err = new(fileIoWriterMicrobot).
-		performAutoClose(
-			fIoWriter,
-			"fIoWriter",
-			autoCloseOnExit,
-			err1,
-			ePrefix)
-
-	return numOfBytesWritten, err
-}
-
-type fileIoWriterMechanics struct {
-	lock *sync.Mutex
-}
-
-// writeCharacters
-//
-// This method will accept the following types:
-//
-//	[]byte
-//	*[]byte
-//	string
-//	*string
-//	[]string
-//	[]rune
-//	*[]rune
-//	RuneArrayDto
-//	*RuneArrayDto
-//	ITextFieldFormatDto
-//	ITextFieldSpecification
-//	ITextLineSpecification
-//	float32
-//	*float32
-//	float64
-//	*float64
-//	BigFloatDto
-//	*BigFloatDto
-//	big.Float
-//	*big.Float
-//	big.Rat
-//	*big.Rat
-//	int8
-//	*int8
-//	int16
-//	*int16
-//	int
-//	*int
-//	int32
-//	*int32
-//	int64
-//	*int64
-//	uint8
-//	*uint8
-//	uint16
-//	*uint16
-//	uint
-//	*uint
-//	uint32
-//	*uint32
-//	uint64,
-//	*uint64
-//	big.Int
-//	*big.Int
-//	TextFieldFormatDtoFloat64
-//	*TextFieldFormatDtoFloat64
-//	TextFieldFormatDtoBigFloat
-//	*TextFieldFormatDtoBigFloat
-//	NumberStrKernel
-//	*NumberStrKernel
-func (fIoWriterMech *fileIoWriterMechanics) writeCharacters(
-	fIoWriter *FileIoWriter,
-	fIoWriterLabel string,
-	charsToWrite interface{},
-	charsToWriteLabel string,
-	endOfLineTerminator string,
-	autoCloseOnExit bool,
-	errPrefDto *ePref.ErrPrefixDto) (
-	numOfBytesWritten int64,
-	err error) {
-
-	if fIoWriterMech.lock == nil {
-		fIoWriterMech.lock = new(sync.Mutex)
-	}
-
-	fIoWriterMech.lock.Lock()
-
-	defer fIoWriterMech.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	funcName := "fileIoWriterMechanics." +
-		"writeSomething()"
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		funcName,
-		"")
-
-	if err != nil {
-
-		return numOfBytesWritten, err
-	}
-
-	if len(fIoWriterLabel) == 0 {
-
-		fIoWriterLabel = "fIoWriter"
-	}
-
-	if len(charsToWriteLabel) == 0 {
-
-		charsToWriteLabel = "charsToWrite"
-	}
-
-	if fIoWriter == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: The FileIoWriter instance passed\n"+
-			"as input parameter '%v' is invalid!\n"+
-			"'%v' is a 'nil' pointer.\n",
-			ePrefix.String(),
-			fIoWriterLabel,
-			fIoWriterLabel)
-
-		return numOfBytesWritten, err
-	}
-
-	if fIoWriter.ioWriter == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"------------------------------------------------------------------------------\n"+
-			"Error: Input parameter '%v' is invalid!\n"+
-			"The internal io.Writer for this FileIoWriter instance has NOT been initialized.\n"+
-			"Call one of the 'New' or 'Setter' methods when creating a new valid instance of\n"+
-			"'FileIoWriter'\n",
-			ePrefix.String(),
-			fIoWriterLabel)
-
-		return numOfBytesWritten, err
-	}
-
-	if charsToWrite == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"-------------------------------------------------------\n"+
-			"Error: Input parameter '%v' is invalid!\n"+
-			"'%v' is a 'nil' value.\n",
-			ePrefix.String(),
-			charsToWriteLabel,
-			charsToWriteLabel)
-
-		return numOfBytesWritten, err
-	}
-
-	var stringToWrite string
-	var ok bool
-	var fIoWriterAtom = new(fileIoWriterAtom)
-
-	switch charsToWrite.(type) {
-
-	case []byte:
-
-		var byteArray []byte
-
-		byteArray, ok = charsToWrite.([]byte)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"-------------------------------------------------------\n"+
-				"Input parameter '%v' is ERROR!\n"+
-				"'%v' was identified as a byte array []byte.\n"+
-				"The cast from '%v' to []byte Failed.\n",
-				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
-
-			return numOfBytesWritten, err
-		}
-
-		numOfBytesWritten,
-			err = fIoWriterAtom.writeBytes(
-			fIoWriter,
-			"fIoWriter",
-			byteArray,
-			"byteArray",
-			endOfLineTerminator,
-			ePrefix.XCpy("byteArray<-[]byte"))
-
-	case *[]byte:
-
-		var byteArrayPtr *[]byte
-
-		byteArrayPtr, ok = charsToWrite.(*[]byte)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"-------------------------------------------------------\n"+
-				"Input parameter '%v' is ERROR!\n"+
-				"'%v' was identified as a byte array ponter (*[]byte).\n"+
-				"The cast from '%v' to *[]byte Failed.\n",
-				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
-
-			return numOfBytesWritten, err
-		}
-
-		numOfBytesWritten,
-			err = fIoWriterAtom.writeBytes(
-			fIoWriter,
-			"fIoWriter",
-			*byteArrayPtr,
-			"byteArrayPtr",
-			endOfLineTerminator,
-			ePrefix.XCpy("byteArray<-*[]byte"))
-
-	case string:
-		// string
-
-		stringToWrite, ok = charsToWrite.(string)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"-------------------------------------------------------\n"+
-				"Input parameter '%v' is ERROR!\n"+
-				"'%v' was identified as a string.\n"+
-				"The cast from '%v' to string Failed.\n",
-				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
-
-			return numOfBytesWritten, err
-		}
-
-		numOfBytesWritten,
-			err = fIoWriterAtom.writeBytes(
-			fIoWriter,
-			"fIoWriter",
-			[]byte(stringToWrite),
-			"byteArray",
-			endOfLineTerminator,
-			ePrefix.XCpy("byteArray<-stringToWrite"))
-
-	case *string:
-		// string pointer
-
-		var strPtr *string
-
-		strPtr, ok = charsToWrite.(*string)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"-------------------------------------------------------\n"+
-				"Input parameter '%v' is ERROR!\n"+
-				"'%v' was identified as a string pointer.\n"+
-				"string cast from '%v' to string pointer Failed.\n",
-				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
-
-			return numOfBytesWritten, err
-		}
-
-		numOfBytesWritten,
-			err = fIoWriterAtom.writeBytes(
-			fIoWriter,
-			"fIoWriter",
-			[]byte(*strPtr),
-			"byteArray",
-			endOfLineTerminator,
-			ePrefix.XCpy("byteArray<-*string"))
-
-	case []string:
-		// string array
-
-		var strArray []string
-
-		strArray, ok = charsToWrite.([]string)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"-------------------------------------------------------\n"+
-				"ERROR: Input parameter '%v' is invalid!\n"+
-				"'%v' was identified as a string array.\n"+
-				"string array cast from '%v' to string array Failed.\n",
-				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
-
-			return numOfBytesWritten, err
-		}
-
-		numOfBytesWritten,
-			err = fIoWriterAtom.
-			writeStringArray(
-				fIoWriter,
-				"fIoWriter",
-				strArray,
-				"strArray",
-				endOfLineTerminator,
-				ePrefix.XCpy("strArray<-[]string"))
-
-	case StringArrayDto:
-
-		var strArrayDto StringArrayDto
-
-		strArrayDto, ok = charsToWrite.(StringArrayDto)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"-------------------------------------------------------\n"+
-				"Input parameter '%v' is ERROR!\n"+
-				"'%v' was identified as a StringArrayDto.\n"+
-				"The cast from '%v' to StringArrayDto Failed.\n",
-				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
-
-			return numOfBytesWritten, err
-		}
-
-		numOfBytesWritten,
-			err = fIoWriterAtom.
-			writeStringArray(
-				fIoWriter,
-				"fIoWriter",
-				strArrayDto.StrArray,
-				"strArrayDto.StrArray",
-				endOfLineTerminator,
-				ePrefix.XCpy("strArray<-StringArrayDto"))
-
-	case *StringArrayDto:
-
-		var strArrayDtoPtr *StringArrayDto
-
-		strArrayDtoPtr, ok = charsToWrite.(*StringArrayDto)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"----------------------------------------------------------------\n"+
-				"ERROR: Input parameter '%v' is invalid!\n"+
-				"'%v' was identified as a StringArrayDto Pointer.\n"+
-				"The cast from '%v' to *StringArrayDto Failed.\n",
-				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
-
-			return numOfBytesWritten, err
-		}
-
-		numOfBytesWritten,
-			err = fIoWriterAtom.
-			writeStringArray(
-				fIoWriter,
-				"fIoWriter",
-				strArrayDtoPtr.StrArray,
-				"strArrayDtoPtr.StrArray",
-				endOfLineTerminator,
-				ePrefix.XCpy("strArray<-*StringArrayDto"))
-
-	case []rune:
-
-		var runesToWrite []rune
-
-		runesToWrite, ok = charsToWrite.([]rune)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"-------------------------------------------------------\n"+
-				"Input parameter '%v' is ERROR!\n"+
-				"'%v' was identified as a rune array ([]rune).\n"+
-				"The cast from '%v' to []rune Failed.\n",
-				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
-
-			return numOfBytesWritten, err
-		}
-
-		numOfBytesWritten,
-			err = fIoWriterAtom.writeBytes(
-			fIoWriter,
-			"fIoWriter",
-			[]byte(string(runesToWrite)),
-			"runesToWrite",
-			endOfLineTerminator,
-			ePrefix.XCpy("byteArray<-runeToWrite"))
-
-	case *[]rune:
-
-		var runeArrayPtr *[]rune
-
-		runeArrayPtr, ok = charsToWrite.(*[]rune)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"-------------------------------------------------------\n"+
-				"Input parameter '%v' is ERROR!\n"+
-				"'%v' was identified as a rune array pointer (*[]rune).\n"+
-				"The cast from '%v' to *[]rune Failed.\n",
-				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
-
-			return numOfBytesWritten, err
-		}
-
-		numOfBytesWritten,
-			err = fIoWriterAtom.writeBytes(
-			fIoWriter,
-			"fIoWriter",
-			[]byte(string(*runeArrayPtr)),
-			"runeArray",
-			endOfLineTerminator,
-			ePrefix.XCpy("byteArray<-runeArray"))
-
-	case RuneArrayDto:
-
-		var runesToWriteDto RuneArrayDto
-
-		runesToWriteDto, ok = charsToWrite.(RuneArrayDto)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"-------------------------------------------------------\n"+
-				"Input parameter '%v' is ERROR!\n"+
-				"'%v' was identified as a type RuneArrayDto.\n"+
-				"The cast from '%v' to RuneArrayDto Failed.\n",
-				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
-
-			return numOfBytesWritten, err
-		}
-
-		numOfBytesWritten,
-			err = fIoWriterAtom.writeBytes(
-			fIoWriter,
-			"fIoWriter",
-			[]byte(string(runesToWriteDto.CharsArray)),
-			"runesToWrite",
-			endOfLineTerminator,
-			ePrefix.XCpy("byteArray<-runeToWrite"))
-
-	case *RuneArrayDto:
-
-		var runesToWriteDtoPtr *RuneArrayDto
-
-		runesToWriteDtoPtr, ok = charsToWrite.(*RuneArrayDto)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"-------------------------------------------------------\n"+
-				"Input parameter '%v' is ERROR!\n"+
-				"'%v' was identified as a type *RuneArrayDto.\n"+
-				"The cast from '%v' to *RuneArrayDto Failed.\n",
-				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
-
-			return numOfBytesWritten, err
-		}
-
-		numOfBytesWritten,
-			err = fIoWriterAtom.writeBytes(
-			fIoWriter,
-			"fIoWriter",
-			[]byte(string(runesToWriteDtoPtr.CharsArray)),
-			"runesToWrite",
-			endOfLineTerminator,
-			ePrefix.XCpy("byteArray<-runeToWrite"))
-
-	case ITextFieldFormatDto:
-
-		var textFileFormatDto ITextFieldFormatDto
-
-		textFileFormatDto, ok = charsToWrite.(ITextFieldFormatDto)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"-------------------------------------------------------\n"+
-				"Input parameter '%v' is ERROR!\n"+
-				"'%v' was identified as a type ITextFieldFormatDto.\n"+
-				"The cast from '%v' to ITextFieldFormatDto Failed.\n",
-				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
-
-			return numOfBytesWritten, err
-		}
-
-		stringToWrite,
-			err = textFileFormatDto.
-			GetFormattedTextFieldStr(
-				ePrefix.XCpy("textFileFormatDto"))
-
-		if err != nil {
-
-			return numOfBytesWritten, err
-
-		}
-
-		numOfBytesWritten,
-			err = fIoWriterAtom.writeBytes(
-			fIoWriter,
-			"fIoWriter",
-			[]byte(stringToWrite),
-			"runesToWrite",
-			endOfLineTerminator,
-			ePrefix.XCpy("byteArray<-ITextFieldFormatDto"))
-
-	case ITextFieldSpecification:
-
-		var textFieldSpecification ITextFieldSpecification
-
-		textFieldSpecification, ok =
-			charsToWrite.(ITextFieldSpecification)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"-------------------------------------------------------\n"+
-				"Input parameter '%v' is ERROR!\n"+
-				"'%v' was identified as a type ITextFieldSpecification.\n"+
-				"The cast from '%v' to ITextFieldSpecification Failed.\n",
-				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
-
-			return numOfBytesWritten, err
-		}
-
-		var fieldSpecStrBuilder strings.Builder
-
-		err = textFieldSpecification.
-			TextBuilder(
-				&fieldSpecStrBuilder,
-				ePrefix.XCpy("ITextFieldSpecification"))
-
-		if err != nil {
-
-			return numOfBytesWritten, err
-
-		}
-
-		numOfBytesWritten,
-			err = fIoWriterAtom.writeBytes(
-			fIoWriter,
-			"fIoWriter",
-			[]byte(fieldSpecStrBuilder.String()),
-			"ITextFieldSpecification",
-			endOfLineTerminator,
-			ePrefix.XCpy("byteArray<-ITextFieldSpecification"))
-
-	case ITextLineSpecification:
-
-		var texLineSpecification ITextLineSpecification
-
-		texLineSpecification, ok =
-			charsToWrite.(ITextLineSpecification)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"-------------------------------------------------------\n"+
-				"Input parameter '%v' is ERROR!\n"+
-				"'%v' was identified as a type ITextLineSpecification.\n"+
-				"The cast from '%v' to ITextLineSpecification Failed.\n",
-				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
-
-			return numOfBytesWritten, err
-		}
-
-		var fieldSpecStrBuilder strings.Builder
-
-		err = texLineSpecification.
-			TextBuilder(
-				&fieldSpecStrBuilder,
-				ePrefix.XCpy("ITextLineSpecification"))
-
-		if err != nil {
-
-			return numOfBytesWritten, err
-
-		}
-
-		numOfBytesWritten,
-			err = fIoWriterAtom.writeBytes(
-			fIoWriter,
-			"fIoWriter",
-			[]byte(fieldSpecStrBuilder.String()),
-			"ITextLineSpecification",
-			endOfLineTerminator,
-			ePrefix.XCpy("byteArray<-ITextLineSpecification"))
-
-	case float32, *float32, float64, *float64, *BigFloatDto,
-		BigFloatDto, *big.Float, big.Float, big.Rat, *big.Rat,
-		int8, *int8, int16, *int16, int, *int, int32,
-		*int32, int64, *int64, uint8, *uint8, uint16,
-		*uint16, uint, *uint, uint32, *uint32, uint64,
-		*uint64, big.Int, *big.Int, TextFieldFormatDtoFloat64,
-		*TextFieldFormatDtoFloat64, TextFieldFormatDtoBigFloat,
-		*TextFieldFormatDtoBigFloat, NumberStrKernel,
-		*NumberStrKernel:
-
-		// Writes numerical data to io.Writer
-
-		stringToWrite,
-			err = new(mathHelperNanobot).
-			numericValueToNativeNumStr(
-				charsToWrite,
-				ePrefix.XCpy("<-charsToWrite"))
-
-		if err != nil {
-
-			return numOfBytesWritten,
-				fmt.Errorf("%v\n"+
-					"Error converting numeric value to a number string!\n"+
-					"Error=\n%v\n",
-					funcName,
-					err.Error())
-
-		}
-
-		numOfBytesWritten,
-			err = fIoWriterAtom.writeBytes(
-			fIoWriter,
-			"fIoWriter",
-			[]byte(stringToWrite),
-			"Number String",
-			endOfLineTerminator,
-			ePrefix.XCpy("byteArray<-number string"))
-
-	default:
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'charsToWrite' is an invalid type!\n"+
-			"'charsToWrite' is unsupported type '%T'\n",
-			ePrefix.String(),
-			charsToWrite)
-
-		return numOfBytesWritten, err
-	}
+	numOfBytesWritten,
+		err = new(fileWriterHelperMicrobot).
+		writeCharacters(
+			fIoWriter.ioWriter,
+			"fIoWriter.ioWriter",
+			charsToWrite,
+			"charsToWrite",
+			writeEndOfLineChars,
+			writeEndOfTextChars,
+			ePrefix.XCpy("fIoWriter.ioWriter<-charsToWrite"))
 
 	if err != nil &&
 		autoCloseOnExit == true {
@@ -2707,7 +1783,6 @@ func (fIoWriterMech *fileIoWriterMechanics) writeCharacters(
 				fIoWriter,
 				"fIoWriter",
 				ePrefix)
-
 	}
 
 	return numOfBytesWritten, err
@@ -3897,483 +2972,4 @@ func (fIoWriterMolecule *fileIoWriterMolecule) close(
 	fIoWriter.ioWriter = nil
 
 	return err
-}
-
-type fileIoWriterAtom struct {
-	lock *sync.Mutex
-}
-
-// writeBytes
-//
-// Writes a byte array to the io.Writer object
-// contained in the FileIoWriter instance passed as input
-// parameter 'fIoWriter'
-//
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-//	If the byte array passed as input parameter
-//	'byteArray' is empty or contains zero array elements,
-//	this method will take no action, no error will be
-//	returned and the returned number of bytes written
-//	('numOfBytesWritten') will be set to zero.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	fIoWriter					*FileIoWriter
-//
-//		A pointer to an instance of FileIoWriter.
-//
-//		The contents of the byte array passed as input
-//		parameter '' will be written to the internal
-//		io.Writer object encapsulated by this
-//		FileIoWriter instance.
-//
-//	fIoWriterLabel				string
-//
-//		The name or label associated with input parameter
-//		'fIoWriter' which will be used in error messages
-//		returned by this method.
-//
-//		If this parameter is submitted as an empty
-//		string, a default value of "fIoWriter" will be
-//		automatically applied.
-//
-//	byteArray					[]string
-//
-//		An array of strings which will be written to
-//		the internal io.Writer object encapsulated
-//		within the FileIoWriter instance passed as input
-//		parameter 'fIoWriter'.
-//
-//		If parameter 'endOfLineTerminator' has a length
-//		greater than zero, 'endOfLineTerminator' will be
-//		appended to each string written to the io.Writer
-//		object.
-//
-//		If 'byteArray' is empty or passed as a zero
-//		length byte array, the method will take no
-//		action, no error will be returned and the
-//		returned number of bytes written
-//		('numOfBytesWritten') will be set to zero.
-//
-//	byteArrayLabel				string
-//
-//		The name or label associated with input parameter
-//		'byteArray' which will be used in error messages
-//		returned by this method.
-//
-//		If this parameter is submitted as an empty
-//		string, a default value of "byteArray" will be
-//		automatically applied.
-//
-//	endOfLineTerminator string
-//
-//		If this parameter has a string length greater
-//		than zero, this string will be appended to
-//		each byte array element ('byteArray') written
-//		to the io.Writer object contained in 'fIoWriter'.
-//
-//	errPrefDto					*ePref.ErrPrefixDto
-//
-//		This object encapsulates an error prefix string
-//		which is included in all returned error
-//		messages. Usually, it contains the name of the
-//		calling method or methods listed as a function
-//		chain.
-//
-//		If no error prefix information is needed, set
-//		this parameter to 'nil'.
-//
-//		Type ErrPrefixDto is included in the 'errpref'
-//		software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	numOfBytesWritten			int64
-//
-//		The number of bytes written to the io.Writer
-//		object encapsulated in the FileIoWriter instance
-//		passed as input parameter 'fIoWriter'.
-//
-//	err							error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errPrefDto'.
-//	 	The 'errPrefDto' text will be prefixed or
-//	 	attached to the	beginning of the error message.
-func (fIoWriterAtom *fileIoWriterAtom) writeBytes(
-	fIoWriter *FileIoWriter,
-	fIoWriterLabel string,
-	byteArray []byte,
-	byteArrayLabel string,
-	endOfLineTerminator string,
-	errPrefDto *ePref.ErrPrefixDto) (
-	numOfBytesWritten int64,
-	err error) {
-
-	if fIoWriterAtom.lock == nil {
-		fIoWriterAtom.lock = new(sync.Mutex)
-	}
-
-	fIoWriterAtom.lock.Lock()
-
-	defer fIoWriterAtom.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	funcName := "fileIoWriterAtom." +
-		"writeBytes()"
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		funcName,
-		"")
-
-	if err != nil {
-
-		return numOfBytesWritten, err
-	}
-
-	if len(fIoWriterLabel) == 0 {
-
-		fIoWriterLabel = "fIoWriter"
-	}
-
-	if len(byteArrayLabel) == 0 {
-
-		byteArrayLabel = "byteArray"
-	}
-
-	if fIoWriter == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"-------------------------------------------\n"+
-			"Error: The FileIoWriter instance passed\n"+
-			"as input parameter '%v' is invalid!\n"+
-			"'%v' is a 'nil' pointer.\n",
-			ePrefix.String(),
-			fIoWriterLabel,
-			fIoWriterLabel)
-
-		return numOfBytesWritten, err
-	}
-
-	if fIoWriter.ioWriter == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"-------------------------------------------------------\n"+
-			"Error: This instance of 'FileIoWriter' passed"+
-			"as input parameter '%v' is invalid!\n"+
-			"The internal io.Writer has NOT been initialized.\n"+
-			"Call one of the 'New' or 'Setter' methods when creating\n"+
-			"a new valid instance of 'FileIoWriter'\n",
-			fIoWriterLabel,
-			ePrefix.String())
-
-		return numOfBytesWritten, err
-	}
-
-	lenByteArray := len(byteArray)
-
-	if lenByteArray == 0 {
-
-		return numOfBytesWritten, err
-	}
-
-	var writer = *fIoWriter.ioWriter
-	var err2 error
-	var localNumBytesWritten int
-
-	localNumBytesWritten,
-		err2 = writer.Write(
-		byteArray)
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error returned by writer.Write(byteArray)"+
-			"while writing original byte array.\n"+
-			"byteArray= '%v'\n"+
-			"Error=\n%v\n",
-			ePrefix.String(),
-			string(byteArray),
-			err2.Error())
-
-		return numOfBytesWritten, err
-
-	} else {
-
-		numOfBytesWritten += int64(localNumBytesWritten)
-	}
-
-	if len(endOfLineTerminator) > 0 {
-
-		localNumBytesWritten,
-			err2 = writer.Write(
-			[]byte(endOfLineTerminator))
-
-		if err2 != nil {
-
-			err = fmt.Errorf("%v\n"+
-				"Error returned by writer.Write(byteArray)"+
-				"while writing original byte array.\n"+
-				"byteArray= '%v'\n"+
-				"Error=\n%v\n",
-				ePrefix.String(),
-				string(byteArray),
-				err2.Error())
-
-		} else {
-
-			numOfBytesWritten += int64(localNumBytesWritten)
-		}
-	}
-
-	return numOfBytesWritten, err
-}
-
-// writeStringArray
-//
-// Writes a string array to the io.Writer object
-// contained in the FileIoWriter instance passed as input
-// parameter 'fIoWriter'
-//
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-//	If the string array passed as input parameter
-//	'strArray' is empty or contains zero array elements,
-//	this method will take no action, no error will be
-//	returned and the returned number of bytes written
-//	'numOfBytesWritten' will be set to zero.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	fIoWriter					*FileIoWriter
-//
-//		A pointer to an instance of FileIoWriter.
-//
-//		The contents of the string array passed as input
-//		parameter '' will be written to the internal
-//		io.Writer object encapsulated by this
-//		FileIoWriter instance.
-//
-//	fIoWriterLabel				string
-//
-//		The name or label associated with input parameter
-//		'fIoWriter' which will be used in error messages
-//		returned by this method.
-//
-//		If this parameter is submitted as an empty
-//		string, a default value of "fIoWriter" will be
-//		automatically applied.
-//
-//	strArray					[]string
-//
-//		An array of strings which will be written to
-//		the internal io.Writer object encapsulated
-//		within the FileIoWriter instance passed as input
-//		parameter 'fIoWriter'.
-//
-//		If parameter 'endOfLineTerminator' has a length
-//		greater than zero, 'endOfLineTerminator' will be
-//		appended to each string written to the io.Writer
-//		object.
-//
-//		If 'strArray' is empty or passed as a zero length
-//		byte array, the method will take no action, no
-//		error will be returned and the returned number of
-//		bytes written ('numOfBytesWritten') will be set
-//		to zero.
-//
-//	strArrayLabel				string
-//
-//		The name or label associated with input parameter
-//		'strArray' which will be used in error messages
-//		returned by this method.
-//
-//		If this parameter is submitted as an empty
-//		string, a default value of "strArray" will be
-//		automatically applied.
-//
-//	endOfLineTerminator string
-//
-//		If this parameter has a string length greater
-//		than zero, this string will be appended to
-//		each string array element ('strArray') written
-//		to the io.Writer object contained in 'fIoWriter'.
-//
-//	errPrefDto					*ePref.ErrPrefixDto
-//
-//		This object encapsulates an error prefix string
-//		which is included in all returned error
-//		messages. Usually, it contains the name of the
-//		calling method or methods listed as a function
-//		chain.
-//
-//		If no error prefix information is needed, set
-//		this parameter to 'nil'.
-//
-//		Type ErrPrefixDto is included in the 'errpref'
-//		software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	numOfBytesWritten			int64
-//
-//		The number of bytes written to the io.Writer
-//		object encapsulated in the FileIoWriter instance
-//		passed as input parameter 'fIoWriter'.
-//
-//	err							error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errPrefDto'.
-//	 	The 'errPrefDto' text will be prefixed or
-//	 	attached to the	beginning of the error message.
-func (fIoWriterAtom *fileIoWriterAtom) writeStringArray(
-	fIoWriter *FileIoWriter,
-	fIoWriterLabel string,
-	strArray []string,
-	strArrayLabel string,
-	endOfLineTerminator string,
-	errPrefDto *ePref.ErrPrefixDto) (
-	numOfBytesWritten int64,
-	err error) {
-
-	if fIoWriterAtom.lock == nil {
-		fIoWriterAtom.lock = new(sync.Mutex)
-	}
-
-	fIoWriterAtom.lock.Lock()
-
-	defer fIoWriterAtom.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	funcName := "fileIoWriterAtom." +
-		"writeStringArray()"
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		funcName,
-		"")
-
-	if err != nil {
-
-		return numOfBytesWritten, err
-	}
-
-	if len(fIoWriterLabel) == 0 {
-
-		fIoWriterLabel = "fIoWriter"
-	}
-
-	if len(strArrayLabel) == 0 {
-
-		strArrayLabel = "strArray"
-	}
-
-	if fIoWriter == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"-------------------------------------------\n"+
-			"Error: The FileIoWriter instance passed\n"+
-			"as input parameter '%v' is invalid!\n"+
-			"'%v' is a 'nil' pointer.\n",
-			ePrefix.String(),
-			fIoWriterLabel,
-			fIoWriterLabel)
-
-		return numOfBytesWritten, err
-	}
-
-	if fIoWriter.ioWriter == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"-------------------------------------------------------\n"+
-			"Error: This instance of 'FileIoWriter' passed"+
-			"as input parameter '%v' is invalid!\n"+
-			"The internal io.Writer has NOT been initialized.\n"+
-			"Call one of the 'New' or 'Setter' methods when creating\n"+
-			"a new valid instance of 'FileIoWriter'\n",
-			fIoWriterLabel,
-			ePrefix.String())
-
-		return numOfBytesWritten, err
-	}
-
-	lenStrArray := len(strArray)
-	lenEOLTerminator := len(endOfLineTerminator)
-
-	if lenStrArray == 0 {
-
-		return numOfBytesWritten, err
-	}
-
-	var err2 error
-	var localNumBytesWritten int
-	var writer = *fIoWriter.ioWriter
-	var strToWrite string
-
-	for i := 0; i <= lenStrArray; i++ {
-
-		strToWrite = strArray[i]
-
-		if lenEOLTerminator > 0 {
-			strToWrite += endOfLineTerminator
-		}
-
-		localNumBytesWritten,
-			err2 = writer.Write(
-			[]byte(strToWrite))
-
-		if err2 != nil {
-
-			err = fmt.Errorf("%v\n"+
-				"Error returned by writer.Write([]byte(strToWrite)).\n"+
-				"strToWrite= '%v'\n"+
-				"Error=\n%v\n",
-				ePrefix.String(),
-				strToWrite,
-				err2.Error())
-
-			return numOfBytesWritten, err
-
-		} else {
-
-			numOfBytesWritten += int64(localNumBytesWritten)
-		}
-
-		strToWrite = ""
-	}
-
-	return numOfBytesWritten, err
 }

@@ -1156,20 +1156,24 @@ func (fIoReader *FileIoReader) Read(
 //
 //		When this parameter is set to 'true', this
 //		method will automatically perform all required
-//		clean-up tasks for the current instance of
-//		FileIoReader. Specifically, the internal
-//		io.Reader object will be properly 'closed'. Upon
-//		completion of this 'close' operation, the current
-//		instance of FileIoReader will be invalid and
-//		unusable for all future 'read' operations.
+//		clean-up tasks upon exit.
 //
-//		If input parameter 'autoCloseOnExit' is
-//		set to 'false', this method will NOT
-//		automatically 'close' the internal io.Reader
-//		object for the current instance of
-//		FileBufferReader. Consequently, the user will be
-//		responsible for 'closing' the internal io.Reader
-//		object by calling the local method:
+//		(1)	The FileIoReader internal io.Reader object
+//			will be properly closed and there will be no
+//			need to make a separate call to local method,
+//			FileIoReader.Close().
+//
+//		(2) After performing this clean-up operation, the
+//			current instance of FileIoReader will invalid
+//			and unusable for future 'read' operations.
+//
+//		If input parameter 'autoCloseOnExit' is set to
+//		'false', this method will NOT automatically
+//		'close' the internal io.Reader object for the
+//		current instance of FileBufferReader.
+//		Consequently, the user will then be responsible
+//		for 'closing' the internal io.Reader object by
+//		calling the local method:
 //
 //				FileIoReader.Close()
 //
