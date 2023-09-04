@@ -1061,11 +1061,17 @@ type fileWriterHelperAtom struct {
 //
 // # IMPORTANT
 //
-//	If the byte array passed as input parameter
-//	'byteArray' is empty or contains zero array elements,
-//	this method will take no action, no error will be
-//	returned and the returned number of bytes written
-//	('numOfBytesWritten') will be set to zero.
+//	(1)	If the byte array passed as input parameter
+//		'byteArray' is empty or contains zero array
+//		elements, this method will take no action, no
+//		error will be returned and the returned number of
+//		bytes written ('numOfBytesWritten') will be set
+//		to zero.
+//
+//	(2)	If the planned number of bytes to be written to
+//		the io.Writer object does NOT match the actual
+//		number of bytes written to the io.Writer object,
+//		an error will be returned.
 //
 // ----------------------------------------------------------------
 //
@@ -1151,6 +1157,11 @@ type fileWriterHelperAtom struct {
 //		The number of bytes written to the io.Writer
 //		object passed as input parameter 'ioWriter'.
 //
+//		If the planned number of bytes to be written to
+//		the io.Writer object does NOT match the actual
+//		number of bytes written to the io.Writer object,
+//		an error will be returned.
+//
 //	err							error
 //
 //		If this method completes successfully, the
@@ -1231,6 +1242,9 @@ func (fWriterHelperAtom *fileWriterHelperAtom) writeBytes(
 	var writer = *ioWriter
 	var err2 error
 	var localNumBytesWritten int
+	var expectedNumBytesWritten int64
+
+	expectedNumBytesWritten = int64(lenByteArray)
 
 	localNumBytesWritten,
 		err2 = writer.Write(
@@ -1256,6 +1270,9 @@ func (fWriterHelperAtom *fileWriterHelperAtom) writeBytes(
 
 	if len(writeEndOfTextChars) > 0 {
 
+		expectedNumBytesWritten +=
+			int64(len(writeEndOfTextChars))
+
 		localNumBytesWritten,
 			err2 = writer.Write(
 			[]byte(writeEndOfTextChars))
@@ -1277,6 +1294,20 @@ func (fWriterHelperAtom *fileWriterHelperAtom) writeBytes(
 		}
 	}
 
+	if err == nil &&
+		expectedNumBytesWritten != numOfBytesWritten {
+
+		err = fmt.Errorf("%v\n"+
+			"Error condition detected!\n"+
+			"The expected number of bytes to be written does\n"+
+			"NOT match the actual number of bytes written.\n"+
+			"Expected Number of Bytes to be Written: %v\n"+
+			"        Actual Number of Bytes Written: %v\n",
+			ePrefix.String(),
+			expectedNumBytesWritten,
+			numOfBytesWritten)
+	}
+
 	return numOfBytesWritten, err
 }
 
@@ -1289,11 +1320,17 @@ func (fWriterHelperAtom *fileWriterHelperAtom) writeBytes(
 //
 // # IMPORTANT
 //
-//	If the string array passed as input parameter
-//	'strArray' is empty or contains zero array elements,
-//	this method will take no action, no error will be
-//	returned and the returned number of bytes written
-//	('numOfBytesWritten') will be set to zero.
+//	(1)	If the string array passed as input parameter
+//		'strArray' is empty or contains zero array
+//		elements, this method will take no action, no
+//		error will be returned and the returned number of
+//		bytes written ('numOfBytesWritten') will be set
+//		to zero.
+//
+//	(2)	If the planned number of bytes to be written to
+//		the io.Writer object does NOT match the actual
+//		number of bytes written to the io.Writer object,
+//		an error will be returned.
 //
 // ----------------------------------------------------------------
 //
@@ -1384,6 +1421,11 @@ func (fWriterHelperAtom *fileWriterHelperAtom) writeBytes(
 //
 //		The number of bytes written to the io.Writer
 //		object passed as input parameter 'ioWriter'.
+//
+//		If the planned number of bytes to be written to
+//		the io.Writer object does NOT match the actual
+//		number of bytes written to the io.Writer object,
+//		an error will be returned.
 //
 //	err							error
 //
@@ -1482,6 +1524,7 @@ func (fWriterHelperAtom *fileWriterHelperAtom) writeStringArray(
 
 	var err2 error
 	var localNumBytesWritten int
+	var expectedNumBytesWritten int64
 	var writer = *ioWriter
 	var strToWrite string
 
@@ -1496,6 +1539,8 @@ func (fWriterHelperAtom *fileWriterHelperAtom) writeStringArray(
 		if i == lastStrArrayIdx {
 			strToWrite += writeEndOfTextChars
 		}
+
+		expectedNumBytesWritten += int64(len(strToWrite))
 
 		localNumBytesWritten,
 			err2 = writer.Write(
@@ -1519,6 +1564,20 @@ func (fWriterHelperAtom *fileWriterHelperAtom) writeStringArray(
 		}
 
 		strToWrite = ""
+	}
+
+	if err == nil &&
+		expectedNumBytesWritten != numOfBytesWritten {
+
+		err = fmt.Errorf("%v\n"+
+			"Error condition detected!\n"+
+			"The expected number of bytes to be written does\n"+
+			"NOT match the actual number of bytes written.\n"+
+			"Expected Number of Bytes to be Written: %v\n"+
+			"        Actual Number of Bytes Written: %v\n",
+			ePrefix.String(),
+			expectedNumBytesWritten,
+			numOfBytesWritten)
 	}
 
 	return numOfBytesWritten, err

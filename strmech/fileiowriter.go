@@ -1,7 +1,6 @@
 package strmech
 
 import (
-	"errors"
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
@@ -1376,15 +1375,17 @@ func (fIoWriter *FileIoWriter) SetPathFileName(
 //
 //	(1) This method implements the io.Writer interface.
 //
-//	(2)	After all 'read' and 'write' operations have been
-//		completed, the user MUST call the 'Close' method
-//		to perform necessary clean-up operations:
+//	(2)	After all 'write' operations have been completed,
+//		the user MUST call the 'Close' method to perform
+//		necessary clean-up operations:
 //
 //			FileIoWriter.Close()
 //
-//	(3) This method WILL NOT VERIFY that the number of
-//		bytes written is equal to the length of the
-//		length of input parameter 'bytesToWrite'.
+//	(3)	If the planned number of bytes to be written as
+//		specified by the length of 'bytesToWrite' does
+//		NOT match the actual number of bytes written to
+//		the internal io.Writer object, an error will be
+//		returned.
 //
 // ----------------------------------------------------------------
 //
@@ -1506,10 +1507,38 @@ func (fIoWriter *FileIoWriter) Write(
 //
 // The text or numeric data type passed as input
 // parameter 'charsToWrite' must match one of over fifty
-// eligible data types.
+// eligible data types. Eligible data types include
+// strings.Builder, strings, string arrays, byte arrays
+// and numeric values such as big.Int, big.Rat, float64
+// and number strings (NumberStrKernel).
 //
 // If 'charsToWrite' is set to an ineligible data type,
 // an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/io
+//	https://pkg.go.dev/io#Writer
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1) This method implements the io.Writer interface.
+//
+//	(2)	After all 'write' operations have been completed,
+//		the user MUST call the 'Close' method to perform
+//		necessary clean-up operations:
+//
+//			FileIoWriter.Close()
+//
+//	(3)	If the planned number of bytes to be written as
+//		specified by the length of 'bytesToWrite' does
+//		NOT match the actual number of bytes written to
+//		the internal io.Writer object, an error will be
+//		returned.
 //
 // ----------------------------------------------------------------
 //
@@ -1638,6 +1667,11 @@ func (fIoWriter *FileIoWriter) Write(
 //		completed by calling the local method:
 //
 //			FileIoWriter.Close()
+//
+//		If a processing error is encountered during
+//		method execution, 'autoCloseOnExit' will be
+//		ignored and no action will be taken to close
+//		the current instance of FileIoWriter.
 //
 //	errorPrefix					interface{}
 //
@@ -1790,215 +1824,6 @@ func (fIoWriter *FileIoWriter) WriteTextOrNumbers(
 
 type fileIoWriterMicrobot struct {
 	lock *sync.Mutex
-}
-
-// performAutoClose
-//
-// Receives an instance of FileIoWriter and performs
-// clean-up operations as specified by input parameter
-// 'autoCloseOnExit'.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	fIoWriter					*FileIoWriter
-//
-//		A pointer to an instance of FileIoWriter.
-//
-//		All internal member variable data values in
-//		this instance will be deleted and initialized
-//		to new values based on the following input
-//		parameters.
-//
-//	fIoWriterLabel				string
-//
-//		The name or label associated with input parameter
-//		'fIoWriter' which will be used in error messages
-//		returned by this method.
-//
-//		If this parameter is submitted as an empty
-//		string, a default value of "fIoWriter" will be
-//		automatically applied.
-//
-//	autoCloseOnExit				bool
-//
-//		When this parameter is set to 'true', this
-//		method will automatically perform the following
-//		clean-up tasks upon exit, even if processing
-//		errors are encountered:
-//
-//		(1)	The internal io.Writer object will be
-//			properly closed and there will be no need
-//			to make a separate call to local method,
-//			FileIoWriter.Close().
-//
-//		(2) After performing this clean-up operation, the
-//			current instance of FileIoWriter will invalid
-//			and unusable for future 'write' operations.
-//
-//		If input parameter 'autoCloseOnExit' is
-//		set to 'false', this method will NOT close
-//		the internal io.Writer object. This means the user
-//	 	is then responsible for performing the 'Close'
-//		operation by calling the local method:
-//
-//			FileIoWriter.Close()
-//
-//	accumulatedErrors			error
-//
-//		This parameter includes any errors accumulated
-//		to this point by the calling method. Any errors
-//		encountered while performing the clean-up
-//		operation on 'fIoWriter' will be added or
-//		'joined' to 'accumulatedErrors' and returned as
-//		a single error by this method.
-//
-//		It is assumed that this method will be called by
-//		high level methods which may have already
-//		encountered and recorded processing errors. If
-//		this is the case, this parameter will contain one
-//		or more processing errors. If this method produces
-//		any additional errors, they will be joined to
-//		'accumulatedErrors' and all errors will be
-//		returned to the caller.
-//
-//	errPrefDto					*ePref.ErrPrefixDto
-//
-//		This object encapsulates an error prefix string
-//		which is included in all returned error
-//		messages. Usually, it contains the name of the
-//		calling method or methods listed as a function
-//		chain.
-//
-//		If no error prefix information is needed, set
-//		this parameter to 'nil'.
-//
-//		Type ErrPrefixDto is included in the 'errpref'
-//		software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	err							error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//		Remember that any errors encountered by this
-//		method will be joined to existing errors passed
-//		as input parameter 'accumulatedErrors'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errPrefDto'.
-//	 	The 'errPrefDto' text will be prefixed or
-//	 	attached to the	beginning of the error message.
-func (fIoWriterMicrobot *fileIoWriterMicrobot) performAutoClose(
-	fIoWriter *FileIoWriter,
-	fIoWriterLabel string,
-	autoCloseOnExit bool,
-	accumulatedErrors error,
-	errPrefDto *ePref.ErrPrefixDto) (
-	err error) {
-
-	if fIoWriterMicrobot.lock == nil {
-		fIoWriterMicrobot.lock = new(sync.Mutex)
-	}
-
-	fIoWriterMicrobot.lock.Lock()
-
-	defer fIoWriterMicrobot.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	var err2 error
-
-	funcName := "fileIoWriterMicrobot." +
-		"performAutoClose()"
-
-	err = errors.Join(err, accumulatedErrors)
-
-	ePrefix,
-		err2 = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		funcName,
-		"")
-
-	if err2 != nil {
-
-		err = errors.Join(err, err2)
-
-		return err
-	}
-
-	if len(fIoWriterLabel) == 0 {
-
-		fIoWriterLabel = "fIoWriter"
-	}
-
-	if fIoWriter == nil {
-
-		err2 = fmt.Errorf("%v\n"+
-			"Error: The FileIoWriter instance passed\n"+
-			"as input parameter '%v' is invalid!\n"+
-			"'%v' is a 'nil' pointer.\n",
-			ePrefix.String(),
-			fIoWriterLabel,
-			fIoWriterLabel)
-
-		err = errors.Join(err, err2)
-
-		return err
-	}
-
-	if fIoWriter.ioWriter == nil {
-
-		err2 = fmt.Errorf("%v\n"+
-			"-------------------------------------------------------\n"+
-			"Error: This instance of 'FileIoWriter' is invalid!\n"+
-			"The internal io.Writer has NOT been initialized.\n"+
-			"Call one of the 'New' or 'Setter' methods when creating\n"+
-			"a new valid instance of 'FileIoWriter'\n",
-			ePrefix.String())
-
-		err = errors.Join(err, err2)
-
-		return err
-	}
-
-	var cleanUpStatus string
-
-	if accumulatedErrors != nil {
-
-		cleanUpStatus = "Processing Error"
-
-	} else {
-
-		cleanUpStatus = "Successful Completion"
-
-	}
-
-	if autoCloseOnExit == true {
-
-		err2 = new(fileIoWriterMolecule).close(
-			fIoWriter,
-			fIoWriterLabel,
-			ePrefix.XCpy(fmt.Sprintf(
-				"%v Close-Writer",
-				cleanUpStatus)))
-
-		if err2 != nil {
-
-			err = errors.Join(err, err2)
-		}
-
-	}
-
-	return err
 }
 
 // setFileMgr
