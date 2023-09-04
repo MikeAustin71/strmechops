@@ -3,7 +3,6 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
-	"io"
 	"math/big"
 	"strings"
 	"sync"
@@ -195,7 +194,7 @@ type fileWriterHelperMicrobot struct {
 //	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
-	ioWriter *io.Writer,
+	ioWriter *IFileWriterEngine,
 	ioWriterLabel string,
 	charsToWrite interface{},
 	charsToWriteLabel string,
@@ -1077,9 +1076,11 @@ type fileWriterHelperAtom struct {
 //
 // # Input Parameters
 //
-//	ioWriter 					*io.Writer
+//	ioWriter 					*IFileWriterEngine
 //
-//		A pointer to an instance of io.Writer.
+//
+//		A pointer to an object which implements the
+//		IFileWriterEngine interface.
 //
 //		The contents of the byte array passed as input
 //		parameter 'byteArray' will be written to this
@@ -1175,7 +1176,7 @@ type fileWriterHelperAtom struct {
 //	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (fWriterHelperAtom *fileWriterHelperAtom) writeBytes(
-	ioWriter *io.Writer,
+	ioWriter *IFileWriterEngine,
 	ioWriterLabel string,
 	byteArray []byte,
 	byteArrayLabel string,
@@ -1336,9 +1337,10 @@ func (fWriterHelperAtom *fileWriterHelperAtom) writeBytes(
 //
 // # Input Parameters
 //
-//	ioWriter 					*io.Writer
+//	ioWriter 					*IFileWriterEngine
 //
-//		A pointer to an instance of io.Writer.
+//		A pointer to an object which implements the
+//		IFileWriterEngine interface.
 //
 //		All the strings contained in the string array
 //		passed as input parameter 'strArray' will be
@@ -1440,7 +1442,7 @@ func (fWriterHelperAtom *fileWriterHelperAtom) writeBytes(
 //	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (fWriterHelperAtom *fileWriterHelperAtom) writeStringArray(
-	ioWriter *io.Writer,
+	ioWriter *IFileWriterEngine,
 	ioWriterLabel string,
 	strArray []string,
 	strArrayLabel string,
@@ -1488,7 +1490,7 @@ func (fWriterHelperAtom *fileWriterHelperAtom) writeStringArray(
 
 		err = fmt.Errorf("%v\n"+
 			"-------------------------------------------\n"+
-			"Error: The io.Writer instance passed\n"+
+			"Error: The IFileWriterEngine instance passed\n"+
 			"as input parameter '%v' is invalid!\n"+
 			"'%v' is a 'nil' pointer.\n",
 			ePrefix.String(),
@@ -1502,7 +1504,7 @@ func (fWriterHelperAtom *fileWriterHelperAtom) writeStringArray(
 
 		err = fmt.Errorf("%v\n"+
 			"-------------------------------------------------------\n"+
-			"Error: The io.Writer instance passed\n"+
+			"Error: The IFileWriterEngine instance passed\n"+
 			"as input parameter '%v' is invalid!\n"+
 			"'%v' is a 'nil' pointer.\n\n",
 			ePrefix.String(),
