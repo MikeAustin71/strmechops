@@ -15,58 +15,183 @@ type fileWriterHelperMicrobot struct {
 
 // writeCharacters
 //
-// This method will accept the following types:
+// This method will accept many different text or numeric
+// data types which are then converted to a byte or
+// string array and written to the io.Writer object
+// passed as input parameter 'ioWriter'.
 //
-//	[]byte
-//	*[]byte
-//	string
-//	*string
-//	[]string
-//	[]rune
-//	*[]rune
-//	RuneArrayDto
-//	*RuneArrayDto
-//	ITextFieldFormatDto
-//	ITextFieldSpecification
-//	ITextLineSpecification
-//	float32
-//	*float32
-//	float64
-//	*float64
-//	BigFloatDto
-//	*BigFloatDto
-//	big.Float
-//	*big.Float
-//	big.Rat
-//	*big.Rat
-//	int8
-//	*int8
-//	int16
-//	*int16
-//	int
-//	*int
-//	int32
-//	*int32
-//	int64
-//	*int64
-//	uint8
-//	*uint8
-//	uint16
-//	*uint16
-//	uint
-//	*uint
-//	uint32
-//	*uint32
-//	uint64,
-//	*uint64
-//	big.Int
-//	*big.Int
-//	TextFieldFormatDtoFloat64
-//	*TextFieldFormatDtoFloat64
-//	TextFieldFormatDtoBigFloat
-//	*TextFieldFormatDtoBigFloat
-//	NumberStrKernel
-//	*NumberStrKernel
+// The text or numeric data type passed as input
+// parameter 'charsToWrite' must match one of over fifty
+// eligible data types.
+//
+// If 'charsToWrite' is set to an ineligible data type,
+// an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	ioWriter					*io.Writer
+//
+//		A pointer to an instance of io.Writer. The
+//		data type 'charsToWrite' will be converted to
+//		a string or byte array and written to this
+//		io.Writer object.
+//
+//
+//	ioWriterLabel				string
+//
+//		The name or label associated with input parameter
+//		'ioWriter' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "ioWriter" will be
+//		automatically applied.
+//
+//	charsToWrite				interface{}
+//
+//		This empty interface is used to transmit an
+//		eligible text or numeric data type which will be
+//		to a string or byte array and written to the
+//		io.Writer object passed as input parameter
+//		'ioWriter'.
+//
+//		If the type transmitted through this parameter
+//		does not one of the following data types, an
+//		error will be returned.
+//
+//				Eligible Data Types
+//
+//			   1.	[]byte
+//			   2.	*[]byte
+//			   3.	string
+//			   4.	*string
+//			   5.	[]string
+//		 	   6.	StringArrayDto
+//			   7.	*StringArrayDto
+//			   8.	[]rune
+//			   9.	*[]rune
+//			  10.	RuneArrayDto
+//			  11.	*RuneArrayDto
+//			  12.	ITextFieldFormatDto
+//			  13.	ITextFieldSpecification
+//			  14.	ITextLineSpecification
+//			  15.	float32
+//			  16.	*float32
+//			  17.	float64
+//			  18.	*float64
+//			  19.	BigFloatDto
+//			  20.	*BigFloatDto
+//			  21.	big.Float
+//			  22.	*big.Float
+//			  23.	big.Rat
+//			  24.	*big.Rat
+//			  25.	int8
+//			  26.	*int8
+//			  27.	int16
+//			  28.	*int16
+//			  29.	int
+//			  30.	*int
+//			  31.	int32
+//			  32.	*int32
+//			  33.	int64
+//			  34.	*int64
+//			  35.	uint8
+//			  36.	*uint8
+//			  37.	uint16
+//			  38.	*uint16
+//			  39.	uint
+//			  40.	*uint
+//			  41.	uint32
+//			  42.	*uint32
+//			  43.	uint64,
+//			  44.	*uint64
+//			  45.	big.Int
+//			  46.	*big.Int
+//			  47.	TextFieldFormatDtoFloat64
+//			  48.	*TextFieldFormatDtoFloat64
+//			  49.	TextFieldFormatDtoBigFloat
+//			  50.	*TextFieldFormatDtoBigFloat
+//			  51.	NumberStrKernel
+//			  52	*NumberStrKernel
+//
+//	charsToWriteLabel			string
+//
+//		The name or label associated with input parameter
+//		'charsToWrite' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "charsToWrite" will be
+//		automatically applied.
+//
+//	writeEndOfLineChars string
+//
+//		This character string is appended to each line of
+//		text written to the io.Writer object. This
+//		capability is more useful when processing string
+//		arrays when each element of the array is written
+//		separately to the io.Writer object.
+//
+//		Remember that on Windows, line-endings are
+//		terminated with a combination of a carriage
+//		return (ASCII 0x0d or \r) and a newline(\n), also
+//		referred to as CR/LF (\r\n).
+//
+//		On UNIX or Linux, text file line-endings are
+//		terminated with a newline character (ASCII 0x0a,
+//		represented by the \n escape sequence in most
+//		languages), also referred to as a linefeed (LF).
+//
+//		If 'writeEndOfLineChars' is set to an empty
+//		string, it will be ignored and no additional
+//		characters will be appended to each line written
+//		to the io.Writer object.
+//
+//	writeEndOfTextChars			string
+//
+//		A character string which will be written to the
+//		io.Writer object after all other text from
+//		'charsToWrite' and 'writeEndOfLineChars' have
+//		been processed and written.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numOfBytesWritten			int64
+//
+//		The number of bytes written to the io.Writer
+//		object passed as input parameter 'ioWriter'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 	ioWriter *io.Writer,
 	ioWriterLabel string,
@@ -168,7 +293,7 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 
 			err = fmt.Errorf("%v\n"+
 				"-------------------------------------------------------\n"+
-				"Input parameter '%v' is ERROR!\n"+
+				"ERROR: Input parameter '%v' is invalid!\n"+
 				"'%v' was identified as a byte array []byte.\n"+
 				"The cast from '%v' to []byte Failed.\n",
 				ePrefix.String(),
@@ -374,6 +499,66 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 				writeEndOfLineChars,
 				writeEndOfTextChars,
 				ePrefix.XCpy("strArray<-*StringArrayDto"))
+
+	case strings.Builder:
+
+		var strBuilder strings.Builder
+
+		strBuilder, ok = charsToWrite.(strings.Builder)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"ERROR: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a string builder (strings.Builder).\n"+
+				"The cast from '%v' to strings.Builder Failed.\n",
+				ePrefix.String(),
+				charsToWriteLabel,
+				charsToWriteLabel,
+				charsToWriteLabel)
+
+			return numOfBytesWritten, err
+		}
+
+		numOfBytesWritten,
+			err = fWriterHlprAtom.writeBytes(
+			ioWriter,
+			"ioWriter",
+			[]byte(strBuilder.String()),
+			"strBuilder",
+			writeEndOfLineChars+writeEndOfTextChars,
+			ePrefix.XCpy("byteArray<-strBuilder"))
+
+	case *strings.Builder:
+
+		var strBuilderPtr *strings.Builder
+
+		strBuilderPtr, ok = charsToWrite.(*strings.Builder)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------------------------\n"+
+				"ERROR: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a string builder pointer (*strings.Builder).\n"+
+				"The cast from '%v' to *strings.Builder Failed.\n",
+				ePrefix.String(),
+				charsToWriteLabel,
+				charsToWriteLabel,
+				charsToWriteLabel)
+
+			return numOfBytesWritten, err
+		}
+
+		numOfBytesWritten,
+			err = fWriterHlprAtom.writeBytes(
+			ioWriter,
+			"ioWriter",
+			[]byte(strBuilderPtr.String()),
+			"strBuilder",
+			writeEndOfLineChars+writeEndOfTextChars,
+			ePrefix.XCpy("byteArray<-strBuilderPtr"))
 
 	case []rune:
 

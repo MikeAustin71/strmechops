@@ -3925,10 +3925,10 @@ func (fBufWriter *FileBufferWriter) WriteStringArray(
 //		\r) and a newline(\n), also referred to as CR/LF
 //		(\r\n).
 //
-//		On UNIX, text file line-endings are terminated
-//		with a newline character (ASCII 0x0a, represented
-//		by the \n escape sequence in most languages),
-//		also referred to as a linefeed (LF).
+//		On UNIX or Linux, text file line-endings are
+//		terminated with a newline character (ASCII 0x0a,
+//		represented by the \n escape sequence in most
+//		languages), also referred to as a linefeed (LF).
 //
 //		On the Mac Classic (Mac systems using any system
 //		prior to Mac OS X), line-endings are terminated
