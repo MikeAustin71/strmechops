@@ -3069,6 +3069,68 @@ func (fBufWriter *FileBufferWriter) WriteTextOrNumbers(
 		err
 }
 
+func (fBufWriter *FileBufferWriter) lowLevelWriteBytes(
+	bytesToWrite []byte,
+	errPrefDto *ePref.ErrPrefixDto) (
+	intNumOfBytesWritten int,
+	err error) {
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "FileBufferWriter." +
+		"lowLevelWriteBytes()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return intNumOfBytesWritten, err
+	}
+
+	if fBufWriter.bufioWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"-------------------------------------------------------\n"+
+			"Error: This instance of 'FileBufferWriter' is invalid!\n"+
+			"The internal bufio.Writer has NOT been initialized.\n"+
+			"Call one of the 'New' or 'Setter' methods when creating\n"+
+			"a new valid instance of 'FileBufferWriter'\n",
+			ePrefix.String())
+
+		return intNumOfBytesWritten, err
+	}
+
+	if len(bytesToWrite) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'bytesToWrite' is invalid!\n"+
+			"The 'bytesToWrite' byte array is empty. It has zero bytes.\n",
+			ePrefix.String())
+
+		return intNumOfBytesWritten, err
+	}
+
+	var err2 error
+
+	intNumOfBytesWritten,
+		err2 = fBufWriter.bufioWriter.Write(bytesToWrite)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by fBufWriter.bufioWriter.Write(bytesToWrite).\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			err2.Error())
+	}
+
+	return intNumOfBytesWritten, err
+}
+
 type fileBufferWriterMechanics struct {
 	lock *sync.Mutex
 }

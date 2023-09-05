@@ -194,8 +194,8 @@ type fileWriterHelperMicrobot struct {
 //	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
-	ioWriter *IFileWriterEngine,
-	ioWriterLabel string,
+	writeBytes func([]byte, string, *ePref.ErrPrefixDto) (int64, error),
+	writeStrArray func([]string, string, string, *ePref.ErrPrefixDto) (int64, error),
 	charsToWrite interface{},
 	charsToWriteLabel string,
 	writeEndOfLineChars string,
@@ -228,41 +228,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 		return numOfBytesWritten, err
 	}
 
-	if len(ioWriterLabel) == 0 {
-
-		ioWriterLabel = "ioWriter"
-	}
-
 	if len(charsToWriteLabel) == 0 {
 
 		charsToWriteLabel = "charsToWrite"
-	}
-
-	if ioWriter == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: The io.Writer instance passed\n"+
-			"as input parameter '%v' is invalid!\n"+
-			"'%v' is a 'nil' pointer.\n",
-			ePrefix.String(),
-			ioWriterLabel,
-			ioWriterLabel)
-
-		return numOfBytesWritten, err
-	}
-
-	if ioWriter == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"------------------------------------------------------------------------------\n"+
-			"Error: The io.Writer instance passed\n"+
-			"as input parameter '%v' is invalid!\n"+
-			"'%v' is a 'nil' pointer.\n",
-			ePrefix.String(),
-			ioWriterLabel,
-			ioWriterLabel)
-
-		return numOfBytesWritten, err
 	}
 
 	if charsToWrite == nil {
@@ -280,13 +248,13 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 
 	var stringToWrite string
 	var ok bool
-	var fWriterHlprAtom = new(fileWriterHelperAtom)
+	var byteArray []byte
+	var strArray []string
+	var strArrayDto StringArrayDto
 
 	switch charsToWrite.(type) {
 
 	case []byte:
-
-		var byteArray []byte
 
 		byteArray, ok = charsToWrite.([]byte)
 
@@ -305,14 +273,7 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 			return numOfBytesWritten, err
 		}
 
-		numOfBytesWritten,
-			err = fWriterHlprAtom.writeBytes(
-			ioWriter,
-			"ioWriter",
-			byteArray,
-			"byteArray",
-			writeEndOfTextChars,
-			ePrefix.XCpy("byteArray<-[]byte"))
+		goto writeToBytes
 
 	case *[]byte:
 
@@ -335,14 +296,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 			return numOfBytesWritten, err
 		}
 
-		numOfBytesWritten,
-			err = fWriterHlprAtom.writeBytes(
-			ioWriter,
-			"ioWriter",
-			*byteArrayPtr,
-			"byteArrayPtr",
-			writeEndOfLineChars+writeEndOfTextChars,
-			ePrefix.XCpy("byteArray<-*[]byte"))
+		byteArray = *byteArrayPtr
+
+		goto writeToBytes
 
 	case string:
 		// string
@@ -364,14 +320,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 			return numOfBytesWritten, err
 		}
 
-		numOfBytesWritten,
-			err = fWriterHlprAtom.writeBytes(
-			ioWriter,
-			"ioWriter",
-			[]byte(stringToWrite),
-			"byteArray",
-			writeEndOfLineChars+writeEndOfTextChars,
-			ePrefix.XCpy("byteArray<-stringToWrite"))
+		byteArray = []byte(stringToWrite)
+
+		goto writeToBytes
 
 	case *string:
 		// string pointer
@@ -395,19 +346,12 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 			return numOfBytesWritten, err
 		}
 
-		numOfBytesWritten,
-			err = fWriterHlprAtom.writeBytes(
-			ioWriter,
-			"ioWriter",
-			[]byte(*strPtr),
-			"byteArray",
-			writeEndOfLineChars+writeEndOfTextChars,
-			ePrefix.XCpy("byteArray<-*string"))
+		byteArray = []byte(*strPtr)
+
+		goto writeToBytes
 
 	case []string:
 		// string array
-
-		var strArray []string
 
 		strArray, ok = charsToWrite.([]string)
 
@@ -426,20 +370,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 			return numOfBytesWritten, err
 		}
 
-		numOfBytesWritten,
-			err = fWriterHlprAtom.
-			writeStringArray(
-				ioWriter,
-				"ioWriter",
-				strArray,
-				"strArray",
-				writeEndOfLineChars,
-				writeEndOfTextChars,
-				ePrefix.XCpy("strArray<-[]string"))
+		goto writeToStrArray
 
 	case StringArrayDto:
-
-		var strArrayDto StringArrayDto
 
 		strArrayDto, ok = charsToWrite.(StringArrayDto)
 
@@ -458,16 +391,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 			return numOfBytesWritten, err
 		}
 
-		numOfBytesWritten,
-			err = fWriterHlprAtom.
-			writeStringArray(
-				ioWriter,
-				"ioWriter",
-				strArrayDto.StrArray,
-				"strArrayDto.StrArray",
-				writeEndOfLineChars,
-				writeEndOfTextChars,
-				ePrefix.XCpy("strArray<-StringArrayDto"))
+		strArray = strArrayDto.StrArray
+
+		goto writeToStrArrayDto
 
 	case *StringArrayDto:
 
@@ -490,16 +416,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 			return numOfBytesWritten, err
 		}
 
-		numOfBytesWritten,
-			err = fWriterHlprAtom.
-			writeStringArray(
-				ioWriter,
-				"ioWriter",
-				strArrayDtoPtr.StrArray,
-				"strArrayDtoPtr.StrArray",
-				writeEndOfLineChars,
-				writeEndOfTextChars,
-				ePrefix.XCpy("strArray<-*StringArrayDto"))
+		strArrayDto = *strArrayDtoPtr
+
+		goto writeToStrArrayDto
 
 	case strings.Builder:
 
@@ -522,14 +441,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 			return numOfBytesWritten, err
 		}
 
-		numOfBytesWritten,
-			err = fWriterHlprAtom.writeBytes(
-			ioWriter,
-			"ioWriter",
-			[]byte(strBuilder.String()),
-			"strBuilder",
-			writeEndOfLineChars+writeEndOfTextChars,
-			ePrefix.XCpy("byteArray<-strBuilder"))
+		byteArray = []byte(strBuilder.String())
+
+		goto writeToBytes
 
 	case *strings.Builder:
 
@@ -552,14 +466,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 			return numOfBytesWritten, err
 		}
 
-		numOfBytesWritten,
-			err = fWriterHlprAtom.writeBytes(
-			ioWriter,
-			"ioWriter",
-			[]byte(strBuilderPtr.String()),
-			"strBuilder",
-			writeEndOfLineChars+writeEndOfTextChars,
-			ePrefix.XCpy("byteArray<-strBuilderPtr"))
+		byteArray = []byte(strBuilderPtr.String())
+
+		goto writeToBytes
 
 	case []rune:
 
@@ -582,14 +491,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 			return numOfBytesWritten, err
 		}
 
-		numOfBytesWritten,
-			err = fWriterHlprAtom.writeBytes(
-			ioWriter,
-			"ioWriter",
-			[]byte(string(runesToWrite)),
-			"runesToWrite",
-			writeEndOfLineChars+writeEndOfTextChars,
-			ePrefix.XCpy("byteArray<-runeToWrite"))
+		byteArray = []byte(string(runesToWrite))
+
+		goto writeToBytes
 
 	case *[]rune:
 
@@ -612,14 +516,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 			return numOfBytesWritten, err
 		}
 
-		numOfBytesWritten,
-			err = fWriterHlprAtom.writeBytes(
-			ioWriter,
-			"ioWriter",
-			[]byte(string(*runeArrayPtr)),
-			"runeArray",
-			writeEndOfLineChars+writeEndOfTextChars,
-			ePrefix.XCpy("byteArray<-runeArray"))
+		byteArray = []byte(string(*runeArrayPtr))
+
+		goto writeToBytes
 
 	case RuneArrayDto:
 
@@ -642,14 +541,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 			return numOfBytesWritten, err
 		}
 
-		numOfBytesWritten,
-			err = fWriterHlprAtom.writeBytes(
-			ioWriter,
-			"ioWriter",
-			[]byte(string(runesToWriteDto.CharsArray)),
-			"runesToWrite",
-			writeEndOfLineChars+writeEndOfTextChars,
-			ePrefix.XCpy("byteArray<-runeToWrite"))
+		byteArray = []byte(string(runesToWriteDto.CharsArray))
+
+		goto writeToBytes
 
 	case *RuneArrayDto:
 
@@ -672,14 +566,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 			return numOfBytesWritten, err
 		}
 
-		numOfBytesWritten,
-			err = fWriterHlprAtom.writeBytes(
-			ioWriter,
-			"ioWriter",
-			[]byte(string(runesToWriteDtoPtr.CharsArray)),
-			"runesToWrite",
-			writeEndOfLineChars+writeEndOfTextChars,
-			ePrefix.XCpy("byteArray<-runeToWrite"))
+		byteArray = []byte(string(runesToWriteDtoPtr.CharsArray))
+
+		goto writeToBytes
 
 	case ITextFieldFormatDto:
 
@@ -713,14 +602,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 
 		}
 
-		numOfBytesWritten,
-			err = fWriterHlprAtom.writeBytes(
-			ioWriter,
-			"ioWriter",
-			[]byte(stringToWrite),
-			"runesToWrite",
-			writeEndOfLineChars+writeEndOfTextChars,
-			ePrefix.XCpy("byteArray<-ITextFieldFormatDto"))
+		byteArray = []byte(stringToWrite)
+
+		goto writeToBytes
 
 	case ITextFieldSpecification:
 
@@ -757,14 +641,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 
 		}
 
-		numOfBytesWritten,
-			err = fWriterHlprAtom.writeBytes(
-			ioWriter,
-			"ioWriter",
-			[]byte(fieldSpecStrBuilder.String()),
-			"ITextFieldSpecification",
-			writeEndOfLineChars+writeEndOfTextChars,
-			ePrefix.XCpy("byteArray<-ITextFieldSpecification"))
+		byteArray = []byte(fieldSpecStrBuilder.String())
+
+		goto writeToBytes
 
 	case ITextLineSpecification:
 
@@ -801,14 +680,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 
 		}
 
-		numOfBytesWritten,
-			err = fWriterHlprAtom.writeBytes(
-			ioWriter,
-			"ioWriter",
-			[]byte(fieldSpecStrBuilder.String()),
-			"ITextLineSpecification",
-			writeEndOfLineChars+writeEndOfTextChars,
-			ePrefix.XCpy("byteArray<-ITextLineSpecification"))
+		byteArray = []byte(fieldSpecStrBuilder.String())
+
+		goto writeToBytes
 
 	case float32, *float32, float64, *float64, *BigFloatDto,
 		BigFloatDto, *big.Float, big.Float, big.Rat, *big.Rat,
@@ -839,14 +713,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 
 		}
 
-		numOfBytesWritten,
-			err = fWriterHlprAtom.writeBytes(
-			ioWriter,
-			"ioWriter",
-			[]byte(stringToWrite),
-			"Number String",
-			writeEndOfLineChars+writeEndOfTextChars,
-			ePrefix.XCpy("byteArray<-number string"))
+		byteArray = []byte(stringToWrite)
+
+		goto writeToBytes
 
 	case []NumberStrKernel:
 
@@ -887,8 +756,6 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 			return numOfBytesWritten, err
 		}
 
-		var localNumBytesWritten int64
-
 		for i := 0; i <= lastNumStrIdx; i++ {
 
 			stringToWrite,
@@ -912,31 +779,13 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 
 			}
 
-			stringToWrite += writeEndOfLineChars
+			strArray = append(strArray, stringToWrite)
 
-			if i == lastNumStrIdx {
+			stringToWrite = ""
 
-				stringToWrite += writeEndOfTextChars
-			}
-
-			localNumBytesWritten,
-				err = fWriterHlprAtom.writeBytes(
-				ioWriter,
-				"ioWriter",
-				[]byte(stringToWrite),
-				"byteArray",
-				writeEndOfTextChars,
-				ePrefix.XCpy(
-					fmt.Sprintf(
-						"byteArray<-numStrKernelArray[%v]", i)))
-
-			if err != nil {
-
-				return numOfBytesWritten, err
-			}
-
-			numOfBytesWritten += localNumBytesWritten
 		}
+
+		goto writeToStrArray
 
 	case *[]NumberStrKernel:
 
@@ -981,8 +830,6 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 			return numOfBytesWritten, err
 		}
 
-		var localNumBytesWritten int64
-
 		for i := 0; i <= lastNumStrIdx; i++ {
 
 			stringToWrite,
@@ -1006,31 +853,10 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 
 			}
 
-			stringToWrite += writeEndOfLineChars
-
-			if i == lastNumStrIdx {
-
-				stringToWrite += writeEndOfTextChars
-			}
-
-			localNumBytesWritten,
-				err = fWriterHlprAtom.writeBytes(
-				ioWriter,
-				"ioWriter",
-				[]byte(stringToWrite),
-				"byteArray",
-				writeEndOfTextChars,
-				ePrefix.XCpy(
-					fmt.Sprintf(
-						"byteArray<-*numStrKernelArray[%v]", i)))
-
-			if err != nil {
-
-				return numOfBytesWritten, err
-			}
-
-			numOfBytesWritten += localNumBytesWritten
+			strArray = append(strArray, stringToWrite)
 		}
+
+		goto writeToStrArray
 
 	default:
 
@@ -1043,544 +869,35 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 		return numOfBytesWritten, err
 	}
 
-	return numOfBytesWritten, err
-}
+writeToBytes:
 
-type fileWriterHelperAtom struct {
-	lock *sync.Mutex
-}
-
-// writeBytes
-//
-// Writes a byte array to the io.Writer object
-// contained in the FileIoWriter instance passed as input
-// parameter 'ioWriter'
-//
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-//	(1)	If the byte array passed as input parameter
-//		'byteArray' is empty or contains zero array
-//		elements, this method will take no action, no
-//		error will be returned and the returned number of
-//		bytes written ('numOfBytesWritten') will be set
-//		to zero.
-//
-//	(2)	If the planned number of bytes to be written to
-//		the io.Writer object does NOT match the actual
-//		number of bytes written to the io.Writer object,
-//		an error will be returned.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	ioWriter 					*IFileWriterEngine
-//
-//
-//		A pointer to an object which implements the
-//		IFileWriterEngine interface.
-//
-//		The contents of the byte array passed as input
-//		parameter 'byteArray' will be written to this
-//		io.Writer object.
-//
-//		If this parameter is submitted with a value of
-//		'nil', an error will be returned.
-//
-//	ioWriterLabel				string
-//
-//		The name or label associated with input parameter
-//		'ioWriter' which will be used in error messages
-//		returned by this method.
-//
-//		If this parameter is submitted as an empty
-//		string, a default value of "ioWriter" will be
-//		automatically applied.
-//
-//	byteArray					[]byte
-//
-//		An array of bytes which will be written to the
-//		io.Writer object passed as input parameter
-//		'ioWriter'.
-//
-//		If parameter 'endOfLineTerminator' has a length
-//		greater than zero, 'endOfLineTerminator' characters
-//		will be to the byte array written to the io.Writer
-//		object.
-//
-//		If 'byteArray' is empty or passed as a zero
-//		length byte array, the method will take no
-//		action, no error will be returned and the
-//		returned number of bytes written
-//		('numOfBytesWritten') will be set to zero.
-//
-//	byteArrayLabel				string
-//
-//		The name or label associated with input parameter
-//		'byteArray' which will be used in error messages
-//		returned by this method.
-//
-//		If this parameter is submitted as an empty
-//		string, a default value of "byteArray" will be
-//		automatically applied.
-//
-//	writeEndOfTextChars 		string
-//
-//		If this parameter has a string length greater
-//		than zero, the text characters contained therein
-//		will be appended to the byte array ('byteArray')
-//		written to the io.Writer object passed as input
-//		parameter 'ioWriter'.
-//
-//	errPrefDto					*ePref.ErrPrefixDto
-//
-//		This object encapsulates an error prefix string
-//		which is included in all returned error
-//		messages. Usually, it contains the name of the
-//		calling method or methods listed as a function
-//		chain.
-//
-//		If no error prefix information is needed, set
-//		this parameter to 'nil'.
-//
-//		Type ErrPrefixDto is included in the 'errpref'
-//		software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	numOfBytesWritten			int64
-//
-//		The number of bytes written to the io.Writer
-//		object passed as input parameter 'ioWriter'.
-//
-//		If the planned number of bytes to be written to
-//		the io.Writer object does NOT match the actual
-//		number of bytes written to the io.Writer object,
-//		an error will be returned.
-//
-//	err							error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errPrefDto'.
-//	 	The 'errPrefDto' text will be prefixed or
-//	 	attached to the	beginning of the error message.
-func (fWriterHelperAtom *fileWriterHelperAtom) writeBytes(
-	ioWriter *IFileWriterEngine,
-	ioWriterLabel string,
-	byteArray []byte,
-	byteArrayLabel string,
-	writeEndOfTextChars string,
-	errPrefDto *ePref.ErrPrefixDto) (
-	numOfBytesWritten int64,
-	err error) {
-
-	if fWriterHelperAtom.lock == nil {
-		fWriterHelperAtom.lock = new(sync.Mutex)
-	}
-
-	fWriterHelperAtom.lock.Lock()
-
-	defer fWriterHelperAtom.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	funcName := "fileWriterHelperAtom." +
-		"writeBytes()"
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		funcName,
-		"")
-
-	if err != nil {
-
-		return numOfBytesWritten, err
-	}
-
-	if len(ioWriterLabel) == 0 {
-
-		ioWriterLabel = "writer"
-	}
-
-	if len(byteArrayLabel) == 0 {
-
-		byteArrayLabel = "byteArray"
-	}
-
-	if ioWriter == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"-------------------------------------------\n"+
-			"Error: The io.Writer instance passed\n"+
-			"as input parameter '%v' is invalid!\n"+
-			"'%v' is a 'nil' pointer.\n",
-			ePrefix.String(),
-			ioWriterLabel,
-			ioWriterLabel)
-
-		return numOfBytesWritten, err
-	}
-
-	lenByteArray := len(byteArray)
-
-	if lenByteArray == 0 {
-
-		return numOfBytesWritten, err
-	}
-
-	var writer = *ioWriter
-	var err2 error
-	var localNumBytesWritten int
-	var expectedNumBytesWritten int64
-
-	expectedNumBytesWritten = int64(lenByteArray)
-
-	localNumBytesWritten,
-		err2 = writer.Write(
-		byteArray)
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error returned by writer.Write(byteArray)"+
-			"while writing original byte array.\n"+
-			"byteArray= '%v'\n"+
-			"Error=\n%v\n",
-			ePrefix.String(),
-			string(byteArray),
-			err2.Error())
-
-		return numOfBytesWritten, err
-
-	} else {
-
-		numOfBytesWritten += int64(localNumBytesWritten)
-	}
-
-	if len(writeEndOfTextChars) > 0 {
-
-		expectedNumBytesWritten +=
-			int64(len(writeEndOfTextChars))
-
-		localNumBytesWritten,
-			err2 = writer.Write(
-			[]byte(writeEndOfTextChars))
-
-		if err2 != nil {
-
-			err = fmt.Errorf("%v\n"+
-				"Error returned by writer.Write(byteArray)"+
-				"while writing original byte array.\n"+
-				"byteArray= '%v'\n"+
-				"Error=\n%v\n",
-				ePrefix.String(),
-				string(byteArray),
-				err2.Error())
-
-		} else {
-
-			numOfBytesWritten += int64(localNumBytesWritten)
-		}
-	}
-
-	if err == nil &&
-		expectedNumBytesWritten != numOfBytesWritten {
-
-		err = fmt.Errorf("%v\n"+
-			"Error condition detected!\n"+
-			"The expected number of bytes to be written does\n"+
-			"NOT match the actual number of bytes written.\n"+
-			"Expected Number of Bytes to be Written: %v\n"+
-			"        Actual Number of Bytes Written: %v\n",
-			ePrefix.String(),
-			expectedNumBytesWritten,
-			numOfBytesWritten)
-	}
+	numOfBytesWritten,
+		err = writeBytes(
+		byteArray,
+		writeEndOfLineChars+writeEndOfTextChars,
+		ePrefix.XCpy("byteArray<-[]byte"))
 
 	return numOfBytesWritten, err
-}
 
-// writeStringArray
-//
-// Writes a string array to the io.Writer object
-// passed as input parameter 'ioWriter'.
-//
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-//	(1)	If the string array passed as input parameter
-//		'strArray' is empty or contains zero array
-//		elements, this method will take no action, no
-//		error will be returned and the returned number of
-//		bytes written ('numOfBytesWritten') will be set
-//		to zero.
-//
-//	(2)	If the planned number of bytes to be written to
-//		the io.Writer object does NOT match the actual
-//		number of bytes written to the io.Writer object,
-//		an error will be returned.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	ioWriter 					*IFileWriterEngine
-//
-//		A pointer to an object which implements the
-//		IFileWriterEngine interface.
-//
-//		All the strings contained in the string array
-//		passed as input parameter 'strArray' will be
-//		written to this io.Writer object.
-//
-//		If this parameter is submitted with a value of
-//		'nil', an error will be returned.
-//
-//	ioWriterLabel				string
-//
-//		The name or label associated with input parameter
-//		'ioWriter' which will be used in error messages
-//		returned by this method.
-//
-//		If this parameter is submitted as an empty
-//		string, a default value of "ioWriter" will be
-//		automatically applied.
-//
-//	strArray					[]string
-//
-//		An array of strings which will be written to
-//		the internal io.Writer object encapsulated
-//		within the FileIoWriter instance passed as input
-//		parameter 'fIoWriter'.
-//
-//		If parameter 'endOfLineTerminator' has a length
-//		greater than zero, 'endOfLineTerminator' will be
-//		appended to each string written to the io.Writer
-//		object.
-//
-//		If 'strArray' is empty or passed as a zero length
-//		byte array, the method will take no action, no
-//		error will be returned and the returned number of
-//		bytes written ('numOfBytesWritten') will be set
-//		to zero.
-//
-//	strArrayLabel				string
-//
-//		The name or label associated with input parameter
-//		'strArray' which will be used in error messages
-//		returned by this method.
-//
-//		If this parameter is submitted as an empty
-//		string, a default value of "strArray" will be
-//		automatically applied.
-//
-//	writeEndOfLineChars 		string
-//
-//		If this parameter has a string length greater
-//		than zero, this string will be appended to
-//		each string array element ('strArray') written
-//		to the io.Writer object ('ioWriter').
-//
-//	writeEndOfTextChars			string
-//
-//		If this parameter has a string length greater
-//		than zero, this string will be the last item
-//		written to the io.Writer object ('ioWriter').
-//
-//	errPrefDto					*ePref.ErrPrefixDto
-//
-//		This object encapsulates an error prefix string
-//		which is included in all returned error
-//		messages. Usually, it contains the name of the
-//		calling method or methods listed as a function
-//		chain.
-//
-//		If no error prefix information is needed, set
-//		this parameter to 'nil'.
-//
-//		Type ErrPrefixDto is included in the 'errpref'
-//		software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	numOfBytesWritten			int64
-//
-//		The number of bytes written to the io.Writer
-//		object passed as input parameter 'ioWriter'.
-//
-//		If the planned number of bytes to be written to
-//		the io.Writer object does NOT match the actual
-//		number of bytes written to the io.Writer object,
-//		an error will be returned.
-//
-//	err							error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errPrefDto'.
-//	 	The 'errPrefDto' text will be prefixed or
-//	 	attached to the	beginning of the error message.
-func (fWriterHelperAtom *fileWriterHelperAtom) writeStringArray(
-	ioWriter *IFileWriterEngine,
-	ioWriterLabel string,
-	strArray []string,
-	strArrayLabel string,
-	writeEndOfLineChars string,
-	writeEndOfTextChars string,
-	errPrefDto *ePref.ErrPrefixDto) (
-	numOfBytesWritten int64,
-	err error) {
+writeToStrArray:
 
-	if fWriterHelperAtom.lock == nil {
-		fWriterHelperAtom.lock = new(sync.Mutex)
-	}
+	numOfBytesWritten,
+		err = writeStrArray(
+		strArray,
+		writeEndOfLineChars,
+		writeEndOfTextChars,
+		ePrefix.XCpy("byteArray<-strArray"))
 
-	fWriterHelperAtom.lock.Lock()
+	return numOfBytesWritten, err
 
-	defer fWriterHelperAtom.lock.Unlock()
+writeToStrArrayDto:
 
-	var ePrefix *ePref.ErrPrefixDto
-
-	funcName := "fileWriterHelperAtom." +
-		"writeStringArray()"
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		funcName,
-		"")
-
-	if err != nil {
-
-		return numOfBytesWritten, err
-	}
-
-	if len(ioWriterLabel) == 0 {
-
-		ioWriterLabel = "ioWriter"
-	}
-
-	if len(strArrayLabel) == 0 {
-
-		strArrayLabel = "strArray"
-	}
-
-	if ioWriter == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"-------------------------------------------\n"+
-			"Error: The IFileWriterEngine instance passed\n"+
-			"as input parameter '%v' is invalid!\n"+
-			"'%v' is a 'nil' pointer.\n",
-			ePrefix.String(),
-			ioWriterLabel,
-			ioWriterLabel)
-
-		return numOfBytesWritten, err
-	}
-
-	if ioWriter == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"-------------------------------------------------------\n"+
-			"Error: The IFileWriterEngine instance passed\n"+
-			"as input parameter '%v' is invalid!\n"+
-			"'%v' is a 'nil' pointer.\n\n",
-			ePrefix.String(),
-			ioWriterLabel,
-			ioWriterLabel)
-
-		return numOfBytesWritten, err
-	}
-
-	lastStrArrayIdx := len(strArray) - 1
-
-	if lastStrArrayIdx < 0 {
-
-		// String array is empty
-		return numOfBytesWritten, err
-	}
-
-	lenWriteEndOfLineChars := len(writeEndOfLineChars)
-
-	var err2 error
-	var localNumBytesWritten int
-	var expectedNumBytesWritten int64
-	var writer = *ioWriter
-	var strToWrite string
-
-	for i := 0; i <= lastStrArrayIdx; i++ {
-
-		strToWrite = strArray[i]
-
-		if lenWriteEndOfLineChars > 0 {
-			strToWrite += writeEndOfLineChars
-		}
-
-		if i == lastStrArrayIdx {
-			strToWrite += writeEndOfTextChars
-		}
-
-		expectedNumBytesWritten += int64(len(strToWrite))
-
-		localNumBytesWritten,
-			err2 = writer.Write(
-			[]byte(strToWrite))
-
-		if err2 != nil {
-
-			err = fmt.Errorf("%v\n"+
-				"Error returned by writer.Write([]byte(strToWrite)).\n"+
-				"strToWrite= '%v'\n"+
-				"Error=\n%v\n",
-				ePrefix.String(),
-				strToWrite,
-				err2.Error())
-
-			break
-
-		} else {
-
-			numOfBytesWritten += int64(localNumBytesWritten)
-		}
-
-		strToWrite = ""
-	}
-
-	if err == nil &&
-		expectedNumBytesWritten != numOfBytesWritten {
-
-		err = fmt.Errorf("%v\n"+
-			"Error condition detected!\n"+
-			"The expected number of bytes to be written does\n"+
-			"NOT match the actual number of bytes written.\n"+
-			"Expected Number of Bytes to be Written: %v\n"+
-			"        Actual Number of Bytes Written: %v\n",
-			ePrefix.String(),
-			expectedNumBytesWritten,
-			numOfBytesWritten)
-	}
+	numOfBytesWritten,
+		err = writeStrArray(
+		strArrayDto.StrArray,
+		writeEndOfLineChars,
+		writeEndOfTextChars,
+		ePrefix.XCpy("byteArray<-strArray"))
 
 	return numOfBytesWritten, err
 }
