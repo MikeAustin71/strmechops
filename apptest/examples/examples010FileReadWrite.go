@@ -1494,9 +1494,11 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite04() {
 	}
 
 	numOfBytesWritten,
-		err = fBufWriter.WriteStrBuilder(
+		err = fBufWriter.WriteTextOrNumbers(
 		&strBuilder,
-		true,
+		"",   // writeEndOfLineChars
+		"",   // writeEndOfTextChars
+		true, // autoFlushAndCloseOnExit
 		ePrefix.XCpy("fBufWriter"))
 
 	if numOfBytesRead != numOfBytesWritten {

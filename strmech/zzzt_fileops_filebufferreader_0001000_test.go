@@ -305,8 +305,10 @@ func TestFileBufferReader_Seek_000100(t *testing.T) {
 	}
 
 	numOfBytesWritten,
-		err = fBufWriter.WriteStrBuilder(
+		err = fBufWriter.WriteTextOrNumbers(
 		&strBuilder,
+		"", // writeEndOfLineChars
+		"", // writeEndOfTextChars
 		true,
 		ePrefix.XCpy("fBufWriter"))
 

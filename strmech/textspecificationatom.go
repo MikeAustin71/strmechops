@@ -13,6 +13,706 @@ type textSpecificationAtom struct {
 	lock *sync.Mutex
 }
 
+// convertParamsToNativeElements
+//
+// Receives an empty interface and attempts to convert that
+// interface to one of over fifty eligible before return the
+// contents as one of two return types:
+//
+//	A string array
+//		Or
+//	A byte array
+//
+//				Eligible Data Types
+//
+//			   1.	[]byte
+//			   2.	*[]byte
+//			   3.	string
+//			   4.	*string
+//			   5.	[]string
+//			   6.	*[]string
+//			   7.	strings.Builder
+//			   8.	*strings.Builder
+//		 	   9.	StringArrayDto
+//			  10.	*StringArrayDto
+//			  11.	[]rune
+//			  12.	*[]rune
+//			  13.	RuneArrayDto
+//			  14.	*RuneArrayDto
+//			  15.	ITextFieldFormatDto
+//			  16.	ITextFieldSpecification
+//			  17.	ITextLineSpecification
+//			  18.	float32
+//			  19.	*float32
+//			  20.	float64
+//			  21.	*float64
+//			  22.	BigFloatDto
+//			  23.	*BigFloatDto
+//			  24.	big.Float
+//			  25.	*big.Float
+//			  26.	big.Rat
+//			  27.	*big.Rat
+//			  28.	int8
+//			  29.	*int8
+//			  30.	int16
+//			  31.	*int16
+//			  32.	int
+//			  33.	*int
+//			  34.	int32
+//			  35.	*int32
+//			  36.	int64
+//			  37.	*int64
+//			  38.	uint8
+//			  39.	*uint8
+//			  40.	uint16
+//			  41.	*uint16
+//			  42.	uint
+//			  43.	*uint
+//			  44.	uint32
+//			  45.	*uint32
+//			  46.	uint64,
+//			  47.	*uint64
+//			  48.	big.Int
+//			  49.	*big.Int
+//			  50.	TextFieldFormatDtoFloat64
+//			  51.	*TextFieldFormatDtoFloat64
+//			  52.	TextFieldFormatDtoBigFloat
+//			  53.	*TextFieldFormatDtoBigFloat
+//			  54.	NumberStrKernel
+//			  55.	*NumberStrKernel
+//			  56.	[]NumberStrKernel
+//			  57.	*[]NumberStrKernel
+func (txtSpecAtom *textSpecificationAtom) convertParamsToNativeElements(
+	charsToConvert interface{},
+	charsToConvertLabel string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	strResult string,
+	lenOfStrResult int,
+	strArrayDto StringArrayDto,
+	numOfStringArrayElements int,
+	byteArray []byte,
+	numOfByteArrayElements int,
+	err error) {
+
+	if txtSpecAtom.lock == nil {
+		txtSpecAtom.lock = new(sync.Mutex)
+	}
+
+	txtSpecAtom.lock.Lock()
+
+	defer txtSpecAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"textSpecificationAtom."+
+			"convertToStringArrayOrByteArray()",
+		"")
+
+	if err != nil {
+
+		return strResult,
+			lenOfStrResult,
+			strArrayDto,
+			numOfStringArrayElements,
+			byteArray,
+			numOfByteArrayElements,
+			err
+	}
+
+	if len(charsToConvertLabel) == 0 {
+
+		charsToConvertLabel = "charsToConvert"
+	}
+
+	if charsToConvert == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"-------------------------------------------------------\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' value.\n",
+			ePrefix.String(),
+			charsToConvertLabel,
+			charsToConvertLabel)
+
+		return strResult,
+			lenOfStrResult,
+			strArrayDto,
+			numOfStringArrayElements,
+			byteArray,
+			numOfByteArrayElements,
+			err
+	}
+
+	var convertedString string
+	var ok bool
+	var err2 error
+
+	switch charsToConvert.(type) {
+
+	case []byte:
+
+		byteArray, ok = charsToConvert.([]byte)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"ERROR: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a byte array []byte.\n"+
+				"However, the cast from '%v' to []byte Failed.\n",
+				ePrefix.String(),
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		numOfByteArrayElements = len(byteArray)
+
+		if numOfByteArrayElements == 0 {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: %v converted to a byte array.\n"+
+				"However, the byte array is empty and\n"+
+				"has a zero length!\n",
+				ePrefix.String(),
+				charsToConvertLabel)
+		}
+
+	case *[]byte:
+
+		var byteArrayPtr *[]byte
+
+		byteArrayPtr, ok = charsToConvert.(*[]byte)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"Error: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a byte array ponter (*[]byte).\n"+
+				"However, the cast from '%v' to *[]byte Failed.\n",
+				ePrefix.String(),
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		byteArray = *byteArrayPtr
+
+		numOfByteArrayElements = len(byteArray)
+
+		if numOfByteArrayElements == 0 {
+			err = fmt.Errorf("%v\n"+
+				"Error: %v converted to a byte array pointer\n"+
+				"(*[]byte). However, the byte array is empty\n"+
+				"and has a zero length!\n",
+				ePrefix.String(),
+				charsToConvertLabel)
+		}
+
+	case string:
+
+		convertedString, ok = charsToConvert.(string)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"Error: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a string.\n"+
+				"However, the cast from '%v' to string Failed.\n",
+				ePrefix.String(),
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		if len(convertedString) == 0 {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: %v converted to a string.\n"+
+				"However, that string is empty\n"+
+				"and has a zero length!\n",
+				ePrefix.String(),
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		strResult = convertedString
+
+		lenOfStrResult = len(strResult)
+
+	case *string:
+		// string pointer
+
+		var strPtr *string
+
+		strPtr, ok = charsToConvert.(*string)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"Error: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a string pointer.\n"+
+				"However, the cast from '%v' to string pointer Failed.\n",
+				ePrefix.String(),
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		strResult = *strPtr
+
+		lenOfStrResult = len(strResult)
+
+		if lenOfStrResult == 0 {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: %v converted to a string pointer\n"+
+				"(*string). However, that string is empty\n"+
+				"and has a zero length!\n",
+				ePrefix.String(),
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+	case []string:
+		// string array
+
+		strArrayDto.StrArray, ok = charsToConvert.([]string)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"ERROR: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a string array.\n"+
+				"However, the cast from '%v' to string array Failed.\n",
+				ePrefix.String(),
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		numOfStringArrayElements =
+			strArrayDto.GetStringArrayLength()
+
+		if numOfStringArrayElements == 0 {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: %v converted to a string array\n"+
+				"([]string). However, that string array\n"+
+				"is empty and has a zero length!\n",
+				ePrefix.String(),
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+	case *[]string:
+		// string array
+
+		var strArrayPtr *[]string
+
+		strArrayPtr, ok = charsToConvert.(*[]string)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"ERROR: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a string array pointer\n"+
+				"(*[]string). However, the cast from '%v' to string\n"+
+				"array Failed.\n",
+				ePrefix.String(),
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		if len(*strArrayPtr) == 0 {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: %v converted to a string array pointer\n"+
+				"(*[]string). However, that string array is\n"+
+				"empty and has a zero length!\n",
+				ePrefix.String(),
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		strArrayDto = new(StringArrayDto).NewStringArray(
+			*strArrayPtr,
+			"",
+			"")
+
+		numOfStringArrayElements =
+			strArrayDto.GetStringArrayLength()
+
+	case strings.Builder:
+
+		var strBuilder strings.Builder
+
+		strBuilder, ok = charsToConvert.(strings.Builder)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"ERROR: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a string builder\n"+
+				"(strings.Builder). However, the cast from '%v' to\n"+
+				"strings.Builder Failed.\n",
+				ePrefix.String(),
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		strResult = strBuilder.String()
+
+		lenOfStrResult = len(strResult)
+
+	case *strings.Builder:
+
+		var strBuilderPtr *strings.Builder
+
+		strBuilderPtr, ok = charsToConvert.(*strings.Builder)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"ERROR: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a string builder pointer\n"+
+				"(*strings.Builder). However, the cast from '%v' to\n"+
+				"*strings.Builder Failed.\n",
+				ePrefix.String(),
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		strResult = strBuilderPtr.String()
+
+		lenOfStrResult = len(strResult)
+
+	case StringArrayDto:
+
+		strArrayDto, ok = charsToConvert.(StringArrayDto)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"Error: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a StringArrayDto.\n"+
+				"However, the cast from '%v' to StringArrayDto Failed.\n",
+				ePrefix.String(),
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		numOfStringArrayElements =
+			strArrayDto.GetStringArrayLength()
+
+	case *StringArrayDto:
+
+		var strArrayDtoPtr *StringArrayDto
+
+		strArrayDtoPtr, ok = charsToConvert.(*StringArrayDto)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"----------------------------------------------------------------\n"+
+				"ERROR: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a StringArrayDto Pointer\n"+
+				"(*StringArrayDto). However, the cast from '%v'\n"+
+				"to *StringArrayDto Failed.\n",
+				ePrefix.String(),
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		err2 = strArrayDto.
+			CopyIn(
+				strArrayDtoPtr,
+				ePrefix.XCpy("strArrayDto<-strArrayDtoPtr"))
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: strArrayDto.CopyIn(strArrayDtoPtr)\n"+
+				"An error occurred while copying from 'strArrayDtoPtr'\n"+
+				"to output parameter 'strArrayDto'\n",
+				ePrefix.String())
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+
+		}
+
+		numOfStringArrayElements =
+			strArrayDto.GetStringArrayLength()
+
+	case []rune:
+
+		var runesToWrite []rune
+
+		runesToWrite, ok = charsToConvert.([]rune)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"Error: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a rune array ([]rune).\n"+
+				"However, the cast from '%v' to []rune Failed.\n",
+				ePrefix.String(),
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		strResult = string(runesToWrite)
+
+		lenOfStrResult = len(strResult)
+
+	case *[]rune:
+
+		var runeArrayPtr *[]rune
+
+		runeArrayPtr, ok = charsToConvert.(*[]rune)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"Error: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a rune array pointer\n"+
+				"(*[]rune). However, the cast from '%v' to\n"+
+				"*[]rune Failed.\n",
+				ePrefix.String(),
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		strResult = string(*runeArrayPtr)
+
+		lenOfStrResult = len(strResult)
+
+	case RuneArrayDto:
+
+		var runesArrayDto RuneArrayDto
+
+		runesArrayDto, ok = charsToConvert.(RuneArrayDto)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"Error: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a type RuneArrayDto.\n"+
+				"However, the cast from '%v' to\n"+
+				"RuneArrayDto Failed.\n",
+				ePrefix.String(),
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		strResult = string(runesArrayDto.CharsArray)
+
+		lenOfStrResult = len(strResult)
+
+	case *RuneArrayDto:
+
+		var runeArrayDtoPtr *RuneArrayDto
+
+		runeArrayDtoPtr, ok = charsToConvert.(*RuneArrayDto)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"Error: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a type RuneArrayDto pointer\n"+
+				"(*RuneArrayDto). However, the cast from '%v'\n"+
+				"to *RuneArrayDto Failed.\n",
+				ePrefix.String(),
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		strResult = string(runeArrayDtoPtr.CharsArray)
+
+		lenOfStrResult = len(strResult)
+
+	}
+
+	return strResult,
+		lenOfStrResult,
+		strArrayDto,
+		numOfStringArrayElements,
+		byteArray,
+		numOfByteArrayElements,
+		err
+
+}
+
 // convertParamEmptyInterfaceToString
 //
 // Receives an object styled as an empty interface and

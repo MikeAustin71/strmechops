@@ -1758,6 +1758,77 @@ func (fIoWriter *FileIoWriter) Write(
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
+
+func (fIoWriter *FileIoWriter) WriteTextOrNumbers(
+	charsToWrite interface{},
+	writeEndOfLineChars string,
+	writeEndOfTextChars string,
+	autoCloseOnExit bool,
+	errorPrefix interface{}) (
+	numOfBytesWritten int64,
+	err error) {
+
+	if fIoWriter.lock == nil {
+		fIoWriter.lock = new(sync.Mutex)
+	}
+
+	fIoWriter.lock.Lock()
+
+	defer fIoWriter.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileIoWriter."+
+			"WriteTextOrNumbers()",
+		"")
+
+	if err != nil {
+
+		return numOfBytesWritten, err
+	}
+
+	if fIoWriter.ioWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"-------------------------------------------------------\n"+
+			"Error: This instance of 'FileIoWriter' is invalid!\n"+
+			"The internal io.Writer has NOT been initialized.\n"+
+			"Call one of the 'New' or 'Setter' methods when creating\n"+
+			"a new valid instance of 'FileIoWriter'\n",
+			ePrefix.String())
+
+		return numOfBytesWritten, err
+	}
+
+	var writeBytesFunc = fIoWriter.lowLevelWriteToBytes
+
+	numOfBytesWritten,
+		err = new(fileWriterHelperMicrobot).
+		writeCharacters(
+			writeBytesFunc,
+			charsToWrite,
+			"charsToWrite",
+			writeEndOfLineChars,
+			writeEndOfTextChars,
+			ePrefix.XCpy("fIoWriter.ioWriter<-charsToWrite"))
+
+	if err != nil &&
+		autoCloseOnExit == true {
+
+		err = new(fileIoWriterMolecule).
+			close(
+				fIoWriter,
+				"fIoWriter",
+				ePrefix)
+	}
+
+	return numOfBytesWritten, err
+}
+
+/*
 func (fIoWriter *FileIoWriter) WriteTextOrNumbers(
 	charsToWrite interface{},
 	writeEndOfLineChars string,
@@ -1821,19 +1892,6 @@ func (fIoWriter *FileIoWriter) WriteTextOrNumbers(
 			"")
 
 		if err != nil {
-			return int64NumOfBytesWritten, err
-		}
-
-		if fIoWriter.ioWriter == nil {
-
-			err = fmt.Errorf("%v\n"+
-				"-------------------------------------------------------\n"+
-				"Error: This instance of 'FileIoWriter' is invalid!\n"+
-				"The internal io.Writer has NOT been initialized.\n"+
-				"Call one of the 'New' or 'Setter' methods when creating\n"+
-				"a new valid instance of 'FileIoWriter'\n",
-				xEPrefix.String())
-
 			return int64NumOfBytesWritten, err
 		}
 
@@ -2003,6 +2061,121 @@ func (fIoWriter *FileIoWriter) WriteTextOrNumbers(
 				fIoWriter,
 				"fIoWriter",
 				ePrefix)
+	}
+
+	return numOfBytesWritten, err
+}
+*/
+
+// lowLevelWriteToBytes
+func (fIoWriter *FileIoWriter) lowLevelWriteToBytes(
+	bytesToWrite []byte,
+	writeLastTextChars string,
+	xErrPref *ePref.ErrPrefixDto) (
+	numOfBytesWritten int64,
+	err error) {
+
+	funcName := "FileIoWriter." +
+		"writeToBytes()"
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		xErrPref,
+		funcName,
+		"")
+
+	if fIoWriter.ioWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"-------------------------------------------------------\n"+
+			"Error: This instance of 'FileIoWriter' is invalid!\n"+
+			"The internal io.Writer has NOT been initialized.\n"+
+			"Call one of the 'New' or 'Setter' methods when creating\n"+
+			"a new valid instance of 'FileIoWriter'\n",
+			ePrefix.String())
+
+		return numOfBytesWritten, err
+	}
+
+	lenBytesToWrite := len(bytesToWrite)
+
+	if lenBytesToWrite == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'bytesToWrite' is invalid!\n"+
+			"The 'bytesToWrite' byte array is empty. It has zero bytes.\n",
+			ePrefix.String())
+
+		return numOfBytesWritten, err
+	}
+
+	var writer io.Writer
+	var localNumOfBytesWritten int
+	var expectedNumOfBytesToWrite int64
+	var err2 error
+	writer = *fIoWriter.ioWriter
+
+	expectedNumOfBytesToWrite = int64(lenBytesToWrite)
+
+	localNumOfBytesWritten,
+		err2 = writer.Write(bytesToWrite)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: writer.Write(bytesToWrite)\n"+
+			"bytesToWrite = '%v'\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			string(bytesToWrite),
+			err2.Error())
+
+		return numOfBytesWritten, err
+	}
+
+	numOfBytesWritten +=
+		int64(localNumOfBytesWritten)
+
+	lenLastTextChars := len(writeLastTextChars)
+
+	if lenLastTextChars > 0 {
+
+		expectedNumOfBytesToWrite += int64(lenLastTextChars)
+
+		localNumOfBytesWritten,
+			err2 = writer.Write([]byte(writeLastTextChars))
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: writer.Write([]byte(writeLastTextChars))\n"+
+				"writeLastTextChars= '%v'\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				writeLastTextChars,
+				err2.Error())
+
+			return numOfBytesWritten, err
+
+		}
+
+		numOfBytesWritten +=
+			int64(localNumOfBytesWritten)
+	}
+
+	if expectedNumOfBytesToWrite != numOfBytesWritten {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Number of bytes written does NOT\n"+
+			"match the expected number of bytes to write!"+
+			"Expected number of bytes to write: %v\n"+
+			"   Actual number of bytes written: %v\n",
+			ePrefix.String(),
+			expectedNumOfBytesToWrite,
+			numOfBytesWritten)
+
 	}
 
 	return numOfBytesWritten, err

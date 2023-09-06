@@ -28,25 +28,74 @@ type fileWriterHelperMicrobot struct {
 //
 // ----------------------------------------------------------------
 //
+// # Reference:
+//
+//	https://golangdocs.com/anonymous-functions-in-golang
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
-//	ioWriter					*io.Writer
+//	writeBytes 	func(
+//					bytesToWrite []byte,
+//					xWriteEndOfTextChars string,
+//					xEPrefix *ePref.ErrPrefixDto) (
+//					xNumOfBytesWritten int64,
+//					xErr error)
 //
-//		A pointer to an instance of io.Writer. The
-//		data type 'charsToWrite' will be converted to
-//		a string or byte array and written to this
-//		io.Writer object.
+//		This parameter is an anonymous function with the
+//		indicated function signature. See the Reference
+//		section on "anonymous functions" above.
 //
+//			Input Parameters
 //
-//	ioWriterLabel				string
+//				bytesToWrite 			[]byte
+//					A byte array containing the bytes to
+//					be written to the internal io.Writer
+//					object wrapped by this anonymous
+//					function.
 //
-//		The name or label associated with input parameter
-//		'ioWriter' which will be used in error messages
-//		returned by this method.
+//				xWriteEndOfTextChars	string
+//					A string containing the text characters
+//					which will be written to the internal
+//					io.Writer object after all the bytes in
+//					'bytesToWrite' have been processed and
+//					written.
 //
-//		If this parameter is submitted as an empty
-//		string, a default value of "ioWriter" will be
-//		automatically applied.
+//				xErrPref 				*ePref.ErrPrefixDto
+//
+//					This object encapsulates an error prefix
+//					string which is included in all returned
+//					error messages. Usually, it contains the
+//					name of the calling method or methods
+//					listed as a function chain.
+//
+//					If no error prefix information is needed,
+//					set this parameter to 'nil'.
+//
+//					Type ErrPrefixDto is included in the
+//					'errpref' software package:
+//						"github.com/MikeAustin71/errpref".
+//
+//			Return Values
+//
+//				xNumOfBytesWritten 		int64
+//					The number of bytes written to the internal
+//					io.Writer.
+//
+//				xErr 					error
+//					If this anonymous method completes
+//					successfully, the returned error Type is set
+//					equal to 'nil'.
+//
+//					If errors are encountered during processing,
+//					the returned error Type will encapsulate an
+//					appropriate error message. This returned
+//					error message will incorporate the method
+//					chain and text passed by input parameter,
+//					'xErrPref'. The 'xErrPref' text will be
+//					prefixed or attached to the	beginning of the
+//					error message.
 //
 //	charsToWrite				interface{}
 //
@@ -153,9 +202,9 @@ type fileWriterHelperMicrobot struct {
 //	writeEndOfTextChars			string
 //
 //		A character string which will be written to the
-//		io.Writer object after all other text from
-//		'charsToWrite' and 'writeEndOfLineChars' have
-//		been processed and written.
+//		internal io.Writer object after all other text
+//		from 'charsToWrite' and 'writeEndOfLineChars'
+//		has been processed and written.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -194,8 +243,12 @@ type fileWriterHelperMicrobot struct {
 //	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
-	writeBytes func([]byte, string, *ePref.ErrPrefixDto) (int64, error),
-	writeStrArray func([]string, string, string, *ePref.ErrPrefixDto) (int64, error),
+	writeBytes func(
+		bytesToWrite []byte,
+		xWriteEndOfTextChars string,
+		xErrPref *ePref.ErrPrefixDto) (
+		xNumOfBytesWritten int64,
+		xErr error),
 	charsToWrite interface{},
 	charsToWriteLabel string,
 	writeEndOfLineChars string,
@@ -251,6 +304,7 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 	var byteArray []byte
 	var strArray []string
 	var strArrayDto StringArrayDto
+	var numStrKernelArray []NumberStrKernel
 
 	switch charsToWrite.(type) {
 
@@ -719,8 +773,6 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 
 	case []NumberStrKernel:
 
-		var numStrKernelArray []NumberStrKernel
-
 		numStrKernelArray, ok =
 			charsToWrite.([]NumberStrKernel)
 
@@ -739,53 +791,7 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 			return numOfBytesWritten, err
 		}
 
-		lastNumStrIdx := len(numStrKernelArray) - 1
-
-		if lastNumStrIdx < 0 {
-
-			err = fmt.Errorf("%v\n"+
-				"--------------------------------------------------------------\n"+
-				"ERROR: Input parameter '%v' is invalid!\n"+
-				"'%v' was identified as a type []NumberStrKernel.\n"+
-				"However, '%v' is empty and contains zero array elements.\n",
-				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
-
-			return numOfBytesWritten, err
-		}
-
-		for i := 0; i <= lastNumStrIdx; i++ {
-
-			stringToWrite,
-				_,
-				err = numStrKernelArray[i].FmtNumStrNative(
-				NumRoundType.NoRounding(),
-				0,
-				ePrefix.XCpy(
-					fmt.Sprintf(
-						"numStrKernelArray[%v]", i)))
-
-			if err != nil {
-
-				return numOfBytesWritten,
-					fmt.Errorf("%v\n"+
-						"Error returned by numStrKernelArray[%v].FmtNumStrNative()\n"+
-						"Error=\n%v\n",
-						funcName,
-						i,
-						err.Error())
-
-			}
-
-			strArray = append(strArray, stringToWrite)
-
-			stringToWrite = ""
-
-		}
-
-		goto writeToStrArray
+		goto writeNumStrKernelArray
 
 	case *[]NumberStrKernel:
 
@@ -809,54 +815,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 			return numOfBytesWritten, err
 		}
 
-		var numStrKernelArray []NumberStrKernel
-
 		numStrKernelArray = *numStrKernelArrayPtr
 
-		lastNumStrIdx := len(numStrKernelArray) - 1
-
-		if lastNumStrIdx < 0 {
-
-			err = fmt.Errorf("%v\n"+
-				"--------------------------------------------------------------\n"+
-				"ERROR: Input parameter '%v' is invalid!\n"+
-				"'%v' was identified as a type *[]NumberStrKernel.\n"+
-				"However, '%v' is empty and contains zero array elements.\n",
-				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
-
-			return numOfBytesWritten, err
-		}
-
-		for i := 0; i <= lastNumStrIdx; i++ {
-
-			stringToWrite,
-				_,
-				err = numStrKernelArray[i].FmtNumStrNative(
-				NumRoundType.NoRounding(),
-				0,
-				ePrefix.XCpy(
-					fmt.Sprintf(
-						"numStrKernelArray[%v]", i)))
-
-			if err != nil {
-
-				return numOfBytesWritten,
-					fmt.Errorf("%v\n"+
-						"Error returned by numStrKernelArray[%v].FmtNumStrNative()\n"+
-						"Error=\n%v\n",
-						funcName,
-						i,
-						err.Error())
-
-			}
-
-			strArray = append(strArray, stringToWrite)
-		}
-
-		goto writeToStrArray
+		goto writeNumStrKernelArray
 
 	default:
 
@@ -882,22 +843,285 @@ writeToBytes:
 writeToStrArray:
 
 	numOfBytesWritten,
-		err = writeStrArray(
-		strArray,
-		writeEndOfLineChars,
-		writeEndOfTextChars,
-		ePrefix.XCpy("byteArray<-strArray"))
+		err = new(fileWriterHelperMolecule).
+		writeStrArray(
+			writeBytes,
+			strArray,
+			charsToWriteLabel,
+			writeEndOfLineChars,
+			writeEndOfTextChars,
+			ePrefix.XCpy(
+				"byteArray<-strArray"))
 
 	return numOfBytesWritten, err
 
 writeToStrArrayDto:
 
 	numOfBytesWritten,
-		err = writeStrArray(
-		strArrayDto.StrArray,
-		writeEndOfLineChars,
-		writeEndOfTextChars,
-		ePrefix.XCpy("byteArray<-strArray"))
+		err = new(fileWriterHelperMolecule).
+		writeStrArray(
+			writeBytes,
+			strArray,
+			charsToWriteLabel,
+			writeEndOfLineChars,
+			writeEndOfTextChars,
+			ePrefix.XCpy(
+				"byteArray<-strArray"))
+
+	return numOfBytesWritten, err
+
+writeNumStrKernelArray:
+
+	//lastNumStrIdx := len(numStrKernelArray) - 1
+
+	numOfBytesWritten,
+		err = new(fileWriterHelperNanobot).
+		writeNumStrKernelArray(
+			writeBytes,
+			numStrKernelArray,
+			charsToWriteLabel,
+			writeEndOfLineChars,
+			writeEndOfTextChars,
+			ePrefix.XCpy(
+				"byteArray<-numStrKernelArray"))
+
+	return numOfBytesWritten, err
+}
+
+type fileWriterHelperNanobot struct {
+	lock *sync.Mutex
+}
+
+func (fWriterHlprNanobot *fileWriterHelperNanobot) writeNumStrKernelArray(
+	writeBytes func(
+		bytesToWrite []byte,
+		xWriteEndOfTextChars string,
+		xErrPref *ePref.ErrPrefixDto) (
+		xNumOfBytesWritten int64,
+		xErr error),
+	numStrKernelArray []NumberStrKernel,
+	numStrKernelArrayLabel string,
+	writeEndOfLineChars string,
+	writeEndOfTextChars string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	numOfBytesWritten int64,
+	err error) {
+
+	if fWriterHlprNanobot.lock == nil {
+		fWriterHlprNanobot.lock = new(sync.Mutex)
+	}
+
+	fWriterHlprNanobot.lock.Lock()
+
+	defer fWriterHlprNanobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileWriterHelperNanobot." +
+		"writeNumStrKernelArray()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return numOfBytesWritten, err
+	}
+
+	if writeBytes == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The anonymous function input parameter 'writeBytes'\n"+
+			"is invalid. 'writeBytes' has a value of 'nil'.\n",
+			ePrefix.String())
+
+		return numOfBytesWritten, err
+	}
+
+	if len(numStrKernelArrayLabel) == 0 {
+
+		numStrKernelArrayLabel = "numStrKernelArray"
+	}
+
+	lastNumStrIdx := len(numStrKernelArray) - 1
+
+	if lastNumStrIdx < 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"--------------------------------------------------------------\n"+
+			"ERROR: Input parameter '%v' is invalid!\n"+
+			"'%v' was identified as a type []NumberStrKernel.\n"+
+			"However, '%v' is empty and contains zero array elements.\n",
+			ePrefix.String(),
+			numStrKernelArrayLabel,
+			numStrKernelArrayLabel,
+			numStrKernelArrayLabel)
+
+		return numOfBytesWritten, err
+	}
+
+	var stringToWrite string
+	var strArray []string
+
+	for i := 0; i <= lastNumStrIdx; i++ {
+
+		stringToWrite,
+			_,
+			err = numStrKernelArray[i].FmtNumStrNative(
+			NumRoundType.NoRounding(),
+			0,
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"numStrKernelArray[%v]", i)))
+
+		if err != nil {
+
+			return numOfBytesWritten,
+				fmt.Errorf("%v\n"+
+					"Error returned by numStrKernelArray[%v].FmtNumStrNative()\n"+
+					"Error=\n%v\n",
+					funcName,
+					i,
+					err.Error())
+
+		}
+
+		strArray = append(strArray, stringToWrite)
+
+		stringToWrite = ""
+
+	}
+
+	numOfBytesWritten,
+		err = new(fileWriterHelperMolecule).
+		writeStrArray(
+			writeBytes,
+			strArray,
+			numStrKernelArrayLabel,
+			writeEndOfLineChars,
+			writeEndOfTextChars,
+			ePrefix.XCpy(
+				"byteArray<-strArray"))
+
+	return numOfBytesWritten, err
+}
+
+type fileWriterHelperMolecule struct {
+	lock *sync.Mutex
+}
+
+func (fWriterHlprMolecule *fileWriterHelperMolecule) writeStrArray(
+	writeBytes func(
+		bytesToWrite []byte,
+		xWriteEndOfTextChars string,
+		xErrPref *ePref.ErrPrefixDto) (
+		xNumOfBytesWritten int64,
+		xErr error),
+	strArray []string,
+	strArrayLabel string,
+	writeEndOfLineChars string,
+	writeEndOfTextChars string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	numOfBytesWritten int64,
+	err error) {
+
+	if fWriterHlprMolecule.lock == nil {
+		fWriterHlprMolecule.lock = new(sync.Mutex)
+	}
+
+	fWriterHlprMolecule.lock.Lock()
+
+	defer fWriterHlprMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileWriterHelperMicrobot." +
+		"writeCharacters()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return numOfBytesWritten, err
+	}
+
+	if writeBytes == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The anonymous function input parameter 'writeBytes'\n"+
+			"is invalid. 'writeBytes' has a value of 'nil'.\n",
+			ePrefix.String())
+
+		return numOfBytesWritten, err
+	}
+
+	if len(strArrayLabel) == 0 {
+
+		strArrayLabel = "strArray"
+	}
+
+	lastStrArrayIdx := len(strArray) - 1
+
+	if lastStrArrayIdx < 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"This string array is empty. It has zero bytes.\n",
+			ePrefix.String(),
+			strArrayLabel)
+
+		return numOfBytesWritten, err
+	}
+	var localNumOfBytesWritten int64
+	var err2 error
+	var strToWrite string
+
+	for i := 0; i <= lastStrArrayIdx; i++ {
+
+		strToWrite = strArray[i]
+
+		strToWrite += writeEndOfLineChars
+
+		if i == lastStrArrayIdx {
+
+			strToWrite += writeEndOfTextChars
+		}
+
+		if len(strToWrite) == 0 {
+			continue
+		}
+
+		localNumOfBytesWritten,
+			err2 = writeBytes(
+			[]byte(strToWrite),
+			"",
+			ePrefix.XCpy("[]byte(strToWrite)<-strArray"))
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error returned by  writeBytes() anonymous function!\n"+
+				"strToWrite= '%v'\n"+
+				"String Array Index= %v\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				strToWrite,
+				i,
+				err2.Error())
+
+			return numOfBytesWritten, err
+		}
+
+		numOfBytesWritten += localNumOfBytesWritten
+
+	}
 
 	return numOfBytesWritten, err
 }
