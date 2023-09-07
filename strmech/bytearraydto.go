@@ -758,7 +758,8 @@ func (byteArrayDto *ByteArrayDto) Empty() {
 
 	byteArrayDto.lock.Lock()
 
-	byteArrayDto.ByteArray = nil
+	new(byteArrayDtoElectron).empty(
+		byteArrayDto)
 
 	byteArrayDto.lock.Unlock()
 
@@ -1046,6 +1047,11 @@ func (bArrayDtoAtom *byteArrayDtoAtom) deleteLeadingBytes(
 		return err
 	}
 
+	if numOfLeadingBytesToDelete == 0 {
+
+		return err
+	}
+
 	lenOrigByteArray := len(bArrayDto.ByteArray)
 
 	if lenOrigByteArray == 0 {
@@ -1242,11 +1248,11 @@ func (bArrayDtoAtom *byteArrayDtoAtom) deleteTrailingBytes(
 		return err
 	}
 
-	lenOfNewByteArray :=
+	lenOfBytesToKeep :=
 		lenOfOrigByteArray -
 			numOfTrailingBytesToDelete
 
-	if lenOfNewByteArray <= 0 {
+	if lenOfBytesToKeep <= 0 {
 
 		bArrayDto.ByteArray = nil
 
@@ -1254,7 +1260,70 @@ func (bArrayDtoAtom *byteArrayDtoAtom) deleteTrailingBytes(
 	}
 
 	bArrayDto.ByteArray =
-		bArrayDto.ByteArray[0:lenOfNewByteArray]
+		bArrayDto.ByteArray[0:lenOfBytesToKeep]
 
 	return err
+}
+
+type byteArrayDtoElectron struct {
+	lock *sync.Mutex
+}
+
+// empty
+//
+// Receives an instance of ByteArrayDto and sets the
+// internal to a value of 'nil'.
+//
+// Effectively, this resets the internal byte array to
+// an empty or zero length array.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete all pre-existing data
+//	values in the internal byte array maintained by
+//	the instance of ByteArrayDto passed as input
+//	parameter 'ByteArrayDto'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	bArrayDto					*ByteArrayDto
+//
+//		A pointer to an instance of ByteArrayDto.
+//
+//		This will method will delete all pre-existing
+//		data maintained by the internal byte array
+//		encapsulated by this ByteArrayDto instance.
+//
+//		Upon exit, the internal byte array contained in
+//		'bArrayDto' will be set to 'nil', a zero length
+//		array
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	-- NONE --
+func (bArrayDtoElectron *byteArrayDtoElectron) empty(
+	bArrayDto *ByteArrayDto) {
+
+	if bArrayDtoElectron.lock == nil {
+		bArrayDtoElectron.lock = new(sync.Mutex)
+	}
+
+	bArrayDtoElectron.lock.Lock()
+
+	defer bArrayDtoElectron.lock.Unlock()
+
+	if bArrayDto == nil {
+
+		return
+	}
+
+	bArrayDto.ByteArray = nil
+
+	return
 }
