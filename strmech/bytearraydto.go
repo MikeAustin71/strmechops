@@ -201,3 +201,43 @@ func (byteArrayDto *ByteArrayDto) AddStrings(
 
 	return
 }
+
+// String
+//
+// Returns the internal byte array maintained by the
+// current instance of ByteArrayDto as a string.
+//
+// This method implements the Stringer interface.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		This method returns a string of characters
+//		extracted from the internal byte array maintained
+//		by the current instance of ByteArrayDto.
+func (byteArrayDto *ByteArrayDto) String() string {
+
+	if byteArrayDto.lock == nil {
+		byteArrayDto.lock = new(sync.Mutex)
+	}
+
+	byteArrayDto.lock.Lock()
+
+	defer byteArrayDto.lock.Unlock()
+
+	if len(byteArrayDto.ByteArray) == 0 {
+
+		return ""
+	}
+
+	return string(byteArrayDto.ByteArray)
+}
