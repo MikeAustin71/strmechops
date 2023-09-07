@@ -9,7 +9,8 @@ import (
 // ByteArrayDto
 //
 // The Byte Array Data Transfer Object is a wrapper for
-// a standard byte array.
+// a standard byte array or more accurately, a slice of
+// bytes.
 type ByteArrayDto struct {
 	ByteArray []byte
 
@@ -423,9 +424,18 @@ func (byteArrayDto *ByteArrayDto) CopyIn(
 // Returns a deep copy of the internal byte array
 // encapsulated by the current instance of ByteArrayDto.
 //
-// If the internal byte array is empty or has a zero
-// length, this method will return a zero length byte
-// array.
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method is designed to return a 'deep' copy
+//		of the internal byte array encapsulated by the
+//		current instance of ByteArrayDto.
+//
+//	(2)	If the internal byte array encapsulated by the
+//		current ByteArrayDto instance is empty and has a
+//		length of zero ('0'), this method will return a
+//		'nil' value.
 //
 // ----------------------------------------------------------------
 //
@@ -456,7 +466,7 @@ func (byteArrayDto *ByteArrayDto) CopyOut() []byte {
 
 	if lenCurrByteArray == 0 {
 
-		return make([]byte, 0)
+		return nil
 	}
 
 	newByteArray := make([]byte, lenCurrByteArray)
@@ -588,6 +598,134 @@ func (byteArrayDto *ByteArrayDto) DeleteLeadingBytes(
 			ePrefix)
 }
 
+// DeleteTrailingBytes
+//
+// This method will delete a specified number of bytes
+// from the trailing edge of an internal byte array
+// encapsulated by the current instance of ByteArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method will delete pre-existing data values
+//		in the internal byte array encapsulated by the
+//		current instance of ByteArrayDto.
+//
+//	(2)	This method is designed to delete trailing bytes
+//		from the internal byte array contained within the
+//		current instance of ByteArrayDto.
+//
+//			ByteArrayDto.ByteArray
+//
+//	(3)	If the ByteArrayDto internal byte array is empty
+//		with a length of zero ('0'), this method will
+//		take no action, return no error and exit.
+//
+//		If the number of trailing bytes to be deleted
+//		('numOfTrailingBytesToDelete') is greater than or
+//		equal to the current length of the internal byte
+//		array, this method will set the internal byte
+//		array to 'nil' (a zero length array) and no error
+//		will be returned.
+//
+//	(4)	If the number of trailing bytes to delete
+//		('numOfTrailingBytesToDelete') is set to zero
+//		('0'), this method will take no action, return no
+//		error and exit.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numOfTrailingBytesToDelete	int
+//
+//		The number of bytes which will be deleted from
+//		the trailing edge of the internal byte array
+//		encapsulated by the current instance of
+//		ByteArrayDto.
+//
+//		If the number of trailing bytes to delete
+//		('numOfTrailingBytesToDelete') is set to zero
+//		('0'), this method will take no action, return
+//		no error and exit.
+//
+//		If the internal byte array is empty with a
+//		length of zero ('0'), this method will take no
+//		action, return no error and exit.
+//
+//		If the number of trailing bytes to be deleted
+//		('numOfTrailingBytesToDelete') is greater than or
+//		equal to the current length of the internal byte
+//		array, this method will set the internal byte
+//		array to 'nil' (a zero length array) and no error
+//		will be returned.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (byteArrayDto *ByteArrayDto) DeleteTrailingBytes(
+	numOfTrailingBytesToDelete int,
+	errorPrefix interface{}) error {
+
+	if byteArrayDto.lock == nil {
+		byteArrayDto.lock = new(sync.Mutex)
+	}
+
+	byteArrayDto.lock.Lock()
+
+	defer byteArrayDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FilePermissionConfig."+
+			"GetEntryTypeComponent()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(byteArrayDtoAtom).
+		deleteTrailingBytes(
+			byteArrayDto,
+			"byteArrayDto",
+			numOfTrailingBytesToDelete,
+			ePrefix)
+}
+
 // Empty
 //
 // Resets the internal byte array contained in the
@@ -679,30 +817,60 @@ import (
 	"fmt"
 )
 
-func deleteLeadingArrayBytes(
-byteArray []byte,
-lengthOfBytesToDelete int) []byte {
 
+func deleteLeadingBytesMech() {
 
-	return byteArray[lengthOfBytesToDelete:]
-
-}
-
-func main() {
 
 	var oldByteArray , newByteArray []byte
 
 	oldByteArray = []byte("xxxHello")
 
-	fmt.Printf("Old Byte Array: %v\n",
-		oldByteArray)
+	fmt.Println("-------------------------")
+	fmt.Println(" Deleting Leading Bytes  ")
+	fmt.Println("-------------------------")
 
-	newByteArray = deleteLeadingArrayBytes(
-		oldByteArray, 3)
+	fmt.Printf("Old Byte Array: %v\n",
+		string(oldByteArray))
+
+	newByteArray = oldByteArray [3:]
+
+
+	fmt.Printf("New Byte Array: %v\n\n",
+	string(newByteArray))
+
+}
+
+
+func deleteTrailingBytesMech() {
+
+
+	var oldByteArray , newByteArray []byte
+
+	oldByteArray = []byte("Helloxxx")
+
+	fmt.Println("-------------------------")
+	fmt.Println(" Deleting Trailing Bytes   ")
+	fmt.Println("-------------------------")
+
+	fmt.Printf("Old Byte Array: %v\n",
+		string(oldByteArray))
+
+	lenOfOldByteArray := len(oldByteArray)
+
+	lenOfBytesToKeep := lenOfOldByteArray - 3
+
+	newByteArray = oldByteArray [0:lenOfBytesToKeep]
 
 
 	fmt.Printf("New Byte Array: %v\n",
-	newByteArray)
+	string(newByteArray))
+
+}
+
+func main() {
+
+	deleteLeadingBytesMech()
+	deleteTrailingBytesMech()
 }
 
 
@@ -740,6 +908,11 @@ func main() {
 //		array to 'nil' (a zero length array) and no error
 //		will be returned.
 //
+//	(4)	If the number of leading bytes to delete
+//		('numOfLeadingBytesToDelete') is set to zero
+//		('0'), this method will take no action, return no
+//		error and exit.
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -767,6 +940,11 @@ func main() {
 //		The number of bytes which will be deleted from
 //		the leading edge of the internal byte array
 //		encapsulated by 'bArrayDto'.
+//
+//		If the number of leading bytes to delete
+//		('numOfLeadingBytesToDelete') is set to zero
+//		('0'), this method will take no action, return
+//		no error and exit.
 //
 //		If the internal byte array is empty with a
 //		length of zero ('0'), this method will take no
@@ -884,6 +1062,199 @@ func (bArrayDtoAtom *byteArrayDtoAtom) deleteLeadingBytes(
 
 	bArrayDto.ByteArray =
 		bArrayDto.ByteArray[numOfLeadingBytesToDelete:]
+
+	return err
+}
+
+// deleteTrailingBytes
+//
+// This method will delete a specified number of bytes
+// from the trailing edge of an internal byte array
+// encapsulated by a ByteArrayDto instance passed as
+// input parameter 'bArrayDto'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method will delete pre-existing data values
+//		in the internal byte array encapsulated by the
+//		ByteArrayDto instance passed as input parameter
+//		'bArrayDto'.
+//
+//	(2)	This method is designed to delete trailing bytes
+//		from the internal byte array passed by input
+//		parameter 'bArrayDto'.
+//
+//	(3)	If the internal byte array passed by 'bArrayDto'
+//		is empty with a length of zero ('0'), this method
+//		will take no action, return no error and exit.
+//
+//		If the number of trailing bytes to be deleted
+//		('numOfTrailingBytesToDelete') is greater than or
+//		equal to the current length of the internal byte
+//		array, this method will set the internal byte
+//		array to 'nil' (a zero length array) and no error
+//		will be returned.
+//
+//	(4)	If the number of trailing bytes to delete
+//		('numOfTrailingBytesToDelete') is set to zero
+//		('0'), this method will take no action, return no
+//		error and exit.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	bArrayDto					*ByteArrayDto
+//
+//		A pointer to an instance of ByteArrayDto.
+//
+//		This will method will delete bytes from the
+//		trailing edge of the internal byte array
+//		encapsulated by this ByteArrayDto instance.
+//
+//	bArrayDtoLabel				string
+//
+//		The name or label associated with input parameter
+//		'bArrayDto' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "bArrayDto" will be
+//		automatically applied.
+//
+//	numOfTrailingBytesToDelete	int
+//
+//		The number of bytes which will be deleted from
+//		the trailing edge of the internal byte array
+//		encapsulated by 'bArrayDto'.
+//
+//		If the number of trailing bytes to delete
+//		('numOfTrailingBytesToDelete') is set to zero
+//		('0'), this method will take no action, return
+//		no error and exit.
+//
+//		If the internal byte array is empty with a
+//		length of zero ('0'), this method will take no
+//		action, return no error and exit.
+//
+//		If the number of trailing bytes to be deleted
+//		('numOfTrailingBytesToDelete') is greater than or
+//		equal to the current length of the internal byte
+//		array, this method will set the internal byte
+//		array to 'nil' (a zero length array) and no error
+//		will be returned.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (bArrayDtoAtom *byteArrayDtoAtom) deleteTrailingBytes(
+	bArrayDto *ByteArrayDto,
+	bArrayDtoLabel string,
+	numOfTrailingBytesToDelete int,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if bArrayDtoAtom.lock == nil {
+		bArrayDtoAtom.lock = new(sync.Mutex)
+	}
+
+	bArrayDtoAtom.lock.Lock()
+
+	defer bArrayDtoAtom.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"byteArrayDtoAtom."+
+			"deleteTrailingBytes()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(bArrayDtoLabel) == 0 {
+
+		bArrayDtoLabel = "bArrayDto"
+	}
+
+	if bArrayDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is a nil pointer!\n",
+			ePrefix.String(),
+			bArrayDtoLabel,
+			bArrayDtoLabel)
+
+		return err
+	}
+
+	if numOfTrailingBytesToDelete < 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numOfTrailingBytesToDelete' is invalid!\n"+
+			"'numOfTrailingBytesToDelete' has a value less than zero ('0')!\n"+
+			"numOfTrailingBytesToDelete= '%v'\n",
+			ePrefix.String(),
+			numOfTrailingBytesToDelete)
+
+		return err
+	}
+
+	lenOfOrigByteArray := len(bArrayDto.ByteArray)
+
+	if lenOfOrigByteArray == 0 {
+
+		return err
+	}
+
+	lenOfNewByteArray :=
+		lenOfOrigByteArray -
+			numOfTrailingBytesToDelete
+
+	if lenOfNewByteArray <= 0 {
+
+		bArrayDto.ByteArray = nil
+
+		return err
+	}
+
+	bArrayDto.ByteArray =
+		bArrayDto.ByteArray[0:lenOfNewByteArray]
 
 	return err
 }
