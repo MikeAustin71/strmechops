@@ -108,3 +108,96 @@ func (byteArrayDto *ByteArrayDto) AddRunes(
 
 	return
 }
+
+// AddStrings
+//
+// Adds one or more strings to the byte array
+// encapsulated by the current instance of ByteArray.
+//
+// Depending on the value of input parameter
+// 'addTrailingStrings', the string(s) to be added will
+// either be prefixed or suffixed to the current byte
+// array.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	addTrailingStrings			bool
+//
+//		If this boolean value is set to 'true', the
+//		strings contained in parameter 'stringsToAdd'
+//		will be appended to the end of the byte array
+//		contained in the current instance of
+//		ByteArrayDto.
+//
+//		If 'addTrailingStrings' is set to 'false', the
+//		strings to be added will be prefixed to the
+//		beginning of the byte array contained in the
+//		current instance of ByteArrayDto.
+//
+//	stringsToAdd 				...string
+//
+//		'stringsToAdd' is a variadic parameter which
+//		will accept one or more strings for addition to
+//		the byte array maintained by the current instance
+//		of ByteArrayDto.
+//
+//		Input parameter 'addTrailingStrings' controls
+//		whether 'stringsToAdd' will be prefixed or
+//		suffixed to the byte array.
+//
+//		If 'stringsToAdd' is empty and contains zero
+//		strings, this method will take no action and
+//		exit.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	-- NONE --
+func (byteArrayDto *ByteArrayDto) AddStrings(
+	addTrailingStrings bool,
+	stringsToAdd ...string) {
+
+	if byteArrayDto.lock == nil {
+		byteArrayDto.lock = new(sync.Mutex)
+	}
+
+	byteArrayDto.lock.Lock()
+
+	defer byteArrayDto.lock.Unlock()
+
+	var newByteArray []byte
+
+	for _, singleString := range stringsToAdd {
+
+		newByteArray = append(
+			newByteArray,
+			[]byte(singleString)...)
+
+	}
+
+	if len(newByteArray) == 0 {
+
+		return
+	}
+
+	if len(byteArrayDto.ByteArray) == 0 ||
+		addTrailingStrings == true {
+
+		byteArrayDto.ByteArray = append(
+			byteArrayDto.ByteArray, newByteArray...)
+
+	} else {
+		// len(byteArrayDto.ByteArray) > 0
+		//         AND
+		// addTrailingRune == false
+		byteArrayDto.ByteArray = append(
+			newByteArray,
+			byteArrayDto.ByteArray...)
+
+	}
+
+	return
+}
