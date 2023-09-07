@@ -206,6 +206,53 @@ func (byteArrayDto *ByteArrayDto) AddStrings(
 	return
 }
 
+// Clear
+//
+// Resets each byte in the internal byte array contained
+// in the current instance of ByteArray to a zero value.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete all pre-existing data
+//	values in the internal byte array maintained by
+//	the current instance of ByteArrayDto. The array
+//	length will remain unchanged. However, the data
+//	value of each element in the array will be reset
+//	to zero ('0').
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	-- NONE --
+func (byteArrayDto *ByteArrayDto) Clear() {
+
+	if byteArrayDto.lock == nil {
+		byteArrayDto.lock = new(sync.Mutex)
+	}
+
+	byteArrayDto.lock.Lock()
+
+	defer byteArrayDto.lock.Unlock()
+
+	if len(byteArrayDto.ByteArray) == 0 {
+
+		return
+	}
+
+	clear(byteArrayDto.ByteArray)
+
+	return
+}
+
 // CopyOut
 //
 // Returns a deep copy of the internal byte array
