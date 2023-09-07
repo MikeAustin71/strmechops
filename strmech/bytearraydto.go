@@ -258,6 +258,45 @@ func (byteArrayDto *ByteArrayDto) CopyOut() []byte {
 	return newByteArray
 }
 
+// Empty
+//
+// Resets the internal byte array contained in the
+// current instance of ByteArray to value of 'nil'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete all pre-existing data
+//	values in the internal byte array maintained by
+//	the current instance of ByteArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	-- NONE --
+func (byteArrayDto *ByteArrayDto) Empty() {
+
+	if byteArrayDto.lock == nil {
+		byteArrayDto.lock = new(sync.Mutex)
+	}
+
+	byteArrayDto.lock.Lock()
+
+	byteArrayDto.ByteArray = nil
+
+	byteArrayDto.lock.Unlock()
+
+	byteArrayDto.lock = nil
+}
+
 // String
 //
 // Returns the internal byte array maintained by the
