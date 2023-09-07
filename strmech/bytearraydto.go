@@ -470,6 +470,124 @@ func (byteArrayDto *ByteArrayDto) CopyOut() []byte {
 	return newByteArray
 }
 
+// DeleteLeadingBytes
+//
+// This method will delete a specified number of bytes
+// from the leading edge of an internal byte array
+// encapsulated by the current instance of ByteArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method will delete pre-existing data values
+//		in the internal byte array encapsulated by the
+//		current instance of ByteArrayDto.
+//
+//	(2)	This method is designed to delete leading bytes
+//		from the internal byte array contained within the
+//		current instance of ByteArrayDto.
+//
+//			ByteArrayDto.ByteArray
+//
+//	(3)	If the ByteArrayDto internal byte array is empty
+//		with a length of zero ('0'), this method will
+//		take no action, return no error and exit.
+//
+//		If the number of leading bytes to be deleted
+//		('numOfLeadingBytesToDelete') is greater than or
+//		equal to the current length of the internal byte
+//		array, this method will set the internal byte
+//		array to 'nil' (a zero length array) and no error
+//		will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numOfLeadingBytesToDelete	int
+//
+//		The number of bytes which will be deleted from
+//		the leading edge of the internal byte array
+//		encapsulated by the current instance of
+//		ByteArrayDto.
+//
+//		If the internal byte array is empty with a
+//		length of zero ('0'), this method will take no
+//		action, return no error and exit.
+//
+//		If the number of leading bytes to be deleted
+//		('numOfLeadingBytesToDelete') is greater than or
+//		equal to the current length of the internal byte
+//		array, this method will set the internal byte
+//		array to 'nil' (a zero length array) and no error
+//		will be returned.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (byteArrayDto *ByteArrayDto) DeleteLeadingBytes(
+	numOfLeadingBytesToDelete int,
+	errorPrefix interface{}) error {
+
+	if byteArrayDto.lock == nil {
+		byteArrayDto.lock = new(sync.Mutex)
+	}
+
+	byteArrayDto.lock.Lock()
+
+	defer byteArrayDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FilePermissionConfig."+
+			"GetEntryTypeComponent()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(byteArrayDtoAtom).
+		deleteLeadingBytes(
+			byteArrayDto,
+			"byteArrayDto",
+			numOfLeadingBytesToDelete,
+			ePrefix)
+}
+
 // Empty
 //
 // Resets the internal byte array contained in the
@@ -547,4 +665,225 @@ func (byteArrayDto *ByteArrayDto) String() string {
 	}
 
 	return string(byteArrayDto.ByteArray)
+}
+
+type byteArrayDtoAtom struct {
+	lock *sync.Mutex
+}
+
+/*
+
+package main
+
+import (
+	"fmt"
+)
+
+func deleteLeadingArrayBytes(
+byteArray []byte,
+lengthOfBytesToDelete int) []byte {
+
+
+	return byteArray[lengthOfBytesToDelete:]
+
+}
+
+func main() {
+
+	var oldByteArray , newByteArray []byte
+
+	oldByteArray = []byte("xxxHello")
+
+	fmt.Printf("Old Byte Array: %v\n",
+		oldByteArray)
+
+	newByteArray = deleteLeadingArrayBytes(
+		oldByteArray, 3)
+
+
+	fmt.Printf("New Byte Array: %v\n",
+	newByteArray)
+}
+
+
+
+*/
+
+// deleteLeadingBytes
+//
+// This method will delete a specified number of bytes
+// from the leading edge of an internal byte array
+// encapsulated by a ByteArrayDto instance passed as
+// input parameter 'bArrayDto'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method will delete pre-existing data values
+//		in the internal byte array encapsulated by the
+//		ByteArrayDto instance passed as input parameter
+//		'bArrayDto'.
+//
+//	(2)	This method is designed to delete leading bytes
+//		from the internal byte array passed by input
+//		parameter 'bArrayDto'.
+//
+//	(3)	If the internal byte array passed by 'bArrayDto'
+//		is empty with a length of zero ('0'), this method
+//		will take no action, return no error and exit.
+//
+//		If the number of leading bytes to be deleted
+//		('numOfLeadingBytesToDelete') is greater than or
+//		equal to the current length of the internal byte
+//		array, this method will set the internal byte
+//		array to 'nil' (a zero length array) and no error
+//		will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	bArrayDto					*ByteArrayDto
+//
+//		A pointer to an instance of ByteArrayDto.
+//
+//		This will method will delete bytes from the
+//		leading edge of the internal byte array
+//		encapsulated by this ByteArrayDto instance.
+//
+//	bArrayDtoLabel				string
+//
+//		The name or label associated with input parameter
+//		'bArrayDto' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "bArrayDto" will be
+//		automatically applied.
+//
+//	numOfLeadingBytesToDelete	int
+//
+//		The number of bytes which will be deleted from
+//		the leading edge of the internal byte array
+//		encapsulated by 'bArrayDto'.
+//
+//		If the internal byte array is empty with a
+//		length of zero ('0'), this method will take no
+//		action, return no error and exit.
+//
+//		If the number of leading bytes to be deleted
+//		('numOfLeadingBytesToDelete') is greater than or
+//		equal to the current length of the internal byte
+//		array, this method will set the internal byte
+//		array to 'nil' (a zero length array) and no error
+//		will be returned.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (bArrayDtoAtom *byteArrayDtoAtom) deleteLeadingBytes(
+	bArrayDto *ByteArrayDto,
+	bArrayDtoLabel string,
+	numOfLeadingBytesToDelete int,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if bArrayDtoAtom.lock == nil {
+		bArrayDtoAtom.lock = new(sync.Mutex)
+	}
+
+	bArrayDtoAtom.lock.Lock()
+
+	defer bArrayDtoAtom.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"byteArrayDtoAtom."+
+			"deleteLeadingBytes()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(bArrayDtoLabel) == 0 {
+
+		bArrayDtoLabel = "bArrayDto"
+	}
+
+	if bArrayDto == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is a nil pointer!\n",
+			ePrefix.String(),
+			bArrayDtoLabel,
+			bArrayDtoLabel)
+
+		return err
+	}
+
+	if numOfLeadingBytesToDelete < 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'numOfLeadingBytesToDelete' is invalid!\n"+
+			"'numOfLeadingBytesToDelete' has a value less than zero ('0')!\n"+
+			"numOfLeadingBytesToDelete= '%v'\n",
+			ePrefix.String(),
+			numOfLeadingBytesToDelete)
+
+		return err
+	}
+
+	lenOrigByteArray := len(bArrayDto.ByteArray)
+
+	if lenOrigByteArray == 0 {
+
+		return err
+	}
+
+	if numOfLeadingBytesToDelete >= lenOrigByteArray {
+
+		bArrayDto.ByteArray = nil
+
+		return err
+	}
+
+	bArrayDto.ByteArray =
+		bArrayDto.ByteArray[numOfLeadingBytesToDelete:]
+
+	return err
 }
