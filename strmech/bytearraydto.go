@@ -214,18 +214,20 @@ func (byteArrayDto *ByteArrayDto) AddStrings(
 // Clear
 //
 // Resets each byte in the internal byte array contained
-// in the current instance of ByteArray to a zero value.
+// in the current instance of ByteArrayDto to a zero value.
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
-//	This method will delete all pre-existing data
-//	values in the internal byte array maintained by
-//	the current instance of ByteArrayDto. The array
-//	length will remain unchanged. However, the data
-//	value of each element in the array will be reset
-//	to zero ('0').
+//	(1)	This method will delete all pre-existing data
+//		values in the internal byte array maintained by
+//		the current instance of ByteArrayDto.
+//
+//	(2)	The length of the internal byte array will
+//		remain unchanged, however each element in that
+//		internal byte array will be set to a zero ('0')
+//		value.
 //
 // ----------------------------------------------------------------
 //
@@ -253,7 +255,7 @@ func (byteArrayDto *ByteArrayDto) Clear() {
 		return
 	}
 
-	clear(byteArrayDto.ByteArray)
+	new(byteArrayDtoElectron).clear(byteArrayDto)
 
 	return
 }
@@ -1267,6 +1269,74 @@ func (bArrayDtoAtom *byteArrayDtoAtom) deleteTrailingBytes(
 
 type byteArrayDtoElectron struct {
 	lock *sync.Mutex
+}
+
+// clear
+//
+// Receives an instance of ByteArrayDto passed as input
+// parameter 'bArrayDto'. This method then proceeds to
+// reset each byte in the 'bArrayDto' internal byte array
+// to a zero value.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method will delete all pre-existing data
+//		values in the internal byte array maintained by
+//		the instance of ByteArrayDto passed as input
+//		parameter 'bArrayDto'.
+//
+//	(2)	The length of the internal byte array will
+//		remain unchanged, however each element in that
+//		internal byte array will be set to a zero ('0')
+//		value.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	bArrayDto					*ByteArrayDto
+//
+//		A pointer to an instance of ByteArrayDto.
+//
+//		This will method will delete all pre-existing
+//		data maintained by the internal byte array
+//		encapsulated by this ByteArrayDto instance.
+//
+//		Upon exit, the internal byte array contained in
+//		'bArrayDto' will be set to 'nil', a zero length
+//		array
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	-- NONE --
+func (bArrayDtoElectron *byteArrayDtoElectron) clear(
+	bArrayDto *ByteArrayDto) {
+
+	if bArrayDtoElectron.lock == nil {
+		bArrayDtoElectron.lock = new(sync.Mutex)
+	}
+
+	bArrayDtoElectron.lock.Lock()
+
+	defer bArrayDtoElectron.lock.Unlock()
+
+	if bArrayDto == nil {
+
+		return
+	}
+
+	if len(bArrayDto.ByteArray) == 0 {
+
+		return
+	}
+
+	clear(bArrayDto.ByteArray)
+
+	return
 }
 
 // empty
