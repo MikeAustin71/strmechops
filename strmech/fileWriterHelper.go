@@ -20,10 +20,10 @@ type fileWriterHelperMicrobot struct {
 // passed as input parameter 'ioWriter'.
 //
 // The text or numeric data type passed as input
-// parameter 'charsToWrite' must match one of over fifty
+// parameter 'charsToConvert' must match one of over fifty
 // eligible data types.
 //
-// If 'charsToWrite' is set to an ineligible data type,
+// If 'charsToConvert' is set to an ineligible data type,
 // an error will be returned.
 //
 // ----------------------------------------------------------------
@@ -97,7 +97,7 @@ type fileWriterHelperMicrobot struct {
 //					prefixed or attached to the	beginning of the
 //					error message.
 //
-//	charsToWrite				interface{}
+//	charsToConvert				interface{}
 //
 //		This empty interface is used to transmit an
 //		eligible text or numeric data type which will be
@@ -166,14 +166,14 @@ type fileWriterHelperMicrobot struct {
 //			  53.	[]NumberStrKernel
 //			  54.	*[]NumberStrKernel
 //
-//	charsToWriteLabel			string
+//	charsToConvertLabel			string
 //
 //		The name or label associated with input parameter
-//		'charsToWrite' which will be used in error
+//		'charsToConvert' which will be used in error
 //		messages returned by this method.
 //
 //		If this parameter is submitted as an empty
-//		string, a default value of "charsToWrite" will be
+//		string, a default value of "charsToConvert" will be
 //		automatically applied.
 //
 //	writeEndOfLineChars string
@@ -203,7 +203,7 @@ type fileWriterHelperMicrobot struct {
 //
 //		A character string which will be written to the
 //		internal io.Writer object after all other text
-//		from 'charsToWrite' and 'writeEndOfLineChars'
+//		from 'charsToConvert' and 'writeEndOfLineChars'
 //		has been processed and written.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
@@ -249,8 +249,8 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 		xErrPref *ePref.ErrPrefixDto) (
 		xNumOfBytesWritten int64,
 		xErr error),
-	charsToWrite interface{},
-	charsToWriteLabel string,
+	charsToConvert interface{},
+	charsToConvertLabel string,
 	writeEndOfLineChars string,
 	writeEndOfTextChars string,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -281,20 +281,20 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 		return numOfBytesWritten, err
 	}
 
-	if len(charsToWriteLabel) == 0 {
+	if len(charsToConvertLabel) == 0 {
 
-		charsToWriteLabel = "charsToWrite"
+		charsToConvertLabel = "charsToConvert"
 	}
 
-	if charsToWrite == nil {
+	if charsToConvert == nil {
 
 		err = fmt.Errorf("%v\n"+
 			"-------------------------------------------------------\n"+
 			"Error: Input parameter '%v' is invalid!\n"+
 			"'%v' is a 'nil' value.\n",
 			ePrefix.String(),
-			charsToWriteLabel,
-			charsToWriteLabel)
+			charsToConvertLabel,
+			charsToConvertLabel)
 
 		return numOfBytesWritten, err
 	}
@@ -306,11 +306,11 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 	var strArrayDto StringArrayDto
 	var numStrKernelArray []NumberStrKernel
 
-	switch charsToWrite.(type) {
+	switch charsToConvert.(type) {
 
 	case []byte:
 
-		byteArray, ok = charsToWrite.([]byte)
+		byteArray, ok = charsToConvert.([]byte)
 
 		if !ok {
 
@@ -320,9 +320,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 				"'%v' was identified as a byte array []byte.\n"+
 				"The cast from '%v' to []byte Failed.\n",
 				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
 
 			return numOfBytesWritten, err
 		}
@@ -333,7 +333,7 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 
 		var byteArrayPtr *[]byte
 
-		byteArrayPtr, ok = charsToWrite.(*[]byte)
+		byteArrayPtr, ok = charsToConvert.(*[]byte)
 
 		if !ok {
 
@@ -343,9 +343,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 				"'%v' was identified as a byte array ponter (*[]byte).\n"+
 				"The cast from '%v' to *[]byte Failed.\n",
 				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
 
 			return numOfBytesWritten, err
 		}
@@ -357,7 +357,7 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 	case string:
 		// string
 
-		stringToWrite, ok = charsToWrite.(string)
+		stringToWrite, ok = charsToConvert.(string)
 
 		if !ok {
 
@@ -367,9 +367,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 				"'%v' was identified as a string.\n"+
 				"The cast from '%v' to string Failed.\n",
 				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
 
 			return numOfBytesWritten, err
 		}
@@ -383,7 +383,7 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 
 		var strPtr *string
 
-		strPtr, ok = charsToWrite.(*string)
+		strPtr, ok = charsToConvert.(*string)
 
 		if !ok {
 
@@ -393,9 +393,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 				"'%v' was identified as a string pointer.\n"+
 				"string cast from '%v' to string pointer Failed.\n",
 				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
 
 			return numOfBytesWritten, err
 		}
@@ -407,7 +407,7 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 	case []string:
 		// string array
 
-		strArray, ok = charsToWrite.([]string)
+		strArray, ok = charsToConvert.([]string)
 
 		if !ok {
 
@@ -417,9 +417,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 				"'%v' was identified as a string array.\n"+
 				"string array cast from '%v' to string array Failed.\n",
 				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
 
 			return numOfBytesWritten, err
 		}
@@ -428,7 +428,7 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 
 	case StringArrayDto:
 
-		strArrayDto, ok = charsToWrite.(StringArrayDto)
+		strArrayDto, ok = charsToConvert.(StringArrayDto)
 
 		if !ok {
 
@@ -438,9 +438,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 				"'%v' was identified as a StringArrayDto.\n"+
 				"The cast from '%v' to StringArrayDto Failed.\n",
 				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
 
 			return numOfBytesWritten, err
 		}
@@ -453,7 +453,7 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 
 		var strArrayDtoPtr *StringArrayDto
 
-		strArrayDtoPtr, ok = charsToWrite.(*StringArrayDto)
+		strArrayDtoPtr, ok = charsToConvert.(*StringArrayDto)
 
 		if !ok {
 
@@ -463,9 +463,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 				"'%v' was identified as a StringArrayDto Pointer.\n"+
 				"The cast from '%v' to *StringArrayDto Failed.\n",
 				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
 
 			return numOfBytesWritten, err
 		}
@@ -478,7 +478,7 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 
 		var strBuilder strings.Builder
 
-		strBuilder, ok = charsToWrite.(strings.Builder)
+		strBuilder, ok = charsToConvert.(strings.Builder)
 
 		if !ok {
 
@@ -488,9 +488,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 				"'%v' was identified as a string builder (strings.Builder).\n"+
 				"The cast from '%v' to strings.Builder Failed.\n",
 				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
 
 			return numOfBytesWritten, err
 		}
@@ -503,7 +503,7 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 
 		var strBuilderPtr *strings.Builder
 
-		strBuilderPtr, ok = charsToWrite.(*strings.Builder)
+		strBuilderPtr, ok = charsToConvert.(*strings.Builder)
 
 		if !ok {
 
@@ -513,9 +513,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 				"'%v' was identified as a string builder pointer (*strings.Builder).\n"+
 				"The cast from '%v' to *strings.Builder Failed.\n",
 				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
 
 			return numOfBytesWritten, err
 		}
@@ -528,7 +528,7 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 
 		var runesToWrite []rune
 
-		runesToWrite, ok = charsToWrite.([]rune)
+		runesToWrite, ok = charsToConvert.([]rune)
 
 		if !ok {
 
@@ -538,9 +538,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 				"'%v' was identified as a rune array ([]rune).\n"+
 				"The cast from '%v' to []rune Failed.\n",
 				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
 
 			return numOfBytesWritten, err
 		}
@@ -553,7 +553,7 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 
 		var runeArrayPtr *[]rune
 
-		runeArrayPtr, ok = charsToWrite.(*[]rune)
+		runeArrayPtr, ok = charsToConvert.(*[]rune)
 
 		if !ok {
 
@@ -563,9 +563,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 				"'%v' was identified as a rune array pointer (*[]rune).\n"+
 				"The cast from '%v' to *[]rune Failed.\n",
 				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
 
 			return numOfBytesWritten, err
 		}
@@ -578,7 +578,7 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 
 		var runesToWriteDto RuneArrayDto
 
-		runesToWriteDto, ok = charsToWrite.(RuneArrayDto)
+		runesToWriteDto, ok = charsToConvert.(RuneArrayDto)
 
 		if !ok {
 
@@ -588,9 +588,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 				"'%v' was identified as a type RuneArrayDto.\n"+
 				"The cast from '%v' to RuneArrayDto Failed.\n",
 				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
 
 			return numOfBytesWritten, err
 		}
@@ -603,7 +603,7 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 
 		var runesToWriteDtoPtr *RuneArrayDto
 
-		runesToWriteDtoPtr, ok = charsToWrite.(*RuneArrayDto)
+		runesToWriteDtoPtr, ok = charsToConvert.(*RuneArrayDto)
 
 		if !ok {
 
@@ -613,9 +613,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 				"'%v' was identified as a type *RuneArrayDto.\n"+
 				"The cast from '%v' to *RuneArrayDto Failed.\n",
 				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
 
 			return numOfBytesWritten, err
 		}
@@ -628,7 +628,7 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 
 		var textFileFormatDto ITextFieldFormatDto
 
-		textFileFormatDto, ok = charsToWrite.(ITextFieldFormatDto)
+		textFileFormatDto, ok = charsToConvert.(ITextFieldFormatDto)
 
 		if !ok {
 
@@ -638,9 +638,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 				"'%v' was identified as a type ITextFieldFormatDto.\n"+
 				"The cast from '%v' to ITextFieldFormatDto Failed.\n",
 				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
 
 			return numOfBytesWritten, err
 		}
@@ -665,7 +665,7 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 		var textFieldSpecification ITextFieldSpecification
 
 		textFieldSpecification, ok =
-			charsToWrite.(ITextFieldSpecification)
+			charsToConvert.(ITextFieldSpecification)
 
 		if !ok {
 
@@ -675,9 +675,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 				"'%v' was identified as a type ITextFieldSpecification.\n"+
 				"The cast from '%v' to ITextFieldSpecification Failed.\n",
 				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
 
 			return numOfBytesWritten, err
 		}
@@ -704,7 +704,7 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 		var texLineSpecification ITextLineSpecification
 
 		texLineSpecification, ok =
-			charsToWrite.(ITextLineSpecification)
+			charsToConvert.(ITextLineSpecification)
 
 		if !ok {
 
@@ -714,9 +714,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 				"'%v' was identified as a type ITextLineSpecification.\n"+
 				"The cast from '%v' to ITextLineSpecification Failed.\n",
 				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
 
 			return numOfBytesWritten, err
 		}
@@ -753,8 +753,8 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 		stringToWrite,
 			err = new(mathHelperNanobot).
 			numericValueToNativeNumStr(
-				charsToWrite,
-				ePrefix.XCpy("<-charsToWrite"))
+				charsToConvert,
+				ePrefix.XCpy("<-charsToConvert"))
 
 		if err != nil {
 
@@ -774,7 +774,7 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 	case []NumberStrKernel:
 
 		numStrKernelArray, ok =
-			charsToWrite.([]NumberStrKernel)
+			charsToConvert.([]NumberStrKernel)
 
 		if !ok {
 
@@ -784,9 +784,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 				"'%v' was identified as a type []NumberStrKernel.\n"+
 				"The cast from '%v' to []NumberStrKernel Failed.\n",
 				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
 
 			return numOfBytesWritten, err
 		}
@@ -798,7 +798,7 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 		var numStrKernelArrayPtr *[]NumberStrKernel
 
 		numStrKernelArrayPtr, ok =
-			charsToWrite.(*[]NumberStrKernel)
+			charsToConvert.(*[]NumberStrKernel)
 
 		if !ok {
 
@@ -808,9 +808,9 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 				"'%v' was identified as a type *[]NumberStrKernel.\n"+
 				"The cast from '%v' to *[]NumberStrKernel Failed.\n",
 				ePrefix.String(),
-				charsToWriteLabel,
-				charsToWriteLabel,
-				charsToWriteLabel)
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
 
 			return numOfBytesWritten, err
 		}
@@ -822,10 +822,10 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 	default:
 
 		err = fmt.Errorf("%v\n"+
-			"ERROR: Input parameter 'charsToWrite' is an invalid type!\n"+
-			"'charsToWrite' is unsupported type '%T'\n",
+			"ERROR: Input parameter 'charsToConvert' is an invalid type!\n"+
+			"'charsToConvert' is unsupported type '%T'\n",
 			ePrefix.String(),
-			charsToWrite)
+			charsToConvert)
 
 		return numOfBytesWritten, err
 	}
@@ -847,7 +847,7 @@ writeToStrArray:
 		writeStrArray(
 			writeBytes,
 			strArray,
-			charsToWriteLabel,
+			charsToConvertLabel,
 			writeEndOfLineChars,
 			writeEndOfTextChars,
 			ePrefix.XCpy(
@@ -862,7 +862,7 @@ writeToStrArrayDto:
 		writeStrArray(
 			writeBytes,
 			strArray,
-			charsToWriteLabel,
+			charsToConvertLabel,
 			writeEndOfLineChars,
 			writeEndOfTextChars,
 			ePrefix.XCpy(
@@ -879,7 +879,7 @@ writeNumStrKernelArray:
 		writeNumStrKernelArray(
 			writeBytes,
 			numStrKernelArray,
-			charsToWriteLabel,
+			charsToConvertLabel,
 			writeEndOfLineChars,
 			writeEndOfTextChars,
 			ePrefix.XCpy(

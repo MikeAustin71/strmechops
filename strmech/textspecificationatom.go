@@ -4,6 +4,7 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"math/big"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -13,7 +14,7 @@ type textSpecificationAtom struct {
 	lock *sync.Mutex
 }
 
-// convertParamsToNativeElements
+// convertParamsToBaseElements
 //
 // Receives an empty interface and attempts to convert that
 // interface to one of over fifty eligible before return the
@@ -31,58 +32,66 @@ type textSpecificationAtom struct {
 //			   4.	*string
 //			   5.	[]string
 //			   6.	*[]string
-//			   7.	strings.Builder
-//			   8.	*strings.Builder
-//		 	   9.	StringArrayDto
-//			  10.	*StringArrayDto
-//			  11.	[]rune
-//			  12.	*[]rune
-//			  13.	RuneArrayDto
-//			  14.	*RuneArrayDto
-//			  15.	ITextFieldFormatDto
-//			  16.	ITextFieldSpecification
-//			  17.	ITextLineSpecification
-//			  18.	float32
-//			  19.	*float32
-//			  20.	float64
-//			  21.	*float64
-//			  22.	BigFloatDto
-//			  23.	*BigFloatDto
-//			  24.	big.Float
-//			  25.	*big.Float
-//			  26.	big.Rat
-//			  27.	*big.Rat
-//			  28.	int8
-//			  29.	*int8
-//			  30.	int16
-//			  31.	*int16
-//			  32.	int
-//			  33.	*int
-//			  34.	int32
-//			  35.	*int32
-//			  36.	int64
-//			  37.	*int64
-//			  38.	uint8
-//			  39.	*uint8
-//			  40.	uint16
-//			  41.	*uint16
-//			  42.	uint
-//			  43.	*uint
-//			  44.	uint32
-//			  45.	*uint32
-//			  46.	uint64,
-//			  47.	*uint64
-//			  48.	big.Int
-//			  49.	*big.Int
-//			  50.	TextFieldFormatDtoFloat64
-//			  51.	*TextFieldFormatDtoFloat64
-//			  52.	TextFieldFormatDtoBigFloat
-//			  53.	*TextFieldFormatDtoBigFloat
-//			  54.	NumberStrKernel
-//			  55.	*NumberStrKernel
-//			  56.	[]NumberStrKernel
-//			  57.	*[]NumberStrKernel
-func (txtSpecAtom *textSpecificationAtom) convertParamsToNativeElements(
+//			   7.	Stringer (fmt.Stringer) Interface
+//			   8.	strings.Builder
+//			   9.	*strings.Builder
+//			  10.	StringArrayDto
+//			  11.	*StringArrayDto
+//			  12.	[]rune
+//			  13.	*[]rune
+//			  14.	RuneArrayDto
+//			  15.	*RuneArrayDto
+//			  16.	RuneArrayCollection
+//			  17.	*RuneArrayCollection
+//			  18.	ITextFieldFormatDto
+//			  19.	ITextFieldSpecification
+//			  20.	ITextLineSpecification
+//			  21.	TextLineSpecLinesCollection
+//			  22.	bool
+//			  23.	TextLineTitleMarqueeDto
+//			  24.	time.Time
+//			  25.	TextInputParamFieldDateTimeDto
+//			  26.	float32
+//			  27.	*float32
+//			  28.	float64
+//			  29.	*float64
+//			  30.	BigFloatDto
+//			  31.	*BigFloatDto
+//			  32.	big.Float
+//			  33.	*big.Float
+//			  34.	big.Rat
+//			  35.	*big.Rat
+//			  36.	int8
+//			  37.	*int8
+//			  38.	int16
+//			  39.	*int16
+//			  40.	int
+//			  41.	*int
+//			  42.	int32
+//			  43.	*int32
+//			  44.	int64
+//			  45.	*int64
+//			  46.	uint8
+//			  47.	*uint8
+//			  48.	uint16
+//			  49.	*uint16
+//			  50.	uint
+//			  51.	*uint
+//			  52.	uint32
+//			  53.	*uint32
+//			  54.	uint64,
+//			  55.	*uint64
+//			  56.	big.Int
+//			  57.	*big.Int
+//			  58.	TextFieldFormatDtoFloat64
+//			  59.	*TextFieldFormatDtoFloat64
+//			  60.	TextFieldFormatDtoBigFloat
+//			  61.	*TextFieldFormatDtoBigFloat
+//			  62.	NumberStrKernel
+//			  63.	*NumberStrKernel
+//			  64.	[]NumberStrKernel
+//			  65.	*[]NumberStrKernel
+func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseElements(
 	charsToConvert interface{},
 	charsToConvertLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
@@ -104,11 +113,13 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToNativeElements(
 
 	var ePrefix *ePref.ErrPrefixDto
 
+	funcName := "textSpecificationAtom." +
+		"convertToStringArrayOrByteArray()"
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"textSpecificationAtom."+
-			"convertToStringArrayOrByteArray()",
+		funcName,
 		"")
 
 	if err != nil {
@@ -149,6 +160,7 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToNativeElements(
 	var convertedString string
 	var ok bool
 	var err2 error
+	var numStrKernelArray []NumberStrKernel
 
 	switch charsToConvert.(type) {
 
@@ -701,6 +713,557 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToNativeElements(
 
 		lenOfStrResult = len(strResult)
 
+	case RuneArrayCollection:
+
+		var runeArrayCol RuneArrayCollection
+
+		runeArrayCol, ok = charsToConvert.(RuneArrayCollection)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"Error: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a type RuneArrayCollection\n"+
+				"However, the cast from '%v' to RuneArrayCollection\n"+
+				"Failed.\n",
+				ePrefix.String(),
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		strArrayDto = runeArrayCol.GetStringArrayDto()
+
+		numOfStringArrayElements =
+			strArrayDto.GetStringArrayLength()
+
+	case *RuneArrayCollection:
+
+		var runeArrayColPtr *RuneArrayCollection
+
+		runeArrayColPtr, ok = charsToConvert.(*RuneArrayCollection)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"Error: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a type *RuneArrayCollection\n"+
+				"However, the cast from '%v' to *RuneArrayCollection\n"+
+				"Failed.\n",
+				ePrefix.String(),
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		strArrayDto = runeArrayColPtr.GetStringArrayDto()
+
+		numOfStringArrayElements =
+			strArrayDto.GetStringArrayLength()
+
+	case ITextFieldFormatDto:
+
+		var textFileFormatDto ITextFieldFormatDto
+
+		textFileFormatDto, ok = charsToConvert.(ITextFieldFormatDto)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"Error: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a type ITextFieldFormatDto.\n"+
+				"The cast from '%v' to ITextFieldFormatDto Failed.\n",
+				ePrefix.String(),
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		strResult,
+			err = textFileFormatDto.
+			GetFormattedTextFieldStr(
+				ePrefix.XCpy("strResult<-ITextFieldFormatDto"))
+
+		if err != nil {
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+
+		}
+
+		lenOfStrResult = len(strResult)
+
+	case ITextFieldSpecification:
+
+		var textFieldSpecification ITextFieldSpecification
+
+		textFieldSpecification, ok =
+			charsToConvert.(ITextFieldSpecification)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"Input parameter '%v' is ERROR!\n"+
+				"'%v' was identified as a type ITextFieldSpecification.\n"+
+				"The cast from '%v' to ITextFieldSpecification Failed.\n",
+				ePrefix.String(),
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		var fieldSpecStrBuilder strings.Builder
+
+		err = textFieldSpecification.
+			TextBuilder(
+				&fieldSpecStrBuilder,
+				ePrefix.XCpy("ITextFieldSpecification"))
+
+		if err != nil {
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		strResult = fieldSpecStrBuilder.String()
+
+		lenOfStrResult = len(strResult)
+
+	case ITextLineSpecification:
+
+		var texLineSpecification ITextLineSpecification
+
+		texLineSpecification, ok =
+			charsToConvert.(ITextLineSpecification)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"Error: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a type ITextLineSpecification.\n"+
+				"However, the cast from '%v' to ITextLineSpecification\n"+
+				"Failed.\n",
+				ePrefix.String(),
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		var fieldSpecStrBuilder strings.Builder
+
+		err = texLineSpecification.
+			TextBuilder(
+				&fieldSpecStrBuilder,
+				ePrefix.XCpy("fieldSpecStrBuilder<-ITextLineSpecification"))
+
+		if err != nil {
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		strResult = fieldSpecStrBuilder.String()
+
+		lenOfStrResult = len(strResult)
+
+	case TextLineSpecLinesCollection:
+
+		var txtLineSpecCol TextLineSpecLinesCollection
+
+		txtLineSpecCol, ok =
+			charsToConvert.(TextLineSpecLinesCollection)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-----------------------------------------------------------\n"+
+				"Error: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a type TextLineSpecLinesCollection.\n"+
+				"However, the cast from '%v' to TextLineSpecLinesCollection\n"+
+				"Failed.\n",
+				ePrefix.String(),
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		strArrayDto,
+			err = txtLineSpecCol.
+			GetFmtTextStrArray(
+				ePrefix.XCpy("strArrayDto<-TextLineSpecLinesCollection"))
+
+		numOfStringArrayElements =
+			strArrayDto.GetStringArrayLength()
+
+	case TextLineTitleMarqueeDto:
+
+		var txtLineTitleMarquee TextLineTitleMarqueeDto
+
+		txtLineTitleMarquee, ok =
+			charsToConvert.(TextLineTitleMarqueeDto)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------------\n"+
+				"Error: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a type TextLineTitleMarqueeDto.\n"+
+				"However, the cast from '%v' to TextLineTitleMarqueeDto\n"+
+				"Failed.\n",
+				ePrefix.String(),
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		var strBuilder strings.Builder
+
+		err2 = txtLineTitleMarquee.
+			TextBuilder(
+				&strBuilder,
+				ePrefix.XCpy(
+					"strBuilder<-txtLineTitleMarquee"))
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: String creation from converted\n"+
+				"TextLineTitleMarqueeDto Failed!\n"+
+				"Error=\n%v\n",
+				funcName,
+				err2.Error())
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		strResult = strBuilder.String()
+
+		lenOfStrResult = len(strResult)
+
+	case bool:
+
+		var booleanValue bool
+
+		booleanValue, ok =
+			charsToConvert.(bool)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"Error: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a type bool.\n"+
+				"However, the cast from '%v' to bool Failed.\n",
+				ePrefix.String(),
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		strResult = strconv.FormatBool(booleanValue)
+
+		lenOfStrResult = len(strResult)
+
+	case time.Time:
+
+		var dateTimeValue time.Time
+
+		dateTimeValue, ok =
+			charsToConvert.(time.Time)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"Error: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a type time.Time.\n"+
+				"However, the cast from '%v' to time.Time\n"+
+				"Failed.\n",
+				ePrefix.String(),
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		defaultDateTimeFormat :=
+			new(textSpecificationMolecule).getDefaultDateTimeFormat()
+
+		strResult =
+			dateTimeValue.Format(defaultDateTimeFormat)
+
+		lenOfStrResult = len(strResult)
+
+	case TextInputParamFieldDateTimeDto:
+
+		var dateTimeInputDto TextInputParamFieldDateTimeDto
+
+		dateTimeInputDto,
+			ok = charsToConvert.(TextInputParamFieldDateTimeDto)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"------------------------------------------------------------------\n"+
+				"Error: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a type TextInputParamFieldDateTimeDto.\n"+
+				"However, the cast from '%v' to TextInputParamFieldDateTimeDto\n"+
+				"Failed.\n",
+				ePrefix.String(),
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		if len(dateTimeInputDto.FieldDateTimeFormat) == 0 {
+			dateTimeInputDto.FieldDateTimeFormat =
+				new(textSpecificationMolecule).
+					getDefaultDateTimeFormat()
+
+		}
+
+		strResult = dateTimeInputDto.FieldDateTime.
+			Format(dateTimeInputDto.FieldDateTimeFormat)
+
+		lenOfStrResult = len(strResult)
+
+	case float32, *float32, float64, *float64, *BigFloatDto,
+		BigFloatDto, *big.Float, big.Float, big.Rat, *big.Rat,
+		int8, *int8, int16, *int16, int, *int, int32,
+		*int32, int64, *int64, uint8, *uint8, uint16,
+		*uint16, uint, *uint, uint32, *uint32, uint64,
+		*uint64, big.Int, *big.Int, TextFieldFormatDtoFloat64,
+		*TextFieldFormatDtoFloat64, TextFieldFormatDtoBigFloat,
+		*TextFieldFormatDtoBigFloat, NumberStrKernel,
+		*NumberStrKernel:
+
+		// Writes numerical data to io.Writer
+
+		strResult,
+			err2 = new(mathHelperNanobot).
+			numericValueToNativeNumStr(
+				charsToConvert,
+				ePrefix.XCpy("<-charsToConvert"))
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error converting numeric value to a number string!\n"+
+				"Error=\n%v\n",
+				funcName,
+				err2.Error())
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+
+		}
+
+		lenOfStrResult = len(strResult)
+
+	case []NumberStrKernel:
+
+		numStrKernelArray, ok =
+			charsToConvert.([]NumberStrKernel)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"ERROR: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a type []NumberStrKernel.\n"+
+				"However, the cast from '%v' to []NumberStrKernel\n"+
+				"Failed.\n",
+				ePrefix.String(),
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		goto convertNumStrKernelArray
+
+	case *[]NumberStrKernel:
+
+		var numStrKernelArrayPtr *[]NumberStrKernel
+
+		numStrKernelArrayPtr, ok =
+			charsToConvert.(*[]NumberStrKernel)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"--------------------------------------------------------------\n"+
+				"ERROR: Input parameter '%v' is invalid!\n"+
+				"'%v' was identified as a type *[]NumberStrKernel \n"+
+				"or a pointer to a Number String Kernel array.\n"+
+				"However, the cast from '%v' to *[]NumberStrKernel Failed.\n",
+				ePrefix.String(),
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		numStrKernelArray = *numStrKernelArrayPtr
+
+		goto convertNumStrKernelArray
+
+	case fmt.Stringer:
+
+		var iStringer fmt.Stringer
+
+		iStringer,
+			ok = charsToConvert.(fmt.Stringer)
+
+		if !ok {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"Input parameter '%v' is ERROR!\n"+
+				"'%v' was identified as a type Stringer\n"+
+				"interface (fmt.Stringer). However, the cast from\n"+
+				"'%v' to fmt.Stringer Failed.\n",
+				ePrefix.String(),
+				charsToConvertLabel,
+				charsToConvertLabel,
+				charsToConvertLabel)
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+		}
+
+		strResult = iStringer.String()
+
+		lenOfStrResult = len(strResult)
+
 	}
 
 	return strResult,
@@ -711,6 +1274,76 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToNativeElements(
 		numOfByteArrayElements,
 		err
 
+convertNumStrKernelArray:
+
+	var stringToWrite string
+
+	lastNumStrIdx := len(numStrKernelArray) - 1
+
+	if lastNumStrIdx < 0 {
+		err = fmt.Errorf("%v\n"+
+			"Error: '%v' conversion to Number String\n"+
+			"Kernel array failed.  '%v' converted to\n"+
+			"an empty array with a zero length.\n",
+			ePrefix.String(),
+			charsToConvertLabel,
+			charsToConvertLabel)
+
+		return strResult,
+			lenOfStrResult,
+			strArrayDto,
+			numOfStringArrayElements,
+			byteArray,
+			numOfByteArrayElements,
+			err
+	}
+
+	for i := 0; i <= lastNumStrIdx; i++ {
+
+		stringToWrite,
+			_,
+			err2 = numStrKernelArray[i].FmtNumStrNative(
+			NumRoundType.NoRounding(),
+			0,
+			ePrefix.XCpy(
+				fmt.Sprintf(
+					"numStrKernelArray[%v]", i)))
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Number String Kernel Array Conversion\n"+
+				"([]NumberStrKernel) numStrKernelArray[%v].FmtNumStrNative()\n"+
+				"Error=\n%v\n",
+				funcName,
+				i,
+				err2.Error())
+
+			return strResult,
+				lenOfStrResult,
+				strArrayDto,
+				numOfStringArrayElements,
+				byteArray,
+				numOfByteArrayElements,
+				err
+
+		}
+
+		strArrayDto.PushStr(stringToWrite)
+
+		stringToWrite = ""
+
+	}
+
+	numOfStringArrayElements = strArrayDto.GetStringArrayLength()
+
+	return strResult,
+		lenOfStrResult,
+		strArrayDto,
+		numOfStringArrayElements,
+		byteArray,
+		numOfByteArrayElements,
+		err
 }
 
 // convertParamEmptyInterfaceToString
