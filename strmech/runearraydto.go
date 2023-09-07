@@ -951,16 +951,16 @@ func (charsArrayDto *RuneArrayDto) AddRuneArrays(
 //	incomingChars				*RuneArrayDto
 //
 //		A pointer to an instance of RuneArrayDto. This
-//		method will NOT change the values of internal
-//		rune array contained in this instance.
+//		method will NOT change the values of the internal
+//		rune array contained in 'incomingChars'.
 //
 //		All data values in this RuneArrayDto instance
 //		will be copied to current RuneArrayDto instance
 //		('charsArrayDto').
 //
-//		If parameter 'incomingChars' is 'nil' pointer or
-//		if its internal rune array has a length of zero,
-//		an error will be returned.
+//		If parameter 'incomingChars' is a 'nil' pointer
+//		or if its internal rune array has a length of
+//		zero, an error will be returned.
 //
 //	errorPrefix					interface{}
 //

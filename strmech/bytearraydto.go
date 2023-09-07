@@ -1,6 +1,10 @@
 package strmech
 
-import "sync"
+import (
+	"fmt"
+	ePref "github.com/MikeAustin71/errpref"
+	"sync"
+)
 
 // ByteArrayDto
 //
@@ -251,6 +255,167 @@ func (byteArrayDto *ByteArrayDto) Clear() {
 	clear(byteArrayDto.ByteArray)
 
 	return
+}
+
+//	CopyIn
+//
+//	Copies the internal byte array from an incoming
+//	instance of ByteArrayDto ('incomingBArrayDto') to the
+//	internal rune array of the current ByteArrayDto
+//	instance. This copy operation is a 'deep' copy.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	The internal rune array for the current ByteArrayDto
+//	instance ('byteArrayDto.ByteArray') will be deleted
+//	and overwritten with new data copied from
+//	'incomingBArrayDto'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	incomingBArrayDto			*ByteArrayDto
+//
+//		A pointer to an incoming instance of
+//		ByteArrayDto. This method will NOT change the
+//		values of the internal byte array contained in
+//		this instance.
+//
+//		All data values in this ByteArrayDto instance
+//		will be copied to current ByteArrayDto instance
+//		('byteArrayDto.ByteArray').
+//
+//		If parameter 'incomingChars' is a 'nil' pointer
+//		or if its internal rune array has a length of
+//		zero, an error will be returned.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it	contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set this
+//		parameter to 'nil'.
+//
+//		This empty interface must be convertible to one of
+//		the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message. This returned error message will
+//		incorporate the method chain and text passed by
+//		input parameter, 'errorPrefix'. The 'errorPrefix'
+//		text will be attached to the beginning of the
+//		error message.
+func (byteArrayDto *ByteArrayDto) CopyIn(
+	incomingBArrayDto *ByteArrayDto,
+	errorPrefix interface{}) error {
+
+	if byteArrayDto.lock == nil {
+		byteArrayDto.lock = new(sync.Mutex)
+	}
+
+	byteArrayDto.lock.Lock()
+
+	defer byteArrayDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"RuneArrayDto."+
+			"CopyIn()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	lenIncomingBArray := len(incomingBArrayDto.ByteArray)
+
+	if lenIncomingBArray == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'incomingBArrayDto' is invalid!\n"+
+			"'incomingBArrayDto' contains an empty or zero length\n"+
+			"byte array.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	byteArrayDto.ByteArray = make([]byte, lenIncomingBArray)
+
+	for i := 0; i < lenIncomingBArray; i++ {
+
+		byteArrayDto.ByteArray[i] =
+			incomingBArrayDto.ByteArray[i]
+
+	}
+
+	return err
 }
 
 // CopyOut
