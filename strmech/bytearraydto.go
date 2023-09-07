@@ -295,6 +295,19 @@ func (byteArrayDto *ByteArrayDto) Clear() {
 //		or if its internal rune array has a length of
 //		zero, an error will be returned.
 //
+//	copyDescriptionData			bool
+//
+//		If this parameter is set to 'true', the
+//		description data contained in 'incomingBArrayDto'
+//		will also be copied to the current instance of
+//		ByteArrayDto.
+//
+//		Description data is contained in two internal
+//		member variables:
+//
+//			ByteArrayDto.Description1
+//			ByteArrayDto.Description2
+//
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
@@ -372,6 +385,7 @@ func (byteArrayDto *ByteArrayDto) Clear() {
 //		error message.
 func (byteArrayDto *ByteArrayDto) CopyIn(
 	incomingBArrayDto *ByteArrayDto,
+	copyDescriptionData bool,
 	errorPrefix interface{}) error {
 
 	if byteArrayDto.lock == nil {
@@ -396,65 +410,139 @@ func (byteArrayDto *ByteArrayDto) CopyIn(
 		return err
 	}
 
-	lenIncomingBArray := len(incomingBArrayDto.ByteArray)
-
-	if lenIncomingBArray == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'incomingBArrayDto' is invalid!\n"+
-			"'incomingBArrayDto' contains an empty or zero length\n"+
-			"byte array.\n",
-			ePrefix.String())
-
-		return err
-	}
-
-	byteArrayDto.ByteArray = make([]byte, lenIncomingBArray)
-
-	for i := 0; i < lenIncomingBArray; i++ {
-
-		byteArrayDto.ByteArray[i] =
-			incomingBArrayDto.ByteArray[i]
-
-	}
-
-	return err
+	return new(byteArrayDtoAtom).
+		copy(
+			incomingBArrayDto,
+			"incomingBArrayDto",
+			byteArrayDto,
+			"byteArrayDto",
+			copyDescriptionData,
+			ePrefix)
 }
 
 // CopyOut
 //
-// Returns a deep copy of the internal byte array
-// encapsulated by the current instance of ByteArrayDto.
+// Returns a new instance of ByteArrayDto containing a
+// deep copy of the member variable data values
+// encapsulated by the current ByteArrayDto instance.
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
-//	(1)	This method is designed to return a 'deep' copy
-//		of the internal byte array encapsulated by the
-//		current instance of ByteArrayDto.
+//	(1)	This method is designed to return a new instance
+//		of ByteArrayDto representing a 'deep' copy of the
+//		internal byte array encapsulated in the current
+//		ByteArrayDto instance.
 //
-//	(2)	If the internal byte array encapsulated by the
-//		current ByteArrayDto instance is empty and has a
-//		length of zero ('0'), this method will return a
-//		'nil' value.
+//			ByteArrayDto.ByteArray
+//
+//	(2) If the current instance of ByteArrayDto contains
+//		a zero length internal byte array, no error will
+//		be returned and the returned new ByteArrayDto
+//		instance will contain a zero length byte array.
+//
+//	(3)	If the input parameter 'copyDescriptionData' is
+//		set to 'true', the description data contained
+//		in the current ByteArrayDto instance will also be
+//		returned in the new ByteArrayDto instance.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	-- NONE --
+//	copyDescriptionData			bool
+//
+//		If this parameter is set to 'true', the
+//		description data contained in the current
+//		instance of ByteArrayDto will be copied to
+//		the returned instance ByteArrayDto.
+//
+//		Description data is contained in two internal
+//		member variables:
+//
+//			ByteArrayDto.Description1
+//			ByteArrayDto.Description2
 //
 // ----------------------------------------------------------------
 //
 // # Return Values
 //
-//	[]byte
+//	ByteArrayDto
 //
-//		This method returns a deep copy of the internal
-//		byte array maintained by the current instance of
+//		This method returns a new instance of ByteArrayDto
+//		containing a deep copy of the internal byte array
+//		encapsulated in the current instance of
 //		ByteArrayDto.
-func (byteArrayDto *ByteArrayDto) CopyOut() []byte {
+//
+//		If input parameter 'copyDescriptionData' is set
+//		to 'true', the description data contained in the
+//		current instance of ByteArrayDto will also be
+//		copied to the returned ByteArrayDto instance.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+func (byteArrayDto *ByteArrayDto) CopyOut(
+	copyDescriptionData bool,
+	errorPrefix interface{}) (
+	ByteArrayDto,
+	error) {
 
 	if byteArrayDto.lock == nil {
 		byteArrayDto.lock = new(sync.Mutex)
@@ -464,22 +552,28 @@ func (byteArrayDto *ByteArrayDto) CopyOut() []byte {
 
 	defer byteArrayDto.lock.Unlock()
 
-	lenCurrByteArray := len(byteArrayDto.ByteArray)
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
 
-	if lenCurrByteArray == 0 {
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"ByteArrayDto."+
+			"GetEntryTypeComponent()",
+		"")
 
-		return nil
-	}
+	var newByteArrayDto ByteArrayDto
 
-	newByteArray := make([]byte, lenCurrByteArray)
+	err = new(byteArrayDtoAtom).
+		copy(
+			byteArrayDto,
+			"byteArrayDto",
+			&newByteArrayDto,
+			"newByteArrayDto",
+			copyDescriptionData,
+			ePrefix)
 
-	for i := 0; i < lenCurrByteArray; i++ {
-
-		newByteArray[i] = byteArrayDto.ByteArray[i]
-
-	}
-
-	return newByteArray
+	return newByteArrayDto, err
 }
 
 // DeleteLeadingBytes
@@ -879,6 +973,203 @@ func main() {
 
 
 */
+
+// copy
+//
+//	Copies the internal byte array from an incoming
+//	instance of ByteArrayDto ('sourceBArray') to the
+//	internal rune array of the destination ByteArrayDto
+//	instance ('destinationBArray').
+//
+//	This copy operation is a 'deep' copy.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	sourceBArray				*ByteArrayDto
+//
+//		A pointer to an instance of ByteArrayDto. The
+//		internal byte array contained in this instance
+//		will be copied to the corresponding internal byte
+//		array contained in 'destinationBArray'.
+//
+//		If 'copyDescriptionData' is set to true, the
+//		source description data will also be copied to
+//		the destination ByteArrayDto instance.
+//
+//	sourceBArrayLabel			string
+//
+//		The name or label associated with input parameter
+//		'sourceBArray' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "sourceBArray" will be
+//		automatically applied.
+//
+//	destinationBArray			*ByteArrayDto
+//
+//		A pointer to an instance of ByteArrayDto.
+//
+//		The internal byte array contained in
+//		'sourceBArray' will be copied to the
+//		corresponding internal byte array contained in
+//		this instance, 'destinationBArray'.
+//
+//		If 'copyDescriptionData' is set to true, the
+//		source description data will also be copied to
+//		'destinationBArray'.
+//
+//	destinationBArrayLabel		string
+//
+//		The name or label associated with input parameter
+//		'destinationBArray' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "destinationBArray"
+//		will be automatically applied.
+//
+//	copyDescriptionData			bool
+//
+//		If this parameter is set to 'true', the
+//		description data contained in 'sourceBArray' will
+//		also be copied to the destination ByteArrayDto
+//		instance, 'destinationBArray'.
+//
+//		Description data is contained in two internal
+//		member variables:
+//
+//			ByteArrayDto.Description1
+//			ByteArrayDto.Description2
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (bArrayDtoAtom *byteArrayDtoAtom) copy(
+	sourceBArray *ByteArrayDto,
+	sourceBArrayLabel string,
+	destinationBArray *ByteArrayDto,
+	destinationBArrayLabel string,
+	copyDescriptionData bool,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if bArrayDtoAtom.lock == nil {
+		bArrayDtoAtom.lock = new(sync.Mutex)
+	}
+
+	bArrayDtoAtom.lock.Lock()
+
+	defer bArrayDtoAtom.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"byteArrayDtoAtom."+
+			"copy()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(sourceBArrayLabel) == 0 {
+
+		sourceBArrayLabel = "sourceBArray"
+	}
+
+	if len(destinationBArrayLabel) == 0 {
+
+		destinationBArrayLabel = "destinationBArray"
+	}
+
+	if sourceBArray == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is a nil pointer!\n",
+			ePrefix.String(),
+			sourceBArrayLabel,
+			sourceBArrayLabel)
+
+		return err
+	}
+
+	if destinationBArray == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is a nil pointer!\n",
+			ePrefix.String(),
+			destinationBArrayLabel,
+			destinationBArrayLabel)
+
+		return err
+	}
+
+	lenSourceBArray := len(sourceBArray.ByteArray)
+
+	if lenSourceBArray == 0 {
+
+		destinationBArray.ByteArray = nil
+
+	} else {
+
+		destinationBArray.ByteArray =
+			make([]byte, lenSourceBArray)
+
+		for i := 0; i < lenSourceBArray; i++ {
+
+			destinationBArray.ByteArray[i] =
+				sourceBArray.ByteArray[i]
+		}
+	}
+
+	if copyDescriptionData == true {
+
+		destinationBArray.Description1 =
+			sourceBArray.Description1
+
+		destinationBArray.Description2 =
+			sourceBArray.Description2
+
+	}
+
+	return err
+}
 
 // deleteLeadingBytes
 //
@@ -1394,6 +1685,10 @@ func (bArrayDtoElectron *byteArrayDtoElectron) empty(
 	}
 
 	bArrayDto.ByteArray = nil
+
+	bArrayDto.Description1 = ""
+
+	bArrayDto.Description2 = ""
 
 	return
 }
