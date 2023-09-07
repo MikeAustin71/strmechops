@@ -2,6 +2,10 @@ package strmech
 
 import "sync"
 
+// ByteArrayDto
+//
+// The Byte Array Data Transfer Object is a wrapper for
+// a standard byte array.
 type ByteArrayDto struct {
 	ByteArray []byte
 
@@ -200,6 +204,58 @@ func (byteArrayDto *ByteArrayDto) AddStrings(
 	}
 
 	return
+}
+
+// CopyOut
+//
+// Returns a deep copy of the internal byte array
+// encapsulated by the current instance of ByteArrayDto.
+//
+// If the internal byte array is empty or has a zero
+// length, this method will return a zero length byte
+// array.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	[]byte
+//
+//		This method returns a deep copy of the internal
+//		byte array maintained by the current instance of
+//		ByteArrayDto.
+func (byteArrayDto *ByteArrayDto) CopyOut() []byte {
+
+	if byteArrayDto.lock == nil {
+		byteArrayDto.lock = new(sync.Mutex)
+	}
+
+	byteArrayDto.lock.Lock()
+
+	defer byteArrayDto.lock.Unlock()
+
+	lenCurrByteArray := len(byteArrayDto.ByteArray)
+
+	if lenCurrByteArray == 0 {
+
+		return make([]byte, 0)
+	}
+
+	newByteArray := make([]byte, lenCurrByteArray)
+
+	for i := 0; i < lenCurrByteArray; i++ {
+
+		newByteArray[i] = byteArrayDto.ByteArray[i]
+
+	}
+
+	return newByteArray
 }
 
 // String
