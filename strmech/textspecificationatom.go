@@ -833,13 +833,7 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseTypes(
 				charsToConvertLabel,
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
 		strArrayDto = runeArrayColPtr.GetStringArrayDto()
@@ -865,13 +859,7 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseTypes(
 				charsToConvertLabel,
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
 		strResult,
@@ -881,14 +869,7 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseTypes(
 
 		if err != nil {
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
-
+			return baseTypeConversion, err
 		}
 
 		lenOfStrResult = len(strResult)
@@ -912,13 +893,7 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseTypes(
 				charsToConvertLabel,
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
 		var fieldSpecStrBuilder strings.Builder
@@ -929,13 +904,8 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseTypes(
 				ePrefix.XCpy("ITextFieldSpecification"))
 
 		if err != nil {
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+
+			return baseTypeConversion, err
 		}
 
 		strResult = fieldSpecStrBuilder.String()
@@ -962,13 +932,7 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseTypes(
 				charsToConvertLabel,
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
 		var fieldSpecStrBuilder strings.Builder
@@ -980,13 +944,7 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseTypes(
 
 		if err != nil {
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
 		strResult = fieldSpecStrBuilder.String()
@@ -1013,13 +971,7 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseTypes(
 				charsToConvertLabel,
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
 		strArrayDto,
@@ -1050,13 +1002,7 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseTypes(
 				charsToConvertLabel,
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
 		var strBuilder strings.Builder
@@ -1076,13 +1022,7 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseTypes(
 				funcName,
 				err2.Error())
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
 		strResult = strBuilder.String()
@@ -1108,13 +1048,7 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseTypes(
 				charsToConvertLabel,
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
 		strResult = strconv.FormatBool(booleanValue)
@@ -1141,13 +1075,7 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseTypes(
 				charsToConvertLabel,
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
 		defaultDateTimeFormat :=
@@ -1178,13 +1106,7 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseTypes(
 				charsToConvertLabel,
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
 		if len(dateTimeInputDto.FieldDateTimeFormat) == 0 {
@@ -1225,13 +1147,7 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseTypes(
 				funcName,
 				err2.Error())
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 
 		}
 
@@ -1255,13 +1171,7 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseTypes(
 				charsToConvertLabel,
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
 		goto convertNumStrKernelArray
@@ -1286,13 +1196,7 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseTypes(
 				charsToConvertLabel,
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
 		numStrKernelArray = *numStrKernelArrayPtr
@@ -1319,13 +1223,7 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseTypes(
 				charsToConvertLabel,
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
 		strResult = iStringer.String()
@@ -1334,13 +1232,7 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseTypes(
 
 	}
 
-	return strResult,
-		lenOfStrResult,
-		strArrayDto,
-		numOfStringArrayElements,
-		byteArray,
-		numOfByteArrayElements,
-		err
+	return baseTypeConversion, err
 
 convertNumStrKernelArray:
 
@@ -1357,13 +1249,7 @@ convertNumStrKernelArray:
 			charsToConvertLabel,
 			charsToConvertLabel)
 
-		return strResult,
-			lenOfStrResult,
-			strArrayDto,
-			numOfStringArrayElements,
-			byteArray,
-			numOfByteArrayElements,
-			err
+		return baseTypeConversion, err
 	}
 
 	for i := 0; i <= lastNumStrIdx; i++ {
@@ -1387,13 +1273,7 @@ convertNumStrKernelArray:
 				i,
 				err2.Error())
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 
 		}
 
@@ -1405,13 +1285,7 @@ convertNumStrKernelArray:
 
 	numOfStringArrayElements = strArrayDto.GetStringArrayLength()
 
-	return strResult,
-		lenOfStrResult,
-		strArrayDto,
-		numOfStringArrayElements,
-		byteArray,
-		numOfByteArrayElements,
-		err
+	return baseTypeConversion, err
 }
 
 // convertParamEmptyInterfaceToString
