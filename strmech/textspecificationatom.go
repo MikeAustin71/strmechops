@@ -14,7 +14,7 @@ type textSpecificationAtom struct {
 	lock *sync.Mutex
 }
 
-// convertParamsToBaseElements
+// convertParamsToBaseTypes
 //
 // Receives an empty interface and attempts to convert that
 // interface to one of over fifty eligible before return the
@@ -91,16 +91,11 @@ type textSpecificationAtom struct {
 //			  63.	*NumberStrKernel
 //			  64.	[]NumberStrKernel
 //			  65.	*[]NumberStrKernel
-func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseElements(
+func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseTypes(
 	charsToConvert interface{},
 	charsToConvertLabel string,
 	errPrefDto *ePref.ErrPrefixDto) (
-	strResult string,
-	lenOfStrResult int,
-	strArrayDto StringArrayDto,
-	numOfStringArrayElements int,
-	byteArray []byte,
-	numOfByteArrayElements int,
+	baseTypeConversion BaseTypeDto,
 	err error) {
 
 	if txtSpecAtom.lock == nil {
@@ -124,13 +119,7 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseElements(
 
 	if err != nil {
 
-		return strResult,
-			lenOfStrResult,
-			strArrayDto,
-			numOfStringArrayElements,
-			byteArray,
-			numOfByteArrayElements,
-			err
+		return baseTypeConversion, err
 	}
 
 	if len(charsToConvertLabel) == 0 {
@@ -148,13 +137,7 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseElements(
 			charsToConvertLabel,
 			charsToConvertLabel)
 
-		return strResult,
-			lenOfStrResult,
-			strArrayDto,
-			numOfStringArrayElements,
-			byteArray,
-			numOfByteArrayElements,
-			err
+		return baseTypeConversion, err
 	}
 
 	var convertedString string
@@ -166,7 +149,8 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseElements(
 
 	case []byte:
 
-		byteArray, ok = charsToConvert.([]byte)
+		baseTypeConversion.AByteArrayDto.ByteArray,
+			ok = charsToConvert.([]byte)
 
 		if !ok {
 
@@ -180,18 +164,13 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseElements(
 				charsToConvertLabel,
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
-		numOfByteArrayElements = len(byteArray)
+		baseTypeConversion.AByteArrayDtoLength =
+			len(baseTypeConversion.AByteArrayDto.ByteArray)
 
-		if numOfByteArrayElements == 0 {
+		if baseTypeConversion.AByteArrayDtoLength == 0 {
 
 			err = fmt.Errorf("%v\n"+
 				"Error: %v converted to a byte array.\n"+
@@ -200,6 +179,8 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseElements(
 				ePrefix.String(),
 				charsToConvertLabel)
 		}
+
+		baseTypeConversion.IsAByteArrayDto = true
 
 	case *[]byte:
 
@@ -219,20 +200,16 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseElements(
 				charsToConvertLabel,
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
-		byteArray = *byteArrayPtr
+		baseTypeConversion.AByteArrayDto.ByteArray =
+			*byteArrayPtr
 
-		numOfByteArrayElements = len(byteArray)
+		baseTypeConversion.AByteArrayDtoLength =
+			len(baseTypeConversion.AByteArrayDto.ByteArray)
 
-		if numOfByteArrayElements == 0 {
+		if baseTypeConversion.AByteArrayDtoLength == 0 {
 			err = fmt.Errorf("%v\n"+
 				"Error: %v converted to a byte array pointer\n"+
 				"(*[]byte). However, the byte array is empty\n"+
@@ -241,9 +218,12 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseElements(
 				charsToConvertLabel)
 		}
 
+		baseTypeConversion.IsAByteArrayDto = true
+
 	case string:
 
-		convertedString, ok = charsToConvert.(string)
+		baseTypeConversion.AString,
+			ok = charsToConvert.(string)
 
 		if !ok {
 
@@ -257,14 +237,11 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseElements(
 				charsToConvertLabel,
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
+
+		baseTypeConversion.AStringLength =
+			len(baseTypeConversion.AString)
 
 		if len(convertedString) == 0 {
 
@@ -275,18 +252,10 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseElements(
 				ePrefix.String(),
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
-		strResult = convertedString
-
-		lenOfStrResult = len(strResult)
+		baseTypeConversion.IsAString = true
 
 	case *string:
 		// string pointer
@@ -307,20 +276,15 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseElements(
 				charsToConvertLabel,
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
-		strResult = *strPtr
+		baseTypeConversion.AString = *strPtr
 
-		lenOfStrResult = len(strResult)
+		baseTypeConversion.AStringLength =
+			len(baseTypeConversion.AString)
 
-		if lenOfStrResult == 0 {
+		if baseTypeConversion.AStringLength == 0 {
 
 			err = fmt.Errorf("%v\n"+
 				"Error: %v converted to a string pointer\n"+
@@ -329,19 +293,18 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseElements(
 				ePrefix.String(),
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
+
+		baseTypeConversion.IsAString = true
 
 	case []string:
 		// string array
 
-		strArrayDto.StrArray, ok = charsToConvert.([]string)
+		var strArray []string
+
+		strArray,
+			ok = charsToConvert.([]string)
 
 		if !ok {
 
@@ -355,19 +318,20 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseElements(
 				charsToConvertLabel,
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
-		numOfStringArrayElements =
-			strArrayDto.GetStringArrayLength()
+		baseTypeConversion.AStringArrayDto =
+			new(StringArrayDto).NewStringArray(
+				strArray,
+				"",
+				"")
 
-		if numOfStringArrayElements == 0 {
+		baseTypeConversion.AStringArrayDtoLength =
+			baseTypeConversion.AStringArrayDto.
+				GetStringArrayLength()
+
+		if baseTypeConversion.AStringArrayDtoLength == 0 {
 
 			err = fmt.Errorf("%v\n"+
 				"Error: %v converted to a string array\n"+
@@ -376,14 +340,10 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseElements(
 				ePrefix.String(),
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
+
+		baseTypeConversion.IsAStringArrayDto = true
 
 	case *[]string:
 		// string array
@@ -405,16 +365,20 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseElements(
 				charsToConvertLabel,
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
-		if len(*strArrayPtr) == 0 {
+		baseTypeConversion.AStringArrayDto =
+			new(StringArrayDto).NewStringArray(
+				*strArrayPtr,
+				"",
+				"")
+
+		baseTypeConversion.AStringArrayDtoLength =
+			baseTypeConversion.AStringArrayDto.
+				GetStringArrayLength()
+
+		if baseTypeConversion.AStringArrayDtoLength == 0 {
 
 			err = fmt.Errorf("%v\n"+
 				"Error: %v converted to a string array pointer\n"+
@@ -423,22 +387,14 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseElements(
 				ePrefix.String(),
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
-		strArrayDto = new(StringArrayDto).NewStringArray(
-			*strArrayPtr,
-			"",
-			"")
+		baseTypeConversion.AStringArrayDtoLength =
+			baseTypeConversion.AStringArrayDto.
+				GetStringArrayLength()
 
-		numOfStringArrayElements =
-			strArrayDto.GetStringArrayLength()
+		baseTypeConversion.IsAStringArrayDto = true
 
 	case strings.Builder:
 
@@ -459,18 +415,15 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseElements(
 				charsToConvertLabel,
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
-		strResult = strBuilder.String()
+		baseTypeConversion.AString = strBuilder.String()
 
-		lenOfStrResult = len(strResult)
+		baseTypeConversion.AStringLength =
+			len(baseTypeConversion.AString)
+
+		baseTypeConversion.IsAString = true
 
 	case *strings.Builder:
 
@@ -491,20 +444,19 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseElements(
 				charsToConvertLabel,
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
-		strResult = strBuilderPtr.String()
+		baseTypeConversion.AString = strBuilderPtr.String()
 
-		lenOfStrResult = len(strResult)
+		baseTypeConversion.AStringLength =
+			len(baseTypeConversion.AString)
+
+		baseTypeConversion.IsAString = true
 
 	case StringArrayDto:
+
+		var strArrayDto StringArrayDto
 
 		strArrayDto, ok = charsToConvert.(StringArrayDto)
 
@@ -520,17 +472,43 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseElements(
 				charsToConvertLabel,
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
-		numOfStringArrayElements =
-			strArrayDto.GetStringArrayLength()
+		err2 = baseTypeConversion.AStringArrayDto.
+			CopyIn(
+				&strArrayDto,
+				ePrefix.XCpy("strArrayDto"))
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"Error copying String Array Dto ('strArrayDto') to\n"+
+				"baseTypeConversion.AStringArrayDto.\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				err2.Error())
+
+			return baseTypeConversion, err
+		}
+
+		baseTypeConversion.AStringArrayDtoLength =
+			baseTypeConversion.AStringArrayDto.GetStringArrayLength()
+
+		if baseTypeConversion.AStringArrayDtoLength == 0 {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: %v converted to a String Array Dto\n"+
+				"(StringArrayDto). However, that string array\n"+
+				"is empty and has a zero length!\n",
+				ePrefix.String(),
+				charsToConvertLabel)
+
+			return baseTypeConversion, err
+		}
+
+		baseTypeConversion.IsAStringArrayDto = true
 
 	case *StringArrayDto:
 
@@ -551,40 +529,44 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseElements(
 				charsToConvertLabel,
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
-		err2 = strArrayDto.
+		err2 = baseTypeConversion.AStringArrayDto.
 			CopyIn(
 				strArrayDtoPtr,
-				ePrefix.XCpy("strArrayDto<-strArrayDtoPtr"))
+				ePrefix.XCpy("strArrayDtoPtr"))
 
 		if err2 != nil {
 
 			err = fmt.Errorf("%v\n"+
-				"Error: strArrayDto.CopyIn(strArrayDtoPtr)\n"+
-				"An error occurred while copying from 'strArrayDtoPtr'\n"+
-				"to output parameter 'strArrayDto'\n",
-				ePrefix.String())
+				"-------------------------------------------------------------\n"+
+				"Error copying String Array Dto Pointer ('strArrayDtoPtr')"+
+				"to baseTypeConversion.AStringArrayDto.\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				err2.Error())
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
-
+			return baseTypeConversion, err
 		}
 
-		numOfStringArrayElements =
-			strArrayDto.GetStringArrayLength()
+		baseTypeConversion.AStringArrayDtoLength =
+			baseTypeConversion.AStringArrayDto.GetStringArrayLength()
+
+		if baseTypeConversion.AStringArrayDtoLength == 0 {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------------\n"+
+				"Error: %v converted to a String Array Dto Pointer.\n"+
+				"(*StringArrayDto). However, that string array\n"+
+				"is empty and has a zero length!\n",
+				ePrefix.String(),
+				charsToConvertLabel)
+
+			return baseTypeConversion, err
+		}
+
+		baseTypeConversion.IsAStringArrayDto = true
 
 	case []rune:
 
@@ -604,18 +586,30 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseElements(
 				charsToConvertLabel,
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
-		strResult = string(runesToWrite)
+		baseTypeConversion.ARuneArrayDto =
+			new(RuneArrayDto).NewRunesDefault(
+				runesToWrite)
 
-		lenOfStrResult = len(strResult)
+		baseTypeConversion.ARuneArrayDtoLength =
+			baseTypeConversion.ARuneArrayDto.
+				GetRuneArrayLength()
+
+		if baseTypeConversion.ARuneArrayDtoLength == 0 {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: %v converted to a rune array\n"+
+				"([]rune). However, that rune array\n"+
+				"is empty and has a zero length!\n",
+				ePrefix.String(),
+				charsToConvertLabel)
+
+			return baseTypeConversion, err
+		}
+
+		baseTypeConversion.IsARuneArrayDto = true
 
 	case *[]rune:
 
@@ -636,18 +630,30 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseElements(
 				charsToConvertLabel,
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
-		strResult = string(*runeArrayPtr)
+		baseTypeConversion.ARuneArrayDto =
+			new(RuneArrayDto).NewRunesDefault(
+				*runeArrayPtr)
 
-		lenOfStrResult = len(strResult)
+		baseTypeConversion.ARuneArrayDtoLength =
+			baseTypeConversion.ARuneArrayDto.
+				GetRuneArrayLength()
+
+		if baseTypeConversion.ARuneArrayDtoLength == 0 {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: %v converted to a rune array\n"+
+				"([]rune). However, that rune array\n"+
+				"is empty and has a zero length!\n",
+				ePrefix.String(),
+				charsToConvertLabel)
+
+			return baseTypeConversion, err
+		}
+
+		baseTypeConversion.IsARuneArrayDto = true
 
 	case RuneArrayDto:
 
@@ -668,18 +674,44 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseElements(
 				charsToConvertLabel,
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
-		strResult = string(runesArrayDto.CharsArray)
+		err2 = baseTypeConversion.ARuneArrayDto.
+			CopyIn(
+				&runesArrayDto,
+				ePrefix.XCpy("runesArrayDto"))
 
-		lenOfStrResult = len(strResult)
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"Error occurred while copying 'RuneArrayDto' to\n"+
+				"baseTypeConversion.ARuneArrayDto\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				err2.Error())
+
+			return baseTypeConversion, err
+		}
+
+		baseTypeConversion.ARuneArrayDtoLength =
+			baseTypeConversion.ARuneArrayDto.
+				GetRuneArrayLength()
+
+		if baseTypeConversion.ARuneArrayDtoLength == 0 {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: %v converted to a Rune Array Dto\n"+
+				"(RuneArrayDto). However, that rune array\n"+
+				"is empty and has a zero length!\n",
+				ePrefix.String(),
+				charsToConvertLabel)
+
+			return baseTypeConversion, err
+		}
+
+		baseTypeConversion.IsARuneArrayDto = true
 
 	case *RuneArrayDto:
 
@@ -700,18 +732,44 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseElements(
 				charsToConvertLabel,
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
-		strResult = string(runeArrayDtoPtr.CharsArray)
+		err2 = baseTypeConversion.ARuneArrayDto.
+			CopyIn(
+				runeArrayDtoPtr,
+				ePrefix.XCpy("runeArrayDtoPtr"))
 
-		lenOfStrResult = len(strResult)
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"Error occurred while copying '*RuneArrayDto' to\n"+
+				"baseTypeConversion.ARuneArrayDto\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				err2.Error())
+
+			return baseTypeConversion, err
+		}
+
+		baseTypeConversion.ARuneArrayDtoLength =
+			baseTypeConversion.ARuneArrayDto.
+				GetRuneArrayLength()
+
+		if baseTypeConversion.ARuneArrayDtoLength == 0 {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: %v converted to a Rune Array Dto\n"+
+				"Pointer (*RuneArrayDto). However, that\n"+
+				"rune array is empty and has a zero length!\n",
+				ePrefix.String(),
+				charsToConvertLabel)
+
+			return baseTypeConversion, err
+		}
+
+		baseTypeConversion.IsARuneArrayDto = true
 
 	case RuneArrayCollection:
 
@@ -732,19 +790,29 @@ func (txtSpecAtom *textSpecificationAtom) convertParamsToBaseElements(
 				charsToConvertLabel,
 				charsToConvertLabel)
 
-			return strResult,
-				lenOfStrResult,
-				strArrayDto,
-				numOfStringArrayElements,
-				byteArray,
-				numOfByteArrayElements,
-				err
+			return baseTypeConversion, err
 		}
 
-		strArrayDto = runeArrayCol.GetStringArrayDto()
+		baseTypeConversion.AStringArrayDto =
+			runeArrayCol.GetStringArrayDto()
 
-		numOfStringArrayElements =
-			strArrayDto.GetStringArrayLength()
+		baseTypeConversion.AStringArrayDtoLength =
+			baseTypeConversion.AStringArrayDto.GetStringArrayLength()
+
+		if baseTypeConversion.AStringArrayDtoLength == 0 {
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------------\n"+
+				"Error: %v converted to a Rune Array Collection.\n"+
+				"(RuneArrayCollection). However, that rune array\n"+
+				"collection is empty and has a zero length!\n",
+				ePrefix.String(),
+				charsToConvertLabel)
+
+			return baseTypeConversion, err
+		}
+
+		baseTypeConversion.IsAStringArrayDto = true
 
 	case *RuneArrayCollection:
 
