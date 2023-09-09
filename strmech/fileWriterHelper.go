@@ -326,6 +326,20 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 
 	if baseTypeConversion.IsAByteArrayDto == true {
 
+		if baseTypeConversion.AByteArrayDto.
+			GetArrayLength() == 0 {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: The converted Byte Array is empty\n"+
+				"and has a zero length.\n"+
+				"The byte array was converted from original\n"+
+				"input type %v.\n",
+				ePrefix.String(),
+				baseTypeConversion.AByteArrayDtoDesc1)
+
+			return numOfBytesWritten, err
+		}
+
 		numOfBytesWritten,
 			err = writeBytes(
 			baseTypeConversion.AByteArrayDto.ByteArray,
@@ -333,6 +347,20 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 			ePrefix.XCpy("byteArray<-AByteArrayDto"))
 
 	} else if baseTypeConversion.IsARuneArrayDto == true {
+
+		if baseTypeConversion.ARuneArrayDto.
+			GetRuneArrayLength() == 0 {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: The converted Rune Array in\n"+
+				"RuneArrayDto is empty and has a zero length.\n"+
+				"This rune array was converted from original\n"+
+				"input type %v.\n",
+				ePrefix.String(),
+				baseTypeConversion.ARuneArrayDtoDesc1)
+
+			return numOfBytesWritten, err
+		}
 
 		numOfBytesWritten,
 			err = writeBytes(
@@ -343,6 +371,19 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 
 	} else if baseTypeConversion.IsAString == true {
 
+		if baseTypeConversion.AStringLength == 0 {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: The converted string is empty\n"+
+				"and has a zero length.\n"+
+				"This string was converted from original\n"+
+				"input type %v.\n",
+				ePrefix.String(),
+				baseTypeConversion.AStringDesc1)
+
+			return numOfBytesWritten, err
+		}
+
 		numOfBytesWritten,
 			err = writeBytes(
 			[]byte(baseTypeConversion.AString),
@@ -350,6 +391,19 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 			ePrefix.XCpy("byteArray<-AString"))
 
 	} else if baseTypeConversion.IsAStringArrayDto == true {
+
+		if baseTypeConversion.AStringArrayDtoLength == 0 {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: The converted string array in\n"+
+				"StringArrayDto is empty and has a zero length.\n"+
+				"This string array was converted from original\n"+
+				"input type %v.\n",
+				ePrefix.String(),
+				baseTypeConversion.AStringArrayDtoDesc1)
+
+			return numOfBytesWritten, err
+		}
 
 		numOfBytesWritten,
 			err = new(fileWriterHelperMolecule).
@@ -360,7 +414,7 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 				writeEndOfLineChars,
 				writeEndOfTextChars,
 				ePrefix.XCpy(
-					"byteArray<-strArray"))
+					"byteArray<-string array"))
 
 	} else {
 

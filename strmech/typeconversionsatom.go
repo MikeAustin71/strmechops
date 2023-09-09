@@ -285,6 +285,8 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 			return baseTypeConversion, err
 		}
 
+		baseTypeConversion.AByteArrayDtoDesc1 = "[]byte"
+
 		baseTypeConversion.AByteArrayDtoLength =
 			len(baseTypeConversion.AByteArrayDto.ByteArray)
 
@@ -313,6 +315,8 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 
 		baseTypeConversion.AByteArrayDto.ByteArray =
 			*byteArrayPtr
+
+		baseTypeConversion.AByteArrayDtoDesc1 = "*[]byte"
 
 		baseTypeConversion.AByteArrayDtoLength =
 			len(baseTypeConversion.AByteArrayDto.ByteArray)
@@ -1251,6 +1255,9 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 			return baseTypeConversion, err
 		}
 
+		baseTypeConversion.AStringArrayDtoDesc1 =
+			"[]NumberStrKernel"
+
 		goto convertNumStrKernelArray
 
 	case *[]NumberStrKernel:
@@ -1278,6 +1285,9 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 
 		numStrKernelArray = *numStrKernelArrayPtr
 
+		baseTypeConversion.AStringArrayDtoDesc1 =
+			"*[]NumberStrKernel"
+
 		goto convertNumStrKernelArray
 
 	case fmt.Stringer:
@@ -1303,7 +1313,11 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 			return baseTypeConversion, err
 		}
 
-		baseTypeConversion.AString = iStringer.String()
+		baseTypeConversion.AString =
+			iStringer.String()
+
+		baseTypeConversion.AStringDesc1 =
+			"fmt.Stringer"
 
 		baseTypeConversion.AStringLength =
 			len(baseTypeConversion.AString)
