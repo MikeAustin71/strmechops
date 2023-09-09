@@ -3,10 +3,8 @@ package strmech
 import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
-	"math/big"
 	"strings"
 	"sync"
-	"time"
 )
 
 type textSpecificationAtom struct {
@@ -18,84 +16,163 @@ type textSpecificationAtom struct {
 // Receives an object styled as an empty interface and
 // attempts to convert that object to a string.
 //
+// If the empty interface object does NOT match one of
+// over sixty supported data types, an error will be
+// returned.
+//
+// Note that the processing of string arrays will result
+// in a concatenation of all string array elements to
+// generate a single string result.
+//
 // ----------------------------------------------------------------
 //
 // Input Parameters
 //
 //	emptyIFace                 interface{}
-//		This object will be converted to a type of string and
-//		returned to the calling function.
 //
-//		This parameter is an empty interface which must contain
-//		of several specific types. This empty interface type will
-//		be converted to a string and configured as the single text
-//		field in this 'Line1Column' Text Line.
+//		This object will be converted to a type of string
+//		and returned to the calling function.
 //
-//		Supported types which may be submitted through this empty
-//		interface parameter are listed as follows:
+//		This empty interface parameter must contain one
+//		of over sixty supported data types. Eligible
+//		objects will then be converted and returned as a
+//		string.
 //
-//			time.Time (Converted using default format)
-//			NumberStrKernel, *NumberStrKernel
-//			string
-//			bool
-//			uint, uint8, uint16, uint32, uint64,
-//			int, int8, int16, int32, int64
-//			float32, float64
-//			*big.Int, big.Int
-//			*big.Float, big.Float
-//			*big.Rat, big.Rat
-//			fmt.Stringer (types that support this interface)
-//			TextInputParamFieldDateTimeDto
-//	               (Converts date time to string)
-//			ITextLineSpecification
-//			ITextFieldSpecification
-//			TextFieldFormatDtoBigFloat - Formats big.Float numbers
-//			TextFieldFormatDtoDate
-//			TextFieldFormatDtoLabel
-//			TextFieldFormatDtoFiller
+//		Supported eligible types which may be submitted
+//		through this empty interface parameter are listed
+//		as follows:
+//
+//		Eligible Data Types
+//
+//	  		 1.	[]byte
+//	  		 2.	*[]byte
+//	  		 3.	string
+//	  		 4.	*string
+//	  		 5.	[]string
+//	  		 6.	*[]string
+//	  		 7.	Stringer (fmt.Stringer) Interface
+//	  		 8.	strings.Builder
+//	  		 9.	*strings.Builder
+//	  		10.	StringArrayDto
+//	  		11.	*StringArrayDto
+//	  		12.	[]rune
+//	  		13.	*[]rune
+//	  		14.	RuneArrayDto
+//	  		15.	*RuneArrayDto
+//	  		16.	RuneArrayCollection
+//	  		17.	*RuneArrayCollection
+//	  		18.	ITextFieldFormatDto
+//	  		19.	ITextFieldSpecification
+//	  		20.	ITextLineSpecification
+//	  		21.	TextLineSpecLinesCollection
+//	  		22.	bool
+//	  		23.	TextLineTitleMarqueeDto
+//	  		24.	time.Time (Converted using default format)
+//	  		25.	TextInputParamFieldDateTimeDto
+//	  		26.	float32
+//	  		27.	*float32
+//	  		28.	float64
+//	  		29.	*float64
+//	  		30.	BigFloatDto
+//	  		31.	*BigFloatDto
+//	  		32.	big.Float
+//	  		33.	*big.Float
+//	  		34.	big.Rat
+//	  		35.	*big.Rat
+//	  		36.	int8
+//	  		37.	*int8
+//	  		38.	int16
+//	  		39.	*int16
+//	  		40.	int
+//	  		41.	*int
+//	  		42.	int32
+//	  		43.	*int32
+//	  		44.	int64
+//	  		45.	*int64
+//	  		46.	uint8
+//	  		47.	*uint8
+//	  		48.	uint16
+//	  		49.	*uint16
+//	  		50.	uint
+//	  		51.	*uint
+//	  		52.	uint32
+//	  		53.	*uint32
+//	  		54.	uint64,
+//	  		55.	*uint64
+//	  		56.	big.Int
+//	  		57.	*big.Int
+//	  		58.	TextFieldFormatDtoFloat64
+//	  		59.	*TextFieldFormatDtoFloat64
+//	  		60.	TextFieldFormatDtoBigFloat
+//	  		61.	*TextFieldFormatDtoBigFloat
+//	  		62.	NumberStrKernel
+//	  		63.	*NumberStrKernel
+//	  		64.	[]NumberStrKernel
+//	  		65.	*[]NumberStrKernel
 //
 //		If the 'emptyIFace' object is not convertible to
 //		one of the supported types, an error will be
 //		returned.
 //
+//		----------------------------------------------------
+//		BE ADVISED
+//
+//			If an 'emptyIFace' object which resolves as a
+//			string array, this method will concatenate the
+//			member string array elements to produce a single
+//			string result.
+//		----------------------------------------------------
+//
 //	 emptyIFaceParamName        string
-//	    - This is the name or text label used to describe input
-//	      parameter 'emptyIFace' when formatting informational or
-//	      error messages. If this parameter is submitted as an empty
-//	      string its value will be defaulted to 'emptyIFace'.
+//
+//		This is the name or text label used to describe
+//		input parameter 'emptyIFace' when formatting
+//		informational or error messages. If this
+//		parameter is submitted as an empty string its
+//		value will be defaulted to 'emptyIFace'.
 //
 //
-//	 errPrefDto                 *ePref.ErrPrefixDto
-//	    - This object encapsulates an error prefix string which is
-//	      included in all returned error messages. Usually, it
-//	      contains the name of the calling method or methods listed
-//	      as a function chain.
+//	errPrefDto					*ePref.ErrPrefixDto
 //
-//	      If no error prefix information is needed, set this parameter
-//	      to 'nil'.
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
 //
-//	      Type ErrPrefixDto is included in the 'errpref' software
-//	      package, "github.com/MikeAustin71/errpref".
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ------------------------------------------------------------------------
 //
 // Return Values
 //
-//	convertedString            string
-//	   - If this method completes successfully, this parameter will
-//	     be populated with a string value extracted and converted
-//	     from the empty interface input parameter, 'emptyIFace'.
+//	convertedString				string
 //
+//		If this method completes successfully, this
+//		parameter will be populated with a string value
+//		extracted and converted from the empty interface
+//		input parameter, 'emptyIFace'.
 //
-//	err                        error
-//	   - If this method completes successfully and no errors are
-//	     encountered, this return value is set to 'nil'. Otherwise,
-//	     if errors are encountered, this return value will contain
-//	     an appropriate error message.
+//		Be advised, the returned string may be empty or
+//		have a zero length.
 //
-//	     If an error message is returned, the text value of input
-//	     parameter 'errorPrefix' will be inserted or prefixed at
-//	     the beginning of the error message.
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (txtSpecAtom *textSpecificationAtom) convertParamEmptyInterfaceToString(
 	emptyIFace interface{},
 	emptyIFaceParamName string,
@@ -112,15 +189,6 @@ func (txtSpecAtom *textSpecificationAtom) convertParamEmptyInterfaceToString(
 	defer txtSpecAtom.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-	var ok bool
-	var plainString, defaultDateTimeFormat string
-	var iStringer fmt.Stringer
-	var dateTimeInputDto TextInputParamFieldDateTimeDto
-	var dateTimeValue time.Time
-	var bFloat big.Float
-	var bFloatPtr *big.Float
-	var bInt big.Int
-	var bIntPtr *big.Int
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -147,398 +215,52 @@ func (txtSpecAtom *textSpecificationAtom) convertParamEmptyInterfaceToString(
 		return convertedString, err
 	}
 
-	defaultDateTimeFormat =
-		new(textSpecificationMolecule).getDefaultDateTimeFormat()
+	var baseTypeConversion BaseTypeDto
 
-	switch emptyIFace.(type) { // the switch uses the type of the interface
+	baseTypeConversion,
+		err = new(typeConversionsAtom).
+		convertParamsToBaseTypes(
+			emptyIFace,
+			emptyIFaceParamName,
+			ePrefix.XCpy("emptyIFace"))
 
-	case time.Time:
+	if err != nil {
 
-		dateTimeValue,
-			ok = emptyIFace.(time.Time)
+		return convertedString, err
+	}
 
-		if !ok {
-			err = fmt.Errorf("%v\n"+
-				"Error: Failed to convert empty interface\n"+
-				"(%v) to Date Time Value!\n"+
-				"String Conversion Error.\n",
-				ePrefix.String(),
-				emptyIFaceParamName)
-
-			return convertedString, err
-		}
+	if baseTypeConversion.IsAByteArrayDto == true {
 
 		convertedString =
-			dateTimeValue.Format(defaultDateTimeFormat)
+			string(baseTypeConversion.AByteArrayDto.ByteArray)
 
-		return convertedString, err
+	} else if baseTypeConversion.IsARuneArrayDto == true {
 
-	case TextInputParamFieldDateTimeDto:
+		convertedString =
+			string(baseTypeConversion.ARuneArrayDto.CharsArray)
 
-		goto dateTimeConversion
+	} else if baseTypeConversion.IsAString == true {
 
-	case bool:
+		convertedString = baseTypeConversion.AString
 
-		goto standardConversion
+	} else if baseTypeConversion.IsAStringArrayDto == true {
 
-	case uint, uint8, uint16, uint32, uint64:
+		convertedString =
+			baseTypeConversion.AStringArrayDto.
+				ConcatenateStrings("")
 
-		goto standardConversion
+	} else {
 
-	case int, int8, int16, int32, int64:
-
-		goto standardConversion
-
-	case float32, float64:
-
-		goto standardConversion
-
-	case big.Int:
-
-		bInt,
-			ok = emptyIFace.(big.Int)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: Failed to convert empty interface\n"+
-				"to big.Int value!\n"+
-				"String Conversion Error.\n",
-				ePrefix.String())
-
-			return convertedString, err
-		}
-
-		convertedString = bInt.Text(10)
-
-		return convertedString, err
-
-	case *big.Int:
-
-		bIntPtr,
-			ok = emptyIFace.(*big.Int)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: Failed to convert empty interface\n"+
-				"to *big.Int value!\n"+
-				"String Conversion Error.\n",
-				ePrefix.String())
-
-			return convertedString, err
-		}
-
-		convertedString = bIntPtr.Text(10)
-
-		return convertedString, err
-
-	case big.Float:
-
-		bFloat,
-			ok = emptyIFace.(big.Float)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: Failed to convert empty interface\n"+
-				"to big.Float value!\n"+
-				"String Conversion Error.\n",
-				ePrefix.String())
-
-			return convertedString, err
-		}
-
-		convertedString = bFloat.Text('f', -1)
-
-		return convertedString, err
-
-	case *big.Float:
-
-		bFloatPtr,
-			ok = emptyIFace.(*big.Float)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: Failed to convert empty interface\n"+
-				"to *big.Float value!\n"+
-				"String Conversion Error.\n",
-				ePrefix.String())
-
-			return convertedString, err
-		}
-
-		convertedString = bFloatPtr.Text('f', -1)
-
-		return convertedString, err
-
-	case big.Rat:
-
-		var bRat big.Rat
-
-		bRat,
-			ok = emptyIFace.(big.Rat)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: Failed to convert empty interface\n"+
-				"to big.Rat value!\n"+
-				"String Conversion Error.\n",
-				ePrefix.String())
-
-			return convertedString, err
-		}
-
-		convertedString = bRat.String()
-
-		return convertedString, err
-
-	case *big.Rat:
-
-		var bRatPtr *big.Rat
-
-		bRatPtr,
-			ok = emptyIFace.(*big.Rat)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: Failed to convert empty interface\n"+
-				"to *big.Rat value!\n"+
-				"String Conversion Error.\n",
-				ePrefix.String())
-
-			return convertedString, err
-		}
-
-		convertedString = bRatPtr.String()
-
-		return convertedString, err
-
-	case NumberStrKernel:
-
-		var nStrKernel NumberStrKernel
-
-		nStrKernel,
-			ok = emptyIFace.(NumberStrKernel)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: Failed to convert empty interface\n"+
-				"to NumberStrKernel value!\n"+
-				"String Conversion Error.\n",
-				ePrefix.String())
-
-			return convertedString, err
-		}
-
-		convertedString,
-			err = nStrKernel.FmtNumStrDefault(
-			ePrefix.XCpy(
-				"convertedString<-nStrKernel"))
-
-		return convertedString, err
-
-	case *NumberStrKernel:
-
-		var nStrKernelPtr *NumberStrKernel
-
-		nStrKernelPtr,
-			ok = emptyIFace.(*NumberStrKernel)
-
-		if !ok {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: Failed to convert empty interface\n"+
-				"to *NumberStrKernel value!\n"+
-				"String Conversion Error.\n",
-				ePrefix.String())
-
-			return convertedString, err
-		}
-
-		convertedString,
-			err = nStrKernelPtr.FmtNumStrDefault(
-			ePrefix.XCpy(
-				"convertedString<-nStrKernel"))
-
-		return convertedString, err
-
-	case fmt.Stringer:
-
-		goto stringerConversion
-
-	case string:
-		goto straightStringConversion
-
-	case ITextFieldSpecification:
-
-		iTextFieldSpec,
-			ok := emptyIFace.(ITextFieldSpecification)
-
-		if !ok {
-			err = fmt.Errorf("%v\n"+
-				"Error: Failed to convert empty interface\n"+
-				"(%v) ITextFieldSpecification!\n"+
-				"String Conversion Error.\n",
-				ePrefix.String(),
-				emptyIFaceParamName)
-
-			return convertedString, err
-		}
-
-		convertedString,
-			err = iTextFieldSpec.GetFormattedText(
-			ePrefix.XCpy(
-				"convertedString<-iTextFieldSpec"))
-
-		return convertedString, err
-
-	case ITextLineSpecification:
-
-		iTextLineSpec,
-			ok := emptyIFace.(ITextLineSpecification)
-
-		if !ok {
-			err = fmt.Errorf("%v\n"+
-				"Error: Failed to convert empty interface\n"+
-				"(%v) ITextLineSpecification!\n"+
-				"String Conversion Error.\n",
-				ePrefix.String(),
-				emptyIFaceParamName)
-
-			return convertedString, err
-		}
-
-		convertedString,
-			err = iTextLineSpec.GetFormattedText(
-			ePrefix.XCpy(
-				"convertedString<-iTextLineSpec"))
-
-		return convertedString, err
-
-	case ITextFieldFormatDto:
-
-		iTextFieldFormatDto,
-			ok := emptyIFace.(ITextFieldFormatDto)
-
-		if !ok {
-			err = fmt.Errorf("%v\n"+
-				"Error: Failed to convert empty interface\n"+
-				"(%v) ITextFieldFormatDto!\n"+
-				"String Conversion Error.\n",
-				ePrefix.String(),
-				emptyIFaceParamName)
-
-			return convertedString, err
-		}
-
-		convertedString,
-			err = iTextFieldFormatDto.GetFormattedTextFieldStr(
-			ePrefix.XCpy(
-				"convertedString"))
-
-		return convertedString, err
-
-	case nil:
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter '%v' is invalid!\n"+
-			"'%v' is a 'nil' value.\n",
-			ePrefix.String(),
-			emptyIFaceParamName,
-			emptyIFaceParamName)
-
-		return convertedString, err
-
-	default:
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter '%v' is invalid!\n"+
-			"'%v' is an unsupported type.\n"+
-			"'%v' is Type: %T",
-			ePrefix.String(),
-			emptyIFaceParamName,
-			emptyIFaceParamName,
-			emptyIFaceParamName,
-			emptyIFace)
-
-		return convertedString, err
-	}
-
-dateTimeConversion:
-
-	dateTimeInputDto,
-		ok = emptyIFace.(TextInputParamFieldDateTimeDto)
-
-	if !ok {
-		err = fmt.Errorf("%v\n"+
-			"Error: Failed to convert empty interface\n"+
-			"(%v) to Date Time!\n"+
-			"String Conversion Error.\n",
-			ePrefix.String(),
-			emptyIFaceParamName)
-
-		return convertedString, err
-	}
-
-	if len(dateTimeInputDto.FieldDateTimeFormat) == 0 {
-		dateTimeInputDto.FieldDateTimeFormat =
-			textSpecificationMolecule{}.ptr().
-				getDefaultDateTimeFormat()
+			"-------------------------------------------------------\n"+
+			"Error: typeConversionsAtom.convertParamsToBaseTypes()\n"+
+			"returned an invalid 'BaseTypeDto' object. The return"+
+			"value did not resolve as a byte array, rune array,"+
+			"string array or string.\n",
+			ePrefix.String())
 
 	}
 
-	convertedString = dateTimeInputDto.FieldDateTime.
-		Format(dateTimeInputDto.FieldDateTimeFormat)
-
-	return convertedString, err
-
-standardConversion:
-
-	convertedString = fmt.Sprintf("%v",
-		emptyIFace)
-
-	return convertedString, err
-
-straightStringConversion:
-
-	plainString,
-		ok = emptyIFace.(string)
-
-	if !ok {
-		err = fmt.Errorf("%v\n"+
-			"Error: Failed to convert empty interface\n"+
-			"(%v) to string!\n"+
-			"String Conversion Error.\n",
-			ePrefix.String(),
-			emptyIFaceParamName)
-
-		return convertedString, err
-	}
-
-	convertedString = plainString
-
-	return convertedString, err
-
-stringerConversion:
-
-	iStringer,
-		ok = emptyIFace.(fmt.Stringer)
-
-	if !ok {
-		err = fmt.Errorf("%v\n"+
-			"Error: Failed to convert empty interface\n"+
-			"(%v) to string!\n"+
-			"fmt.Stringer Conversion Error.\n",
-			ePrefix.String(),
-			emptyIFaceParamName)
-
-		return convertedString, err
-	}
-
-	convertedString = iStringer.String()
 	return convertedString, err
 }
 

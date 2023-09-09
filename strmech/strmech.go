@@ -573,28 +573,28 @@ func (sMech *StrMech) ConvertNonPrintableString(
 //
 //		type BaseTypeDto struct {
 //
-//			IsAByteArrayDto     bool
-//			AByteArrayDto       ByteArrayDto
-//			AByteArrayDtoLength int
-//			AByteArrayDtoDesc1  string
-//			AByteArrayDtoDesc2  string
+//			IsAByteArrayDto     		bool
+//			AByteArrayDto       		ByteArrayDto
+//			AByteArrayDtoLength 		int
+//			AByteArrayDtoSourceDataType	string
+//			AByteArrayDtoDesc2  		string
 //
-//			IsARuneArrayDto     bool
-//			ARuneArrayDto       RuneArrayDto
+//			IsARuneArrayDto     		bool
+//			ARuneArrayDto       		RuneArrayDto
 //			ARuneArrayDtoLength int
-//			ARuneArrayDtoDesc1  string
-//			ARuneArrayDtoDesc2  string
+//			ARuneArrayDtoSourceDataType  string
+//			ARuneArrayDtoDesc2  		string
 //
-//			IsAString     		bool
-//			AString       		string
-//			AStringLength 		int
-//			AStringDesc1  		string
-//			AStringDesc2  		string
+//			IsAString     				bool
+//			AString       				string
+//			AStringLength 				int
+//			AStringSourceDataType  		string
+//			AStringDesc2  				string
 //
 //			IsAStringArrayDto     bool
 //			AStringArrayDto       StringArrayDto
 //			AStringArrayDtoLength int
-//			AStringArrayDtoDesc1  string
+//			AStringArrayDtoSourceDataType  string
 //			AStringArrayDtoDesc2  string
 //		}
 //
@@ -3263,43 +3263,109 @@ func (sMech *StrMech) GetStringData() string {
 //		This object will be converted to a type of string
 //		and returned to the calling function.
 //
-//		This parameter is an empty interface which must
-//		contain of several specific types. Eligible
+//		This empty interface parameter must contain one
+//		of over sixty supported data types. Eligible
 //		objects will then be converted and returned as a
 //		string.
 //
-//		Supported types which may be submitted through this empty
-//		interface parameter are listed as follows:
+//		Supported eligible types which may be submitted
+//		through this empty interface parameter are listed
+//		as follows:
 //
-//		   time.Time (Converted using default format)
-//		   string
-//		   bool
-//		   uint, uint8, uint16, uint32, uint64,
-//		   int, int8, int16, int32, int64
-//		   float32, float64
-//		   *big.Int *big.Float
-//		   fmt.Stringer (types that support this interface)
-//		   TextInputParamFieldDateTimeDto
-//		         (Converts date time to string)
+//		Eligible Data Types
 //
+//	  		 1.	[]byte
+//	  		 2.	*[]byte
+//	  		 3.	string
+//	  		 4.	*string
+//	  		 5.	[]string
+//	  		 6.	*[]string
+//	  		 7.	Stringer (fmt.Stringer) Interface
+//	  		 8.	strings.Builder
+//	  		 9.	*strings.Builder
+//	  		10.	StringArrayDto
+//	  		11.	*StringArrayDto
+//	  		12.	[]rune
+//	  		13.	*[]rune
+//	  		14.	RuneArrayDto
+//	  		15.	*RuneArrayDto
+//	  		16.	RuneArrayCollection
+//	  		17.	*RuneArrayCollection
+//	  		18.	ITextFieldFormatDto
+//	  		19.	ITextFieldSpecification
+//	  		20.	ITextLineSpecification
+//	  		21.	TextLineSpecLinesCollection
+//	  		22.	bool
+//	  		23.	TextLineTitleMarqueeDto
+//	  		24.	time.Time (Converted using default format)
+//	  		25.	TextInputParamFieldDateTimeDto
+//	  		26.	float32
+//	  		27.	*float32
+//	  		28.	float64
+//	  		29.	*float64
+//	  		30.	BigFloatDto
+//	  		31.	*BigFloatDto
+//	  		32.	big.Float
+//	  		33.	*big.Float
+//	  		34.	big.Rat
+//	  		35.	*big.Rat
+//	  		36.	int8
+//	  		37.	*int8
+//	  		38.	int16
+//	  		39.	*int16
+//	  		40.	int
+//	  		41.	*int
+//	  		42.	int32
+//	  		43.	*int32
+//	  		44.	int64
+//	  		45.	*int64
+//	  		46.	uint8
+//	  		47.	*uint8
+//	  		48.	uint16
+//	  		49.	*uint16
+//	  		50.	uint
+//	  		51.	*uint
+//	  		52.	uint32
+//	  		53.	*uint32
+//	  		54.	uint64,
+//	  		55.	*uint64
+//	  		56.	big.Int
+//	  		57.	*big.Int
+//	  		58.	TextFieldFormatDtoFloat64
+//	  		59.	*TextFieldFormatDtoFloat64
+//	  		60.	TextFieldFormatDtoBigFloat
+//	  		61.	*TextFieldFormatDtoBigFloat
+//	  		62.	NumberStrKernel
+//	  		63.	*NumberStrKernel
+//	  		64.	[]NumberStrKernel
+//	  		65.	*[]NumberStrKernel
 //
-//		If the empty interface object is not convertible
-//		to one of the supported types, an error will be
+//		If the 'emptyIFace' object is not convertible to
+//		one of the supported types, an error will be
 //		returned.
+//
+//		----------------------------------------------------
+//		BE ADVISED
+//
+//			If an 'emptyIFace' object which resolves as a
+//			string array, this method will concatenate the
+//			member string array elements to produce a single
+//			string result.
+//		----------------------------------------------------
 //
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
 //		is included in all returned error messages.
-//		Usually, it	contains the name of the calling
+//		Usually, it contains the name of the calling
 //		method or methods listed as a method or function
 //		chain of execution.
 //
-//		If no error prefix information is needed, set this
-//		parameter to 'nil'.
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
 //
-//		This empty interface must be convertible to one of
-//		the following types:
+//		This empty interface must be convertible to one
+//		of the following types:
 //
 //		1.	nil
 //				A nil value is valid and generates an
@@ -3350,23 +3416,33 @@ func (sMech *StrMech) GetStringData() string {
 //
 // # Return Values
 //
-//	error
+//	convertedString				string
+//
+//		If this method completes successfully, this
+//		parameter will be populated with a string value
+//		extracted and converted from the empty interface
+//		input parameter, 'emptyIFace'.
+//
+//		Be advised, the returned string may be empty or
+//		have a zero length.
+//
+//	err							error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
 //
 //		If errors are encountered during processing, the
-//		returned error Type will encapsulate an error
-//		message. This returned error message will
-//		incorporate the method chain and text passed by
-//		input parameter, 'errorPrefix'. The 'errorPrefix'
-//		text will be attached to the beginning of the
-//		error message.
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (sMech *StrMech) GetStringFromAnything(
 	emptyIFace interface{},
 	errorPrefix interface{}) (
-	string,
-	error) {
+	convertedString string,
+	err error) {
 
 	if sMech.stringDataMutex == nil {
 		sMech.stringDataMutex = new(sync.Mutex)
@@ -3376,7 +3452,6 @@ func (sMech *StrMech) GetStringFromAnything(
 
 	defer sMech.stringDataMutex.Unlock()
 
-	var err error
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,

@@ -335,7 +335,7 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 				"The byte array was converted from original\n"+
 				"input type %v.\n",
 				ePrefix.String(),
-				baseTypeConversion.AByteArrayDtoDesc1)
+				baseTypeConversion.AByteArrayDtoSourceDataType)
 
 			return numOfBytesWritten, err
 		}
@@ -357,7 +357,7 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 				"This rune array was converted from original\n"+
 				"input type %v.\n",
 				ePrefix.String(),
-				baseTypeConversion.ARuneArrayDtoDesc1)
+				baseTypeConversion.ARuneArrayDtoSourceDataType)
 
 			return numOfBytesWritten, err
 		}
@@ -379,7 +379,7 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 				"This string was converted from original\n"+
 				"input type %v.\n",
 				ePrefix.String(),
-				baseTypeConversion.AStringDesc1)
+				baseTypeConversion.AStringSourceDataType)
 
 			return numOfBytesWritten, err
 		}
@@ -400,7 +400,7 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 				"This string array was converted from original\n"+
 				"input type %v.\n",
 				ePrefix.String(),
-				baseTypeConversion.AStringArrayDtoDesc1)
+				baseTypeConversion.AStringArrayDtoSourceDataType)
 
 			return numOfBytesWritten, err
 		}

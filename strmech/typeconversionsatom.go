@@ -45,7 +45,7 @@ type typeConversionsAtom struct {
 //	  21.	TextLineSpecLinesCollection
 //	  22.	bool
 //	  23.	TextLineTitleMarqueeDto
-//	  24.	time.Time
+//	  24.	time.Time (Converted using default format)
 //	  25.	TextInputParamFieldDateTimeDto
 //	  26.	float32
 //	  27.	*float32
@@ -167,25 +167,25 @@ type typeConversionsAtom struct {
 //			IsAByteArrayDto     bool
 //			AByteArrayDto       ByteArrayDto
 //			AByteArrayDtoLength int
-//			AByteArrayDtoDesc1  string
+//			AByteArrayDtoSourceDataType  string
 //			AByteArrayDtoDesc2  string
 //
 //			IsARuneArrayDto     bool
 //			ARuneArrayDto       RuneArrayDto
 //			ARuneArrayDtoLength int
-//			ARuneArrayDtoDesc1  string
+//			ARuneArrayDtoSourceDataType  string
 //			ARuneArrayDtoDesc2  string
 //
 //			IsAString     		bool
 //			AString       		string
 //			AStringLength 		int
-//			AStringDesc1  		string
+//			AStringSourceDataType  		string
 //			AStringDesc2  		string
 //
 //			IsAStringArrayDto     bool
 //			AStringArrayDto       StringArrayDto
 //			AStringArrayDtoLength int
-//			AStringArrayDtoDesc1  string
+//			AStringArrayDtoSourceDataType  string
 //			AStringArrayDtoDesc2  string
 //		}
 //
@@ -285,7 +285,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 			return baseTypeConversion, err
 		}
 
-		baseTypeConversion.AByteArrayDtoDesc1 = "[]byte"
+		baseTypeConversion.AByteArrayDtoSourceDataType = "[]byte"
 
 		baseTypeConversion.AByteArrayDtoLength =
 			len(baseTypeConversion.AByteArrayDto.ByteArray)
@@ -316,7 +316,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 		baseTypeConversion.AByteArrayDto.ByteArray =
 			*byteArrayPtr
 
-		baseTypeConversion.AByteArrayDtoDesc1 = "*[]byte"
+		baseTypeConversion.AByteArrayDtoSourceDataType = "*[]byte"
 
 		baseTypeConversion.AByteArrayDtoLength =
 			len(baseTypeConversion.AByteArrayDto.ByteArray)
@@ -343,7 +343,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 			return baseTypeConversion, err
 		}
 
-		baseTypeConversion.AStringDesc1 = "string"
+		baseTypeConversion.AStringSourceDataType = "string"
 
 		baseTypeConversion.AStringLength =
 			len(baseTypeConversion.AString)
@@ -373,7 +373,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 			return baseTypeConversion, err
 		}
 
-		baseTypeConversion.AStringDesc1 = "*string"
+		baseTypeConversion.AStringSourceDataType = "*string"
 
 		baseTypeConversion.AString = *strPtr
 
@@ -406,7 +406,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 			return baseTypeConversion, err
 		}
 
-		baseTypeConversion.AStringArrayDtoDesc1 =
+		baseTypeConversion.AStringArrayDtoSourceDataType =
 			"[]string"
 
 		baseTypeConversion.AStringArrayDto =
@@ -450,7 +450,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 				"",
 				"")
 
-		baseTypeConversion.AStringArrayDtoDesc1 =
+		baseTypeConversion.AStringArrayDtoSourceDataType =
 			"*[]string"
 
 		baseTypeConversion.AStringArrayDtoLength =
@@ -483,7 +483,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 
 		baseTypeConversion.AString = strBuilder.String()
 
-		baseTypeConversion.AStringDesc1 =
+		baseTypeConversion.AStringSourceDataType =
 			"strings.Builder"
 
 		baseTypeConversion.AStringLength =
@@ -515,7 +515,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 
 		baseTypeConversion.AString = strBuilderPtr.String()
 
-		baseTypeConversion.AStringDesc1 =
+		baseTypeConversion.AStringSourceDataType =
 			"*strings.Builder"
 
 		baseTypeConversion.AStringLength =
@@ -562,7 +562,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 			return baseTypeConversion, err
 		}
 
-		baseTypeConversion.AStringArrayDtoDesc1 =
+		baseTypeConversion.AStringArrayDtoSourceDataType =
 			"StringArrayDto"
 
 		baseTypeConversion.AStringArrayDtoLength =
@@ -611,7 +611,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 			return baseTypeConversion, err
 		}
 
-		baseTypeConversion.AStringArrayDtoDesc1 =
+		baseTypeConversion.AStringArrayDtoSourceDataType =
 			"*StringArrayDto"
 
 		baseTypeConversion.AStringArrayDtoLength =
@@ -640,7 +640,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 			return baseTypeConversion, err
 		}
 
-		baseTypeConversion.ARuneArrayDtoDesc1 =
+		baseTypeConversion.ARuneArrayDtoSourceDataType =
 			"[]rune"
 
 		baseTypeConversion.ARuneArrayDto =
@@ -679,7 +679,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 			new(RuneArrayDto).NewRunesDefault(
 				*runeArrayPtr)
 
-		baseTypeConversion.ARuneArrayDtoDesc1 =
+		baseTypeConversion.ARuneArrayDtoSourceDataType =
 			"*[]rune"
 
 		baseTypeConversion.ARuneArrayDtoLength =
@@ -728,7 +728,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 			return baseTypeConversion, err
 		}
 
-		baseTypeConversion.ARuneArrayDtoDesc1 =
+		baseTypeConversion.ARuneArrayDtoSourceDataType =
 			"RuneArrayDto"
 
 		baseTypeConversion.ARuneArrayDtoLength =
@@ -777,7 +777,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 			return baseTypeConversion, err
 		}
 
-		baseTypeConversion.ARuneArrayDtoDesc1 =
+		baseTypeConversion.ARuneArrayDtoSourceDataType =
 			"*RuneArrayDto"
 
 		baseTypeConversion.ARuneArrayDtoLength =
@@ -808,7 +808,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 			return baseTypeConversion, err
 		}
 
-		baseTypeConversion.AStringArrayDtoDesc1 =
+		baseTypeConversion.AStringArrayDtoSourceDataType =
 			"RuneArrayCollection"
 
 		baseTypeConversion.AStringArrayDto =
@@ -841,7 +841,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 			return baseTypeConversion, err
 		}
 
-		baseTypeConversion.AStringArrayDtoDesc1 =
+		baseTypeConversion.AStringArrayDtoSourceDataType =
 			"*RuneArrayCollection"
 
 		baseTypeConversion.AStringArrayDto =
@@ -883,7 +883,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 			return baseTypeConversion, err
 		}
 
-		baseTypeConversion.AStringDesc1 =
+		baseTypeConversion.AStringSourceDataType =
 			"ITextFieldFormatDto"
 
 		baseTypeConversion.AStringLength =
@@ -928,7 +928,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 		baseTypeConversion.AString =
 			fieldSpecStrBuilder.String()
 
-		baseTypeConversion.AStringDesc1 =
+		baseTypeConversion.AStringSourceDataType =
 			"ITextFieldSpecification"
 
 		baseTypeConversion.AStringLength =
@@ -974,7 +974,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 		baseTypeConversion.AString =
 			fieldSpecStrBuilder.String()
 
-		baseTypeConversion.AStringDesc1 =
+		baseTypeConversion.AStringSourceDataType =
 			"ITextLineSpecification"
 
 		baseTypeConversion.AStringLength =
@@ -1023,7 +1023,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 			return baseTypeConversion, err
 		}
 
-		baseTypeConversion.AStringArrayDtoDesc1 =
+		baseTypeConversion.AStringArrayDtoSourceDataType =
 			"TextLineSpecLinesCollection"
 
 		baseTypeConversion.AStringArrayDtoLength =
@@ -1077,7 +1077,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 		baseTypeConversion.AString =
 			strBuilder.String()
 
-		baseTypeConversion.AStringDesc1 =
+		baseTypeConversion.AStringSourceDataType =
 			"TextLineTitleMarqueeDto"
 
 		baseTypeConversion.AStringLength =
@@ -1110,7 +1110,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 		baseTypeConversion.AString =
 			strconv.FormatBool(booleanValue)
 
-		baseTypeConversion.AStringDesc1 =
+		baseTypeConversion.AStringSourceDataType =
 			"bool"
 
 		baseTypeConversion.AStringLength =
@@ -1147,7 +1147,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 		baseTypeConversion.AString =
 			dateTimeValue.Format(defaultDateTimeFormat)
 
-		baseTypeConversion.AStringDesc1 =
+		baseTypeConversion.AStringSourceDataType =
 			"time.Time"
 
 		baseTypeConversion.AStringLength =
@@ -1190,7 +1190,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 				Format(
 					dateTimeInputDto.FieldDateTimeFormat)
 
-		baseTypeConversion.AStringDesc1 =
+		baseTypeConversion.AStringSourceDataType =
 			"TextInputParamFieldDateTimeDto"
 
 		baseTypeConversion.AStringLength =
@@ -1211,7 +1211,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 		// Writes numerical data to io.Writer
 
 		baseTypeConversion.AString,
-			baseTypeConversion.AStringDesc1,
+			baseTypeConversion.AStringSourceDataType,
 			err2 = new(mathHelperNanobot).
 			numericValueToNativeNumStr(
 				charsToConvert,
@@ -1255,7 +1255,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 			return baseTypeConversion, err
 		}
 
-		baseTypeConversion.AStringArrayDtoDesc1 =
+		baseTypeConversion.AStringArrayDtoSourceDataType =
 			"[]NumberStrKernel"
 
 		goto convertNumStrKernelArray
@@ -1285,7 +1285,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 
 		numStrKernelArray = *numStrKernelArrayPtr
 
-		baseTypeConversion.AStringArrayDtoDesc1 =
+		baseTypeConversion.AStringArrayDtoSourceDataType =
 			"*[]NumberStrKernel"
 
 		goto convertNumStrKernelArray
@@ -1316,7 +1316,7 @@ func (typeConvAtom *typeConversionsAtom) convertParamsToBaseTypes(
 		baseTypeConversion.AString =
 			iStringer.String()
 
-		baseTypeConversion.AStringDesc1 =
+		baseTypeConversion.AStringSourceDataType =
 			"fmt.Stringer"
 
 		baseTypeConversion.AStringLength =
