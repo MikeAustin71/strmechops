@@ -4,6 +4,7 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"sync"
+	"unicode/utf8"
 )
 
 // ByteArrayDto
@@ -862,6 +863,288 @@ func (byteArrayDto *ByteArrayDto) Empty() {
 	byteArrayDto.lock = nil
 }
 
+// GetRuneArrayDto
+//
+// Converts the bytes contained in the internal
+// byte array, encapsulated by the current instance of
+// ByteArrayDto, to an array of runes returned as an
+// instance of RuneArrayDto.
+//
+// If the internal byte array for the current
+// ByteArrayDto instance is empty, meaning it has a zero
+// length, this method will return an empty instance of
+// RuneArrayDto and no error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	runeArrayDto				RuneArrayDto
+//
+//		The internal byte array contained in the current
+//		ByteArrayDto instance will be converted and
+//		returned through this instance of RuneArrayDto.
+//
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (byteArrayDto *ByteArrayDto) GetRuneArrayDto(
+	errorPrefix interface{}) (
+	runeArrayDto RuneArrayDto,
+	err error) {
+
+	if byteArrayDto.lock == nil {
+		byteArrayDto.lock = new(sync.Mutex)
+	}
+
+	byteArrayDto.lock.Lock()
+
+	defer byteArrayDto.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"ByteArrayDto."+
+			"GetRuneArrayDto()",
+		"")
+
+	if err != nil {
+		return runeArrayDto, err
+	}
+
+	lenByteArray := len(byteArrayDto.ByteArray)
+
+	if lenByteArray == 0 {
+
+		return runeArrayDto, err
+	}
+
+	i := 0
+
+	var r rune
+	var size int
+
+	for i < lenByteArray {
+
+		r, size = utf8.DecodeRune(byteArrayDto.ByteArray[i:])
+
+		if r == utf8.RuneError {
+
+			err = fmt.Errorf("%v\n"+
+				"Error occurred while processing the byte array.\n"+
+				"utf8.DecodeRune(byteArrayDto.ByteArray[%v:])\n"+
+				"'RuneError' code returned while processing byte\n"+
+				"array index number %v. size= %v\n",
+				ePrefix.String(),
+				i,
+				i,
+				size)
+
+			return runeArrayDto, err
+
+		}
+
+		runeArrayDto.CharsArray = append(
+			runeArrayDto.CharsArray, r)
+
+		i += size
+	}
+
+	return runeArrayDto, err
+}
+
+/*
+package main
+
+import (
+	"fmt"
+	"unicode/utf8"
+)
+
+func main() {
+
+	b := []byte("Hello, 世界")
+		fmt.Printf("b= %v\n",
+		string(b))
+
+	lenBArray := len(b)
+
+	i:= 0
+
+	var r rune
+
+	var size, totalSize int
+	var err error
+	var runeArray []rune
+
+	fmt.Printf("Initial size of b array: %v\n", lenBArray)
+
+
+	for i < lenBArray {
+
+
+		r, size = utf8.DecodeRune(b[i:])
+
+		fmt.Printf("size= %v\n", size)
+
+		if r == utf8.RuneError {
+
+			err= fmt.Errorf("Error: r resolved as an error.\n" +
+			"index = %v\n", i)
+
+			fmt.Printf(err.Error() + "\n")
+
+			return
+
+		}
+
+		runeArray = append(runeArray, r)
+
+		totalSize += size
+
+		i+=size
+
+	}
+
+	fmt.Println("Results")
+	fmt.Printf("runeArray= %v\n", string(runeArray))
+	fmt.Printf("totalSize for 'b' processing = %v\n", totalSize)
+
+	for i:= 0; i < len(runeArray); i++ {
+
+		fmt.Printf("Rune[%v]= %v\n",
+		i,
+		string(runeArray[i]))
+
+	}
+
+}
+
+*/
+
+/*
+
+	runeArray := make([]rune, 0)
+
+	var r rune
+	var size int
+
+	for len(byteArray) > 0 {
+		r, size = utf8.DecodeRune(byteArray)
+		byteArray = byteArray[size:]
+		runeArray = append(runeArray, r)
+	}
+
+*/
+
+// GetArrayLength
+//
+// Returns the length of the internal byte array
+// encapsulated in the current instance of ByteArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	int
+//
+//		This integer value returns the length  of the
+//		internal byte array encapsulated in the current
+//		instance of ByteArrayDto.
+func (byteArrayDto *ByteArrayDto) GetArrayLength() int {
+
+	if byteArrayDto.lock == nil {
+		byteArrayDto.lock = new(sync.Mutex)
+	}
+
+	byteArrayDto.lock.Lock()
+
+	defer byteArrayDto.lock.Unlock()
+
+	return len(byteArrayDto.ByteArray)
+}
+
 // String
 //
 // Returns the internal byte array maintained by the
@@ -905,74 +1188,6 @@ func (byteArrayDto *ByteArrayDto) String() string {
 type byteArrayDtoAtom struct {
 	lock *sync.Mutex
 }
-
-/*
-
-package main
-
-import (
-	"fmt"
-)
-
-
-func deleteLeadingBytesMech() {
-
-
-	var oldByteArray , newByteArray []byte
-
-	oldByteArray = []byte("xxxHello")
-
-	fmt.Println("-------------------------")
-	fmt.Println(" Deleting Leading Bytes  ")
-	fmt.Println("-------------------------")
-
-	fmt.Printf("Old Byte Array: %v\n",
-		string(oldByteArray))
-
-	newByteArray = oldByteArray [3:]
-
-
-	fmt.Printf("New Byte Array: %v\n\n",
-	string(newByteArray))
-
-}
-
-
-func deleteTrailingBytesMech() {
-
-
-	var oldByteArray , newByteArray []byte
-
-	oldByteArray = []byte("Helloxxx")
-
-	fmt.Println("-------------------------")
-	fmt.Println(" Deleting Trailing Bytes   ")
-	fmt.Println("-------------------------")
-
-	fmt.Printf("Old Byte Array: %v\n",
-		string(oldByteArray))
-
-	lenOfOldByteArray := len(oldByteArray)
-
-	lenOfBytesToKeep := lenOfOldByteArray - 3
-
-	newByteArray = oldByteArray [0:lenOfBytesToKeep]
-
-
-	fmt.Printf("New Byte Array: %v\n",
-	string(newByteArray))
-
-}
-
-func main() {
-
-	deleteLeadingBytesMech()
-	deleteTrailingBytesMech()
-}
-
-
-
-*/
 
 // copy
 //
