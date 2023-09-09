@@ -1751,6 +1751,51 @@ func (charsArrayDto *RuneArrayDto) ExtendRuneArray(
 			"charsArrayDto<-"))
 }
 
+// GetByteArrayDto
+//
+// Converts the internal rune array encapsulated by the
+// current instance of RuneArrayDto to a byte array and
+// returns that array as an instance of ByteArrayDto.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	ByteArrayDto
+//
+//		This returned instance of ByteArrayDto contains a
+//		byte array created from a conversion of the
+//		internal rune array encapsulated by the current
+//		instance of RuneArrayDto.
+func (charsArrayDto *RuneArrayDto) GetByteArrayDto() ByteArrayDto {
+
+	if charsArrayDto.lock == nil {
+		charsArrayDto.lock = new(sync.Mutex)
+	}
+
+	charsArrayDto.lock.Lock()
+
+	defer charsArrayDto.lock.Unlock()
+
+	var byteArrayDto ByteArrayDto
+
+	if len(charsArrayDto.CharsArray) == 0 {
+
+		return byteArrayDto
+	}
+
+	byteArrayDto.ByteArray =
+		[]byte(string(charsArrayDto.CharsArray))
+
+	return byteArrayDto
+}
+
 //	GetCharacterString
 //
 //	Returns a string populated with the text characters

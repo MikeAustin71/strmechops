@@ -1275,6 +1275,11 @@ func (mathHelpNanobot *mathHelperNanobot) nativeNumStrToNumericValue(
 //			(c)	A leading minus sign ('-') in the case of
 //				negative numeric values.
 //
+//	sourceType					string
+//
+//		A text string listing the original type from which
+//		input parameter 'numericValue' was converted.
+//
 //	err							error
 //
 //		If this method completes successfully, the
@@ -1291,6 +1296,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 	numericValue interface{},
 	errPrefDto *ePref.ErrPrefixDto) (
 	nativeNumStr string,
+	sourceType string,
 	err error) {
 
 	if mathHelpNanobot.lock == nil {
@@ -1312,7 +1318,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 
 	if err != nil {
 
-		return nativeNumStr, err
+		return nativeNumStr, sourceType, err
 	}
 
 	var ok bool
@@ -1323,7 +1329,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 			"ERROR: Input parameter 'numericValue' is a nil pointer!\n",
 			ePrefix.String())
 
-		return nativeNumStr, err
+		return nativeNumStr, sourceType, err
 	}
 
 	var int64Num int64
@@ -1344,7 +1350,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: float32 cast to 'float32Num' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		nativeNumStr = strconv.FormatFloat(
@@ -1353,7 +1359,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 			-1,
 			32)
 
-		return nativeNumStr, err
+		sourceType = "float32"
 
 	case *float32:
 
@@ -1367,7 +1373,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: *float32 cast to 'ptrFloat32' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		if ptrFloat32 == nil {
@@ -1377,7 +1383,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ptrFloat32 is a nil pointer.",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 
 		}
 
@@ -1387,7 +1393,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 			-1,
 			32)
 
-		return nativeNumStr, err
+		sourceType = "*float32"
 
 	case float64:
 
@@ -1401,7 +1407,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: float64 cast to 'float64Num' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		nativeNumStr = strconv.FormatFloat(
@@ -1410,7 +1416,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 			-1,
 			64)
 
-		return nativeNumStr, err
+		sourceType = "float64"
 
 	case *float64:
 
@@ -1424,7 +1430,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: *float64 cast to 'ptrFloat64' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		if ptrFloat64 == nil {
@@ -1434,7 +1440,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ptrFloat64 is a nil pointer.",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 
 		}
 
@@ -1444,7 +1450,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 			-1,
 			64)
 
-		return nativeNumStr, err
+		sourceType = "*float64"
 
 	case *BigFloatDto:
 
@@ -1458,7 +1464,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: *BigFloatDto cast to 'ptrBigFloatDto' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		if ptrBigFloatDto == nil {
@@ -1468,14 +1474,14 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ptrBigFloatDto is a nil pointer.",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 
 		}
 
 		nativeNumStr =
 			ptrBigFloatDto.Value.Text('f', -1)
 
-		return nativeNumStr, err
+		sourceType = "*BigFloatDto"
 
 	case BigFloatDto:
 
@@ -1489,13 +1495,13 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: BigFloatDto cast to 'bigFloatDto' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		nativeNumStr =
 			bigFloatDto.Value.Text('f', -1)
 
-		return nativeNumStr, err
+		sourceType = "BigFloatDto"
 
 	case *big.Float:
 
@@ -1509,7 +1515,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: *big.Float cast to 'ptrBigFloatNum' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		if ptrBigFloatNum == nil {
@@ -1519,14 +1525,13 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ptrBigFloatNum is a nil pointer.",
 				ePrefix.String())
 
-			return nativeNumStr, err
-
+			return nativeNumStr, sourceType, err
 		}
 
 		nativeNumStr =
 			ptrBigFloatNum.Text('f', -1)
 
-		return nativeNumStr, err
+		sourceType = "*big.Float"
 
 	case big.Float:
 
@@ -1540,13 +1545,13 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: big.Float cast to 'bigFloatNum' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		nativeNumStr =
 			bigFloatNum.Text('f', -1)
 
-		return nativeNumStr, err
+		sourceType = "big.Float"
 
 	case big.Rat:
 
@@ -1560,13 +1565,13 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: big.Rat cast to 'bigRatNum' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		nativeNumStr =
 			bigRatNum.FloatString(2000)
 
-		return nativeNumStr, err
+		sourceType = "big.Rat"
 
 	case *big.Rat:
 
@@ -1580,7 +1585,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: *big.Rat cast to 'ptrBigRatNum' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		if ptrBigRatNum == nil {
@@ -1590,14 +1595,13 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ptrBigRatNum is a nil pointer.",
 				ePrefix.String())
 
-			return nativeNumStr, err
-
+			return nativeNumStr, sourceType, err
 		}
 
 		nativeNumStr =
 			ptrBigRatNum.FloatString(2000)
 
-		return nativeNumStr, err
+		sourceType = "*big.Rat"
 
 	case int8:
 
@@ -1611,10 +1615,12 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: int8 cast to 'int8Num' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		int64Num = int64(int8Num)
+
+		sourceType = "int8"
 
 		goto conversionInteger
 
@@ -1630,7 +1636,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: *int8 cast to 'ptrInt8Num' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		if ptrInt8Num == nil {
@@ -1640,11 +1646,12 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ptrInt8Num is a nil pointer.",
 				ePrefix.String())
 
-			return nativeNumStr, err
-
+			return nativeNumStr, sourceType, err
 		}
 
 		int64Num = int64(*ptrInt8Num)
+
+		sourceType = "*int8"
 
 		goto conversionInteger
 
@@ -1660,10 +1667,12 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: int16 cast to 'int16Num' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		int64Num = int64(int16Num)
+
+		sourceType = "int16"
 
 		goto conversionInteger
 
@@ -1679,7 +1688,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: *int16 cast to 'ptrInt16Num' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		if ptrInt16Num == nil {
@@ -1689,11 +1698,12 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ptrInt16Num is a nil pointer.",
 				ePrefix.String())
 
-			return nativeNumStr, err
-
+			return nativeNumStr, sourceType, err
 		}
 
 		int64Num = int64(*ptrInt16Num)
+
+		sourceType = "*int16"
 
 		goto conversionInteger
 
@@ -1709,10 +1719,12 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: int cast to 'intNum' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		int64Num = int64(intNum)
+
+		sourceType = "int"
 
 		goto conversionInteger
 
@@ -1728,7 +1740,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: *int cast to 'ptrIntNum' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		if ptrIntNum == nil {
@@ -1738,11 +1750,12 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ptrIntNum is a nil pointer.",
 				ePrefix.String())
 
-			return nativeNumStr, err
-
+			return nativeNumStr, sourceType, err
 		}
 
 		int64Num = int64(*ptrIntNum)
+
+		sourceType = "*int"
 
 		goto conversionInteger
 
@@ -1758,10 +1771,12 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: int32 cast to 'int32Num' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		int64Num = int64(int32Num)
+
+		sourceType = "int32"
 
 		goto conversionInteger
 
@@ -1777,7 +1792,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: *int32 cast to 'ptrInt32Num' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		if ptrInt32Num == nil {
@@ -1787,11 +1802,12 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ptrInt32Num is a nil pointer.",
 				ePrefix.String())
 
-			return nativeNumStr, err
-
+			return nativeNumStr, sourceType, err
 		}
 
 		int64Num = int64(*ptrInt32Num)
+
+		sourceType = "*int32"
 
 		goto conversionInteger
 
@@ -1805,8 +1821,10 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: int64 cast to 'int64Num' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
+
+		sourceType = "int64"
 
 		goto conversionInteger
 
@@ -1822,7 +1840,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: *int64 cast to 'ptrInt64Num' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		if ptrInt64Num == nil {
@@ -1832,11 +1850,12 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ptrInt64Num is a nil pointer.",
 				ePrefix.String())
 
-			return nativeNumStr, err
-
+			return nativeNumStr, sourceType, err
 		}
 
 		int64Num = *ptrInt64Num
+
+		sourceType = "*int64"
 
 		goto conversionInteger
 
@@ -1852,10 +1871,12 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: uint8 cast to 'uint8Num' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		uint64Num = uint64(uint8Num)
+
+		sourceType = "uint8"
 
 		goto conversionUnsignedInteger
 
@@ -1871,7 +1892,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: *uint8 cast to 'ptrUint8Num' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		if ptrUint8Num == nil {
@@ -1881,11 +1902,12 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ptrUint8Num is a nil pointer.",
 				ePrefix.String())
 
-			return nativeNumStr, err
-
+			return nativeNumStr, sourceType, err
 		}
 
 		uint64Num = uint64(*ptrUint8Num)
+
+		sourceType = "*uint8"
 
 		goto conversionUnsignedInteger
 
@@ -1901,10 +1923,12 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: uint16 cast to 'uint16Num' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		uint64Num = uint64(uint16Num)
+
+		sourceType = "uint16"
 
 		goto conversionUnsignedInteger
 
@@ -1920,7 +1944,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: *uint16 cast to 'ptrUint16Num' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		if ptrUint16Num == nil {
@@ -1930,11 +1954,12 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ptrUint16Num is a nil pointer.",
 				ePrefix.String())
 
-			return nativeNumStr, err
-
+			return nativeNumStr, sourceType, err
 		}
 
 		uint64Num = uint64(*ptrUint16Num)
+
+		sourceType = "*uint16"
 
 		goto conversionUnsignedInteger
 
@@ -1950,10 +1975,12 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: uint cast to 'uintNum' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		uint64Num = uint64(uintNum)
+
+		sourceType = "uint"
 
 		goto conversionUnsignedInteger
 
@@ -1969,7 +1996,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: *uint cast to 'ptrUintNum' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		if ptrUintNum == nil {
@@ -1979,11 +2006,12 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ptrUintNum is a nil pointer.",
 				ePrefix.String())
 
-			return nativeNumStr, err
-
+			return nativeNumStr, sourceType, err
 		}
 
 		uint64Num = uint64(*ptrUintNum)
+
+		sourceType = "*uint"
 
 		goto conversionUnsignedInteger
 
@@ -1999,10 +2027,12 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: uint32 cast to 'uint32Num' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		uint64Num = uint64(uint32Num)
+
+		sourceType = "uint32"
 
 		goto conversionUnsignedInteger
 
@@ -2018,7 +2048,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: *uint32 cast to 'ptrUint32Num' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		if ptrUint32Num == nil {
@@ -2028,11 +2058,12 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ptrUint32Num is a nil pointer.",
 				ePrefix.String())
 
-			return nativeNumStr, err
-
+			return nativeNumStr, sourceType, err
 		}
 
 		uint64Num = uint64(*ptrUint32Num)
+
+		sourceType = "*uint32"
 
 		goto conversionUnsignedInteger
 
@@ -2046,8 +2077,10 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: uint64 cast to 'uint64Num' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
+
+		sourceType = "uint64"
 
 		goto conversionUnsignedInteger
 
@@ -2063,7 +2096,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: *uint64 cast to 'ptrUint32Num' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		if ptrUint32Num == nil {
@@ -2073,11 +2106,12 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ptrUint32Num is a nil pointer.",
 				ePrefix.String())
 
-			return nativeNumStr, err
-
+			return nativeNumStr, sourceType, err
 		}
 
 		uint64Num = *ptrUint32Num
+
+		sourceType = "*uint64"
 
 		goto conversionUnsignedInteger
 
@@ -2093,7 +2127,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: *big.Int cast to 'ptrBigIntNum' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		if ptrBigIntNum == nil {
@@ -2103,13 +2137,12 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ptrBigIntNum is a nil pointer.",
 				ePrefix.String())
 
-			return nativeNumStr, err
-
+			return nativeNumStr, sourceType, err
 		}
 
 		nativeNumStr = ptrBigIntNum.Text(10)
 
-		return nativeNumStr, err
+		sourceType = "*big.Int"
 
 	case big.Int:
 
@@ -2123,12 +2156,12 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: big.Int cast to 'bigIntNum' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
 
 		nativeNumStr = bigIntNum.Text(10)
 
-		return nativeNumStr, err
+		sourceType = "big.Int"
 
 	case *TextFieldFormatDtoFloat64:
 
@@ -2143,16 +2176,16 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: *TextFieldFormatDtoFloat64 cast to 'ptrTxtFieldFmtDtoF64' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
+
+		sourceType = "*TextFieldFormatDtoFloat64"
 
 		nativeNumStr,
 			err = ptrTxtFieldFmtDtoF64.FmtNumStrNative(
 			ePrefix.XCpy(
 				"nativeNumStr<-" +
 					"ptrTxtFieldFmtDtoF64"))
-
-		return nativeNumStr, err
 
 	case TextFieldFormatDtoFloat64:
 
@@ -2167,16 +2200,16 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: TextFieldFormatDtoFloat64 cast to 'txtFieldFmtDtoF64' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
+
+		sourceType = "TextFieldFormatDtoFloat64"
 
 		nativeNumStr,
 			err = txtFieldFmtDtoF64.FmtNumStrNative(
 			ePrefix.XCpy(
 				"nativeNumStr<-" +
-					"txtFieldFmtDtoF64"))
-
-		return nativeNumStr, err
+					"txtFieldFmtDtoF64-TextFieldFormatDtoFloat64"))
 
 	case *TextFieldFormatDtoBigFloat:
 
@@ -2191,16 +2224,16 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: *TextFieldFormatDtoBigFloat cast to 'ptrTxtFieldFmtDtoBigFloat' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
+
+		sourceType = "*TextFieldFormatDtoBigFloat"
 
 		nativeNumStr,
 			err = ptrTxtFieldFmtDtoBigFloat.FmtNumStrNative(
 			ePrefix.XCpy(
 				"nativeNumStr<-" +
-					"ptrTxtFieldFmtDtoBigFloat"))
-
-		return nativeNumStr, err
+					"ptrTxtFieldFmtDtoBigFloat-*TextFieldFormatDtoBigFloat"))
 
 	case TextFieldFormatDtoBigFloat:
 
@@ -2215,16 +2248,16 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: TextFieldFormatDtoBigFloat cast to 'txtFieldFmtDtoBigFloat' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
+
+		sourceType = "TextFieldFormatDtoBigFloat"
 
 		nativeNumStr,
 			err = txtFieldFmtDtoBigFloat.FmtNumStrNative(
 			ePrefix.XCpy(
 				"nativeNumStr<-" +
-					"txtFieldFmtDtoBigFloat"))
-
-		return nativeNumStr, err
+					"txtFieldFmtDtoBigFloat-TextFieldFormatDtoBigFloat"))
 
 	case *NumberStrKernel:
 
@@ -2239,8 +2272,10 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: *NumberStrKernel cast to 'ptrNumStrKernel' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
+
+		sourceType = "*NumberStrKernel"
 
 		nativeNumStr,
 			_,
@@ -2249,9 +2284,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 			0,
 			ePrefix.XCpy(
 				"nativeNumStr<-"+
-					"ptrNumStrKernel"))
-
-		return nativeNumStr, err
+					"ptrNumStrKernel-*NumberStrKernel"))
 
 	case NumberStrKernel:
 
@@ -2266,8 +2299,10 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 				"ERROR: NumberStrKernel cast to 'numStrKernel' failed!\n",
 				ePrefix.String())
 
-			return nativeNumStr, err
+			return nativeNumStr, sourceType, err
 		}
+
+		sourceType = "NumberStrKernel"
 
 		nativeNumStr,
 			_,
@@ -2276,9 +2311,7 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 			0,
 			ePrefix.XCpy(
 				"nativeNumStr<-"+
-					"numStrKernel"))
-
-		return nativeNumStr, err
+					"numStrKernel-NumberStrKernel"))
 
 	default:
 
@@ -2288,20 +2321,19 @@ func (mathHelpNanobot *mathHelperNanobot) numericValueToNativeNumStr(
 			ePrefix.String(),
 			numericValue)
 
-		return nativeNumStr, err
-
 	}
+
+	return nativeNumStr, sourceType, err
 
 conversionUnsignedInteger:
 
 	nativeNumStr = strconv.FormatUint(uint64Num, 10)
 
-	return nativeNumStr, err
+	return nativeNumStr, sourceType, err
 
 conversionInteger:
 
 	nativeNumStr = strconv.FormatInt(int64Num, 10)
 
-	return nativeNumStr, err
-
+	return nativeNumStr, sourceType, err
 }

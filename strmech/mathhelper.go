@@ -1,6 +1,7 @@
 package strmech
 
 import (
+	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"sync"
 )
@@ -510,14 +511,15 @@ func (mathHelper *MathHelper) NumericValueToNativeNumStr(
 	defer mathHelper.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
-
 	var err error
+
+	funcName := "MathHelper." +
+		"NumericValueToNativeNumStr()"
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"MathHelper."+
-			"NumericValueToNativeNumStr()",
+		funcName,
 		"")
 
 	if err != nil {
@@ -525,9 +527,28 @@ func (mathHelper *MathHelper) NumericValueToNativeNumStr(
 		return "", err
 	}
 
-	return new(mathHelperNanobot).
+	var nativeNumStr, sourceType string
+	var err2 error
+
+	nativeNumStr,
+		sourceType,
+		err2 = new(mathHelperNanobot).
 		numericValueToNativeNumStr(
 			numericValue,
 			ePrefix.XCpy("<-numericValue"))
 
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error occurred while converting a '%v' type\n"+
+			"to a native number string.\n"+
+			"Source Type= '%v'\n"+
+			"Error=\n%v\n",
+			funcName,
+			sourceType,
+			sourceType,
+			err2.Error())
+	}
+
+	return nativeNumStr, err
 }
