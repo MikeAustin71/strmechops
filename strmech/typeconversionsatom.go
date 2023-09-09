@@ -153,11 +153,11 @@ type typeConversionsAtom struct {
 //
 //	baseTypeConversion			BaseTypeDto
 //
-//		If this method completes successfully, this
-//		method will return an instance of BaseTypeDto.
-//		Input parameter 'charsToConvert' will be
-//		converted to one of four base types encapsulated
-//		by return parameter 'baseTypeConversion'.
+//		This method will return an instance of
+//		BaseTypeDto. Input parameter 'charsToConvert'
+//		will be converted to one of four base types
+//		encapsulated by this returned instance of
+//		'BaseTypeDto'.
 //
 //		Type BaseTypeDto consists of the following data
 //		elements:

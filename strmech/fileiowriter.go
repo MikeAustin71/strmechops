@@ -1510,7 +1510,7 @@ func (fIoWriter *FileIoWriter) Write(
 // configured for the current instance of FileIoWriter.
 //
 // The text or numeric data type passed as input
-// parameter 'charsToWrite' must match one of over fifty
+// parameter 'charsToWrite' must match one of over sixty
 // eligible data types. Eligible data types include
 // strings.Builder, strings, string arrays, byte arrays
 // and numeric values such as big.Int, big.Rat, float64
@@ -1560,62 +1560,73 @@ func (fIoWriter *FileIoWriter) Write(
 //		does not one of the following data types, an
 //		error will be returned.
 //
-//				Eligible Data Types
+//			Eligible Data Types
 //
-//			   1.	[]byte
-//			   2.	*[]byte
-//			   3.	string
-//			   4.	*string
-//			   5.	[]string
-//		 	   6.	StringArrayDto
-//			   7.	*StringArrayDto
-//			   8.	[]rune
-//			   9.	*[]rune
-//			  10.	RuneArrayDto
-//			  11.	*RuneArrayDto
-//			  12.	ITextFieldFormatDto
-//			  13.	ITextFieldSpecification
-//			  14.	ITextLineSpecification
-//			  15.	float32
-//			  16.	*float32
-//			  17.	float64
-//			  18.	*float64
-//			  19.	BigFloatDto
-//			  20.	*BigFloatDto
-//			  21.	big.Float
-//			  22.	*big.Float
-//			  23.	big.Rat
-//			  24.	*big.Rat
-//			  25.	int8
-//			  26.	*int8
-//			  27.	int16
-//			  28.	*int16
-//			  29.	int
-//			  30.	*int
-//			  31.	int32
-//			  32.	*int32
-//			  33.	int64
-//			  34.	*int64
-//			  35.	uint8
-//			  36.	*uint8
-//			  37.	uint16
-//			  38.	*uint16
-//			  39.	uint
-//			  40.	*uint
-//			  41.	uint32
-//			  42.	*uint32
-//			  43.	uint64,
-//			  44.	*uint64
-//			  45.	big.Int
-//			  46.	*big.Int
-//			  47.	TextFieldFormatDtoFloat64
-//			  48.	*TextFieldFormatDtoFloat64
-//			  49.	TextFieldFormatDtoBigFloat
-//			  50.	*TextFieldFormatDtoBigFloat
-//			  51.	NumberStrKernel
-//			  52.	*NumberStrKernel
-//			  53.	[]NumberStrKernel
-//			  54.	*[]NumberStrKernel
+//			 1.	[]byte
+//			 2.	*[]byte
+//			 3.	string
+//			 4.	*string
+//			 5.	[]string
+//			 6.	*[]string
+//			 7.	Stringer (fmt.Stringer) Interface
+//			 8.	strings.Builder
+//			 9.	*strings.Builder
+//			10.	StringArrayDto
+//			11.	*StringArrayDto
+//			12.	[]rune
+//			13.	*[]rune
+//			14.	RuneArrayDto
+//			15.	*RuneArrayDto
+//			16.	RuneArrayCollection
+//			17.	*RuneArrayCollection
+//			18.	ITextFieldFormatDto
+//			19.	ITextFieldSpecification
+//			20.	ITextLineSpecification
+//			21.	TextLineSpecLinesCollection
+//			22.	bool
+//			23.	TextLineTitleMarqueeDto
+//			24.	time.Time
+//			25.	TextInputParamFieldDateTimeDto
+//			26.	float32
+//			27.	*float32
+//			28.	float64
+//			29.	*float64
+//			30.	BigFloatDto
+//			31.	*BigFloatDto
+//			32.	big.Float
+//			33.	*big.Float
+//			34.	big.Rat
+//			35.	*big.Rat
+//			36.	int8
+//			37.	*int8
+//			38.	int16
+//			39.	*int16
+//			40.	int
+//			41.	*int
+//			42.	int32
+//			43.	*int32
+//			44.	int64
+//			45.	*int64
+//			46.	uint8
+//			47.	*uint8
+//			48.	uint16
+//			49.	*uint16
+//			50.	uint
+//			51.	*uint
+//			52.	uint32
+//			53.	*uint32
+//			54.	uint64,
+//			55.	*uint64
+//			56.	big.Int
+//			57.	*big.Int
+//			58.	TextFieldFormatDtoFloat64
+//			59.	*TextFieldFormatDtoFloat64
+//			60.	TextFieldFormatDtoBigFloat
+//			61.	*TextFieldFormatDtoBigFloat
+//			62.	NumberStrKernel
+//			63.	*NumberStrKernel
+//			64.	[]NumberStrKernel
+//			65.	*[]NumberStrKernel
 //
 //	writeEndOfLineChars			string
 //

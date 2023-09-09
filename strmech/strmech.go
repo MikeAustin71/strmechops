@@ -385,6 +385,276 @@ func (sMech *StrMech) ConvertNonPrintableString(
 	return printableString
 }
 
+// ConvertParamsToBaseTypes
+//
+// Receives an empty interface object ('charsToConvert')
+// and attempts to convert that object to one of four
+// base types.
+//
+// The conversion algorithm will accept any one of over
+// sixty eligible data types for conversion. Eligible
+// data types are defined as follows:
+//
+//		Eligible Data Types
+//
+//	   1.	[]byte
+//	   2.	*[]byte
+//	   3.	string
+//	   4.	*string
+//	   5.	[]string
+//	   6.	*[]string
+//	   7.	Stringer (fmt.Stringer) Interface
+//	   8.	strings.Builder
+//	   9.	*strings.Builder
+//	  10.	StringArrayDto
+//	  11.	*StringArrayDto
+//	  12.	[]rune
+//	  13.	*[]rune
+//	  14.	RuneArrayDto
+//	  15.	*RuneArrayDto
+//	  16.	RuneArrayCollection
+//	  17.	*RuneArrayCollection
+//	  18.	ITextFieldFormatDto
+//	  19.	ITextFieldSpecification
+//	  20.	ITextLineSpecification
+//	  21.	TextLineSpecLinesCollection
+//	  22.	bool
+//	  23.	TextLineTitleMarqueeDto
+//	  24.	time.Time
+//	  25.	TextInputParamFieldDateTimeDto
+//	  26.	float32
+//	  27.	*float32
+//	  28.	float64
+//	  29.	*float64
+//	  30.	BigFloatDto
+//	  31.	*BigFloatDto
+//	  32.	big.Float
+//	  33.	*big.Float
+//	  34.	big.Rat
+//	  35.	*big.Rat
+//	  36.	int8
+//	  37.	*int8
+//	  38.	int16
+//	  39.	*int16
+//	  40.	int
+//	  41.	*int
+//	  42.	int32
+//	  43.	*int32
+//	  44.	int64
+//	  45.	*int64
+//	  46.	uint8
+//	  47.	*uint8
+//	  48.	uint16
+//	  49.	*uint16
+//	  50.	uint
+//	  51.	*uint
+//	  52.	uint32
+//	  53.	*uint32
+//	  54.	uint64,
+//	  55.	*uint64
+//	  56.	big.Int
+//	  57.	*big.Int
+//	  58.	TextFieldFormatDtoFloat64
+//	  59.	*TextFieldFormatDtoFloat64
+//	  60.	TextFieldFormatDtoBigFloat
+//	  61.	*TextFieldFormatDtoBigFloat
+//	  62.	NumberStrKernel
+//	  63.	*NumberStrKernel
+//	  64.	[]NumberStrKernel
+//	  65.	*[]NumberStrKernel
+//
+// The results of the interface conversion are returned
+// and reported through an instance of BaseTypeDto.
+// Depending on the data type passed through input
+// parameter 'charsToConvert', this empty interface
+// input parameter will be converted to one of the
+// following four data elements encapsulated in the
+// returned instance of BaseTypeDto:
+//
+//	BaseTypeDto.AByteArrayDto
+//
+//	BaseTypeDto.ARuneArrayDto
+//
+//	BaseTypeDto.AString
+//
+//	BaseTypeDto.AStringArrayDto
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	charsToConvert				interface{}
+//
+//		An empty interface containing an object matching
+//		one of the more than 60-eligible types described
+//		above.
+//
+//		If this object is NOT convertible to one of the
+//		60+ eligible types supported by this method, an
+//		error will be returned.
+//
+//		Eligible types passed through this parameter will be
+//		one of the four base type specified by the returned
+//		instance of BaseTypeDto.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	baseTypeConversion			BaseTypeDto
+//
+//		This method will return an instance of
+//		BaseTypeDto. Input parameter 'charsToConvert'
+//		will be converted to one of four base types
+//		encapsulated by this returned instance of
+//		'BaseTypeDto'.
+//
+//		Type BaseTypeDto consists of the following data
+//		elements:
+//
+//		type BaseTypeDto struct {
+//
+//			IsAByteArrayDto     bool
+//			AByteArrayDto       ByteArrayDto
+//			AByteArrayDtoLength int
+//			AByteArrayDtoDesc1  string
+//			AByteArrayDtoDesc2  string
+//
+//			IsARuneArrayDto     bool
+//			ARuneArrayDto       RuneArrayDto
+//			ARuneArrayDtoLength int
+//			ARuneArrayDtoDesc1  string
+//			ARuneArrayDtoDesc2  string
+//
+//			IsAString     		bool
+//			AString       		string
+//			AStringLength 		int
+//			AStringDesc1  		string
+//			AStringDesc2  		string
+//
+//			IsAStringArrayDto     bool
+//			AStringArrayDto       StringArrayDto
+//			AStringArrayDtoLength int
+//			AStringArrayDtoDesc1  string
+//			AStringArrayDtoDesc2  string
+//		}
+//
+//		----------------------------------------------------
+//		BE ADVISED
+//
+//			The description #1 (...Desc1) data element
+//			will always be populated with the name of the
+//			original source type passed through the empty
+//			interface input parameter 'charsToConvert'.
+//		----------------------------------------------------
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (sMech *StrMech) ConvertParamsToBaseTypes(
+	charsToConvert interface{},
+	errorPrefix interface{}) (
+	baseTypeConversion BaseTypeDto,
+	err error) {
+
+	if sMech.stringDataMutex == nil {
+		sMech.stringDataMutex = new(sync.Mutex)
+	}
+
+	sMech.stringDataMutex.Lock()
+
+	defer sMech.stringDataMutex.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"StrMech.ConvertParamsToBaseTypes()",
+		"")
+
+	if err != nil {
+		return baseTypeConversion, err
+	}
+
+	baseTypeConversion,
+		err = new(typeConversionsAtom).
+		convertParamsToBaseTypes(
+			charsToConvert,
+			"charsToConvert",
+			ePrefix)
+
+	return baseTypeConversion, err
+}
+
 // ConvertPrintableChars - Converts printable characters to their
 // non-printable or native equivalent. For example, instances of
 // '\\n' in a string will be converted to '\n'.
