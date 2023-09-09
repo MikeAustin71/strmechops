@@ -3004,7 +3004,7 @@ func (txtSpecTimerLines *TextLineSpecTimerLines) Read(
 	}
 
 	n,
-		err = textSpecificationAtom{}.ptr().
+		err = new(textSpecificationAtom).
 		readBytes(
 			txtSpecTimerLines.textLineReader,
 			p,

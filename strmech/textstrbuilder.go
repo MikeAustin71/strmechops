@@ -1730,6 +1730,8 @@ func (txtStrBuildr *TextStrBuilder) FieldLabel(
 		convertParamEmptyInterfaceToString(
 			fieldText,
 			"fieldText",
+			false, // acceptStrArrayAsValid
+			"",    // strArrayElementSeparator
 			ePrefix.XCpy(
 				"fieldTextStr<-fieldText"))
 

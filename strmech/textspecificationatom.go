@@ -131,6 +131,28 @@ type textSpecificationAtom struct {
 //		parameter is submitted as an empty string its
 //		value will be defaulted to 'emptyIFace'.
 //
+//	acceptStrArrayAsValid	 	bool
+//
+//		If this parameter is set to 'true', empty
+//		interface objects which resolve as string arrays
+//		will be considered valid, converted to a string
+//		and returned through return parameter
+//		'convertedString'.
+//
+//		If 'acceptStrArrayAsValid' is set to 'false',
+//		data types which resolve to string arrays
+//		will be considered invalid and trigger an
+//		error return.
+//
+//	strArrayElementSeparator	string
+//
+//		If input parameter 'acceptStrArrayAsValid' is set
+//		to true and the empty interface object
+//		('emptyIFace') resolves to a string array, the
+//		member elements of that string array will be
+//		concatenated with each element of the string
+//		array being separated by this parameter,
+//		'strArrayElementSeparator'.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -176,6 +198,8 @@ type textSpecificationAtom struct {
 func (txtSpecAtom *textSpecificationAtom) convertParamEmptyInterfaceToString(
 	emptyIFace interface{},
 	emptyIFaceParamName string,
+	acceptStrArrayAsValid bool,
+	strArrayElementSeparator string,
 	errPrefDto *ePref.ErrPrefixDto) (
 	convertedString string,
 	err error) {
@@ -229,37 +253,25 @@ func (txtSpecAtom *textSpecificationAtom) convertParamEmptyInterfaceToString(
 		return convertedString, err
 	}
 
-	if baseTypeConversion.IsAByteArrayDto == true {
+	isInvalidStrArrayMessage :=
+		"Error: The empty interface object 'emptyIFace' resolved\n" +
+			"to a string array. String arrays are invalid!\n" +
+			"'emptyIFace' must resolve to a byte array, rune array\n" +
+			"or string.\n"
 
-		convertedString =
-			string(baseTypeConversion.AByteArrayDto.ByteArray)
+	isEmptyErrorMessage :=
+		"Error: typeConversionsAtom.convertParamsToBaseTypes()\n" +
+			"returned an invalid 'BaseTypeDto' object. The return" +
+			"value did not resolve as a byte array, rune array," +
+			"string array or string.\n"
 
-	} else if baseTypeConversion.IsARuneArrayDto == true {
-
-		convertedString =
-			string(baseTypeConversion.ARuneArrayDto.CharsArray)
-
-	} else if baseTypeConversion.IsAString == true {
-
-		convertedString = baseTypeConversion.AString
-
-	} else if baseTypeConversion.IsAStringArrayDto == true {
-
-		convertedString =
-			baseTypeConversion.AStringArrayDto.
-				ConcatenateStrings("")
-
-	} else {
-
-		err = fmt.Errorf("%v\n"+
-			"-------------------------------------------------------\n"+
-			"Error: typeConversionsAtom.convertParamsToBaseTypes()\n"+
-			"returned an invalid 'BaseTypeDto' object. The return"+
-			"value did not resolve as a byte array, rune array,"+
-			"string array or string.\n",
-			ePrefix.String())
-
-	}
+	convertedString,
+		err = baseTypeConversion.GetStringFromResult(
+		acceptStrArrayAsValid,
+		strArrayElementSeparator,
+		isInvalidStrArrayMessage,
+		isEmptyErrorMessage,
+		ePrefix)
 
 	return convertedString, err
 }
@@ -287,23 +299,6 @@ func (txtSpecAtom *textSpecificationAtom) getDefaultNewLineChars() []rune {
 	newLineChars := []rune{'\n'}
 
 	return newLineChars
-}
-
-// ptr - Returns a pointer to a new instance of
-// textSpecificationAtom.
-func (txtSpecAtom textSpecificationAtom) ptr() *textSpecificationAtom {
-
-	if txtSpecAtom.lock == nil {
-		txtSpecAtom.lock = new(sync.Mutex)
-	}
-
-	txtSpecAtom.lock.Lock()
-
-	defer txtSpecAtom.lock.Unlock()
-
-	return &textSpecificationAtom{
-		lock: new(sync.Mutex),
-	}
 }
 
 //	readBytes

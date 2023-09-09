@@ -286,7 +286,7 @@ func (txtSpecMolecule *textSpecificationMolecule) setDefaultNewLineChars(
 	}
 
 	defaultNewLineChars :=
-		textSpecificationAtom{}.ptr().
+		new(textSpecificationAtom).
 			getDefaultNewLineChars()
 
 	lenDefaultChars := len(defaultNewLineChars)

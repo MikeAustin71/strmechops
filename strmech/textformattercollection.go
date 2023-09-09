@@ -1805,6 +1805,8 @@ func (txtFmtCollection *TextFormatterCollection) AddFieldLabel(
 		convertParamEmptyInterfaceToString(
 			fieldText,
 			"fieldText",
+			false, // acceptStrArrayAsValid
+			"",    // strArrayElementSeparator
 			nil)
 
 	if err != nil {
@@ -2560,6 +2562,8 @@ func (txtFmtCollection *TextFormatterCollection) AddLine1Col(
 		convertParamEmptyInterfaceToString(
 			column1Field,
 			"column1Field",
+			false, // acceptStrArrayAsValid
+			"",    // strArrayElementSeparator
 			ePrefix.XCpy(
 				"column1Field"))
 
@@ -2825,6 +2829,8 @@ func (txtFmtCollection *TextFormatterCollection) AddLine2Col(
 		convertParamEmptyInterfaceToString(
 			column1Field,
 			"column1Field",
+			false, // acceptStrArrayAsValid
+			"",    // strArrayElementSeparator
 			ePrefix.XCpy(
 				"column1Field"))
 
@@ -2843,6 +2849,8 @@ func (txtFmtCollection *TextFormatterCollection) AddLine2Col(
 		convertParamEmptyInterfaceToString(
 			column2Field,
 			"column2Field",
+			false, // acceptStrArrayAsValid
+			"",    // strArrayElementSeparator
 			ePrefix.XCpy(
 				"column2Field"))
 
@@ -3250,6 +3258,8 @@ func (txtFmtCollection *TextFormatterCollection) AddLineMultiCol(
 				convertParamEmptyInterfaceToString(
 					textFields[i],
 					fmt.Sprintf("textFields[%v]", i),
+					false, // acceptStrArrayAsValid
+					"",    // strArrayElementSeparator
 					ePrefix.XCpy(
 						fmt.Sprintf("textFields[%v]", i)))
 
@@ -3440,6 +3450,8 @@ func (txtFmtCollection *TextFormatterCollection) AddLineManyCol(
 				convertParamEmptyInterfaceToString(
 					txtFieldVal,
 					fmt.Sprintf("txtFieldVal[%v]", idx),
+					false, // acceptStrArrayAsValid
+					"",    // strArrayElementSeparator
 					ePrefix.XCpy(
 						fmt.Sprintf("txtFieldVal[%v]", idx)))
 
@@ -5211,6 +5223,8 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine1Col(
 			convertParamEmptyInterfaceToString(
 				column1Field,
 				"column1Field",
+				false, // acceptStrArrayAsValid
+				"",    // strArrayElementSeparator
 				ePrefix.XCpy(
 					"column1Field"))
 
@@ -5735,6 +5749,8 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine2Col(
 			convertParamEmptyInterfaceToString(
 				column1Field,
 				"column1Field",
+				false, // acceptStrArrayAsValid
+				"",    // strArrayElementSeparator
 				ePrefix.XCpy(
 					"column1Field"))
 
@@ -5745,10 +5761,12 @@ func (txtFmtCollection *TextFormatterCollection) CfgLine2Col(
 	var column2FieldText string
 
 	column2FieldText,
-		err = textSpecificationAtom{}.ptr().
+		err = new(textSpecificationAtom).
 		convertParamEmptyInterfaceToString(
 			column2Field,
 			"column2Field",
+			false, // acceptStrArrayAsValid
+			"",    // strArrayElementSeparator
 			ePrefix.XCpy(
 				"column2Field"))
 
@@ -6190,10 +6208,12 @@ func (txtFmtCollection *TextFormatterCollection) CfgLineMultiCol(
 	for i := 0; i < lenTextFields; i++ {
 
 		textFieldsContent[i].TextFieldString,
-			err = textSpecificationAtom{}.ptr().
+			err = new(textSpecificationAtom).
 			convertParamEmptyInterfaceToString(
 				textFields[i],
 				fmt.Sprintf("textFields[%v]", i),
+				false, // acceptStrArrayAsValid
+				"",    // strArrayElementSeparator
 				ePrefix.XCpy(
 					fmt.Sprintf("textFields[%v]", i)))
 

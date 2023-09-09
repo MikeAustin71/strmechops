@@ -64,6 +64,19 @@ type BaseTypeDto struct {
 //
 // # Input Parameters
 //
+//	acceptStrArrayAsValid	 	bool
+//
+//		If this parameter is set to 'true', source data
+//		types which resolve as string arrays will be
+//		considered valid, converted to a string and
+//		returned through return parameter
+//		'convertedString'.
+//
+//		If 'acceptStrArrayAsValid' is set to 'false',
+//		data types which resolve to string arrays
+//		will be considered invalid and trigger an
+//		error return.
+//
 //	strArrayElementSeparator	string
 //
 //		If the active or populated internal data element
@@ -77,6 +90,16 @@ type BaseTypeDto struct {
 //		string array when creating the returned
 //		'convertedString'.
 //
+//	isInvalidStrArrayMessage	string
+//
+//		If input parameter 'acceptStrArrayAsValid' is set
+//		to 'false' and the source data type resolves to
+//		a string array, this text will be displayed as
+//		part of the returned error message.
+//
+//		If 'isInvalidStrArrayMessage' is submitted as an
+//		empty string, a default error message will
+//		be automatically generated.
 //
 //	isEmptyErrorMessage			string
 //
@@ -84,6 +107,10 @@ type BaseTypeDto struct {
 //		message which will be returned if all data
 //		elements in the current BaseTypeDto instance
 //		are empty.
+//
+//		If 'isEmptyErrorMessage' is submitted as an
+//		empty string, a default error message will
+//		be automatically generated.
 //
 //	errorPrefix					interface{}
 //
@@ -174,7 +201,9 @@ type BaseTypeDto struct {
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
 func (bTypeDto *BaseTypeDto) GetStringFromResult(
+	acceptStrArrayAsValid bool,
 	strArrayElementSeparator string,
+	isInvalidStrArrayMessage string,
 	isEmptyErrorMessage string,
 	errorPrefix interface{}) (
 	convertedString string,
@@ -217,9 +246,30 @@ func (bTypeDto *BaseTypeDto) GetStringFromResult(
 
 	} else if bTypeDto.IsAStringArrayDto == true {
 
-		convertedString =
-			bTypeDto.AStringArrayDto.
-				ConcatenateStrings(strArrayElementSeparator)
+		if acceptStrArrayAsValid == false {
+
+			if len(isInvalidStrArrayMessage) == 0 {
+
+				isInvalidStrArrayMessage =
+					"Error: The source data type resolved to a string\n" +
+						"array. String arrays are defined as invalid!\n" +
+						"The source data type must resolve to a byte array,\n" +
+						"rune array or string.\n"
+			}
+
+			err = fmt.Errorf("%v\n"+
+				"-------------------------------------------------------\n"+
+				"%v",
+				ePrefix.String(),
+				isInvalidStrArrayMessage)
+
+		} else {
+
+			convertedString =
+				bTypeDto.AStringArrayDto.
+					ConcatenateStrings(strArrayElementSeparator)
+
+		}
 
 	} else {
 

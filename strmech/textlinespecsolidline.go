@@ -3564,7 +3564,7 @@ func (txtSpecSolidLine *TextLineSpecSolidLine) Read(
 	}
 
 	n,
-		err = textSpecificationAtom{}.ptr().
+		err = new(textSpecificationAtom).
 		readBytes(
 			txtSpecSolidLine.textLineReader,
 			p,

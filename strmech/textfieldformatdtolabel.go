@@ -1500,6 +1500,8 @@ func (txtLabelFieldFmtDtoNanobot *textLabelFieldFormatDtoNanobot) copy(
 		convertParamEmptyInterfaceToString(
 			sourceTxtLabelFieldFmtDto.FieldContents,
 			"sourceTxtLabelFieldFmtDto.FieldContents",
+			false, // acceptStrArrayAsValid
+			"",    //strArrayElementSeparator
 			ePrefix.XCpy(
 				"sourceTxtLabelFieldFmtDto.FieldContents"))
 
@@ -1812,6 +1814,8 @@ func (txtLabelFieldFmtDtoMolecule *textLabelFieldFormatDtoMolecule) getFieldCont
 		convertParamEmptyInterfaceToString(
 			txtLabelFieldFmtDto.FieldContents,
 			"txtLabelFieldFmtDto.FieldContents",
+			false, // acceptStrArrayAsValid
+			"",    // strArrayElementSeparator
 			ePrefix.XCpy(
 				"txtLabelFieldFmtDto.FieldContents"))
 

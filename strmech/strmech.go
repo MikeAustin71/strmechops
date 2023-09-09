@@ -577,25 +577,29 @@ func (sMech *StrMech) ConvertNonPrintableString(
 //			AByteArrayDto       		ByteArrayDto
 //			AByteArrayDtoLength 		int
 //			AByteArrayDtoSourceDataType	string
+//			AByteArrayDtoDesc1  		string
 //			AByteArrayDtoDesc2  		string
 //
 //			IsARuneArrayDto     		bool
 //			ARuneArrayDto       		RuneArrayDto
-//			ARuneArrayDtoLength int
-//			ARuneArrayDtoSourceDataType  string
+//			ARuneArrayDtoLength 		int
+//			ARuneArrayDtoSourceDataType string
+//			ARuneArrayDtoDesc1  		string
 //			ARuneArrayDtoDesc2  		string
 //
 //			IsAString     				bool
 //			AString       				string
 //			AStringLength 				int
 //			AStringSourceDataType  		string
+//			AStringDesc1  				string
 //			AStringDesc2  				string
 //
-//			IsAStringArrayDto     bool
-//			AStringArrayDto       StringArrayDto
-//			AStringArrayDtoLength int
-//			AStringArrayDtoSourceDataType  string
-//			AStringArrayDtoDesc2  string
+//			IsAStringArrayDto     			bool
+//			AStringArrayDto       			StringArrayDto
+//			AStringArrayDtoLength 			int
+//			AStringArrayDtoSourceDataType  	string
+//			AStringArrayDtoDesc1  			string
+//			AStringArrayDtoDesc2  			string
 //		}
 //
 //		----------------------------------------------------
@@ -3353,6 +3357,29 @@ func (sMech *StrMech) GetStringData() string {
 //			string result.
 //		----------------------------------------------------
 //
+//	acceptStrArrayAsValid	 	bool
+//
+//		If this parameter is set to 'true', empty
+//		interface objects ('emptyIFace') which resolve as
+//		string arrays will be considered valid, converted
+//		to a string and returned through return parameter
+//		'convertedString'.
+//
+//		If 'acceptStrArrayAsValid' is set to 'false',
+//		data types which resolve to string arrays
+//		will be considered invalid and trigger an
+//		error return.
+//
+//	strArrayElementSeparator	string
+//
+//		If input parameter 'acceptStrArrayAsValid' is set
+//		to true and the empty interface object
+//		('emptyIFace') resolves to a string array, the
+//		member elements of that string array will be
+//		concatenated with each element of the string
+//		array being separated by this parameter,
+//		'strArrayElementSeparator'.
+//
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
@@ -3440,6 +3467,8 @@ func (sMech *StrMech) GetStringData() string {
 //	 	attached to the	beginning of the error message.
 func (sMech *StrMech) GetStringFromAnything(
 	emptyIFace interface{},
+	acceptStrArrayAsValid bool,
+	strArrayElementSeparator string,
 	errorPrefix interface{}) (
 	convertedString string,
 	err error) {
@@ -3469,6 +3498,8 @@ func (sMech *StrMech) GetStringFromAnything(
 		convertParamEmptyInterfaceToString(
 			emptyIFace,
 			"emptyIFace",
+			acceptStrArrayAsValid,
+			strArrayElementSeparator,
 			ePrefix.XCpy(
 				""))
 }

@@ -4263,7 +4263,7 @@ func (plainTextLine *TextLineSpecPlainText) Read(
 	}
 
 	n,
-		err = textSpecificationAtom{}.ptr().
+		err = new(textSpecificationAtom).
 		readBytes(
 			plainTextLine.textLineReader,
 			p,

@@ -2468,7 +2468,7 @@ func (txtDateTimeField *TextFieldSpecDateTime) Read(
 	}
 
 	n,
-		err = textSpecificationAtom{}.ptr().
+		err = new(textSpecificationAtom).
 		readBytes(
 			txtDateTimeField.textLineReader,
 			p,

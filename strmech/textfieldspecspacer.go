@@ -1456,7 +1456,7 @@ func (txtFieldSpacer *TextFieldSpecSpacer) Read(
 	}
 
 	n,
-		err = textSpecificationAtom{}.ptr().
+		err = new(textSpecificationAtom).
 		readBytes(
 			txtFieldSpacer.textLineReader,
 			p,

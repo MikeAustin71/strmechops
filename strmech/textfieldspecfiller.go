@@ -2418,7 +2418,7 @@ func (txtFillerField *TextFieldSpecFiller) Read(
 	}
 
 	n,
-		err = textSpecificationAtom{}.ptr().
+		err = new(textSpecificationAtom).
 		readBytes(
 			txtFillerField.textLineReader,
 			p,
