@@ -756,11 +756,12 @@ func (fBufWriter *FileBufferWriter) Flush(
 //	(1)	When all 'write' operations are completed and the
 //		services of the returned new instance of
 //		FileBufferWriter are no longer required, the user
-//		MUST call one of these local methods:
+//		MUST perform 'close' and clean-up operations by
+//		calling one of these local methods:
 //
-//				FileBufferWriter.Close()
-//				FileBufferWriter.FlushAndClose()
-//				FileBufferWriter.CloseWithNoFlush()
+//			FileBufferWriter.Close() - Same as FlushAndClose()
+//			FileBufferWriter.FlushAndClose()
+//			FileBufferWriter.CloseWithNoFlush()
 //
 //	(2)	After executing the 'close' operation described
 //		in paragraph (1) above, the current instance of
@@ -771,8 +772,12 @@ func (fBufWriter *FileBufferWriter) Flush(
 //		NOT *os.File, the user will be required to
 //		execute any 'close' or clean-up operations
 //		required by the external 'writer' object in
-//		addition to those 'close' operations specified in
-//		paragraph (1), above.
+//		addition to those 'close' and clean-up operations
+//		specified in paragraph (1), above.
+//
+//	(4)	Input parameter 'writer' will accept a pointer to
+//		an instance of os.File because *os.File implements
+//		the io.Writer interface.
 //
 // ----------------------------------------------------------------
 //
@@ -979,6 +984,31 @@ func (fBufWriter *FileBufferWriter) NewIoWriter(
 //	https://pkg.go.dev/bufio
 //	https://pkg.go.dev/bufio#Writer
 //	https://pkg.go.dev/io#Writer
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	As a precaution, the incoming 'fileMgr' object
+//		will be closed before configuring the internal
+//		bufio.writer object for the returned instance of
+//		FileBufferWriter.
+//
+//	(2)	When all read operations have been completed and
+//		there is no further need for the returned
+//		instance of FileBufferWriter, the user is
+//		responsible for 'closing' and releasing the
+//		associated memory resources by calling one
+//		of the following local methods:
+//
+//			FileBufferWriter.Close() - Same as FlushAndClose()
+//			FileBufferWriter.FlushAndClose()
+//			FileBufferWriter.CloseWithNoFlush()
+//
+//	(2)	After executing the 'close' operation described
+//		in paragraph (2) above, the current instance of
+//		FileBufferWriter will be rendered invalid and
+//		unavailable for future 'write' operations.
 //
 // ----------------------------------------------------------------
 //
@@ -1238,6 +1268,26 @@ func (fBufWriter *FileBufferWriter) NewFileMgr(
 //	https://pkg.go.dev/bufio
 //	https://pkg.go.dev/bufio#Writer
 //	https://pkg.go.dev/io#Writer
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	When all 'write' operations have been completed
+//		and there is no further need for the returned
+//		instance of FileBufferWriter, the user is
+//		responsible for 'closing' and releasing the
+//		associated memory resources by calling one
+//		of the following local methods:
+//
+//			FileBufferWriter.Close() - Same as FlushAndClose()
+//			FileBufferWriter.FlushAndClose()
+//			FileBufferWriter.CloseWithNoFlush()
+//
+//	(2)	After executing the 'close' operation described
+//		in paragraph (1) above, the current instance of
+//		FileBufferWriter will be rendered invalid and
+//		unavailable for future 'write' operations.
 //
 // ----------------------------------------------------------------
 //
@@ -1839,8 +1889,9 @@ func (fBufWriter *FileBufferWriter) Seek(
 		err = fmt.Errorf("%v\n"+
 			"Error: Seek is called on an io.Writer object.\n"+
 			"FileBufferWriter was NOT initialized as a file!\n"+
-			"FileBufferWriter was initialized as an io.Writer object.\n"+
-			"The 'Seek' method cannot be called on an io.Writer object.\n",
+			"Instead, FileBufferWriter was initialized as an\n"+
+			"io.Writer object. The 'Seek' method cannot be\n"+
+			"called on an io.Writer object.\n",
 			ePrefix.String())
 
 		return offsetFromFileStart, err
@@ -4074,7 +4125,7 @@ func (fBufWriterNanobot *fileBufferWriterNanobot) setIoWriter(
 
 	fBufWriter.filePtr, ok = writer.(*os.File)
 
-	if ok {
+	if ok == true {
 
 		fBufWriter.ioWriter = &writer
 

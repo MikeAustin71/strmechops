@@ -110,18 +110,29 @@ func (fIoWriter *FileIoWriter) Close() error {
 //		implements a direct write protocol using
 //		io.Writer.
 //
-//	(2)	Input parameter 'writer' will accept a pointer to
-//		an instance of os.File because os.File implements
-//		the io.Writer interface.
-//
-//	(3) The returned instance of FileIoWriter will retain
-//		a pointer reference to input parameter 'writer'.
-//		Be sure to close and release this pointer when the
-//		returned instance of FileIoWriter is no longer
-//		needed. To perform the 'close' operation, call the
-//		local method:
+//	(2)	When all 'write' operations are completed and the
+//		services of the returned new instance of
+//		FileIoWriter are no longer required, the user
+//		MUST perform 'close' and clean-up operations by
+//		calling this local methods:
 //
 //			FileIoWriter.Close()
+//
+//	(3)	After executing the 'close' operation described
+//		in paragraph (2) above, the current instance of
+//		FileIoWriter will be rendered invalid and
+//		unavailable for future 'write' operations.
+//
+//	(4) If the input parameter 'writer' base type is
+//		NOT *os.File, the user will be required to
+//		execute any 'close' or clean-up operations
+//		required by the external 'writer' object in
+//		addition to those 'close' and clean-up operations
+//		specified in paragraph (2), above.
+//
+//	(5)	Input parameter 'writer' will accept a pointer to
+//		an instance of os.File because os.File implements
+//		the io.Writer interface.
 //
 // ----------------------------------------------------------------
 //
@@ -922,8 +933,9 @@ func (fIoWriter *FileIoWriter) Seek(
 		err = fmt.Errorf("%v\n"+
 			"Error: Seek is called on an io.Writer object.\n"+
 			"FileIoWriter was NOT initialized as a file!\n"+
-			"FileIoWriter was initialized as an io.Writer object.\n"+
-			"The 'Seek' method cannot be called on an io.Writer object.\n",
+			"Instead, the FileIoWriter was initialized as\n"+
+			"an io.Writer object. The 'Seek' method cannot\n"+
+			"be called on an io.Writer object.\n",
 			ePrefix.String())
 
 		return offsetFromFileStart, err
@@ -2871,13 +2883,7 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setIoWriter(
 
 	fIoWriter.filePtr, ok = writer.(*os.File)
 
-	if !ok {
-
-		fIoWriter.filePtr = nil
-
-		fIoWriter.ioWriter = &writer
-
-	} else {
+	if ok {
 
 		var xWriter io.Writer
 
@@ -2887,6 +2893,13 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setIoWriter(
 			fIoWriter.filePtr.Name()
 
 		fIoWriter.ioWriter = &xWriter
+
+	} else {
+		// ok == false This is NOT a file pointer
+
+		fIoWriter.filePtr = nil
+
+		fIoWriter.ioWriter = &writer
 
 	}
 

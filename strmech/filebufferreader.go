@@ -80,6 +80,7 @@ import (
 //		unusable for all future 'read' operations.
 type FileBufferReader struct {
 	bufioReader        *bufio.Reader
+	ioReader           *io.Reader
 	filePtr            *os.File
 	targetReadFileName string
 
@@ -410,10 +411,25 @@ func (fBufReader *FileBufferReader) Discard(
 //
 // # IMPORTANT
 //
-//	The user is responsible for 'closing' the instance of
-//	io.Reader passed as input parameter 'reader'. The
-//	FileBufferReader.Close() method	will NOT close the
-//	'reader' object.
+//	(1)	When all 'read' operations are completed and the
+//		services of the returned new instance of
+//		FileBufferReader are no longer required, the user
+//		MUST perform 'close' and clean-up operations by
+//		calling this local methods:
+//
+//				FileBufferReader.Close()
+//
+//	(2)	After executing the 'close' operation described
+//		in paragraph (1) above, the current instance of
+//		FileBufferReader will be rendered invalid and
+//		unavailable for future 'read' operations.
+//
+//	(3) If the input parameter 'reader' base type is
+//		NOT *os.File, the user will be required to
+//		execute any 'close' or clean-up operations
+//		required by the external 'reader' object in
+//		addition to those 'close' and clean-up operations
+//		specified in paragraph (1), above.
 //
 // ----------------------------------------------------------------
 //
@@ -632,8 +648,10 @@ func (fBufReader *FileBufferReader) NewIoReader(
 //		there is no further need for the returned
 //		instance of FileBufferReader, the user is
 //		responsible for 'closing' and releasing the
-//		associated memory resources by calling the method
-//		FileIoReader.Close().
+//		associated memory resources by calling the
+//		local method:
+//
+//			FileIoReader.Close().
 //
 // ----------------------------------------------------------------
 //
@@ -890,6 +908,18 @@ func (fBufReader *FileBufferReader) NewFileMgr(
 //	https://pkg.go.dev/bufio
 //	https://pkg.go.dev/bufio#Reader
 //	https://pkg.go.dev/io#Reader
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	When all read operations have been completed and
+//	there is no further need for the returned instance of
+//	FileBufferReader, the user is responsible for
+//	'closing' and releasing the associated memory
+//	resources by calling the local method:
+//
+//			FileIoReader.Close().
 //
 // ----------------------------------------------------------------
 //
@@ -4064,9 +4094,32 @@ func (fBufReaderNanobot *fileBufferReaderNanobot) setIoReader(
 		bufSize = 4096
 	}
 
-	fBufReader.bufioReader = bufio.NewReaderSize(
-		reader,
-		bufSize)
+	var ok bool
+
+	fBufReader.filePtr, ok = reader.(*os.File)
+
+	if ok == true {
+
+		fBufReader.ioReader = &reader
+
+		fBufReader.bufioReader = bufio.NewReaderSize(
+			fBufReader.filePtr,
+			bufSize)
+
+		fBufReader.targetReadFileName =
+			fBufReader.filePtr.Name()
+
+	} else {
+
+		fBufReader.filePtr = nil
+
+		fBufReader.bufioReader = bufio.NewReaderSize(
+			reader,
+			bufSize)
+
+		fBufReader.ioReader = &reader
+
+	}
 
 	return err
 }
@@ -4576,6 +4629,8 @@ func (fBuffReaderMolecule *fileBufferReaderMolecule) close(
 	fBufReader.targetReadFileName = ""
 
 	fBufReader.filePtr = nil
+
+	fBufReader.ioReader = nil
 
 	fBufReader.bufioReader = nil
 
