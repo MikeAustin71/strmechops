@@ -1515,6 +1515,17 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite04() {
 		return
 	}
 
+	fmt.Printf("%v\n"+
+		"%v\n"+
+		"Number of Bytes Read matches\n"+
+		"Number of bytes written.\n"+
+		"   Number of Bytes Read = %v\n"+
+		"Number of Bytes Written = %v\n\n",
+		ePrefix.String(),
+		dashLineStr,
+		numOfBytesRead,
+		numOfBytesWritten)
+
 	// ------ Trailing Marquee
 
 	fmt.Printf("\n\n" + breakStr + "\n")
@@ -1720,6 +1731,339 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufWriter01() {
 			"Errors returned from Flush() and Close()\n"+
 			"Errors= \n%v\n",
 			ePrefix.String(),
+			err.Error())
+
+		return
+	}
+
+	if expectedNumOfBytesWritten != totalNumOfBytesWritten {
+
+		fmt.Printf(" %v\n"+
+			"%v\n"+
+			" Error: Expected Bytes Written != Actual Bytes Written\n"+
+			" Expected Bytes Written = '%v'\n"+
+			"   Actual Bytes Written = '%v'\n"+
+			"  Target Read File: %v\n"+
+			" Target Write File: %v\n",
+			ePrefix.String(),
+			dashLineStr,
+			expectedNumOfBytesWritten,
+			totalNumOfBytesWritten,
+			targetReadFile,
+			targetWriteFile)
+
+		return
+	}
+
+	fmt.Printf(" %v\n"+
+		"%v\n"+
+		" After fBufWriter.Write() Sequence\n"+
+		" Expected Number Of Bytes Written: %v\n"+
+		"   Actual Number of Bytes Written: %v\n"+
+		"  Target Read File: %v\n"+
+		" Target Write File: %v\n\n",
+		ePrefix.String(),
+		dashLineStr,
+		expectedNumOfBytesWritten,
+		totalNumOfBytesWritten,
+		targetReadFile,
+		targetWriteFile)
+
+	var filesAreEqual bool
+
+	if shouldReadAndWriteFilesBeEqual == true {
+
+		var reasonFilesNotEqual string
+
+		filesAreEqual,
+			reasonFilesNotEqual,
+			err = fHelper.CompareFiles(
+			targetReadFile,
+			targetWriteFile,
+			ePrefix.XCpy(
+				"Target Files Comparison"))
+
+		if err != nil {
+
+			fmt.Printf(" %v\n"+
+				" Error Return from fHelper.CompareFiles()\n"+
+				"  targetReadFile= %v\n"+
+				" targetWriteFile= %v\n"+
+				" Reason: %v\n",
+				ePrefix.String(),
+				targetReadFile,
+				targetWriteFile,
+				reasonFilesNotEqual)
+
+			return
+		}
+
+		if !filesAreEqual {
+
+			fmt.Printf(" %v\n"+
+				"%v\n"+
+				" Error: Read and Write Files are NOT equal!\n"+
+				" Reason: %v\n"+
+				"  Target Read File: %v\n"+
+				" Target Write File: %v\n\n",
+				ePrefix.String(),
+				dashLineStr,
+				reasonFilesNotEqual,
+				targetReadFile,
+				targetWriteFile)
+
+			return
+
+		} else {
+
+			fmt.Printf(" %v\n"+
+				"%v\n"+
+				" SUCCESS! Files are EQUAL!\n"+
+				"  Target Read File: %v\n"+
+				" Target Write File: %v\n\n",
+				ePrefix.String(),
+				dashLineStr,
+				targetReadFile,
+				targetWriteFile)
+
+		}
+
+	}
+
+	if shouldFinalDeleteWriteFile == true {
+
+		err = fHelper.
+			DeleteDirOrFile(
+				targetWriteFile,
+				ePrefix.XCpy("Final Delete-targetWriteFile"))
+
+		if err != nil {
+			fmt.Printf("\n%v\n\n",
+				err.Error())
+			return
+		}
+	}
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	return
+}
+
+func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufWriter02() {
+
+	funcName := "Main010.FileBufWriter02()"
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		funcName,
+		"")
+
+	breakStr := " " + strings.Repeat("=",
+		len(funcName)+6)
+
+	dashLineStr := " " + strings.Repeat("-",
+		len(funcName)+6)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	var shouldReadAndWriteFilesBeEqual,
+		useWindowsLineTerminationChars,
+		shouldFinalDeleteWriteFile bool
+
+	shouldReadAndWriteFilesBeEqual = true
+
+	useWindowsLineTerminationChars = true
+
+	shouldFinalDeleteWriteFile = true
+
+	var targetReadFile string
+	var err error
+
+	var exUtil = ExampleUtility{}
+
+	targetReadFile,
+		err = exUtil.GetCompositeDirectory(
+		"\\fileOpsTest\\filesForTest\\textFilesForTest\\splitFunc.txt",
+		ePrefix.XCpy("targetInputFileName<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var targetWriteFile string
+
+	targetWriteFile,
+		err = exUtil.GetCompositeDirectory(
+		"\\fileOpsTest\\trashDirectory\\Main010FileBufWriter02.txt",
+		ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var fHelper = new(strmech.FileHelper)
+	var outputLinesArray strmech.StringArrayDto
+	var numOfLinesRead, expectedNumOfBytesWritten int
+	var i64numOfBytesRead int64
+	var readEndOfLineDelimiters strmech.StringArrayDto
+	var writeEndOfLineChars string
+
+	if useWindowsLineTerminationChars {
+
+		// Windows Output Format
+		writeEndOfLineChars = "\r\n"
+
+	} else {
+
+		// Unix Output Format
+		writeEndOfLineChars = "\n"
+
+	}
+
+	readEndOfLineDelimiters.AddManyStrings(
+		"\n",
+		"\r\n",
+		"[EOL]")
+
+	_,
+		numOfLinesRead,
+		i64numOfBytesRead,
+		err = fHelper.ReadTextLines(
+		targetReadFile,
+		&readEndOfLineDelimiters,
+		&outputLinesArray,
+		-1,
+		ePrefix.XCpy("targetReadFile"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	outputLinesArray.AppendSuffix(writeEndOfLineChars)
+
+	expectedNumOfBytesWritten =
+		int(i64numOfBytesRead) + numOfLinesRead
+
+	var filePtr *os.File
+	var err2 error
+
+	filePtr,
+		err2 = fHelper.OpenFileWriteOnly(
+		targetWriteFile,
+		true,
+		ePrefix)
+
+	if err2 != nil {
+
+		fmt.Printf("%v\n"+
+			"Error: fHelper.OpenFileWriteOnly()\n"+
+			"Atempty to open targetWriteFile Failed!\n"+
+			"targetWriteFile= '%v'\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			targetWriteFile,
+			err2.Error())
+
+		return
+	}
+
+	var fBufWriter strmech.FileBufferWriter
+
+	fBufWriter,
+		err = new(strmech.FileBufferWriter).
+		NewIoWriter(
+			filePtr,
+			512,
+			ePrefix.XCpy("targetWriteFile"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var totalNumOfBytesWritten, localNumOfBytesWritten int
+	var bytesToWrite []byte
+
+	expectedNumOfBytesWritten = 0
+
+	for i := 0; i < numOfLinesRead; i++ {
+
+		bytesToWrite = []byte(outputLinesArray.StrArray[i])
+
+		expectedNumOfBytesWritten += len(bytesToWrite)
+
+		localNumOfBytesWritten,
+			err2 =
+			fBufWriter.Write(bytesToWrite)
+
+		if err2 != nil {
+
+			err = fmt.Errorf(" %v\n"+
+				" Error returned by fBufWriter.Write(bytesToWrite)\n"+
+				" Bytes To Write = '%v'\n"+
+				" Index = '%v'\n"+
+				" Error= \n%v\n",
+				ePrefix.String(),
+				string(bytesToWrite),
+				i,
+				err2.Error())
+
+			err2 = fBufWriter.FlushAndClose(nil)
+
+			err = errors.Join(err, err2)
+
+			fmt.Printf("%v\n",
+				err.Error())
+
+			return
+		}
+
+		totalNumOfBytesWritten += localNumOfBytesWritten
+	}
+
+	var err3 error
+
+	err3 = fBufWriter.Close()
+
+	if err3 != nil {
+
+		err2 = fmt.Errorf("%v\n"+
+			"Error returned by fBufWriter.Close()\n"+
+			"Error = \n%v\n",
+			ePrefix.String(),
+			err3.Error())
+
+		err = errors.Join(err, err2)
+	}
+
+	filePtr = nil
+
+	if err != nil {
+
+		fmt.Printf("%v\n"+
+			"Errors returned from Close()\n"+
+			"which were executed on the\n"+
+			"targetWriteFile.\n"+
+			"targetWriteFile= '%v'\n"+
+			"Errors= \n%v\n",
+			ePrefix.String(),
+			targetWriteFile,
 			err.Error())
 
 		return

@@ -89,6 +89,7 @@ import (
 //		and unusable for future 'write' operations.
 type FileBufferWriter struct {
 	bufioWriter         *bufio.Writer
+	ioWriter            *io.Writer
 	filePtr             *os.File
 	targetWriteFileName string
 
@@ -224,10 +225,12 @@ func (fBufWriter *FileBufferWriter) AvailableBuffer() []byte {
 // # IMPORTANT
 //
 //	(1)	Call this method after completing all write
-//		operations. Calling this method is essential to
-//		performance of necessary clean-up tasks after
-//		completion of all 'write' operations. Clean-up
-//		tasks consist of:
+//		operations when the services of this
+//		FileBufferWriter instance are no longer required.
+//		Calling this method is essential to performance
+//		of necessary clean-up tasks after completion of
+//		all 'write' operations. Clean-up tasks consist
+//		of:
 //
 //		(a)	Flushing the 'write' buffer to ensure that
 //			all data is written from the 'write' buffer
@@ -238,8 +241,8 @@ func (fBufWriter *FileBufferWriter) AvailableBuffer() []byte {
 //
 //	(2)	Once this method completes the 'Close' operation,
 //		this instance of FileBufferWriter becomes
-//		invalid, unusable and unavailable for further
-//		'write' operations.
+//		invalid and unavailable for further 'write'
+//		operations.
 //
 // ----------------------------------------------------------------
 //
@@ -351,6 +354,95 @@ func (fBufWriter *FileBufferWriter) Close() error {
 			ePrefix.XCpy("fBufWriter"))
 
 	return err
+}
+
+// CloseWithNoFlush
+//
+// Performs 'close' and clean-up operations on the
+// current instance of FileBufferWriter. This method will
+// 'close' all bufio.Writer and io.Writer objects, but
+// it will NOT flush any bytes remaining in the buffer
+// and therefore will NOT write those remaining bytes
+// to the underlying io.Writer object. This means that
+// any bytes remaining in the buffer will be discarded and
+// NOT written to the underlying io.Writer object.
+//
+// To perform both the 'flush' and 'close' operations on
+// the current instance of FileBufferWriter call either
+// one of the following local methods:
+//
+//	FileBufferWriter.Close() - Same as Flush and Close
+//	FileBufferWriter.FlushAndClose()
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	Call this method after completing all write
+//		operations when the services of this
+//		FileBufferWriter instance are no longer required.
+//		Calling this method is essential to performance
+//		of necessary clean-up tasks after completion of
+//		all 'write' operations.
+//
+//	(2)	Once this method completes the 'Close' operation,
+//		this instance of FileBufferWriter becomes
+//		invalid and unavailable for further 'write'
+//		operations.
+//
+//	(3) This method will NOT flush the write buffer
+//		before closing all internal io.Writer
+//		objects. This means that any data remaining
+//		in the write buffer will be discarded and
+//		will NOT be written to the underlying
+//		io.Writer object.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message.
+func (fBufWriter *FileBufferWriter) CloseWithNoFlush() error {
+
+	if fBufWriter.lock == nil {
+		fBufWriter.lock = new(sync.Mutex)
+	}
+
+	fBufWriter.lock.Lock()
+
+	defer fBufWriter.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileBufferWriter."+
+			"CloseWithNoFlush()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(fileBufferWriterMolecule).
+		close(fBufWriter,
+			"fBufWriter",
+			ePrefix)
 }
 
 // FlushAndClose
@@ -656,6 +748,31 @@ func (fBufWriter *FileBufferWriter) Flush(
 //	https://pkg.go.dev/bufio
 //	https://pkg.go.dev/bufio#Writer
 //	https://pkg.go.dev/io#Writer
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	When all 'write' operations are completed and the
+//		services of the returned new instance of
+//		FileBufferWriter are no longer required, the user
+//		MUST call one of these local methods:
+//
+//				FileBufferWriter.Close()
+//				FileBufferWriter.FlushAndClose()
+//				FileBufferWriter.CloseWithNoFlush()
+//
+//	(2)	After executing the 'close' operation described
+//		in paragraph (1) above, the current instance of
+//		FileBufferWriter will be rendered invalid and
+//		unavailable for future 'write' operations.
+//
+//	(3) If the input parameter 'writer' base type is
+//		NOT *os.File, the user will be required to
+//		execute any 'close' or clean-up operations
+//		required by the external 'writer' object in
+//		addition to those 'close' operations specified in
+//		paragraph (1), above.
 //
 // ----------------------------------------------------------------
 //
@@ -3953,9 +4070,33 @@ func (fBufWriterNanobot *fileBufferWriterNanobot) setIoWriter(
 		bufSize = 4096
 	}
 
-	fBufWriter.bufioWriter = bufio.NewWriterSize(
-		writer,
-		bufSize)
+	var ok bool
+
+	fBufWriter.filePtr, ok = writer.(*os.File)
+
+	if ok {
+
+		fBufWriter.ioWriter = &writer
+
+		fBufWriter.bufioWriter = bufio.NewWriterSize(
+			fBufWriter.filePtr,
+			bufSize)
+
+		fBufWriter.targetWriteFileName =
+			fBufWriter.filePtr.Name()
+
+	} else {
+		// ok == false - this is NOT a file
+
+		fBufWriter.filePtr = nil
+
+		fBufWriter.ioWriter = &writer
+
+		fBufWriter.bufioWriter = bufio.NewWriterSize(
+			writer,
+			bufSize)
+
+	}
 
 	return err
 }
@@ -4498,6 +4639,8 @@ func (fBufWriterMolecule *fileBufferWriterMolecule) close(
 	}
 
 	fBufWriter.targetWriteFileName = ""
+
+	fBufWriter.ioWriter = nil
 
 	fBufWriter.filePtr = nil
 
