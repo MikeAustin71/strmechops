@@ -49,11 +49,11 @@ import (
 //	io.Reader object, the user need to apply any
 //	required 'close' or clean-up operations externally.
 type FileIoReader struct {
-	ioReader           *io.Reader
-	filePtr            *os.File
-	targetReadFileName string
-
-	lock *sync.Mutex
+	ioReader                *io.Reader
+	filePtr                 *os.File
+	targetReadFileName      string
+	defaultReaderBufferSize int
+	lock                    *sync.Mutex
 }
 
 // Close
@@ -194,6 +194,17 @@ func (fIoReader *FileIoReader) Close() error {
 //		files, this 'reader' will in fact read data from
 //		any object implementing the io.Reader interface.
 //
+//	defaultReaderBufferSize		int
+//
+//		The size of the byte array which will be used to
+//		read data from the internal io.Reader object
+//		encapsulated by the current FileIoReader
+//		instance.
+//
+//		If the value of 'defaultReaderBufferSize' is
+//		less than '16', it will be reset to a size of
+//		'4096'.
+//
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
@@ -277,6 +288,7 @@ func (fIoReader *FileIoReader) Close() error {
 //	 	attached to the	beginning of the error message.
 func (fIoReader *FileIoReader) NewIoReader(
 	reader io.Reader,
+	defaultReaderBufferSize int,
 	errorPrefix interface{}) (
 	FileIoReader,
 	error) {
@@ -310,6 +322,7 @@ func (fIoReader *FileIoReader) NewIoReader(
 			"newFileIoReader",
 			reader,
 			"reader",
+			defaultReaderBufferSize,
 			ePrefix.XCpy("newFileIoReader"))
 
 	return newFileIoReader, err
@@ -1878,6 +1891,17 @@ func (fIoReader *FileIoReader) ReadAllToString(
 //		method 'Close()' will NOT close this io.Reader
 //		object.
 //
+//	defaultReaderBufferSize		int
+//
+//		The size of the byte array which will be used to
+//		read data from the internal io.Reader object
+//		encapsulated by the current FileIoReader
+//		instance.
+//
+//		If the value of 'defaultReaderBufferSize' is
+//		less than '16', it will be reset to a size of
+//		'4096'.
+//
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
@@ -1955,6 +1979,7 @@ func (fIoReader *FileIoReader) ReadAllToString(
 //	 	attached to the	beginning of the error message.
 func (fIoReader *FileIoReader) SetIoReader(
 	reader io.Reader,
+	defaultReaderBufferSize int,
 	errorPrefix interface{}) error {
 
 	if fIoReader.lock == nil {
@@ -1985,6 +2010,7 @@ func (fIoReader *FileIoReader) SetIoReader(
 			"fIoReader",
 			reader,
 			"reader",
+			defaultReaderBufferSize,
 			ePrefix.XCpy("fIoReader"))
 
 	return err
@@ -2422,6 +2448,184 @@ func (fIoReader *FileIoReader) SetPathFileName(
 				pathFileName))
 
 	return fInfoPlus, err
+}
+
+// WriteTo
+//
+// This method implements the io.WriterTo interface.
+//
+// Input parameter 'writer' passes an io.Writer object.
+// This method will then proceed to read the entire
+// contents of the io.Reader object encapsulated by
+// the current instance of FileIoReader and write
+// this data to the io.Writer object passed as input
+// parameter 'writer'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method implements the io.WriterTo interface.
+//
+//	(2) When the current instance of FileIoReader is no
+//		longer needed, the user is responsible for
+//		performing 'close' and clean-up operations by
+//		calling the local method:
+//
+//			FileIoReader.Close()
+//
+//	(3) If the number of bytes read from the FileIoReader
+//		internal io.Reader object does NOT match the bytes
+//		written to the io.Writer object passed as input
+//		parameter 'writer', an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	writer						io.Writer
+//
+//		This instance of io.Writer will be used as the
+//		'write' destination for all data read from the
+//		io.Reader object encapsulated by the current
+//		instance of FileIoReader.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numOfBytesProcessed			int64
+//
+//		The number of bytes read from the internal
+//		FileIoReader io.Reader object and written to the
+//		destination io.Writer object passed as input
+//		parameter 'writer'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message.
+func (fIoReader *FileIoReader) WriteTo(
+	writer io.Writer) (
+	numOfBytesProcessed int64,
+	err error) {
+
+	if fIoReader.lock == nil {
+		fIoReader.lock = new(sync.Mutex)
+	}
+
+	fIoReader.lock.Lock()
+
+	defer fIoReader.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileBufferReader."+
+			"WriteTo()",
+		"")
+
+	if err != nil {
+
+		return numOfBytesProcessed, err
+	}
+
+	if fIoReader.ioReader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of 'FileIoReader' is invalid!\n"+
+			"The internal io.Reader object has NOT been initialized.\n"+
+			"Call one of the 'New' or 'Setter' methods to create a\n"+
+			"valid instance of 'FileIoReader'\n",
+			ePrefix.String())
+
+		return numOfBytesProcessed, err
+	}
+
+	if writer == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'writer' is invalid!\n"+
+			"'writer' has a 'nil' value.\n",
+			ePrefix.String())
+
+		return numOfBytesProcessed, err
+	}
+
+	var bytesRead = make([]byte, 4096)
+	var localBytesRead, localBytesWritten int
+	var err2, err3 error
+	var localReader = *fIoReader.ioReader
+
+	for {
+
+		localBytesRead,
+			err2 = localReader.Read(bytesRead)
+
+		if err2 != nil &&
+			err2 != io.EOF {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: localReader.Read(bytesRead).\n"+
+				"The Read operation failed with errors.\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				err2.Error())
+
+			return numOfBytesProcessed, err
+		}
+
+		if localBytesRead > 0 {
+
+			localBytesWritten,
+				err3 = writer.Write(bytesRead[:localBytesRead])
+
+			if err3 != nil {
+
+				err = fmt.Errorf("\n%v\n"+
+					"Error: writer.Write(bytesRead[:localBytesRead])\n"+
+					"The Write operation failed with errors.\n"+
+					"Error=\n%v\n",
+					ePrefix.String(),
+					err3.Error())
+
+				return numOfBytesProcessed, err
+			}
+
+			if localBytesWritten != localBytesRead {
+
+				err = fmt.Errorf("%v\n"+
+					"Error: The number of bytes written\n"+
+					"DOES NOT equal the number of bytes read!\n"+
+					"   Bytes Read: %v\n"+
+					"Bytes Written: %v\n",
+					ePrefix.String(),
+					localBytesRead,
+					localBytesWritten)
+
+				return numOfBytesProcessed, err
+
+			} else {
+
+				numOfBytesProcessed += int64(localBytesRead)
+			}
+
+		}
+
+		if err2 == io.EOF {
+
+			break
+		}
+
+	}
+
+	return numOfBytesProcessed, err
 }
 
 type fileIoReaderMicrobot struct {
@@ -2961,6 +3165,17 @@ type fileIoReaderNanobot struct {
 //		string, a default value of "reader" will be
 //		automatically applied.
 //
+//	defaultReaderBufferSize		int
+//
+//		The size of the byte array which will be used to
+//		read data from the internal io.Reader object
+//		encapsulated by the current FileIoReader
+//		instance.
+//
+//		If the value of 'defaultReaderBufferSize' is
+//		less than '16', it will be reset to a size of
+//		'4096'.
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -2997,6 +3212,7 @@ func (fIoReaderNanobot *fileIoReaderNanobot) setIoReader(
 	fIoReaderLabel string,
 	reader io.Reader,
 	readerLabel string,
+	defaultReaderBufferSize int,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if fIoReaderNanobot.lock == nil {
@@ -3043,6 +3259,10 @@ func (fIoReaderNanobot *fileIoReaderNanobot) setIoReader(
 		return err
 	}
 
+	if defaultReaderBufferSize < 16 {
+		defaultReaderBufferSize = 4096
+	}
+
 	err = new(fileIoReaderMolecule).close(
 		fIoReader,
 		fIoReaderLabel,
@@ -3053,6 +3273,9 @@ func (fIoReaderNanobot *fileIoReaderNanobot) setIoReader(
 	}
 
 	fIoReader.ioReader = &reader
+
+	fIoReader.defaultReaderBufferSize =
+		defaultReaderBufferSize
 
 	return err
 }

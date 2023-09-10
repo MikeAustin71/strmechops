@@ -3247,7 +3247,8 @@ func (fBufReader *FileBufferReader) Size() int {
 // This method will then proceed to read the entire
 // contents of the bufio.Reader object encapsulated by
 // the current instance of FileBufferReader and write
-// this data to the io.Writer object.
+// this data to the io.Writer object passed as input
+// parameter 'writer'.
 //
 // ----------------------------------------------------------------
 //
@@ -3273,9 +3274,9 @@ func (fBufReader *FileBufferReader) Size() int {
 //	numOfBytesProcessed			int64
 //
 //		The number of bytes read from the internal
-//		bufio.Reader and written to the destination
-//		io.Writer object passed as input parameter
-//		'writer'.
+//		 FileBufferReader bufio.Reader object and written
+//		 to the destination io.Writer object passed as
+//		 input parameter 'writer'.
 //
 //	err							error
 //
