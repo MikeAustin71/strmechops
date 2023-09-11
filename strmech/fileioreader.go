@@ -194,14 +194,14 @@ func (fIoReader *FileIoReader) Close() error {
 //		files, this 'reader' will in fact read data from
 //		any object implementing the io.Reader interface.
 //
-//	defaultReaderBufferSize		int
+//	defaultWriterBufferSize		int
 //
 //		The size of the byte array which will be used to
 //		read data from the internal io.Reader object
 //		encapsulated by the returned FileIoReader
 //		instance.
 //
-//		If the value of 'defaultReaderBufferSize' is
+//		If the value of 'defaultWriterBufferSize' is
 //		less than '16', it will be reset to a size of
 //		'4096'.
 //
@@ -420,14 +420,14 @@ func (fIoReader *FileIoReader) NewIoReader(
 //		target 'read' file will be opened for 'read-only'
 //		operations.
 //
-//	defaultReaderBufferSize		int
+//	defaultWriterBufferSize		int
 //
 //		The size of the byte array which will be used to
 //		read data from the internal io.Reader object
 //		encapsulated by the returned FileIoReader
 //		instance.
 //
-//		If the value of 'defaultReaderBufferSize' is
+//		If the value of 'defaultWriterBufferSize' is
 //		less than '16', it will be reset to a size of
 //		'4096'.
 //
@@ -679,14 +679,14 @@ func (fIoReader *FileIoReader) NewFileMgr(
 //		target 'read' file will be opened for 'read-only'
 //		operations.
 //
-//	defaultReaderBufferSize		int
+//	defaultWriterBufferSize		int
 //
 //		The size of the byte array which will be used to
 //		read data from the internal io.Reader object
 //		encapsulated by the returned FileIoReader
 //		instance.
 //
-//		If the value of 'defaultReaderBufferSize' is
+//		If the value of 'defaultWriterBufferSize' is
 //		less than '16', it will be reset to a size of
 //		'4096'.
 //
@@ -2133,14 +2133,14 @@ func (fIoReader *FileIoReader) Seek(
 //
 // # Input Parameters
 //
-//	defaultReaderBufferSize		int
+//	defaultWriterBufferSize		int
 //
 //		The size of the byte array which will be used to
 //		read data from the internal io.Reader object
 //		encapsulated by the current instance of
 //		FileIoReader.
 //
-//		If the value of 'defaultReaderBufferSize' is
+//		If the value of 'defaultWriterBufferSize' is
 //		less than '16', it will be reset to a size of
 //		'4096'.
 //
@@ -2234,14 +2234,14 @@ func (fIoReader *FileIoReader) SetDefaultReaderBufferSize(
 //		method 'Close()' will NOT close this io.Reader
 //		object.
 //
-//	defaultReaderBufferSize		int
+//	defaultWriterBufferSize		int
 //
 //		The size of the byte array which will be used to
 //		read data from the internal io.Reader object
 //		encapsulated by the current FileIoReader
 //		instance.
 //
-//		If the value of 'defaultReaderBufferSize' is
+//		If the value of 'defaultWriterBufferSize' is
 //		less than '16', it will be reset to a size of
 //		'4096'.
 //
@@ -2438,14 +2438,14 @@ func (fIoReader *FileIoReader) SetIoReader(
 //		target 'read' file will be opened for 'read-only'
 //		operations.
 //
-//	defaultReaderBufferSize		int
+//	defaultWriterBufferSize		int
 //
 //		The size of the byte array which will be used to
 //		read data from the internal io.Reader object
 //		encapsulated by the current FileIoReader
 //		instance.
 //
-//		If the value of 'defaultReaderBufferSize' is
+//		If the value of 'defaultWriterBufferSize' is
 //		less than '16', it will be reset to a size of
 //		'4096'.
 //
@@ -2675,14 +2675,14 @@ func (fIoReader *FileIoReader) SetFileMgr(
 //		target 'read' file will be opened for 'read-only'
 //		operations.
 //
-//	defaultReaderBufferSize		int
+//	defaultWriterBufferSize		int
 //
 //		The size of the byte array which will be used to
 //		read data from the internal io.Reader object
 //		encapsulated by the current FileIoReader
 //		instance.
 //
-//		If the value of 'defaultReaderBufferSize' is
+//		If the value of 'defaultWriterBufferSize' is
 //		less than '16', it will be reset to a size of
 //		'4096'.
 //
@@ -2888,7 +2888,7 @@ func (fIoReader *FileIoReader) SetPathFileName(
 //		store and write bytes is controlled by the
 //		FileIoReader internal member variable:
 //
-//			FileIoReader.defaultReaderBufferSize
+//			FileIoReader.defaultWriterBufferSize
 //
 //		Reference local method:
 //
@@ -3322,14 +3322,14 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readAllStrBuilder(
 //		target read file will be opened for 'read-only'
 //		operations.
 //
-//	defaultReaderBufferSize		int
+//	defaultWriterBufferSize		int
 //
 //		The size of the byte array which will be used to
 //		read data from the internal io.Reader object
 //		encapsulated by the FileIoReader instance passed
 //		as input parameter 'fIoReader'.
 //
-//		If the value of 'defaultReaderBufferSize' is
+//		If the value of 'defaultWriterBufferSize' is
 //		less than '16', it will be reset to a size of
 //		'4096'.
 //
@@ -3598,14 +3598,14 @@ type fileIoReaderNanobot struct {
 //		string, a default value of "reader" will be
 //		automatically applied.
 //
-//	defaultReaderBufferSize		int
+//	defaultWriterBufferSize		int
 //
 //		The size of the byte array which will be used to
 //		read data from the internal io.Reader object
 //		encapsulated by the FileIoReader instance passed
 //		as input parameter 'fIoReader'.
 //
-//		If the value of 'defaultReaderBufferSize' is
+//		If the value of 'defaultWriterBufferSize' is
 //		less than '16', it will be reset to a size of
 //		'4096'.
 //
@@ -3817,14 +3817,14 @@ func (fIoReaderNanobot *fileIoReaderNanobot) setIoReader(
 //		target 'read' file will be opened for 'read-only'
 //		operations.
 //
-//	defaultReaderBufferSize		int
+//	defaultWriterBufferSize		int
 //
 //		The size of the byte array which will be used to
 //		read data from the internal io.Reader object
 //		encapsulated by the FileIoReader instance passed
 //		as input paramter 'fIoReader'.
 //
-//		If the value of 'defaultReaderBufferSize' is
+//		If the value of 'defaultWriterBufferSize' is
 //		less than '16', it will be reset to a size of
 //		'4096'.
 //

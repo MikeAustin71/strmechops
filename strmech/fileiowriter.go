@@ -4,16 +4,17 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
+	"math"
 	"os"
 	"sync"
 )
 
 type FileIoWriter struct {
-	ioWriter            *io.Writer
-	filePtr             *os.File
-	targetWriteFileName string
-
-	lock *sync.Mutex
+	ioWriter                *io.Writer
+	filePtr                 *os.File
+	targetWriteFileName     string
+	defaultWriterBufferSize int
+	lock                    *sync.Mutex
 }
 
 // Close
@@ -762,6 +763,204 @@ func (fIoWriter *FileIoWriter) NewPathFileName(
 				pathFileName))
 
 	return fInfoPlus, newFileIoWriter, err
+}
+
+// ReadFrom
+//
+// Implements the io.ReadFrom interface.
+//
+// This method will read data from the io.Reader object
+// passed as input parameter 'reader' and write that data
+// to bufio.Writer encapsulated by the current instance of
+// FileBufferWriter.
+//
+// The data is read from 'reader' using an internal byte
+// array equal in length to the buffer configured for the
+// current instance of FileBufferWriter.
+//
+// The return parameter 'numOfBytesProcessed' records the
+// number of bytes read from 'reader' and written to
+// the FileBufferWriter bufio.Writer object. If the
+// number of bytes read fails to match the number of
+// bytes written, an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	reader						io.Reader
+//
+//		An object which implements the io.Reader interface.
+//		This method will read the entire contents of this
+//		io.Reader object and write the data to the
+//		bufio.Writer object encapsulated by the current
+//		instance of FileBufferWriter.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numOfBytesProcessed			int64
+//
+//		This return parameter documents the number of
+//		bytes read from 'reader' and written to the
+//		FileBufferWriter bufio.Writer object. If the
+//		number of bytes read fails to match the number
+//		bytes written, an error will be returned.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message.
+func (fIoWriter *FileIoWriter) ReadFrom(
+	reader io.Reader) (
+	numOfBytesProcessed int64,
+	err error) {
+
+	if fIoWriter.lock == nil {
+		fIoWriter.lock = new(sync.Mutex)
+	}
+
+	fIoWriter.lock.Lock()
+
+	defer fIoWriter.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileIoWriter."+
+			"ReadFrom()",
+		"")
+
+	if err != nil {
+
+		return numOfBytesProcessed, err
+	}
+
+	if fIoWriter.ioWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of 'FileIoWriter' is invalid!\n"+
+			"The internal io.Writer object has NOT been initialized.\n"+
+			"Call one of the 'New' or 'Setter' methods to create a\n"+
+			"valid instance of 'FileIoWriter'\n",
+			ePrefix.String())
+
+		return numOfBytesProcessed, err
+	}
+
+	if reader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'reader' is invalid!\n"+
+			"'reader' has a 'nil' value.\n",
+			ePrefix.String())
+
+		return numOfBytesProcessed, err
+	}
+
+	if fIoWriter.defaultWriterBufferSize <= 0 {
+
+		fIoWriter.defaultWriterBufferSize = 4096
+	}
+
+	var bytesRead = make([]byte,
+		fIoWriter.defaultWriterBufferSize)
+
+	var numBytesRead, numBytesWritten int
+	var err1, err2 error
+	var maxCycle = math.MaxInt - 1
+	var cycleCnt int
+	var writer io.Writer
+	writer = *fIoWriter.ioWriter
+
+	for {
+
+		cycleCnt++
+
+		if cycleCnt >= maxCycle {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Infinite Loop!\n"+
+				"The 'Read' operation failed to locate io.EOF\n"+
+				"otherwise known as the end-of-file for this\n"+
+				"underlying io.Reader object.\n"+
+				"Read Cycle Count= %v\n",
+				ePrefix.String(),
+				cycleCnt)
+
+			break
+		}
+
+		numBytesRead,
+			err1 = reader.Read(bytesRead)
+
+		if err1 != nil &&
+			err1 != io.EOF {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: reader.Read(bytesRead)\n"+
+				"Error= \n%v\n",
+				ePrefix.String(),
+				err1.Error())
+
+			break
+
+		}
+
+		if numBytesRead > 0 {
+
+			numBytesWritten,
+				err2 = writer.Write(
+				bytesRead[:numBytesRead])
+
+			if err2 != nil {
+
+				err = fmt.Errorf("%v\n"+
+					"Error returned by fBufWriter.bufioWriter.Write(bytesRead[:numBytesRead])\n"+
+					"numBytesRead= '%v'\n"+
+					"Error=\n%v\n",
+					ePrefix.String(),
+					numBytesRead,
+					err2.Error())
+
+				break
+			}
+
+			if numBytesWritten != numBytesRead {
+
+				err = fmt.Errorf("%v\n"+
+					"Error: Number of bytes read does NOT\n"+
+					"match the number of bytes written.\n"+
+					"Write Cycle Number: %v\n"+
+					"   Number of Bytes Read: %v\n"+
+					"Number of Bytes Written: %v\n",
+					ePrefix.String(),
+					cycleCnt,
+					numBytesRead,
+					numBytesWritten)
+
+				break
+			}
+
+			numOfBytesProcessed += int64(numBytesWritten)
+		}
+
+		if err1 == io.EOF {
+
+			break
+		}
+
+		clear(bytesRead)
+	}
+
+	return numOfBytesProcessed, err
 }
 
 // Seek
@@ -2052,245 +2251,6 @@ func (fIoWriter *FileIoWriter) WriteTextOrNumbers(
 
 	return numOfBytesWritten, err
 }
-
-/*
-func (fIoWriter *FileIoWriter) WriteTextOrNumbers(
-	charsToWrite interface{},
-	writeEndOfLineChars string,
-	writeEndOfTextChars string,
-	autoCloseOnExit bool,
-	errorPrefix interface{}) (
-	numOfBytesWritten int64,
-	err error) {
-
-	if fIoWriter.lock == nil {
-		fIoWriter.lock = new(sync.Mutex)
-	}
-
-	fIoWriter.lock.Lock()
-
-	defer fIoWriter.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"FileIoWriter."+
-			"WriteTextOrNumbers()",
-		"")
-
-	if err != nil {
-
-		return numOfBytesWritten, err
-	}
-
-	if fIoWriter.ioWriter == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"-------------------------------------------------------\n"+
-			"Error: This instance of 'FileIoWriter' is invalid!\n"+
-			"The internal io.Writer has NOT been initialized.\n"+
-			"Call one of the 'New' or 'Setter' methods when creating\n"+
-			"a new valid instance of 'FileIoWriter'\n",
-			ePrefix.String())
-
-		return numOfBytesWritten, err
-	}
-
-	writeBytesFunc := func(
-		bytesToWrite []byte,
-		writeLastTextChars string,
-		errPrefDto *ePref.ErrPrefixDto) (
-		int64NumOfBytesWritten int64,
-		err error) {
-
-		var xEPrefix *ePref.ErrPrefixDto
-
-		funcName := "FileIoWriter." +
-			"lowLevelWriteBytes()"
-
-		xEPrefix,
-			err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-			errPrefDto,
-			funcName,
-			"")
-
-		if err != nil {
-			return int64NumOfBytesWritten, err
-		}
-
-		if len(bytesToWrite) == 0 {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: Input parameter 'bytesToWrite' is invalid!\n"+
-				"The 'bytesToWrite' byte array is empty. It has zero bytes.\n",
-				xEPrefix.String())
-
-			return int64NumOfBytesWritten, err
-		}
-
-		var writer io.Writer
-		var localNumOfBytesWritten int
-		var err2 error
-		writer = *fIoWriter.ioWriter
-
-		localNumOfBytesWritten,
-			err2 = writer.Write(bytesToWrite)
-
-		if err2 != nil {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: writer.Write(bytesToWrite)\n"+
-				"Error=\n%v\n",
-				xEPrefix.String(),
-				err2.Error())
-
-			return int64NumOfBytesWritten, err
-		}
-
-		int64NumOfBytesWritten +=
-			int64(localNumOfBytesWritten)
-
-		if len(writeLastTextChars) > 0 {
-
-			localNumOfBytesWritten,
-				err2 = writer.Write([]byte(writeLastTextChars))
-
-			if err2 != nil {
-
-				err = fmt.Errorf("%v\n"+
-					"Error: writer.Write([]byte(writeLastTextChars))\n"+
-					"Error= \n%v\n",
-					xEPrefix.String(),
-					err2.Error())
-
-			} else {
-
-				int64NumOfBytesWritten +=
-					int64(localNumOfBytesWritten)
-
-			}
-
-		}
-
-		return int64NumOfBytesWritten, err
-	}
-
-	writeStrArrayFunc := func(
-		strArray []string,
-		writeEOLTerminator string,
-		writeLastTextChars string,
-		errPrefDto *ePref.ErrPrefixDto) (
-		int64NumOfBytesWritten int64,
-		err error) {
-
-		var xEPrefix *ePref.ErrPrefixDto
-
-		funcName := "FileIoWriter." +
-			"lowLevelWriteBytes()"
-
-		xEPrefix,
-			err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-			errPrefDto,
-			funcName,
-			"")
-
-		if err != nil {
-			return int64NumOfBytesWritten, err
-		}
-
-		if fIoWriter.ioWriter == nil {
-
-			err = fmt.Errorf("%v\n"+
-				"-------------------------------------------------------\n"+
-				"Error: This instance of 'FileIoWriter' is invalid!\n"+
-				"The internal io.Writer has NOT been initialized.\n"+
-				"Call one of the 'New' or 'Setter' methods when creating\n"+
-				"a new valid instance of 'FileIoWriter'\n",
-				xEPrefix.String())
-
-			return int64NumOfBytesWritten, err
-		}
-
-		lastStrArrayIdx := len(strArray) - 1
-
-		if lastStrArrayIdx < 0 {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: Input parameter 'strArray' is invalid!\n"+
-				"This string array is empty. It has zero bytes.\n",
-				xEPrefix.String())
-
-			return int64NumOfBytesWritten, err
-		}
-
-		var writer io.Writer
-		var localNumOfBytesWritten int
-		var err2 error
-		var strToWrite string
-		writer = *fIoWriter.ioWriter
-
-		for i := 0; i <= lastStrArrayIdx; i++ {
-
-			strToWrite = strArray[i]
-
-			strToWrite += writeEOLTerminator
-
-			if i == lastStrArrayIdx {
-
-				strToWrite += writeLastTextChars
-
-			}
-
-			localNumOfBytesWritten,
-				err2 = writer.Write([]byte(strToWrite))
-
-			if err2 != nil {
-				err = fmt.Errorf("%v\n"+
-					"Error: writer.Write([]byte(strToWrite))\n"+
-					"strToWrite= '%v'\n"+
-					"String Array Index= '%v'\n"+
-					"Error=\n%v\n",
-					xEPrefix.String(),
-					strToWrite,
-					i,
-					err2.Error())
-
-				return int64NumOfBytesWritten, err
-			}
-
-			int64NumOfBytesWritten +=
-				int64(localNumOfBytesWritten)
-		}
-
-		return int64NumOfBytesWritten, err
-	}
-
-	numOfBytesWritten,
-		err = new(fileWriterHelperMicrobot).
-		writeCharacters(
-			writeBytesFunc,
-			writeStrArrayFunc,
-			charsToWrite,
-			"charsToWrite",
-			writeEndOfLineChars,
-			writeEndOfTextChars,
-			ePrefix.XCpy("fIoWriter.ioWriter<-charsToWrite"))
-
-	if err != nil &&
-		autoCloseOnExit == true {
-
-		err = new(fileIoWriterMolecule).
-			close(
-				fIoWriter,
-				"fIoWriter",
-				ePrefix)
-	}
-
-	return numOfBytesWritten, err
-}
-*/
 
 // lowLevelWriteToBytes
 func (fIoWriter *FileIoWriter) lowLevelWriteToBytes(

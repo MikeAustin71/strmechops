@@ -1580,8 +1580,8 @@ func (fBufWriter *FileBufferWriter) ReadFrom(
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		nil,
-		"FileBufferReader."+
-			"WriteTo()",
+		"FileBufferWriter."+
+			"ReadFrom()",
 		"")
 
 	if err != nil {
