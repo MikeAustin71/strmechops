@@ -1127,22 +1127,39 @@ func (fIoWriter *FileIoWriter) Seek(
 		return offsetFromFileStart, err
 	}
 
-	if fIoWriter.filePtr == nil {
+	var ok bool
+	var seekerObj io.Seeker
+	var localWriter io.Writer
+	localWriter = *fIoWriter.ioWriter
+
+	seekerObj, ok = localWriter.(io.Seeker)
+
+	if !ok {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Seek is called on an io.Writer object.\n"+
-			"FileIoWriter was NOT initialized as a file!\n"+
-			"Instead, the FileIoWriter was initialized as\n"+
-			"an io.Writer object. The 'Seek' method cannot\n"+
-			"be called on an io.Writer object.\n",
+			"Error: This Seek method was invoked on an\n"+
+			"'FileIoWriter' internal io.Writer object\n"+
+			"which does NOT support the io.Seeker\n"+
+			"interface. This means:\n"+
+			"(1) The 'Seek' method is unavailable.\n"+
+			"\n"+
+			"(2) The 'FileIoReader' internal io.Writer\n"+
+			"      object was created from something\n"+
+			"      other than a disk file (*os.File).\n",
 			ePrefix.String())
 
 		return offsetFromFileStart, err
+
 	}
 
-	if whence != io.SeekStart &&
-		whence != io.SeekCurrent &&
-		whence != io.SeekEnd {
+	var whenceCodeIsOk bool
+	var whenceCodeStr string
+
+	whenceCodeIsOk,
+		whenceCodeStr = new(FileConstants).
+		GetSeekerWhenceCodes(whence)
+
+	if !whenceCodeIsOk {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'whence' is invalid!\n"+
@@ -1151,17 +1168,32 @@ func (fIoWriter *FileIoWriter) Seek(
 			"  io.SeekStart = 0\n"+
 			"  io.SeekCurrent = 1\n"+
 			"  io.SeekEnd = 2\n"+
-			"'whence' = %v\n",
+			"Input 'whence' value = %v\n",
 			ePrefix.String(),
 			whence)
 
 		return offsetFromFileStart, err
 	}
 
+	var err2 error
+
 	offsetFromFileStart,
-		err = fIoWriter.filePtr.Seek(
+		err2 = seekerObj.Seek(
 		targetOffset,
 		whence)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: FileIoWriter.Seek()\n"+
+			"targetOffSet = %v\n"+
+			"whence = %v\n"+
+			"Error = \n%v\n",
+			ePrefix.String(),
+			targetOffset,
+			whenceCodeStr,
+			err2.Error())
+	}
 
 	return offsetFromFileStart, err
 }

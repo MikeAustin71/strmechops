@@ -1,3 +1,0 @@
-This is paragraph-2 and line number-1.
-This is paragraph-2 and line number-2.
-This is paragraph-2 and line number-3.

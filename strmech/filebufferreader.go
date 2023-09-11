@@ -2497,6 +2497,18 @@ func (fBufReader *FileBufferReader) Seek(
 		return offsetFromFileStart, err
 	}
 
+	if fBufReader.ioReader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of 'FileBufferReader' is invalid!\n"+
+			"The internal io.Reader object has NOT been initialized.\n"+
+			"Call one of the 'New' or 'Setter' methods to create a\n"+
+			"valid instance of 'FileBufferReader'\n",
+			ePrefix.String())
+
+		return offsetFromFileStart, err
+	}
+
 	var ok bool
 	var seekerObj io.Seeker
 	var localReader io.Reader
@@ -2522,9 +2534,14 @@ func (fBufReader *FileBufferReader) Seek(
 
 	}
 
-	if whence != io.SeekStart &&
-		whence != io.SeekCurrent &&
-		whence != io.SeekEnd {
+	var whenceCodeIsOk bool
+	var whenceCodeStr string
+
+	whenceCodeIsOk,
+		whenceCodeStr = new(FileConstants).
+		GetSeekerWhenceCodes(whence)
+
+	if !whenceCodeIsOk {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'whence' is invalid!\n"+
@@ -2533,17 +2550,32 @@ func (fBufReader *FileBufferReader) Seek(
 			"  io.SeekStart = 0\n"+
 			"  io.SeekCurrent = 1\n"+
 			"  io.SeekEnd = 2\n"+
-			"'whence' = %v\n",
+			"Input 'whence' value = %v\n",
 			ePrefix.String(),
 			whence)
 
 		return offsetFromFileStart, err
 	}
 
+	var err2 error
+
 	offsetFromFileStart,
-		err = seekerObj.Seek(
+		err2 = seekerObj.Seek(
 		targetOffset,
 		whence)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: FileBufferReader.Seek()\n"+
+			"targetOffSet = %v\n"+
+			"whence = %v\n"+
+			"Error = \n%v\n",
+			ePrefix.String(),
+			targetOffset,
+			whenceCodeStr,
+			err2.Error())
+	}
 
 	return offsetFromFileStart, err
 }
