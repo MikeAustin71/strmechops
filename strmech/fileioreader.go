@@ -205,6 +205,18 @@ func (fIoReader *FileIoReader) Close() error {
 //		less than '16', it will be reset to a size of
 //		'4096'.
 //
+//		Although the FileIoReader type does not use the
+//		'buffered' read protocol, the size of the byte
+//		array used to read and store bytes read from the
+//		underlying io.Reader object is variable.
+//
+//		Methods utilizing the Default Reader Buffer Size
+//		include:
+//
+//			FileIoReader.ReadAllStrBuilder()
+//			FileIoReader.ReadAllToString()
+//			FileIoReader.WriteTo()
+//
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
@@ -418,6 +430,18 @@ func (fIoReader *FileIoReader) NewIoReader(
 //		If the value of 'defaultReaderBufferSize' is
 //		less than '16', it will be reset to a size of
 //		'4096'.
+//
+//		Although the FileIoReader type does not use the
+//		'buffered' read protocol, the size of the byte
+//		array used to read and store bytes read from the
+//		underlying io.Reader object is variable.
+//
+//		Methods utilizing the Default Reader Buffer Size
+//		include:
+//
+//			FileIoReader.ReadAllStrBuilder()
+//			FileIoReader.ReadAllToString()
+//			FileIoReader.WriteTo()
 //
 //	errorPrefix					interface{}
 //
@@ -665,6 +689,18 @@ func (fIoReader *FileIoReader) NewFileMgr(
 //		If the value of 'defaultReaderBufferSize' is
 //		less than '16', it will be reset to a size of
 //		'4096'.
+//
+//		Although the FileIoReader type does not use the
+//		'buffered' read protocol, the size of the byte
+//		array used to read and store bytes read from the
+//		underlying io.Reader object is variable.
+//
+//		Methods utilizing the Default Reader Buffer Size
+//		include:
+//
+//			FileIoReader.ReadAllStrBuilder()
+//			FileIoReader.ReadAllToString()
+//			FileIoReader.WriteTo()
 //
 //	errorPrefix					interface{}
 //
@@ -1861,6 +1897,73 @@ func (fIoReader *FileIoReader) ReadAllToString(
 	return numOfBytesRead, contentsStr, err
 }
 
+// SetDefaultReaderBufferSize
+//
+// Sets the default size of the array used to read bytes
+// from the internal io.Reader encapsulated in the
+// current instance of FileIoReader.
+//
+// Although the FileIoReader type does not use the
+// 'buffered' read protocol, the size of the byte array
+// used to read and store bytes read from the underlying
+// io.Reader object is variable.
+//
+// The Default Reader Buffer Size controls the size of
+// the byte array used by the following methods:
+//
+//	FileIoReader.ReadAllStrBuilder()
+//	FileIoReader.ReadAllToString()
+//	FileIoReader.WriteTo()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	defaultReaderBufferSize		int
+//
+//		The size of the byte array which will be used to
+//		read data from the internal io.Reader object
+//		encapsulated by the current instance of
+//		FileIoReader.
+//
+//		If the value of 'defaultReaderBufferSize' is
+//		less than '16', it will be reset to a size of
+//		'4096'.
+//
+//		Methods utilizing the Default Reader Buffer Size
+//		include:
+//
+//			FileIoReader.ReadAllStrBuilder()
+//			FileIoReader.ReadAllToString()
+//			FileIoReader.WriteTo()
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	-- NONE --
+func (fIoReader *FileIoReader) SetDefaultReaderBufferSize(
+	defaultReaderBufferSize int) {
+
+	if fIoReader.lock == nil {
+		fIoReader.lock = new(sync.Mutex)
+	}
+
+	fIoReader.lock.Lock()
+
+	defer fIoReader.lock.Unlock()
+
+	if defaultReaderBufferSize < 16 {
+
+		defaultReaderBufferSize = 4096
+	}
+
+	fIoReader.defaultReaderBufferSize =
+		defaultReaderBufferSize
+
+	return
+}
+
 // SetIoReader
 //
 // This method will completely re-initialize the current
@@ -1927,6 +2030,18 @@ func (fIoReader *FileIoReader) ReadAllToString(
 //		If the value of 'defaultReaderBufferSize' is
 //		less than '16', it will be reset to a size of
 //		'4096'.
+//
+//		Although the FileIoReader type does not use the
+//		'buffered' read protocol, the size of the byte
+//		array used to read and store bytes read from the
+//		underlying io.Reader object is variable.
+//
+//		Methods utilizing the Default Reader Buffer Size
+//		include:
+//
+//			FileIoReader.ReadAllStrBuilder()
+//			FileIoReader.ReadAllToString()
+//			FileIoReader.WriteTo()
 //
 //	errorPrefix					interface{}
 //
@@ -2119,6 +2234,18 @@ func (fIoReader *FileIoReader) SetIoReader(
 //		If the value of 'defaultReaderBufferSize' is
 //		less than '16', it will be reset to a size of
 //		'4096'.
+//
+//		Although the FileIoReader type does not use the
+//		'buffered' read protocol, the size of the byte
+//		array used to read and store bytes read from the
+//		underlying io.Reader object is variable.
+//
+//		Methods utilizing the Default Reader Buffer Size
+//		include:
+//
+//			FileIoReader.ReadAllStrBuilder()
+//			FileIoReader.ReadAllToString()
+//			FileIoReader.WriteTo()
 //
 //	errorPrefix					interface{}
 //
@@ -2345,6 +2472,18 @@ func (fIoReader *FileIoReader) SetFileMgr(
 //		less than '16', it will be reset to a size of
 //		'4096'.
 //
+//		Although the FileIoReader type does not use the
+//		'buffered' read protocol, the size of the byte
+//		array used to read and store bytes read from the
+//		underlying io.Reader object is variable.
+//
+//		Methods utilizing the Default Reader Buffer Size
+//		include:
+//
+//			FileIoReader.ReadAllStrBuilder()
+//			FileIoReader.ReadAllToString()
+//			FileIoReader.WriteTo()
+//
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
@@ -2530,6 +2669,16 @@ func (fIoReader *FileIoReader) SetPathFileName(
 //		internal io.Reader object does NOT match the bytes
 //		written to the io.Writer object passed as input
 //		parameter 'writer', an error will be returned.
+//
+//	(4) The size of the internal byte array used to read
+//		store and write bytes is controlled by the
+//		FileIoReader internal member variable:
+//
+//			FileIoReader.defaultReaderBufferSize
+//
+//		Reference local method:
+//
+//			FileIoReader.SetDefaultReaderBufferSize()
 //
 // ----------------------------------------------------------------
 //
@@ -2834,8 +2983,13 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readAllStrBuilder(
 		return numOfBytesRead, err
 	}
 
+	if fIoReader.defaultReaderBufferSize < 16 {
+
+		fIoReader.defaultReaderBufferSize = 4096
+	}
+
 	var reader = *fIoReader.ioReader
-	var bytesRead = make([]byte, 4096)
+	var bytesRead = make([]byte, fIoReader.defaultReaderBufferSize)
 	var localBytesRead int
 	var err2 error
 
