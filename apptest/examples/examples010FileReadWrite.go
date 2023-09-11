@@ -986,6 +986,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02B() {
 		NewPathFileName(
 			targetWriteFile,
 			false,
+			1024,
 			ePrefix)
 
 	if err != nil {

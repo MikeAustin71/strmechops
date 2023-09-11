@@ -2336,10 +2336,13 @@ func (fBufReader *FileBufferReader) ReadAllToString(
 // Seek
 //
 // This method sets the offset for the next 'read'
-// operation within the 'read' file. This method only
-// succeeds if the current FileBufferReader instance
-// was created as a file with a path and file name string
-// or a File Manager object (FileMgr).
+// operation within the 'read' file.
+//
+// This method only succeeds if the current
+// FileBufferReader instance was created by means of a
+// path and file name string, a File Manager object
+// (FileMgr) or an io.Reader object with a base type
+// of file pointer (*os.File).
 //
 // This target offset is interpreted according to input
 // parameter 'whence'.
@@ -2376,17 +2379,14 @@ func (fBufReader *FileBufferReader) ReadAllToString(
 // # IMPORTANT
 //
 //	(1)	If the current instance of FileBufferReader was
-//		NOT initialized with a path and file name or a
-//		File Manager (FileMgr) object, it will return an
-//		error.
+//		NOT initialized with a path and file name, a File
+//		Manager (FileMgr) object or an io.Reader object
+//		with a base type of *os.File, this method will
+//		return an error.
 //
 //		Said another way, if the current instance of
-//		FileBufferReader was initialized with a call to
-//		one of the following local methods, an error will
-//		be returned.
-//
-//			FileBufferReader.NewIoReader()
-//			FileBufferReader.SetIoReader()
+//		FileBufferReader was initialized with some object
+//		other than a disk file, an error will be returned.
 //
 //	(2)	Seeking to an offset before the start of the file
 //		is an error.
@@ -2497,16 +2497,29 @@ func (fBufReader *FileBufferReader) Seek(
 		return offsetFromFileStart, err
 	}
 
-	if fBufReader.filePtr == nil {
+	var ok bool
+	var seekerObj io.Seeker
+	var localReader io.Reader
+	localReader = *fBufReader.ioReader
+
+	seekerObj, ok = localReader.(io.Seeker)
+
+	if !ok {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Seek is called on an io.Reader object.\n"+
-			"FileBufferReader was NOT initialized as a file!\n"+
-			"FileBufferReader was initialized as an io.Reader object.\n"+
-			"The 'Seek' method cannot be called on an io.Reader object.\n",
+			"Error: This Seek method was invoked on an\n"+
+			"'FileBufferReader' internal io.Reader object\n"+
+			"which does NOT support the io.Seeker interface.\n"+
+			"This means:\n"+
+			"(1) The 'Seek' method is unavailable.\n"+
+			"\n"+
+			"(2) The 'FileBufferReader' internal io.Reader\n"+
+			"      object was created from something other\n"+
+			"      than a disk file (*os.File).\n",
 			ePrefix.String())
 
 		return offsetFromFileStart, err
+
 	}
 
 	if whence != io.SeekStart &&
@@ -2528,7 +2541,7 @@ func (fBufReader *FileBufferReader) Seek(
 	}
 
 	offsetFromFileStart,
-		err = fBufReader.filePtr.Seek(
+		err = seekerObj.Seek(
 		targetOffset,
 		whence)
 
@@ -4466,6 +4479,12 @@ func (fBufReaderNanobot *fileBufferReaderNanobot) setPathFileName(
 	}
 
 	fBufReader.targetReadFileName = pathFileName
+
+	var reader io.Reader
+
+	reader = fBufReader.filePtr
+
+	fBufReader.ioReader = &reader
 
 	fBufReader.bufioReader = bufio.NewReaderSize(
 		fBufReader.filePtr,
