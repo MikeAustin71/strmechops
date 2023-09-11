@@ -3478,6 +3478,19 @@ func (fIoReaderNanobot *fileIoReaderNanobot) setIoReader(
 		return err
 	}
 
+	if reader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The io.Reader instance passed\n"+
+			"as input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' pointer.\n",
+			ePrefix.String(),
+			readerLabel,
+			readerLabel)
+
+		return err
+	}
+
 	if defaultReaderBufferSize < 16 {
 		defaultReaderBufferSize = 4096
 	}
@@ -3491,7 +3504,28 @@ func (fIoReaderNanobot *fileIoReaderNanobot) setIoReader(
 		return err
 	}
 
-	fIoReader.ioReader = &reader
+	var ok bool
+
+	fIoReader.filePtr, ok = reader.(*os.File)
+
+	if ok == true {
+
+		var xReader io.Reader
+
+		xReader = fIoReader.filePtr
+
+		fIoReader.ioReader = &xReader
+
+		fIoReader.targetReadFileName =
+			fIoReader.filePtr.Name()
+
+	} else {
+		// ok == false - This is NOT a disk file
+
+		fIoReader.ioReader = &reader
+
+		fIoReader.filePtr = nil
+	}
 
 	fIoReader.defaultReaderBufferSize =
 		defaultReaderBufferSize
@@ -4005,6 +4039,8 @@ func (fIoReaderMolecule *fileIoReaderMolecule) close(
 	fIoReader.filePtr = nil
 
 	fIoReader.ioReader = nil
+
+	fIoReader.defaultReaderBufferSize = 0
 
 	return err
 }
