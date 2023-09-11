@@ -1906,11 +1906,10 @@ func (fIoWriter *FileIoWriter) Write(
 	if fIoWriter.ioWriter == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"-------------------------------------------------------\n"+
 			"Error: This instance of 'FileIoWriter' is invalid!\n"+
-			"The internal io.Writer has NOT been initialized.\n"+
-			"Call one of the 'New' or 'Setter' methods when creating\n"+
-			"a new valid instance of 'FileIoWriter'\n",
+			"The internal io.Writer object has NOT been properly\n"+
+			"initialized. Call one of the 'New' or 'Setter'\n"+
+			"methods to create a valid instance of 'FileIoWriter'.\n",
 			ePrefix.String())
 
 		return numBytesWritten, err
@@ -2254,6 +2253,19 @@ func (fIoWriter *FileIoWriter) WriteTextOrNumbers(
 			"The internal io.Writer has NOT been initialized.\n"+
 			"Call one of the 'New' or 'Setter' methods when creating\n"+
 			"a new valid instance of 'FileIoWriter'\n",
+			ePrefix.String())
+
+		return numOfBytesWritten, err
+	}
+
+	if fIoWriter.ioWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"-------------------------------------------------------\n"+
+			"Error: This instance of 'FileIoWriter' is invalid!\n"+
+			"The internal io.Writer object has NOT been properly\n"+
+			"initialized. Call one of the 'New' or 'Setter'\n"+
+			"methods to create a valid instance of 'FileIoWriter'.\n",
 			ePrefix.String())
 
 		return numOfBytesWritten, err
@@ -2850,6 +2862,18 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setIoWriter(
 		return err
 	}
 
+	if fIoWriter.ioWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of 'FileIoWriter' is invalid!\n"+
+			"The internal io.Writer object has NOT been properly\n"+
+			"initialized. Call one of the 'New' or 'Setter'\n"+
+			"methods to create a valid instance of 'FileIoWriter'.\n",
+			ePrefix.String())
+
+		return err
+	}
+
 	if writer == nil {
 
 		err = fmt.Errorf("%v\n"+
@@ -3084,6 +3108,18 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setPathFileName(
 			ePrefix.String(),
 			fIoWriterLabel,
 			fIoWriterLabel)
+
+		return fInfoPlus, err
+	}
+
+	if fIoWriter.ioWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of 'FileIoWriter' is invalid!\n"+
+			"The internal io.Writer object has NOT been properly\n"+
+			"initialized. Call one of the 'New' or 'Setter'\n"+
+			"methods to create a valid instance of 'FileIoWriter'.\n",
+			ePrefix.String())
 
 		return fInfoPlus, err
 	}
@@ -3367,25 +3403,71 @@ func (fIoWriterMolecule *fileIoWriterMolecule) close(
 		return err
 	}
 
-	if fIoWriter.filePtr != nil {
+	if fIoWriter.ioWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of 'FileIoWriter' is invalid!\n"+
+			"The internal io.Writer object has NOT been properly\n"+
+			"initialized. Call one of the 'New' or 'Setter'\n"+
+			"methods to create a valid instance of 'FileIoWriter'.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	if fIoWriter.ioWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"-------------------------------------------\n"+
+			"Error: The FileIoWriter instance passed\n"+
+			"as input parameter '%v' is invalid!\n"+
+			"the internal io.Writer object is a 'nil'\n"+
+			"pointer. (%v.ioWriter)\n",
+			ePrefix.String(),
+			fIoWriterLabel,
+			fIoWriterLabel)
+
+		return err
+
+	}
+
+	var ok bool
+	var closerObj io.Closer
+	var localWriter io.Writer
+
+	localWriter = *fIoWriter.ioWriter
+
+	closerObj, ok = localWriter.(io.Closer)
+
+	if ok {
 
 		var err2 error
 
-		err2 = fIoWriter.filePtr.Close()
+		err2 = closerObj.Close()
 
 		if err2 != nil {
 
-			err = fmt.Errorf("%v\n"+
-				"Error returned while closing the target 'target' file!\n"+
-				"%v.filePtr.Close()\n"+
-				"Target Read File = '%v'\n"+
-				"Error = \n%v\n",
-				ePrefix.String(),
-				fIoWriterLabel,
-				fIoWriter.targetWriteFileName,
+			errText := fmt.Sprintf(
+				"%v\n"+
+					"Error returned while closing the 'FileIoWriter'\n"+
+					"internal io.Writer object.\n",
+				ePrefix.String())
+
+			if len(fIoWriter.targetWriteFileName) > 0 {
+
+				errText += fmt.Sprintf(
+					"Target Write File Name: %v\n",
+					fIoWriter.targetWriteFileName)
+
+			}
+
+			err = fmt.Errorf("%v"+
+				"closerObj.Close() Error=\n%v\n",
+				errText,
 				err2.Error())
 
 		}
+
 	}
 
 	fIoWriter.targetWriteFileName = ""
@@ -3393,6 +3475,8 @@ func (fIoWriterMolecule *fileIoWriterMolecule) close(
 	fIoWriter.filePtr = nil
 
 	fIoWriter.ioWriter = nil
+
+	fIoWriter.defaultWriterBufferSize = 0
 
 	return err
 }

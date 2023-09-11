@@ -1906,7 +1906,7 @@ func (fBufWriter *FileBufferWriter) Seek(
 	if !ok {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: This Seek method was invoked on an\n"+
+			"Error: This Seek method was invoked on a\n"+
 			"'FileBufferWriter' internal io.Writer object\n"+
 			"which does NOT support the io.Seeker interface.\n"+
 			"This means:\n"+
@@ -4712,25 +4712,59 @@ func (fBufWriterMolecule *fileBufferWriterMolecule) close(
 		return err
 	}
 
-	if fBufWriter.filePtr != nil {
+	if fBufWriter.ioWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"-------------------------------------------\n"+
+			"Error: The FileBufferWriter instance passed\n"+
+			"as input parameter '%v' is invalid!\n"+
+			"the internal io.Writer object is a 'nil'\n"+
+			"pointer. (%v.ioWriter)\n",
+			ePrefix.String(),
+			fBufWriterLabel,
+			fBufWriterLabel)
+
+		return err
+
+	}
+
+	var ok bool
+	var closerObj io.Closer
+	var localWriter io.Writer
+
+	localWriter = *fBufWriter.ioWriter
+
+	closerObj, ok = localWriter.(io.Closer)
+
+	if ok {
 
 		var err2 error
 
-		err2 = fBufWriter.filePtr.Close()
+		err2 = closerObj.Close()
 
 		if err2 != nil {
 
-			err = fmt.Errorf("%v\n"+
-				"Error returned while closing the target 'target' file!\n"+
-				"%v.filePtr.Close()\n"+
-				"Target Read File = '%v'\n"+
-				"Error = \n%v\n",
-				ePrefix.String(),
-				fBufWriterLabel,
-				fBufWriter.targetWriteFileName,
+			errText := fmt.Sprintf(
+				"%v\n"+
+					"Error returned while closing the 'fBufWriter'\n"+
+					"internal io.Writer object.\n",
+				ePrefix.String())
+
+			if len(fBufWriter.targetWriteFileName) > 0 {
+
+				errText += fmt.Sprintf(
+					"Target Write File Name: %v\n",
+					fBufWriter.targetWriteFileName)
+
+			}
+
+			err = fmt.Errorf("%v"+
+				"closerObj.Close() Error=\n%v\n",
+				errText,
 				err2.Error())
 
 		}
+
 	}
 
 	fBufWriter.targetWriteFileName = ""
@@ -4860,12 +4894,38 @@ func (fBufWriterMolecule *fileBufferWriterMolecule) flush(
 	if fBufWriter == nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: The FileBufferReader instance passed\n"+
+			"Error: The FileBufferWriter instance passed\n"+
 			"as input parameter '%v' is invalid!\n"+
 			"'%v' is a 'nil' pointer.\n",
 			ePrefix.String(),
 			fBufWriterLabel,
 			fBufWriterLabel)
+
+		return err
+	}
+
+	if fBufWriter.bufioWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The FileBufferWriter instance passed\n"+
+			"as input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' pointer.\n",
+			ePrefix.String(),
+			fBufWriterLabel,
+			fBufWriterLabel)
+
+		return err
+	}
+
+	if fBufWriter.ioWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"-------------------------------------------------------\n"+
+			"Error: This instance of 'FileBufferWriter' is invalid!\n"+
+			"The internal io.Writer object has NOT been properly\n"+
+			"initialized. Call one of the 'New' or 'Setter'\n"+
+			"methods to create a valid instance of 'FileBufferWriter'.\n",
+			ePrefix.String())
 
 		return err
 	}
