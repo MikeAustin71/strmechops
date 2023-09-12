@@ -168,6 +168,27 @@ func (fIoWriter *FileIoWriter) Close() error {
 //		files, this 'writer' will in fact write data to
 //		any object implementing the io.Writer interface.
 //
+//	defaultWriterBufferSize		int
+//
+//		The size of the byte array which will be used to
+//		write data to the internal io.Writer object
+//		encapsulated by the returned FileIoWriter
+//		instance.
+//
+//		If the value of 'defaultWriterBufferSize' is
+//		less than one ('1'), it will be reset to a size
+//		of '4096'.
+//
+//		Although the FileIoWriter type does not use the
+//		'buffered' write protocol, the size of the byte
+//		array used to write bytes to the underlying
+//		io.Writer object is variable.
+//
+//		Methods utilizing the Default Writer Buffer Size
+//		include:
+//
+//			FileIoWriter.ReadFrom()
+//
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
@@ -251,6 +272,7 @@ func (fIoWriter *FileIoWriter) Close() error {
 //	 	attached to the	beginning of the error message.
 func (fIoWriter *FileIoWriter) NewIoWriter(
 	writer io.Writer,
+	defaultWriterBufferSize int,
 	errorPrefix interface{}) (
 	FileIoWriter,
 	error) {
@@ -284,6 +306,7 @@ func (fIoWriter *FileIoWriter) NewIoWriter(
 			"newFileIoWriter",
 			writer,
 			"writer",
+			defaultWriterBufferSize,
 			ePrefix.XCpy("newFileIoWriter"))
 
 	return newFileIoWriter, err
@@ -368,6 +391,27 @@ func (fIoWriter *FileIoWriter) NewIoWriter(
 //		If 'openFileReadWrite' is set to 'false', the
 //		target 'write' file will be opened for 'write-only'
 //		operations.
+//
+//	defaultWriterBufferSize		int
+//
+//		The size of the byte array which will be used to
+//		write data to the internal io.Writer object
+//		encapsulated by the returned FileIoWriter
+//		instance.
+//
+//		If the value of 'defaultWriterBufferSize' is
+//		less than one ('1'), it will be reset to a size
+//		of '4096'.
+//
+//		Although the FileIoWriter type does not use the
+//		'buffered' write protocol, the size of the byte
+//		array used to write bytes to the underlying
+//		io.Writer object is variable.
+//
+//		Methods utilizing the Default Writer Buffer Size
+//		include:
+//
+//			FileIoWriter.ReadFrom()
 //
 //	errorPrefix					interface{}
 //
@@ -495,6 +539,7 @@ func (fIoWriter *FileIoWriter) NewIoWriter(
 func (fIoWriter *FileIoWriter) NewFileMgr(
 	fileMgr *FileMgr,
 	openFileReadWrite bool,
+	defaultWriterBufferSize int,
 	errorPrefix interface{}) (
 	fInfoPlus FileInfoPlus,
 	newFileIoWriter FileIoWriter,
@@ -530,6 +575,7 @@ func (fIoWriter *FileIoWriter) NewFileMgr(
 			fileMgr,
 			"fileMgr",
 			openFileReadWrite,
+			defaultWriterBufferSize,
 			ePrefix.XCpy(
 				"fileMgr"))
 
@@ -602,6 +648,27 @@ func (fIoWriter *FileIoWriter) NewFileMgr(
 //		If 'openFileReadWrite' is set to 'false', the
 //		target 'write' file will be opened for 'write-only'
 //		operations.
+//
+//	defaultWriterBufferSize		int
+//
+//		The size of the byte array which will be used to
+//		write data to the internal io.Writer object
+//		encapsulated by the returned FileIoWriter
+//		instance.
+//
+//		If the value of 'defaultWriterBufferSize' is
+//		less than one ('1'), it will be reset to a size
+//		of '4096'.
+//
+//		Although the FileIoWriter type does not use the
+//		'buffered' write protocol, the size of the byte
+//		array used to write bytes to the underlying
+//		io.Writer object is variable.
+//
+//		Methods utilizing the Default Writer Buffer Size
+//		include:
+//
+//			FileIoWriter.ReadFrom()
 //
 //	errorPrefix					interface{}
 //
@@ -724,6 +791,7 @@ func (fIoWriter *FileIoWriter) NewFileMgr(
 func (fIoWriter *FileIoWriter) NewPathFileName(
 	pathFileName string,
 	openFileReadWrite bool,
+	defaultWriterBufferSize int,
 	errorPrefix interface{}) (
 	fInfoPlus FileInfoPlus,
 	newFileIoWriter FileIoWriter,
@@ -759,6 +827,7 @@ func (fIoWriter *FileIoWriter) NewPathFileName(
 			pathFileName,
 			"pathFileName",
 			openFileReadWrite,
+			defaultWriterBufferSize,
 			ePrefix.XCpy(
 				pathFileName))
 
@@ -866,7 +935,7 @@ func (fIoWriter *FileIoWriter) ReadFrom(
 		return numOfBytesProcessed, err
 	}
 
-	if fIoWriter.defaultWriterBufferSize <= 0 {
+	if fIoWriter.defaultWriterBufferSize < 1 {
 
 		fIoWriter.defaultWriterBufferSize = 4096
 	}
@@ -1144,7 +1213,7 @@ func (fIoWriter *FileIoWriter) Seek(
 			"interface. This means:\n"+
 			"(1) The 'Seek' method is unavailable.\n"+
 			"\n"+
-			"(2) The 'FileIoReader' internal io.Writer\n"+
+			"(2) The 'FileIoWriter' internal io.Writer\n"+
 			"      object was created from something\n"+
 			"      other than a disk file (*os.File).\n",
 			ePrefix.String())
@@ -1255,6 +1324,27 @@ func (fIoWriter *FileIoWriter) Seek(
 //		method 'Close()' will NOT close this io.Writer
 //		object.
 //
+//	defaultWriterBufferSize		int
+//
+//		The size of the byte array which will be used to
+//		write data to the internal io.Writer object
+//		encapsulated by the current instance of
+//		FileIoWriter.
+//
+//		If the value of 'defaultWriterBufferSize' is
+//		less than one ('1'), it will be reset to a size
+//		of '4096'.
+//
+//		Although the FileIoWriter type does not use the
+//		'buffered' write protocol, the size of the byte
+//		array used to write bytes to the underlying
+//		io.Writer object is variable.
+//
+//		Methods utilizing the Default Writer Buffer Size
+//		include:
+//
+//			FileIoWriter.ReadFrom()
+//
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
@@ -1332,6 +1422,7 @@ func (fIoWriter *FileIoWriter) Seek(
 //	 	attached to the	beginning of the error message.
 func (fIoWriter *FileIoWriter) SetIoWriter(
 	writer io.Writer,
+	defaultWriterBufferSize int,
 	errorPrefix interface{}) error {
 
 	if fIoWriter.lock == nil {
@@ -1362,6 +1453,7 @@ func (fIoWriter *FileIoWriter) SetIoWriter(
 			"fIoWriter",
 			writer,
 			"writer",
+			defaultWriterBufferSize,
 			ePrefix.XCpy("fIoWriter"))
 
 	return err
@@ -1433,6 +1525,27 @@ func (fIoWriter *FileIoWriter) SetIoWriter(
 //		If 'openFileReadWrite' is set to 'false', the
 //		target 'write' file will be opened for 'write-only'
 //		operations.
+//
+//	defaultWriterBufferSize		int
+//
+//		The size of the byte array which will be used to
+//		write data to the internal io.Writer object
+//		encapsulated by the current instance of
+//		FileIoWriter.
+//
+//		If the value of 'defaultWriterBufferSize' is
+//		less than one ('1'), it will be reset to a size
+//		of '4096'.
+//
+//		Although the FileIoWriter type does not use the
+//		'buffered' write protocol, the size of the byte
+//		array used to write bytes to the underlying
+//		io.Writer object is variable.
+//
+//		Methods utilizing the Default Writer Buffer Size
+//		include:
+//
+//			FileIoWriter.ReadFrom()
 //
 //	errorPrefix					interface{}
 //
@@ -1549,6 +1662,7 @@ func (fIoWriter *FileIoWriter) SetIoWriter(
 func (fIoWriter *FileIoWriter) SetFileMgr(
 	fileMgr *FileMgr,
 	openFileReadWrite bool,
+	defaultWriterBufferSize int,
 	errorPrefix interface{}) (
 	fInfoPlus FileInfoPlus,
 	err error) {
@@ -1583,6 +1697,7 @@ func (fIoWriter *FileIoWriter) SetFileMgr(
 			fileMgr,
 			"fileMgr",
 			openFileReadWrite,
+			defaultWriterBufferSize,
 			ePrefix.XCpy(
 				"fileMgr"))
 
@@ -1645,6 +1760,27 @@ func (fIoWriter *FileIoWriter) SetFileMgr(
 //		If 'openFileReadWrite' is set to 'false', the
 //		target 'write' file will be opened for 'write-only'
 //		operations.
+//
+//	defaultWriterBufferSize		int
+//
+//		The size of the byte array which will be used to
+//		write data to the internal io.Writer object
+//		encapsulated by the current instance of
+//		FileIoWriter.
+//
+//		If the value of 'defaultWriterBufferSize' is
+//		less than one ('1'), it will be reset to a size
+//		of '4096'.
+//
+//		Although the FileIoWriter type does not use the
+//		'buffered' write protocol, the size of the byte
+//		array used to write bytes to the underlying
+//		io.Writer object is variable.
+//
+//		Methods utilizing the Default Writer Buffer Size
+//		include:
+//
+//			FileIoWriter.ReadFrom()
 //
 //	errorPrefix					interface{}
 //
@@ -1761,6 +1897,7 @@ func (fIoWriter *FileIoWriter) SetFileMgr(
 func (fIoWriter *FileIoWriter) SetPathFileName(
 	pathFileName string,
 	openFileReadWrite bool,
+	defaultWriterBufferSize int,
 	errorPrefix interface{}) (
 	fInfoPlus FileInfoPlus,
 	err error) {
@@ -1795,6 +1932,7 @@ func (fIoWriter *FileIoWriter) SetPathFileName(
 			pathFileName,
 			"pathFileName",
 			openFileReadWrite,
+			defaultWriterBufferSize,
 			ePrefix.XCpy(
 				pathFileName))
 
@@ -2493,6 +2631,27 @@ type fileIoWriterMicrobot struct {
 //		target write file will be opened for 'write-only'
 //		operations.
 //
+//	defaultWriterBufferSize		int
+//
+//		The size of the byte array which will be used to
+//		write data to the internal io.Writer object
+//		encapsulated by FileIoWriter input parameter
+//		'fIoWriter'.
+//
+//		If the value of 'defaultWriterBufferSize' is
+//		less than one ('1'), it will be reset to a size
+//		of '4096'.
+//
+//		Although the FileIoWriter type does not use the
+//		'buffered' write protocol, the size of the byte
+//		array used to write bytes to the underlying
+//		io.Writer object is variable.
+//
+//		Methods utilizing the Default Writer Buffer Size
+//		include:
+//
+//			FileIoWriter.ReadFrom()
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -2567,6 +2726,7 @@ func (fIoWriterMicrobot *fileIoWriterMicrobot) setFileMgr(
 	fileMgr *FileMgr,
 	fileMgrLabel string,
 	openFileReadWrite bool,
+	defaultWriterBufferSize int,
 	errPrefDto *ePref.ErrPrefixDto) (
 	fInfoPlus FileInfoPlus,
 	err error) {
@@ -2677,6 +2837,7 @@ func (fIoWriterMicrobot *fileIoWriterMicrobot) setFileMgr(
 			fileMgr.absolutePathFileName,
 			fileMgrLabel,
 			openFileReadWrite,
+			defaultWriterBufferSize,
 			ePrefix.XCpy(fIoWriterLabel+"<-"+fileMgrLabel))
 
 	return fInfoPlus, err
@@ -2777,6 +2938,27 @@ type fileIoWriterNanobot struct {
 //		string, a default value of "writer" will be
 //		automatically applied.
 //
+//	defaultWriterBufferSize		int
+//
+//		The size of the byte array which will be used to
+//		write data to the internal io.Writer object
+//		encapsulated by FileIoWriter input parameter
+//		'fIoWriter'.
+//
+//		If the value of 'defaultWriterBufferSize' is
+//		less than one ('1'), it will be reset to a size
+//		of '4096'.
+//
+//		Although the FileIoWriter type does not use the
+//		'buffered' write protocol, the size of the byte
+//		array used to write bytes to the underlying
+//		io.Writer object is variable.
+//
+//		Methods utilizing the Default Writer Buffer Size
+//		include:
+//
+//			FileIoWriter.ReadFrom()
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -2813,6 +2995,7 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setIoWriter(
 	fIoWriterLabel string,
 	writer io.Writer,
 	writerLabel string,
+	defaultWriterBufferSize int,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if fIoWriterNanobot.lock == nil {
@@ -2888,6 +3071,11 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setIoWriter(
 
 	}
 
+	if defaultWriterBufferSize < 1 {
+
+		defaultWriterBufferSize = 4096
+	}
+
 	var fIoWriterMolecule = new(fileIoWriterMolecule)
 
 	// Close the old fIoWriter
@@ -2919,6 +3107,9 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setIoWriter(
 		fIoWriter.ioWriter = &writer
 
 	}
+
+	fIoWriter.defaultWriterBufferSize =
+		defaultWriterBufferSize
 
 	return err
 }
@@ -2992,6 +3183,27 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setIoWriter(
 //		If 'openFileReadWrite' is set to 'false', the
 //		target 'write' file will be opened for 'write-only'
 //		operations.
+//
+//	defaultWriterBufferSize		int
+//
+//		The size of the byte array which will be used to
+//		write data to the internal io.Writer object
+//		encapsulated by FileIoWriter input parameter
+//		'fIoWriter'.
+//
+//		If the value of 'defaultWriterBufferSize' is
+//		less than one ('1'), it will be reset to a size
+//		of '4096'.
+//
+//		Although the FileIoWriter type does not use the
+//		'buffered' write protocol, the size of the byte
+//		array used to write bytes to the underlying
+//		io.Writer object is variable.
+//
+//		Methods utilizing the Default Writer Buffer Size
+//		include:
+//
+//			FileIoWriter.ReadFrom()
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -3067,6 +3279,7 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setPathFileName(
 	pathFileName string,
 	pathFileNameLabel string,
 	openFileReadWrite bool,
+	defaultWriterBufferSize int,
 	errPrefDto *ePref.ErrPrefixDto) (
 	fInfoPlus FileInfoPlus,
 	err error) {
@@ -3123,6 +3336,11 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setPathFileName(
 			ePrefix.String())
 
 		return fInfoPlus, err
+	}
+
+	if defaultWriterBufferSize < 1 {
+
+		defaultWriterBufferSize = 4096
 	}
 
 	if len(pathFileNameLabel) == 0 {
@@ -3260,6 +3478,9 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setPathFileName(
 	writer = fIoWriter.filePtr
 
 	fIoWriter.ioWriter = &writer
+
+	fIoWriter.defaultWriterBufferSize =
+		defaultWriterBufferSize
 
 	return fInfoPlus, err
 }
