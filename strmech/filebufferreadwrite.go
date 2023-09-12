@@ -8112,7 +8112,7 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) flushAndCloseWriter(
 	}
 
 	var err2, err3 error
-	var fBufWriterMolecule = new(fileBufferWriterMolecule)
+	var fBufWriterMolecule = new(fileBufferWriterAtom)
 
 	if fBufReadWrite.writer != nil {
 

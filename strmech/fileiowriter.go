@@ -846,10 +846,11 @@ func (fIoWriter *FileIoWriter) ReadFrom(
 	if fIoWriter.ioWriter == nil {
 
 		err = fmt.Errorf("%v\n"+
+			"-------------------------------------------------------\n"+
 			"Error: This instance of 'FileIoWriter' is invalid!\n"+
-			"The internal io.Writer object has NOT been initialized.\n"+
-			"Call one of the 'New' or 'Setter' methods to create a\n"+
-			"valid instance of 'FileIoWriter'\n",
+			"The internal io.Writer object has NOT been properly\n"+
+			"initialized. Call one of the 'New' or 'Setter'\n"+
+			"methods to create a valid instance of 'FileIoWriter'\n",
 			ePrefix.String())
 
 		return numOfBytesProcessed, err

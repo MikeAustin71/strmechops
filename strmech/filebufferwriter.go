@@ -347,7 +347,7 @@ func (fBufWriter *FileBufferWriter) Close() error {
 		return err
 	}
 
-	err = new(fileBufferWriterNanobot).
+	err = new(fileBufferWriterMolecule).
 		flushAndClose(
 			fBufWriter,
 			"fBufWriter",
@@ -439,7 +439,7 @@ func (fBufWriter *FileBufferWriter) CloseWithNoFlush() error {
 		return err
 	}
 
-	return new(fileBufferWriterMolecule).
+	return new(fileBufferWriterAtom).
 		close(fBufWriter,
 			"fBufWriter",
 			ePrefix)
@@ -592,7 +592,7 @@ func (fBufWriter *FileBufferWriter) FlushAndClose(
 		return err
 	}
 
-	err = new(fileBufferWriterNanobot).
+	err = new(fileBufferWriterMolecule).
 		flushAndClose(
 			fBufWriter,
 			"fBufWriter",
@@ -711,7 +711,7 @@ func (fBufWriter *FileBufferWriter) Flush(
 		return err
 	}
 
-	err = new(fileBufferWriterMolecule).
+	err = new(fileBufferWriterAtom).
 		flush(
 			fBufWriter,
 			"fBufWriter",
@@ -3112,7 +3112,7 @@ func (fBufWriter *FileBufferWriter) WriteTextOrNumbers(
 
 	if err == nil {
 
-		var fBufWriterMolecule = new(fileBufferWriterMolecule)
+		var fBufWriterMolecule = new(fileBufferWriterAtom)
 		var err2, err3 error
 
 		err3 = fBufWriterMolecule.flush(
@@ -3461,7 +3461,7 @@ func (fBufWriterMicrobot *fileBufferWriterMicrobot) performAutoFlushAndClose(
 
 	if autoFlushAndCloseOnExit == true {
 
-		err2 = new(fileBufferWriterNanobot).flushAndClose(
+		err2 = new(fileBufferWriterMolecule).flushAndClose(
 			fBufWriter,
 			fBufWriterLabel,
 			ePrefix.XCpy(fmt.Sprintf(
@@ -3475,7 +3475,7 @@ func (fBufWriterMicrobot *fileBufferWriterMicrobot) performAutoFlushAndClose(
 
 	} else {
 
-		err2 = new(fileBufferWriterMolecule).
+		err2 = new(fileBufferWriterAtom).
 			flush(
 				fBufWriter,
 				fBufWriterLabel,
@@ -3798,158 +3798,6 @@ type fileBufferWriterNanobot struct {
 	lock *sync.Mutex
 }
 
-// flushAndClose
-//
-// This method is used to perform all necessary clean-up
-// operations after all data has been written to the
-// internal destination bufio.Writer object.
-//
-// These clean-up operations consist of:
-//
-//	(1)	Flushing the write buffer to ensure that all
-//		data is written to the internal destination
-//		bufio.Writer object.
-//
-//				AND
-//
-//	(2) Closing the internal bufio.Writer object thereby
-//		it invalid and unavailable for any future
-//		'write' operations.
-//
-// After calling this method, the current instance of
-// FileBufferWriter will be unusable and should be
-// discarded.
-//
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-//	(1)	Call this method after completing all write
-//		operations. Calling this method is essential to
-//		performance of necessary clean-up tasks. Clean-up
-//		tasks consist of:
-//
-//		(a)	Flushing the 'write' buffer to ensure that
-//			all data is written from the 'write' buffer
-//			to the underlying bufio.Writer object.
-//
-//		(b)	Properly closing the 'write' file or
-//			bufio.Writer object.
-//
-//	(2)	Once this method completes the 'Close' operation,
-//		this instance of FileBufferWriter becomes
-//		invalid, unusable and unavailable for further
-//		'write' operations.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	errPrefDto					*ePref.ErrPrefixDto
-//
-//		This object encapsulates an error prefix string
-//		which is included in all returned error
-//		messages. Usually, it contains the name of the
-//		calling method or methods listed as a function
-//		chain.
-//
-//		If no error prefix information is needed, set
-//		this parameter to 'nil'.
-//
-//		Type ErrPrefixDto is included in the 'errpref'
-//		software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errPrefDto'.
-//	 	The 'errPrefDto' text will be prefixed or
-//	 	attached to the	beginning of the error message.
-func (fBufWriterNanobot *fileBufferWriterNanobot) flushAndClose(
-	fBufWriter *FileBufferWriter,
-	fBufWriterLabel string,
-	errPrefDto *ePref.ErrPrefixDto) error {
-
-	if fBufWriterNanobot.lock == nil {
-		fBufWriterNanobot.lock = new(sync.Mutex)
-	}
-
-	fBufWriterNanobot.lock.Lock()
-
-	defer fBufWriterNanobot.lock.Unlock()
-
-	var err error
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	funcName := "fileBufferWriterNanobot." +
-		"flushAndClose()"
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		funcName,
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	if len(fBufWriterLabel) == 0 {
-
-		fBufWriterLabel = "fBufWriter"
-	}
-
-	if fBufWriter == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"-------------------------------------------\n"+
-			"Error: The FileBufferReader instance passed\n"+
-			"as input parameter '%v' is invalid!\n"+
-			"'%v' is a 'nil' pointer.\n",
-			ePrefix.String(),
-			fBufWriterLabel,
-			fBufWriterLabel)
-
-		return err
-	}
-
-	var fBufWriterMolecule = new(fileBufferWriterMolecule)
-
-	err = fBufWriterMolecule.
-		flush(
-			fBufWriter,
-			fBufWriterLabel,
-			ePrefix.XCpy("fBufWriter"))
-
-	var err2 error
-
-	err2 = fBufWriterMolecule.
-		close(
-			fBufWriter,
-			fBufWriterLabel,
-			ePrefix.XCpy("fBufWriter"))
-
-	if err2 != nil {
-
-		err = errors.Join(err, err2)
-
-	}
-
-	return err
-}
-
 // setIoWriter
 //
 // This 'setter' method is used to initialize new values
@@ -4147,15 +3995,9 @@ func (fBufWriterNanobot *fileBufferWriterNanobot) setIoWriter(
 
 	var fBufWriterMolecule = new(fileBufferWriterMolecule)
 
-	// Flush the old fBufWriter
+	// Flush and close the old fBufWriter
 
-	_ = fBufWriterMolecule.flush(
-		fBufWriter,
-		"",
-		nil)
-
-	// Close the old fBufWriter
-	_ = fBufWriterMolecule.close(
+	_ = fBufWriterMolecule.flushAndClose(
 		fBufWriter,
 		"",
 		nil)
@@ -4444,15 +4286,9 @@ func (fBufWriterNanobot *fileBufferWriterNanobot) setPathFileName(
 
 	var fBufWriterMolecule = new(fileBufferWriterMolecule)
 
-	// Flush the old fBufWriter
+	// Flush and close the old fBufWriter
 
-	_ = fBufWriterMolecule.flush(
-		fBufWriter,
-		"",
-		nil)
-
-	// Close the old fBufWriter
-	_ = fBufWriterMolecule.close(
+	_ = fBufWriterMolecule.flushAndClose(
 		fBufWriter,
 		"",
 		nil)
@@ -4563,6 +4399,12 @@ func (fBufWriterNanobot *fileBufferWriterNanobot) setPathFileName(
 		return fInfoPlus, err
 	}
 
+	var writer io.Writer
+
+	writer = fBufWriter.filePtr
+
+	fBufWriter.ioWriter = &writer
+
 	fBufWriter.targetWriteFileName = pathFileName
 
 	fBufWriter.bufioWriter = bufio.NewWriterSize(
@@ -4573,6 +4415,176 @@ func (fBufWriterNanobot *fileBufferWriterNanobot) setPathFileName(
 }
 
 type fileBufferWriterMolecule struct {
+	lock *sync.Mutex
+}
+
+// flushAndClose
+//
+// This method is used to perform all necessary clean-up
+// operations after all data has been written to the
+// internal destination bufio.Writer object.
+//
+// These clean-up operations consist of:
+//
+//	(1)	Flushing the write buffer to ensure that all
+//		data is written to the internal destination
+//		bufio.Writer object.
+//
+//				AND
+//
+//	(2) Closing the internal bufio.Writer object thereby
+//		it invalid and unavailable for any future
+//		'write' operations.
+//
+// After calling this method, the current instance of
+// FileBufferWriter will be unusable and should be
+// discarded.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	Call this method after completing all write
+//		operations. Calling this method is essential to
+//		performance of necessary clean-up tasks. Clean-up
+//		tasks consist of:
+//
+//		(a)	Flushing the 'write' buffer to ensure that
+//			all data is written from the 'write' buffer
+//			to the underlying bufio.Writer object.
+//
+//		(b)	Properly closing the 'write' file or
+//			bufio.Writer object.
+//
+//	(2)	Once this method completes the 'Close' operation,
+//		this instance of FileBufferWriter becomes
+//		invalid, unusable and unavailable for further
+//		'write' operations.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufWriterMolecule *fileBufferWriterMolecule) flushAndClose(
+	fBufWriter *FileBufferWriter,
+	fBufWriterLabel string,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fBufWriterMolecule.lock == nil {
+		fBufWriterMolecule.lock = new(sync.Mutex)
+	}
+
+	fBufWriterMolecule.lock.Lock()
+
+	defer fBufWriterMolecule.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileBufferWriterMolecule." +
+		"flushAndClose()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(fBufWriterLabel) == 0 {
+
+		fBufWriterLabel = "fBufWriter"
+	}
+
+	if fBufWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"-------------------------------------------\n"+
+			"Error: The FileBufferReader instance passed\n"+
+			"as input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' pointer.\n",
+			ePrefix.String(),
+			fBufWriterLabel,
+			fBufWriterLabel)
+
+		return err
+	}
+
+	if fBufWriter.ioWriter == nil {
+
+		// Nothing to do. Nothing to close.
+
+		fBufWriter.targetWriteFileName = ""
+
+		fBufWriter.filePtr = nil
+
+		fBufWriter.bufioWriter = nil
+
+		return err
+
+	}
+
+	var fBufWriterAtom = new(fileBufferWriterAtom)
+
+	err = fBufWriterAtom.
+		flush(
+			fBufWriter,
+			fBufWriterLabel,
+			ePrefix.XCpy("fBufWriter"))
+
+	var err2 error
+
+	err2 = fBufWriterAtom.
+		close(
+			fBufWriter,
+			fBufWriterLabel,
+			ePrefix.XCpy("fBufWriter"))
+
+	if err2 != nil {
+
+		err = errors.Join(err, err2)
+
+	}
+
+	return err
+}
+
+type fileBufferWriterAtom struct {
 	lock *sync.Mutex
 }
 
@@ -4602,7 +4614,7 @@ type fileBufferWriterMolecule struct {
 //
 //	(2)	This 'close' method will NOT flush the 'write'
 //		buffer. To flush the 'write' buffer call:
-//			fileBufferWriterMolecule.flush()
+//			fileBufferWriterAtom.flush()
 //
 //		Be sure to call the 'flush()' method before you
 //		call this method ('close()').
@@ -4663,24 +4675,24 @@ type fileBufferWriterMolecule struct {
 //	 	text passed by input parameter, 'errPrefDto'.
 //	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fBufWriterMolecule *fileBufferWriterMolecule) close(
+func (fBufWriterAtom *fileBufferWriterAtom) close(
 	fBufWriter *FileBufferWriter,
 	fBufWriterLabel string,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
-	if fBufWriterMolecule.lock == nil {
-		fBufWriterMolecule.lock = new(sync.Mutex)
+	if fBufWriterAtom.lock == nil {
+		fBufWriterAtom.lock = new(sync.Mutex)
 	}
 
-	fBufWriterMolecule.lock.Lock()
+	fBufWriterAtom.lock.Lock()
 
-	defer fBufWriterMolecule.lock.Unlock()
+	defer fBufWriterAtom.lock.Unlock()
 
 	var err error
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	funcName := "fileBufferWriterMolecule." +
+	funcName := "fileBufferWriterAtom." +
 		"close()"
 
 	ePrefix,
@@ -4712,56 +4724,44 @@ func (fBufWriterMolecule *fileBufferWriterMolecule) close(
 		return err
 	}
 
-	if fBufWriter.ioWriter == nil {
+	if fBufWriter.ioWriter != nil {
 
-		err = fmt.Errorf("%v\n"+
-			"-------------------------------------------\n"+
-			"Error: The FileBufferWriter instance passed\n"+
-			"as input parameter '%v' is invalid!\n"+
-			"the internal io.Writer object is a 'nil'\n"+
-			"pointer. (%v.ioWriter)\n",
-			ePrefix.String(),
-			fBufWriterLabel,
-			fBufWriterLabel)
+		var ok bool
+		var closerObj io.Closer
+		var localWriter io.Writer
 
-		return err
+		localWriter = *fBufWriter.ioWriter
 
-	}
+		closerObj, ok = localWriter.(io.Closer)
 
-	var ok bool
-	var closerObj io.Closer
-	var localWriter io.Writer
+		if ok {
 
-	localWriter = *fBufWriter.ioWriter
+			var err2 error
 
-	closerObj, ok = localWriter.(io.Closer)
+			err2 = closerObj.Close()
 
-	if ok {
+			if err2 != nil {
 
-		var err2 error
+				errText := fmt.Sprintf(
+					"%v\n"+
+						"Error returned while closing the 'fBufWriter'\n"+
+						"internal io.Writer object.\n",
+					ePrefix.String())
 
-		err2 = closerObj.Close()
+				if len(fBufWriter.targetWriteFileName) > 0 {
 
-		if err2 != nil {
+					errText += fmt.Sprintf(
+						"Target Write File Name: %v\n",
+						fBufWriter.targetWriteFileName)
 
-			errText := fmt.Sprintf(
-				"%v\n"+
-					"Error returned while closing the 'fBufWriter'\n"+
-					"internal io.Writer object.\n",
-				ePrefix.String())
+				}
 
-			if len(fBufWriter.targetWriteFileName) > 0 {
-
-				errText += fmt.Sprintf(
-					"Target Write File Name: %v\n",
-					fBufWriter.targetWriteFileName)
+				err = fmt.Errorf("%v"+
+					"closerObj.Close() Error=\n%v\n",
+					errText,
+					err2.Error())
 
 			}
-
-			err = fmt.Errorf("%v"+
-				"closerObj.Close() Error=\n%v\n",
-				errText,
-				err2.Error())
 
 		}
 
@@ -4793,7 +4793,7 @@ func (fBufWriterMolecule *fileBufferWriterMolecule) close(
 // in 'fBufWriter'. To fully close the 'fBufWriter'
 // instance, make a separate call to local method:
 //
-//	fileBufferWriterMolecule.close()'.
+//	fileBufferWriterAtom.close()'.
 //
 // ----------------------------------------------------------------
 //
@@ -4856,24 +4856,24 @@ func (fBufWriterMolecule *fileBufferWriterMolecule) close(
 //	 	text passed by input parameter, 'errPrefDto'.
 //	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fBufWriterMolecule *fileBufferWriterMolecule) flush(
+func (fBufWriterAtom *fileBufferWriterAtom) flush(
 	fBufWriter *FileBufferWriter,
 	fBufWriterLabel string,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
-	if fBufWriterMolecule.lock == nil {
-		fBufWriterMolecule.lock = new(sync.Mutex)
+	if fBufWriterAtom.lock == nil {
+		fBufWriterAtom.lock = new(sync.Mutex)
 	}
 
-	fBufWriterMolecule.lock.Lock()
+	fBufWriterAtom.lock.Lock()
 
-	defer fBufWriterMolecule.lock.Unlock()
+	defer fBufWriterAtom.lock.Unlock()
 
 	var err error
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	funcName := "fileBufferWriterMolecule." +
+	funcName := "fileBufferWriterAtom." +
 		"flush()"
 
 	ePrefix,
@@ -4906,47 +4906,25 @@ func (fBufWriterMolecule *fileBufferWriterMolecule) flush(
 
 	if fBufWriter.bufioWriter == nil {
 
-		err = fmt.Errorf("%v\n"+
-			"Error: The FileBufferWriter instance passed\n"+
-			"as input parameter '%v' is invalid!\n"+
-			"'%v' is a 'nil' pointer.\n",
-			ePrefix.String(),
-			fBufWriterLabel,
-			fBufWriterLabel)
-
+		// Nothing to do. Nothing to close.
 		return err
-	}
 
-	if fBufWriter.ioWriter == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"-------------------------------------------------------\n"+
-			"Error: This instance of 'FileBufferWriter' is invalid!\n"+
-			"The internal io.Writer object has NOT been properly\n"+
-			"initialized. Call one of the 'New' or 'Setter'\n"+
-			"methods to create a valid instance of 'FileBufferWriter'.\n",
-			ePrefix.String())
-
-		return err
 	}
 
 	var err2 error
 
-	if fBufWriter.bufioWriter != nil {
+	err2 = fBufWriter.bufioWriter.Flush()
 
-		err2 = fBufWriter.bufioWriter.Flush()
+	if err2 != nil {
 
-		if err2 != nil {
+		err = fmt.Errorf("%v\n"+
+			"Error returned while flushing the 'write' buffer!\n"+
+			"%v.bufioWriter.Flush()\n"+
+			"Error = \n%v\n",
+			ePrefix.String(),
+			fBufWriterLabel,
+			err2.Error())
 
-			err = fmt.Errorf("%v\n"+
-				"Error returned while flushing the 'write' buffer!\n"+
-				"%v.bufioWriter.Flush()\n"+
-				"Error = \n%v\n",
-				ePrefix.String(),
-				fBufWriterLabel,
-				err2.Error())
-
-		}
 	}
 
 	return err

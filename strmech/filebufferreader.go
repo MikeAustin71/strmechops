@@ -4159,11 +4159,11 @@ func (fBufReaderNanobot *fileBufferReaderNanobot) setIoReader(
 
 		fBufReader.filePtr = nil
 
+		fBufReader.ioReader = &reader
+
 		fBufReader.bufioReader = bufio.NewReaderSize(
 			reader,
 			bufSize)
-
-		fBufReader.ioReader = &reader
 
 	}
 
@@ -4658,22 +4658,44 @@ func (fBuffReaderMolecule *fileBufferReaderMolecule) close(
 		return err
 	}
 
-	if fBufReader.filePtr != nil {
+	if fBufReader.ioReader != nil {
 
-		var err2 error
+		var ok bool
+		var closerObj io.Closer
+		var localReader io.Reader
 
-		err2 = fBufReader.filePtr.Close()
+		localReader = *fBufReader.ioReader
 
-		if err2 != nil {
+		closerObj, ok = localReader.(io.Closer)
 
-			err = fmt.Errorf("%v\n"+
-				"Error returned while closing the target 'target' file!\n"+
-				"fBufWriter.filePtr.Close()\n"+
-				"Target Read File = '%v'\n"+
-				"Error = \n%v\n",
-				ePrefix.String(),
-				fBufReader.targetReadFileName,
-				err2.Error())
+		if ok {
+
+			var err2 error
+
+			err2 = closerObj.Close()
+
+			if err2 != nil {
+
+				errText := fmt.Sprintf(
+					"%v\n"+
+						"Error returned while closing the 'fBufWriter'\n"+
+						"internal io.Writer object.\n",
+					ePrefix.String())
+
+				if len(fBufReader.targetReadFileName) > 0 {
+
+					errText += fmt.Sprintf(
+						"Target Read File Name: %v\n",
+						fBufReader.targetReadFileName)
+
+				}
+
+				err = fmt.Errorf("%v"+
+					"closerObj.Close() Error=\n%v\n",
+					errText,
+					err2.Error())
+
+			}
 
 		}
 	}
