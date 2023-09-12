@@ -970,12 +970,14 @@ func (fIoReader *FileIoReader) NewPathFileName(
 //
 //	bytesRead					[]byte
 //
+//		Bytes will be read from the input data source and
+//		stored in this byte array.
+//
+//		The input data source was previously configured
+//		in the current instance of FileIoReader.
+//
 //		If the length of this byte array is less than
 //		16-bytes, an error will be returned.
-//
-//		Bytes will be read from the data source
-//		configured for the current instance of
-//		FileIoReader.
 //
 // ----------------------------------------------------------------
 //
@@ -1899,14 +1901,124 @@ func (fIoReader *FileIoReader) ReadAllToString(
 
 // ReadAt
 //
-// Implements the io.ReaderAt interface.
-//
 // This method reads bytes beginning at the offset from
 // the beginning of the input source as specified by
-// input parameter 'offsetFromFileStart'.
+// input parameter 'offsetFromBeginning'.
+//
+// ----------------------------------------------------------------
+//
+// # Reference
+//
+// https://pkg.go.dev/io#ReaderAt
+//
+// ----------------------------------------------------------------
+//
+// # Be Advised
+//
+//	This method implements the io.ReaderAt interface.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	bytesRead					[]byte
+//
+//		Bytes will be read from the input data source and
+//		stored in this byte array.
+//
+//		The input data source was previously configured
+//		in the current instance of FileIoReader.
+//
+//		If the length of this byte array is less than
+//		16-bytes, an error will be returned.
+//
+//	offsetFromBeginning			int64
+//
+//		The offset in bytes from the beginning of the
+//		input source from which the read 'operation' will
+//		commence.
+//
+//		If this value is less than zero, an error will be
+//		returned.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fIoReader *FileIoReader) ReadAt(
 	bytesRead []byte,
-	offsetFromFileStart int64) (
+	offsetFromBeginning int64) (
 	numOfBytesRead int,
 	err error) {
 
@@ -1944,12 +2056,26 @@ func (fIoReader *FileIoReader) ReadAt(
 		return numOfBytesRead, err
 	}
 
-	if len(bytesRead) == 0 {
+	if len(bytesRead) < 16 {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'BytesRead' is invalid!\n"+
-			"The 'bytesRead' array is empty and has a length of zero.\n",
-			ePrefix.String())
+			"Error: Input parameter 'bytesRead' is invalid!\n"+
+			"The 'bytesRead' array has a length less than 16.\n"+
+			"Length 'bytesRead'= '%v'\n",
+			ePrefix.String(),
+			len(bytesRead))
+
+		return numOfBytesRead, err
+	}
+
+	if offsetFromBeginning < 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'offsetFromBeginning' is invalid!\n"+
+			"The 'bytesRead' array has a length less than zero ('0).\n"+
+			"offsetFromBeginning= '%v'\n",
+			ePrefix.String(),
+			offsetFromBeginning)
 
 		return numOfBytesRead, err
 	}
@@ -1969,7 +2095,6 @@ func (fIoReader *FileIoReader) ReadAt(
 			"which does NOT support the io.ReaderAt\n"+
 			"interface. This means:\n"+
 			"(1) The 'ReadAt' method is unavailable.\n"+
-			"\n"+
 			"(2) The 'FileIoReader' internal io.Reader\n"+
 			"      object was created from something\n"+
 			"      other than a disk file (*os.File).\n",
@@ -1981,7 +2106,7 @@ func (fIoReader *FileIoReader) ReadAt(
 	numOfBytesRead,
 		err = readerAtObj.ReadAt(
 		bytesRead,
-		offsetFromFileStart)
+		offsetFromBeginning)
 
 	return numOfBytesRead, err
 }
