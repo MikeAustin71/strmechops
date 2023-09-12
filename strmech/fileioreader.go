@@ -1897,6 +1897,95 @@ func (fIoReader *FileIoReader) ReadAllToString(
 	return numOfBytesRead, contentsStr, err
 }
 
+// ReadAt
+//
+// Implements the io.ReaderAt interface.
+//
+// This method reads bytes beginning at the offset from
+// the beginning of the input source as specified by
+// input parameter 'offsetFromFileStart'.
+func (fIoReader *FileIoReader) ReadAt(
+	bytesRead []byte,
+	offsetFromFileStart int64) (
+	numOfBytesRead int,
+	err error) {
+
+	if fIoReader.lock == nil {
+		fIoReader.lock = new(sync.Mutex)
+	}
+
+	fIoReader.lock.Lock()
+
+	defer fIoReader.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileIoReader."+
+			"ReadAt()",
+		"")
+
+	if err != nil {
+
+		return numOfBytesRead, err
+	}
+
+	if fIoReader.ioReader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of 'FileIoReader' is invalid!\n"+
+			"The internal io.Reader object has NOT been initialized.\n"+
+			"Call one of the 'New' or 'Setter' methods when creating\n"+
+			"an instance of 'FileIoReader'\n",
+			ePrefix.String())
+
+		return numOfBytesRead, err
+	}
+
+	if len(bytesRead) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'BytesRead' is invalid!\n"+
+			"The 'bytesRead' array is empty and has a length of zero.\n",
+			ePrefix.String())
+
+		return numOfBytesRead, err
+	}
+
+	var ok bool
+	var readerAtObj io.ReaderAt
+	var localReader io.Reader
+	localReader = *fIoReader.ioReader
+
+	readerAtObj, ok = localReader.(io.ReaderAt)
+
+	if !ok {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This ReadAt method was invoked on a\n"+
+			"'FileIoReader' internal io.Reader object\n"+
+			"which does NOT support the io.ReaderAt\n"+
+			"interface. This means:\n"+
+			"(1) The 'ReadAt' method is unavailable.\n"+
+			"\n"+
+			"(2) The 'FileIoReader' internal io.Reader\n"+
+			"      object was created from something\n"+
+			"      other than a disk file (*os.File).\n",
+			ePrefix.String())
+
+		return numOfBytesRead, err
+	}
+
+	numOfBytesRead,
+		err = readerAtObj.ReadAt(
+		bytesRead,
+		offsetFromFileStart)
+
+	return numOfBytesRead, err
+}
+
 // Seek
 //
 // This method sets the offset for the next 'read'
@@ -2070,7 +2159,7 @@ func (fIoReader *FileIoReader) Seek(
 	if !ok {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: This Seek method was invoked on an\n"+
+			"Error: This Seek method was invoked on a\n"+
 			"'FileIoReader' internal io.Reader object\n"+
 			"which does NOT support the io.Seeker\n"+
 			"interface. This means:\n"+
