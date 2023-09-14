@@ -3711,12 +3711,24 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readAllStrBuilder(
 		fIoReaderLabel = "fIoReader"
 	}
 
+	if fIoReader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' pointer.\n",
+			ePrefix.String(),
+			fIoReaderLabel,
+			fIoReaderLabel)
+
+		return numOfBytesRead, err
+	}
+
 	if strBuilder == nil {
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'strBuilder' is invalid!\n"+
 			"'strBuilder' is a 'nil' pointer.\n",
-			ePrefix)
+			ePrefix.String())
 
 		return numOfBytesRead, err
 	}
@@ -3780,6 +3792,80 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readAllStrBuilder(
 	}
 
 	return numOfBytesRead, err
+}
+func (fIoReaderMicrobot *fileIoReaderMicrobot) readBytesToStrBuilder(
+	fIoReader *FileIoReader,
+	fIoReaderLabel string,
+	strBuilder *strings.Builder,
+	errPrefDto *ePref.ErrPrefixDto) (
+	numOfBytesRead int64,
+	reachedEndOfFile bool,
+	err error) {
+
+	if fIoReaderMicrobot.lock == nil {
+		fIoReaderMicrobot.lock = new(sync.Mutex)
+	}
+
+	fIoReaderMicrobot.lock.Lock()
+
+	defer fIoReaderMicrobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileIoReaderMicrobot."+
+			"readAllStrBuilder()",
+		"")
+
+	if err != nil {
+
+		return numOfBytesRead, reachedEndOfFile, err
+	}
+
+	if len(fIoReaderLabel) == 0 {
+
+		fIoReaderLabel = "fIoReader"
+	}
+
+	if fIoReader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' pointer.\n",
+			ePrefix.String(),
+			fIoReaderLabel,
+			fIoReaderLabel)
+
+		return numOfBytesRead, reachedEndOfFile, err
+	}
+
+	if strBuilder == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'strBuilder' is invalid!\n"+
+			"'strBuilder' is a 'nil' pointer.\n",
+			ePrefix)
+
+		return numOfBytesRead, reachedEndOfFile, err
+	}
+
+	if fIoReader.ioReader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of 'FileIoReader' (%v) is invalid!\n"+
+			"The internal '%v' io.Reader object has NOT been initialized.\n"+
+			"Call one of the 'New' or 'Setter' methods when creating\n"+
+			"an instance of 'FileIoReader'\n",
+			ePrefix.String(),
+			fIoReaderLabel,
+			fIoReaderLabel)
+
+		return numOfBytesRead, reachedEndOfFile, err
+	}
+
+	return numOfBytesRead, reachedEndOfFile, err
 }
 
 // setFileMgr
