@@ -1598,7 +1598,7 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 //
 // # Return Values
 //
-//	numBytesRead				int64
+//	numOfBytesRead				int64
 //
 //		If this method completes successfully, this
 //		integer value will equal the number of bytes
@@ -1826,7 +1826,7 @@ func (fIoReader *FileIoReader) ReadAllStrBuilder(
 //
 // # Return Values
 //
-//	numBytesRead				int64
+//	numOfBytesRead				int64
 //
 //		If this method completes successfully, this
 //		integer value will equal the number of bytes
@@ -2182,7 +2182,7 @@ func (fIoReader *FileIoReader) ReadAt(
 //
 //		When this parameter is set to 'true', this
 //		method will automatically perform all required
-//		clean-up tasks upon exit.
+//		FileIoReader clean-up tasks upon exit.
 //
 //		(1)	The FileIoReader internal io.Reader object
 //			will be properly closed and there will be no
@@ -2203,10 +2203,10 @@ func (fIoReader *FileIoReader) ReadAt(
 //		If input parameter 'autoCloseOnExit' is set to
 //		'false', this method will NOT automatically
 //		'close' the internal io.Reader object for the
-//		current instance of FileBufferReader.
-//		Consequently, the user will then be responsible
-//		for 'closing' the internal io.Reader object by
-//		calling the local method:
+//		current instance of FileIoReader. Consequently,
+//		the user will then be responsible for performing
+//		required clean-up tasks on the FileIoReader
+//		instance by calling the local method:
 //
 //				FileIoReader.Close()
 //
@@ -2273,14 +2273,14 @@ func (fIoReader *FileIoReader) ReadAt(
 //
 // # Return Values
 //
-//	numBytesRead				int64
+//	numOfBytesRead				int64
 //
 //		If this method completes successfully, this
-//		integer value will equal the number of bytes read
-//		from the internal io.Reader object encapsulated
-//		by the current instance of FileIoReader and
-//		stored in the strings.Builder instance passed as
-//		input parameter 'strBuilder'.
+//		integer value will equal the actual number of
+//		bytes read from the input data source (io.Reader)
+//		encapsulated by the current instance of
+//		FileIoReader and stored in the strings.Builder
+//		instance passed as input parameter 'strBuilder'.
 //
 //		This actual number of bytes read from the data
 //		input source may vary from the 'numOfBytesToRead'
@@ -2315,7 +2315,7 @@ func (fIoReader *FileIoReader) ReadBytesToStringBuilder(
 	strBuilder *strings.Builder,
 	autoCloseOnExit bool,
 	errorPrefix interface{}) (
-	numOfBytesRead int,
+	numOfBytesRead int64,
 	reachedEndOfFile bool,
 	err error) {
 
@@ -2353,64 +2353,16 @@ func (fIoReader *FileIoReader) ReadBytesToStringBuilder(
 		return numOfBytesRead, reachedEndOfFile, err
 	}
 
-	if strBuilder == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'strBuilder' is invalid!\n"+
-			"'strBuilder' is a 'nil' pointer.\n",
-			ePrefix)
-
-		return numOfBytesRead, reachedEndOfFile, err
-	}
-
-	if numOfBytesToRead < 1 {
-
-		if fIoReader.defaultReaderBufferSize < 16 {
-
-			fIoReader.defaultReaderBufferSize = 4096
-		}
-
-		numOfBytesToRead = fIoReader.defaultReaderBufferSize
-
-	}
-
-	bytesToRead := make([]byte, numOfBytesToRead)
-
-	var err2 error
-	var reader = *fIoReader.ioReader
-
 	numOfBytesRead,
-		err2 = reader.Read(bytesToRead)
-
-	if err2 != nil {
-
-		if err2 != io.EOF {
-
-			err = fmt.Errorf("%v\n"+
-				"Error returned by fIoReader.ioReader.Read(bytesRead).\n"+
-				"Error=\n%v\n",
-				ePrefix.String(),
-				err2.Error())
-
-			return numOfBytesRead, reachedEndOfFile, err
-
-		} else {
-
-			// Must be io.EOF
-			reachedEndOfFile = true
-		}
-
-	}
-
-	if autoCloseOnExit == true {
-
-		// Do NOT Close if there is an error!
-		err = new(fileIoReaderMolecule).close(
+		reachedEndOfFile,
+		err = new(fileIoReaderMicrobot).
+		readBytesToStrBuilder(
 			fIoReader,
 			"fIoReader",
-			ePrefix.XCpy("fIoReader"))
-
-	}
+			numOfBytesToRead,
+			strBuilder,
+			autoCloseOnExit,
+			ePrefix)
 
 	return numOfBytesRead, reachedEndOfFile, err
 }
@@ -3747,10 +3699,11 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readAllStrBuilder(
 		return numOfBytesRead, err
 	}
 
-	if fIoReader.defaultReaderBufferSize < 16 {
+	var fIoReaderMolecule = new(fileIoReaderMolecule)
 
-		fIoReader.defaultReaderBufferSize = 4096
-	}
+	fIoReaderMolecule.
+		validateDefaultReaderBufferSize(
+			fIoReader)
 
 	var reader = *fIoReader.ioReader
 	var bytesRead = make([]byte, fIoReader.defaultReaderBufferSize)
@@ -3793,10 +3746,161 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readAllStrBuilder(
 
 	return numOfBytesRead, err
 }
+
+// readBytesToStrBuilder
+//
+// Reads a specified number of bytes from the data input
+// source configured for the instance of FileIoReader
+// passed as input parameter 'fIoReader'. These bytes are
+// then stored in an instance of strings.Builder passed
+// as input parameter 'strBuilder'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fIoReader					*FileIoReader
+//
+//		A pointer to an instance of FileIoReader.
+//
+//		A number of bytes specified by input parameter
+//		'numOfBytesToRead' will be read from the data
+//		input source (io.Reader) configured for this
+//		instance of FileIoReader.
+//
+//	fIoReaderLabel				string
+//
+//		The name or label associated with input parameter
+//		'fIoReader' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fIoReader" will be
+//		automatically applied.
+//
+//	numOfBytesToRead			int
+//
+//		This parameter specifies the number of bytes to
+//		read from the data input source configured for
+//		the current instance of FileIoReader.
+//
+//		If the value of 'numOfBytesToRead' is less than
+//		one ('1'), this parameter will be automatically
+//		set to the Default Reader Buffer Size previously
+//		configured for the 'fIoReader' FileIoReader
+//		instance. For more information on Default Reader
+//		Buffer Size, reference local method:
+//
+//			FileIoReader.SetDefaultReaderBufferSize()
+//
+//		The actual number of bytes read from the data input
+//		source may vary due to (1) unforeseen processing
+//		errors or (2) an End-Of-File scenario. Be sure to
+//		check the 'numOfBytesRead' and 'reachedEndOfFile'
+//		parameters returned by this method.
+//
+//	strBuilder					*strings.Builder
+//
+//		A pointer to an instance of strings.Builder.
+//		Bytes read from the input data source configured
+//		for the 'fIoReader'	FileIoReader instance will be
+//		extracted and stored as a string in 'strBuilder'.
+//
+//	autoCloseOnExit				bool
+//
+//		When this parameter is set to 'true', this
+//		method will automatically perform all required
+//		FileIoReader clean-up tasks upon exit for
+//		'fIoReader'.
+//
+//		(1)	The FileIoReader internal io.Reader object
+//			will be properly closed and there will be no
+//			need to make a separate call to local method,
+//			FileIoReader.Close().
+//
+//		(2) After performing this clean-up operation, the
+//			current instance of FileIoReader will invalid
+//			and unavailable for future 'read' operations.
+//
+//		-------------------------------------------------
+//						Be Advised
+//		If processing errors are encountered during method
+//		execution, the 'close' operation WILL NOT be
+//		invoked or applied.
+//		-------------------------------------------------
+//
+//		If input parameter 'autoCloseOnExit' is set to
+//		'false', this method will NOT automatically
+//		'close' the internal io.Reader object for the
+//		'fIoReader' FileBufferReader. Consequently, the
+//		user will then be responsible for performing
+//		required clean-up tasks on the FileIoReader
+//		instance by calling the local method:
+//
+//				FileIoReader.Close()
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numOfBytesRead				int64
+//
+//		If this method completes successfully, this
+//		integer value will equal the actual number of
+//		bytes read from the input data source (io.Reader)
+//		encapsulated by the 'fIoReader' and stored in the
+//		strings.Builder instance passed as input
+//		parameter 'strBuilder'.
+//
+//		This actual number of bytes read from the data
+//		input source may vary from the 'numOfBytesToRead'
+//		input parameter due to (1) unforeseen processing
+//		errors or (2) an End-Of-File scenario. Be sure to
+//		check the 'reachedEndOfFile' parameter returned
+//		by this method.
+//
+//	reachedEndOfFile			bool
+//
+//		If during the 'read' operation, the End-Of-File
+//		flag was encountered, this boolean parameter will
+//		be set to 'true'. The End-Of-File flag signals that
+//		the 'read' operation reached the end of the data
+//		input source configured for the 'fIoReader'
+//		FileIoReader instance.
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
 func (fIoReaderMicrobot *fileIoReaderMicrobot) readBytesToStrBuilder(
 	fIoReader *FileIoReader,
 	fIoReaderLabel string,
+	numOfBytesToRead int,
 	strBuilder *strings.Builder,
+	autoCloseOnExit bool,
 	errPrefDto *ePref.ErrPrefixDto) (
 	numOfBytesRead int64,
 	reachedEndOfFile bool,
@@ -3863,6 +3967,61 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readBytesToStrBuilder(
 			fIoReaderLabel)
 
 		return numOfBytesRead, reachedEndOfFile, err
+	}
+
+	var fIoReaderMolecule = new(fileIoReaderMolecule)
+
+	fIoReaderMolecule.
+		validateDefaultReaderBufferSize(
+			fIoReader)
+
+	if numOfBytesToRead < 1 {
+
+		numOfBytesToRead = fIoReader.defaultReaderBufferSize
+
+	}
+
+	bytesToRead := make([]byte, numOfBytesToRead)
+
+	var err2 error
+	var reader = *fIoReader.ioReader
+	var localNumBytesRead int
+
+	localNumBytesRead,
+		err2 = reader.Read(bytesToRead)
+
+	if err2 != nil {
+
+		if err2 != io.EOF {
+
+			err = fmt.Errorf("%v\n"+
+				"Error returned by fIoReader.ioReader.Read(bytesRead).\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				err2.Error())
+
+			return numOfBytesRead, reachedEndOfFile, err
+
+		} else {
+
+			// Must be io.EOF
+			reachedEndOfFile = true
+		}
+
+	}
+
+	strBuilder.Write(bytesToRead[:localNumBytesRead])
+
+	numOfBytesRead = int64(localNumBytesRead)
+
+	if autoCloseOnExit == true {
+
+		// Do NOT Close if there is an error!
+		err = fIoReaderMolecule.close(
+			fIoReader,
+			"fIoReader",
+			ePrefix.XCpy("fIoReader"))
+
 	}
 
 	return numOfBytesRead, reachedEndOfFile, err
@@ -4881,4 +5040,53 @@ func (fIoReaderMolecule *fileIoReaderMolecule) close(
 	fIoReader.defaultReaderBufferSize = 0
 
 	return err
+}
+
+// validateDefaultReaderBufferSize
+//
+// Validates the default buffer size for the instance of
+// FileIoReader passed as input parameter 'fIoReader'.
+//
+// If the buffer size is less than 16-bytes, it will be
+// reset to 4096 bytes.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fIoReader					*FileIoReader
+//
+//		A pointer to an instance of FileIoReader.
+//
+//		The default buffer size for this FileIoReader
+//		instance will be validated. If an invalid value
+//		is detected that value will be automatically
+//		reset to a value of 4096-bytes.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	-- NONE --
+func (fIoReaderMolecule *fileIoReaderMolecule) validateDefaultReaderBufferSize(
+	fIoReader *FileIoReader) {
+
+	if fIoReaderMolecule.lock == nil {
+		fIoReaderMolecule.lock = new(sync.Mutex)
+	}
+
+	fIoReaderMolecule.lock.Lock()
+
+	defer fIoReaderMolecule.lock.Unlock()
+
+	if fIoReader == nil {
+		return
+	}
+
+	if fIoReader.defaultReaderBufferSize < 16 {
+
+		fIoReader.defaultReaderBufferSize = 4096
+	}
+
+	return
 }
