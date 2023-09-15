@@ -1530,8 +1530,9 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 //		'close' the internal io.Reader object for the
 //		current instance of FileBufferReader.
 //		Consequently, the user will then be responsible
-//		for 'closing' the internal io.Reader object by
-//		calling the local method:
+//		for performing required clean-up tasks on the
+//		FileIoReader instance by calling the local
+//		method:
 //
 //				FileIoReader.Close()
 //
@@ -1622,7 +1623,7 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 //		An error will only be returned if a processing
 //		or system error was encountered. When the
 //		end-of-file is encountered during the 'read'
-//		process, the returned error object will be set
+//		operation, the returned error object will be set
 //		to 'nil' and no error will be returned.
 func (fIoReader *FileIoReader) ReadAllStrBuilder(
 	strBuilder *strings.Builder,
@@ -1659,23 +1660,8 @@ func (fIoReader *FileIoReader) ReadAllStrBuilder(
 			fIoReader,
 			"fIoReader",
 			strBuilder,
+			autoCloseOnExit,
 			ePrefix)
-
-	if err != nil {
-
-		return numOfBytesRead, err
-
-	}
-
-	if autoCloseOnExit == true {
-
-		// Do NOT Close if there is an error!
-		err = new(fileIoReaderMolecule).close(
-			fIoReader,
-			"fIoReader",
-			ePrefix.XCpy("fIoReader"))
-
-	}
 
 	return numOfBytesRead, err
 }
@@ -1861,7 +1847,7 @@ func (fIoReader *FileIoReader) ReadAllStrBuilder(
 //		An error will only be returned if a processing
 //		or system error was encountered. When the
 //		end-of-file is encountered during the 'read'
-//		process, the returned error object will be set
+//		operation, the returned error object will be set
 //		to 'nil' and no error will be returned.
 func (fIoReader *FileIoReader) ReadAllToString(
 	autoCloseOnExit bool,
@@ -1900,27 +1886,15 @@ func (fIoReader *FileIoReader) ReadAllToString(
 			fIoReader,
 			"fIoReader",
 			strBuilder,
+			autoCloseOnExit,
 			ePrefix)
 
 	if err != nil {
 
 		return numOfBytesRead, contentsStr, err
-
-	} else {
-
-		contentsStr = strBuilder.String()
 	}
 
-	if autoCloseOnExit == true {
-
-		// Do NOT Close if there is an error!
-
-		err = new(fileIoReaderMolecule).close(
-			fIoReader,
-			"fIoReader",
-			ePrefix.XCpy("fIoReader"))
-
-	}
+	contentsStr = strBuilder.String()
 
 	return numOfBytesRead, contentsStr, err
 }
@@ -2137,6 +2111,256 @@ func (fIoReader *FileIoReader) ReadAt(
 	return numOfBytesRead, err
 }
 
+// ReadBytesToString
+//
+// Reads a specified number of bytes from the data input
+// source configured for the current instance of
+// FileIoReader. These bytes are then stored as a string
+// and returned via return parameter 'contentsStr'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numOfBytesToRead			int
+//
+//		This parameter specifies the number of bytes to
+//		read from the data input source configured for
+//		the current instance of FileIoReader.
+//
+//		If the value of 'numOfBytesToRead' is less than
+//		one ('1'), this parameter will be automatically
+//		set to the Default Reader Buffer Size previously
+//		configured for this FileIoReader instance. For
+//		more information on Default Reader Buffer Size,
+//		reference local method:
+//
+//			FileIoReader.SetDefaultReaderBufferSize()
+//
+//		The actual number of bytes read from the data input
+//		source may vary due to (1) unforeseen processing
+//		errors or (2) an End-Of-File scenario. Be sure to
+//		check the 'numOfBytesRead' and 'reachedEndOfFile'
+//		parameters returned by this method.
+//
+//	autoCloseOnExit				bool
+//
+//		When this parameter is set to 'true', this
+//		method will automatically perform all required
+//		FileIoReader clean-up tasks upon exit.
+//
+//		(1)	The FileIoReader internal io.Reader object
+//			will be properly closed and there will be no
+//			need to make a separate call to local method,
+//			FileIoReader.Close().
+//
+//		(2) After performing this clean-up operation, the
+//			current instance of FileIoReader will invalid
+//			and unavailable for future 'read' operations.
+//
+//		-------------------------------------------------
+//						Be Advised
+//		If processing errors are encountered during method
+//		execution, the 'close' operation WILL NOT be
+//		invoked or applied.
+//		-------------------------------------------------
+//
+//		If input parameter 'autoCloseOnExit' is set to
+//		'false', this method will NOT automatically
+//		'close' the internal io.Reader object for the
+//		current instance of FileIoReader. Consequently,
+//		the user will then be responsible for performing
+//		required clean-up tasks on the FileIoReader
+//		instance by calling the local method:
+//
+//				FileIoReader.Close()
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numOfBytesRead				int64
+//
+//		If this method completes successfully, this
+//		integer value will equal the actual number of
+//		bytes read from the input data source (io.Reader)
+//		encapsulated by the current instance of
+//		FileIoReader and stored in the strings.Builder
+//		instance passed as input parameter 'strBuilder'.
+//
+//		This actual number of bytes read from the data
+//		input source may vary from the 'numOfBytesToRead'
+//		input parameter due to (1) unforeseen processing
+//		errors or (2) an End-Of-File scenario. Be sure to
+//		check the 'reachedEndOfFile' parameter returned
+//		by this method.
+//
+//	contentsStr					string
+//
+//		If this method completes successfully, the bytes
+//		read from the input data source configured for
+//		the	current instance of FileIoReader will be
+//		returned in this string.
+//
+//	reachedEndOfFile			bool
+//
+//		If during the 'read' operation, the End-Of-File
+//		flag was encountered, this boolean parameter will
+//		be set to 'true'. The End-Of-File flag signals that
+//		the 'read' operation reached the end of the data
+//		input source configured for the current
+//		FileIoReader instance.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		An error will only be returned if a processing
+//		or system error was encountered. When the
+//		end-of-file flag is encountered during the 'read'
+//		operation, 'reachedEndOfFile' will be set to
+//		'true', the returned error object will be set
+//		to 'nil', and no error will be returned.
+func (fIoReader *FileIoReader) ReadBytesToString(
+	numOfBytesToRead int,
+	autoCloseOnExit bool,
+	errorPrefix interface{}) (
+	numOfBytesRead int64,
+	contentsStr string,
+	reachedEndOfFile bool,
+	err error) {
+
+	if fIoReader.lock == nil {
+		fIoReader.lock = new(sync.Mutex)
+	}
+
+	fIoReader.lock.Lock()
+
+	defer fIoReader.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileIoReader."+
+			"ReadBytesToString()",
+		"")
+
+	if err != nil {
+
+		return numOfBytesRead,
+			contentsStr,
+			reachedEndOfFile,
+			err
+	}
+
+	if fIoReader.ioReader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of 'FileIoReader' is invalid!\n"+
+			"The internal io.Reader object has NOT been initialized.\n"+
+			"Call one of the 'New' or 'Setter' methods when creating\n"+
+			"an instance of 'FileIoReader'\n",
+			ePrefix.String())
+
+		return numOfBytesRead,
+			contentsStr,
+			reachedEndOfFile,
+			err
+	}
+
+	var strBuilder = new(strings.Builder)
+
+	numOfBytesRead,
+		reachedEndOfFile,
+		err = new(fileIoReaderMicrobot).
+		readBytesToStrBuilder(
+			fIoReader,
+			"fIoReader",
+			numOfBytesToRead,
+			strBuilder,
+			autoCloseOnExit,
+			ePrefix)
+
+	if err != nil {
+		contentsStr = strBuilder.String()
+	}
+
+	return numOfBytesRead,
+		contentsStr,
+		reachedEndOfFile,
+		err
+}
+
 // ReadBytesToStringBuilder
 //
 // Reads a specified number of bytes from the data input
@@ -2310,6 +2534,13 @@ func (fIoReader *FileIoReader) ReadAt(
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
+//
+//		An error will only be returned if a processing
+//		or system error was encountered. When the
+//		end-of-file flag is encountered during the 'read'
+//		operation, 'reachedEndOfFile' will be set to
+//		'true', the returned error object will be set
+//		to 'nil', and no error will be returned.
 func (fIoReader *FileIoReader) ReadBytesToStringBuilder(
 	numOfBytesToRead int,
 	strBuilder *strings.Builder,
@@ -3583,6 +3814,39 @@ type fileIoReaderMicrobot struct {
 //		be extracted and stored as a string in
 //		'strBuilder'.
 //
+//	autoCloseOnExit				bool
+//
+//		When this parameter is set to 'true', this
+//		method will automatically perform all required
+//		FileIoReader clean-up tasks upon exit for
+//		'fIoReader'.
+//
+//		(1)	The FileIoReader internal io.Reader object
+//			will be properly closed and there will be no
+//			need to make a separate call to local method,
+//			FileIoReader.Close().
+//
+//		(2) After performing this clean-up operation, the
+//			current instance of FileIoReader will invalid
+//			and unavailable for future 'read' operations.
+//
+//		-------------------------------------------------
+//						Be Advised
+//		If processing errors are encountered during method
+//		execution, the 'close' operation WILL NOT be
+//		invoked or applied.
+//		-------------------------------------------------
+//
+//		If input parameter 'autoCloseOnExit' is set to
+//		'false', this method will NOT automatically
+//		'close' the internal io.Reader object for the
+//		'fIoReader' FileBufferReader. Consequently, the
+//		user will then be responsible for performing
+//		required clean-up tasks on the FileIoReader
+//		instance by calling the local method:
+//
+//				FileIoReader.Close()
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -3610,6 +3874,15 @@ type fileIoReaderMicrobot struct {
 //		encapsulated by the FileIoReader instance passed
 //		as input parameter 'fIoReader'.
 //
+//	reachedEndOfFile			bool
+//
+//		If during the 'read' operation, the End-Of-File
+//		flag was encountered, this boolean parameter will
+//		be set to 'true'. The End-Of-File flag signals that
+//		the 'read' operation reached the end of the data
+//		input source configured for the 'fIoReader'
+//		FileIoReader instance.
+//
 //	err							error
 //
 //		If this method completes successfully, the
@@ -3632,6 +3905,7 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readAllStrBuilder(
 	fIoReader *FileIoReader,
 	fIoReaderLabel string,
 	strBuilder *strings.Builder,
+	autoCloseOnExit bool,
 	errPrefDto *ePref.ErrPrefixDto) (
 	numOfBytesRead int64,
 	err error) {
@@ -3737,10 +4011,20 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readAllStrBuilder(
 				ePrefix.String(),
 				err2.Error())
 
-			break
+			return numOfBytesRead, err
 		}
 
 		clear(bytesRead)
+
+	}
+
+	if autoCloseOnExit == true {
+
+		// Do NOT Close if there is an error!
+		err = fIoReaderMolecule.close(
+			fIoReader,
+			"fIoReader",
+			ePrefix.XCpy("fIoReader"))
 
 	}
 
@@ -3895,6 +4179,13 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readAllStrBuilder(
 //		for input parameter 'errPrefDto' (error prefix)
 //		will be prefixed or attached at the beginning of
 //		the error message.
+//
+//		An error will only be returned if a processing
+//		or system error was encountered. When the
+//		end-of-file is encountered during the 'read'
+//		process, the returned error object will be set
+//		to 'nil', 'reachedEndOfFile' will be set to
+//		'true' and no error will be returned.
 func (fIoReaderMicrobot *fileIoReaderMicrobot) readBytesToStrBuilder(
 	fIoReader *FileIoReader,
 	fIoReaderLabel string,
