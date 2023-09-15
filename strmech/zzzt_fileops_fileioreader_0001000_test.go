@@ -38,6 +38,7 @@ func TestFileIoReader_Read_000100(t *testing.T) {
 		NewPathFileName(
 			targetReadFile,
 			false, //openFileReadWrite
+			1024,
 			ePrefix.XCpy("fIoReader<-"))
 
 	if err != nil {
@@ -64,7 +65,7 @@ func TestFileIoReader_Read_000100(t *testing.T) {
 
 	numOfBytesRead,
 		err = fIoReader.
-		ReadAllStrBuilder(
+		ReadAllToStrBuilder(
 			strBuilder,
 			false,
 			ePrefix.XCpy("strBuilder"))

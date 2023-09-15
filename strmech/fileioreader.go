@@ -213,7 +213,7 @@ func (fIoReader *FileIoReader) Close() error {
 //		Methods utilizing the Default Reader Buffer Size
 //		include:
 //
-//			FileIoReader.ReadAllStrBuilder()
+//			FileIoReader.ReadAllToStrBuilder()
 //			FileIoReader.ReadAllToString()
 //			FileIoReader.WriteTo()
 //
@@ -439,7 +439,7 @@ func (fIoReader *FileIoReader) NewIoReader(
 //		Methods utilizing the Default Reader Buffer Size
 //		include:
 //
-//			FileIoReader.ReadAllStrBuilder()
+//			FileIoReader.ReadAllToStrBuilder()
 //			FileIoReader.ReadAllToString()
 //			FileIoReader.WriteTo()
 //
@@ -698,7 +698,7 @@ func (fIoReader *FileIoReader) NewFileMgr(
 //		Methods utilizing the Default Reader Buffer Size
 //		include:
 //
-//			FileIoReader.ReadAllStrBuilder()
+//			FileIoReader.ReadAllToStrBuilder()
 //			FileIoReader.ReadAllToString()
 //			FileIoReader.WriteTo()
 //
@@ -1442,7 +1442,7 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 		err
 }
 
-// ReadAllStrBuilder
+// ReadAllToStrBuilder
 //
 // Reads the entire contents of the internal io.Reader
 // for the current instance of FileIoReader as
@@ -1625,7 +1625,7 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 //		end-of-file is encountered during the 'read'
 //		operation, the returned error object will be set
 //		to 'nil' and no error will be returned.
-func (fIoReader *FileIoReader) ReadAllStrBuilder(
+func (fIoReader *FileIoReader) ReadAllToStrBuilder(
 	strBuilder *strings.Builder,
 	autoCloseOnExit bool,
 	errorPrefix interface{}) (
@@ -1646,7 +1646,7 @@ func (fIoReader *FileIoReader) ReadAllStrBuilder(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"FileIoReader."+
-			"ReadAllStrBuilder()",
+			"ReadAllToStrBuilder()",
 		"")
 
 	if err != nil {
@@ -2846,7 +2846,7 @@ func (fIoReader *FileIoReader) Seek(
 // The Default Reader Buffer Size controls the size of
 // the byte array used by the following methods:
 //
-//	FileIoReader.ReadAllStrBuilder()
+//	FileIoReader.ReadAllToStrBuilder()
 //	FileIoReader.ReadAllToString()
 //	FileIoReader.WriteTo()
 //
@@ -2868,7 +2868,7 @@ func (fIoReader *FileIoReader) Seek(
 //		Methods utilizing the Default Reader Buffer Size
 //		include:
 //
-//			FileIoReader.ReadAllStrBuilder()
+//			FileIoReader.ReadAllToStrBuilder()
 //			FileIoReader.ReadAllToString()
 //			FileIoReader.WriteTo()
 //
@@ -2974,7 +2974,7 @@ func (fIoReader *FileIoReader) SetDefaultReaderBufferSize(
 //		Methods utilizing the Default Reader Buffer Size
 //		include:
 //
-//			FileIoReader.ReadAllStrBuilder()
+//			FileIoReader.ReadAllToStrBuilder()
 //			FileIoReader.ReadAllToString()
 //			FileIoReader.WriteTo()
 //
@@ -3178,7 +3178,7 @@ func (fIoReader *FileIoReader) SetIoReader(
 //		Methods utilizing the Default Reader Buffer Size
 //		include:
 //
-//			FileIoReader.ReadAllStrBuilder()
+//			FileIoReader.ReadAllToStrBuilder()
 //			FileIoReader.ReadAllToString()
 //			FileIoReader.WriteTo()
 //
@@ -3415,7 +3415,7 @@ func (fIoReader *FileIoReader) SetFileMgr(
 //		Methods utilizing the Default Reader Buffer Size
 //		include:
 //
-//			FileIoReader.ReadAllStrBuilder()
+//			FileIoReader.ReadAllToStrBuilder()
 //			FileIoReader.ReadAllToString()
 //			FileIoReader.WriteTo()
 //
