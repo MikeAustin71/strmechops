@@ -2841,7 +2841,7 @@ func (fIoReader *FileIoReader) Seek(
 // Although the FileIoReader type does not use the
 // 'buffered' read protocol, the size of the byte array
 // used to read and store bytes read from the underlying
-// io.Reader object is variable.
+// io.Reader object is variable in some cases.
 //
 // The Default Reader Buffer Size controls the size of
 // the byte array used by the following methods:
@@ -2862,15 +2862,8 @@ func (fIoReader *FileIoReader) Seek(
 //		FileIoReader.
 //
 //		If the value of 'defaultReaderBufferSize' is
-//		less than '16', it will be reset to a size of
-//		'4096'.
-//
-//		Methods utilizing the Default Reader Buffer Size
-//		include:
-//
-//			FileIoReader.ReadAllToStrBuilder()
-//			FileIoReader.ReadAllToString()
-//			FileIoReader.WriteTo()
+//		less than '16', it will be automatically reset to
+//		a size of '4096'.
 //
 // ----------------------------------------------------------------
 //
@@ -5353,6 +5346,10 @@ func (fIoReaderMolecule *fileIoReaderMolecule) close(
 //		instance will be validated. If an invalid value
 //		is detected that value will be automatically
 //		reset to a value of 4096-bytes.
+//
+//		This internal member variable is styled as:
+//
+//			FileIoReader.defaultReaderBufferSize
 //
 // ----------------------------------------------------------------
 //

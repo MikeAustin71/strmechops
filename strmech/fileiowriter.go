@@ -935,10 +935,8 @@ func (fIoWriter *FileIoWriter) ReadFrom(
 		return numOfBytesProcessed, err
 	}
 
-	if fIoWriter.defaultWriterBufferSize < 1 {
-
-		fIoWriter.defaultWriterBufferSize = 4096
-	}
+	new(fileIoWriterMolecule).
+		validateDefaultWriterBufferSize(fIoWriter)
 
 	var bytesRead = make([]byte,
 		fIoWriter.defaultWriterBufferSize)
@@ -1266,6 +1264,62 @@ func (fIoWriter *FileIoWriter) Seek(
 	}
 
 	return offsetFromFileStart, err
+}
+
+// SetDefaultWriterBufferSize
+//
+// Sets the default size of the array used to write bytes
+// to the output data destination object (io.Writer)
+// encapsulated in the current instance of FileIoWriter.
+//
+// Although the FileIoWriter type does not use the
+// 'buffered' write protocol, the size of the byte array
+// used to write bytes to the underlying io.Writer object
+// is variable is some cases.
+//
+// Methods which utilize the Default Reader Buffer Size
+// include:
+//
+//	FileIoWriter.ReadFrom()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	defaultWriterBufferSize		int
+//
+//		The size of the byte array which will be used to
+//		write data to the output data destination object
+//		(io.Writer) encapsulated by the current instance
+//		of FileIoWriter.
+//
+//		If the value of 'defaultWriterBufferSize' is less
+//		than  one ('1'), it will be automatically reset
+//		to a size of '4096'.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	-- NONE --
+func (fIoWriter *FileIoWriter) SetDefaultWriterBufferSize(
+	defaultWriterBufferSize int) {
+
+	if fIoWriter.lock == nil {
+		fIoWriter.lock = new(sync.Mutex)
+	}
+
+	fIoWriter.lock.Lock()
+
+	defer fIoWriter.lock.Unlock()
+
+	fIoWriter.defaultWriterBufferSize =
+		defaultWriterBufferSize
+
+	new(fileIoWriterMolecule).
+		validateDefaultWriterBufferSize(fIoWriter)
+
+	return
 }
 
 // SetIoWriter
@@ -3071,11 +3125,6 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setIoWriter(
 
 	}
 
-	if defaultWriterBufferSize < 1 {
-
-		defaultWriterBufferSize = 4096
-	}
-
 	var fIoWriterMolecule = new(fileIoWriterMolecule)
 
 	// Close the old fIoWriter
@@ -3110,6 +3159,9 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setIoWriter(
 
 	fIoWriter.defaultWriterBufferSize =
 		defaultWriterBufferSize
+
+	fIoWriterMolecule.
+		validateDefaultWriterBufferSize(fIoWriter)
 
 	return err
 }
@@ -3360,7 +3412,9 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setPathFileName(
 		return fInfoPlus, err
 	}
 
-	err = new(fileIoWriterMolecule).close(
+	var fIoWriterMolecule = new(fileIoWriterMolecule)
+
+	err = fIoWriterMolecule.close(
 		fIoWriter,
 		fIoWriterLabel,
 		ePrefix.XCpy(fIoWriterLabel))
@@ -3481,6 +3535,9 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setPathFileName(
 
 	fIoWriter.defaultWriterBufferSize =
 		defaultWriterBufferSize
+
+	fIoWriterMolecule.
+		validateDefaultWriterBufferSize(fIoWriter)
 
 	return fInfoPlus, err
 }
@@ -3701,4 +3758,56 @@ func (fIoWriterMolecule *fileIoWriterMolecule) close(
 	fIoWriter.defaultWriterBufferSize = 0
 
 	return err
+}
+
+// validateDefaultWriterBufferSize
+//
+// Validates the Default Writer Buffer Size internal
+// member variable for the FileIoWriter instance passed
+// as input parameter 'fIoWriter'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fIoWriter					*FileIoWriter
+//
+//		A pointer to an instance of FileIoWriter.
+//
+//		The default buffer size for this FileIoWriter
+//		instance will be validated. If an invalid value
+//		is detected that value will be automatically
+//		reset to a value of 4096-bytes.
+//
+//		This internal member variable is styled as:
+//
+//			FileIoWriter.defaultWriterBufferSize
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	-- NONE --
+func (fIoWriterMolecule *fileIoWriterMolecule) validateDefaultWriterBufferSize(
+	fIoWriter *FileIoWriter) {
+
+	if fIoWriterMolecule.lock == nil {
+		fIoWriterMolecule.lock = new(sync.Mutex)
+	}
+
+	fIoWriterMolecule.lock.Lock()
+
+	defer fIoWriterMolecule.lock.Unlock()
+
+	if fIoWriter == nil {
+
+		return
+	}
+
+	if fIoWriter.defaultWriterBufferSize < 1 {
+
+		fIoWriter.defaultWriterBufferSize = 4096
+	}
+
+	return
 }
