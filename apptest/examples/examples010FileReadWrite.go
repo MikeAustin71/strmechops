@@ -1483,7 +1483,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite04() {
 	var numOfBytesRead, numOfBytesWritten int64
 
 	numOfBytesRead,
-		err = fBufReader.ReadAllStrBuilder(
+		err = fBufReader.ReadAllToStrBuilder(
 		&strBuilder,
 		true,
 		ePrefix.XCpy("fBufReader"))

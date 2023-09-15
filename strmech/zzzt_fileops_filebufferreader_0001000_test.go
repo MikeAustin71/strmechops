@@ -293,7 +293,7 @@ func TestFileBufferReader_Seek_000100(t *testing.T) {
 	var numOfBytesRead, numOfBytesWritten int64
 
 	numOfBytesRead,
-		err = fBufReader.ReadAllStrBuilder(
+		err = fBufReader.ReadAllToStrBuilder(
 		&strBuilder,
 		true,
 		ePrefix.XCpy("fBufReader"))

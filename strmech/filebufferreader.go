@@ -1833,7 +1833,7 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 		err
 }
 
-// ReadAllStrBuilder
+// ReadAllToStrBuilder
 //
 // Reads the entire contents of the internal bufio.Reader
 // for the current instance of FileBufferReader as
@@ -2014,7 +2014,7 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 //		end-of-file is encountered during the 'read'
 //		process, the returned error object will be set
 //		to 'nil' and no error will be returned.
-func (fBufReader *FileBufferReader) ReadAllStrBuilder(
+func (fBufReader *FileBufferReader) ReadAllToStrBuilder(
 	strBuilder *strings.Builder,
 	autoCloseOnExit bool,
 	errorPrefix interface{}) (
@@ -2035,7 +2035,7 @@ func (fBufReader *FileBufferReader) ReadAllStrBuilder(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"FileBufferReader."+
-			"ReadAllStrBuilder()",
+			"ReadAllToStrBuilder()",
 		"")
 
 	if err != nil {
