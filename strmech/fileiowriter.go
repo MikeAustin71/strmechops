@@ -919,7 +919,7 @@ func (fIoWriter *FileIoWriter) NewPathFileName(
 //		If errors are encountered during processing, the
 //		returned error Type will encapsulate an
 //		appropriate error message.
-func (fIoWriter *FileIoWriter) ReadFrom(
+func (fIoWriter FileIoWriter) ReadFrom(
 	reader io.Reader) (
 	numOfBytesProcessed int64,
 	err error) {
@@ -970,7 +970,7 @@ func (fIoWriter *FileIoWriter) ReadFrom(
 	}
 
 	new(fileIoWriterMolecule).
-		validateDefaultWriterBufferSize(fIoWriter)
+		validateDefaultWriterBufferSize(&fIoWriter)
 
 	var bytesRead = make([]byte,
 		fIoWriter.defaultWriterBufferSize)
@@ -2137,7 +2137,7 @@ func (fIoWriter *FileIoWriter) SetPathFileName(
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fIoWriter *FileIoWriter) Write(
+func (fIoWriter FileIoWriter) Write(
 	bytesToWrite []byte) (
 	numBytesWritten int,
 	err error) {

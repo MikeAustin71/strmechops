@@ -2790,3 +2790,275 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) IoReadwrite01() {
 
 	return
 }
+
+func (fileReadWriteTest010 MainFileReadWriteTest010) IoWriteTo01() {
+
+	funcName := "Main010.IoReadwrite01()"
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		funcName,
+		"")
+
+	breakStr := " " + strings.Repeat("=",
+		len(funcName)+6)
+
+	dashLineStr := " " + strings.Repeat("-",
+		len(funcName)+6)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		" Function: %v\n\n",
+		ePrefix.String())
+
+	var shouldReadAndWriteFilesBeEqual,
+		shouldFinalDeleteWriteFile bool
+
+	shouldReadAndWriteFilesBeEqual = true
+
+	shouldFinalDeleteWriteFile = true
+
+	var targetReadFile string
+	var err error
+
+	var exUtil = ExampleUtility{}
+
+	targetReadFile,
+		err = exUtil.GetCompositeDirectory(
+		"\\fileOpsTest\\filesForTest\\textFilesForTest\\splitFunc.txt",
+		ePrefix.XCpy("targetInputFileName<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var targetWriteFile string
+
+	targetWriteFile,
+		err = exUtil.GetCompositeDirectory(
+		"\\fileOpsTest\\trashDirectory\\Main010IoWriteTo01.txt",
+		ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var readFileInfoPlus strmech.FileInfoPlus
+
+	var targetIoReader strmech.FileIoReader
+
+	readFileInfoPlus,
+		targetIoReader,
+		err = new(strmech.FileIoReader).
+		NewPathFileName(
+			targetReadFile,
+			false, // openFileReadWrite
+			4096,
+			ePrefix.XCpy("targetIoReader<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var targetIoWriter strmech.FileIoWriter
+
+	_,
+		targetIoWriter,
+		err = new(strmech.FileIoWriter).
+		NewPathFileName(
+			targetWriteFile,
+			false, // openFileReadWrite
+			4096,
+			true,
+			ePrefix.XCpy("targetIoWriter<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var numOfBytesProcessed int64
+
+	numOfBytesProcessed,
+		err = targetIoWriter.
+		ReadFrom(
+			targetIoReader)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	if numOfBytesProcessed != readFileInfoPlus.Size() {
+
+		fmt.Printf("%v\n"+
+			"%v\n"+
+			"Error: targetIoWriter.ReadFrom()\n"+
+			"The Number of Bytes Processed is NOT EQUAL\n"+
+			"to the size of the Target Read File.\n"+
+			"Number of Bytes Processed= '%v'\n"+
+			"    Target Readfile Size = '%v'\n"+
+			" Target Read File: %v\n"+
+			"Target Write File: %v\n",
+			ePrefix.String(),
+			dashLineStr,
+			numOfBytesProcessed,
+			readFileInfoPlus.Size(),
+			targetReadFile,
+			targetWriteFile)
+
+		return
+	}
+
+	fmt.Printf("%v\n"+
+		"%v\n"+
+		"!!! SUCCESS !!!\n"+
+		"targetIoWriter.ReadFrom()\n"+
+		"The Number of Bytes Processed is EQUAL\n"+
+		"to the size of the Target Read File.\n"+
+		"Number of Bytes Processed= '%v'\n"+
+		"    Target Readfile Size = '%v'\n"+
+		" Target Read File: %v\n"+
+		"Target Write File: %v\n\n",
+		ePrefix.String(),
+		dashLineStr,
+		numOfBytesProcessed,
+		readFileInfoPlus.Size(),
+		targetReadFile,
+		targetWriteFile)
+
+	err = targetIoReader.Close()
+
+	if err != nil {
+
+		fmt.Printf("\n%v\n"+
+			"Error closing 'targetIoReader'\n"+
+			"Target Read File: %v\n"+
+			"Error=\n%v\n\n",
+			ePrefix.String(),
+			targetReadFile,
+			err.Error())
+
+		return
+	}
+
+	err = targetIoWriter.Close()
+
+	if err != nil {
+
+		fmt.Printf("\n%v\n"+
+			"Error closing 'targetIoWriter'\n"+
+			"Target Write File: %v\n"+
+			"Error=\n%v\n\n",
+			ePrefix.String(),
+			targetWriteFile,
+			err.Error())
+
+		return
+	}
+
+	var filesAreEqual bool
+
+	var fHelper = new(strmech.FileHelper)
+
+	if shouldReadAndWriteFilesBeEqual == true {
+
+		var reasonFilesNotEqual string
+
+		filesAreEqual,
+			reasonFilesNotEqual,
+			err = fHelper.
+			CompareFiles(
+				targetReadFile,
+				targetWriteFile,
+				ePrefix.XCpy(
+					"Target Files Comparison"))
+
+		if err != nil {
+
+			fmt.Printf(" %v\n"+
+				" Error Return from fHelper.CompareFiles()\n"+
+				"  targetReadFile= %v\n"+
+				" targetWriteFile= %v\n"+
+				" Reason: %v\n",
+				ePrefix.String(),
+				targetReadFile,
+				targetWriteFile,
+				reasonFilesNotEqual)
+
+			return
+		}
+
+		if !filesAreEqual {
+
+			fmt.Printf(" %v\n"+
+				"%v\n"+
+				" Error: Read and Write Files are NOT equal!\n"+
+				" Reason: %v\n"+
+				"  Target Read File: %v\n"+
+				" Target Write File: %v\n\n",
+				ePrefix.String(),
+				dashLineStr,
+				reasonFilesNotEqual,
+				targetReadFile,
+				targetWriteFile)
+
+			return
+
+		} else {
+
+			fmt.Printf(" %v\n"+
+				"%v\n"+
+				" SUCCESS! Files are EQUAL!\n"+
+				"  Target Read File: %v\n"+
+				" Target Write File: %v\n\n",
+				ePrefix.String(),
+				dashLineStr,
+				targetReadFile,
+				targetWriteFile)
+
+		}
+
+	}
+
+	if shouldFinalDeleteWriteFile == true {
+
+		err = fHelper.
+			DeleteDirOrFile(
+				targetWriteFile,
+				ePrefix.XCpy("Final Delete-targetWriteFile"))
+
+		if err != nil {
+			fmt.Printf("\n%v\n\n",
+				err.Error())
+			return
+		}
+
+		fmt.Printf("%v\n"+
+			"%v\n"+
+			"Successfully Deleted Target Write File.\n"+
+			"Target Write File= '%v'\n",
+			ePrefix.String(),
+			dashLineStr,
+			targetWriteFile)
+
+	}
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	return
+}
