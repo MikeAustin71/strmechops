@@ -3831,7 +3831,13 @@ func (fIoReader FileIoReader) WriteTo(
 		return numOfBytesProcessed, err
 	}
 
-	var bytesRead = make([]byte, 4096)
+	new(fileIoReaderMolecule).
+		validateDefaultReaderBufferSize(
+			&fIoReader)
+
+	var bytesRead = make([]byte,
+		fIoReader.defaultReaderBufferSize)
+
 	var localBytesRead, localBytesWritten int
 	var err2, err3 error
 	var localReader = *fIoReader.ioReader

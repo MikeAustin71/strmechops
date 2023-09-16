@@ -40,6 +40,7 @@ func main() {
 	//examples.MainFileReadWriteTest010{}.FileBuffReadWrite02B()
 	//examples.MainFileReadWriteTest010{}.FileBuffReadWrite03()
 	//examples.MainFileReadWriteTest010{}.FileBuffReadWrite04()
-	//examples.MainFileReadWriteTest010{}.IoReadwrite01()
+	//examples.MainFileReadWriteTest010{}.IoReadWrite01()
+	//examples.MainFileReadWriteTest010{}.IoReadFrom01()
 	examples.MainFileReadWriteTest010{}.IoWriteTo01()
 }
