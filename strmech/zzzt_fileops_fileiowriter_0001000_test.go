@@ -351,14 +351,6 @@ func TestFileIoWriter_ReadFrom_000200(t *testing.T) {
 		return
 	}
 
-	defer func() {
-
-		_ = fHelper.DeleteDirOrFile(
-			targetWriteFile,
-			nil)
-
-	}()
-
 	var numOfBytesProcessed int64
 
 	numOfBytesProcessed,
@@ -371,6 +363,52 @@ func TestFileIoWriter_ReadFrom_000200(t *testing.T) {
 			err.Error())
 		return
 	}
+
+	err = targetIoReader.Close()
+
+	if err != nil {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: targetIoReader.Close()\n"+
+			"Error returned while attempting\n"+
+			"to close TargetIoReader!\n"+
+			"Target Read File: %v\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			dashLineStr,
+			targetReadFile,
+			err.Error())
+
+		return
+	}
+
+	err = targetIoWriter.Close()
+
+	if err != nil {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: targetIoWriter.Close()\n"+
+			"Error returned while attempting\n"+
+			"to close TargetIoWriter!\n"+
+			"Target Write File: %v\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			dashLineStr,
+			targetWriteFile,
+			err.Error())
+
+		return
+	}
+
+	defer func() {
+
+		_ = fHelper.DeleteDirOrFile(
+			targetWriteFile,
+			nil)
+
+	}()
 
 	if numOfBytesProcessed != readFileInfoPlus.Size() {
 
