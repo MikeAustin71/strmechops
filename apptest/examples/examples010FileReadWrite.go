@@ -2488,3 +2488,305 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) WriteFileBytes02() {
 	fmt.Printf("\n" + breakStr + "\n")
 
 }
+
+func (fileReadWriteTest010 MainFileReadWriteTest010) IoReadwrite01() {
+
+	funcName := "Main010.IoReadwrite01()"
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		funcName,
+		"")
+
+	breakStr := " " + strings.Repeat("=",
+		len(funcName)+6)
+
+	dashLineStr := " " + strings.Repeat("-",
+		len(funcName)+6)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		" Function: %v\n\n",
+		ePrefix.String())
+
+	var shouldReadAndWriteFilesBeEqual,
+		shouldFinalDeleteWriteFile bool
+
+	shouldReadAndWriteFilesBeEqual = true
+
+	shouldFinalDeleteWriteFile = true
+
+	var targetReadFile string
+	var err error
+
+	var exUtil = ExampleUtility{}
+
+	targetReadFile,
+		err = exUtil.GetCompositeDirectory(
+		"\\fileOpsTest\\filesForTest\\textFilesForTest\\splitFunc.txt",
+		ePrefix.XCpy("targetInputFileName<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var targetWriteFile string
+
+	targetWriteFile,
+		err = exUtil.GetCompositeDirectory(
+		"\\fileOpsTest\\trashDirectory\\Main010IoReadwrite01.txt",
+		ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var i64NumOfBytesRead, i64NumOfBytesWritten int64
+
+	var readFileInfoPlus,
+		writeFileInfoPlus strmech.FileInfoPlus
+
+	var targetIoReader strmech.FileIoReader
+
+	readFileInfoPlus,
+		targetIoReader,
+		err = new(strmech.FileIoReader).
+		NewPathFileName(
+			targetReadFile,
+			false, // openFileReadWrite
+			4096,
+			ePrefix.XCpy("targetIoReader<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var readStrBuilder = new(strings.Builder)
+
+	i64NumOfBytesRead,
+		err = targetIoReader.
+		ReadAllToStrBuilder(
+			readStrBuilder,
+			true,
+			ePrefix.XCpy("readStrBuilder<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var targetIoWriter strmech.FileIoWriter
+
+	writeFileInfoPlus,
+		targetIoWriter,
+		err = new(strmech.FileIoWriter).
+		NewPathFileName(
+			targetWriteFile,
+			false, // openFileReadWrite
+			4096,
+			true,
+			ePrefix.XCpy("targetIoWriter<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	i64NumOfBytesWritten,
+		err = targetIoWriter.
+		WriteTextOrNumbers(
+			readStrBuilder,
+			"",
+			"",
+			true, // autoCloseOnExit
+			ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	if i64NumOfBytesRead != i64NumOfBytesWritten {
+
+		fmt.Printf(" %v\n"+
+			"%v\n"+
+			" Error: Expected Bytes Written != Actual Bytes Written\n"+
+			" Expected Bytes Written = '%v'\n"+
+			"   Actual Bytes Written = '%v'\n"+
+			"  Target Read File: %v\n"+
+			" Target Write File: %v\n",
+			ePrefix.String(),
+			dashLineStr,
+			i64NumOfBytesRead,
+			i64NumOfBytesWritten,
+			targetReadFile,
+			targetWriteFile)
+
+		return
+
+	}
+
+	fmt.Printf(" %v\n"+
+		"%v\n"+
+		" After targetIoWriter.WriteTextOrNumbers() Sequence\n"+
+		" Expected Number Of Bytes Written: %v\n"+
+		"   Actual Number of Bytes Written: %v\n"+
+		"  Target Read File: %v\n"+
+		" Target Write File: %v\n\n",
+		ePrefix.String(),
+		dashLineStr,
+		i64NumOfBytesRead,
+		i64NumOfBytesWritten,
+		targetReadFile,
+		targetWriteFile)
+
+	var fHelper = new(strmech.FileHelper)
+
+	writeFileInfoPlus,
+		err = fHelper.
+		GetFileInfoPlus(
+			targetWriteFile,
+			ePrefix.XCpy("targetWriteFile"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	if readFileInfoPlus.Size() != writeFileInfoPlus.Size() {
+
+		fmt.Printf("%v\n"+
+			"Error: Target Read File Size != Target Write File Size!\n"+
+			" Target Read File Size= %v\n"+
+			"Target Write File Size= %v\n"+
+			" Target Read File= %v\n"+
+			"Target Write File= %v\n\n",
+			ePrefix.String(),
+			readFileInfoPlus.Size(),
+			writeFileInfoPlus.Size(),
+			targetReadFile,
+			targetWriteFile)
+
+		return
+	}
+
+	fmt.Printf("%v\n"+
+		"%v\n"+
+		"!!! Success !!!\n"+
+		"Target Read File Size == Target Write File Size!\n"+
+		" Target Read File Size= %v\n"+
+		"Target Write File Size= %v\n"+
+		" Target Read File= %v\n"+
+		"Target Write File= %v\n\n",
+		ePrefix.String(),
+		dashLineStr,
+		readFileInfoPlus.Size(),
+		writeFileInfoPlus.Size(),
+		targetReadFile,
+		targetWriteFile)
+
+	var filesAreEqual bool
+
+	if shouldReadAndWriteFilesBeEqual == true {
+
+		var reasonFilesNotEqual string
+
+		filesAreEqual,
+			reasonFilesNotEqual,
+			err = fHelper.
+			CompareFiles(
+				targetReadFile,
+				targetWriteFile,
+				ePrefix.XCpy(
+					"Target Files Comparison"))
+
+		if err != nil {
+
+			fmt.Printf(" %v\n"+
+				" Error Return from fHelper.CompareFiles()\n"+
+				"  targetReadFile= %v\n"+
+				" targetWriteFile= %v\n"+
+				" Reason: %v\n",
+				ePrefix.String(),
+				targetReadFile,
+				targetWriteFile,
+				reasonFilesNotEqual)
+
+			return
+		}
+
+		if !filesAreEqual {
+
+			fmt.Printf(" %v\n"+
+				"%v\n"+
+				" Error: Read and Write Files are NOT equal!\n"+
+				" Reason: %v\n"+
+				"  Target Read File: %v\n"+
+				" Target Write File: %v\n\n",
+				ePrefix.String(),
+				dashLineStr,
+				reasonFilesNotEqual,
+				targetReadFile,
+				targetWriteFile)
+
+			return
+
+		} else {
+
+			fmt.Printf(" %v\n"+
+				"%v\n"+
+				" SUCCESS! Files are EQUAL!\n"+
+				"  Target Read File: %v\n"+
+				" Target Write File: %v\n\n",
+				ePrefix.String(),
+				dashLineStr,
+				targetReadFile,
+				targetWriteFile)
+
+		}
+
+	}
+
+	if shouldFinalDeleteWriteFile == true {
+
+		err = fHelper.
+			DeleteDirOrFile(
+				targetWriteFile,
+				ePrefix.XCpy("Final Delete-targetWriteFile"))
+
+		if err != nil {
+			fmt.Printf("\n%v\n\n",
+				err.Error())
+			return
+		}
+
+		fmt.Printf("%v\n"+
+			"%v\n"+
+			"Successfully Deleted Target Write File.\n"+
+			"Target Write File= '%v'\n",
+			ePrefix.String(),
+			dashLineStr,
+			targetWriteFile)
+
+	}
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	return
+}

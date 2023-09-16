@@ -413,6 +413,21 @@ func (fIoWriter *FileIoWriter) NewIoWriter(
 //
 //			FileIoWriter.ReadFrom()
 //
+//	truncateExistingFile			bool
+//
+//		If this parameter is set to 'true', the target
+//		'write' file specified by 'fileMgr' will be
+//		opened for write operations. If the target file
+//		previously existed, it will be truncated. This
+//		means that the file's previous contents will be
+//		deleted.
+//
+//		If this parameter is set to 'false', the target
+//		file will be opened for write operations. If the
+//		target file previously existed, the new text
+//		written to the file will be appended to the
+//		end of the previous file contents.
+//
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
@@ -540,6 +555,7 @@ func (fIoWriter *FileIoWriter) NewFileMgr(
 	fileMgr *FileMgr,
 	openFileReadWrite bool,
 	defaultWriterBufferSize int,
+	truncateExistingFile bool,
 	errorPrefix interface{}) (
 	fInfoPlus FileInfoPlus,
 	newFileIoWriter FileIoWriter,
@@ -576,6 +592,7 @@ func (fIoWriter *FileIoWriter) NewFileMgr(
 			"fileMgr",
 			openFileReadWrite,
 			defaultWriterBufferSize,
+			truncateExistingFile,
 			ePrefix.XCpy(
 				"fileMgr"))
 
@@ -669,6 +686,21 @@ func (fIoWriter *FileIoWriter) NewFileMgr(
 //		include:
 //
 //			FileIoWriter.ReadFrom()
+//
+//	truncateExistingFile			bool
+//
+//		If this parameter is set to 'true', the target
+//		'write' file specified by 'pathFileName' will be
+//		opened for write operations. If the target file
+//		previously existed, it will be truncated. This
+//		means that the file's previous contents will be
+//		deleted.
+//
+//		If this parameter is set to 'false', the target
+//		file will be opened for write operations. If the
+//		target file previously existed, the new text
+//		written to the file will be appended to the
+//		end of the previous file contents.
 //
 //	errorPrefix					interface{}
 //
@@ -792,6 +824,7 @@ func (fIoWriter *FileIoWriter) NewPathFileName(
 	pathFileName string,
 	openFileReadWrite bool,
 	defaultWriterBufferSize int,
+	truncateExistingFile bool,
 	errorPrefix interface{}) (
 	fInfoPlus FileInfoPlus,
 	newFileIoWriter FileIoWriter,
@@ -828,6 +861,7 @@ func (fIoWriter *FileIoWriter) NewPathFileName(
 			"pathFileName",
 			openFileReadWrite,
 			defaultWriterBufferSize,
+			truncateExistingFile,
 			ePrefix.XCpy(
 				pathFileName))
 
@@ -1601,6 +1635,21 @@ func (fIoWriter *FileIoWriter) SetIoWriter(
 //
 //			FileIoWriter.ReadFrom()
 //
+//	truncateExistingFile			bool
+//
+//		If this parameter is set to 'true', the target
+//		'write' file specified by 'fileMgr' will be
+//		opened for write operations. If the target file
+//		previously existed, it will be truncated. This
+//		means that the file's previous contents will be
+//		deleted.
+//
+//		If this parameter is set to 'false', the target
+//		file will be opened for write operations. If the
+//		target file previously existed, the new text
+//		written to the file will be appended to the
+//		end of the previous file contents.
+//
 //	errorPrefix					interface{}
 //
 //		This object encapsulates error prefix text which
@@ -1717,6 +1766,7 @@ func (fIoWriter *FileIoWriter) SetFileMgr(
 	fileMgr *FileMgr,
 	openFileReadWrite bool,
 	defaultWriterBufferSize int,
+	truncateExistingFile bool,
 	errorPrefix interface{}) (
 	fInfoPlus FileInfoPlus,
 	err error) {
@@ -1752,6 +1802,7 @@ func (fIoWriter *FileIoWriter) SetFileMgr(
 			"fileMgr",
 			openFileReadWrite,
 			defaultWriterBufferSize,
+			truncateExistingFile,
 			ePrefix.XCpy(
 				"fileMgr"))
 
@@ -1835,6 +1886,21 @@ func (fIoWriter *FileIoWriter) SetFileMgr(
 //		include:
 //
 //			FileIoWriter.ReadFrom()
+//
+//	truncateExistingFile			bool
+//
+//		If this parameter is set to 'true', the target
+//		'write' file specified by 'pathFileName' will be
+//		opened for write operations. If the target file
+//		previously existed, it will be truncated. This
+//		means that the file's previous contents will be
+//		deleted.
+//
+//		If this parameter is set to 'false', the target
+//		file will be opened for write operations. If the
+//		target file previously existed, the new text
+//		written to the file will be appended to the
+//		end of the previous file contents.
 //
 //	errorPrefix					interface{}
 //
@@ -1952,6 +2018,7 @@ func (fIoWriter *FileIoWriter) SetPathFileName(
 	pathFileName string,
 	openFileReadWrite bool,
 	defaultWriterBufferSize int,
+	truncateExistingFile bool,
 	errorPrefix interface{}) (
 	fInfoPlus FileInfoPlus,
 	err error) {
@@ -1987,6 +2054,7 @@ func (fIoWriter *FileIoWriter) SetPathFileName(
 			"pathFileName",
 			openFileReadWrite,
 			defaultWriterBufferSize,
+			truncateExistingFile,
 			ePrefix.XCpy(
 				pathFileName))
 
@@ -2476,7 +2544,7 @@ func (fIoWriter *FileIoWriter) WriteTextOrNumbers(
 			writeEndOfTextChars,
 			ePrefix.XCpy("fIoWriter.ioWriter<-charsToWrite"))
 
-	if err != nil &&
+	if err == nil &&
 		autoCloseOnExit == true {
 
 		err = new(fileIoWriterMolecule).
@@ -2706,6 +2774,21 @@ type fileIoWriterMicrobot struct {
 //
 //			FileIoWriter.ReadFrom()
 //
+//	truncateExistingFile			bool
+//
+//		If this parameter is set to 'true', the target
+//		'write' file specified by 'fileMgr' will be
+//		opened for write operations. If the target file
+//		previously existed, it will be truncated. This
+//		means that the file's previous contents will be
+//		deleted.
+//
+//		If this parameter is set to 'false', the target
+//		file will be opened for write operations. If the
+//		target file previously existed, the new text
+//		written to the file will be appended to the
+//		end of the previous file contents.
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -2781,6 +2864,7 @@ func (fIoWriterMicrobot *fileIoWriterMicrobot) setFileMgr(
 	fileMgrLabel string,
 	openFileReadWrite bool,
 	defaultWriterBufferSize int,
+	truncateExistingFile bool,
 	errPrefDto *ePref.ErrPrefixDto) (
 	fInfoPlus FileInfoPlus,
 	err error) {
@@ -2892,6 +2976,7 @@ func (fIoWriterMicrobot *fileIoWriterMicrobot) setFileMgr(
 			fileMgrLabel,
 			openFileReadWrite,
 			defaultWriterBufferSize,
+			truncateExistingFile,
 			ePrefix.XCpy(fIoWriterLabel+"<-"+fileMgrLabel))
 
 	return fInfoPlus, err
@@ -3100,18 +3185,6 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setIoWriter(
 		return err
 	}
 
-	if fIoWriter.ioWriter == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: This instance of 'FileIoWriter' is invalid!\n"+
-			"The internal io.Writer object has NOT been properly\n"+
-			"initialized. Call one of the 'New' or 'Setter'\n"+
-			"methods to create a valid instance of 'FileIoWriter'.\n",
-			ePrefix.String())
-
-		return err
-	}
-
 	if writer == nil {
 
 		err = fmt.Errorf("%v\n"+
@@ -3257,6 +3330,20 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setIoWriter(
 //
 //			FileIoWriter.ReadFrom()
 //
+//	truncateExistingFile			bool
+//
+//		If this parameter is set to 'true', the target
+//		'write' file will be opened for write operations.
+//		If the target file previously existed, it will be
+//		truncated. This means that the file's previous
+//		contents will be deleted.
+//
+//		If this parameter is set to 'false', the target
+//		file will be opened for write operations. If the
+//		target file previously existed, the new text
+//		written to the file will be appended to the
+//		end of the previous file contents.
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -3332,6 +3419,7 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setPathFileName(
 	pathFileNameLabel string,
 	openFileReadWrite bool,
 	defaultWriterBufferSize int,
+	truncateExistingFile bool,
 	errPrefDto *ePref.ErrPrefixDto) (
 	fInfoPlus FileInfoPlus,
 	err error) {
@@ -3378,23 +3466,6 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setPathFileName(
 		return fInfoPlus, err
 	}
 
-	if fIoWriter.ioWriter == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: This instance of 'FileIoWriter' is invalid!\n"+
-			"The internal io.Writer object has NOT been properly\n"+
-			"initialized. Call one of the 'New' or 'Setter'\n"+
-			"methods to create a valid instance of 'FileIoWriter'.\n",
-			ePrefix.String())
-
-		return fInfoPlus, err
-	}
-
-	if defaultWriterBufferSize < 1 {
-
-		defaultWriterBufferSize = 4096
-	}
-
 	if len(pathFileNameLabel) == 0 {
 
 		pathFileNameLabel = "pathFileName"
@@ -3424,11 +3495,10 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setPathFileName(
 		return fInfoPlus, err
 	}
 
-	var pathFileDoesExist bool
 	var err2 error
 
 	pathFileName,
-		pathFileDoesExist,
+		_,
 		fInfoPlus,
 		err2 =
 		new(fileHelperMolecule).
@@ -3454,35 +3524,8 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setPathFileName(
 		return fInfoPlus, err
 	}
 
-	if !pathFileDoesExist {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter '%v' is invalid!\n"+
-			"The path and file name do NOT exist on an attached\n"+
-			"storage drive.\n"+
-			"%v= '%v'\n",
-			ePrefix.String(),
-			pathFileNameLabel,
-			pathFileNameLabel,
-			pathFileName)
-
-		return fInfoPlus, err
-	}
-
-	if fInfoPlus.IsDir() {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'pathFileName' is invalid!\n"+
-			"'pathFileName' is directory and NOT a file name.\n"+
-			"pathFileName= '%v'\n",
-			ePrefix.String(),
-			pathFileName)
-
-		return fInfoPlus, err
-	}
-
 	var filePermissionCfg FilePermissionConfig
-	var fileOpenPermissions = "-r--r--r--"
+	var fileOpenPermissions = "--w--w--w-"
 
 	if openFileReadWrite == true {
 		fileOpenPermissions = "-rw-rw-rw-"
@@ -3500,14 +3543,36 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setPathFileName(
 
 	var fileOpenCfg FileOpenConfig
 
-	fileOpenCfg,
-		err = new(FileOpenConfig).New(
-		ePrefix.XCpy("fileOpenCfg<-"),
-		FOpenType.TypeReadOnly())
+	if truncateExistingFile {
 
-	if err != nil {
+		fileOpenCfg,
+			err = new(FileOpenConfig).New(
+			ePrefix.XCpy("fileOpenCfg<-"),
+			FOpenType.TypeWriteOnly(),
+			FOpenMode.ModeCreate(),
+			FOpenMode.ModeTruncate())
 
-		return fInfoPlus, err
+		if err != nil {
+
+			return fInfoPlus, err
+		}
+
+	} else {
+		// truncateExistingFile = 'false'
+		// This signals Append to existing file.
+
+		fileOpenCfg,
+			err = new(FileOpenConfig).New(
+			ePrefix.XCpy("fileOpenCfg<-"),
+			FOpenType.TypeWriteOnly(),
+			FOpenMode.ModeCreate(),
+			FOpenMode.ModeAppend())
+
+		if err != nil {
+
+			return fInfoPlus, err
+		}
+
 	}
 
 	fIoWriter.filePtr,
@@ -3521,6 +3586,10 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setPathFileName(
 			ePrefix)
 
 	if err != nil {
+
+		if fIoWriter.filePtr != nil {
+			_ = fIoWriter.filePtr.Close()
+		}
 
 		return fInfoPlus, err
 	}
@@ -3682,71 +3751,46 @@ func (fIoWriterMolecule *fileIoWriterMolecule) close(
 		return err
 	}
 
-	if fIoWriter.ioWriter == nil {
+	if fIoWriter.ioWriter != nil {
 
-		err = fmt.Errorf("%v\n"+
-			"Error: This instance of 'FileIoWriter' is invalid!\n"+
-			"The internal io.Writer object has NOT been properly\n"+
-			"initialized. Call one of the 'New' or 'Setter'\n"+
-			"methods to create a valid instance of 'FileIoWriter'.\n",
-			ePrefix.String())
+		var ok bool
+		var closerObj io.Closer
+		var localWriter io.Writer
 
-		return err
-	}
+		localWriter = *fIoWriter.ioWriter
 
-	if fIoWriter.ioWriter == nil {
+		closerObj, ok = localWriter.(io.Closer)
 
-		err = fmt.Errorf("%v\n"+
-			"-------------------------------------------\n"+
-			"Error: The FileIoWriter instance passed\n"+
-			"as input parameter '%v' is invalid!\n"+
-			"the internal io.Writer object is a 'nil'\n"+
-			"pointer. (%v.ioWriter)\n",
-			ePrefix.String(),
-			fIoWriterLabel,
-			fIoWriterLabel)
+		if ok {
 
-		return err
+			var err2 error
 
-	}
+			err2 = closerObj.Close()
 
-	var ok bool
-	var closerObj io.Closer
-	var localWriter io.Writer
+			if err2 != nil {
 
-	localWriter = *fIoWriter.ioWriter
+				errText := fmt.Sprintf(
+					"%v\n"+
+						"Error returned while closing the 'FileIoWriter'\n"+
+						"internal io.Writer object.\n",
+					ePrefix.String())
 
-	closerObj, ok = localWriter.(io.Closer)
+				if len(fIoWriter.targetWriteFileName) > 0 {
 
-	if ok {
+					errText += fmt.Sprintf(
+						"Target Write File Name: %v\n",
+						fIoWriter.targetWriteFileName)
 
-		var err2 error
+				}
 
-		err2 = closerObj.Close()
-
-		if err2 != nil {
-
-			errText := fmt.Sprintf(
-				"%v\n"+
-					"Error returned while closing the 'FileIoWriter'\n"+
-					"internal io.Writer object.\n",
-				ePrefix.String())
-
-			if len(fIoWriter.targetWriteFileName) > 0 {
-
-				errText += fmt.Sprintf(
-					"Target Write File Name: %v\n",
-					fIoWriter.targetWriteFileName)
+				err = fmt.Errorf("%v"+
+					"closerObj.Close() Error=\n%v\n",
+					errText,
+					err2.Error())
 
 			}
 
-			err = fmt.Errorf("%v"+
-				"closerObj.Close() Error=\n%v\n",
-				errText,
-				err2.Error())
-
 		}
-
 	}
 
 	fIoWriter.targetWriteFileName = ""

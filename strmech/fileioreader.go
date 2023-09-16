@@ -4772,11 +4772,9 @@ func (fIoReaderNanobot *fileIoReaderNanobot) setIoReader(
 		return err
 	}
 
-	if defaultReaderBufferSize < 16 {
-		defaultReaderBufferSize = 4096
-	}
+	var fIoReaderMolecule = new(fileIoReaderMolecule)
 
-	err = new(fileIoReaderMolecule).close(
+	err = fIoReaderMolecule.close(
 		fIoReader,
 		fIoReaderLabel,
 		ePrefix.XCpy(fIoReaderLabel))
@@ -4810,6 +4808,9 @@ func (fIoReaderNanobot *fileIoReaderNanobot) setIoReader(
 
 	fIoReader.defaultReaderBufferSize =
 		defaultReaderBufferSize
+
+	fIoReaderMolecule.
+		validateDefaultReaderBufferSize(fIoReader)
 
 	return err
 }
@@ -5033,11 +5034,9 @@ func (fIoReaderNanobot *fileIoReaderNanobot) setPathFileName(
 		return fInfoPlus, err
 	}
 
-	if defaultReaderBufferSize < 16 {
-		defaultReaderBufferSize = 4096
-	}
+	var fIoReaderMolecule = new(fileIoReaderMolecule)
 
-	err = new(fileIoReaderMolecule).close(
+	err = fIoReaderMolecule.close(
 		fIoReader,
 		fIoReaderLabel,
 		ePrefix.XCpy(fIoReaderLabel))
@@ -5158,6 +5157,10 @@ func (fIoReaderNanobot *fileIoReaderNanobot) setPathFileName(
 
 	fIoReader.defaultReaderBufferSize =
 		defaultReaderBufferSize
+
+	fIoReaderMolecule.
+		validateDefaultReaderBufferSize(
+			fIoReader)
 
 	return fInfoPlus, err
 }
