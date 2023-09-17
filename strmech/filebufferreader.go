@@ -3331,7 +3331,7 @@ func (fBufReader *FileBufferReader) SetPathFileName(
 //		If errors are encountered during processing, the
 //		returned error Type will encapsulate an
 //		appropriate error message.
-func (fBufReader *FileBufferReader) WriteTo(
+func (fBufReader FileBufferReader) WriteTo(
 	writer io.Writer) (
 	numOfBytesProcessed int64,
 	err error) {
