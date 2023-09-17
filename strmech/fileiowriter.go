@@ -1189,7 +1189,7 @@ func (fIoWriter FileIoWriter) ReadFrom(
 //		If errors are encountered during processing, the
 //		returned error Type will encapsulate an
 //		appropriate error message.
-func (fIoWriter *FileIoWriter) Seek(
+func (fIoWriter FileIoWriter) Seek(
 	targetOffset int64,
 	whence int) (
 	offsetFromFileStart int64,

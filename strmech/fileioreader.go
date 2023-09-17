@@ -2866,7 +2866,7 @@ func (fIoReader *FileIoReader) ReadBytesToStringBuilder(
 //		If errors are encountered during processing, the
 //		returned error Type will encapsulate an
 //		appropriate error message.
-func (fIoReader *FileIoReader) Seek(
+func (fIoReader FileIoReader) Seek(
 	targetOffset int64,
 	whence int) (
 	offsetFromFileStart int64,

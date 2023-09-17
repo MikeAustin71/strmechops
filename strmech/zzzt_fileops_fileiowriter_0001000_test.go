@@ -271,6 +271,7 @@ func TestFileIoWriter_ReadFrom_000200(t *testing.T) {
 			err.Error())
 		return
 	}
+
 	var doesFileExist bool
 	var fHelper = new(FileHelper)
 	var readFileInfoPlus FileInfoPlus
