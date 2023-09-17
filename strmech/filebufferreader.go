@@ -323,7 +323,7 @@ func (fBufReader *FileBufferReader) Buffered() int {
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fBufReader *FileBufferReader) Discard(
+func (fBufReader FileBufferReader) Discard(
 	numBytesToDiscard int,
 	errorPrefix interface{}) (
 	discardedBytes int,
@@ -379,6 +379,50 @@ func (fBufReader *FileBufferReader) Discard(
 	}
 
 	return discardedBytes, err
+}
+
+// GetBufferSize
+//
+// This method returns the size of the underlying 'read'
+// buffer in bytes.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/bufio#Reader.Size
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	int
+//
+//		This return value contains the size of the
+//		underlying 'read' buffer in bytes for the current
+//		instance of FileBufferReader.
+func (fBufReader *FileBufferReader) GetBufferSize() int {
+
+	if fBufReader.lock == nil {
+		fBufReader.lock = new(sync.Mutex)
+	}
+
+	fBufReader.lock.Lock()
+
+	defer fBufReader.lock.Unlock()
+
+	if fBufReader.bufioReader == nil {
+
+		return 0
+	}
+
+	return fBufReader.bufioReader.Size()
 }
 
 // NewIoReader
@@ -1224,7 +1268,7 @@ func (fBufReader *FileBufferReader) NewPathFileName(
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fBufReader *FileBufferReader) Peek(
+func (fBufReader FileBufferReader) Peek(
 	nextBytes int,
 	errorPrefix interface{}) (
 	peekBytes []byte,
@@ -1431,7 +1475,7 @@ func (fBufReader *FileBufferReader) Peek(
 //		If processing errors are encountered, the
 //		returned error Type will encapsulate an
 //		appropriate error message.
-func (fBufReader *FileBufferReader) Read(
+func (fBufReader FileBufferReader) Read(
 	bytesRead []byte) (
 	numOfBytesRead int,
 	err error) {
@@ -2457,7 +2501,7 @@ func (fBufReader *FileBufferReader) ReadAllToString(
 //		If errors are encountered during processing, the
 //		returned error Type will encapsulate an
 //		appropriate error message.
-func (fBufReader *FileBufferReader) Seek(
+func (fBufReader FileBufferReader) Seek(
 	targetOffset int64,
 	whence int) (
 	offsetFromFileStart int64,
@@ -3238,50 +3282,6 @@ func (fBufReader *FileBufferReader) SetPathFileName(
 				pathFileName))
 
 	return fInfoPlus, err
-}
-
-// Size
-//
-// This method returns the size of the underlying 'read'
-// buffer in bytes.
-//
-// ----------------------------------------------------------------
-//
-// # Reference:
-//
-//	https://pkg.go.dev/bufio#Reader.Size
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	--- NONE ---
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	int
-//
-//		This return value contains the size of the
-//		underlying 'read' buffer in bytes for the current
-//		instance of FileBufferReader.
-func (fBufReader *FileBufferReader) Size() int {
-
-	if fBufReader.lock == nil {
-		fBufReader.lock = new(sync.Mutex)
-	}
-
-	fBufReader.lock.Lock()
-
-	defer fBufReader.lock.Unlock()
-
-	if fBufReader.bufioReader == nil {
-
-		return 0
-	}
-
-	return fBufReader.bufioReader.Size()
 }
 
 // WriteTo
