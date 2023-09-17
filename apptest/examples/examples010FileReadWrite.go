@@ -3334,3 +3334,259 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) IoReadFrom01() {
 
 	return
 }
+
+func (fileReadWriteTest010 MainFileReadWriteTest010) IoWriteSeek01() {
+
+	funcName := "Main010.IoWriteSeek01()"
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		funcName,
+		"")
+
+	breakStr := " " + strings.Repeat("=",
+		len(funcName)+6)
+
+	dashLineStr := " " + strings.Repeat("-",
+		len(funcName)+6)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		" Function: %v\n\n",
+		ePrefix.String())
+
+	var shouldFinalDeleteWriteFile bool
+
+	shouldFinalDeleteWriteFile = false
+
+	var targetReadFile string
+	var err error
+
+	var exUtil = ExampleUtility{}
+
+	targetReadFile,
+		err = exUtil.GetCompositeDirectory(
+		"\\fileOpsTest\\filesForTest\\textFilesForTest\\smallTextFile.txt",
+		ePrefix.XCpy("targetInputFileName<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var targetWriteFile string
+
+	targetWriteFile,
+		err = exUtil.GetCompositeDirectory(
+		"\\fileOpsTest\\trashDirectory\\Main010IoWriteSeek01.txt",
+		ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var targetIoReader strmech.FileIoReader
+	var readFileInfoPlus strmech.FileInfoPlus
+
+	readFileInfoPlus,
+		targetIoReader,
+		err = new(strmech.FileIoReader).
+		NewPathFileName(
+			targetReadFile,
+			false, // openFileReadWrite
+			1024,
+			ePrefix.XCpy("targetIoReader<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var targetIoWriter strmech.FileIoWriter
+
+	_,
+		targetIoWriter,
+		err = new(strmech.FileIoWriter).
+		NewPathFileName(
+			targetWriteFile,
+			false, // openFileReadWrite
+			4096,
+			true,
+			ePrefix.XCpy("targetIoWriter<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var numOfBytesProcessed int64
+
+	numOfBytesProcessed,
+		err = targetIoReader.
+		WriteTo(
+			targetIoWriter)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	if numOfBytesProcessed != readFileInfoPlus.Size() {
+
+		fmt.Printf("%v\n"+
+			"%v\n"+
+			"Error: targetIoReader.WriteTo()\n"+
+			"The Number of Bytes Processed is NOT EQUAL\n"+
+			"to the size of the Target Read File.\n"+
+			"Number of Bytes Processed= '%v'\n"+
+			"    Target Readfile Size = '%v'\n"+
+			" Target Read File: %v\n"+
+			"Target Write File: %v\n",
+			ePrefix.String(),
+			dashLineStr,
+			numOfBytesProcessed,
+			readFileInfoPlus.Size(),
+			targetReadFile,
+			targetWriteFile)
+
+		return
+	}
+
+	var i64RequestedWriteFileOffset, i64ActualWriteFileOffset int64
+
+	i64RequestedWriteFileOffset = 12
+
+	i64ActualWriteFileOffset,
+		err = targetIoWriter.Seek(
+		i64RequestedWriteFileOffset,
+		io.SeekStart)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	if i64RequestedWriteFileOffset !=
+		i64ActualWriteFileOffset {
+
+		fmt.Printf("%v\n"+
+			"%v\n"+
+			"Error: targetIoWriter.Seek()\n"+
+			"The Requested File Offset is NOT EQUAL\n"+
+			"to the Actual File Offset!\n"+
+			"Requested File Offset= '%v'\n"+
+			"   Actual File Offset= '%v'\n"+
+			"Target Write File: %v\n",
+			ePrefix.String(),
+			dashLineStr,
+			i64RequestedWriteFileOffset,
+			i64ActualWriteFileOffset,
+			targetWriteFile)
+
+		return
+	}
+
+	var testStr = "Hello World - How are you?"
+	lenTestStr := len(testStr)
+
+	var bytesToWrite = []byte(testStr)
+	var localNumOfBytesWritten int
+
+	localNumOfBytesWritten,
+		err = targetIoWriter.Write(bytesToWrite)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	if localNumOfBytesWritten != lenTestStr {
+
+		fmt.Printf("%v\n"+
+			"%v\n"+
+			"Error: targetIoWriter.Write(bytesToWrite)\n"+
+			"Expected Bytes Written DOES NOT MATCH\n"+
+			"Actual Bytes Written!\n"+
+			"Expected Bytes Written= '%v'\n"+
+			"  Actual Bytes Written= '%v'\n"+
+			"Target Write File: %v\n",
+			ePrefix.String(),
+			dashLineStr,
+			lenTestStr,
+			localNumOfBytesWritten,
+			targetWriteFile)
+
+		return
+	}
+
+	if shouldFinalDeleteWriteFile == true {
+
+		err = new(strmech.FileHelper).
+			DeleteDirOrFile(
+				targetWriteFile,
+				ePrefix.XCpy("Final Delete-targetWriteFile"))
+
+		if err != nil {
+			fmt.Printf("\n%v\n\n",
+				err.Error())
+			return
+		}
+
+		fmt.Printf("%v\n"+
+			"%v\n"+
+			"Successfully Deleted Target Write File.\n"+
+			"Target Write File= '%v'\n",
+			ePrefix.String(),
+			dashLineStr,
+			targetWriteFile)
+
+	}
+
+	var err2 error
+
+	err2 = targetIoReader.Close()
+
+	err = errors.Join(err, err2)
+
+	err2 = targetIoWriter.Close()
+
+	err = errors.Join(err, err2)
+
+	if err != nil {
+
+		fmt.Printf("%v\n"+
+			"%v\n"+
+			"Error returned by targetIoReader.Close()\n"+
+			"and/or targetIoWriter.Close().\n"+
+			"All Errors= \n%v\n",
+			ePrefix.String(),
+			dashLineStr,
+			err.Error())
+
+		fmt.Printf("\n\n" + breakStr + "\n")
+
+		fmt.Printf("\nERRORS - Function Execution FAILED!\n"+
+			" Function: %v\n",
+			ePrefix.String())
+
+		return
+	}
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf(" !!! Successful Completion !!!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	return
+}

@@ -323,7 +323,7 @@ func (fBufWriter *FileBufferWriter) AvailableBuffer() []byte {
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fBufWriter *FileBufferWriter) Close() error {
+func (fBufWriter FileBufferWriter) Close() error {
 
 	if fBufWriter.lock == nil {
 		fBufWriter.lock = new(sync.Mutex)
@@ -349,7 +349,7 @@ func (fBufWriter *FileBufferWriter) Close() error {
 
 	err = new(fileBufferWriterMolecule).
 		flushAndClose(
-			fBufWriter,
+			&fBufWriter,
 			"fBufWriter",
 			ePrefix.XCpy("fBufWriter"))
 
@@ -415,7 +415,8 @@ func (fBufWriter *FileBufferWriter) Close() error {
 //		If errors are encountered during processing, the
 //		returned error Type will encapsulate an
 //		appropriate error message.
-func (fBufWriter *FileBufferWriter) CloseWithNoFlush() error {
+func (fBufWriter *FileBufferWriter) CloseWithNoFlush(
+	errorPrefix interface{}) error {
 
 	if fBufWriter.lock == nil {
 		fBufWriter.lock = new(sync.Mutex)
@@ -430,7 +431,7 @@ func (fBufWriter *FileBufferWriter) CloseWithNoFlush() error {
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		nil,
+		errorPrefix,
 		"FileBufferWriter."+
 			"CloseWithNoFlush()",
 		"")

@@ -127,7 +127,7 @@ type FileBufferReader struct {
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fBufReader *FileBufferReader) Close() error {
+func (fBufReader FileBufferReader) Close() error {
 
 	if fBufReader.lock == nil {
 		fBufReader.lock = new(sync.Mutex)
@@ -152,7 +152,7 @@ func (fBufReader *FileBufferReader) Close() error {
 	}
 
 	err = new(fileBufferReaderMolecule).close(
-		fBufReader,
+		&fBufReader,
 		"fBufReader",
 		ePrefix.XCpy("fBufReader"))
 

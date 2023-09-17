@@ -96,7 +96,7 @@ type FileIoReader struct {
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fIoReader *FileIoReader) Close() error {
+func (fIoReader FileIoReader) Close() error {
 
 	if fIoReader.lock == nil {
 		fIoReader.lock = new(sync.Mutex)
@@ -121,7 +121,7 @@ func (fIoReader *FileIoReader) Close() error {
 	}
 
 	err = new(fileIoReaderMolecule).close(
-		fIoReader,
+		&fIoReader,
 		"fIoReader",
 		ePrefix.XCpy("fIoReader"))
 

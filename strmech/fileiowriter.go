@@ -57,7 +57,7 @@ type FileIoWriter struct {
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fIoWriter *FileIoWriter) Close() error {
+func (fIoWriter FileIoWriter) Close() error {
 
 	if fIoWriter.lock == nil {
 		fIoWriter.lock = new(sync.Mutex)
@@ -82,7 +82,7 @@ func (fIoWriter *FileIoWriter) Close() error {
 	}
 
 	err = new(fileIoWriterMolecule).close(
-		fIoWriter,
+		&fIoWriter,
 		"fIoWriter",
 		ePrefix.XCpy("fIoWriter"))
 
