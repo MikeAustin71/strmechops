@@ -3593,3 +3593,310 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) IoWriteSeek01() {
 
 	return
 }
+
+// IoWriteAppend01
+//
+// Test writing text at the end of a pre-existing
+// target file.
+func (fileReadWriteTest010 MainFileReadWriteTest010) IoWriteAppend01() {
+
+	funcName := "Main010.IoWriteAppend01()"
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		funcName,
+		"")
+
+	breakStr := " " + strings.Repeat("=",
+		len(funcName)+6)
+
+	dashLineStr := " " + strings.Repeat("-",
+		len(funcName)+6)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		" Function: %v\n\n",
+		ePrefix.String())
+
+	var shouldFinalDeleteWriteFile bool
+
+	shouldFinalDeleteWriteFile = false
+
+	var targetReadFile string
+	var err error
+
+	var exUtil = ExampleUtility{}
+
+	targetReadFile,
+		err = exUtil.GetCompositeDirectory(
+		"\\fileOpsTest\\filesForTest\\textFilesForTest\\smallTextFile.txt",
+		ePrefix.XCpy("targetInputFileName<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var targetWriteFile string
+
+	targetWriteFile,
+		err = exUtil.GetCompositeDirectory(
+		"\\fileOpsTest\\trashDirectory\\Main010IoWriteAppend01.txt",
+		ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var doesFileExist bool
+	var fHelper = new(strmech.FileHelper)
+	var readFileInfoPlus strmech.FileInfoPlus
+
+	doesFileExist,
+		readFileInfoPlus,
+		err = fHelper.
+		DoesFileInfoPlusExist(
+			targetReadFile,
+			ePrefix.XCpy("targetReadFile"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	if doesFileExist == false {
+
+		fmt.Printf("%v\n"+
+			"%v\n"+
+			"Error: The Target Read File Does NOT Exist!\n"+
+			"Target Read File was not found on attached storage drive.\n"+
+			"Target Read File: %v\n",
+			ePrefix.String(),
+			dashLineStr,
+			targetReadFile)
+
+		return
+	}
+
+	var targetIoReader strmech.FileIoReader
+
+	readFileInfoPlus,
+		targetIoReader,
+		err = new(strmech.FileIoReader).
+		NewPathFileName(
+			targetReadFile,
+			false, // openFileReadWrite
+			512,
+			ePrefix.XCpy("targetIoReader<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var targetIoWriter strmech.FileIoWriter
+
+	_,
+		targetIoWriter,
+		err = new(strmech.FileIoWriter).
+		NewPathFileName(
+			targetWriteFile,
+			false, // openFileReadWrite
+			512,
+			true,
+			ePrefix.XCpy("targetIoWriter<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var numOfBytesProcessed int64
+
+	numOfBytesProcessed,
+		err = targetIoWriter.
+		ReadFrom(
+			targetIoReader)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	err = targetIoReader.Close()
+
+	if err != nil {
+
+		fmt.Printf("%v\n"+
+			"%v\n"+
+			"Error: targetIoReader.Close()\n"+
+			"Error returned while attempting\n"+
+			"to close TargetIoReader!\n"+
+			"Target Read File: %v\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			dashLineStr,
+			targetReadFile,
+			err.Error())
+
+		return
+	}
+
+	if numOfBytesProcessed != readFileInfoPlus.Size() {
+
+		fmt.Printf("%v\n"+
+			"%v\n"+
+			"Error: targetIoWriter.ReadFrom()\n"+
+			"The Number of Bytes Processed is NOT EQUAL\n"+
+			"to the size of the Target Read File.\n"+
+			"Number of Bytes Processed= '%v'\n"+
+			"    Target Readfile Size = '%v'\n"+
+			" Target Read File: %v\n"+
+			"Target Write File: %v\n",
+			ePrefix.String(),
+			dashLineStr,
+			numOfBytesProcessed,
+			readFileInfoPlus.Size(),
+			targetReadFile,
+			targetWriteFile)
+
+		_ = targetIoWriter.Close()
+
+		return
+	}
+
+	err = targetIoWriter.Close()
+
+	if err != nil {
+		fmt.Printf("%v\n"+
+			"%v\n"+
+			"Error: targetIoWriter.Close()\n"+
+			"Error returned while attempting\n"+
+			"to close TargetIoWriter!\n"+
+			"Target Write File: %v\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			dashLineStr,
+			targetWriteFile,
+			err.Error())
+	}
+
+	var targetIoWriterTwo strmech.FileIoWriter
+
+	_,
+		targetIoWriterTwo,
+		err = new(strmech.FileIoWriter).
+		NewPathFileName(
+			targetWriteFile,
+			false, // openFileReadWrite
+			256,
+			false, // Truncate Existing File
+			ePrefix.XCpy("targetIoWriter<-"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var testStr = "End-Of-File Text. Hello!"
+	lenTestStr := len(testStr)
+
+	var bytesToWrite = []byte(testStr)
+	var localNumOfBytesWritten int
+
+	localNumOfBytesWritten,
+		err = targetIoWriterTwo.Write(bytesToWrite)
+
+	if err != nil {
+
+		fmt.Printf("\n%v\n"+
+			"Error: targetIoWriterTwo.Write(bytesToWrite)\n"+
+			"Target Write File: %v\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			targetWriteFile,
+			err.Error())
+
+		return
+	}
+
+	err = targetIoWriterTwo.Close()
+
+	if err != nil {
+
+		fmt.Printf("%v\n"+
+			"%v\n"+
+			"Error: targetIoWriterTwo.Close()\n"+
+			"Error returned while attempting\n"+
+			"to close TargetIoWriter #2!\n"+
+			"Target Write File: %v\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			dashLineStr,
+			targetWriteFile,
+			err.Error())
+
+		return
+	}
+
+	if localNumOfBytesWritten != lenTestStr {
+
+		fmt.Printf("%v\n"+
+			"%v\n"+
+			"Error: targetIoWriter.Write(bytesToWrite)\n"+
+			"Expected Bytes Written DOES NOT MATCH\n"+
+			"Actual Bytes Written!\n"+
+			"Expected Bytes Written= '%v'\n"+
+			"  Actual Bytes Written= '%v'\n"+
+			"Target Write File: %v\n",
+			ePrefix.String(),
+			dashLineStr,
+			lenTestStr,
+			localNumOfBytesWritten,
+			targetWriteFile)
+
+		return
+	}
+
+	if shouldFinalDeleteWriteFile == true {
+
+		err = new(strmech.FileHelper).
+			DeleteDirOrFile(
+				targetWriteFile,
+				ePrefix.XCpy("Final Delete-targetWriteFile"))
+
+		if err != nil {
+			fmt.Printf("\n%v\n\n",
+				err.Error())
+			return
+		}
+
+		fmt.Printf("%v\n"+
+			"%v\n"+
+			"Successfully Deleted Target Write File.\n"+
+			"Target Write File= '%v'\n",
+			ePrefix.String(),
+			dashLineStr,
+			targetWriteFile)
+
+	}
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf(" !!! Successful Completion !!!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	return
+
+}

@@ -34,7 +34,6 @@ func main() {
 	//examples.MainFileReadWriteTest010{}.FileBufWriter01()
 	//examples.MainFileReadWriteTest010{}.FileBufWriter02()
 	// examples.MainFilePermissionsTest009{}.PermissionStr02()
-
 	//examples.MainFileReadWriteTest010{}.FileBuffReadWrite01()
 	//examples.MainFileReadWriteTest010{}.FileBuffReadWrite02()
 	//examples.MainFileReadWriteTest010{}.FileBuffReadWrite02B()
@@ -43,5 +42,6 @@ func main() {
 	//examples.MainFileReadWriteTest010{}.IoReadWrite01()
 	//examples.MainFileReadWriteTest010{}.IoReadFrom01()
 	//examples.MainFileReadWriteTest010{}.IoWriteTo01()
-	examples.MainFileReadWriteTest010{}.IoWriteSeek01()
+	//examples.MainFileReadWriteTest010{}.IoWriteSeek01()
+	examples.MainFileReadWriteTest010{}.IoWriteAppend01()
 }
