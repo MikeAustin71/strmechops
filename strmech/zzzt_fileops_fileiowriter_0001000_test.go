@@ -2,6 +2,7 @@ package strmech
 
 import (
 	ePref "github.com/MikeAustin71/errpref"
+	"io"
 	"os"
 	"strings"
 	"testing"
@@ -294,7 +295,7 @@ func TestFileIoWriter_ReadFrom_000200(t *testing.T) {
 		t.Errorf("%v\n"+
 			"%v\n"+
 			"Error: The Target Read File Does NOT Exist!\n"+
-			"Target Read File was not found on attached storage drive.\n"+
+			"Target Read File was not found on an attached storage drive.\n"+
 			"Target Read File: %v\n",
 			ePrefix.String(),
 			dashLineStr,
@@ -504,4 +505,353 @@ func TestFileIoWriter_ReadFrom_000200(t *testing.T) {
 	}
 
 	return
+}
+
+func TestFileIoWriter_Seek_000300(t *testing.T) {
+
+	funcName := "TestFileIoWriter_Seek_000300()"
+
+	dashLineStr := " " + strings.Repeat("-",
+		len(funcName)+10)
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		funcName,
+		"")
+
+	var targetReadFile string
+	var err error
+
+	targetReadFile,
+		err = new(fileOpsTestUtility).
+		GetCompositeDir(
+			"\\fileOpsTest\\filesForTest\\textFilesForTest\\smallTextFile.txt",
+			ePrefix.XCpy("targetReadFile"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var doesFileExist bool
+	var fHelper = new(FileHelper)
+	var readFileInfoPlus FileInfoPlus
+
+	doesFileExist,
+		readFileInfoPlus,
+		err = fHelper.
+		DoesFileInfoPlusExist(
+			targetReadFile,
+			ePrefix.XCpy("targetReadFile"))
+
+	if err != nil {
+		t.Errorf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	if doesFileExist == false {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: The Target Read File Does NOT Exist!\n"+
+			"Target Read File was not found on attached storage drive.\n"+
+			"Target Read File: %v\n",
+			ePrefix.String(),
+			dashLineStr,
+			targetReadFile)
+
+		return
+	}
+
+	var compareFile string
+
+	compareFile,
+		err = new(fileOpsTestUtility).
+		GetCompositeDir(
+			"\\fileOpsTest\\filesForTest\\textFilesForTest\\smallTextFileWriteSeek12.txt",
+			ePrefix.XCpy("targetReadFile"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	doesFileExist,
+		_,
+		err = fHelper.
+		DoesFileInfoPlusExist(
+			compareFile,
+			ePrefix.XCpy("compareFile"))
+
+	if err != nil {
+		t.Errorf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	if doesFileExist == false {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: The Comparison File Does NOT Exist!\n"+
+			"The Comparison File was not found on an attached storage drive.\n"+
+			"Comparison File: %v\n",
+			ePrefix.String(),
+			dashLineStr,
+			compareFile)
+
+		return
+	}
+
+	var targetWriteFile string
+
+	targetWriteFile,
+		err = new(fileOpsTestUtility).
+		GetCompositeDir(
+			"\\fileOpsTest\\trashDirectory\\TestFileIoWriter_Seek_000300.txt",
+			ePrefix.XCpy("targetWriteFile"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var targetIoReader FileIoReader
+
+	readFileInfoPlus,
+		targetIoReader,
+		err = new(FileIoReader).
+		NewPathFileName(
+			targetReadFile,
+			false, // openFileReadWrite
+			2048,
+			ePrefix.XCpy("targetIoReader<-"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var targetIoWriter FileIoWriter
+
+	_,
+		targetIoWriter,
+		err = new(FileIoWriter).
+		NewPathFileName(
+			targetWriteFile,
+			false, // openFileReadWrite
+			2048,  // Default Buffer Size
+			true,
+			ePrefix.XCpy("targetIoWriter<-"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var numOfBytesProcessed int64
+
+	numOfBytesProcessed,
+		err = targetIoReader.
+		WriteTo(
+			targetIoWriter)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = targetIoReader.Close()
+
+	if err != nil {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: targetIoReader.Close()\n"+
+			"Error returned while attempting\n"+
+			"to close TargetIoReader!\n"+
+			"Target Read File: %v\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			dashLineStr,
+			targetReadFile,
+			err.Error())
+
+		return
+	}
+
+	if numOfBytesProcessed != readFileInfoPlus.Size() {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: targetIoReader.WriteTo()\n"+
+			"The Number of Bytes Processed is NOT EQUAL\n"+
+			"to the size of the Target Read File.\n"+
+			"Number of Bytes Processed= '%v'\n"+
+			"    Target Readfile Size = '%v'\n"+
+			" Target Read File: %v\n"+
+			"Target Write File: %v\n",
+			ePrefix.String(),
+			dashLineStr,
+			numOfBytesProcessed,
+			readFileInfoPlus.Size(),
+			targetReadFile,
+			targetWriteFile)
+
+		return
+	}
+
+	var i64RequestedWriteFileOffset, i64ActualWriteFileOffset int64
+
+	i64RequestedWriteFileOffset = 12
+
+	i64ActualWriteFileOffset,
+		err = targetIoWriter.Seek(
+		i64RequestedWriteFileOffset,
+		io.SeekStart)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	if i64RequestedWriteFileOffset !=
+		i64ActualWriteFileOffset {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: targetIoWriter.Seek()\n"+
+			"The Requested File Offset is NOT EQUAL\n"+
+			"to the Actual File Offset!\n"+
+			"Requested File Offset= '%v'\n"+
+			"   Actual File Offset= '%v'\n"+
+			"Target Write File: %v\n",
+			ePrefix.String(),
+			dashLineStr,
+			i64RequestedWriteFileOffset,
+			i64ActualWriteFileOffset,
+			targetWriteFile)
+
+		return
+	}
+
+	var testStr = "Hello World - How are you?"
+	lenTestStr := len(testStr)
+
+	var bytesToWrite = []byte(testStr)
+	var localNumOfBytesWritten int
+
+	localNumOfBytesWritten,
+		err = targetIoWriter.Write(bytesToWrite)
+
+	if err != nil {
+
+		t.Errorf("\n%v\n"+
+			"Error: targetIoWriter.Write(bytesToWrite)\n"+
+			"Target Write File: %v\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			targetWriteFile,
+			err.Error())
+
+		return
+	}
+
+	err = targetIoWriter.Close()
+
+	if err != nil {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: targetIoWriter.Close()\n"+
+			"Error returned while attempting\n"+
+			"to close TargetIoWriter!\n"+
+			"Target Write File: %v\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			dashLineStr,
+			targetWriteFile,
+			err.Error())
+
+		return
+	}
+
+	if localNumOfBytesWritten != lenTestStr {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: targetIoWriter.Write(bytesToWrite)\n"+
+			"Expected Bytes Written DOES NOT MATCH\n"+
+			"Actual Bytes Written!\n"+
+			"Expected Bytes Written= '%v'\n"+
+			"  Actual Bytes Written= '%v'\n"+
+			"Target Write File: %v\n",
+			ePrefix.String(),
+			dashLineStr,
+			lenTestStr,
+			localNumOfBytesWritten,
+			targetWriteFile)
+
+		return
+	}
+
+	var reasonFilesNotEqual string
+	var filesAreEqual bool
+
+	filesAreEqual,
+		reasonFilesNotEqual,
+		err = fHelper.CompareFiles(
+		compareFile,
+		targetWriteFile,
+		ePrefix.XCpy(
+			"Target Files Comparison"))
+
+	if err != nil {
+
+		t.Errorf(" %v\n"+
+			"Error Return from fHelper.CompareFiles()\n"+
+			"  targetReadFile= %v\n"+
+			" targetWriteFile= %v\n"+
+			"Reason: %v\n",
+			ePrefix.String(),
+			targetReadFile,
+			targetWriteFile,
+			reasonFilesNotEqual)
+
+		return
+	}
+
+	if !filesAreEqual {
+
+		t.Errorf("%v\n"+
+			"Error: Comparison and Write Files are NOT equal!\n"+
+			"Reason: %v\n"+
+			"  Comparison File: %v\n"+
+			"Target Write File: %v\n",
+			ePrefix.String(),
+			reasonFilesNotEqual,
+			compareFile,
+			targetWriteFile)
+
+		return
+
+	}
+
+	err = fHelper.
+		DeleteDirOrFile(
+			targetWriteFile,
+			ePrefix.XCpy("targetWriteFile-Final Delete"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
 }

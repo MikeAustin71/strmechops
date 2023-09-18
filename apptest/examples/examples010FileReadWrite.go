@@ -3335,6 +3335,9 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) IoReadFrom01() {
 	return
 }
 
+// IoWriteSeek01
+//
+// Tests FileIoWriter.Seek()
 func (fileReadWriteTest010 MainFileReadWriteTest010) IoWriteSeek01() {
 
 	funcName := "Main010.IoWriteSeek01()"
