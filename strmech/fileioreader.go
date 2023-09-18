@@ -49,11 +49,11 @@ import (
 //	io.Reader object, the user need to apply any
 //	required 'close' or clean-up operations externally.
 type FileIoReader struct {
-	ioReader                *io.Reader
-	filePtr                 *os.File
-	targetReadFileName      string
-	defaultReaderBufferSize int
-	lock                    *sync.Mutex
+	ioReader             *io.Reader
+	filePtr              *os.File
+	targetReadFileName   string
+	defaultByteArraySize int
+	lock                 *sync.Mutex
 }
 
 // Close
@@ -339,14 +339,14 @@ func (fIoReader *FileIoReader) GetIoReader(
 //		files, this 'reader' will in fact read data from
 //		any object implementing the io.Reader interface.
 //
-//	defaultReaderBufferSize		int
+//	defaultReaderByteArraySize		int
 //
 //		The size of the byte array which will be used to
 //		read data from the internal io.Reader object
 //		encapsulated by the returned FileIoReader
 //		instance.
 //
-//		If the value of 'defaultReaderBufferSize' is
+//		If the value of 'defaultReaderByteArraySize' is
 //		less than '16', it will be reset to a size of
 //		'4096'.
 //
@@ -445,7 +445,7 @@ func (fIoReader *FileIoReader) GetIoReader(
 //	 	attached to the	beginning of the error message.
 func (fIoReader *FileIoReader) NewIoReader(
 	reader io.Reader,
-	defaultReaderBufferSize int,
+	defaultReaderByteArraySize int,
 	errorPrefix interface{}) (
 	FileIoReader,
 	error) {
@@ -479,7 +479,7 @@ func (fIoReader *FileIoReader) NewIoReader(
 			"newFileIoReader",
 			reader,
 			"reader",
-			defaultReaderBufferSize,
+			defaultReaderByteArraySize,
 			ePrefix.XCpy("newFileIoReader"))
 
 	return newFileIoReader, err
@@ -565,16 +565,15 @@ func (fIoReader *FileIoReader) NewIoReader(
 //		target 'read' file will be opened for 'read-only'
 //		operations.
 //
-//	defaultReaderBufferSize		int
+//	defaultReaderByteArraySize		int
 //
 //		The size of the byte array which will be used to
 //		read data from the internal io.Reader object
 //		encapsulated by the returned FileIoReader
 //		instance.
 //
-//		If the value of 'defaultReaderBufferSize' is
-//		less than '16', it will be reset to a size of
-//		'4096'.
+//		If the value of 'defaultReaderByteArraySize' is less
+//		than '16', it will be reset to a size of '4096'.
 //
 //		Although the FileIoReader type does not use the
 //		'buffered' read protocol, the size of the byte
@@ -714,7 +713,7 @@ func (fIoReader *FileIoReader) NewIoReader(
 func (fIoReader *FileIoReader) NewFileMgr(
 	fileMgr *FileMgr,
 	openFileReadWrite bool,
-	defaultReaderBufferSize int,
+	defaultReaderByteArraySize int,
 	errorPrefix interface{}) (
 	fInfoPlus FileInfoPlus,
 	newFileIoReader FileIoReader,
@@ -750,7 +749,7 @@ func (fIoReader *FileIoReader) NewFileMgr(
 			fileMgr,
 			"fileMgr",
 			openFileReadWrite,
-			defaultReaderBufferSize,
+			defaultReaderByteArraySize,
 			ePrefix.XCpy(
 				"fileMgr"))
 
@@ -824,14 +823,14 @@ func (fIoReader *FileIoReader) NewFileMgr(
 //		target 'read' file will be opened for 'read-only'
 //		operations.
 //
-//	defaultReaderBufferSize		int
+//	defaultReaderByteArraySize		int
 //
 //		The size of the byte array which will be used to
 //		read data from the internal io.Reader object
 //		encapsulated by the returned FileIoReader
 //		instance.
 //
-//		If the value of 'defaultReaderBufferSize' is
+//		If the value of 'defaultReaderByteArraySize' is
 //		less than '16', it will be reset to a size of
 //		'4096'.
 //
@@ -968,7 +967,7 @@ func (fIoReader *FileIoReader) NewFileMgr(
 func (fIoReader *FileIoReader) NewPathFileName(
 	pathFileName string,
 	openFileReadWrite bool,
-	defaultReaderBufferSize int,
+	defaultReaderByteArraySize int,
 	errorPrefix interface{}) (
 	fInfoPlus FileInfoPlus,
 	newFileIoReader FileIoReader,
@@ -1004,7 +1003,7 @@ func (fIoReader *FileIoReader) NewPathFileName(
 			pathFileName,
 			"pathFileName",
 			openFileReadWrite,
-			defaultReaderBufferSize,
+			defaultReaderByteArraySize,
 			ePrefix.XCpy(
 				pathFileName))
 
@@ -2999,16 +2998,16 @@ func (fIoReader FileIoReader) Seek(
 //
 // # Input Parameters
 //
-//	defaultReaderBufferSize		int
+//	defaultReaderByteArraySize		int
 //
 //		The size of the byte array which will be used to
 //		read data from the internal io.Reader object
 //		encapsulated by the current instance of
 //		FileIoReader.
 //
-//		If the value of 'defaultReaderBufferSize' is
-//		less than '16', it will be automatically reset to
-//		a size of '4096'.
+//		If the value of 'defaultReaderByteArraySize' is less
+//		than '16', it will be automatically reset to a
+//		size of '4096'.
 //
 // ----------------------------------------------------------------
 //
@@ -3016,7 +3015,7 @@ func (fIoReader FileIoReader) Seek(
 //
 //	-- NONE --
 func (fIoReader *FileIoReader) SetDefaultReaderBufferSize(
-	defaultReaderBufferSize int) {
+	defaultReaderByteArraySize int) {
 
 	if fIoReader.lock == nil {
 		fIoReader.lock = new(sync.Mutex)
@@ -3026,8 +3025,8 @@ func (fIoReader *FileIoReader) SetDefaultReaderBufferSize(
 
 	defer fIoReader.lock.Unlock()
 
-	fIoReader.defaultReaderBufferSize =
-		defaultReaderBufferSize
+	fIoReader.defaultByteArraySize =
+		defaultReaderByteArraySize
 
 	new(fileIoReaderMolecule).
 		validateDefaultReaderBufferSize(
@@ -3092,14 +3091,14 @@ func (fIoReader *FileIoReader) SetDefaultReaderBufferSize(
 //		method 'Close()' will NOT close this io.Reader
 //		object.
 //
-//	defaultReaderBufferSize		int
+//	defaultReaderByteArraySize		int
 //
 //		The size of the byte array which will be used to
 //		read data from the internal io.Reader object
 //		encapsulated by the current FileIoReader
 //		instance.
 //
-//		If the value of 'defaultReaderBufferSize' is
+//		If the value of 'defaultReaderByteArraySize' is
 //		less than '16', it will be reset to a size of
 //		'4096'.
 //
@@ -3192,7 +3191,7 @@ func (fIoReader *FileIoReader) SetDefaultReaderBufferSize(
 //	 	attached to the	beginning of the error message.
 func (fIoReader *FileIoReader) SetIoReader(
 	reader io.Reader,
-	defaultReaderBufferSize int,
+	defaultReaderByteArraySize int,
 	errorPrefix interface{}) error {
 
 	if fIoReader.lock == nil {
@@ -3223,7 +3222,7 @@ func (fIoReader *FileIoReader) SetIoReader(
 			"fIoReader",
 			reader,
 			"reader",
-			defaultReaderBufferSize,
+			defaultReaderByteArraySize,
 			ePrefix.XCpy("fIoReader"))
 
 	return err
@@ -3296,14 +3295,14 @@ func (fIoReader *FileIoReader) SetIoReader(
 //		target 'read' file will be opened for 'read-only'
 //		operations.
 //
-//	defaultReaderBufferSize		int
+//	defaultReaderByteArraySize		int
 //
 //		The size of the byte array which will be used to
 //		read data from the internal io.Reader object
 //		encapsulated by the current FileIoReader
 //		instance.
 //
-//		If the value of 'defaultReaderBufferSize' is
+//		If the value of 'defaultReaderByteArraySize' is
 //		less than '16', it will be reset to a size of
 //		'4096'.
 //
@@ -3434,7 +3433,7 @@ func (fIoReader *FileIoReader) SetIoReader(
 func (fIoReader *FileIoReader) SetFileMgr(
 	fileMgr *FileMgr,
 	openFileReadWrite bool,
-	defaultReaderBufferSize int,
+	defaultReaderByteArraySize int,
 	errorPrefix interface{}) (
 	fInfoPlus FileInfoPlus,
 	err error) {
@@ -3469,7 +3468,7 @@ func (fIoReader *FileIoReader) SetFileMgr(
 			fileMgr,
 			"fileMgr",
 			openFileReadWrite,
-			defaultReaderBufferSize,
+			defaultReaderByteArraySize,
 			ePrefix.XCpy(
 				"fileMgr"))
 
@@ -3533,14 +3532,14 @@ func (fIoReader *FileIoReader) SetFileMgr(
 //		target 'read' file will be opened for 'read-only'
 //		operations.
 //
-//	defaultReaderBufferSize		int
+//	defaultReaderByteArraySize		int
 //
 //		The size of the byte array which will be used to
 //		read data from the internal io.Reader object
 //		encapsulated by the current FileIoReader
 //		instance.
 //
-//		If the value of 'defaultReaderBufferSize' is
+//		If the value of 'defaultReaderByteArraySize' is
 //		less than '16', it will be reset to a size of
 //		'4096'.
 //
@@ -3671,7 +3670,7 @@ func (fIoReader *FileIoReader) SetFileMgr(
 func (fIoReader *FileIoReader) SetPathFileName(
 	pathFileName string,
 	openFileReadWrite bool,
-	defaultReaderBufferSize int,
+	defaultReaderByteArraySize int,
 	errorPrefix interface{}) (
 	fInfoPlus FileInfoPlus,
 	err error) {
@@ -3706,7 +3705,7 @@ func (fIoReader *FileIoReader) SetPathFileName(
 			pathFileName,
 			"pathFileName",
 			openFileReadWrite,
-			defaultReaderBufferSize,
+			defaultReaderByteArraySize,
 			ePrefix.XCpy(
 				pathFileName))
 
@@ -3746,11 +3745,11 @@ func (fIoReader *FileIoReader) SetPathFileName(
 //		store and write bytes is controlled by the
 //		FileIoReader internal member variable:
 //
-//			FileIoReader.defaultReaderBufferSize
+//			FileIoReader.defaultByteArraySize
 //
 //		Reference local method:
 //
-//			FileIoReader.SetDefaultReaderBufferSize()
+//			FileIoReader.SetDefaultReaderByteArraySize()
 //
 // ----------------------------------------------------------------
 //
@@ -3836,7 +3835,7 @@ func (fIoReader FileIoReader) WriteTo(
 			&fIoReader)
 
 	var bytesRead = make([]byte,
-		fIoReader.defaultReaderBufferSize)
+		fIoReader.defaultByteArraySize)
 
 	var localBytesRead, localBytesWritten int
 	var err2, err3 error
@@ -4123,7 +4122,7 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readAllStrBuilder(
 			fIoReader)
 
 	var reader = *fIoReader.ioReader
-	var bytesRead = make([]byte, fIoReader.defaultReaderBufferSize)
+	var bytesRead = make([]byte, fIoReader.defaultByteArraySize)
 	var localBytesRead int
 	var err2 error
 
@@ -4411,7 +4410,7 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readBytesToStrBuilder(
 
 	if numOfBytesToRead < 1 {
 
-		numOfBytesToRead = fIoReader.defaultReaderBufferSize
+		numOfBytesToRead = fIoReader.defaultByteArraySize
 
 	}
 
@@ -4539,14 +4538,14 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readBytesToStrBuilder(
 //		target read file will be opened for 'read-only'
 //		operations.
 //
-//	defaultReaderBufferSize		int
+//	defaultReaderByteArraySize		int
 //
 //		The size of the byte array which will be used to
 //		read data from the internal io.Reader object
 //		encapsulated by the FileIoReader instance passed
 //		as input parameter 'fIoReader'.
 //
-//		If the value of 'defaultReaderBufferSize' is
+//		If the value of 'defaultReaderByteArraySize' is
 //		less than '16', it will be reset to a size of
 //		'4096'.
 //
@@ -4624,7 +4623,7 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) setFileMgr(
 	fileMgr *FileMgr,
 	fileMgrLabel string,
 	openFileReadWrite bool,
-	defaultReaderBufferSize int,
+	defaultReaderByteArraySize int,
 	errPrefDto *ePref.ErrPrefixDto) (
 	fInfoPlus FileInfoPlus,
 	err error) {
@@ -4735,7 +4734,7 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) setFileMgr(
 			fileMgr.absolutePathFileName,
 			fileMgrLabel,
 			openFileReadWrite,
-			defaultReaderBufferSize,
+			defaultReaderByteArraySize,
 			ePrefix.XCpy(fIoReaderLabel+"<-"+fileMgrLabel))
 
 	return fInfoPlus, err
@@ -4815,14 +4814,14 @@ type fileIoReaderNanobot struct {
 //		string, a default value of "reader" will be
 //		automatically applied.
 //
-//	defaultReaderBufferSize		int
+//	defaultReaderByteArraySize		int
 //
 //		The size of the byte array which will be used to
 //		read data from the internal io.Reader object
 //		encapsulated by the FileIoReader instance passed
 //		as input parameter 'fIoReader'.
 //
-//		If the value of 'defaultReaderBufferSize' is
+//		If the value of 'defaultReaderByteArraySize' is
 //		less than '16', it will be reset to a size of
 //		'4096'.
 //
@@ -4862,7 +4861,7 @@ func (fIoReaderNanobot *fileIoReaderNanobot) setIoReader(
 	fIoReaderLabel string,
 	reader io.Reader,
 	readerLabel string,
-	defaultReaderBufferSize int,
+	defaultReaderByteArraySize int,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if fIoReaderNanobot.lock == nil {
@@ -4956,8 +4955,8 @@ func (fIoReaderNanobot *fileIoReaderNanobot) setIoReader(
 		fIoReader.filePtr = nil
 	}
 
-	fIoReader.defaultReaderBufferSize =
-		defaultReaderBufferSize
+	fIoReader.defaultByteArraySize =
+		defaultReaderByteArraySize
 
 	fIoReaderMolecule.
 		validateDefaultReaderBufferSize(fIoReader)
@@ -5035,14 +5034,14 @@ func (fIoReaderNanobot *fileIoReaderNanobot) setIoReader(
 //		target 'read' file will be opened for 'read-only'
 //		operations.
 //
-//	defaultReaderBufferSize		int
+//	defaultReaderByteArraySize		int
 //
 //		The size of the byte array which will be used to
 //		read data from the internal io.Reader object
 //		encapsulated by the FileIoReader instance passed
 //		as input paramter 'fIoReader'.
 //
-//		If the value of 'defaultReaderBufferSize' is
+//		If the value of 'defaultReaderByteArraySize' is
 //		less than '16', it will be reset to a size of
 //		'4096'.
 //
@@ -5120,7 +5119,7 @@ func (fIoReaderNanobot *fileIoReaderNanobot) setPathFileName(
 	pathFileName string,
 	pathFileNameLabel string,
 	openFileReadWrite bool,
-	defaultReaderBufferSize int,
+	defaultReaderByteArraySize int,
 	errPrefDto *ePref.ErrPrefixDto) (
 	fInfoPlus FileInfoPlus,
 	err error) {
@@ -5305,8 +5304,8 @@ func (fIoReaderNanobot *fileIoReaderNanobot) setPathFileName(
 
 	fIoReader.ioReader = &reader
 
-	fIoReader.defaultReaderBufferSize =
-		defaultReaderBufferSize
+	fIoReader.defaultByteArraySize =
+		defaultReaderByteArraySize
 
 	fIoReaderMolecule.
 		validateDefaultReaderBufferSize(
@@ -5474,7 +5473,7 @@ func (fIoReaderMolecule *fileIoReaderMolecule) close(
 
 	fIoReader.ioReader = nil
 
-	fIoReader.defaultReaderBufferSize = 0
+	fIoReader.defaultByteArraySize = 0
 
 	return err
 }
@@ -5502,7 +5501,7 @@ func (fIoReaderMolecule *fileIoReaderMolecule) close(
 //
 //		This internal member variable is styled as:
 //
-//			FileIoReader.defaultReaderBufferSize
+//			FileIoReader.defaultByteArraySize
 //
 // ----------------------------------------------------------------
 //
@@ -5524,9 +5523,9 @@ func (fIoReaderMolecule *fileIoReaderMolecule) validateDefaultReaderBufferSize(
 		return
 	}
 
-	if fIoReader.defaultReaderBufferSize < 16 {
+	if fIoReader.defaultByteArraySize < 16 {
 
-		fIoReader.defaultReaderBufferSize = 4096
+		fIoReader.defaultByteArraySize = 4096
 	}
 
 	return
