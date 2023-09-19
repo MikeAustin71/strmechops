@@ -196,6 +196,45 @@ func (fBufWriter *FileBufferWriter) AvailableBuffer() []byte {
 
 }
 
+// Buffered
+//
+// This method returns the number of bytes that have been
+// written into the 'write' buffer for the current
+// instance of FileBufferWriter.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	int
+//
+//		The number of bytes that have been written into
+//		the 'write' buffer for the current instance of
+//		FileBufferWriter.
+func (fBufWriter *FileBufferWriter) Buffered() int {
+
+	if fBufWriter.lock == nil {
+		fBufWriter.lock = new(sync.Mutex)
+	}
+
+	fBufWriter.lock.Lock()
+
+	defer fBufWriter.lock.Unlock()
+
+	if fBufWriter.bufioWriter == nil {
+
+		return 0
+	}
+
+	return fBufWriter.bufioWriter.Buffered()
+}
+
 // Close
 //
 // This method is used to close any open file pointers
@@ -1845,7 +1884,7 @@ func (fBufWriter FileBufferWriter) ReadFrom(
 //		If errors are encountered during processing, the
 //		returned error Type will encapsulate an
 //		appropriate error message.
-func (fBufWriter *FileBufferWriter) Seek(
+func (fBufWriter FileBufferWriter) Seek(
 	targetOffset int64,
 	whence int) (
 	offsetFromFileStart int64,
@@ -2738,7 +2777,7 @@ func (fBufWriter *FileBufferWriter) Size() int {
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fBufWriter *FileBufferWriter) Write(
+func (fBufWriter FileBufferWriter) Write(
 	bytesToWrite []byte) (
 	numBytesWritten int,
 	err error) {
