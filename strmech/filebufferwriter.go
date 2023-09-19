@@ -1655,18 +1655,15 @@ func (fBufWriter FileBufferWriter) ReadFrom(
 
 	if bufSize <= 0 {
 
-		// Reset to default buffer size of 4096
-		fBufWriter.bufioWriter.Reset(nil)
-
-		bufSize = fBufWriter.bufioWriter.Size()
-	}
-
-	if bufSize <= 0 {
-
 		err = fmt.Errorf("%v\n"+
-			"Error: The attempt to reset the bufio.Writer buffer\n"+
-			"size to 4096-bytes Failed!\n",
-			ePrefix.String())
+			"Error: The Buffer Size for currnt instance of\n"+
+			"FileBufferWriter is less than or equal to zero!\n"+
+			"Therefore the current instance of FileBufferWriter\n"+
+			"is invalid. Use one of the 'New' or 'Setter' methods\n"+
+			"to create a valid instance of FileBufferWriter.\n"+
+			"The current FileBufferWriter Size is '%v'\n",
+			ePrefix.String(),
+			bufSize)
 
 		return numOfBytesProcessed, err
 	}
