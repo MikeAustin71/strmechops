@@ -856,6 +856,8 @@ func TestFileIoWriter_Seek_000300(t *testing.T) {
 			err.Error())
 		return
 	}
+
+	return
 }
 
 func TestFileIoWriter_Append_000400(t *testing.T) {

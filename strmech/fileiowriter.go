@@ -1107,23 +1107,10 @@ func (fIoWriter FileIoWriter) ReadFrom(
 //
 // # IMPORTANT
 //
-//	(1)	If the current instance of FileIoWriter was
-//		NOT initialized with a path and file name or a
-//		File Manager (FileMgr) object, it will return an
-//		error.
-//
-//		Said another way, if the current instance of
-//		FileIoWriter was initialized with a call to
-//		one of the following local methods, an error will
-//		be returned.
-//
-//			FileIoWriter.NewIoWriter()
-//			FileIoWriter.SetIoWriter()
-//
-//	(2)	Seeking to an offset before the start of the file
+//	(1)	Seeking to an offset before the start of the file
 //		is an error.
 //
-//	(3) If input parameter 'whence' is not set to one of
+//	(2) If input parameter 'whence' is not set to one of
 //		these three constant integer values, an error
 //		will be returned.
 //

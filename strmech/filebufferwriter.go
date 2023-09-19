@@ -1799,21 +1799,14 @@ func (fBufWriter FileBufferWriter) ReadFrom(
 //
 // # IMPORTANT
 //
-//	(1)	If the current instance of FileBufferWriter was
-//		NOT initialized with a path and file name or a
-//		File Manager (FileMgr) object, it will return an
-//		error.
+//	(1)	The standard technique is to call method Seek()
+//		and a 'write' method in tandem. In this case,
+//		BE ADVISED, best practice specifies calling
+//		Flush() to flush the write buffer BEFORE
+//		calling this method, Seek().
 //
-//		Said another way, if the current instance of
-//		FileBufferWriter was initialized with a call to
-//		one of the following local methods, an error will
-//		be returned.
-//
-//			FileBufferWriter.NewIoWriter()
-//			FileBufferWriter.SetIoWriter()
-//
-//	(2)	Seeking to an offset before the start of the file
-//		is an error.
+//	(2)	Calling Seek() to move to an offset before the
+//		beginning of the file is an error.
 //
 //	(3) If input parameter 'whence' is not set to one of
 //		these three constant integer values, an error
