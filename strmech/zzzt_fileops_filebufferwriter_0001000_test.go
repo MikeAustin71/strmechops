@@ -1299,20 +1299,6 @@ func TestFileBufferWriter_Seek_000500(t *testing.T) {
 		return
 	}
 
-	var targetFileBackup string
-
-	targetFileBackup,
-		err = new(fileOpsTestUtility).
-		GetCompositeDir(
-			"\\assets\\TestFileBufferWriter_Seek_000500.txt",
-			ePrefix.XCpy("targetFileBackup"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
-		return
-	}
-
 	var targetBufioReader FileBufferReader
 
 	readFileInfoPlus,
@@ -1528,17 +1514,6 @@ func TestFileBufferWriter_Seek_000500(t *testing.T) {
 			localNumOfBytesWritten,
 			targetWriteFile)
 
-		return
-	}
-
-	err = fHelper.CopyFileByIo(
-		targetWriteFile,
-		targetFileBackup,
-		ePrefix.XCpy("targetFileBackup<-targetWriteFile"))
-
-	if err != nil {
-		t.Errorf("\n%v\n",
-			err.Error())
 		return
 	}
 
