@@ -9,9 +9,392 @@ import (
 	"testing"
 )
 
-func TestFileBufferWriter_Write_000100(t *testing.T) {
+func TestFileBufferWriter_Append_001000(t *testing.T) {
 
-	funcName := "TestFileBufferWriter_Write_000100()"
+	funcName := "TestFileBufferWriter_Append_001000()"
+
+	dashLineStr := " " + strings.Repeat("-",
+		len(funcName)+10)
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		funcName,
+		"")
+
+	var targetReadFile string
+	var err error
+	var fOpsTestUtil = new(fileOpsTestUtility)
+
+	targetReadFile,
+		err = fOpsTestUtil.
+		GetCompositeDir(
+			"\\fileOpsTest\\filesForTest\\textFilesForTest\\smallTextFile.txt",
+			ePrefix.XCpy("targetReadFile"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var doesFileExist bool
+	var fHelper = new(FileHelper)
+	var readFileInfoPlus FileInfoPlus
+
+	doesFileExist,
+		readFileInfoPlus,
+		err = fHelper.
+		DoesFileInfoPlusExist(
+			targetReadFile,
+			ePrefix.XCpy("targetReadFile"))
+
+	if err != nil {
+		t.Errorf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	if doesFileExist == false {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: The Target Read File Does NOT Exist!\n"+
+			"Target Read File was not found on attached storage drive.\n"+
+			"Target Read File: %v\n",
+			ePrefix.String(),
+			dashLineStr,
+			targetReadFile)
+
+		return
+	}
+
+	var compareFile string
+
+	compareFile,
+		err = new(fileOpsTestUtility).
+		GetCompositeDir(
+			"\\fileOpsTest\\filesForTest\\textFilesForTest\\smallTextFileAppendedText.txt",
+			ePrefix.XCpy("targetReadFile"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	doesFileExist,
+		_,
+		err = fHelper.
+		DoesFileInfoPlusExist(
+			compareFile,
+			ePrefix.XCpy("compareFile"))
+
+	if err != nil {
+		t.Errorf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	if doesFileExist == false {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: The Comparison File Does NOT Exist!\n"+
+			"The Comparison File was not found on an attached storage drive.\n"+
+			"Comparison File: %v\n",
+			ePrefix.String(),
+			dashLineStr,
+			compareFile)
+
+		return
+	}
+
+	var targetWriteFile string
+
+	targetWriteFile,
+		err = fOpsTestUtil.
+		GetCompositeDir(
+			"\\fileOpsTest\\trashDirectory\\TestFileBufferWriter_Append_001000.txt",
+			ePrefix.XCpy("targetWriteFile"))
+
+	if err != nil {
+		t.Errorf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var fMgrReadFile FileMgr
+
+	fMgrReadFile,
+		err = new(FileMgr).
+		New(
+			targetReadFile,
+			ePrefix.XCpy("fMgrReadFile<-targetReadFile"))
+
+	if err != nil {
+		t.Errorf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var targetBufioReader FileBufferReader
+
+	readFileInfoPlus,
+		targetBufioReader,
+		err = new(FileBufferReader).
+		NewFileMgr(
+			&fMgrReadFile,
+			false, // openFileReadWrite
+			512,
+			ePrefix.XCpy("targetBufioReader<-"))
+
+	if err != nil {
+		t.Errorf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var fMgrWriteFile FileMgr
+
+	fMgrWriteFile,
+		err = new(FileMgr).
+		New(
+			targetWriteFile,
+			ePrefix.XCpy("fMgrWriteFile<-targetWriteFile"))
+
+	if err != nil {
+		t.Errorf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var targetBufioWriter FileBufferWriter
+
+	_,
+		targetBufioWriter,
+		err = new(FileBufferWriter).
+		NewFileMgr(
+			&fMgrWriteFile,
+			false, // openFileReadWrite
+			512,
+			true, // Truncate Existing File
+			ePrefix.XCpy("targetBufioWriter<-"))
+
+	if err != nil {
+		t.Errorf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var numOfBytesProcessed int64
+
+	numOfBytesProcessed,
+		err = targetBufioWriter.
+		ReadFrom(
+			targetBufioReader)
+
+	if err != nil {
+		t.Errorf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	err = targetBufioReader.Close()
+
+	if err != nil {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: targetBufioReader.Close()\n"+
+			"Error returned while attempting\n"+
+			"to close TargetBufioReader!\n"+
+			"Target Read File: %v\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			dashLineStr,
+			targetReadFile,
+			err.Error())
+
+		return
+	}
+
+	err = targetBufioWriter.Close()
+
+	if err != nil {
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: targetBufioWriter.Close()\n"+
+			"Error returned while attempting\n"+
+			"to close targetBufioWriter!\n"+
+			"Target Write File: %v\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			dashLineStr,
+			targetWriteFile,
+			err.Error())
+	}
+
+	if numOfBytesProcessed != readFileInfoPlus.Size() {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: targetBufioWriter.ReadFrom()\n"+
+			"The Number of Bytes Processed is NOT EQUAL\n"+
+			"to the size of the Target Read File.\n"+
+			"Number of Bytes Processed= '%v'\n"+
+			"    Target Readfile Size = '%v'\n"+
+			" Target Read File: %v\n"+
+			"Target Write File: %v\n",
+			ePrefix.String(),
+			dashLineStr,
+			numOfBytesProcessed,
+			readFileInfoPlus.Size(),
+			targetReadFile,
+			targetWriteFile)
+
+		return
+	}
+
+	var targetBufioWriterTwo FileBufferWriter
+
+	_,
+		targetBufioWriterTwo,
+		err = new(FileBufferWriter).
+		NewPathFileName(
+			targetWriteFile,
+			false, // openFileReadWrite
+			256,
+			false, // Truncate Existing File
+			ePrefix.XCpy("targetBufioWriterTwo<-"))
+
+	if err != nil {
+		t.Errorf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var testStr = "End-Of-File Text. Hello!"
+	lenTestStr := len(testStr)
+
+	var bytesToWrite = []byte(testStr)
+	var localNumOfBytesWritten int
+
+	localNumOfBytesWritten,
+		err = targetBufioWriterTwo.Write(bytesToWrite)
+
+	if err != nil {
+
+		t.Errorf("\n%v\n"+
+			"Error: targetBufioWriterTwo.Write(bytesToWrite)\n"+
+			"Target Write File: %v\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			targetWriteFile,
+			err.Error())
+
+		_ = targetBufioWriterTwo.Close()
+
+		return
+	}
+
+	err = targetBufioWriterTwo.Close()
+
+	if err != nil {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: targetBufioWriterTwo.Close()\n"+
+			"Error returned while attempting\n"+
+			"to close TargetIoWriter #2!\n"+
+			"Target Write File: %v\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			dashLineStr,
+			targetWriteFile,
+			err.Error())
+
+		return
+	}
+
+	if localNumOfBytesWritten != lenTestStr {
+
+		t.Errorf("%v\n"+
+			"%v\n"+
+			"Error: targetBufioWriter.Write(bytesToWrite)\n"+
+			"Expected Bytes Written DOES NOT MATCH\n"+
+			"Actual Bytes Written!\n"+
+			"Expected Bytes Written= '%v'\n"+
+			"  Actual Bytes Written= '%v'\n"+
+			"Target Write File: %v\n",
+			ePrefix.String(),
+			dashLineStr,
+			lenTestStr,
+			localNumOfBytesWritten,
+			targetWriteFile)
+
+		return
+	}
+
+	var reasonFilesNotEqual string
+	var filesAreEqual bool
+
+	filesAreEqual,
+		reasonFilesNotEqual,
+		err = fHelper.CompareFiles(
+		compareFile,
+		targetWriteFile,
+		ePrefix.XCpy(
+			"Target Files Comparison"))
+
+	if err != nil {
+
+		t.Errorf(" %v\n"+
+			"Error Return from fHelper.CompareFiles()\n"+
+			"  targetReadFile= %v\n"+
+			" targetWriteFile= %v\n"+
+			"     compareFile= %v\n"+
+			"Reason: %v\n",
+			ePrefix.String(),
+			targetReadFile,
+			targetWriteFile,
+			compareFile,
+			reasonFilesNotEqual)
+
+		return
+	}
+
+	if !filesAreEqual {
+
+		t.Errorf("%v\n"+
+			"Error: Comparison and Write Files are NOT equal!\n"+
+			"Reason: %v\n"+
+			"  Comparison File: %v\n"+
+			"Target Write File: %v\n",
+			ePrefix.String(),
+			reasonFilesNotEqual,
+			compareFile,
+			targetWriteFile)
+
+		return
+
+	}
+
+	err = new(FileHelper).
+		DeleteDirOrFile(
+			targetWriteFile,
+			ePrefix.XCpy("Final Delete-targetWriteFile"))
+
+	if err != nil {
+		t.Errorf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	return
+}
+
+func TestFileBufferWriter_Write_001100(t *testing.T) {
+
+	funcName := "TestFileBufferWriter_Write_001100()"
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
 		funcName,
@@ -93,7 +476,7 @@ func TestFileBufferWriter_Write_000100(t *testing.T) {
 	targetWriteFile,
 		err = fOpsTestUtil.
 		GetCompositeDir(
-			"\\fileOpsTest\\trashDirectory\\TestFileBufferWriter_Write_000100.txt",
+			"\\fileOpsTest\\trashDirectory\\TestFileBufferWriter_Write_001100.txt",
 			ePrefix)
 
 	if err != nil {
@@ -349,9 +732,9 @@ func TestFileBufferWriter_Write_000100(t *testing.T) {
 	return
 }
 
-func TestFileBufferWriter_Write_000200(t *testing.T) {
+func TestFileBufferWriter_Write_002200(t *testing.T) {
 
-	funcName := "TestFileBufferWriter_Write_000200()"
+	funcName := "TestFileBufferWriter_Write_002200()"
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
 		funcName,
@@ -445,7 +828,7 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 	targetWriteFile,
 		err = new(fileOpsTestUtility).
 		GetCompositeDir(
-			"\\fileOpsTest\\trashDirectory\\TestFileBufferWriter_Write_000200.txt",
+			"\\fileOpsTest\\trashDirectory\\TestFileBufferWriter_Write_002200.txt",
 			ePrefix.XCpy("targetWriteFile"))
 
 	if err != nil {
@@ -670,9 +1053,9 @@ func TestFileBufferWriter_Write_000200(t *testing.T) {
 	return
 }
 
-func TestFileBufferWriter_Write_000300(t *testing.T) {
+func TestFileBufferWriter_Write_003300(t *testing.T) {
 
-	funcName := "TestFileBufferWriter_Write_000300()"
+	funcName := "TestFileBufferWriter_Write_003300()"
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
 		funcName,
@@ -727,7 +1110,7 @@ func TestFileBufferWriter_Write_000300(t *testing.T) {
 	targetWriteFile,
 		err = new(fileOpsTestUtility).
 		GetCompositeDir(
-			"\\fileOpsTest\\trashDirectory\\TestFileBufferWriter_Write_000300.txt",
+			"\\fileOpsTest\\trashDirectory\\TestFileBufferWriter_Write_003300.txt",
 			ePrefix)
 
 	if err != nil {
@@ -922,9 +1305,9 @@ func TestFileBufferWriter_Write_000300(t *testing.T) {
 	return
 }
 
-func TestFileBufferWriter_ReadFrom_000400(t *testing.T) {
+func TestFileBufferWriter_ReadFrom_004400(t *testing.T) {
 
-	funcName := "TestFileBufferWriter_ReadFrom_000400()"
+	funcName := "TestFileBufferWriter_ReadFrom_004400()"
 
 	dashLineStr := " " + strings.Repeat("-",
 		len(funcName)+10)
@@ -984,7 +1367,7 @@ func TestFileBufferWriter_ReadFrom_000400(t *testing.T) {
 	targetWriteFile,
 		err = new(fileOpsTestUtility).
 		GetCompositeDir(
-			"\\fileOpsTest\\trashDirectory\\TestFileBufferWriter_ReadFrom_000400.txt",
+			"\\fileOpsTest\\trashDirectory\\TestFileBufferWriter_ReadFrom_004400.txt",
 			ePrefix.XCpy("targetWriteFile"))
 
 	if err != nil {
@@ -1187,9 +1570,9 @@ func TestFileBufferWriter_ReadFrom_000400(t *testing.T) {
 	return
 }
 
-func TestFileBufferWriter_Seek_000500(t *testing.T) {
+func TestFileBufferWriter_Seek_005500(t *testing.T) {
 
-	funcName := "TestFileBufferWriter_Seek_000500()"
+	funcName := "TestFileBufferWriter_Seek_005500()"
 
 	dashLineStr := " " + strings.Repeat("-",
 		len(funcName)+10)
@@ -1290,7 +1673,7 @@ func TestFileBufferWriter_Seek_000500(t *testing.T) {
 	targetWriteFile,
 		err = new(fileOpsTestUtility).
 		GetCompositeDir(
-			"\\fileOpsTest\\trashDirectory\\TestFileBufferWriter_Seek_000500.txt",
+			"\\fileOpsTest\\trashDirectory\\TestFileBufferWriter_Seek_005500.txt",
 			ePrefix.XCpy("targetWriteFile"))
 
 	if err != nil {
