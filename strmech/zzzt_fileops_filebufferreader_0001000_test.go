@@ -7,9 +7,153 @@ import (
 	"testing"
 )
 
-func TestFileBufferReader_Read_000100(t *testing.T) {
+/*
+func TestFileBufferReader_GetReadBufferSize_050100(t *testing.T) {
 
-	funcName := "TestFileBufferReader_Read_000100()"
+	funcName := "TestFileBufferReader_GetReadBufferSize_050100()"
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		funcName,
+		"")
+
+	var trashDirectory string
+	var err error
+
+	var fOpsTestUtil = new(fileOpsTestUtility)
+
+	trashDirectory,
+		err = fOpsTestUtil.
+		GetCompositeDir(
+			FILEOpsBaseTrashDirectory,
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	err = new(DirHelper).DeleteAllInParentDirectory(
+		trashDirectory,
+		ePrefix.XCpy("trashDirectory"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var targetReadFile string
+
+	targetReadFile,
+		err = fOpsTestUtil.
+		GetCompositeDir(
+			"\\fileOpsTest\\filesForTest\\textFilesForTest\\splitFunc.txt",
+			ePrefix)
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var fHelper = new(FileHelper)
+	var osFilePtr *os.File
+
+	osFilePtr,
+		err = fHelper.OpenFileReadWrite(
+		targetReadFile,
+		true,
+		ePrefix.XCpy("osFilePtr<-targetReadFile"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	var fBufReader FileBufferReader
+	var readByteBufferSize int
+
+	defer func() {
+
+		_ = fBufReader.Close()
+
+		if osFilePtr != nil {
+			_ = osFilePtr.Close()
+		}
+
+		osFilePtr = nil
+
+	}()
+
+	readByteBufferSize = 256
+
+	fBufReader,
+		err = new(FileBufferReader).
+		NewIoReader(
+			osFilePtr,
+			readByteBufferSize,
+			ePrefix.XCpy("fBufReader<-osFilePtr"))
+
+	if err != nil {
+		t.Errorf("\n%v\n",
+			err.Error())
+		return
+	}
+
+	bytesReadBuff := make([]byte, 128)
+
+	var totalBytesRead, localBytesRead int
+	var err2 error
+
+	localBytesRead,
+		err2 = fBufReader.Read(
+		bytesReadBuff)
+
+	if err2 != nil {
+
+		t.Errorf("\n%v\n"+
+			"Processing error returned by\n"+
+			"fBufReader.Read(bytesReadBuff)"+
+			"while reading the file.\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+		return
+
+	}
+
+	totalBytesRead += localBytesRead
+
+	var bufBytes int
+
+	bufBytes = fBufReader.Buffered()
+
+	if bufBytes != readByteBufferSize {
+
+		t.Errorf("%v\n"+
+			"Error: fBufReader.Buffered()\n"+
+			"The number of bytes returned is NOT equal\n"+
+			"to the number of bytes configured for the\n"+
+			"'read' buffer size.\n"+
+			"Configured 'read' buffer size= '%v'\n"+
+			"  Returned 'read' buffer size= '%v'\n",
+			ePrefix.String(),
+			readByteBufferSize,
+			bufBytes)
+
+		return
+	}
+
+	return
+}
+*/
+
+func TestFileBufferReader_Read_090100(t *testing.T) {
+
+	funcName := "TestFileBufferReader_Read_090100()"
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
 		funcName,
@@ -140,12 +284,12 @@ func TestFileBufferReader_Read_000100(t *testing.T) {
 	return
 }
 
-func TestFileBufferReader_Seek_000100(t *testing.T) {
+func TestFileBufferReader_Seek_090200(t *testing.T) {
 
-	funcName := "TestFileBufferReader_Read_000100()"
+	funcName := "TestFileBufferReader_Seek_090200"
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
-		funcName,
+		funcName+"()",
 		"")
 
 	var targetReadFile string
