@@ -760,6 +760,50 @@ func (fBufWriter *FileBufferWriter) Flush(
 	return err
 }
 
+// GetWriteBufferSize
+//
+// This method returns the size of the underlying 'write'
+// buffer in bytes configured for the current instance of
+// FileBufferWriter.
+//
+// To acquire the number of bytes unused in the buffer
+// configured for the current instance of
+// FileBufferWriter, call local method:
+//
+//	FileBufferWriter.Available()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	int
+//
+//		This integer value returns the size of the
+//		underlying 'write' buffer in bytes.
+func (fBufWriter *FileBufferWriter) GetWriteBufferSize() int {
+
+	if fBufWriter.lock == nil {
+		fBufWriter.lock = new(sync.Mutex)
+	}
+
+	fBufWriter.lock.Lock()
+
+	defer fBufWriter.lock.Unlock()
+
+	if fBufWriter.bufioWriter == nil {
+
+		return 0
+	}
+
+	return fBufWriter.bufioWriter.Size()
+}
+
 // NewIoWriter
 //
 // This method returns a fully initialized instance of
@@ -2647,49 +2691,6 @@ func (fBufWriter *FileBufferWriter) SetIoWriter(
 			ePrefix.XCpy("fBufWriter"))
 
 	return err
-}
-
-// Size
-//
-// This method returns the size of the underlying 'write'
-// buffer in bytes.
-//
-// To acquire the number of bytes unused in the buffer
-// configured for the current instance of
-// FileBufferWriter, call local method:
-//
-//	FileBufferWriter.Available()
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	--- NONE ---
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	int
-//
-//		This integer value returns the size of the
-//		underlying 'write' buffer in bytes.
-func (fBufWriter *FileBufferWriter) Size() int {
-
-	if fBufWriter.lock == nil {
-		fBufWriter.lock = new(sync.Mutex)
-	}
-
-	fBufWriter.lock.Lock()
-
-	defer fBufWriter.lock.Unlock()
-
-	if fBufWriter.bufioWriter == nil {
-
-		return 0
-	}
-
-	return fBufWriter.bufioWriter.Size()
 }
 
 // Write
