@@ -381,10 +381,11 @@ func (fBufReader FileBufferReader) Discard(
 	return discardedBytes, err
 }
 
-// GetBufferSize
+// GetReadBufferSize
 //
 // This method returns the size of the underlying 'read'
-// buffer in bytes.
+// buffer in bytes configured for the current instance of
+// FileBufferReader.
 //
 // ----------------------------------------------------------------
 //
@@ -407,7 +408,7 @@ func (fBufReader FileBufferReader) Discard(
 //		This return value contains the size of the
 //		underlying 'read' buffer in bytes for the current
 //		instance of FileBufferReader.
-func (fBufReader *FileBufferReader) GetBufferSize() int {
+func (fBufReader *FileBufferReader) GetReadBufferSize() int {
 
 	if fBufReader.lock == nil {
 		fBufReader.lock = new(sync.Mutex)
