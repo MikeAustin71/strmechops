@@ -3,11 +3,11 @@ package strmech
 import (
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
+	"os"
 	"strings"
 	"testing"
 )
 
-/*
 func TestFileBufferReader_GetReadBufferSize_050100(t *testing.T) {
 
 	funcName := "TestFileBufferReader_GetReadBufferSize_050100()"
@@ -63,7 +63,7 @@ func TestFileBufferReader_GetReadBufferSize_050100(t *testing.T) {
 	osFilePtr,
 		err = fHelper.OpenFileReadWrite(
 		targetReadFile,
-		true,
+		false, // truncate file!
 		ePrefix.XCpy("osFilePtr<-targetReadFile"))
 
 	if err != nil {
@@ -73,11 +73,15 @@ func TestFileBufferReader_GetReadBufferSize_050100(t *testing.T) {
 	}
 
 	var fBufReader FileBufferReader
-	var readByteBufferSize int
+	var originalReadBufferCapacity int
 
 	defer func() {
 
-		_ = fBufReader.Close()
+		if fBufReader.IsClosed() == false {
+
+			_ = fBufReader.Close()
+
+		}
 
 		if osFilePtr != nil {
 			_ = osFilePtr.Close()
@@ -87,13 +91,13 @@ func TestFileBufferReader_GetReadBufferSize_050100(t *testing.T) {
 
 	}()
 
-	readByteBufferSize = 256
+	originalReadBufferCapacity = 256
 
 	fBufReader,
 		err = new(FileBufferReader).
 		NewIoReader(
 			osFilePtr,
-			readByteBufferSize,
+			originalReadBufferCapacity,
 			ePrefix.XCpy("fBufReader<-osFilePtr"))
 
 	if err != nil {
@@ -102,7 +106,9 @@ func TestFileBufferReader_GetReadBufferSize_050100(t *testing.T) {
 		return
 	}
 
-	bytesReadBuff := make([]byte, 128)
+	byteArraySize := 128
+
+	bytesReadBuff := make([]byte, byteArraySize)
 
 	var totalBytesRead, localBytesRead int
 	var err2 error
@@ -131,25 +137,107 @@ func TestFileBufferReader_GetReadBufferSize_050100(t *testing.T) {
 
 	bufBytes = fBufReader.Buffered()
 
-	if bufBytes != readByteBufferSize {
+	if bufBytes != byteArraySize {
 
 		t.Errorf("%v\n"+
 			"Error: fBufReader.Buffered()\n"+
 			"The number of bytes returned is NOT equal\n"+
-			"to the number of bytes configured for the\n"+
-			"'read' buffer size.\n"+
-			"Configured 'read' buffer size= '%v'\n"+
-			"  Returned 'read' buffer size= '%v'\n",
+			"to the number of bytes residing in the\n"+
+			"'read' buffer.\n"+
+			"       Configured byte array size= '%v'\n"+
+			"  Returned bytes in 'read' buffer= '%v'\n",
 			ePrefix.String(),
-			readByteBufferSize,
+			byteArraySize,
 			bufBytes)
+
+		return
+	}
+
+	bufCapacity := fBufReader.GetReadBufferCapacity()
+
+	if bufCapacity != originalReadBufferCapacity {
+
+		t.Errorf("%v\n"+
+			"Error: fBufReader.GetReadBufferCapacity()\n"+
+			"The number of bytes returned is NOT equal\n"+
+			"to the 'read' buffer capacity in bytes.\n"+
+			"Configured 'read' buffer capacity= '%v'\n"+
+			"  Returned 'read' buffer capacity= '%v'\n",
+			ePrefix.String(),
+			originalReadBufferCapacity,
+			bufCapacity)
+
+		return
+	}
+
+	isClosed := fBufReader.IsClosed()
+
+	if isClosed == true {
+
+		t.Errorf("%v\n"+
+			"Error: fBufReader.IsClosed()\n"+
+			"IsClosed == 'true'\n"+
+			"However, the fBufReader object\n"+
+			"has NOT YET BEEN CLOSED!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	err2 = fBufReader.Close()
+
+	if err2 != nil {
+
+		t.Errorf("%v\n"+
+			"Error: fBufReader.Close() returned an error!\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+		return
+	}
+
+	isClosed = fBufReader.IsClosed()
+
+	if isClosed == false {
+
+		t.Errorf("%v\n"+
+			"Error: fBufReader.IsClosed() #2\n"+
+			"IsClosed == 'false'\n"+
+			"Exected IsClosed=='true' because\n"+
+			"fBufReader.Close() has already been\n"+
+			"called!\n",
+			ePrefix.String())
+
+		return
+	}
+
+	if osFilePtr == nil {
+
+		t.Errorf("%v\n"+
+			"Error: osFilePtr\n"+
+			"Expected osFilePtr != nil\n"+
+			"Instead, osFilePtr == nil\n",
+			ePrefix.String())
+
+		return
+	}
+
+	err2 = osFilePtr.Close()
+
+	if err2 != nil {
+
+		t.Errorf("%v\n"+
+			"Error: osFilePtr.Close()\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			err2.Error())
 
 		return
 	}
 
 	return
 }
-*/
 
 func TestFileBufferReader_Read_090100(t *testing.T) {
 
