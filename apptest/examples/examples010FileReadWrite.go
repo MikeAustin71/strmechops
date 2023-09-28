@@ -125,7 +125,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufferReader03() {
 
 func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufferReader04() {
 
-	funcName := "MainFileReadWriteTest010.FileBuffReadWrite03()"
+	funcName := "MainFileReadWriteTest010.FileBufferReader04()"
 
 	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
 		funcName,

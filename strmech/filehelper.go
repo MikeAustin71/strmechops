@@ -2513,14 +2513,21 @@ func (fh *FileHelper) CopyFileByLink(
 // Copies file from source path and file name to
 // destination path and file name.
 //
+// This method is a wrapper for io.Copy().
+//
 // Reference:
-// https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
+//
+//	https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
+//	https://pkg.go.dev/io#Copy
 //
 // Note: Unlike the method CopyFileByLink above, this
 // method does NOT rely on the creation of symbolic
 // links. Instead, a new destination file is created and
 // the contents of the source file are written to the new
-// destination file using "io.Copy()".
+// destination file using:
+//
+//	io.Copy(dst Writer, src Reader)
+//			(written int64, err error)
 //
 // "io.Copy()" is the only method used to copy the
 // designated source file. If this method fails, an error
@@ -2534,6 +2541,12 @@ func (fh *FileHelper) CopyFileByLink(
 // destination directory. If the destination directory
 // does NOT exist, this method will abort the copy
 // operation and return an error.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method is a wrapper for io.Copy().
 //
 // ----------------------------------------------------------------
 //

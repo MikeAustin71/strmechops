@@ -1,6 +1,7 @@
 package strmech
 
 import (
+	"errors"
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
@@ -12,6 +13,679 @@ import (
 
 type fileHelperDirector struct {
 	lock *sync.Mutex
+}
+
+// copyFileByIoBuffer
+//
+// Copies file from source path and file name to
+// destination path and file name.
+//
+// Reference:
+//
+//	https://pkg.go.dev/io#CopyBuffer
+//
+// If the destination file does not exist, it will be
+// created.
+//
+// The contents of the source file are written to the
+// destination file using:
+//
+//	io.CopyBuffer(dst Writer, src Reader, buf []byte)
+//			 (written int64, err error)
+//
+// If source file is equivalent to the destination file,
+// no action will be taken and no error will be returned.
+//
+// If the destination file does not exist, this method
+// will create the destination file. However, it will NOT
+// create the destination directory. If the destination directory
+// does NOT exist, this method will abort the copy
+// operation and return an error.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method is a wrapper for io.Copy().
+//
+// /
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	sourceFile					string
+//
+//		This string holds the path and/or file name of
+//	 	the source file. This source file will be copied
+//		to the destination file.
+//
+//	destinationFile				string
+//
+//		This string holds the path and/or the file name
+//		of the destination file. The source file taken
+//		from input parameter 'sourceFile' will be copied
+//		to this destination file.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bytesCopied					int64
+//
+//		If this method completes successfully, this
+//		return parameter will contain the number of
+//		bytes copied from the source file to the
+//		destination file. If no errors are present,
+//		this value also represents the size of both
+//		the source file and the destination file.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (fHelpDirector *fileHelperDirector) copyFileByIoBuffer(
+	sourceFile string,
+	sourceFileLabel string,
+	destinationFile string,
+	destinationFileLabel string,
+	buffer []byte,
+	createDirectoryPathIfNotExist bool,
+	errPrefDto *ePref.ErrPrefixDto) (
+	bytesCopied int64,
+	err error) {
+
+	if fHelpDirector.lock == nil {
+		fHelpDirector.lock = new(sync.Mutex)
+	}
+
+	fHelpDirector.lock.Lock()
+
+	defer fHelpDirector.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileHelperDirector." +
+		"copyFileByIoBuffer()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return bytesCopied, err
+	}
+
+	if len(sourceFileLabel) == 0 {
+
+		sourceFileLabel = "sourceFile"
+	}
+
+	if len(destinationFileLabel) == 0 {
+
+		destinationFileLabel = "destinationFile"
+	}
+
+	var err2, err3 error
+	var destFileDoesExist bool
+	var srcFInfo, dstFileInfo FileInfoPlus
+
+	sourceFile,
+		srcFInfo,
+		err2 = new(fileHelperMicrobot).
+		validateSourceFile(
+			sourceFile,
+			sourceFileLabel,
+			true, // errorOnEmptyFile
+			ePrefix.XCpy(
+				sourceFileLabel))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter %v is invalid!\n"+
+			"Error=\n%v\n",
+			funcName,
+			sourceFileLabel,
+			err2.Error())
+
+		return bytesCopied, err
+	}
+
+	var fhMolecule = new(fileHelperMolecule)
+
+	destinationFile,
+		destFileDoesExist,
+		dstFileInfo,
+		err = fhMolecule.
+		doesPathFileExist(
+			destinationFile,
+			PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
+			ePrefix,
+			destinationFileLabel)
+
+	if err != nil {
+
+		return bytesCopied, err
+	}
+
+	var areSameFile bool
+
+	areSameFile,
+		err2 = new(fileHelperNanobot).areSameFile(
+		sourceFile,
+		destinationFile,
+		ePrefix.XCpy(
+			"areSameFile<-"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error occurred during path file name comparison.\n"+
+			"%v: '%v'\n"+
+			"%v: '%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			sourceFileLabel,
+			sourceFile,
+			destinationFileLabel,
+			destinationFile,
+			err2.Error())
+
+		return bytesCopied, err
+	}
+
+	if areSameFile {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The source and destination file\n"+
+			"are the same. They are equivalent.\n"+
+			"%v: '%v'\n"+
+			"%v: '%v'\n",
+			ePrefix.String(),
+			sourceFileLabel,
+			sourceFile,
+			destinationFileLabel,
+			destinationFile)
+
+		return bytesCopied, err
+	}
+
+	if destFileDoesExist && dstFileInfo.Mode().IsDir() {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: '%v' is a Directory and NOT a File!\n"+
+			"%v='%v'",
+			ePrefix.String(),
+			destinationFileLabel,
+			destinationFileLabel,
+			destinationFile)
+
+		return bytesCopied, err
+	}
+
+	if destFileDoesExist && !dstFileInfo.Mode().IsRegular() {
+		err = fmt.Errorf("%v\n"+
+			"Error: Destination File is NOT a 'Regular' File!\n"+
+			"%v= '%v'\n",
+			ePrefix.String(),
+			destinationFileLabel,
+			destinationFile)
+
+		return bytesCopied, err
+	}
+
+	if !destFileDoesExist {
+		// The destination path and/or file does NOT
+		// exist on disk.
+		var directoryPath, fileNameExt string
+		var bothAreEmpty, dirPathExists bool
+
+		directoryPath,
+			fileNameExt,
+			bothAreEmpty,
+			err2 = new(fileHelperDirector).
+			getPathAndFileNameExt(
+				destinationFile,
+				destinationFileLabel,
+				ePrefix.XCpy("<-"+destinationFileLabel))
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Destination File parameter '%v' is invalid!\n"+
+				"An error occurred while breaking '%v'\n"+
+				"into directory path, file name and file extension\n"+
+				"components.\n"+
+				"Error = \n%v\n",
+				funcName,
+				destinationFileLabel,
+				destinationFileLabel,
+				err2.Error())
+
+			return bytesCopied, err
+		}
+
+		if len(fileNameExt) == 0 || bothAreEmpty {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Input parameter destination file, '%v',\n"+
+				"is invalid! No valid file name could be extracted\n"+
+				"from '%v'.\n"+
+				"%v= '%v'\n"+
+				"Directory Path Element= '%v'\n"+
+				"File Name Element= '%v'\n",
+				ePrefix.String(),
+				destinationFileLabel,
+				destinationFileLabel,
+				destinationFileLabel,
+				destinationFile,
+				directoryPath,
+				fileNameExt)
+
+			return bytesCopied, err
+		}
+
+		dirPathExists,
+			dstFileInfo,
+			err2 = new(fileHelperAtom).doesDirectoryExist(
+			directoryPath,
+			destinationFileLabel+" Dir Path",
+			ePrefix.XCpy(destinationFileLabel+" Dir Path"))
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error returned by fileHelperAtom.doesDirectoryExist()\n"+
+				"%v= '%v'\n"+
+				"Error=\n%v\n",
+				funcName,
+				destinationFileLabel,
+				destinationFile,
+				err2.Error())
+
+			return bytesCopied, err
+		}
+
+		if !dstFileInfo.IsDir() {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: The directory path extracted from destination\n"+
+				"file path, '%v', is NOT a valid directory.\n"+
+				"Destination File '%v' is therefore invalid!\n"+
+				"%v= '%v'\n",
+				ePrefix.String(),
+				destinationFileLabel,
+				destinationFileLabel,
+				destinationFileLabel,
+				destinationFile)
+
+			return bytesCopied, err
+		}
+
+		if !dirPathExists {
+			// The Destination File directory path does NOT
+			// exist on an attached storage volume.
+
+			if createDirectoryPathIfNotExist {
+
+				err2 = new(fileHelperMechanics).makeDirAll(
+					directoryPath,
+					destinationFileLabel+" directoryPath",
+					ePrefix)
+
+				if err2 != nil {
+
+					err = fmt.Errorf("%v\n"+
+						"Attempted creation of directory path for the"+
+						"destination file, '%v', failed!\n"+
+						"%v= '%v'\n"+
+						"%v Directory Path= '%v'\n"+
+						"Error returned by fileHelperMechanics.makeDirAll()\n"+
+						"Error=\n%v\n",
+						funcName,
+						destinationFileLabel,
+						destinationFileLabel,
+						destinationFile,
+						destinationFileLabel,
+						directoryPath,
+						err2.Error())
+
+					return bytesCopied, err
+				}
+
+			} else {
+				// The Path File Name Directory DOES NOT EXIST
+				// on an attached storage drive and
+				// createDirectoryPathIfNotExist = 'false'.
+
+				err = fmt.Errorf("%v\n"+
+					"Error: The Destination File, %v, Directory\n"+
+					"does NOT exist on an attached storage drive and\n"+
+					"Input Parameter 'createDirectoryPathIfNotExist'\n"+
+					"was set to 'false'. Therefore the file cannot be\n"+
+					"opened.\n"+
+					"%v= '%v\n"+
+					"%v Directory = '%v'\n",
+					ePrefix.String(),
+					destinationFileLabel,
+					destinationFileLabel,
+					destinationFile,
+					destinationFileLabel,
+					directoryPath)
+
+				return bytesCopied, err
+			}
+		}
+	}
+
+	// Create a new destination file and copy source
+	// file contents to the destination file.
+
+	// First, open the source file
+	var inSrcPtr *os.File
+
+	inSrcPtr, err2 = os.Open(sourceFile)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned from os.Open(%v)\n"+
+			"An error was returned while opening the source file!\n"+
+			"%v= '%v'\n"+
+			"Error='%v'",
+			ePrefix.String(),
+			sourceFileLabel,
+			sourceFileLabel,
+			sourceFile,
+			err2.Error())
+
+		return bytesCopied, err
+	}
+
+	// Next, 'Create' the destination file
+	// If the destination file previously exists,
+	// it will be truncated.
+
+	var outDestPtr *os.File
+
+	outDestPtr,
+		err2 = os.Create(destinationFile)
+
+	if err2 != nil {
+
+		err3 = fmt.Errorf("%v\n"+
+			"Error: os.Create(%v)\n"+
+			"An error was returned while creating\n"+
+			"the destination file, '%v'.\n"+
+			"%v= '%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			destinationFileLabel,
+			destinationFileLabel,
+			destinationFileLabel,
+			destinationFile,
+			err2.Error())
+
+		err = errors.Join(err, err3)
+
+		_ = inSrcPtr.Close()
+
+		return bytesCopied, err
+	}
+
+	bytesCopied,
+		err2 = io.CopyBuffer(
+		outDestPtr,
+		inSrcPtr,
+		buffer)
+
+	if err2 != nil {
+
+		err3 = fmt.Errorf("%v\n"+
+			"Error: io.CopyBuffer(%v, %v)\n"+
+			"%v= '%v'\n"+
+			"%v= '%v'\n"+
+			"Error='%v'\n",
+			ePrefix.String(),
+			destinationFileLabel,
+			sourceFileLabel,
+			destinationFileLabel,
+			destinationFile,
+			sourceFileLabel,
+			sourceFile,
+			err2.Error())
+
+		err = errors.Join(err, err3)
+
+		err2 = inSrcPtr.Close()
+
+		if err2 != nil {
+
+			err3 = fmt.Errorf("%v\n"+
+				"Error: inSrcPtr.Close()\n"+
+				"Error returned while closing source\n"+
+				"file, '%v'\n"+
+				"%v= '%v'\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				sourceFileLabel,
+				sourceFileLabel,
+				sourceFile,
+				err2.Error())
+
+			err = errors.Join(err, err3)
+		}
+
+		err2 = outDestPtr.Close()
+
+		if err2 != nil {
+
+			err3 = fmt.Errorf("%v\n"+
+				"Error: outDestPtr.Close()\n"+
+				"Error returned while closing destination\n"+
+				"file, '%v'\n"+
+				"%v= '%v'\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				destinationFileLabel,
+				destinationFileLabel,
+				destinationFile,
+				err2.Error())
+
+			err = errors.Join(err, err3)
+		}
+
+		inSrcPtr = nil
+		outDestPtr = nil
+
+		return bytesCopied, err
+	}
+
+	// flush file buffers outDestPtr memory
+	err2 = outDestPtr.Sync()
+
+	if err2 != nil {
+
+		err3 = fmt.Errorf("%v\n"+
+			"Error: outDestPtr.Sync()\n"+
+			"Error returned while flushing\n"+
+			"destination file, '%v'\n"+
+			"outDestPtr= %v ='%v'\n"+
+			"Error=\n'%v'\n",
+			ePrefix.String(),
+			destinationFileLabel,
+			destinationFileLabel,
+			destinationFile,
+			err2.Error())
+
+		err = errors.Join(err, err3)
+
+	}
+
+	err2 = inSrcPtr.Close()
+
+	if err2 != nil {
+
+		err3 = fmt.Errorf("%v\n"+
+			"Error: inSrcPtr.Close() after sync operation!\n"+
+			"Error returned while closing source\n"+
+			"file, '%v'.\n"+
+			"%v= '%v'\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			sourceFileLabel,
+			sourceFileLabel,
+			sourceFile,
+			err2.Error())
+
+		err = errors.Join(err, err3)
+	}
+
+	err2 = outDestPtr.Close()
+
+	if err2 != nil {
+
+		err3 = fmt.Errorf("%v\n"+
+			"Error: outDestPtr.Close() after sync operation!\n"+
+			"Error returned while closing destination\n"+
+			"file, '%v'\n"+
+			"%v= '%v'\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			destinationFileLabel,
+			destinationFileLabel,
+			destinationFile,
+			err2.Error())
+
+		err = errors.Join(err, err3)
+	}
+
+	inSrcPtr = nil
+	outDestPtr = nil
+
+	if err != nil {
+
+		return bytesCopied, err
+	}
+
+	_,
+		destFileDoesExist,
+		dstFileInfo,
+		err2 = fhMolecule.
+		doesPathFileExist(
+			destinationFile,
+			PreProcPathCode.None(), // Do NOT alter path
+			ePrefix,
+			destinationFileLabel)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Destination File Verification!\n"+
+			"After the Io Buffer Copy operation,\n"+
+			"Destination File, %v, generated a non-path\n"+
+			"error.\n"+
+			"%v='%v'\n"+
+			"Error='%v'\n",
+			funcName,
+			destinationFileLabel,
+			destinationFileLabel,
+			destinationFile,
+			err2.Error())
+
+		return bytesCopied, err
+	}
+
+	if !destFileDoesExist {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Destination File Verification!\n"+
+			"After Io Buffer Copy operation, the destination\n"+
+			"file, %v, DOES NOT EXIST on disk!\n"+
+			"%v= '%v'\n",
+			ePrefix.String(),
+			destinationFileLabel,
+			destinationFileLabel,
+			destinationFile)
+
+		return bytesCopied, err
+	}
+
+	srcFileSize := srcFInfo.Size()
+
+	if bytesCopied != srcFileSize {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Bytes Copied does NOT equal bytes "+
+			"in source file, '%v'!\n"+
+			"Source File, '%v', Size in Bytes='%v'\n"+
+			"Bytes Copied='%v'\n"+
+			"Destination File, '%v', Size in Bytes='%v'\n"+
+			"Source File '%v'= '%v'\n"+
+			"Destination File '%v'= '%v'\n",
+			ePrefix.String(),
+			sourceFileLabel,
+			sourceFileLabel,
+			srcFileSize,
+			bytesCopied,
+			destinationFileLabel,
+			dstFileInfo.Size(),
+			sourceFileLabel,
+			sourceFile,
+			destinationFileLabel,
+			destinationFile)
+
+		return bytesCopied, err
+	}
+
+	if dstFileInfo.Size() != srcFileSize {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Bytes is source file do NOT equal bytes "+
+			"in destination file!\n"+
+			"Source File, '%v', Size in Bytes='%v'\n"+
+			"Destination File, '%v', Size in Bytes='%v'\n"+
+			"%v= '%v'\n"+
+			"%v= '%v'\n",
+			ePrefix.String(),
+			sourceFileLabel,
+			srcFileSize,
+			destinationFileLabel,
+			dstFileInfo.Size(),
+			sourceFileLabel,
+			sourceFile,
+			destinationFileLabel,
+			destinationFile)
+
+	}
+
+	return bytesCopied, err
 }
 
 // copyFileByIoByLink

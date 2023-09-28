@@ -26,7 +26,10 @@ type fileHelperMechanics struct {
 // method does NOT rely on the creation of symbolic
 // links. Instead, a new destination file is created and
 // the contents of the source file are written to the new
-// destination file using "io.Copy()".
+// destination file using:
+//
+//	io.Copy(dst Writer, src Reader)
+//			(written int64, err error)
 //
 // "io.Copy()" is the only method used to copy the
 // designated source file. If this method fails, an error
@@ -36,11 +39,18 @@ type fileHelperMechanics struct {
 // no action will be taken and no error will be returned.
 //
 // If the destination file does not exist, this method
-// will create. However, it will NOT create the
-// destination directory. If the destination directory
-// does NOT exist, this method will abort the copy
+// will create that destination file. However, it will
+// NOT create the destination directory. If the destination
+// directory does NOT exist, this method will abort the copy
 // operation and return an error.
 //
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method is a wrapper for io.Copy().
+//
+// /
 // ----------------------------------------------------------------
 //
 // # Input Parameters
