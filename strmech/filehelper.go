@@ -2311,9 +2311,7 @@ func (fh *FileHelper) CopyFileByLinkByIo(
 		return err
 	}
 
-	fHelperMech := new(fileHelperMechanics)
-
-	err = fHelperMech.copyFileByLink(
+	err = new(fileHelperMechanics).copyFileByLink(
 		src,
 		dst,
 		ePrefix)
@@ -2325,9 +2323,13 @@ func (fh *FileHelper) CopyFileByLinkByIo(
 	var err2 error
 
 	// Copy by Link Failed. Try CopyFileByIo()
-	err2 = fHelperMech.copyFileByIo(
+	_,
+		err2 = new(fileHelperUtility).copyFileByIo(
 		src,
+		"src",
 		dst,
+		"dst",
+		true, // createDestDirPathIfNotExist
 		ePrefix)
 
 	if err2 != nil {
@@ -2534,13 +2536,13 @@ func (fh *FileHelper) CopyFileByLink(
 // is returned.
 //
 // If source file is equivalent to the destination file,
-// no action will be taken and no error will be returned.
+// an error will be returned.
 //
 // If the destination file does not exist, this method
-// will create. However, it will NOT create the
-// destination directory. If the destination directory
-// does NOT exist, this method will abort the copy
-// operation and return an error.
+// will attempt to create it. If the destination file
+// directory path does not exist, the creation of the
+// destination file will depend on input parameter,
+// 'createDestDirPathIfNotExist'.
 //
 // ----------------------------------------------------------------
 //
@@ -2564,6 +2566,20 @@ func (fh *FileHelper) CopyFileByLink(
 //		of the destination file. The source file taken
 //		from input parameter 'sourceFile' will be copied
 //		to this destination file.
+//
+//	createDestDirPathIfNotExist	bool
+//
+//		If the directory path element of parameter
+//		'destinationFile' does not exist on an attached
+//		storage drive, and this parameter is set to
+//		'true', this method will attempt to create
+//		the directory path for 'destinationFile'.
+//
+//		If 'createDestDirPathIfNotExist' is set to
+//		'false', and the directory path element of
+//		parameter 'destinationFile' does not exist on
+//		an attached storage drive, the copy operation
+//		will fail and an error will be returned.
 //
 //	errorPrefix					interface{}
 //
@@ -2628,7 +2644,16 @@ func (fh *FileHelper) CopyFileByLink(
 //
 // # Return Values
 //
-//	error
+//	bytesCopied					int64
+//
+//		If this method completes successfully, this
+//		return parameter will contain the number of
+//		bytes copied from the source file to the
+//		destination file. If no errors are present,
+//		this value also represents the size of both
+//		the source file and the destination file.
+//
+//	err							error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -2643,7 +2668,10 @@ func (fh *FileHelper) CopyFileByLink(
 func (fh *FileHelper) CopyFileByIo(
 	sourceFile string,
 	destinationFile string,
-	errorPrefix interface{}) error {
+	createDestDirPathIfNotExist bool,
+	errorPrefix interface{}) (
+	bytesCopied int64,
+	err error) {
 
 	if fh.lock == nil {
 		fh.lock = new(sync.Mutex)
@@ -2655,8 +2683,6 @@ func (fh *FileHelper) CopyFileByIo(
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	var err error
-
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
@@ -2665,13 +2691,17 @@ func (fh *FileHelper) CopyFileByIo(
 		"")
 
 	if err != nil {
-		return err
+		return bytesCopied, err
 	}
 
-	return new(fileHelperMechanics).copyFileByIo(
-		sourceFile,
-		destinationFile,
-		ePrefix)
+	return new(fileHelperUtility).
+		copyFileByIo(
+			sourceFile,
+			"sourceFile",
+			destinationFile,
+			"destinationFile",
+			createDestDirPathIfNotExist,
+			ePrefix)
 }
 
 // CreateFile
