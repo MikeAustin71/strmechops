@@ -621,6 +621,10 @@ func (fHelperUtility *fileHelperUtility) copyFileByIo(
 // If source file is equivalent to the destination file,
 // an error will be returned.
 //
+// This method will perform the copy operation using a
+// buffer supplied by the user through input parameter,
+// 'buffer'.
+//
 // ----------------------------------------------------------------
 //
 // # BE ADVISED

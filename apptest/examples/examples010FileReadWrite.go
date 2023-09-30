@@ -309,7 +309,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufferReader04() {
 
 			err = errors.Join(err, err3)
 
-			err3 = fBufWriter.FlushAndClose(ePrefix)
+			err3 = fBufWriter.FlushCloseAndRelease(ePrefix)
 
 			err = errors.Join(err, err3)
 
@@ -323,7 +323,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufferReader04() {
 
 	}
 
-	err = fBufWriter.FlushAndClose(
+	err = fBufWriter.FlushCloseAndRelease(
 		ePrefix.XCpy("fBufWriter"))
 
 	if err != nil {
@@ -1685,7 +1685,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufWriter01() {
 				i,
 				err2.Error())
 
-			err2 = fBufWriter.FlushAndClose(nil)
+			err2 = fBufWriter.FlushCloseAndRelease(nil)
 
 			err = errors.Join(err, err2)
 
@@ -1713,7 +1713,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufWriter01() {
 		err = errors.Join(err, err2)
 	}
 
-	err3 = fBufWriter.FlushAndClose(ePrefix)
+	err3 = fBufWriter.FlushCloseAndRelease(ePrefix)
 
 	if err3 != nil {
 
@@ -2025,7 +2025,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufWriter02() {
 				i,
 				err2.Error())
 
-			err2 = fBufWriter.FlushAndClose(nil)
+			err2 = fBufWriter.FlushCloseAndRelease(nil)
 
 			err = errors.Join(err, err2)
 
