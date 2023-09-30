@@ -14656,178 +14656,35 @@ func (fh *FileHelper) WriteFileBytes(
 		"")
 
 	if err != nil {
+
 		return numBytesWritten, err
 	}
 
 	pathFileNameLabel := "pathFileName"
 
-	var fInfoPlus FileInfoPlus
-	var pathFileDoesExist bool
 	var err2 error
 
 	pathFileName,
-		pathFileDoesExist,
-		fInfoPlus,
-		err2 =
-		new(fileHelperMolecule).
-			doesPathFileExist(
-				pathFileName,
-				PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
-				ePrefix,
-				pathFileNameLabel)
+		_,
+		_,
+		err2 = new(fileHelperMicrobot).
+		validateDestinationFile(
+			pathFileName,
+			pathFileNameLabel,
+			createDirectoryPathIfNotExist,
+			true, // errorOnIrregularFile
+			ePrefix.XCpy(pathFileNameLabel))
 
 	if err2 != nil {
 
 		err = fmt.Errorf("%v\n"+
-			"An error occurred while testing for the existance\n"+
-			"of 'pathFileName' on an attached storage drive.\n"+
-			"pathFileName = '%v'\n"+
-			"Error= \n%v\n",
-			funcName,
-			pathFileName,
+			"Error: Input parameter 'pathFileName' is invalid!\n"+
+			"An error occurred while validating 'pathFileName'.\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
 			err2.Error())
 
 		return numBytesWritten, err
-	}
-
-	if !pathFileDoesExist {
-
-		var directoryPath, fileNameExt string
-		var bothAreEmpty bool
-
-		directoryPath,
-			fileNameExt,
-			bothAreEmpty,
-			err2 = new(fileHelperDirector).
-			getPathAndFileNameExt(
-				pathFileName,
-				pathFileNameLabel,
-				ePrefix.XCpy("<-pathFileName"))
-
-		if err2 != nil {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: Input parameter '%v' is invalid!\n"+
-				"An error occurred while breaking '%v'\n"+
-				"into directory path, file name and file extension\n"+
-				"components.\n"+
-				"Error = \n%v\n",
-				funcName,
-				pathFileNameLabel,
-				pathFileNameLabel,
-				err2.Error())
-
-			return numBytesWritten, err
-		}
-
-		if len(fileNameExt) == 0 || bothAreEmpty {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: Input parameter '%v' is invalid!\n"+
-				"No valid file name could be extracted from\n"+
-				"'%v'.\n"+
-				"%v= '%v'\n"+
-				"Directory Path Element= '%v'\n"+
-				"File Name Element= '%v'\n",
-				ePrefix.String(),
-				pathFileNameLabel,
-				pathFileNameLabel,
-				pathFileNameLabel,
-				pathFileName,
-				directoryPath,
-				fileNameExt)
-
-			return numBytesWritten, err
-		}
-
-		pathFileDoesExist,
-			fInfoPlus,
-			err2 = new(fileHelperAtom).doesDirectoryExist(
-			directoryPath,
-			pathFileNameLabel+" Dir Path",
-			ePrefix.XCpy(pathFileNameLabel+" Dir Path"))
-
-		if err2 != nil {
-
-			err = fmt.Errorf("%v\n"+
-				"Error returned by fileHelperAtom.doesDirectoryExist()\n"+
-				"%v= '%v'\n"+
-				"Error=\n%v\n",
-				funcName,
-				pathFileNameLabel,
-				pathFileName,
-				err2.Error())
-
-			return numBytesWritten, err
-		}
-
-		if !fInfoPlus.IsDir() {
-
-			err = fmt.Errorf("%v\n"+
-				"Error: The directory path extracted from '%v'\n"+
-				"is NOT a valid directory. '%v' is therefore invalid!\n"+
-				"%v= '%v'\n",
-				ePrefix.String(),
-				pathFileNameLabel,
-				pathFileNameLabel,
-				pathFileNameLabel,
-				pathFileName)
-
-			return numBytesWritten, err
-		}
-
-		if !pathFileDoesExist {
-			// The 'pathFileName' directory path does NOT
-			// exist on an attached storage volume.
-
-			if createDirectoryPathIfNotExist {
-
-				err2 = new(fileHelperPreon).makeDirAll(
-					directoryPath,
-					pathFileNameLabel+" directoryPath",
-					ePrefix)
-
-				if err2 != nil {
-
-					err = fmt.Errorf("%v\n"+
-						"Attempted creation of directory path failed!\n"+
-						"%v= '%v'\n"+
-						"%v Directory Path= '%v'\n"+
-						"Error returned by fileHelperMechanics.makeDirAll()\n"+
-						"Error=\n%v\n",
-						funcName,
-						pathFileNameLabel,
-						pathFileName,
-						pathFileNameLabel,
-						directoryPath,
-						err2.Error())
-
-					return numBytesWritten, err
-				}
-
-			} else {
-				// The Path File Name Directory DOES NOT EXIST
-				// on an attached storage drive and
-				// createDirectoryPathIfNotExist = 'false'.
-
-				err = fmt.Errorf("%v\n"+
-					"Error: The %v Directory\n"+
-					"does NOT exist on an attached storage drive and\n"+
-					"Input Parameter 'createDirectoryPathIfNotExist'\n"+
-					"was set to 'false'. Therefore the file cannot be\n"+
-					"opened.\n"+
-					"%v= '%v\n"+
-					"%v Directory = '%v'\n",
-					ePrefix.String(),
-					pathFileNameLabel,
-					pathFileNameLabel,
-					pathFileName,
-					pathFileNameLabel,
-					directoryPath)
-
-				return numBytesWritten, err
-			}
-		}
 	}
 
 	err2 = os.WriteFile(

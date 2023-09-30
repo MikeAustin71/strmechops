@@ -207,6 +207,7 @@ func (fHelperUtility *fileHelperUtility) copyFileByIoBuffer(
 		validateSourceFile(
 			sourceFile,
 			sourceFileLabel,
+			true, // errorOnIrregularFile
 			true, // errorOnEmptyFile
 			ePrefix.XCpy(
 				sourceFileLabel))
@@ -232,6 +233,7 @@ func (fHelperUtility *fileHelperUtility) copyFileByIoBuffer(
 			destinationFile,
 			destinationFileLabel,
 			createDestDirPathIfNotExist,
+			true, // errorOnIrregularFile
 			ePrefix.XCpy(destinationFileLabel))
 
 	if err2 != nil {
@@ -774,6 +776,7 @@ func (fHelperUtility *fileHelperUtility) copyFileByIo(
 		validateSourceFile(
 			sourceFile,
 			sourceFileLabel,
+			true, // errorOnIrregularFile
 			true, // errorOnEmptyFile
 			ePrefix.XCpy(
 				sourceFileLabel))
@@ -799,6 +802,7 @@ func (fHelperUtility *fileHelperUtility) copyFileByIo(
 			destinationFile,
 			destinationFileLabel,
 			createDestDirPathIfNotExist,
+			true, // errorOnIrregularFile
 			ePrefix.XCpy(destinationFileLabel))
 
 	if err2 != nil {

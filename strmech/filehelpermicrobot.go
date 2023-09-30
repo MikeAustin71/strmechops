@@ -41,6 +41,19 @@ type fileHelperMicrobot struct {
 //		string, a default value of "sourceFile" will be
 //		automatically applied.
 //
+//	errorOnIrregularFile		bool
+//
+//		If this parameter is set to true, and the subject
+//		source file is NOT a regular file, an error will
+//		be returned.
+//
+//		Examples of 'irregular' files are Symlinks and
+//		NamedPipe files.
+//
+//		If this parameter is set to 'false', no error
+//		will be returned where the source file is
+//		classified as an irregular file.
+//
 //	errorOnEmptyFile			bool
 //
 //		If this parameter is set to 'true' and the source
@@ -129,6 +142,7 @@ type fileHelperMicrobot struct {
 func (fHelperMicrobot *fileHelperMicrobot) validateSourceFile(
 	sourceFile string,
 	sourceFileLabel string,
+	errorOnIrregularFile bool,
 	errorOnEmptyFile bool,
 	errPrefDto *ePref.ErrPrefixDto) (
 	sourceFileAbsPath string,
@@ -212,7 +226,7 @@ func (fHelperMicrobot *fileHelperMicrobot) validateSourceFile(
 		return sourceFileAbsPath, srcFInfoPlus, err
 	}
 
-	if !srcFInfoPlus.Mode().IsRegular() {
+	if errorOnIrregularFile && !srcFInfoPlus.Mode().IsRegular() {
 		// cannot copy non-regular files (e.g., directories,
 		// symlinks, devices, etc.)
 
@@ -289,6 +303,19 @@ func (fHelperMicrobot *fileHelperMicrobot) validateSourceFile(
 //		parameter 'pathFileName' does not exist on an
 //		attached storage drive, an error will be
 //		returned.
+//
+//	errorOnIrregularFile		bool
+//
+//		If this parameter is set to true, and the subject
+//		source file is NOT a regular file, an error will
+//		be returned.
+//
+//		Examples of 'irregular' files are Symlinks and
+//		NamedPipe files.
+//
+//		If this parameter is set to 'false', no error
+//		will be returned where the source file is
+//		classified as an irregular file.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -376,6 +403,7 @@ func (fHelperMicrobot *fileHelperMicrobot) validateDestinationFile(
 	destinationFile string,
 	destinationFileLabel string,
 	createDirectoryPathIfNotExist bool,
+	errorOnIrregularFile bool,
 	errPrefDto *ePref.ErrPrefixDto) (
 	destinationFileAbsPath string,
 	destFileDoesExist bool,
@@ -452,7 +480,10 @@ func (fHelperMicrobot *fileHelperMicrobot) validateDestinationFile(
 			err
 	}
 
-	if destFileDoesExist && !dstFileInfo.Mode().IsRegular() {
+	if errorOnIrregularFile &&
+		destFileDoesExist &&
+		!dstFileInfo.Mode().IsRegular() {
+
 		err = fmt.Errorf("%v\n"+
 			"Error: Destination File is NOT a 'Regular' File!\n"+
 			"%v= '%v'\n",
