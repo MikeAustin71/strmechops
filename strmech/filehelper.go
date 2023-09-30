@@ -2560,12 +2560,39 @@ func (fh *FileHelper) CopyFileByLink(
 //	 	the source file. This source file will be copied
 //		to the destination file.
 //
+//		If the source file does NOT exist on an attached
+//		storage device, an error will be returned.
+//
+//		If the source file is empty and contains zero (0)
+//		bytes, an error will be returned.
+//
+//		If the source file is NOT classified as a
+//		'regular' file, an error will be returned. This
+//		means that Symlink files cannot be used as source
+//		files.
+//
+//		If source file is equivalent to the destination
+//		file, an error will be returned.
+//
 //	destinationFile				string
 //
 //		This string holds the path and/or the file name
 //		of the destination file. The source file taken
 //		from input parameter 'sourceFile' will be copied
 //		to this destination file.
+//
+//		If the destination previously existed on an
+//		attached storage device, it will be truncated.
+//
+//		If the destination file does not exist on an
+//		attached storage device, that file will be
+//		created automatically. If the directory path
+//		for the destination file does not exist, it too
+//		will be created depending on the setting for
+//		input parameter 'createDestDirPathIfNotExist'.
+//
+//		If destination file is equivalent to the source
+//		file, an error will be returned.
 //
 //	createDestDirPathIfNotExist	bool
 //
@@ -2700,6 +2727,257 @@ func (fh *FileHelper) CopyFileByIo(
 			"sourceFile",
 			destinationFile,
 			"destinationFile",
+			createDestDirPathIfNotExist,
+			ePrefix)
+}
+
+// CopyFileByIoBuffer
+//
+// Copies file from source path and file name to a
+// destination path and file name.
+//
+// Reference:
+//
+//	https://pkg.go.dev/io#CopyBuffer
+//
+// If the destination file does not exist, it will be
+// created. If the directory path for the destination
+// file does not exist, it too will be created
+// depending on the setting for input parameter
+// 'createDestDirPathIfNotExist'.
+//
+// The contents of the source file are written to the
+// destination file using:
+//
+//	io.CopyBuffer(dst Writer, src Reader, buf []byte)
+//			 (written int64, err error)
+//
+// If source file is equivalent to the destination file,
+// an error will be returned.
+//
+// This method will perform the copy operation using a
+// buffer supplied by the user through input parameter,
+// 'buffer'.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method is a wrapper for io.CopyBuffer.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	sourceFile						string
+//
+//		This string holds the path and/or file name of
+//	 	the source file. This source file will be copied
+//		to the destination file.
+//
+//		If the source file does NOT exist on an attached
+//		storage device, an error will be returned.
+//
+//		If the source file is empty and contains zero (0)
+//		bytes, an error will be returned.
+//
+//		If the source file is NOT classified as a
+//		'regular' file, an error will be returned. This
+//		means that Symlink files cannot be used as source
+//		files.
+//
+//		If source file is equivalent to the destination
+//		file, an error will be returned.
+//
+//	sourceFileLabel					string
+//
+//		The name or label associated with input parameter
+//		'sourceFile' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "sourceFile" will be
+//		automatically applied.
+//
+//	destinationFile					string
+//
+//		This string holds the path and/or the file name
+//		of the destination file. The source file taken
+//		from input parameter 'sourceFile' will be copied
+//		to this destination file.
+//
+//		If the destination previously existed on an
+//		attached storage device, it will be truncated.
+//
+//		If the destination file does not exist on an
+//		attached storage device, that file will be
+//		created automatically. If the directory path
+//		for the destination file does not exist, it too
+//		will be created depending on the setting for
+//		input parameter 'createDestDirPathIfNotExist'.
+//
+//		If destination file is equivalent to the source
+//		file, an error will be returned.
+//
+// /
+//
+//	destinationFileLabel			string
+//
+//		The name or label associated with input parameter
+//		'destinationFile' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "destinationFile" will
+//		be automatically applied.
+//
+//	buffer							[]byte
+//
+//		This byte array will be used as an internal
+//		buffer for the copy operation performed by this
+//		method.
+//
+//		If 'buffer' is set to 'nil', a default internal
+//		buffer will be used.
+//
+//		If 'buffer' has an array length of zero, a
+//		default internal buffer will be used.
+//
+//	createDestDirPathIfNotExist		bool
+//
+//		If the directory path element of parameter
+//		'destinationFile' does not exist on an attached
+//		storage drive, and this parameter is set to
+//		'true', this method will attempt to create
+//		the directory path for 'destinationFile'.
+//
+//		If 'createDestDirPathIfNotExist' is set to
+//		'false', and the directory path element of
+//		parameter 'destinationFile' does not exist on
+//		an attached storage drive, the copy operation
+//		will fail and an error will be returned.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bytesCopied					int64
+//
+//		If this method completes successfully, this
+//		return parameter will contain the number of
+//		bytes copied from the source file to the
+//		destination file. If no errors are present,
+//		this value also represents the size of both
+//		the source file and the destination file.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'. If
+//		errors are encountered during processing, the
+//		returned error Type will encapsulate an error
+//		message.
+//
+//		If an error message is returned, the text value
+//		for input parameter 'errPrefDto' (error prefix)
+//		will be prefixed or attached at the beginning of
+//		the error message.
+func (fh *FileHelper) CopyFileByIoBuffer(
+	sourceFile string,
+	destinationFile string,
+	buffer []byte,
+	createDestDirPathIfNotExist bool,
+	errorPrefix interface{}) (
+	bytesCopied int64,
+	err error) {
+
+	if fh.lock == nil {
+		fh.lock = new(sync.Mutex)
+	}
+
+	fh.lock.Lock()
+
+	defer fh.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileHelper."+
+			"CopyFileByIo()",
+		"")
+
+	if err != nil {
+		return bytesCopied, err
+	}
+
+	return new(fileHelperUtility).
+		copyFileByIoBuffer(
+			sourceFile,
+			"sourceFile",
+			destinationFile,
+			"destinationFile",
+			buffer,
 			createDestDirPathIfNotExist,
 			ePrefix)
 }
