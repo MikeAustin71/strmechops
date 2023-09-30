@@ -1965,6 +1965,11 @@ func (fileHelpMech *fileHelperMechanics) isPathString(
 //		an attached storage drive, an error will be
 //		returned.
 //
+//	(4) If the target file does NOT qualify as a
+//		'regular' file, an error will be returned. This
+//		means source files classified as Symlink files
+//		will generate an error.
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
@@ -2171,46 +2176,28 @@ func (fileHelpMech *fileHelperMechanics) readTextLines(
 	}
 
 	var fInfoPlus FileInfoPlus
-	var pathFileDoesExist bool
 	var err2 error
 
 	pathFileName,
-		pathFileDoesExist,
 		fInfoPlus,
-		err2 =
-		new(fileHelperMolecule).
-			doesPathFileExist(
-				pathFileName,
-				PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
-				ePrefix,
-				pathFileNameLabel)
+		err2 = new(fileHelperMicrobot).
+		validateSourceFile(
+			pathFileName,
+			pathFileNameLabel,
+			true, // errorOnIrregularFile
+			true, // errorOnEmptyFile
+			ePrefix.XCpy("pathFileName"))
 
 	if err2 != nil {
 
 		err = fmt.Errorf("%v\n"+
-			"An error occurred while testing for the existance\n"+
-			"of '%v' on an attached storage drive.\n"+
-			"%v = '%v'\n"+
-			"Error= \n%v\n",
+			"Error: Input parameter '%v' is invalid!\n"+
+			"An error occurred while validating '%v'.\n"+
+			"Error=\n%v\n",
 			funcName,
 			pathFileNameLabel,
 			pathFileNameLabel,
-			pathFileName,
 			err2.Error())
-
-	}
-
-	if !pathFileDoesExist {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter '%v' is invalid!\n"+
-			"The path and file name do NOT exist on an attached\n"+
-			"storage drive. Therefore the contents cannot be read.\n"+
-			"%v= '%v'\n",
-			ePrefix.String(),
-			pathFileNameLabel,
-			pathFileNameLabel,
-			pathFileName)
 
 		return originalFileSize,
 			numOfLinesRead,

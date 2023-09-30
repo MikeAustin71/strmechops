@@ -170,7 +170,9 @@ func (fHelperMicrobot *fileHelperMicrobot) validateSourceFile(
 
 	if err != nil {
 
-		return sourceFileAbsPath, srcFInfoPlus, err
+		return sourceFileAbsPath,
+			srcFInfoPlus,
+			err
 	}
 
 	if len(sourceFileLabel) == 0 {
@@ -178,9 +180,9 @@ func (fHelperMicrobot *fileHelperMicrobot) validateSourceFile(
 		sourceFileLabel = "sourceFile"
 	}
 
-	var srcFileDoesExist bool
-
 	fhMolecule := new(fileHelperMolecule)
+
+	var srcFileDoesExist bool
 
 	sourceFile,
 		srcFileDoesExist,
@@ -194,7 +196,9 @@ func (fHelperMicrobot *fileHelperMicrobot) validateSourceFile(
 
 	if err != nil {
 
-		return sourceFileAbsPath, srcFInfoPlus, err
+		return sourceFileAbsPath,
+			srcFInfoPlus,
+			err
 	}
 
 	sourceFileAbsPath = sourceFile

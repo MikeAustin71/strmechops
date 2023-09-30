@@ -12288,6 +12288,11 @@ func (fh *FileHelper) ReadFileStrBuilderOpenClose(
 //		an attached storage drive, an error will be
 //		returned.
 //
+//	(4) If the target file does NOT qualify as a
+//		'regular' file, an error will be returned. This
+//		means source files classified as Symlink files
+//		will generate an error.
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
