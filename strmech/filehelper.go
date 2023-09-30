@@ -11619,7 +11619,7 @@ func (fh *FileHelper) OpenFileWriteOnly(
 
 // ReadFileBytes
 //
-// Reads the entire contents of a file and returns
+// Reads the entire contents of a source file and returns
 // the bytes read from that file in a byte array.
 //
 // The read operation is performed by os.ReadFile and
@@ -11630,9 +11630,16 @@ func (fh *FileHelper) OpenFileWriteOnly(
 //
 // # IMPORTANT
 //
-//	This method reads the entire contents of input file
-//	'pathFileName' into memory. Large files may challenge
-//	the memory limitations on your computer.
+//	(1)	This method reads the entire contents of input
+//		file 'pathFileName' into memory. Large files may
+//		challenge the memory resources and limitations on
+//		your computer.
+//
+//	(2)	If the source file is classified as an
+//		'irregular' file, this method will NOT return an
+//		error and will attempt to read the source file.
+//		This means that this method will attempt to read
+//		Symlink files.
 //
 // ----------------------------------------------------------------
 //
@@ -11642,13 +11649,17 @@ func (fh *FileHelper) OpenFileWriteOnly(
 //
 //		A string containing the path and file name of the
 //		target input file. The contents of this file will
-//		be read and written to the strings.Builder instance
-//		passed as 'strBuilder'.
+//		be read and returned in a byte array.
 //
 //		After reading the contents, this file will be
-//		automatically will be automatically closed and
-//		rendered ready in all respects for future
-//		read/write operations.
+//		automatically closed and rendered ready in all
+//		respects for future read/write operations.
+//
+//		If the source file is classified as an
+//		'irregular' file, this method will NOT return an
+//		error and will attempt to read the source file.
+//		This means that an attempt will be made to read
+//		Symlink files.
 //
 //	errorPrefix						interface{}
 //
@@ -11771,45 +11782,26 @@ func (fh *FileHelper) ReadFileBytes(
 	}
 
 	var fInfoPlus FileInfoPlus
-	var pathFileDoesExist bool
 	var err2 error
 
 	pathFileName,
-		pathFileDoesExist,
 		fInfoPlus,
-		err2 =
-		new(fileHelperMolecule).
-			doesPathFileExist(
-				pathFileName,
-				PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
-				ePrefix,
-				"pathFileName")
+		err2 = new(fileHelperMicrobot).
+		validateSourceFile(
+			pathFileName,
+			"pathFileName",
+			false, // errorOnIrregularFile
+			true,  // errorOnEmptyFile
+			ePrefix.XCpy("pathFileName"))
 
 	if err2 != nil {
 
 		err = fmt.Errorf("%v\n"+
-			"An error occurred while testing for the existance\n"+
-			"of 'pathFileName' on an attached storage drive.\n"+
-			"pathFileName = '%v'\n"+
-			"Error= \n%v\n",
-			funcName,
-			pathFileName,
-			err2.Error())
-
-		return byteArray,
-			numOfBytesRead,
-			err
-	}
-
-	if !pathFileDoesExist {
-
-		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter 'pathFileName' is invalid!\n"+
-			"The path and file name do NOT exist on an attached\n"+
-			"storage drive. Therefore the contents cannot be read.\n"+
-			"pathFileName= '%v'\n",
-			ePrefix.String(),
-			pathFileName)
+			"An error occurred while validating 'pathFileName'.\n"+
+			"Error=\n%v\n",
+			funcName,
+			err2.Error())
 
 		return byteArray,
 			numOfBytesRead,
@@ -11893,6 +11885,12 @@ func (fh *FileHelper) ReadFileBytes(
 //	(3)	If the target file to be read does not exist on
 //		an attached storage drive, an error will be
 //		returned.
+//
+//	(4)	If the source file is classified as an
+//		'irregular' file, this method will NOT return an
+//		error and will attempt to read the source file.
+//		This means that an attempt will be made to read
+//		Symlink files.
 //
 // ----------------------------------------------------------------
 //
@@ -12031,59 +12029,31 @@ func (fh *FileHelper) ReadFileStrBuilderOpenClose(
 		"")
 
 	if err != nil {
+
 		return numBytesRead, err
 	}
 
 	var fInfoPlus FileInfoPlus
-	var pathFileDoesExist bool
 	var err2 error
 
 	pathFileName,
-		pathFileDoesExist,
 		fInfoPlus,
-		err2 =
-		new(fileHelperMolecule).
-			doesPathFileExist(
-				pathFileName,
-				PreProcPathCode.AbsolutePath(), // Convert to Absolute Path
-				ePrefix,
-				"pathFileName")
+		err2 = new(fileHelperMicrobot).
+		validateSourceFile(
+			pathFileName,
+			"pathFileName",
+			false, // errorOnIrregularFile
+			true,  // errorOnEmptyFile
+			ePrefix.XCpy("pathFileName"))
 
 	if err2 != nil {
 
 		err = fmt.Errorf("%v\n"+
-			"An error occurred while testing for the existance\n"+
-			"of 'pathFileName' on an attached storage drive.\n"+
-			"pathFileName = '%v'\n"+
-			"Error= \n%v\n",
+			"Error: Input parameter 'pathFileName' is invalid!\n"+
+			"An error occurred while validating 'pathFileName'.\n"+
+			"Error=\n%v\n",
 			funcName,
-			pathFileName,
 			err2.Error())
-
-		return numBytesRead, err
-	}
-
-	if !pathFileDoesExist {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'pathFileName' is invalid!\n"+
-			"The path and file name do NOT exist on an attached\n"+
-			"storage drive.\n"+
-			"pathFileName= '%v'\n",
-			ePrefix.String(),
-			pathFileName)
-
-		return numBytesRead, err
-	}
-
-	if fInfoPlus.IsDir() {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'pathFileName' is invalid!\n"+
-			"'pathFileName' is directory and NOT a file name.\n"+
-			"pathFileName= '%v'\n",
-			ePrefix.String(),
-			pathFileName)
 
 		return numBytesRead, err
 	}
@@ -14517,6 +14487,14 @@ func (fh *FileHelper) SwapBasePath(
 //
 // ----------------------------------------------------------------
 //
+// # IMPORTANT
+//
+//	If 'pathFileName' is NOT classified as a 'regular'
+//	file, an error will be returned. Symlinks do NOT
+//	qualify as a 'regular' file.
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	pathFileName					string
@@ -14524,6 +14502,10 @@ func (fh *FileHelper) SwapBasePath(
 //		A string containing the path and file name of the
 //		target output file to which the byte array,
 //		'bytesToWrite', will be written.
+//
+//		If 'pathFileName' is NOT classified as a
+//		'regular' file, an error will be returned.
+//		Symlinks do NOT qualify as a 'regular' file.
 //
 //	createDirectoryPathIfNotExist	bool
 //
@@ -14681,7 +14663,7 @@ func (fh *FileHelper) WriteFileBytes(
 			"Error: Input parameter 'pathFileName' is invalid!\n"+
 			"An error occurred while validating 'pathFileName'.\n"+
 			"Error=\n%v\n",
-			ePrefix.String(),
+			funcName,
 			err2.Error())
 
 		return numBytesWritten, err
