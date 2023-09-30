@@ -9519,7 +9519,7 @@ func (fh *FileHelper) MakeDirAll(
 		return err
 	}
 
-	return new(fileHelperMechanics).makeDirAll(
+	return new(fileHelperPreon).makeDirAll(
 		dirPath,
 		"dirPath",
 		ePrefix)
@@ -9878,7 +9878,7 @@ func (fh *FileHelper) MakeDirAllPerm(
 		return err
 	}
 
-	return new(fileHelperNanobot).
+	return new(fileHelperPlanck).
 		makeDirAllPerm(
 			dirPath,
 			permission,
@@ -14782,7 +14782,7 @@ func (fh *FileHelper) WriteFileBytes(
 
 			if createDirectoryPathIfNotExist {
 
-				err2 = new(fileHelperMechanics).makeDirAll(
+				err2 = new(fileHelperPreon).makeDirAll(
 					directoryPath,
 					pathFileNameLabel+" directoryPath",
 					ePrefix)

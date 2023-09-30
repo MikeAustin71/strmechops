@@ -574,7 +574,7 @@ func (fHelperMicrobot *fileHelperMicrobot) validateDestinationFile(
 
 			if createDirectoryPathIfNotExist {
 
-				err2 = new(fileHelperMechanics).makeDirAll(
+				err2 = new(fileHelperPreon).makeDirAll(
 					directoryPath,
 					destinationFileLabel+" directoryPath",
 					ePrefix)

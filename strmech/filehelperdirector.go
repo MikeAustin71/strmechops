@@ -1392,7 +1392,7 @@ func (fHelpDirector *fileHelperDirector) openDirectory(
 
 		// Parameter 'createDir' must be 'true'.
 		// The error signaled that the path does not exist. So, create the directory path
-		err = new(fileHelperMechanics).makeDirAll(
+		err = new(fileHelperPreon).makeDirAll(
 			directoryPath,
 			directoryPathLabel,
 			ePrefix)

@@ -297,7 +297,7 @@ func (fileHelpBoson *fileHelperBoson) openFile(
 
 		if createDirectoryPathIfNotExist {
 
-			err2 = new(fileHelperMechanics).makeDirAll(
+			err2 = new(fileHelperPreon).makeDirAll(
 				directoryPath,
 				pathFileNameLabel+" directoryPath",
 				ePrefix)
