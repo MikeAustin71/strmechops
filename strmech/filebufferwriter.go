@@ -921,6 +921,61 @@ func (fBufWriter *FileBufferWriter) GetWriteBufferSize() int {
 	return fBufWriter.bufioWriter.Size()
 }
 
+// IsClosed
+//
+// Returns a boolean value set to 'true' if the current
+// instance of FileBufferWriter is 'closed'.
+//
+// The term 'closed' means that the FileBufferWriter
+// member data values, including the internal
+// bufio.Writer object, are invalid or uninitialized.
+//
+// If a FileBufferWriter object is closed, it is
+// invalid and unavailable for future 'write' operations.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	bool
+//
+//		If this boolean return value is set to 'true', it
+//		signals that the current instance of
+//		FileBufferWriter is 'closed' or uninitialized.
+//
+//		FileBufferWriter objects which are 'closed' are
+//		invalid and unavailable for future 'write'
+//		operations.
+//
+//		If this return parameter is set to 'false', it
+//		signals that the current FileBufferWriter
+//		instance is valid, properly configured and ready
+//		to perform 'write' operations.
+func (fBufWriter *FileBufferWriter) IsClosed() bool {
+
+	if fBufWriter.lock == nil {
+		fBufWriter.lock = new(sync.Mutex)
+	}
+
+	fBufWriter.lock.Lock()
+
+	defer fBufWriter.lock.Unlock()
+
+	if fBufWriter.bufioWriter != nil ||
+		fBufWriter.ioWriter != nil {
+
+		return false
+	}
+
+	return true
+}
+
 // NewIoWriter
 //
 // This method returns a fully initialized instance of

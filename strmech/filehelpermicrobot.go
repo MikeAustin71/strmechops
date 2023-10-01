@@ -180,6 +180,20 @@ func (fHelperMicrobot *fileHelperMicrobot) validateSourceFile(
 		sourceFileLabel = "sourceFile"
 	}
 
+	if len(sourceFile) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is a empty string containing zero bytes.\n",
+			ePrefix.String(),
+			sourceFileLabel,
+			sourceFileLabel)
+
+		return sourceFileAbsPath,
+			srcFInfoPlus,
+			err
+	}
+
 	fhMolecule := new(fileHelperMolecule)
 
 	var srcFileDoesExist bool
@@ -446,6 +460,21 @@ func (fHelperMicrobot *fileHelperMicrobot) validateDestinationFile(
 		destinationFileLabel = "destinationFile"
 	}
 
+	if len(destinationFile) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is a empty string containing zero bytes.\n",
+			ePrefix.String(),
+			destinationFileLabel,
+			destinationFileLabel)
+
+		return destinationFileAbsPath,
+			destFileDoesExist,
+			destFInfoPlus,
+			err
+	}
+
 	var dstFileInfo FileInfoPlus
 
 	var fhMolecule = new(fileHelperMolecule)
@@ -467,6 +496,8 @@ func (fHelperMicrobot *fileHelperMicrobot) validateDestinationFile(
 			destFInfoPlus,
 			err
 	}
+
+	destinationFileAbsPath = destinationFile
 
 	if destFileDoesExist && dstFileInfo.Mode().IsDir() {
 

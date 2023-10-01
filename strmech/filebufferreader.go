@@ -742,7 +742,7 @@ func (fBufReader *FileBufferReader) IsClosed() bool {
 
 	defer fBufReader.lock.Unlock()
 
-	if fBufReader.bufioReader != nil &&
+	if fBufReader.bufioReader != nil ||
 		fBufReader.ioReader != nil {
 
 		return false

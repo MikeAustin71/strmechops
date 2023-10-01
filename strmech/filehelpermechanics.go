@@ -157,7 +157,9 @@ func (fileHelpMech *fileHelperMechanics) copyFileByLink(
 	areSameFile, err2 :=
 		new(fileHelperNanobot).areSameFile(
 			src,
+			"src",
 			dst,
+			"dst",
 			ePrefix.XCpy("areSameFile<-"))
 
 	if err2 != nil {

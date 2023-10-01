@@ -272,7 +272,9 @@ func (fHelperUtility *fileHelperUtility) copyFileByIo(
 	areSameFile,
 		err2 = new(fileHelperNanobot).areSameFile(
 		sourceFile,
+		sourceFileLabel,
 		destinationFile,
+		destinationFileLabel,
 		ePrefix.XCpy(
 			"areSameFile<-"))
 
@@ -865,7 +867,9 @@ func (fHelperUtility *fileHelperUtility) copyFileByIoBuffer(
 	areSameFile,
 		err2 = new(fileHelperNanobot).areSameFile(
 		sourceFile,
+		sourceFileLabel,
 		destinationFile,
+		destinationFileLabel,
 		ePrefix.XCpy(
 			"areSameFile<-"))
 

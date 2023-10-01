@@ -51,6 +51,16 @@ type fileHelperNanobot struct {
 //		If 'pathFile1' is submitted as an empty or zero
 //		length string, an error will be returned.
 //
+//	pathFile1Label				string
+//
+//		The name or label associated with input parameter
+//		'pathFile1' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "pathFile1" will
+//		be automatically applied.
+//
 //	pathFile2					string
 //
 //		The first of two path file strings passed to this
@@ -63,6 +73,16 @@ type fileHelperNanobot struct {
 //
 //		If 'pathFile2' is submitted as an empty or zero
 //		length string, an error will be returned.
+//
+//	pathFile2Label				string
+//
+//		The name or label associated with input parameter
+//		'pathFile2' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "pathFile2" will
+//		be automatically applied.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //
@@ -111,7 +131,9 @@ type fileHelperNanobot struct {
 //		error message.
 func (fHelperNanobot *fileHelperNanobot) areSameFile(
 	pathFile1,
+	pathFile1Label string,
 	pathFile2 string,
+	pathFile2Label string,
 	errPrefDto *ePref.ErrPrefixDto) (
 	bool,
 	error) {
@@ -138,6 +160,38 @@ func (fHelperNanobot *fileHelperNanobot) areSameFile(
 		return false, err
 	}
 
+	if len(pathFile1Label) == 0 {
+		pathFile1Label = "pathFile1"
+	}
+
+	if len(pathFile2Label) == 0 {
+		pathFile2Label = "pathFile2"
+	}
+
+	if len(pathFile1) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is a empty string containing zero bytes.\n",
+			ePrefix.String(),
+			pathFile1Label,
+			pathFile1Label)
+
+		return false, err
+	}
+
+	if len(pathFile2) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is a empty string containing zero bytes.\n",
+			ePrefix.String(),
+			pathFile2Label,
+			pathFile2Label)
+
+		return false, err
+	}
+
 	var pathFile1DoesExist, pathFile2DoesExist bool
 	var fInfoPathFile1, fInfoPathFile2 FileInfoPlus
 
@@ -147,8 +201,9 @@ func (fHelperNanobot *fileHelperNanobot) areSameFile(
 		err = new(fileHelperMolecule).doesPathFileExist(
 		pathFile1,
 		PreProcPathCode.AbsolutePath(), // Convert To Absolute Path
-		ePrefix,
-		"pathFile1")
+		ePrefix.XCpy(
+			pathFile1Label),
+		pathFile1Label)
 
 	if err != nil {
 		return false, err
@@ -159,8 +214,8 @@ func (fHelperNanobot *fileHelperNanobot) areSameFile(
 		fInfoPathFile2,
 		err = new(fileHelperMolecule).doesPathFileExist(pathFile2,
 		PreProcPathCode.AbsolutePath(), // Convert To Absolute Path
-		ePrefix,
-		"pathFile2")
+		ePrefix.XCpy(pathFile2Label),
+		pathFile2Label)
 
 	if err != nil {
 		return false, err

@@ -1539,6 +1539,344 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite04() {
 
 }
 
+// FileBuffReadWrite05
+//
+// Testing Close operations.
+func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite05() {
+
+	funcName := "MainFileReadWriteTest010.FileBuffReadWrite05()"
+
+	ePrefix := ePref.ErrPrefixDto{}.NewEPrefCtx(
+		funcName,
+		"")
+
+	breakStr := " " + strings.Repeat("=",
+		len(funcName)+6)
+
+	dashLineStr := " " + strings.Repeat("-",
+		len(funcName)+6)
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Starting Run!\n"+
+		" Function:\n"+
+		"    %v\n\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n\n\n")
+
+	var err error
+	var baseReadFile string
+	var exampleUtil = ExampleUtility{}
+
+	baseReadFile,
+		err = exampleUtil.GetCompositeDirectory(
+		"fileOpsTest\\filesForTest\\textFilesForTest\\splitFunc.txt",
+		ePrefix.XCpy("targetReadFile"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var fHelper = new(strmech.FileHelper)
+
+	var baseReadFileBytes int64
+	var fileExistsOnDisk bool
+
+	fileExistsOnDisk,
+		baseReadFileBytes,
+		err = fHelper.GetBytesInFile(
+		baseReadFile,
+		ePrefix.XCpy("<-baseReadFile"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	fmt.Printf("%v\n"+
+		"%v\n"+
+		"File Bytes for Base Read File.\n"+
+		"Base Read File: %v\n"+
+		"File Exists On Disk: %v\n"+
+		"Byte Count= %v\n\n",
+		ePrefix.String(),
+		dashLineStr,
+		baseReadFile,
+		fileExistsOnDisk,
+		baseReadFileBytes)
+
+	var targetReadFile string
+
+	targetReadFile,
+		err = exampleUtil.GetCompositeDirectory(
+		"fileOpsTest\\trashDirectory\\Main10ReadWrite05splitFunc.txt",
+		ePrefix.XCpy("targetReadFile"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var targetReadFileBytes int64
+
+	targetReadFileBytes,
+		err = fHelper.CopyFileByIoBuffer(
+		baseReadFile,
+		targetReadFile,
+		nil,
+		false,
+		ePrefix.XCpy("targetReadFile<-baseReadFile"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	if baseReadFileBytes != targetReadFileBytes {
+
+		fmt.Printf("%v\n"+
+			"%v\n"+
+			"Error: File Byte Count Do NOT MATCH!\n"+
+			"Base Read File and Target Read File\n"+
+			"byte counts DO NOT MATCH.\n"+
+			"  Base Read File Byte Count: %v\n"+
+			"Target Read File Byte Count: %v\n"+
+			"  Base Read File: %v\n"+
+			"Target Read File: %v\n\n",
+			ePrefix.String(),
+			dashLineStr,
+			baseReadFileBytes,
+			targetReadFileBytes,
+			baseReadFile,
+			targetReadFile)
+
+		return
+	}
+
+	fmt.Printf("%v\n"+
+		"%v\n"+
+		"   Successful File Copy Operation!\n"+
+		"%v\n"+
+		"File Byte Counts MATCH!\n"+
+		"Base Read File and Target Read File\n"+
+		"byte counts are equivalent.\n"+
+		"  Base Read File Byte Count: %v\n"+
+		"Target Read File Byte Count: %v\n"+
+		"  Base Read File: %v\n"+
+		"Target Read File: %v\n\n",
+		ePrefix.String(),
+		dashLineStr,
+		dashLineStr,
+		baseReadFileBytes,
+		targetReadFileBytes,
+		baseReadFile,
+		targetReadFile)
+
+	var fBufReader strmech.FileBufferReader
+	var fBufReaderBufferSize = 1024
+	var fInfoPlus strmech.FileInfoPlus
+
+	fInfoPlus,
+		fBufReader,
+		err = new(strmech.FileBufferReader).
+		NewPathFileName(
+			targetReadFile,
+			false,
+			fBufReaderBufferSize,
+			ePrefix.XCpy("fBufReader"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	if fInfoPlus.Size() != targetReadFileBytes {
+
+		fmt.Printf("%v\n"+
+			"%v\n"+
+			"Error: fBufReader file size invalid!\n"+
+			"The reported fBufReader file size\n"+
+			"DOES NOT MATCH the 'targetReadFile' size!\n"+
+			" fBufReader File Byte Count: %v\n"+
+			"Target Read File Byte Count: %v\n"+
+			"  Base Read File: %v\n"+
+			"Target Read File: %v\n\n",
+			ePrefix.String(),
+			dashLineStr,
+			fInfoPlus.Size(),
+			targetReadFileBytes,
+			baseReadFile,
+			targetReadFile)
+
+		return
+	}
+
+	var targetWriteFile string
+
+	targetWriteFile,
+		err = exampleUtil.GetCompositeDirectory(
+		"fileOpsTest\\trashDirectory\\Main10FileBuffReadWrite05.txt",
+		ePrefix.XCpy("targetWriteFile"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var fBufWriter strmech.FileBufferWriter
+	targetWriteFileBufferSize := 512
+	_,
+		fBufWriter,
+		err = new(strmech.FileBufferWriter).
+		NewPathFileName(
+			targetWriteFile,
+			false,
+			targetWriteFileBufferSize,
+			false,
+			ePrefix)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	var numBytesProcessed int64
+
+	numBytesProcessed,
+		err = fBufWriter.
+		ReadFrom(fBufReader)
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	if numBytesProcessed != targetReadFileBytes {
+
+		fmt.Printf("%v\n"+
+			"%v\n"+
+			"Error: Number of bytes written does\n"+
+			"NOT MATCH the number of bytes in target\n"+
+			"Read File.\n"+
+			"  Number of Bytes Processed: %v\n"+
+			"Target Read File Byte Count: %v\n"+
+			" Target Read File: %v\n"+
+			"Target Write File: %v\n\n",
+			ePrefix.String(),
+			dashLineStr,
+			numBytesProcessed,
+			targetReadFileBytes,
+			targetReadFile,
+			targetWriteFile)
+
+		return
+	}
+
+	err = fBufReader.Close()
+
+	if err != nil {
+
+		fmt.Printf("%v\n"+
+			"%v\n"+
+			"Error returned from fBufReader.Close()\n"+
+			"Error=\n%v\n\n",
+			ePrefix.String(),
+			dashLineStr,
+			err.Error())
+
+		return
+	}
+
+	var isClosed bool
+
+	isClosed = fBufReader.IsClosed()
+
+	fmt.Printf("%v\n"+
+		"%v\n"+
+		"#1 isClosed = fBufReader.IsClosed() result\n"+
+		"isClosed= %v\n\n",
+		ePrefix.String(),
+		dashLineStr,
+		isClosed)
+
+	fBufReader.ReleaseMemResources()
+
+	isClosed = fBufReader.IsClosed()
+
+	fmt.Printf("%v\n"+
+		"%v\n"+
+		"#2 isClosed = fBufReader.IsClosed() result\n"+
+		"isClosed= %v\n\n",
+		ePrefix.String(),
+		dashLineStr,
+		isClosed)
+
+	err = fBufWriter.
+		FlushCloseAndRelease(
+			ePrefix.XCpy("fBufWriter"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	isClosed = fBufWriter.IsClosed()
+
+	fmt.Printf("%v\n"+
+		"%v\n"+
+		"#1 isClosed = fBufWriter.IsClosed() result\n"+
+		"isClosed= %v\n\n",
+		ePrefix.String(),
+		dashLineStr,
+		isClosed)
+
+	err = fHelper.
+		DeleteDirOrFile(
+			targetReadFile,
+			ePrefix.XCpy("targetWriteFile"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	err = fHelper.
+		DeleteDirOrFile(
+			targetWriteFile,
+			ePrefix.XCpy("targetWriteFile"))
+
+	if err != nil {
+		fmt.Printf("\n%v\n\n",
+			err.Error())
+		return
+	}
+
+	// ------ Trailing Marquee
+
+	fmt.Printf("\n\n" + breakStr + "\n")
+
+	fmt.Printf("\n Successful Completion!\n"+
+		" Function: %v\n",
+		ePrefix.String())
+
+	fmt.Printf("\n" + breakStr + "\n")
+
+	return
+
+}
+
 func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufWriter01() {
 
 	funcName := "Main010.FileBufWriter01()"

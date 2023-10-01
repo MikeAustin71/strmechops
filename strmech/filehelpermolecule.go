@@ -154,8 +154,8 @@ func (fHelpMolecule *fileHelperMolecule) doesPathFileExist(
 	ePrefix,
 		nonPathError = ePref.ErrPrefixDto{}.NewIEmpty(
 		errPrefDto,
-		"FileHelper."+
-			"AreSameFile()",
+		"fileHelperMolecule."+
+			"doesPathFileExist()",
 		"")
 
 	if nonPathError != nil {
