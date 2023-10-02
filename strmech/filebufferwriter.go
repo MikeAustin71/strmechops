@@ -240,17 +240,13 @@ func (fBufWriter *FileBufferWriter) Buffered() int {
 // This method is provided in order to implement the
 // io.Closer interface.
 //
-// ----------------------------------------------------------------
-//
-// # Background
-//
 // Calling this method will perform two elements of
 // the clean-up operation required when all data
 // has been written to the internal bufio.Writer and
 // the services of the current FileBufferWriter
-// instance are no longer required. The two
-// clean-up procedures performed by this method are
-// listed as follows:
+// instance are no longer required. The two clean-up
+// procedures performed by this method are listed as
+// follows:
 //
 //	(1)	'flush' procedure
 //		This procedure flushes the 'write' buffer to
@@ -271,13 +267,23 @@ func (fBufWriter *FileBufferWriter) Buffered() int {
 //		current FileBufferWriter instance.
 //
 //	(2)	After calling this method, FileBufferWriter.Close(),
-//		the user is STILL REQUIRED to release the internal
-//		memory resources by calling local method:
+//		the should release all internal memory resources
+//		by calling the local method:
 //
 //			FileBufferWriter.ReleaseMemResources()
 //
+//		This call to 'ReleaseMemResources()' should be
+//		made immediately after the call to 'Close()'.
+//
+//		Releasing all internal memory resources will
+//		synchronize internal flags and prevent multiple
+//		calls to 'close' the underlying io.Writer object.
+//		Calling 'close' on the same underlying io.Writer
+//		object multiple times can produce unexpected
+//		results.
+//
 //	(3)	Once this method completes the 'Close' operation,
-//		this instance of FileBufferWriter becomes
+//		this current instance of FileBufferWriter becomes
 //		unavailable for further 'write' operations.
 //
 // ----------------------------------------------------------------
@@ -287,13 +293,21 @@ func (fBufWriter *FileBufferWriter) Buffered() int {
 //	(1)	This method, FileBufferWriter.Close(), is NOT the
 //		preferred or recommended method for performing
 //		clean-up operations on a FileBufferWriter
-//		instance.
+//		instance. FileBufferWriter.Close() does not
+//		release internal memory resources there
+//		requiring a second call to:
+//
+//			FileBufferWriter.ReleaseMemResources()
 //
 //	(2)	The preferred and recommended method for
 //		performing all clean-up operations on a
 //		FileBufferWriter instance is local method:
 //
 //			FileBufferWriter.FlushCloseAndRelease()
+//
+//		Unlike this method, FileBufferWriter.Close(),
+//		the FileBufferWriter.FlushCloseAndRelease() will
+//		also release internal memory resources.
 //
 //	(3)	If the user does not choose to flush the write
 //		buffer before closing the FileBufferWriter
@@ -307,18 +321,22 @@ func (fBufWriter *FileBufferWriter) Buffered() int {
 //		released after closing the FileBufferWriter
 //		object, they will probably be released by
 //		Go Garbage Collector or upon program
-//		termination. However, manually releasing
-//		internal memory resources by calling one
-//		of the two following local methods is
-//		recommended:
+//		termination. However, in this case the
+//		internal flags will remain unsynchronized
+//		thereby allowing multiple 'close' calls
+//		on the underlying io.Writer object.
+//
+//		Manually releasing internal memory resources by
+//		calling one of the two following local methods is
+//		therefore highly recommended:
 //
 //			FileBufferWriter.FlushCloseAndRelease()
 //			FileBufferWriter.CloseAndRelease()
 //
 //	(5)	Once this method completes the required clean-up
-//		operations, this instance of FileBufferWriter
-//		becomes invalid and unavailable for further
-//		'write' operations.
+//		operations, this current instance of
+//		FileBufferWriter becomes invalid and unavailable
+//		for further 'write' operations.
 //
 //	(6)	New instances of FileBufferWriter are created
 //		using the 'New' methods. Existing instances of
@@ -439,8 +457,8 @@ func (fBufWriter FileBufferWriter) Close() error {
 
 // CloseAndRelease
 //
-// Performs 'close' procedure and releases the internal
-// memory resources on the current instance of
+// Performs the 'close' procedure and releases the
+// internal memory resources for the current instance of
 // FileBufferWriter.
 //
 // Call this method when all 'write' operations have
@@ -451,29 +469,107 @@ func (fBufWriter FileBufferWriter) Close() error {
 //
 // # IMPORTANT
 //
-//	(1) This method, FileBufferWriter.CloseAndRelease(),
+//	(1)	This method will perform the following
+//		two procedures:
+//
+//		(a)	'close' procedure
+//
+//			This procedure properly closes the underlying
+//			bufio.Writer object configured for the current
+//			instance of FileBufferWriter.
+//
+//		(b)	Release internal memory resources
+//
+//			This procedure releases all internal memory
+//			resources and synchronizes internal flags
+//			thereby preventing multiple calls to 'close'
+//			the underlying io.writer object.
+//
+//	(2) This method, FileBufferWriter.CloseAndRelease(),
 //		will NOT flush the internal 'write' buffer before
 //		closing the FileBufferWriter. Any data remaining
 //		in the internal 'write' buffer when this method
 //		is called, will be lost.
 //
-//	(2)	Call this method after completing all write
-//		operations when the services of the current
-//		FileBufferWriter instance are no longer required.
-//		Calling this method is essential to performance
-//		of necessary clean-up tasks after completion of
-//		all 'write' operations.
+//	(3)	Call this method only after completing all
+//		'write' operations when the services of the
+//		current FileBufferWriter instance are no longer
+//		required. Calling this method is essential to
+//		performance of necessary clean-up tasks after
+//		completing all 'write' operations.
 //
-//	(3)	Once this method completes the clean-up
-//		operations, this instance of FileBufferWriter
-//		will become invalid and unavailable for further
+//	(4)	Once this method executes the clean-up operation,
+//		this current instance of FileBufferWriter will
+//		become invalid and unavailable for further
 //		'write' operations.
+//
+//	(5)	New instances of FileBufferWriter are created
+//		using the 'New' methods. Existing instances of
+//		FileBufferWriter may be reconfigured using the
+//		'Setter' methods.
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	-- NONE --
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
 //
@@ -619,8 +715,8 @@ func (fBufWriter *FileBufferWriter) Empty() {
 //		operations when the services of the current
 //		FileBufferWriter instance are no longer required.
 //
-//	(3)	This method performs required clean-up operations
-//		consisting of:
+//	(3)	This method performs three required clean-up
+//		procedures consisting of:
 //
 //		(a)	Flushing the 'write' buffer to ensure that
 //			all data is written from the 'write' buffer
@@ -632,7 +728,7 @@ func (fBufWriter *FileBufferWriter) Empty() {
 //		(c)	Releasing all internal memory resources.
 //
 //	(4)	Once this method completes the required clean-up
-//		operations, this instance of FileBufferWriter
+//		procedures, this instance of FileBufferWriter
 //		becomes invalid and unavailable for further
 //		'write' operations.
 //
@@ -2016,7 +2112,9 @@ func (fBufWriter FileBufferWriter) ReadFrom(
 //	(2)	This method does NOT perform the 'flush' or
 //		'close' protocols. To perform the 'flush' and
 //		'close' protocols, as well as releasing all
-//		internal memory resources, call local method:
+//		internal memory resources, DO NOT call this
+//		method, FileBufferWriter.ReleaseMemResources().
+//		Instead, call local method:
 //
 //			FileBufferWriter.FlushCloseAndRelease()
 //
