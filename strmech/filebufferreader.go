@@ -162,14 +162,14 @@ func (fBufReader *FileBufferReader) Buffered() int {
 // FileBufferReader.
 //
 // The preferred and recommended method for performing
-// both the 'close' protocol and release of memory
-// resources is the local method:
+// both the 'close' protocol and, releasing all memory
+// resources, is the local method:
 //
 //	FileBufferReader.CloseAndRelease()
 //
-// After calling this 'Close' method, the current
-// instance of FileBufferReader will be invalid and
-// unavailable for further 'read' operations.
+// After calling this method, FileBufferReader.Close(),
+// the current instance of FileBufferReader will be
+// invalid and unavailable for further 'read' operations.
 //
 // ----------------------------------------------------------------
 //
@@ -180,9 +180,9 @@ func (fBufReader *FileBufferReader) Buffered() int {
 //	(2)	This method will 'close' the underlying io.Reader
 //		object, but it will NOT release the internal
 //		memory resources. After call this method,
-//		FileBufferReader.Close(), users should immediately
-//		call the following local method inorder to release
-//		internal memory resources:
+//		FileBufferReader.Close(), users should
+//		immediately call the following local method in
+//		order to release internal memory resources:
 //
 //			FileBufferReader.ReleaseMemResources()
 //
@@ -264,9 +264,12 @@ func (fBufReader FileBufferReader) Close() error {
 
 // CloseAndRelease
 //
-// This method will perform the 'close' protocol on the
+// This method will perform the 'close' procedure on the
 // internal bufio.Reader object encapsulated by the
 // current instance of FileBufferReader.
+//
+// FileBufferReader.CloseAndRelease() is the recommended
+// method for 'closing' the internal io.Reader object.
 //
 // Unlike method FileBufferReader.Close(), this method,
 // FileBufferReader.CloseAndRelease(), will also release
@@ -278,9 +281,9 @@ func (fBufReader FileBufferReader) Close() error {
 // same io.Reader object multiple times can produce
 // unexpected results.
 //
-// This method, FileBufferReader.CloseAndRelease(), is
-// the preferred and recommended method for 'closing' an
-// instance of FileBufferReader.
+// Again, this method, FileBufferReader.CloseAndRelease(),
+// is the preferred and recommended method for 'closing'
+// an instance of FileBufferReader.
 //
 // ----------------------------------------------------------------
 //

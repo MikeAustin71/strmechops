@@ -68,21 +68,60 @@ type FileIoReader struct {
 //
 //	FileIoReader.ReleaseMemResources()
 //
-// This method is used to close any open file pointers
-// and perform required clean-up operations.
+// Calling this method, FileIoReader.Close(), will
+// 'close' the underlying io.Reader object; however, it
+// will NOT release the internal memory resources for
+// the current FileIoReader instance. As such, this
+// method, FileIoReader.Close(), is NOT the preferred
+// or recommended method for 'closing' an instance of
+// FileIoReader.
 //
-// Users MUST call this method after all 'read'
-// operations have been completed.
+// The preferred and recommended method for performing
+// both the 'close' procedure, and releasing all memory
+// resources, is the local method:
 //
-// After calling this method, the current instance of
-// FileIoReader will be invalid and unavailable for
-// future 'read' operations.
+//	FileIoReader.CloseAndRelease()
+//
+// After calling this method ,FileIoReader.Close(), the
+// current instance of FileIoReader will be invalid and
+// unavailable for further 'read' operations.
 //
 // ----------------------------------------------------------------
 //
-// # BE ADVISED
+// # IMPORTANT
 //
-//	This method implements the io.Closer interface.
+//	(1)	This method implements the io.Closer interface.
+//
+//	(2)	This method will 'close' the underlying io.Reader
+//		object, but it will NOT release the internal
+//		memory resources. After call this method,
+//		FileIoReader.Close(), users should immediately
+//		call the following local method in order to
+//		release internal memory resources:
+//
+//			FileIoReader.ReleaseMemResources()
+//
+//		Releasing all internal memory resources will
+//		synchronize internal flags and prevent multiple
+//		calls to 'close' the underlying io.Reader object.
+//		Calling 'close' on the same underlying io.Reader
+//		object multiple times can produce unexpected
+//		results.
+//
+//	(3)	This method, FileIoReader.Close(), is NOT the
+//		preferred or recommended method for 'closing the
+//		current FileIoReader instance. Instead of
+//		calling FileIoReader.Close(), the preferred
+//		and recommended means for 'closing' and	releasing
+//		memory resources is a single call to local
+//		method:
+//
+//			FileIoReader.CloseAndRelease()
+//
+//	(4)	After completing the call to this method,
+//		FileIoReader.Close(), this FileIoReader
+//		instance will become invalid and unavailable
+//		for future 'read' operations.
 //
 // ----------------------------------------------------------------
 //
@@ -140,9 +179,12 @@ func (fIoReader FileIoReader) Close() error {
 
 // CloseAndRelease
 //
-// This method will perform the 'close' protocol on the
-// internal io.Reader object encapsulated by the
-// current instance of FileIoReader.
+// This method will perform the 'close' procedure on the
+// internal io.Reader object encapsulated by the current
+// instance of FileIoReader.
+//
+// FileIoReader.CloseAndRelease() is the recommended
+// method for 'closing' the internal io.Reader object.
 //
 // Unlike method FileIoReader.Close(), this method,
 // FileIoReader.CloseAndRelease(), will also release
@@ -154,8 +196,8 @@ func (fIoReader FileIoReader) Close() error {
 // same underlying io.Reader object multiple times can
 // produce unexpected results.
 //
-// This method, FileIoReader.CloseAndRelease(), is the
-// preferred and recommended method for 'closing' an
+// Again, this method, FileIoReader.CloseAndRelease(), is
+// the preferred and recommended method for 'closing' an
 // instance of FileIoReader.
 //
 // ----------------------------------------------------------------
