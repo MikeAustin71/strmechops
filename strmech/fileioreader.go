@@ -2758,16 +2758,18 @@ func (fIoReader *FileIoReader) ReadBytesToStringBuilder(
 // memory resources contained in the current instance of
 // FileIoReader.
 //
-// This method WILL NOT perform the 'close' protocol on
+// This method WILL NOT perform the 'close' procedure on
 // the internal io.Reader object contained in the current
 // FileIoReader instance. To perform the 'close' protocol
 // and simultaneously release all internal memory
-// resources, call the local method:
+// resources, DO NOT call this method, FileIoReader.
+// ReleaseMemResources(). Instead, call the
+// local method:
 //
 //	FileIoReader.CloseAndRelease()
 //
 // Specifically the following internal member variables
-// are set to 'nil' or their initial zero values:
+// will be set to 'nil' or their initial zero values:
 //
 //	FileIoReader.targetReadFileName = ""
 //	FileIoReader.filePtr = nil

@@ -2726,24 +2726,22 @@ func (fBufReader *FileBufferReader) ReadAllToString(
 // memory resources contained in the current instance of
 // FileBufferReader.
 //
-// This method WILL NOT perform the 'close' protocol on
+// This method WILL NOT perform the 'close' procedure on
 // the internal bufio.Reader object contained in the
 // current FileBufferReader instance. To perform the
 // 'close' protocol and simultaneously release all
-// internal memory resources, call the local method:
+// internal memory resources, DO NOT call this method,
+// FileBufferReader.ReleaseMemResources(). Instead, call
+// the local method:
 //
 //	FileBufferReader.CloseAndRelease()
 //
 // Specifically the following internal object pointers
-// are set to nil:
+// will be set to 'nil' or their initial zero values:
 //
 //	FileBufferReader.bufioReader = nil
 //	FileBufferReader.ioReader = nil
 //	FileBufferReader.filePtr = nil
-//
-// In addition, the internal member variable
-// 'targetReadFileName' is set to an empty string.
-//
 //	FileBufferReader.targetReadFileName = ""
 //
 // After calling this method, the current instance of
