@@ -269,9 +269,14 @@ func (fBufReader FileBufferReader) Close() error {
 // current instance of FileBufferReader.
 //
 // Unlike method FileBufferReader.Close(), this method,
-// FileBufferReader.CloseAndRelease() will also release
+// FileBufferReader.CloseAndRelease(), will also release
 // all internal memory resources contained in the current
-// FileBufferReader instance.
+// FileBufferReader instance.  Releasing internal memory
+// resources effectively synchronizes internal flags
+// thereby preventing multiple calls to 'close'	the
+// underlying io.reader object. Calling 'close' on the
+// same io.Reader object multiple times can produce
+// unexpected results.
 //
 // This method, FileBufferReader.CloseAndRelease(), is
 // the preferred and recommended method for 'closing' an

@@ -4909,14 +4909,6 @@ func (fBufWriterAtom *fileBufferWriterAtom) close(
 
 	}
 
-	fBufWriter.targetWriteFileName = ""
-
-	fBufWriter.ioWriter = nil
-
-	fBufWriter.filePtr = nil
-
-	fBufWriter.bufioWriter = nil
-
 	return err
 }
 
@@ -5080,31 +5072,28 @@ type fileBufferWriterElectron struct {
 //
 // This method deletes all internal member variables and
 // releases all the internal memory resources for an
-// instance of FileBufferReader passed as input parameter
-// 'fBufReader'.
+// instance of FileBufferWriter passed as input parameter
+// 'fBufWriter'.
 //
-// Specifically the following internal object pointers
-// are set to nil:
+// Specifically the following internal member variables
+// are set to 'nil' or their initial zero values:
 //
-//	FileBufferReader.bufioReader = nil
-//	FileBufferReader.ioReader = nil
-//	FileBufferReader.filePtr = nil
-//
-// In addition, the internal member variable
-// 'targetReadFileName' is set to an empty string.
-//
-//	FileBufferReader.targetReadFileName = ""
+//	FileBufferWriter.targetWriteFileName = ""
+//	FileBufferWriter.filePtr = nil
+//	FileBufferWriter.ioWriter = nil
+//	FileBufferWriter.bufioWriter = nil
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	fBufReader					*FileBufferReader
+//	fBufWriter					*FileBufferWriter
 //
-//		A pointer to an instance of FileBufferReader.
+//		A pointer to an instance of FileBufferWriter.
 //
 //		All internal member variable data values in
-//		this instance will be deleted.
+//		this instance will be deleted and reset to
+//		their initial zero values.
 //
 //		All member variable object pointers will be set
 //		to 'nil'.

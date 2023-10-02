@@ -138,6 +138,172 @@ func (fIoReader FileIoReader) Close() error {
 	return err
 }
 
+// CloseAndRelease
+//
+// This method will perform the 'close' protocol on the
+// internal io.Reader object encapsulated by the
+// current instance of FileIoReader.
+//
+// Unlike method FileIoReader.Close(), this method,
+// FileIoReader.CloseAndRelease(), will also release
+// all internal memory resources contained in the current
+// FileIoReader instance. Releasing internal memory
+// resources effectively synchronizes internal flags
+// thereby preventing multiple calls to 'close' the
+// underlying io.reader object. Calling 'close' on the
+// same underlying io.Reader object multiple times can
+// produce unexpected results.
+//
+// This method, FileIoReader.CloseAndRelease(), is the
+// preferred and recommended method for 'closing' an
+// instance of FileIoReader.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method will perform the following
+//		two procedures:
+//
+//		(a)	'close' procedure
+//
+//			This procedure properly closes the underlying
+//			io.Reader object configured for the current
+//			instance of FileIoReader.
+//
+//		(b)	Release internal memory resources
+//
+//			This procedure releases all internal memory
+//			resources and synchronizes internal flags
+//			thereby preventing multiple calls to 'close'
+//			the underlying io.reader object. Calling
+//			'close' on the same underlying io.Reader
+//			object multiple times can produce unexpected
+//			results.
+//
+//	(2) This method, FileIoReader.CloseAndRelease(),
+//		is the preferred and recommended method for
+//		'closing' a FileIoReader instance.
+//
+//	(3)	After completion of this method, the current
+//		FileIoReader instance will be invalid and
+//		unavailable	for future 'read' operations.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fIoReader *FileIoReader) CloseAndRelease(
+	errorPrefix interface{}) error {
+
+	if fIoReader.lock == nil {
+		fIoReader.lock = new(sync.Mutex)
+	}
+
+	fIoReader.lock.Lock()
+
+	defer fIoReader.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileBufferReader."+
+			"CloseAndRelease()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	err = new(fileIoReaderMolecule).close(
+		fIoReader,
+		"fIoReader",
+		ePrefix.XCpy("fIoReader"))
+
+	new(fileIoReaderAtom).empty(
+		fIoReader)
+
+	return err
+}
+
 // GetIoReader
 //
 // Returns the internal io.Reader object encapsulated by
@@ -2818,13 +2984,8 @@ func (fIoReader *FileIoReader) ReleaseMemResources() {
 
 	defer fIoReader.lock.Unlock()
 
-	fIoReader.targetReadFileName = ""
-
-	fIoReader.filePtr = nil
-
-	fIoReader.ioReader = nil
-
-	fIoReader.defaultByteArraySize = 0
+	new(fileIoReaderAtom).empty(
+		fIoReader)
 
 	return
 }
@@ -5614,6 +5775,71 @@ func (fIoReaderMolecule *fileIoReaderMolecule) validateDefaultReaderBufferSize(
 
 		fIoReader.defaultByteArraySize = 4096
 	}
+
+	return
+}
+
+type fileIoReaderAtom struct {
+	lock *sync.Mutex
+}
+
+// empty
+//
+// This method deletes all internal member variables and
+// releases all the internal memory resources for an
+// instance of FileIoReader passed as input parameter
+// 'fIoReader'.
+//
+// Specifically the following internal member variables
+// are set to 'nil' or their initial zero values:
+//
+//	fIoReader.targetReadFileName = ""
+//	fIoReader.filePtr = nil
+//	fIoReader.ioReader = nil
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fIoReader					*FileIoReader
+//
+//		A pointer to an instance of FileIoReader.
+//
+//		All internal member variable data values in
+//		this instance will be deleted and reset to
+//		their initial zero values.
+//
+//		All member variable object pointers will be set
+//		to 'nil'.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	--- NONE ---
+func (fIoReaderAtom *fileIoReaderAtom) empty(
+	fIoReader *FileIoReader) {
+
+	if fIoReaderAtom.lock == nil {
+		fIoReaderAtom.lock = new(sync.Mutex)
+	}
+
+	fIoReaderAtom.lock.Lock()
+
+	defer fIoReaderAtom.lock.Unlock()
+
+	if fIoReader == nil {
+
+		return
+	}
+
+	fIoReader.targetReadFileName = ""
+
+	fIoReader.filePtr = nil
+
+	fIoReader.ioReader = nil
+
+	fIoReader.defaultByteArraySize = 0
 
 	return
 }
