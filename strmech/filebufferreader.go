@@ -2723,7 +2723,7 @@ func (fBufReader *FileBufferReader) ReadAllToString(
 // ReleaseMemResources
 //
 // This method will delete and release all internal
-// member variables contained in the current instance of
+// memory resources contained in the current instance of
 // FileBufferReader.
 //
 // This method WILL NOT perform the 'close' protocol on
@@ -2773,7 +2773,7 @@ func (fBufReader *FileBufferReader) ReadAllToString(
 //
 //	-- NONE --
 //
-// ----------------------------------------------------------------
+// ---------------------------------------------------------------
 //
 // # Return Values
 //

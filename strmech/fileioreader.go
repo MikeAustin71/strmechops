@@ -58,6 +58,16 @@ type FileIoReader struct {
 
 // Close
 //
+// This method is provided in order to implement the
+// io.Closer interface.
+//
+// After calling this method, FileIoReader.Close(),
+// the user should immediately release all internal
+// memory resources by making a second call to local
+// method:
+//
+//	FileIoReader.ReleaseMemResources()
+//
 // This method is used to close any open file pointers
 // and perform required clean-up operations.
 //
@@ -2740,6 +2750,81 @@ func (fIoReader *FileIoReader) ReadBytesToStringBuilder(
 			ePrefix)
 
 	return numOfBytesRead, reachedEndOfFile, err
+}
+
+// ReleaseMemResources
+//
+// This method will delete and release all internal
+// memory resources contained in the current instance of
+// FileIoReader.
+//
+// This method WILL NOT perform the 'close' protocol on
+// the internal io.Reader object contained in the current
+// FileIoReader instance. To perform the 'close' protocol
+// and simultaneously release all internal memory
+// resources, call the local method:
+//
+//	FileIoReader.CloseAndRelease()
+//
+// Specifically the following internal member variables
+// are set to 'nil' or their initial zero values:
+//
+//	FileIoReader.targetReadFileName = ""
+//	FileIoReader.filePtr = nil
+//	FileIoReader.ioReader = nil
+//	FileIoReader.defaultByteArraySize = 0
+//
+// After calling this method, the current instance of
+// FileIoReader will become invalid and unavailable
+// for future 'read' operations.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	(1)	This method is functionally identical to local
+//		method:
+//
+//			FileIoReader.Empty()
+//
+//	(2)	This method does NOT perform the 'close' protocol.
+//		To perform both the 'close' protocol and release
+//		all internal memory resources DO NOT call this
+//		method, FileIoReader.ReleaseMemResources().
+//		Instead, call local method:
+//
+//			FileIoReader.CloseAndRelease()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ---------------------------------------------------------------
+//
+// # Return Values
+//
+//	--- NONE ---
+func (fIoReader *FileIoReader) ReleaseMemResources() {
+
+	if fIoReader.lock == nil {
+		fIoReader.lock = new(sync.Mutex)
+	}
+
+	fIoReader.lock.Lock()
+
+	defer fIoReader.lock.Unlock()
+
+	fIoReader.targetReadFileName = ""
+
+	fIoReader.filePtr = nil
+
+	fIoReader.ioReader = nil
+
+	fIoReader.defaultByteArraySize = 0
+
+	return
 }
 
 // Seek
