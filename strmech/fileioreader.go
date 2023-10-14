@@ -82,7 +82,7 @@ type FileIoReader struct {
 //
 //	FileIoReader.CloseAndRelease()
 //
-// After calling this method ,FileIoReader.Close(), the
+// After calling this method, FileIoReader.Close(), the
 // current instance of FileIoReader will be invalid and
 // unavailable for further 'read' operations.
 //
@@ -169,7 +169,7 @@ func (fIoReader FileIoReader) Close() error {
 		return err
 	}
 
-	err = new(fileIoReaderMolecule).close(
+	err = new(fileIoReaderAtom).close(
 		&fIoReader,
 		"fIoReader",
 		ePrefix.XCpy("fIoReader"))
@@ -335,13 +335,10 @@ func (fIoReader *FileIoReader) CloseAndRelease(
 		return err
 	}
 
-	err = new(fileIoReaderMolecule).close(
+	err = new(fileIoReaderMolecule).closeAndRelease(
 		fIoReader,
 		"fIoReader",
 		ePrefix.XCpy("fIoReader"))
-
-	new(fileIoReaderAtom).empty(
-		fIoReader)
 
 	return err
 }
@@ -1492,16 +1489,19 @@ func (fIoReader FileIoReader) Read(
 //		to the output instance of StringArrayDto,
 //		'outputLinesArray'.
 //
-//	(2)	This method will NOT automatically close the
-//		io.Reader object upon completion.
+//	(2)	This method may automatically close the io.Reader
+//		object upon completion depending on the setting
+//		for input parameter, 'autoCloseOnExit'.
 //
-//		The user is responsible for performing required
-//		clean-up tasks by calling the local method:
+//		If this method does NOT automatically close the
+//		io.Reader object upon completion, the user will
+//		be responsible for performing the clean-up tasks
+//		by calling local method:
 //
-//			FileIoReader.Close()
+//			FileIoReader.CloseAndRelease()
 //
-//	(3)	If the current instance of FileIoReader has
-//		NOT been properly initialized, an error will be
+//	(3)	If the current instance of FileIoReader has NOT
+//		been properly initialized, an error will be
 //		returned.
 //
 // ----------------------------------------------------------------
@@ -1595,12 +1595,16 @@ func (fIoReader FileIoReader) Read(
 //
 //		When this parameter is set to 'true', this
 //		method will automatically perform all required
-//		clean-up tasks upon exit.
+//		clean-up tasks upon exit. These tasks include
+//		closing the underlying FileIoReader io.Reader
+//		object and releasing all internal memory
+//		resources.
 //
 //		(1)	The FileIoReader internal io.Reader object
-//			will be properly closed and there will be no
-//			need to make a separate call to local method,
-//			FileIoReader.Close().
+//			will be properly closed, the internal memory
+//			resources will be released and there will be
+//			no need to make a separate call to local
+//			method,	FileIoReader.CloseAndRelease().
 //
 //		(2) After performing this clean-up operation, the
 //			current instance of FileIoReader will invalid
@@ -1615,13 +1619,13 @@ func (fIoReader FileIoReader) Read(
 //
 //		If input parameter 'autoCloseOnExit' is set to
 //		'false', this method will NOT automatically
-//		'close' the internal io.Reader object for the
-//		current instance of FileBufferReader.
-//		Consequently, the user will then be responsible
-//		for 'closing' the internal io.Reader object by
-//		calling the local method:
+//		'close' the internal io.Reader object and release
+//		the memory resources for the current instance of
+//		FileBufferReader. Consequently, the user will then
+//		be responsible for 'closing' the internal io.Reader
+//		object by calling the local method:
 //
-//				FileIoReader.Close()
+//				FileIoReader.CloseAndRelease()
 //
 //	errorPrefix					interface{}
 //
@@ -1792,7 +1796,7 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 		err == nil {
 
 		// Do NOT Close if there is an error!
-		err = new(fileIoReaderMolecule).close(
+		err = new(fileIoReaderMolecule).closeAndRelease(
 			fIoReader,
 			"fIoReader",
 			ePrefix.XCpy("fIoReader"))
@@ -1842,13 +1846,16 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 //		to the strings.Builder input parameter,
 //		'strBuilder'.
 //
-//	(2)	This method will NOT automatically close the
-//		io.Reader object upon completion.
+//	(2)	This method may automatically close the io.Reader
+//		object upon completion depending on the setting
+//		for input parameter, 'autoCloseOnExit'.
 //
-//		The user is responsible for performing required
-//		clean-up tasks by calling the local method:
+//		If this method does NOT automatically close the
+//		io.Reader object upon completion, the user will
+//		be responsible for performing the clean-up tasks
+//		by calling local method:
 //
-//			FileIoReader.Close()
+//			FileIoReader.CloseAndRelease()
 //
 //	(3)	If the current instance of FileIoReader has
 //		NOT been properly initialized, an error will be
@@ -1869,12 +1876,16 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 //
 //		When this parameter is set to 'true', this
 //		method will automatically perform all required
-//		clean-up tasks upon exit.
+//		clean-up tasks upon exit. These tasks include
+//		closing the underlying FileIoReader io.Reader
+//		object and releasing all internal memory
+//		resources.
 //
 //		(1)	The FileIoReader internal io.Reader object
-//			will be properly closed and there will be no
-//			need to make a separate call to local method,
-//			FileIoReader.Close().
+//			will be properly closed, the internal memory
+//			resources will be released and there will be
+//			no need to make a separate call to local
+//			method,	FileIoReader.CloseAndRelease().
 //
 //		(2) After performing this clean-up operation, the
 //			current instance of FileIoReader will invalid
@@ -1882,21 +1893,20 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 //
 //		-------------------------------------------------
 //						Be Advised
-//		If processing errors are encountered during method
-//		execution, the 'close' operation WILL NOT be
-//		invoked or applied.
+//		If processing errors are encountered during
+//		method execution, the 'close' operation WILL NOT
+//		be invoked or applied.
 //		-------------------------------------------------
 //
 //		If input parameter 'autoCloseOnExit' is set to
 //		'false', this method will NOT automatically
-//		'close' the internal io.Reader object for the
-//		current instance of FileBufferReader.
-//		Consequently, the user will then be responsible
-//		for performing required clean-up tasks on the
-//		FileIoReader instance by calling the local
-//		method:
+//		'close' the internal io.Reader object and release
+//		the memory resources for the current instance of
+//		FileBufferReader. Consequently, the user will then
+//		be responsible for 'closing' the internal io.Reader
+//		object by calling the local method:
 //
-//				FileIoReader.Close()
+//				FileIoReader.CloseAndRelease()
 //
 //	errorPrefix					interface{}
 //
@@ -2063,13 +2073,16 @@ func (fIoReader *FileIoReader) ReadAllToStrBuilder(
 //		reading large files and returning their contents
 //		as a single string ('contentsStr').
 //
-//	(2)	This method will NOT automatically close the
-//		io.Reader object upon completion.
+//	(2)	This method may automatically close the io.Reader
+//		object upon completion depending on the setting
+//		for input parameter, 'autoCloseOnExit'.
 //
-//		The user is responsible for performing required
-//		clean-up tasks by calling the local method:
+//		If this method does NOT automatically close the
+//		io.Reader object upon completion, the user will
+//		be responsible for performing the clean-up tasks
+//		by calling local method:
 //
-//			FileIoReader.Close()
+//			FileIoReader.CloseAndRelease()
 //
 //	(3)	If the current instance of FileIoReader has
 //		NOT been properly initialized, an error will be
@@ -2083,12 +2096,16 @@ func (fIoReader *FileIoReader) ReadAllToStrBuilder(
 //
 //		When this parameter is set to 'true', this
 //		method will automatically perform all required
-//		clean-up tasks upon exit.
+//		clean-up tasks upon exit. These tasks include
+//		closing the underlying FileIoReader io.Reader
+//		object and releasing all internal memory
+//		resources.
 //
 //		(1)	The FileIoReader internal io.Reader object
-//			will be properly closed and there will be no
-//			need to make a separate call to local method,
-//			FileIoReader.Close().
+//			will be properly closed, the internal memory
+//			resources will be released and there will be
+//			no need to make a separate call to local
+//			method,	FileIoReader.CloseAndRelease().
 //
 //		(2) After performing this clean-up operation, the
 //			current instance of FileIoReader will invalid
@@ -2096,20 +2113,20 @@ func (fIoReader *FileIoReader) ReadAllToStrBuilder(
 //
 //		-------------------------------------------------
 //						Be Advised
-//		If processing errors are encountered during method
-//		execution, the 'close' operation WILL NOT be
-//		invoked or applied.
+//		If processing errors are encountered during
+//		method execution, the 'close' operation WILL NOT
+//		be invoked or applied.
 //		-------------------------------------------------
 //
 //		If input parameter 'autoCloseOnExit' is set to
 //		'false', this method will NOT automatically
-//		'close' the internal io.Reader object for the
-//		current instance of FileBufferReader.
-//		Consequently, the user will then be responsible
-//		for 'closing' the internal io.Reader object by
-//		calling the local method:
+//		'close' the internal io.Reader object and release
+//		the memory resources for the current instance of
+//		FileBufferReader. Consequently, the user will then
+//		be responsible for 'closing' the internal io.Reader
+//		object by calling the local method:
 //
-//				FileIoReader.Close()
+//				FileIoReader.CloseAndRelease()
 //
 //	errorPrefix					interface{}
 //
@@ -2482,6 +2499,25 @@ func (fIoReader *FileIoReader) ReadAt(
 //
 // ----------------------------------------------------------------
 //
+// # BE ADVISED
+//
+//	(1)	This method may automatically close the io.Reader
+//		object upon completion depending on the setting
+//		for input parameter, 'autoCloseOnExit'.
+//
+//		If this method does NOT automatically close the
+//		io.Reader object upon completion, the user will
+//		be responsible for performing the clean-up tasks
+//		by calling local method:
+//
+//			FileIoReader.CloseAndRelease()
+//
+//	(2)	If the current instance of FileIoReader has NOT
+//		been properly initialized, an error will be
+//		returned.
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	numOfBytesToRead			int
@@ -2509,12 +2545,16 @@ func (fIoReader *FileIoReader) ReadAt(
 //
 //		When this parameter is set to 'true', this
 //		method will automatically perform all required
-//		FileIoReader clean-up tasks upon exit.
+//		clean-up tasks upon exit. These tasks include
+//		closing the underlying FileIoReader io.Reader
+//		object and releasing all internal memory
+//		resources.
 //
 //		(1)	The FileIoReader internal io.Reader object
-//			will be properly closed and there will be no
-//			need to make a separate call to local method,
-//			FileIoReader.Close().
+//			will be properly closed, the internal memory
+//			resources will be released and there will be
+//			no need to make a separate call to local
+//			method,	FileIoReader.CloseAndRelease().
 //
 //		(2) After performing this clean-up operation, the
 //			current instance of FileIoReader will invalid
@@ -2522,20 +2562,20 @@ func (fIoReader *FileIoReader) ReadAt(
 //
 //		-------------------------------------------------
 //						Be Advised
-//		If processing errors are encountered during method
-//		execution, the 'close' operation WILL NOT be
-//		invoked or applied.
+//		If processing errors are encountered during
+//		method execution, the 'close' operation WILL NOT
+//		be invoked or applied.
 //		-------------------------------------------------
 //
 //		If input parameter 'autoCloseOnExit' is set to
 //		'false', this method will NOT automatically
-//		'close' the internal io.Reader object for the
-//		current instance of FileIoReader. Consequently,
-//		the user will then be responsible for performing
-//		required clean-up tasks on the FileIoReader
-//		instance by calling the local method:
+//		'close' the internal io.Reader object and release
+//		the memory resources for the current instance of
+//		FileBufferReader. Consequently, the user will then
+//		be responsible for 'closing' the internal io.Reader
+//		object by calling the local method:
 //
-//				FileIoReader.Close()
+//				FileIoReader.CloseAndRelease()
 //
 //	errorPrefix					interface{}
 //
@@ -2733,6 +2773,25 @@ func (fIoReader *FileIoReader) ReadBytesToString(
 //
 // ----------------------------------------------------------------
 //
+// # BE ADVISED
+//
+//	(1)	This method may automatically close the io.Reader
+//		object upon completion depending on the setting
+//		for input parameter, 'autoCloseOnExit'.
+//
+//		If this method does NOT automatically close the
+//		io.Reader object upon completion, the user will
+//		be responsible for performing the clean-up tasks
+//		by calling local method:
+//
+//			FileIoReader.CloseAndRelease()
+//
+//	(2)	If the current instance of FileIoReader has NOT
+//		been properly initialized, an error will be
+//		returned.
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	numOfBytesToRead			int
@@ -2768,12 +2827,16 @@ func (fIoReader *FileIoReader) ReadBytesToString(
 //
 //		When this parameter is set to 'true', this
 //		method will automatically perform all required
-//		FileIoReader clean-up tasks upon exit.
+//		clean-up tasks upon exit. These tasks include
+//		closing the underlying FileIoReader io.Reader
+//		object and releasing all internal memory
+//		resources.
 //
 //		(1)	The FileIoReader internal io.Reader object
-//			will be properly closed and there will be no
-//			need to make a separate call to local method,
-//			FileIoReader.Close().
+//			will be properly closed, the internal memory
+//			resources will be released and there will be
+//			no need to make a separate call to local
+//			method,	FileIoReader.CloseAndRelease().
 //
 //		(2) After performing this clean-up operation, the
 //			current instance of FileIoReader will invalid
@@ -2781,20 +2844,20 @@ func (fIoReader *FileIoReader) ReadBytesToString(
 //
 //		-------------------------------------------------
 //						Be Advised
-//		If processing errors are encountered during method
-//		execution, the 'close' operation WILL NOT be
-//		invoked or applied.
+//		If processing errors are encountered during
+//		method execution, the 'close' operation WILL NOT
+//		be invoked or applied.
 //		-------------------------------------------------
 //
 //		If input parameter 'autoCloseOnExit' is set to
 //		'false', this method will NOT automatically
-//		'close' the internal io.Reader object for the
-//		current instance of FileIoReader. Consequently,
-//		the user will then be responsible for performing
-//		required clean-up tasks on the FileIoReader
-//		instance by calling the local method:
+//		'close' the internal io.Reader object and release
+//		the memory resources for the current instance of
+//		FileBufferReader. Consequently, the user will then
+//		be responsible for 'closing' the internal io.Reader
+//		object by calling the local method:
 //
-//				FileIoReader.Close()
+//				FileIoReader.CloseAndRelease()
 //
 //	errorPrefix					interface{}
 //
@@ -4453,7 +4516,7 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readAllStrBuilder(
 	if autoCloseOnExit == true {
 
 		// Do NOT Close if there is an error!
-		err = fIoReaderMolecule.close(
+		err = fIoReaderMolecule.closeAndRelease(
 			fIoReader,
 			"fIoReader",
 			ePrefix.XCpy("fIoReader"))
@@ -4740,7 +4803,7 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readBytesToStrBuilder(
 	if autoCloseOnExit == true {
 
 		// Do NOT Close if there is an error!
-		err = fIoReaderMolecule.close(
+		err = fIoReaderMolecule.closeAndRelease(
 			fIoReader,
 			"fIoReader",
 			ePrefix.XCpy("fIoReader"))
@@ -5213,7 +5276,7 @@ func (fIoReaderNanobot *fileIoReaderNanobot) setIoReader(
 
 	var fIoReaderMolecule = new(fileIoReaderMolecule)
 
-	err = fIoReaderMolecule.close(
+	err = fIoReaderMolecule.closeAndRelease(
 		fIoReader,
 		fIoReaderLabel,
 		ePrefix.XCpy(fIoReaderLabel))
@@ -5475,7 +5538,7 @@ func (fIoReaderNanobot *fileIoReaderNanobot) setPathFileName(
 
 	var fIoReaderMolecule = new(fileIoReaderMolecule)
 
-	err = fIoReaderMolecule.close(
+	err = fIoReaderMolecule.closeAndRelease(
 		fIoReader,
 		fIoReaderLabel,
 		ePrefix.XCpy(fIoReaderLabel))
@@ -5608,26 +5671,232 @@ type fileIoReaderMolecule struct {
 	lock *sync.Mutex
 }
 
+// validateDefaultReaderBufferSize
+//
+// Validates the default buffer size for the instance of
+// FileIoReader passed as input parameter 'fIoReader'.
+//
+// If the buffer size is less than 16-bytes, it will be
+// reset to 4096 bytes.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fIoReader					*FileIoReader
+//
+//		A pointer to an instance of FileIoReader.
+//
+//		The default buffer size for this FileIoReader
+//		instance will be validated. If an invalid value
+//		is detected that value will be automatically
+//		reset to a value of 4096-bytes.
+//
+//		This internal member variable is styled as:
+//
+//			FileIoReader.defaultByteArraySize
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	-- NONE --
+func (fIoReaderMolecule *fileIoReaderMolecule) validateDefaultReaderBufferSize(
+	fIoReader *FileIoReader) {
+
+	if fIoReaderMolecule.lock == nil {
+		fIoReaderMolecule.lock = new(sync.Mutex)
+	}
+
+	fIoReaderMolecule.lock.Lock()
+
+	defer fIoReaderMolecule.lock.Unlock()
+
+	if fIoReader == nil {
+		return
+	}
+
+	if fIoReader.defaultByteArraySize < 16 {
+
+		fIoReader.defaultByteArraySize = 4096
+	}
+
+	return
+}
+
+// closeAndRelease
+//
+// This method will perform the 'close' procedure on the
+// internal io.Reader object encapsulated by the instance
+// of FileIoReader passed as input parameter 'fIoReader'.
+//
+// In addition, this method will also release the
+// internal memory resources encapsulated by 'fIoReader'.
+//
+// This method, fileIoReaderMolecule.closeAndRelease(),
+// is the recommended method for 'closing' the internal
+// io.Reader object.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	(1)	This method will close the underlying io.Reader
+//		object encapsulated by 'fIoReader'.
+//
+//	(2)	In addition, this method will release the
+//		internal memory	resources for the 'fIoReader'
+//		object.
+//
+//	(3)	After completion of this method the FileIoReader
+//		instance passed by 'fIoReader' will be unusable,
+//		invalid and unavailable	for future 'read'
+//		operations.
+//
+//	(4)	If an error is returned by the 'close' operation,
+//		this method will still proceed to release all
+//		internal memory resources.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fIoReader					*FileIoReader
+//
+//		A pointer to an instance of FileIoReader.
+//
+//		This method will close the underlying io.Reader
+//		object contained in 'fIoReader' and release
+//		all memory resources.
+//
+//		Upon completion, 'fIoReader' will be rendered
+//		invalid, and unusable for all future 'read'
+//		operations.
+//
+//	fIoReaderLabel				string
+//
+//		The name or label associated with input parameter
+//		'fIoReader' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fIoReader" will be
+//		automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fIoReaderMolecule *fileIoReaderMolecule) closeAndRelease(
+	fIoReader *FileIoReader,
+	fIoReaderLabel string,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fIoReaderMolecule.lock == nil {
+		fIoReaderMolecule.lock = new(sync.Mutex)
+	}
+
+	fIoReaderMolecule.lock.Lock()
+
+	defer fIoReaderMolecule.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileIoReaderAtom." +
+		"closeAndRelease()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(fIoReaderLabel) == 0 {
+
+		fIoReaderLabel = "fIoReader"
+	}
+
+	if fIoReader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The FileIoReader instance passed as\n"+
+			"input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' pointer.\n",
+			ePrefix.String(),
+			fIoReaderLabel,
+			fIoReaderLabel)
+
+		return err
+	}
+
+	var fIoReaderAtom = new(fileIoReaderAtom)
+
+	err = fIoReaderAtom.close(
+		fIoReader,
+		fIoReaderLabel,
+		ePrefix)
+
+	fIoReaderAtom.empty(fIoReader)
+
+	return err
+}
+
+type fileIoReaderAtom struct {
+	lock *sync.Mutex
+}
+
 // close
 //
-// This method will effectively close and invalidate the
-// instance of FileIoReader passed as input parameter
-// 'fIoReader'.
+// This method will effectively close the underlying
+// io.Reader object contained in the FileIoReader
+// instance passed as input parameter 'fIoReader'.
 //
-// If a file pointer (*os.File) was previously configured
-// for 'fIoReader', it will be closed and set to 'nil'.
+// ----------------------------------------------------------------
 //
-// After completion of this method this FileIoReader
-// instance will be unusable, invalid and unavailable for
-// future 'read' operations.
+// # BE ADVISED
+//
+//	This method will NOT release the internal memory
+//	resources for the 'fIoReader' instance. To release
+//	the internal memory resources, call this method:
+//
+//			fileIoReaderAtom.empty()
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
-//
-//	This method will delete all pre-existing data values
-//	in the instance of FileIoReader passed as input
-//	parameter 'fIoReader'.
 //
 //	After completion of this method this FileIoReader
 //	instance will be unusable, invalid and unavailable
@@ -5689,24 +5958,24 @@ type fileIoReaderMolecule struct {
 //	 	text passed by input parameter, 'errPrefDto'.
 //	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fIoReaderMolecule *fileIoReaderMolecule) close(
+func (fIoReaderAtom *fileIoReaderAtom) close(
 	fIoReader *FileIoReader,
 	fIoReaderLabel string,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
-	if fIoReaderMolecule.lock == nil {
-		fIoReaderMolecule.lock = new(sync.Mutex)
+	if fIoReaderAtom.lock == nil {
+		fIoReaderAtom.lock = new(sync.Mutex)
 	}
 
-	fIoReaderMolecule.lock.Lock()
+	fIoReaderAtom.lock.Lock()
 
-	defer fIoReaderMolecule.lock.Unlock()
+	defer fIoReaderAtom.lock.Unlock()
 
 	var err error
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	funcName := "fileIoReaderMolecule." +
+	funcName := "fileIoReaderAtom." +
 		"close()"
 
 	ePrefix,
@@ -5768,69 +6037,11 @@ func (fIoReaderMolecule *fileIoReaderMolecule) close(
 	return err
 }
 
-// validateDefaultReaderBufferSize
-//
-// Validates the default buffer size for the instance of
-// FileIoReader passed as input parameter 'fIoReader'.
-//
-// If the buffer size is less than 16-bytes, it will be
-// reset to 4096 bytes.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	fIoReader					*FileIoReader
-//
-//		A pointer to an instance of FileIoReader.
-//
-//		The default buffer size for this FileIoReader
-//		instance will be validated. If an invalid value
-//		is detected that value will be automatically
-//		reset to a value of 4096-bytes.
-//
-//		This internal member variable is styled as:
-//
-//			FileIoReader.defaultByteArraySize
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	-- NONE --
-func (fIoReaderMolecule *fileIoReaderMolecule) validateDefaultReaderBufferSize(
-	fIoReader *FileIoReader) {
-
-	if fIoReaderMolecule.lock == nil {
-		fIoReaderMolecule.lock = new(sync.Mutex)
-	}
-
-	fIoReaderMolecule.lock.Lock()
-
-	defer fIoReaderMolecule.lock.Unlock()
-
-	if fIoReader == nil {
-		return
-	}
-
-	if fIoReader.defaultByteArraySize < 16 {
-
-		fIoReader.defaultByteArraySize = 4096
-	}
-
-	return
-}
-
-type fileIoReaderAtom struct {
-	lock *sync.Mutex
-}
-
 // empty
 //
-// This method deletes all internal member variables and
-// releases all the internal memory resources for an
-// instance of FileIoReader passed as input parameter
-// 'fIoReader'.
+// This method releases all internal member resources
+// contained in the FileIoReader instance passed as input
+// parameter 'fIoReader'.
 //
 // Specifically the following internal member variables
 // are set to 'nil' or their initial zero values:
@@ -5838,6 +6049,20 @@ type fileIoReaderAtom struct {
 //	fIoReader.targetReadFileName = ""
 //	fIoReader.filePtr = nil
 //	fIoReader.ioReader = nil
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method will NOT 'close' the underlying io.Reader
+//	object encapsulated within 'fIoReader'. Best
+//	practices call for 'closing' the underlying io.Reader
+//	object first and then releasing the internal memory
+//	resources with a call to this method,
+//	fileIoReaderAtom.empty().
+//
+//	To 'close' the underlying io.Reader object, first
+//	call method, fileIoReaderAtom.close().
 //
 // ----------------------------------------------------------------
 //
