@@ -343,6 +343,65 @@ func (fIoReader *FileIoReader) CloseAndRelease(
 	return err
 }
 
+// Empty
+//
+// This method deletes all internal member variables and
+// releases all the internal memory resources for the
+// current instance of FileIoReader.
+//
+// Specifically the following internal object pointers
+// are set to nil:
+//
+//	FileIoReader.targetReadFileName = ""
+//	FileIoReader.filePtr = nil
+//	FileIoReader.ioReader = nil
+//
+// After calling this method, the current instance of
+// FileIoReader will become invalid and unavailable
+// for future 'read' operations.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	(1)	This method is functionally identical to local
+//		method:
+//
+//			FileIoReader.ReleaseMemResources()
+//
+//	(2)	This method does NOT perform the 'close' protocol.
+//		To perform both the 'close' protocol and release
+//		all internal memory resources call local method:
+//
+//			FileIoReader.CloseAndRelease()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	--- NONE ---
+func (fIoReader *FileIoReader) Empty() {
+
+	if fIoReader.lock == nil {
+		fIoReader.lock = new(sync.Mutex)
+	}
+
+	fIoReader.lock.Lock()
+
+	defer fIoReader.lock.Unlock()
+
+	new(fileIoReaderAtom).empty(
+		fIoReader)
+
+	return
+}
+
 // GetIoReader
 //
 // Returns the internal io.Reader object encapsulated by
@@ -6049,6 +6108,10 @@ func (fIoReaderAtom *fileIoReaderAtom) close(
 //	fIoReader.targetReadFileName = ""
 //	fIoReader.filePtr = nil
 //	fIoReader.ioReader = nil
+//
+// After calling this method, the current instance of
+// FileIoReader will become invalid and unavailable
+// for future 'read' operations.
 //
 // ----------------------------------------------------------------
 //
