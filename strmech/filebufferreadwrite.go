@@ -7964,7 +7964,7 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) closeReader(
 
 	if fBufReadWrite.reader != nil {
 
-		err2 = new(fileBufferReaderMolecule).close(
+		err2 = new(fileBufferReaderMolecule).closeAndRelease(
 			fBufReadWrite.reader,
 			fBufReadWriteLabel+".reader",
 			ePrefix.XCpy(
