@@ -254,7 +254,7 @@ func (fBufReader FileBufferReader) Close() error {
 		return err
 	}
 
-	err = new(fileBufferReaderMolecule).close(
+	err = new(fileBufferReaderAtom).close(
 		&fBufReader,
 		"fBufReader",
 		ePrefix.XCpy("fBufReader"))
@@ -420,13 +420,10 @@ func (fBufReader *FileBufferReader) CloseAndRelease(
 		return err
 	}
 
-	err = new(fileBufferReaderMolecule).close(
+	err = new(fileBufferReaderMolecule).closeAndRelease(
 		fBufReader,
 		"fBufReader",
 		ePrefix.XCpy("fBufReader"))
-
-	new(fileBufferReaderAtom).empty(
-		fBufReader)
 
 	return err
 }
@@ -2214,7 +2211,7 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 
 	if autoCloseOnExit == true {
 
-		err2 = new(fileBufferReaderMolecule).close(
+		err2 = new(fileBufferReaderMolecule).closeAndRelease(
 			fBufReader,
 			"fBufReader",
 			ePrefix.XCpy("fBufReader"))
@@ -2464,7 +2461,7 @@ func (fBufReader *FileBufferReader) ReadAllToStrBuilder(
 
 	if autoCloseOnExit == true {
 
-		err2 = new(fileBufferReaderMolecule).close(
+		err2 = new(fileBufferReaderMolecule).closeAndRelease(
 			fBufReader,
 			"fBufReader",
 			ePrefix.XCpy("fBufReader"))
@@ -2716,7 +2713,7 @@ func (fBufReader *FileBufferReader) ReadAllToString(
 
 	if autoCloseOnExit == true {
 
-		err2 = new(fileBufferReaderMolecule).close(
+		err2 = new(fileBufferReaderMolecule).closeAndRelease(
 			fBufReader,
 			"fBufReader",
 			ePrefix.XCpy("fBufReader"))
@@ -4547,7 +4544,7 @@ func (fBufReaderNanobot *fileBufferReaderNanobot) setIoReader(
 		return err
 	}
 
-	err = new(fileBufferReaderMolecule).close(
+	err = new(fileBufferReaderMolecule).closeAndRelease(
 		fBufReader,
 		fBufReaderLabel,
 		ePrefix.XCpy(fBufReaderLabel))
@@ -4815,7 +4812,7 @@ func (fBufReaderNanobot *fileBufferReaderNanobot) setPathFileName(
 		return fInfoPlus, err
 	}
 
-	err = new(fileBufferReaderMolecule).close(
+	err = new(fileBufferReaderMolecule).closeAndRelease(
 		fBufReader,
 		fBufReaderLabel,
 		ePrefix.XCpy(fBufReaderLabel))
@@ -4950,6 +4947,161 @@ type fileBufferReaderMolecule struct {
 	lock *sync.Mutex
 }
 
+// closeAndRelease
+//
+// This method will perform the 'close' procedure on the
+// internal io.Reader object encapsulated by the instance
+// of FileBufferReader passed as input parameter
+// 'fBufReader'.
+//
+// In addition, this method will also release the
+// internal memory resources encapsulated by 'fBufReader'.
+//
+// This method, fileBufferReaderMolecule.closeAndRelease(),
+// is the recommended method for 'closing' the internal
+// io.Reader object.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	(1)	This method will close the underlying io.Reader
+//		object encapsulated by 'fBufReader'.
+//
+//	(2)	In addition, this method will release the
+//		internal memory	resources for the 'fBufReader'
+//		object.
+//
+//	(3)	After completion of this method the
+//		FileBufferReader instance passed by 'fIoReader'
+//		will be unusable, invalid and unavailable for
+//		future 'read' operations.
+//
+//	(4)	If an error is returned by the 'close' operation,
+//		this method will still proceed to release all
+//		internal memory resources.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufReader					*FileBufferReader
+//
+//		A pointer to an instance of FileBufferReader.
+//
+//		This method will close the underlying io.Reader
+//		object contained in 'fBufReader' and release
+//		all internal memory resources.
+//
+//		Upon completion, 'fBufReader' will be rendered
+//		invalid, and unusable for all future 'read'
+//		operations.
+//
+//	fBufReaderLabel				string
+//
+//		The name or label associated with input parameter
+//		'fBufReader' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufReader" will be
+//		automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBuffReaderMolecule *fileBufferReaderMolecule) closeAndRelease(
+	fBufReader *FileBufferReader,
+	fBufReaderLabel string,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fBuffReaderMolecule.lock == nil {
+		fBuffReaderMolecule.lock = new(sync.Mutex)
+	}
+
+	fBuffReaderMolecule.lock.Lock()
+
+	defer fBuffReaderMolecule.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileBufferReaderMolecule." +
+		"closeAndRelease()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(fBufReaderLabel) == 0 {
+
+		fBufReaderLabel = "fBufReader"
+	}
+
+	if fBufReader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The FileBufferReader instance passed\n"+
+			"as input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' pointer.\n",
+			ePrefix.String(),
+			fBufReaderLabel,
+			fBufReaderLabel)
+
+		return err
+	}
+
+	var fBuffReaderAtom = new(fileBufferReaderAtom)
+
+	err = fBuffReaderAtom.close(
+		fBufReader,
+		fBufReaderLabel,
+		ePrefix)
+
+	fBuffReaderAtom.empty(fBufReader)
+
+	return err
+}
+
+type fileBufferReaderAtom struct {
+	lock *sync.Mutex
+}
+
 // close
 //
 // This method will effectively close and invalidate the
@@ -5040,24 +5192,24 @@ type fileBufferReaderMolecule struct {
 //	 	text passed by input parameter, 'errPrefDto'.
 //	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fBuffReaderMolecule *fileBufferReaderMolecule) close(
+func (fBuffReaderAtom *fileBufferReaderAtom) close(
 	fBufReader *FileBufferReader,
 	fBufReaderLabel string,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
-	if fBuffReaderMolecule.lock == nil {
-		fBuffReaderMolecule.lock = new(sync.Mutex)
+	if fBuffReaderAtom.lock == nil {
+		fBuffReaderAtom.lock = new(sync.Mutex)
 	}
 
-	fBuffReaderMolecule.lock.Lock()
+	fBuffReaderAtom.lock.Lock()
 
-	defer fBuffReaderMolecule.lock.Unlock()
+	defer fBuffReaderAtom.lock.Unlock()
 
 	var err error
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	funcName := "fileBufferReaderMolecule." +
+	funcName := "fileBufferReaderAtom." +
 		"close()"
 
 	ePrefix,
@@ -5131,10 +5283,6 @@ func (fBuffReaderMolecule *fileBufferReaderMolecule) close(
 	}
 
 	return err
-}
-
-type fileBufferReaderAtom struct {
-	lock *sync.Mutex
 }
 
 // empty
