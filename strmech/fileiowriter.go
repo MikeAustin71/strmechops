@@ -2810,8 +2810,8 @@ func (fIoWriter *FileIoWriter) WriteTextOrNumbers(
 	if err == nil &&
 		autoCloseOnExit == true {
 
-		err = new(fileIoWriterAtom).
-			close(
+		err = new(fileIoWriterMolecule).
+			closeAndRelease(
 				fIoWriter,
 				"fIoWriter",
 				ePrefix)
@@ -3461,10 +3461,10 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setIoWriter(
 
 	}
 
-	var fIoWriterAtom = new(fileIoWriterAtom)
+	var fIoWriterMolecule = new(fileIoWriterMolecule)
 
 	// Close the old fIoWriter
-	_ = fIoWriterAtom.close(
+	_ = fIoWriterMolecule.closeAndRelease(
 		fIoWriter,
 		"",
 		nil)
@@ -3496,7 +3496,7 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setIoWriter(
 	fIoWriter.defaultByteArraySize =
 		defaultByteArraySize
 
-	new(fileIoWriterMolecule).
+	fIoWriterMolecule.
 		validateDefaultByteArraySize(fIoWriter)
 
 	return err
@@ -3746,15 +3746,13 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setPathFileName(
 		return fInfoPlus, err
 	}
 
-	err = new(fileIoWriterAtom).close(
+	var fIoWriterMolecule = new(fileIoWriterMolecule)
+
+	// Close the old fIoWriter
+	_ = fIoWriterMolecule.closeAndRelease(
 		fIoWriter,
-		fIoWriterLabel,
-		ePrefix.XCpy(fIoWriterLabel))
-
-	if err != nil {
-
-		return fInfoPlus, err
-	}
+		"",
+		nil)
 
 	var err2 error
 
@@ -3866,7 +3864,7 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setPathFileName(
 	fIoWriter.defaultByteArraySize =
 		defaultByteArraySize
 
-	new(fileIoWriterMolecule).
+	fIoWriterMolecule.
 		validateDefaultByteArraySize(fIoWriter)
 
 	return fInfoPlus, err
