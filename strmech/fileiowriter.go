@@ -3828,3 +3828,80 @@ func (fIoWriterAtom *fileIoWriterAtom) close(
 
 	return err
 }
+
+// empty
+//
+// This method releases all internal member resources
+// contained in the FileIoWriter instance passed as input
+// parameter 'fIoWriter'.
+//
+// Specifically, the following internal member variables
+// are set to 'nil' or their initial zero values:
+//
+//	fIoWriter.targetReadFileName = ""
+//	fIoWriter.filePtr = nil
+//	fIoWriter.ioReader = nil
+//	fIoWriter.defaultByteArraySize = 0
+//
+// After calling this method, the current instance of
+// FileIoWriter will become invalid and unavailable
+// for future 'write' operations.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method will NOT 'close' the underlying io.Writer
+//	object encapsulated within 'fIoWriter'. Best
+//	practices call for 'closing' the underlying io.Writer
+//	object first and then releasing the internal memory
+//	resources with a call to this method,
+//	fileIoReaderAtom.empty().
+//
+//	To 'close' the underlying io.Writer object, first
+//	call method, fileIoWriterAtom.close().
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fIoWriter					*FileIoWriter
+//
+//		A pointer to an instance of FileIoWriter.
+//
+//		All internal member variable data values in
+//		this instance will be deleted and reset to
+//		their initial zero values.
+//
+//		All member variable object pointers will be set
+//		to 'nil'.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	--- NONE ---
+func (fIoWriterAtom *fileIoWriterAtom) empty(
+	fIoWriter *FileIoWriter) {
+
+	if fIoWriterAtom.lock == nil {
+		fIoWriterAtom.lock = new(sync.Mutex)
+	}
+
+	fIoWriterAtom.lock.Lock()
+
+	defer fIoWriterAtom.lock.Unlock()
+
+	if fIoWriter == nil {
+
+		return
+	}
+
+	fIoWriter.ioWriter = nil
+
+	fIoWriter.filePtr = nil
+
+	fIoWriter.targetWriteFileName = ""
+
+	fIoWriter.defaultByteArraySize = 0
+}

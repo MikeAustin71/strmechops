@@ -6090,12 +6090,13 @@ func (fIoReaderAtom *fileIoReaderAtom) close(
 // contained in the FileIoReader instance passed as input
 // parameter 'fIoReader'.
 //
-// Specifically the following internal member variables
+// Specifically, the following internal member variables
 // are set to 'nil' or their initial zero values:
 //
 //	fIoReader.targetReadFileName = ""
 //	fIoReader.filePtr = nil
 //	fIoReader.ioReader = nil
+//	fIoReader.defaultByteArraySize = 0
 //
 // After calling this method, the current instance of
 // FileIoReader will become invalid and unavailable
