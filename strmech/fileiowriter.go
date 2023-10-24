@@ -81,7 +81,7 @@ func (fIoWriter FileIoWriter) Close() error {
 		return err
 	}
 
-	err = new(fileIoWriterMolecule).close(
+	err = new(fileIoWriterAtom).close(
 		&fIoWriter,
 		"fIoWriter",
 		ePrefix.XCpy("fIoWriter"))
@@ -2534,7 +2534,7 @@ func (fIoWriter *FileIoWriter) WriteTextOrNumbers(
 	if err == nil &&
 		autoCloseOnExit == true {
 
-		err = new(fileIoWriterMolecule).
+		err = new(fileIoWriterAtom).
 			close(
 				fIoWriter,
 				"fIoWriter",
@@ -3185,10 +3185,10 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setIoWriter(
 
 	}
 
-	var fIoWriterMolecule = new(fileIoWriterMolecule)
+	var fIoWriterAtom = new(fileIoWriterAtom)
 
 	// Close the old fIoWriter
-	_ = fIoWriterMolecule.close(
+	_ = fIoWriterAtom.close(
 		fIoWriter,
 		"",
 		nil)
@@ -3220,7 +3220,7 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setIoWriter(
 	fIoWriter.defaultByteArraySize =
 		defaultByteArraySize
 
-	fIoWriterMolecule.
+	new(fileIoWriterMolecule).
 		validateDefaultByteArraySize(fIoWriter)
 
 	return err
@@ -3470,9 +3470,7 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setPathFileName(
 		return fInfoPlus, err
 	}
 
-	var fIoWriterMolecule = new(fileIoWriterMolecule)
-
-	err = fIoWriterMolecule.close(
+	err = new(fileIoWriterAtom).close(
 		fIoWriter,
 		fIoWriterLabel,
 		ePrefix.XCpy(fIoWriterLabel))
@@ -3592,7 +3590,7 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setPathFileName(
 	fIoWriter.defaultByteArraySize =
 		defaultByteArraySize
 
-	fIoWriterMolecule.
+	new(fileIoWriterMolecule).
 		validateDefaultByteArraySize(fIoWriter)
 
 	return fInfoPlus, err
@@ -3602,36 +3600,13 @@ type fileIoWriterMolecule struct {
 	lock *sync.Mutex
 }
 
-// close
+// validateDefaultByteArraySize
 //
-// This method is designed to perform clean up
-// operations after completion of all 'write'
-// operations.
+// Validates the Default Byte Array Size internal
+// member variable for the FileIoWriter instance passed
+// as input parameter 'fIoWriter'.
 //
-// All internal member variable data values for the
-// instance of FileIoWriter passed as input parameter
-// 'fIoWriter' will be deleted and reset to their zero
-// states.
-//
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-//	(1)	This method will delete all pre-existing data
-//		values in the instance of FileIoWriter passed
-//		as input parameter 'fIoWriter'.
-//
-//		After completion of this method this
-//		FileIoWriter instance will be unusable,
-//		invalid and unavailable for future 'write'
-//		operations.
-//
-//	(2)	This 'close' method will NOT flush the 'write'
-//		buffer. To flush the 'write' buffer call:
-//			fileIoWriterMolecule.flush()
-//
-//		Be sure to call the 'flush()' method before you
-//		call this method ('close()').
+//	FileIoWriter.defaultByteArraySize
 //
 // ----------------------------------------------------------------
 //
@@ -3641,12 +3616,83 @@ type fileIoWriterMolecule struct {
 //
 //		A pointer to an instance of FileIoWriter.
 //
-//		All internal member variable data values in
-//		this instance will be deleted.
+//		The default buffer size for this FileIoWriter
+//		instance will be validated. If an invalid value
+//		is detected that value will be automatically
+//		reset to a value of 4096-bytes.
 //
-//		If a file pointer (*os.File) was previously
-//		configured for 'fIoWriter', it will be closed
-//		and set to 'nil' by this method.
+//		This internal member variable is styled as:
+//
+//			FileIoWriter.defaultByteArraySize
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	-- NONE --
+func (fIoWriterMolecule *fileIoWriterMolecule) validateDefaultByteArraySize(
+	fIoWriter *FileIoWriter) {
+
+	if fIoWriterMolecule.lock == nil {
+		fIoWriterMolecule.lock = new(sync.Mutex)
+	}
+
+	fIoWriterMolecule.lock.Lock()
+
+	defer fIoWriterMolecule.lock.Unlock()
+
+	if fIoWriter == nil {
+
+		return
+	}
+
+	if fIoWriter.defaultByteArraySize < 1 {
+
+		fIoWriter.defaultByteArraySize = 4096
+	}
+
+	return
+}
+
+type fileIoWriterAtom struct {
+	lock *sync.Mutex
+}
+
+// close
+//
+// This method will effectively close the underlying
+// io.Writer object contained in the FileIoWriter
+// instance passed as input parameter 'fIoWriter'.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method will NOT release the internal memory
+//	resources for the 'fIoWriter' instance. To release
+//	the internal memory resources, call this method:
+//
+//			fileIoWriterAtom.empty()
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	After completion of this method th3 FileIoWriter
+//	instance passed as 'fIoWriter' will be unusable,
+//	invalid and unavailable for future 'write'
+//	operations.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fIoWriter					*FileIoWriter
+//
+//		A pointer to an instance of FileIoWriter.
+//
+//		The underlying io.Writer object	configured for
+//		'fIoWriter' will be closed.
 //
 //	fIoWriterLabel				string
 //
@@ -3689,24 +3735,24 @@ type fileIoWriterMolecule struct {
 //	 	text passed by input parameter, 'errPrefDto'.
 //	 	The 'errPrefDto' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fIoWriterMolecule *fileIoWriterMolecule) close(
+func (fIoWriterAtom *fileIoWriterAtom) close(
 	fIoWriter *FileIoWriter,
 	fIoWriterLabel string,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
-	if fIoWriterMolecule.lock == nil {
-		fIoWriterMolecule.lock = new(sync.Mutex)
+	if fIoWriterAtom.lock == nil {
+		fIoWriterAtom.lock = new(sync.Mutex)
 	}
 
-	fIoWriterMolecule.lock.Lock()
+	fIoWriterAtom.lock.Lock()
 
-	defer fIoWriterMolecule.lock.Unlock()
+	defer fIoWriterAtom.lock.Unlock()
 
 	var err error
 
 	var ePrefix *ePref.ErrPrefixDto
 
-	funcName := "fileIoWriterMolecule." +
+	funcName := "fileIoWriterAtom." +
 		"close()"
 
 	ePrefix,
@@ -3780,67 +3826,5 @@ func (fIoWriterMolecule *fileIoWriterMolecule) close(
 		}
 	}
 
-	fIoWriter.targetWriteFileName = ""
-
-	fIoWriter.filePtr = nil
-
-	fIoWriter.ioWriter = nil
-
-	fIoWriter.defaultByteArraySize = 0
-
 	return err
-}
-
-// validateDefaultByteArraySize
-//
-// Validates the Default Byte Array Size internal
-// member variable for the FileIoWriter instance passed
-// as input parameter 'fIoWriter'.
-//
-//	FileIoWriter.defaultByteArraySize
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	fIoWriter					*FileIoWriter
-//
-//		A pointer to an instance of FileIoWriter.
-//
-//		The default buffer size for this FileIoWriter
-//		instance will be validated. If an invalid value
-//		is detected that value will be automatically
-//		reset to a value of 4096-bytes.
-//
-//		This internal member variable is styled as:
-//
-//			FileIoWriter.defaultByteArraySize
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	-- NONE --
-func (fIoWriterMolecule *fileIoWriterMolecule) validateDefaultByteArraySize(
-	fIoWriter *FileIoWriter) {
-
-	if fIoWriterMolecule.lock == nil {
-		fIoWriterMolecule.lock = new(sync.Mutex)
-	}
-
-	fIoWriterMolecule.lock.Lock()
-
-	defer fIoWriterMolecule.lock.Unlock()
-
-	if fIoWriter == nil {
-
-		return
-	}
-
-	if fIoWriter.defaultByteArraySize < 1 {
-
-		fIoWriter.defaultByteArraySize = 4096
-	}
-
-	return
 }

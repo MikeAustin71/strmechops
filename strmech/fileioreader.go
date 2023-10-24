@@ -5957,9 +5957,9 @@ type fileIoReaderAtom struct {
 //
 // # IMPORTANT
 //
-//	After completion of this method this FileIoReader
-//	instance will be unusable, invalid and unavailable
-//	for future 'read' operations.
+//	After completion of this method th3 FileIoReader
+//	instance passed as 'fIoReader' will be unusable,
+//	invalid and unavailable for future 'read' operations.
 //
 // ----------------------------------------------------------------
 //
@@ -5969,12 +5969,8 @@ type fileIoReaderAtom struct {
 //
 //		A pointer to an instance of FileIoReader.
 //
-//		All internal member variable data values in
-//		this instance will be deleted.
-//
-//		If a file pointer (*os.File) was previously
-//		configured for 'fIoReader', it will be closed
-//		and set to 'nil' by this method.
+//		The underlying io.Reader object configured for
+//		'fIoReader' will be closed.
 //
 //	fIoReaderLabel				string
 //
@@ -6084,14 +6080,6 @@ func (fIoReaderAtom *fileIoReaderAtom) close(
 
 		}
 	}
-
-	fIoReader.targetReadFileName = ""
-
-	fIoReader.filePtr = nil
-
-	fIoReader.ioReader = nil
-
-	fIoReader.defaultByteArraySize = 0
 
 	return err
 }
