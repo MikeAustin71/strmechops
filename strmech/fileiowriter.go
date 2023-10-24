@@ -365,6 +365,150 @@ func (fIoWriter *FileIoWriter) Empty() {
 	fIoWriter.lock = nil
 }
 
+// GetIoWriter
+//
+// Returns the internal io.Writer object encapsulated by
+// the current instance of FileIoWriter.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method returns the internal io.Writer object
+//	configured for the current instance of FileIoWriter.
+//
+//	Be sure to release this io.Writer object when it
+//	is no longer needed.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	writer						io.Writer
+//
+//		The concrete instance of io.Writer encapsulated
+//		by the current instance of FileIoWriter.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fIoWriter *FileIoWriter) GetIoWriter(
+	errorPrefix interface{}) (
+	writer io.Writer,
+	err error) {
+
+	if fIoWriter.lock == nil {
+		fIoWriter.lock = new(sync.Mutex)
+	}
+
+	fIoWriter.lock.Lock()
+
+	defer fIoWriter.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileIoWriter."+
+			"GetIoWriter()",
+		"")
+
+	if err != nil {
+		return writer, err
+	}
+
+	if fIoWriter.ioWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of 'FileIoWriter' (%v) is invalid!\n"+
+			"The internal '%v' io.Writer object has NOT been initialized.\n"+
+			"Call one of the 'New' or 'Setter' methods when creating\n"+
+			"an instance of 'FileIoWriter'\n",
+			ePrefix.String(),
+			"fIoWriter",
+			"fIoWriter")
+
+		return writer, err
+	}
+
+	writer = *fIoWriter.ioWriter
+
+	return writer, err
+}
+
 // NewIoWriter
 //
 // This method returns a fully initialized instance of
