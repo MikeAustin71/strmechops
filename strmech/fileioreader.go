@@ -350,11 +350,12 @@ func (fIoReader *FileIoReader) CloseAndRelease(
 // current instance of FileIoReader.
 //
 // Specifically the following internal object pointers
-// are set to nil:
+// are set to nil or their initial zero values:
 //
 //	FileIoReader.targetReadFileName = ""
 //	FileIoReader.filePtr = nil
 //	FileIoReader.ioReader = nil
+//	FileIoReader.defaultByteArraySize = 0
 //
 // After calling this method, the current instance of
 // FileIoReader will become invalid and unavailable
@@ -394,10 +395,12 @@ func (fIoReader *FileIoReader) Empty() {
 
 	fIoReader.lock.Lock()
 
-	defer fIoReader.lock.Unlock()
-
 	new(fileIoReaderAtom).empty(
 		fIoReader)
+
+	fIoReader.lock.Unlock()
+
+	fIoReader.lock = nil
 
 	return
 }

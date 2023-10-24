@@ -661,11 +661,12 @@ func (fBufReader *FileBufferReader) Empty() {
 
 	fBufReader.lock.Lock()
 
-	defer fBufReader.lock.Unlock()
-
 	new(fileBufferReaderAtom).empty(
 		fBufReader)
 
+	fBufReader.lock.Unlock()
+
+	fBufReader.lock = nil
 }
 
 // GetReadBufferCapacity

@@ -89,6 +89,66 @@ func (fIoWriter FileIoWriter) Close() error {
 	return err
 }
 
+// Empty
+//
+// This method deletes all internal member variables and
+// releases all the internal memory resources for the
+// current instance of FileIoWriter.
+//
+// Specifically the following internal object pointers
+// are set to nil or their initial zero values:
+//
+//	FileIoWriter.targetReadFileName = ""
+//	FileIoWriter.filePtr = nil
+//	FileIoWriter.ioReader = nil
+//	FileIoWriter.defaultByteArraySize = 0
+//
+// After calling this method, the current instance of
+// FileIoWriter will become invalid and unavailable
+// for future 'write' operations.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	(1)	This method is functionally identical to local
+//		method:
+//
+//			FileIoWriter.ReleaseMemResources()
+//
+//	(2)	This method does NOT perform the 'close' protocol.
+//		To perform both the 'close' protocol and release
+//		all internal memory resources call local method:
+//
+//			FileIoWriter.CloseAndRelease()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	--- NONE ---
+func (fIoWriter *FileIoWriter) Empty() {
+
+	if fIoWriter.lock == nil {
+		fIoWriter.lock = new(sync.Mutex)
+	}
+
+	fIoWriter.lock.Lock()
+
+	new(fileIoWriterAtom).empty(
+		fIoWriter)
+
+	fIoWriter.lock.Unlock()
+
+	fIoWriter.lock = nil
+}
+
 // NewIoWriter
 //
 // This method returns a fully initialized instance of
