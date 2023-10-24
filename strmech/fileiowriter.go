@@ -19,21 +19,70 @@ type FileIoWriter struct {
 
 // Close
 //
-// This method is used to close any open file pointers
-// and perform required clean-up operations.
+// This method is provided in order to implement the
+// io.Closer interface.
 //
-// Users MUST call this method after all 'write'
-// operations have been completed.
+// After calling this method, FileIoWriter.Close(),
+// the user should immediately release all internal
+// memory resources by making a second call to local
+// method:
 //
-// After calling this method, the current instance of
-// FileIoWriter will be invalid and unavailable for
-// future 'write' operations.
+//	FileIoWriter.ReleaseMemResources()
+//
+// Calling this method, FileIoWriter.Close(), will
+// 'close' the underlying io.Writer object; however, it
+// will NOT release the internal memory resources for
+// the current FileIoWriter instance. As such, this
+// method, FileIoWriter.Close(), is NOT the preferred
+// or recommended method for 'closing' an instance of
+// FileIoWriter.
+//
+// The preferred and recommended method for performing
+// both the 'close' procedure, and releasing all memory
+// resources, is the local method:
+//
+//	FileIoWriter.CloseAndRelease()
+//
+// After calling this method, FileIoWriter.Close(), the
+// current instance of FileIoWriter will be invalid and
+// unavailable for further 'write' operations.
 //
 // ----------------------------------------------------------------
 //
-// # BE ADVISED
+// # IMPORTANT
 //
-//	This method implements the io.Closer interface.
+//	(1)	This method implements the io.Closer interface.
+//
+//	(2)	This method will 'close' the underlying io.Writer
+//		object, but it will NOT release the internal
+//		memory resources. After call this method,
+//		FileIoWriter.Close(), users should immediately
+//		call the following local method in order to
+//		release internal memory resources:
+//
+//			FileIoWriter.ReleaseMemResources()
+//
+//		Releasing all internal memory resources will
+//		synchronize internal flags and prevent multiple
+//		calls to 'close' the underlying io.Writer object.
+//		Calling 'close' on the same underlying io.Writer
+//		object multiple times can produce unexpected
+//		results.
+//
+//	(3)	This method, FileIoWriter.Close(), is NOT the
+//		preferred or recommended method for 'closing the
+//		current FileIoWriter instance. Instead of
+//		calling FileIoWriter.Close(), the preferred
+//		and recommended means for 'closing' and	releasing
+//		memory resources is a single call to local
+//		method:
+//
+//			FileIoWriter.CloseAndRelease()
+//
+//	(4)	After completing the call to this method,
+//		FileIoWriter.Close(), this FileIoWriter
+//		instance will become invalid and unavailable
+//		for future 'write' operations.
 //
 // ----------------------------------------------------------------
 //
@@ -85,6 +134,173 @@ func (fIoWriter FileIoWriter) Close() error {
 		&fIoWriter,
 		"fIoWriter",
 		ePrefix.XCpy("fIoWriter"))
+
+	return err
+}
+
+// CloseAndRelease
+//
+// This method will perform the 'close' procedure on the
+// internal io.Writer object encapsulated by the current
+// instance of FileIoWriter.
+//
+// FileIoWriter.CloseAndRelease() is the recommended
+// method for 'closing' the internal io.Writer object.
+//
+// Unlike method FileIoWriter.Close(), this method,
+// FileIoWriter.CloseAndRelease(), will also release
+// all internal memory resources contained in the current
+// FileIoWriter instance. Releasing internal memory
+// resources effectively synchronizes internal flags
+// thereby preventing multiple calls to 'close' the
+// underlying io.reader object. Calling 'close' on the
+// same underlying io.Writer object multiple times can
+// produce unexpected results.
+//
+// Again, this method, FileIoWriter.CloseAndRelease(), is
+// the preferred and recommended method for 'closing' an
+// instance of FileIoWriter.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method will perform the following
+//		two procedures:
+//
+//		(a)	'close' procedure
+//
+//			This procedure properly closes the underlying
+//			io.Writer object configured for the current
+//			instance of FileIoWriter.
+//
+//		(b)	Release internal memory resources
+//
+//			This procedure releases all internal memory
+//			resources and synchronizes internal flags
+//			thereby preventing multiple calls to 'close'
+//			the underlying io.Writer object. Calling
+//			'close' on the same underlying io.Writer
+//			object multiple times can produce unexpected
+//			results.
+//
+//	(2) This method, FileIoWriter.CloseAndRelease(),
+//		is the preferred and recommended method for
+//		'closing' a FileIoWriter instance.
+//
+//	(3)	After completion of this method, the current
+//		FileIoWriter instance will be invalid and
+//		unavailable	for future 'write' operations.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fIoWriter *FileIoWriter) CloseAndRelease(
+	errorPrefix interface{}) error {
+
+	if fIoWriter.lock == nil {
+		fIoWriter.lock = new(sync.Mutex)
+	}
+
+	fIoWriter.lock.Lock()
+
+	defer fIoWriter.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileIoWriter."+
+			"CloseAndRelease()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	err = new(fileIoWriterMolecule).
+		closeAndRelease(
+			fIoWriter,
+			"fIoWriter",
+			ePrefix)
 
 	return err
 }
@@ -3658,6 +3874,157 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setPathFileName(
 
 type fileIoWriterMolecule struct {
 	lock *sync.Mutex
+}
+
+// closeAndRelease
+//
+// This method will perform the 'close' procedure on the
+// internal io.Writer object encapsulated by the instance
+// of FileIoWriter passed as input parameter 'fIoWriter'.
+//
+// In addition, this method will also release the
+// internal memory resources encapsulated by 'fIoWriter'.
+//
+// This method, fileIoReaderMolecule.closeAndRelease(),
+// is the recommended method for 'closing' the internal
+// io.Writer object.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	(1)	This method will close the underlying io.Writer
+//		object encapsulated by 'fIoWriter'.
+//
+//	(2)	In addition, this method will release the
+//		internal memory	resources for the 'fIoWriter'
+//		object.
+//
+//	(3)	After completion of this method, the FileIoWriter
+//		instance passed by 'fIoWriter' will be unusable,
+//		invalid and unavailable	for future 'write'
+//		operations.
+//
+//	(4)	If an error is returned by the 'close' operation,
+//		this method will still proceed to release all
+//		internal memory resources.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fIoWriter					*FileIoWriter
+//
+//		A pointer to an instance of FileIoWriter.
+//
+//		This method will close the underlying io.Writer
+//		object contained in 'fIoWriter' and release
+//		all internal memory resources.
+//
+//		Upon completion, 'fIoWriter' will be rendered
+//		invalid, and unusable for all future 'write'
+//		operations.
+//
+//	fIoWriterLabel				string
+//
+//		The name or label associated with input parameter
+//		'fIoWriter' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fIoWriter" will be
+//		automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fIoWriterMolecule *fileIoWriterMolecule) closeAndRelease(
+	fIoWriter *FileIoWriter,
+	fIoWriterLabel string,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fIoWriterMolecule.lock == nil {
+		fIoWriterMolecule.lock = new(sync.Mutex)
+	}
+
+	fIoWriterMolecule.lock.Lock()
+
+	defer fIoWriterMolecule.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	funcName := "fileIoWriterMolecule." +
+		"closeAndRelease()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return err
+	}
+
+	if len(fIoWriterLabel) == 0 {
+
+		fIoWriterLabel = "fIoWriter"
+	}
+
+	if fIoWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The FileIoWriter instance passed\n"+
+			"as input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' pointer.\n",
+			ePrefix.String(),
+			fIoWriterLabel,
+			fIoWriterLabel)
+
+		return err
+	}
+
+	var fIoWriterAtom = new(fileIoWriterAtom)
+
+	err = fIoWriterAtom.close(
+		fIoWriter,
+		fIoWriterLabel,
+		ePrefix)
+
+	fIoWriterAtom.empty(fIoWriter)
+
+	return err
 }
 
 // validateDefaultByteArraySize

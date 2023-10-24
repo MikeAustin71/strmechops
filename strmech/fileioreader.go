@@ -218,7 +218,7 @@ func (fIoReader FileIoReader) Close() error {
 //			This procedure releases all internal memory
 //			resources and synchronizes internal flags
 //			thereby preventing multiple calls to 'close'
-//			the underlying io.reader object. Calling
+//			the underlying io.Reader object. Calling
 //			'close' on the same underlying io.Reader
 //			object multiple times can produce unexpected
 //			results.
@@ -5810,7 +5810,7 @@ func (fIoReaderMolecule *fileIoReaderMolecule) validateDefaultReaderBufferSize(
 //		internal memory	resources for the 'fIoReader'
 //		object.
 //
-//	(3)	After completion of this method the FileIoReader
+//	(3)	After completion of this method, the FileIoReader
 //		instance passed by 'fIoReader' will be unusable,
 //		invalid and unavailable	for future 'read'
 //		operations.
@@ -5829,7 +5829,7 @@ func (fIoReaderMolecule *fileIoReaderMolecule) validateDefaultReaderBufferSize(
 //
 //		This method will close the underlying io.Reader
 //		object contained in 'fIoReader' and release
-//		all memory resources.
+//		all internal memory resources.
 //
 //		Upon completion, 'fIoReader' will be rendered
 //		invalid, and unusable for all future 'read'
