@@ -1485,6 +1485,77 @@ func (fIoWriter FileIoWriter) ReadFrom(
 	return numOfBytesProcessed, err
 }
 
+// ReleaseMemResources
+//
+// This method will delete and release all internal
+// memory resources contained in the current instance of
+// FileIoWriter.
+//
+// This method WILL NOT perform the 'close' procedure on
+// the internal io.Reader object contained in the current
+// FileIoWriter instance. To perform the 'close' protocol
+// and simultaneously release all internal memory
+// resources, DO NOT call this method, FileIoWriter.
+// ReleaseMemResources(). Instead, call the
+// local method:
+//
+//	FileIoWriter.CloseAndRelease()
+//
+// Specifically the following internal member variables
+// will be set to 'nil' or their initial zero values:
+//
+//	FileIoWriter.targetWriteFileName = ""
+//	FileIoWriter.filePtr = nil
+//	FileIoWriter.ioWriter = nil
+//	FileIoWriter.defaultByteArraySize = 0
+//
+// After calling this method, the current instance of
+// FileIoWriter will become invalid and unavailable
+// for future 'write' operations.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	(1)	This method is functionally identical to local
+//		method:
+//
+//			FileIoWriter.Empty()
+//
+//	(2)	This method does NOT perform the 'close' protocol.
+//		To perform both the 'close' protocol and release
+//		all internal memory resources DO NOT call this
+//		method, FileIoWriter.ReleaseMemResources().
+//		Instead, call local method:
+//
+//			FileIoWriter.CloseAndRelease()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ---------------------------------------------------------------
+//
+// # Return Values
+//
+//	--- NONE ---
+func (fIoWriter *FileIoWriter) ReleaseMemResources() {
+
+	if fIoWriter.lock == nil {
+		fIoWriter.lock = new(sync.Mutex)
+	}
+
+	fIoWriter.lock.Lock()
+
+	defer fIoWriter.lock.Unlock()
+
+	new(fileIoWriterAtom).empty(
+		fIoWriter)
+
+}
+
 // Seek
 //
 // This method sets the offset for the next 'write'
