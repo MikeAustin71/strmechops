@@ -260,14 +260,14 @@ func (fBufWriter *FileBufferWriter) Buffered() int {
 //
 // ----------------------------------------------------------------
 //
-// # BE ADVISED
+// # IMPORTANT
 //
 //	(1)	This method, FileBufferWriter.Close(), will NOT
 //		release the internal memory resources for the
 //		current FileBufferWriter instance.
 //
 //	(2)	After calling this method, FileBufferWriter.Close(),
-//		the should release all internal memory resources
+//		you should release all internal memory resources
 //		by calling the local method:
 //
 //			FileBufferWriter.ReleaseMemResources()
@@ -286,11 +286,7 @@ func (fBufWriter *FileBufferWriter) Buffered() int {
 //		this current instance of FileBufferWriter becomes
 //		unavailable for further 'write' operations.
 //
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-//	(1)	This method, FileBufferWriter.Close(), is NOT the
+//	(4)	This method, FileBufferWriter.Close(), is NOT the
 //		preferred or recommended method for performing
 //		clean-up operations on a FileBufferWriter
 //		instance. FileBufferWriter.Close() does not
@@ -299,7 +295,7 @@ func (fBufWriter *FileBufferWriter) Buffered() int {
 //
 //			FileBufferWriter.ReleaseMemResources()
 //
-//	(2)	The preferred and recommended method for
+//	(5)	The preferred and recommended method for
 //		performing all clean-up operations on a
 //		FileBufferWriter instance is local method:
 //
@@ -309,7 +305,7 @@ func (fBufWriter *FileBufferWriter) Buffered() int {
 //		the FileBufferWriter.FlushCloseAndRelease() will
 //		also release internal memory resources.
 //
-//	(3)	If the user does not choose to flush the write
+//	(6)	If the user does not choose to flush the write
 //		buffer before closing the FileBufferWriter
 //		object, call the following local method to
 //		close the FileBufferWriter instance and release
@@ -317,7 +313,7 @@ func (fBufWriter *FileBufferWriter) Buffered() int {
 //
 //			FileBufferWriter.CloseAndRelease()
 //
-//	(4)	If the internal memory resources are not
+//	(7)	If the internal memory resources are not
 //		released after closing the FileBufferWriter
 //		object, they will probably be released by
 //		Go Garbage Collector or upon program
@@ -333,12 +329,12 @@ func (fBufWriter *FileBufferWriter) Buffered() int {
 //			FileBufferWriter.FlushCloseAndRelease()
 //			FileBufferWriter.CloseAndRelease()
 //
-//	(5)	Once this method completes the required clean-up
+//	(8)	Once this method completes the required clean-up
 //		operations, this current instance of
 //		FileBufferWriter becomes invalid and unavailable
 //		for further 'write' operations.
 //
-//	(6)	New instances of FileBufferWriter are created
+//	(9)	New instances of FileBufferWriter are created
 //		using the 'New' methods. Existing instances of
 //		FileBufferWriter may be reconfigured using the
 //		'Setter' methods.
@@ -489,7 +485,10 @@ func (fBufWriter FileBufferWriter) Close() error {
 //		will NOT flush the internal 'write' buffer before
 //		closing the FileBufferWriter. Any data remaining
 //		in the internal 'write' buffer when this method
-//		is called, will be lost.
+//		is called, will be lost. To 'flush', 'close' and
+//		'release' memory resources call local method:
+//
+//			FileBufferWriter.FlushCloseAndRelease()
 //
 //	(3)	Call this method only after completing all
 //		'write' operations when the services of the
@@ -608,9 +607,10 @@ func (fBufWriter *FileBufferWriter) CloseAndRelease(
 		return err
 	}
 
-	return new(fileBufferWriterAtom).
-		close(fBufWriter,
+	return new(fileBufferWriterMolecule).
+		flushCloseRelease(fBufWriter,
 			"fBufWriter",
+			false, // flushBuffer
 			ePrefix)
 }
 
@@ -696,7 +696,9 @@ func (fBufWriter *FileBufferWriter) Empty() {
 //		'write' operations.
 //
 //	(3)	Releasing all internal memory resources for the
-//		current instance of FileBufferWriter.
+//		current instance of FileBufferWriter. This
+//		operation synchronizes internal flags and
+//		prevents multiple calls to the 'close' method.
 //
 // After calling this method, the current instance of
 // FileBufferWriter will be unusable and should be
@@ -841,13 +843,11 @@ func (fBufWriter *FileBufferWriter) FlushCloseAndRelease(
 		return err
 	}
 
-	err = new(fileBufferWriterMolecule).
-		flushAndClose(
-			fBufWriter,
+	return new(fileBufferWriterMolecule).
+		flushCloseRelease(fBufWriter,
 			"fBufWriter",
-			ePrefix.XCpy("fBufWriter"))
-
-	return err
+			true, // flushBuffer
+			ePrefix)
 }
 
 // Flush
@@ -4139,10 +4139,11 @@ func (fBufWriterNanobot *fileBufferWriterNanobot) setIoWriter(
 
 	// Flush and close the old fBufWriter
 
-	_ = fBufWriterMolecule.flushAndClose(
-		fBufWriter,
-		"",
-		nil)
+	_ = fBufWriterMolecule.
+		flushCloseRelease(fBufWriter,
+			"fBufWriter",
+			true, // flushBuffer
+			ePrefix)
 
 	if bufSize <= 0 {
 
@@ -4430,10 +4431,11 @@ func (fBufWriterNanobot *fileBufferWriterNanobot) setPathFileName(
 
 	// Flush and close the old fBufWriter
 
-	_ = fBufWriterMolecule.flushAndClose(
-		fBufWriter,
-		"",
-		nil)
+	_ = fBufWriterMolecule.
+		flushCloseRelease(fBufWriter,
+			"fBufWriter",
+			true, // flushBuffer
+			ePrefix)
 
 	if bufSize <= 0 {
 
@@ -4586,10 +4588,20 @@ type fileBufferWriterMolecule struct {
 //
 // # IMPORTANT
 //
-//	(1)	Call this method after completing all write
-//		operations. Calling this method is essential to
-//		performance of necessary clean-up tasks. Clean-up
-//		tasks consist of:
+//	(1)	THIS METHOD WILL NOT RELEASE MEMORY RESOURCES.
+//		The release of memory resources is essential
+//		to synchronizing internal flags which prevent
+//		multiple calls to the 'close' method. To
+//		perform all three Clean-up tasks ('flush',
+//		'close' and 'release' memory resources),
+//		call method:
+//
+//		fileBufferWriterMolecule.flushCloseRelease()
+//
+//	(2)	Call this method after completing all write
+//		operations. Calling this method will perform
+//		two of three necessary clean-up tasks. These
+//		two Clean-up tasks consist of:
 //
 //		(a)	Flushing the 'write' buffer to ensure that
 //			all data is written from the 'write' buffer
@@ -4598,7 +4610,7 @@ type fileBufferWriterMolecule struct {
 //		(b)	Properly closing the 'write' file or
 //			bufio.Writer object.
 //
-//	(2)	Once this method completes the 'Close' operation,
+//	(3)	Once this method completes the 'Close' operation,
 //		this instance of FileBufferWriter becomes
 //		invalid, unusable and unavailable for further
 //		'write' operations.
@@ -4722,6 +4734,182 @@ func (fBufWriterMolecule *fileBufferWriterMolecule) flushAndClose(
 		err = errors.Join(err, err2)
 
 	}
+
+	return err
+}
+
+// flushCloseRelease
+//
+// This method is used to perform all necessary clean-up
+// operations after final data has been written to the
+// internal destination bufio.Writer object.
+//
+// These clean-up operations consist of the following:
+//
+//	(1)	Flushing the write buffer to ensure that all
+//		data is written to the internal destination
+//		bufio.Writer object. This procedure is optional
+//		but highly recommended. If the write buffer is
+//		NOT flushed, any data contained in the write
+//		buffer will be lost. Reference input parameter,
+//		'flushBuffer'.
+//
+//	(2) Closing the internal bufio.Writer object thereby
+//		rendering it invalid and unavailable for any future
+//		'write' operations.
+//
+//	(3)	Releasing all internal memory resources for the
+//		passed instance of FileBufferWriter. This
+//		operation synchronizes internal flags and
+//		prevents multiple calls to the 'close' method.
+//
+// After calling this method, the passed instance of
+// FileBufferWriter ('fBufWriter') will be unusable and
+// should be discarded.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufWriter					*FileBufferWriter
+//
+//		A pointer to an instance of FileBufferWriter.
+//
+//		All internal member variable data values in
+//		this instance will be deleted and initialized
+//		to new values based on the following input
+//		parameters.
+//
+//	fBufWriterLabel				string
+//
+//		The name or label associated with input parameter
+//		'fBufWriter' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufWriter" will be
+//		automatically applied.
+//
+//	flushBuffer					bool
+//
+//		If this parameter is set to 'true', the method
+//		will flush the contents of the write buffer. This
+//		means that write buffer contents are guaranteed
+//		to be written to the internal io.Writer object
+//		encapsulated by FileBufferWriter input parameter
+//		'fBufWriter'.
+//
+//		If flushBuffer is set to 'false', the contents of
+//		the write buffer will be lost.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufWriterMolecule *fileBufferWriterMolecule) flushCloseRelease(
+	fBufWriter *FileBufferWriter,
+	fBufWriterLabel string,
+	flushBuffer bool,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fBufWriterMolecule.lock == nil {
+		fBufWriterMolecule.lock = new(sync.Mutex)
+	}
+
+	fBufWriterMolecule.lock.Lock()
+
+	defer fBufWriterMolecule.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileBufferWriterMolecule." +
+		"flushCloseRelease()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(fBufWriterLabel) == 0 {
+
+		fBufWriterLabel = "fBufWriter"
+	}
+
+	if fBufWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The FileBufferWriter instance passed\n"+
+			"as input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' pointer.\n",
+			ePrefix.String(),
+			fBufWriterLabel,
+			fBufWriterLabel)
+
+		return err
+	}
+
+	var fBuffWriterAtom = new(fileBufferWriterAtom)
+
+	if flushBuffer == true {
+
+		err = fBuffWriterAtom.
+			flush(
+				fBufWriter,
+				fBufWriterLabel,
+				ePrefix)
+
+		if err != nil {
+			return err
+		}
+
+	}
+
+	err = fBuffWriterAtom.close(
+		fBufWriter,
+		fBufWriterLabel,
+		ePrefix)
+
+	if err != nil {
+		return err
+	}
+
+	new(fileBufferWriterElectron).
+		empty(
+			fBufWriter)
 
 	return err
 }
