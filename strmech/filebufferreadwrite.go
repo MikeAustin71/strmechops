@@ -696,11 +696,13 @@ func (fBufReadWrite *FileBufferReadWrite) FlushWriteBuffer(
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
 
+	funcName := "FileBufferReadWrite." +
+		"FlushWriteBuffer()"
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
-		"FileBufferReadWrite."+
-			"FlushWriteBuffer()",
+		funcName,
 		"")
 
 	if fBufReadWrite.writer == nil {
@@ -715,8 +717,23 @@ func (fBufReadWrite *FileBufferReadWrite) FlushWriteBuffer(
 		return err
 	}
 
-	return fBufReadWrite.writer.
+	var err2 error
+
+	err2 = fBufReadWrite.writer.
 		Flush(ePrefix.XCpy("fBufReadWrite.writer"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while flushing the write buffer\n"+
+			"for the internal bufio.Writer object.\n"+
+			"Error:\n%v\n",
+			funcName,
+			err2.Error())
+
+	}
+
+	return err
 }
 
 // IsValidInstanceError
@@ -8112,22 +8129,17 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) flushAndCloseWriter(
 	}
 
 	var err2, err3 error
-	var fBufWriterMolecule = new(fileBufferWriterAtom)
 
 	if fBufReadWrite.writer != nil {
 
-		err = fBufWriterMolecule.
-			flush(
+		err2 = new(fileBufferWriterMolecule).
+			flushCloseRelease(
 				fBufReadWrite.writer,
 				fBufReadWriteLabel+".writer",
+				true, // flushWriteBuffer
+				true, // releaseMemoryResources
 				ePrefix.XCpy(
 					fBufReadWriteLabel+".writer"))
-
-		err2 = fBufWriterMolecule.close(
-			fBufReadWrite.writer,
-			fBufReadWriteLabel+".writer",
-			ePrefix.XCpy(
-				fBufReadWriteLabel+".writer"))
 
 		if err2 != nil {
 
