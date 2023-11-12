@@ -423,6 +423,7 @@ func (fBufReader *FileBufferReader) CloseAndRelease(
 	err = new(fileBufferReaderMolecule).closeAndRelease(
 		fBufReader,
 		"fBufReader",
+		true, // releaseMemoryResources
 		ePrefix.XCpy("fBufReader"))
 
 	return err
@@ -2215,6 +2216,7 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 		err2 = new(fileBufferReaderMolecule).closeAndRelease(
 			fBufReader,
 			"fBufReader",
+			true, // releaseMemoryResources
 			ePrefix.XCpy("fBufReader"))
 
 	}
@@ -2465,6 +2467,7 @@ func (fBufReader *FileBufferReader) ReadAllToStrBuilder(
 		err2 = new(fileBufferReaderMolecule).closeAndRelease(
 			fBufReader,
 			"fBufReader",
+			true, // releaseMemoryResources
 			ePrefix.XCpy("fBufReader"))
 
 	}
@@ -2717,6 +2720,7 @@ func (fBufReader *FileBufferReader) ReadAllToString(
 		err2 = new(fileBufferReaderMolecule).closeAndRelease(
 			fBufReader,
 			"fBufReader",
+			true, // releaseMemoryResources
 			ePrefix.XCpy("fBufReader"))
 
 	}
@@ -4548,6 +4552,7 @@ func (fBufReaderNanobot *fileBufferReaderNanobot) setIoReader(
 	err = new(fileBufferReaderMolecule).closeAndRelease(
 		fBufReader,
 		fBufReaderLabel,
+		true, // releaseMemoryResources
 		ePrefix.XCpy(fBufReaderLabel))
 
 	if err != nil {
@@ -4816,6 +4821,7 @@ func (fBufReaderNanobot *fileBufferReaderNanobot) setPathFileName(
 	err = new(fileBufferReaderMolecule).closeAndRelease(
 		fBufReader,
 		fBufReaderLabel,
+		true, // releaseMemoryResources
 		ePrefix.XCpy(fBufReaderLabel))
 
 	if err != nil {
@@ -5008,6 +5014,15 @@ type fileBufferReaderMolecule struct {
 //		string, a default value of "fBufReader" will be
 //		automatically applied.
 //
+//	releaseMemoryResources		bool
+//
+//		If this parameter is set to 'true', this method
+//		will release all internal memory resources for
+//		the passed instance of FileBufferReader
+//		('fBufReader'). Releasing internal memory
+//		resources synchronizes internal flags and
+//		prevents multiple calls to the 'close' method.
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -5042,6 +5057,7 @@ type fileBufferReaderMolecule struct {
 func (fBuffReaderMolecule *fileBufferReaderMolecule) closeAndRelease(
 	fBufReader *FileBufferReader,
 	fBufReaderLabel string,
+	releaseMemoryResources bool,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if fBuffReaderMolecule.lock == nil {
@@ -5094,7 +5110,11 @@ func (fBuffReaderMolecule *fileBufferReaderMolecule) closeAndRelease(
 		fBufReaderLabel,
 		ePrefix)
 
-	fBuffReaderAtom.empty(fBufReader)
+	if releaseMemoryResources == true {
+
+		fBuffReaderAtom.empty(fBufReader)
+
+	}
 
 	return err
 }

@@ -138,34 +138,72 @@ type FileBufferReadWrite struct {
 
 // Close
 //
-// This method is designed to perform clean up tasks
-// after completion of all 'read' and 'write' operations
-// associated with the current instance of
-// FileBufferReadWrite.
+// This method is provided in order to implement the
+// io.Closer interface. Be advised that this method is
+// NOT the preferred method for closing the
+// FileBufferReadWrite object after all read and write
+// operations have been completed. The preferred method
+// for closing the current instance of
+// FileBufferReadWrite is local method:
+//
+//	FileBufferReadWrite.FlushCloseRelease()
+//
+// Calling this method, Close(), will perform most, but
+// not all, of the Clean-Up procedures required when all
+// data has been read from the internal bufio.Reader and
+// written to the internal bufio.Writer.
+//
+// After calling this method, the user must call the
+// following local method to complete the Clean-Up
+// operation:
+//
+//	FileBufferReadWrite.ReleaseMemResources()
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
 //	After completing all 'read' and 'write' operations,
-//	users MUST call this method ('Close()') in order to
-//	perform required clean-up operations.
-//
-//	This method will:
+//	calling this method will:
 //
 //	(1)	'Flush' the write buffer thereby ensuring all
 //		data is written from the write buffer to the
-//		underlying io.Writer object.
+//		underlying bufio.Writer object.
 //
-//	(2) Properly 'Close' the 'write' file or io.Writer
+//	(2) Properly 'Close' the internal bufio.Writer
 //		object.
 //
-//	(3) Properly 'Close' the 'read' file or io.Reader
+//	(3) Properly 'Close' the internal bufio.Reader
 //		object.
 //
 //	(4) Effectively render the current instance of
 //		FileBufferReadWrite invalid and unusable for
 //		any future 'read' or 'write' operations.
+//
+//	(5)	This method will NOT release the internal
+//		memory resources after closing the internal
+//		bufio.reader and bufio.writer objects.
+//
+//		Therefore, after calling this method ('Close()'),
+//		the user must call the following local method to
+//		release internal memory resources and complete
+//		the Clean-Up operation:
+//
+//		FileBufferReadWrite.ReleaseMemResources()
+//
+//		Releasing internal memory resources will
+//		synchronize internal flags and prevent multiple
+//		calls to the 'close' method. Multiple calls to
+//		the 'close' method may produce unexpected
+//		results.
+//
+//	(6)	This method ('Close()') is NOT the preferred
+//		method for performing final Clean-Up operations
+//		on a FileBufferReadWrite object. The recommended
+//		method for performing final Clean-Up operations
+//		is local method:
+//
+//		FileBufferReadWrite.FlushCloseRelease()
 //
 // ----------------------------------------------------------------
 //
@@ -271,9 +309,12 @@ func (fBufReadWrite *FileBufferReadWrite) Close() error {
 	}
 
 	err = new(fileBufferReadWriteMicrobot).
-		closeReaderWriter(
+		flushCloseRelease(
 			fBufReadWrite,
 			"fBufReadWrite",
+			true,  // flushWriteBuffer
+			false, // releaseReaderWriterMemResources
+			false, // releaseFBuffReadWriteMemResources
 			ePrefix.XCpy("Close-Readers&Writers"))
 
 	return err
@@ -427,6 +468,7 @@ func (fBufReadWrite *FileBufferReadWrite) CloseReader(
 		closeReader(
 			fBufReadWrite,
 			"fBufReadWrite",
+			true, // releaseMemoryResources
 			ePrefix)
 
 	return err
@@ -592,6 +634,7 @@ func (fBufReadWrite *FileBufferReadWrite) CloseWriter(
 		flushAndCloseWriter(
 			fBufReadWrite,
 			"fBufReadWrite",
+			true, // releaseMemoryResources
 			ePrefix)
 
 	return err
@@ -2179,9 +2222,12 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 				readErr.Error())
 
 			err2 = fBufReadWriteMicrobot.
-				closeReaderWriter(
+				flushCloseRelease(
 					fBufReadWrite,
 					"fBufReadWrite",
+					true,  // flushWriteBuffer
+					false, // releaseReaderWriterMemResources
+					false, // releaseFBuffReadWriteMemResources
 					funcName)
 
 			if err2 != nil {
@@ -2210,9 +2256,12 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 					err2.Error())
 
 				err2 = fBufReadWriteMicrobot.
-					closeReaderWriter(
+					flushCloseRelease(
 						fBufReadWrite,
 						"fBufReadWrite",
+						true,  // flushWriteBuffer
+						false, // releaseReaderWriterMemResources
+						false, // releaseFBuffReadWriteMemResources
 						funcName)
 
 				if err2 != nil {
@@ -2235,9 +2284,12 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 					numOfBytesWritten)
 
 				err2 = fBufReadWriteMicrobot.
-					closeReaderWriter(
+					flushCloseRelease(
 						fBufReadWrite,
 						"fBufReadWrite",
+						true,  // flushWriteBuffer
+						false, // releaseReaderWriterMemResources
+						false, // releaseFBuffReadWriteMemResources
 						funcName)
 
 				if err2 != nil {
@@ -2261,9 +2313,12 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 	if autoFlushAndCloseOnExit == true {
 
 		err = fBufReadWriteMicrobot.
-			closeReaderWriter(
+			flushCloseRelease(
 				fBufReadWrite,
 				"fBufReadWrite",
+				true, // flushWriteBuffer
+				true, // releaseReaderWriterMemResources
+				true, // releaseFBuffReadWriteMemResources
 				ePrefix.XCpy("FlushClose-Readers&Writers"))
 
 	} else {
@@ -2845,9 +2900,12 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 	if autoFlushAndCloseOnExit == true {
 
 		err2 = fBufReadWriteMicrobot.
-			closeReaderWriter(
+			flushCloseRelease(
 				fBufReadWrite,
 				"fBufReadWrite",
+				true, // flushWriteBuffer
+				true, // releaseReaderWriterMemResources
+				true, // releaseFBuffReadWriteMemResources
 				ePrefix.XCpy(fmt.Sprintf(
 					"%v Flush/Close-Readers & Writers",
 					cleanUpStatus)))
@@ -5173,6 +5231,232 @@ type fileBufferReadWriteMicrobot struct {
 	lock *sync.Mutex
 }
 
+// flushCloseRelease
+//
+// This method will perform all required Clean-Up
+// operations on an instance of FileBufferReadWrite
+// passed as input parameter 'fBufReadWrite'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	After calling this method the FileBufferReadWrite
+//	instance passed as 'fBufReadWrite' will be invalid
+//	and unavailable for any future read/write operations.
+//
+//	The specific Clean-Up procedures performed by this
+//	method are listed as follows:
+//
+//	(1)	Flushing the internal write buffer.
+//		This guarantees that any data remaining in the
+//		'write' will be written to the underlying
+//		bufio.writer object.
+//
+//	(2)	Closing the internal bufio.reader object.
+//
+//	(3)	Closing the internal bufio.writer object.
+//
+//	(4) Releasing all internal memory resources.
+//		This action will synchronize internal flags and
+//		prevent multiple calls to 'close' methods.
+//		Performing a 'close' operation multiple times
+//		on a single bufio.reader or bufio.writer object
+//		can produce unexpected results.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufReadWrite						*FileBufferReadWrite
+//
+//		A pointer to an instance of FileBufferWriter.
+//
+//		This method will perform Clean-Up operations on
+//		the internal bufio.reader and bufio.writer objects
+//		encapsulated in	this FileBufferReadWrite instance.
+//
+//		This method will effectively render the
+//		FileBufferReadWrite instance 'fBufReadWrite'
+//		invalid and unusable for any future 'read' and/or
+//		'write' operations.
+//
+//	fBufReadWriteLabel					string
+//
+//		The name or label associated with input parameter
+//		'fBufReadWrite' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufReadWrite" will
+//		be automatically applied.
+//
+//	flushWriteBuffer					bool
+//
+//		If this parameter is set to 'true', this method
+//		will flush the contents of the internal
+//		bufio.writer 'write' buffer. This means that
+//		'write' buffer contents are guaranteed to be
+//		written to the internal bufio.Writer object
+//		encapsulated by	FileBufferReadWrite input
+//		parameter 'fBufReadWrite'.
+//
+//		If 'flushWriteBuffer' is set to 'false', the
+//		contents of the 'write' buffer will be lost.
+//
+//	releaseReaderWriterMemResources		bool
+//
+//		If this parameter is set to 'true', this method
+//		will release the memory resources for the
+//		internal bufio.reader and bufio.writer objects
+//		encapsulated by 'fBufReadWrite'.
+//
+//	releaseFBuffReadWriteMemResources	bool
+//
+//		If this parameter is set to 'true', this method
+//		will release the internal memory resources for
+//		the FileBufferReadWrite instance passed as
+//		'fBufReadWrite'.
+//
+//	errPrefDto							*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) flushCloseRelease(
+	fBufReadWrite *FileBufferReadWrite,
+	fBufReadWriteLabel string,
+	flushWriteBuffer bool,
+	releaseReaderWriterMemResources bool,
+	releaseFBuffReadWriteMemResources bool,
+	errorPrefix interface{}) error {
+
+	if fBufReadWriteMicrobot.lock == nil {
+		fBufReadWriteMicrobot.lock = new(sync.Mutex)
+	}
+
+	fBufReadWriteMicrobot.lock.Lock()
+
+	defer fBufReadWriteMicrobot.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileBufferReadWriteMicrobot." +
+		"flushCloseRelease()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return err
+	}
+
+	if len(fBufReadWriteLabel) == 0 {
+
+		fBufReadWriteLabel = "fBufReadWrite"
+	}
+
+	if fBufReadWrite == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is a nil pointer!\n"+
+			"%v is invalid.\n",
+			ePrefix.String(),
+			fBufReadWriteLabel,
+			fBufReadWriteLabel)
+
+		return err
+	}
+
+	var err2, err3 error
+
+	if fBufReadWrite.writer != nil {
+
+		err2 = new(fileBufferWriterMolecule).
+			flushCloseRelease(
+				fBufReadWrite.writer,
+				fBufReadWriteLabel+".writer",
+				flushWriteBuffer,
+				releaseReaderWriterMemResources,
+				ePrefix)
+
+		if err2 != nil {
+
+			err3 = fmt.Errorf("%v\n"+
+				"Error occurred while closing the %v.\n"+
+				"Error:\n%v\n",
+				funcName,
+				fBufReadWriteLabel+".writer",
+				err2.Error())
+
+			err = errors.Join(err3)
+		}
+
+	}
+
+	if fBufReadWrite.reader != nil {
+
+		err2 = new(fileBufferReaderMolecule).
+			closeAndRelease(
+				fBufReadWrite.reader,
+				fBufReadWriteLabel+".reader",
+				releaseReaderWriterMemResources,
+				ePrefix)
+
+		if err2 != nil {
+
+			err3 = fmt.Errorf("%v\n"+
+				"Error occurred while closing the %v.\n"+
+				"Error:\n%v\n",
+				funcName,
+				fBufReadWriteLabel+".reader",
+				err2.Error())
+
+			err = errors.Join(err3)
+		}
+	}
+
+	if releaseFBuffReadWriteMemResources == true {
+
+		new(fileBufferReadWriteElectron).
+			empty(fBufReadWrite)
+	}
+
+	return err
+}
+
 // closeReaderWriter
 //
 // This method is designed to perform clean up tasks
@@ -5240,63 +5524,26 @@ type fileBufferReadWriteMicrobot struct {
 //		string, a default value of "fBufReadWrite" will
 //		be automatically applied.
 //
-//	errorPrefix					interface{}
+//	releaseMemoryResources		bool
 //
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
+//		If this parameter is set to 'true', this method
+//		will release the memory resources for the
+//		internal bufio.reader and bufio.writer objects
+//		encapsulated by 'fBufReadWrite'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
 //
 //		If no error prefix information is needed, set
 //		this parameter to 'nil'.
 //
-//		This empty interface must be convertible to one
-//		of the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
 //			"github.com/MikeAustin71/errpref".
 //
 // ----------------------------------------------------------------
@@ -5318,6 +5565,7 @@ type fileBufferReadWriteMicrobot struct {
 func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) closeReaderWriter(
 	fBufReadWrite *FileBufferReadWrite,
 	fBufReadWriteLabel string,
+	releaseMemoryResources bool,
 	errorPrefix interface{}) error {
 
 	if fBufReadWriteMicrobot.lock == nil {
@@ -5370,6 +5618,7 @@ func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) closeReaderWriter(
 		closeReader(
 			fBufReadWrite,
 			fBufReadWriteLabel,
+			releaseMemoryResources,
 			ePrefix)
 
 	if err2 != nil {
@@ -5380,6 +5629,7 @@ func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) closeReaderWriter(
 		flushAndCloseWriter(
 			fBufReadWrite,
 			fBufReadWriteLabel,
+			releaseMemoryResources,
 			ePrefix)
 
 	if err2 != nil {
@@ -7052,6 +7302,7 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setIoReader(
 	err = new(fileBufferReadWriteElectron).closeReader(
 		fBufReadWrite,
 		fBufReadWriteLabel,
+		true, // releaseMemoryResources
 		ePrefix.XCpy("Close-Reader"))
 
 	if err != nil {
@@ -7274,6 +7525,7 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setIoWriter(
 	err = new(fileBufferReadWriteElectron).flushAndCloseWriter(
 		fBufReadWrite,
 		fBufReadWriteLabel,
+		true, // releaseMemoryResources
 		ePrefix.XCpy("Close-Writer"))
 
 	if err != nil {
@@ -7527,6 +7779,7 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameReader(
 	err = new(fileBufferReadWriteElectron).closeReader(
 		fBufReadWrite,
 		fBufReadWriteLabel,
+		true, // releaseMemoryResources
 		ePrefix.XCpy("Close-Reader"))
 
 	if err != nil {
@@ -7813,6 +8066,7 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameWriter(
 	err = new(fileBufferReadWriteElectron).flushAndCloseWriter(
 		fBufReadWrite,
 		fBufReadWriteLabel,
+		true, // releaseMemoryResources
 		ePrefix.XCpy("Close-Writer"))
 
 	if err != nil {
@@ -7899,6 +8153,15 @@ type fileBufferReadWriteElectron struct {
 //		string, a default value of "fBufReadWrite" will
 //		be automatically applied.
 //
+//	releaseMemoryResources		bool
+//
+//		If this parameter is set to 'true', this method
+//		will release all memory resources for the internal
+//		bufio.reader object encapsulated by 'fBufReader'.
+//		Releasing these memory resources synchronizes
+//		internal flags and prevents multiple calls to the
+//		'close' reader method.
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -7933,6 +8196,7 @@ type fileBufferReadWriteElectron struct {
 func (fBuffReadWriteElectron *fileBufferReadWriteElectron) closeReader(
 	fBufReadWrite *FileBufferReadWrite,
 	fBufReadWriteLabel string,
+	releaseMemoryResources bool,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if fBuffReadWriteElectron.lock == nil {
@@ -7984,6 +8248,7 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) closeReader(
 		err2 = new(fileBufferReaderMolecule).closeAndRelease(
 			fBufReadWrite.reader,
 			fBufReadWriteLabel+".reader",
+			releaseMemoryResources,
 			ePrefix.XCpy(
 				fBufReadWriteLabel+".reader"))
 
@@ -8005,6 +8270,68 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) closeReader(
 	fBufReadWrite.readerFilePathName = ""
 
 	return err
+}
+
+// empty
+//
+// This method deletes all internal member variables and
+// releases all the internal memory resources for an
+// instance of FileBufferReadWrite passed as input
+// parameter 'fBufReadWrite'.
+//
+// Specifically the following internal member variables
+// are set to 'nil' or their initial zero values:
+//
+//	FileBufferReadWrite.reader = ""
+//	FileBufferReadWrite.writer = nil
+//	FileBufferReadWrite.readerFilePathName = nil
+//	FileBufferReadWrite.writerFilePathName = nil
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufWriter					*FileBufferWriter
+//
+//		A pointer to an instance of FileBufferWriter.
+//
+//		All internal member variable data values in
+//		this instance will be deleted and reset to
+//		their initial zero values.
+//
+//		All member variable object pointers will be set
+//		to 'nil'.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	--- NONE ---
+func (fBuffReadWriteElectron *fileBufferReadWriteElectron) empty(
+	fBufReadWrite *FileBufferReadWrite) {
+
+	if fBuffReadWriteElectron.lock == nil {
+		fBuffReadWriteElectron.lock = new(sync.Mutex)
+	}
+
+	fBuffReadWriteElectron.lock.Lock()
+
+	defer fBuffReadWriteElectron.lock.Unlock()
+
+	if fBufReadWrite == nil {
+
+		return
+	}
+
+	fBufReadWrite.reader = nil
+
+	fBufReadWrite.writer = nil
+
+	fBufReadWrite.readerFilePathName = ""
+
+	fBufReadWrite.writerFilePathName = ""
+
+	return
 }
 
 // flushAndCloseWriter
@@ -8050,6 +8377,13 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) closeReader(
 //		string, a default value of "fBufReadWrite" will
 //		be automatically applied.
 //
+//	releaseMemoryResources		bool
+//
+//		If this parameter is set to 'true', this method
+//		will release the memory resources for the
+//		internal bufio.writer object encapsulated by
+//		'fBufReadWrite'.
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -8084,6 +8418,7 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) closeReader(
 func (fBuffReadWriteElectron *fileBufferReadWriteElectron) flushAndCloseWriter(
 	fBufReadWrite *FileBufferReadWrite,
 	fBufReadWriteLabel string,
+	releaseMemoryResources bool,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if fBuffReadWriteElectron.lock == nil {
@@ -8137,7 +8472,7 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) flushAndCloseWriter(
 				fBufReadWrite.writer,
 				fBufReadWriteLabel+".writer",
 				true, // flushWriteBuffer
-				true, // releaseMemoryResources
+				releaseMemoryResources,
 				ePrefix.XCpy(
 					fBufReadWriteLabel+".writer"))
 

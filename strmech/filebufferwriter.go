@@ -4659,7 +4659,7 @@ type fileBufferWriterMolecule struct {
 //		If this parameter is set to 'true', this method
 //		will flush the contents of the write buffer. This
 //		means that write buffer contents are guaranteed
-//		to be written to the internal io.Writer object
+//		to be written to the internal bufio.Writer object
 //		encapsulated by FileBufferWriter input parameter
 //		'fBufWriter'.
 //
