@@ -149,7 +149,7 @@ type FileBufferReadWrite struct {
 //	FileBufferReadWrite.FlushCloseRelease()
 //
 // Calling this method, Close(), will perform most, but
-// not all, of the Clean-Up procedures required when all
+// not all, of the Clean-Up procedures required after all
 // data has been read from the internal bufio.Reader and
 // written to the internal bufio.Writer.
 //
@@ -638,6 +638,167 @@ func (fBufReadWrite *FileBufferReadWrite) CloseWriter(
 			ePrefix)
 
 	return err
+}
+
+// FlushCloseRelease
+//
+// After all read and write operations have been
+// completed for the current instance of
+// FileBufferReadWrite, call this method to perform the
+// required Clean-Up procedures for the internal
+// bufio.Reader and bufio.Writer objects.
+//
+// Once this method completes, no further action is
+// required and the current FileBufferReadWrite is
+// effectively rendered invalid and unavailable for
+// future read/write operations.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	After completing all 'read' and 'write' operations,
+//	calling this method will:
+//
+//	(1)	'Flush' the write buffer thereby ensuring all
+//		data is written from the write buffer to the
+//		underlying bufio.Writer object.
+//
+//	(2) Properly 'Close' the internal bufio.Writer
+//		object.
+//
+//	(3) Properly 'Close' the internal bufio.Reader
+//		object.
+//
+//	(4)	Release all the internal memory resources
+//		of the internal bufio.Reader, bufio.Writer
+//		and the current FileBufferReadWrite
+//		instance.
+//
+//		Releasing internal memory resources will
+//		synchronize internal flags and prevent multiple
+//		calls to the 'close' method. Multiple calls to
+//		the 'close' method may produce unexpected
+//		results.
+//
+//	(5) Effectively render the current instance of
+//		FileBufferReadWrite invalid and unusable for
+//		any future 'read' or 'write' operations.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufReadWrite *FileBufferReadWrite) FlushCloseRelease(
+	errorPrefix interface{}) error {
+
+	if fBufReadWrite.lock == nil {
+		fBufReadWrite.lock = new(sync.Mutex)
+	}
+
+	fBufReadWrite.lock.Lock()
+
+	defer fBufReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	funcName := "FileBufferReadWrite." +
+		"FlushCloseRelease()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(fileBufferReadWriteMicrobot).
+		flushCloseRelease(
+			fBufReadWrite,
+			"fBufReadWrite",
+			true, // flushWriteBuffer
+			true, // releaseReaderWriterMemResources
+			true, // releaseFBuffReadWriteMemResources
+			ePrefix)
 }
 
 // FlushWriteBuffer
