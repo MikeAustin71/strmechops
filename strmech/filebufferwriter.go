@@ -2077,9 +2077,9 @@ func (fBufWriter FileBufferWriter) ReadFrom(
 
 // ReleaseMemResources
 //
-// This method will delete and release all internal
-// member variables contained in the current instance of
-// FileBufferWriter.
+// This method will delete all internal member variables
+// and releases all internal memory resources contained
+// in the current instance of FileBufferWriter.
 //
 // This method WILL NOT perform the 'flush' and/or
 // 'close' protocol on the internal bufio.Writer object
@@ -2123,6 +2123,13 @@ func (fBufWriter FileBufferWriter) ReadFrom(
 //		Instead, call local method:
 //
 //			FileBufferWriter.FlushCloseAndRelease()
+//
+//	(3)	If the user calls local method
+//		FileBufferWriter.Close(), this method,
+//		FileBufferWriter.ReleaseMemResources(), should be
+//		called immediately thereafter to complete the
+//		Clean-Up operation for the current instance of
+//		FileBufferWriter.
 //
 // ----------------------------------------------------------------
 //

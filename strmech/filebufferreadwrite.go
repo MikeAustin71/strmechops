@@ -657,7 +657,7 @@ func (fBufReadWrite *FileBufferReadWrite) CloseWriter(
 // releases all the internal memory resources for the
 // current instance of FileBufferReadWrite.
 //
-// Specifically the following internal object pointers
+// Specifically the following internal member variables
 // are set to nil or their initial zero values:
 //
 //	FileBufferReadWrite.writer = nil
@@ -678,9 +678,10 @@ func (fBufReadWrite *FileBufferReadWrite) CloseWriter(
 //
 //			FileBufferReadWrite.ReleaseMemResources()
 //
-//	(2)	This method does NOT perform the 'close' protocol.
-//		To perform both the 'close' protocol and release
-//		all internal memory resources call local method:
+//	(2)	This method does NOT perform the 'flush' or
+//		'close' protocols. To perform the 'flush' and
+//		'close' protocols while simultaneously releasing
+//		all internal memory resources, call local method:
 //
 //			FileBufferReadWrite.FlushCloseRelease()
 //
@@ -3152,6 +3153,89 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 		numTextLineBytes,
 		numBytesWritten,
 		err
+}
+
+// ReleaseMemResources
+//
+// This method will delete all internal member variables
+// and release all internal memory resources contained in
+// the current instance of FileBufferReadWrite.
+//
+// This method WILL NOT perform the 'flush' and/or
+// 'close' protocols on the internal bufio.Reader and
+// bufio.Writer objects contained in the current
+// FileBufferReadWrite instance. To perform the 'flush'
+// and 'close' protocols while simultaneously releasing
+// all internal memory resources, call the local method:
+//
+//	FileBufferReadWrite.FlushCloseRelease()
+//
+// Specifically the following internal member variables
+// are set to nil or their initial zero values:
+//
+//	FileBufferReadWrite.writer = nil
+//	FileBufferReadWrite.reader = nil
+//	FileBufferReadWrite.writerFilePathName = ""
+//	FileBufferReadWrite.readerFilePathName = ""
+//
+// In addition, the internal member variable
+// 'targetWriteFileName' is set to an empty string.
+//
+//	FileBufferReadWrite.targetWriteFileName = ""
+//
+// After calling this method, the current instance of
+// FileBufferReadWrite will become invalid and
+// unavailable for future read/write operations.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	(1)	This method is functionally identical to local
+//		method:
+//
+//			FileBufferReadWrite.Empty()
+//
+//	(2)	This method does NOT perform the 'flush' or
+//		'close' protocols. To perform the 'flush' and
+//		'close' protocols while simultaneously releasing
+//		all internal memory resources, call local method:
+//
+//			FileBufferReadWrite.FlushCloseRelease()
+//
+//	(3)	If the user calls local method
+//		FileBufferReadWrite.Close(), this method,
+//		FileBufferReadWrite.ReleaseMemResources(), should
+//		be called immediately thereafter to complete the
+//		Clean-Up operation for the current instance of
+//		FileBufferReadWrite.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	--- NONE ---
+func (fBufReadWrite *FileBufferReadWrite) ReleaseMemResources() {
+
+	if fBufReadWrite.lock == nil {
+		fBufReadWrite.lock = new(sync.Mutex)
+	}
+
+	fBufReadWrite.lock.Lock()
+
+	defer fBufReadWrite.lock.Unlock()
+
+	new(fileBufferReadWriteElectron).
+		empty(
+			fBufReadWrite)
+
+	return
 }
 
 // Write
