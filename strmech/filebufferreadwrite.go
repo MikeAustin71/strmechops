@@ -994,23 +994,11 @@ func (fBufReadWrite *FileBufferReadWrite) FlushWriteBuffer(
 		return err
 	}
 
-	var err2 error
-
-	err2 = fBufReadWrite.writer.
-		Flush(ePrefix.XCpy("fBufReadWrite.writer"))
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"An error occurred while flushing the write buffer\n"+
-			"for the internal bufio.Writer object.\n"+
-			"Error:\n%v\n",
-			funcName,
-			err2.Error())
-
-	}
-
-	return err
+	return new(fileBufferReadWriteMicrobot).
+		flushWriteBuffer(
+			fBufReadWrite,
+			"fBufReadWrite",
+			ePrefix)
 }
 
 // IsValidInstanceError
@@ -2456,13 +2444,10 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 				readErr.Error())
 
 			err2 = fBufReadWriteMicrobot.
-				flushCloseRelease(
+				flushWriteBuffer(
 					fBufReadWrite,
-					"fBufReadWrite",
-					true,  // flushWriteBuffer
-					false, // releaseReaderWriterMemResources
-					false, // releaseFBuffReadWriteMemResources
-					funcName)
+					"fBufReadWrite flush#1",
+					ePrefix)
 
 			if err2 != nil {
 
@@ -2490,13 +2475,10 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 					err2.Error())
 
 				err2 = fBufReadWriteMicrobot.
-					flushCloseRelease(
+					flushWriteBuffer(
 						fBufReadWrite,
-						"fBufReadWrite",
-						true,  // flushWriteBuffer
-						false, // releaseReaderWriterMemResources
-						false, // releaseFBuffReadWriteMemResources
-						funcName)
+						"fBufReadWrite flush#2",
+						ePrefix)
 
 				if err2 != nil {
 
@@ -2518,13 +2500,10 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 					numOfBytesWritten)
 
 				err2 = fBufReadWriteMicrobot.
-					flushCloseRelease(
+					flushWriteBuffer(
 						fBufReadWrite,
-						"fBufReadWrite",
-						true,  // flushWriteBuffer
-						false, // releaseReaderWriterMemResources
-						false, // releaseFBuffReadWriteMemResources
-						funcName)
+						"fBufReadWrite flush#3",
+						ePrefix)
 
 				if err2 != nil {
 
@@ -2557,8 +2536,11 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 
 	} else {
 
-		err = fBufReadWrite.writer.
-			Flush(ePrefix.XCpy("fBufReadWrite.writer"))
+		err = fBufReadWriteMicrobot.
+			flushWriteBuffer(
+				fBufReadWrite,
+				"fBufReadWrite final-flush",
+				ePrefix)
 
 	}
 
@@ -3151,10 +3133,13 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 
 	} else {
 
-		err2 = fBufReadWrite.writer.
-			Flush(ePrefix.XCpy(fmt.Sprintf(
-				"%v Flush fBufReadWrite.writer",
-				cleanUpStatus)))
+		err2 = new(fileBufferReadWriteMicrobot).
+			flushWriteBuffer(
+				fBufReadWrite,
+				"fBufReadWrite",
+				ePrefix.XCpy(fmt.Sprintf(
+					"%v Flush fBufReadWrite.writer",
+					cleanUpStatus)))
 
 		if err2 != nil {
 
@@ -3207,11 +3192,13 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 //
 //	(1) This method implements the io.Writer interface.
 //
-//	(2)	After all 'read' and 'write' operations have been
+//	(2) This method DOES NOT flush the write buffer.
+//
+//	(3)	After all 'read' and 'write' operations have been
 //		completed, the user MUST call the 'Close' method
 //		to perform necessary clean-up operations:
 //
-//		FileBufferReadWrite.Close()
+//		FileBufferReadWrite.FlushCloseRelease()
 //
 //	(3) This method WILL NOT VERIFY that the number of
 //		bytes written is equal to the length of the
@@ -5529,7 +5516,7 @@ type fileBufferReadWriteMicrobot struct {
 //
 //		If this parameter is set to 'true', this method
 //		will flush the contents of the internal
-//		bufio.writer 'write' buffer. This means that
+//		bufio.Writer 'write' buffer. This means that
 //		'write' buffer contents are guaranteed to be
 //		written to the internal bufio.Writer object
 //		encapsulated by	FileBufferReadWrite input
@@ -5589,7 +5576,7 @@ func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) flushCloseRelease(
 	flushWriteBuffer bool,
 	releaseReaderWriterMemResources bool,
 	releaseFBuffReadWriteMemResources bool,
-	errorPrefix interface{}) error {
+	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if fBufReadWriteMicrobot.lock == nil {
 		fBufReadWriteMicrobot.lock = new(sync.Mutex)
@@ -5607,8 +5594,8 @@ func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) flushCloseRelease(
 		"flushCloseRelease()"
 
 	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
 		funcName,
 		"")
 
@@ -5676,6 +5663,148 @@ func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) flushCloseRelease(
 			err2.Error())
 
 		err = errors.Join(err3)
+	}
+
+	return err
+}
+
+// flushWriteBuffer
+//
+// This method will flush the write buffer to ensure that
+// all data is written to the underlying bufio.Writer which
+// encapsulates the output destination.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufReadWrite						*FileBufferReadWrite
+//
+//		A pointer to an instance of FileBufferWriter.
+//
+//		This method will flush the contents of the internal
+//		bufio.Writer 'write' buffer encapsulated by
+//		'fBufReadWrite'. This means that 'write' buffer
+//		contents are guaranteed to be written to the
+//		internal bufio.Writer object containing the data
+//		output destination.
+//
+//	fBufReadWriteLabel					string
+//
+//		The name or label associated with input parameter
+//		'fBufReadWrite' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufReadWrite" will
+//		be automatically applied.
+//
+//	errPrefDto							*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) flushWriteBuffer(
+	fBufReadWrite *FileBufferReadWrite,
+	fBufReadWriteLabel string,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fBufReadWriteMicrobot.lock == nil {
+		fBufReadWriteMicrobot.lock = new(sync.Mutex)
+	}
+
+	fBufReadWriteMicrobot.lock.Lock()
+
+	defer fBufReadWriteMicrobot.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileBufferReadWriteMicrobot." +
+		"flushWriteBuffer()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return err
+	}
+
+	if len(fBufReadWriteLabel) == 0 {
+
+		fBufReadWriteLabel = "fBufReadWrite"
+	}
+
+	if fBufReadWrite == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is a nil pointer!\n"+
+			"%v is invalid.\n",
+			ePrefix.String(),
+			fBufReadWriteLabel,
+			fBufReadWriteLabel)
+
+		return err
+	}
+
+	if fBufReadWrite.writer == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The internal '%v.writer' object is a nil pointer!\n"+
+			"%v is invalid and was NOT properly initialized.\n",
+			ePrefix.String(),
+			fBufReadWriteLabel,
+			fBufReadWriteLabel)
+
+		return err
+	}
+
+	var err2 error
+
+	err2 = fBufReadWrite.writer.
+		Flush(ePrefix.XCpy(fBufReadWriteLabel + ".writer"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while flushing the write buffer\n"+
+			"for the internal bufio.Writer object, %v.writer.\n"+
+			"Error:\n%v\n",
+			funcName,
+			fBufReadWriteLabel,
+			err2.Error())
+
 	}
 
 	return err
