@@ -651,6 +651,68 @@ func (fBufReadWrite *FileBufferReadWrite) CloseWriter(
 	return err
 }
 
+// Empty
+//
+// This method deletes all internal member variables and
+// releases all the internal memory resources for the
+// current instance of FileBufferReadWrite.
+//
+// Specifically the following internal object pointers
+// are set to nil or their initial zero values:
+//
+//	FileBufferReadWrite.writer = nil
+//	FileBufferReadWrite.reader = nil
+//	FileBufferReadWrite.writerFilePathName = ""
+//	FileBufferReadWrite.readerFilePathName = ""
+//
+// After calling this method, the current instance of
+// FileBufferReadWrite will become invalid and
+// unavailable for future read/write operations.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	(1)	This method is functionally identical to local
+//		method:
+//
+//			FileBufferReadWrite.ReleaseMemResources()
+//
+//	(2)	This method does NOT perform the 'close' protocol.
+//		To perform both the 'close' protocol and release
+//		all internal memory resources call local method:
+//
+//			FileBufferReadWrite.FlushCloseRelease()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	--- NONE ---
+func (fBufReadWrite *FileBufferReadWrite) Empty() {
+
+	if fBufReadWrite.lock == nil {
+		fBufReadWrite.lock = new(sync.Mutex)
+	}
+
+	fBufReadWrite.lock.Lock()
+
+	new(fileBufferReadWriteElectron).
+		empty(fBufReadWrite)
+
+	fBufReadWrite.lock.Unlock()
+
+	fBufReadWrite.lock = nil
+
+	return
+}
+
 // FlushCloseRelease
 //
 // After all read and write operations have been
