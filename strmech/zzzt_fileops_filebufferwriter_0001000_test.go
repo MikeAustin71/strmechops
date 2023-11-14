@@ -570,7 +570,7 @@ func TestFileBufferWriter_Write_001100(t *testing.T) {
 				err = errors.Join(err, err2)
 			}
 
-			err2 = fBufWriter.FlushCloseAndRelease("After Error: fBufWriter")
+			err2 = fBufWriter.FlushCloseRelease("After Error: fBufWriter")
 
 			if err2 != nil {
 				err = errors.Join(err, err2)
@@ -938,7 +938,7 @@ func TestFileBufferWriter_Write_002200(t *testing.T) {
 				i,
 				err2.Error())
 
-			err2 = fBufWriter.FlushCloseAndRelease(ePrefix.XCpy(
+			err2 = fBufWriter.FlushCloseRelease(ePrefix.XCpy(
 				"After Error-fBufWriter"))
 
 			err = errors.Join(err, err2)

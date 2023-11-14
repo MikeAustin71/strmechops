@@ -303,10 +303,10 @@ func (fBufWriter *FileBufferWriter) Buffered() int {
 //		performing all clean-up operations on a
 //		FileBufferWriter instance is local method:
 //
-//			FileBufferWriter.FlushCloseAndRelease()
+//			FileBufferWriter.FlushCloseRelease()
 //
 //		Unlike this method, FileBufferWriter.Close(),
-//		the FileBufferWriter.FlushCloseAndRelease() will
+//		the FileBufferWriter.FlushCloseRelease() will
 //		also release internal memory resources.
 //
 //	(6)	If the user does not choose to flush the write
@@ -330,7 +330,7 @@ func (fBufWriter *FileBufferWriter) Buffered() int {
 //		calling one of the two following local methods is
 //		therefore highly recommended:
 //
-//			FileBufferWriter.FlushCloseAndRelease()
+//			FileBufferWriter.FlushCloseRelease()
 //			FileBufferWriter.CloseAndRelease()
 //
 //	(8)	Once this method completes the required clean-up
@@ -492,7 +492,7 @@ func (fBufWriter FileBufferWriter) Close() error {
 //		is called, will be lost. To 'flush', 'close' and
 //		'release' memory resources call local method:
 //
-//			FileBufferWriter.FlushCloseAndRelease()
+//			FileBufferWriter.FlushCloseRelease()
 //
 //	(3)	Call this method only after completing all
 //		'write' operations when the services of the
@@ -655,7 +655,7 @@ func (fBufWriter *FileBufferWriter) CloseAndRelease(
 //		all internal memory resources call one of the
 //		following local methods:
 //
-//			FileBufferReader.FlushCloseAndRelease()
+//			FileBufferReader.FlushCloseRelease()
 //			FileBufferReader.CloseAndRelease()
 //
 // ----------------------------------------------------------------
@@ -684,7 +684,7 @@ func (fBufWriter *FileBufferWriter) Empty() {
 
 }
 
-// FlushCloseAndRelease
+// FlushCloseRelease
 //
 // This method is used to perform all necessary clean-up
 // operations after final data has been written to the
@@ -823,7 +823,7 @@ func (fBufWriter *FileBufferWriter) Empty() {
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fBufWriter *FileBufferWriter) FlushCloseAndRelease(
+func (fBufWriter *FileBufferWriter) FlushCloseRelease(
 	errorPrefix interface{}) error {
 
 	if fBufWriter.lock == nil {
@@ -1117,8 +1117,8 @@ func (fBufWriter *FileBufferWriter) IsClosed() bool {
 //		MUST perform 'close' and clean-up operations by
 //		calling one of these local methods:
 //
-//			FileBufferWriter.Close() - Same as FlushCloseAndRelease()
-//			FileBufferWriter.FlushCloseAndRelease()
+//			FileBufferWriter.Close() - Same as FlushCloseRelease()
+//			FileBufferWriter.FlushCloseRelease()
 //			FileBufferWriter.CloseAndRelease()
 //
 //	(2)	After executing the 'close' operation described
@@ -1155,7 +1155,7 @@ func (fBufWriter *FileBufferWriter) IsClosed() bool {
 //		the user is responsible for manually closing the
 //		file and performing any other required clean-up
 //		operations in addition to calling local method
-//		FileBufferWriter.FlushCloseAndRelease().
+//		FileBufferWriter.FlushCloseRelease().
 //
 //		While the returned instance of FileBufferWriter
 //		is primarily designed for writing data to disk
@@ -1359,8 +1359,8 @@ func (fBufWriter *FileBufferWriter) NewIoWriter(
 //		associated memory resources by calling one
 //		of the following local methods:
 //
-//			FileBufferWriter.Close() - Same as FlushCloseAndRelease()
-//			FileBufferWriter.FlushCloseAndRelease()
+//			FileBufferWriter.Close() - Same as FlushCloseRelease()
+//			FileBufferWriter.FlushCloseRelease()
 //			FileBufferWriter.CloseAndRelease()
 //
 //	(2)	After executing the 'close' operation described
@@ -1638,8 +1638,8 @@ func (fBufWriter *FileBufferWriter) NewFileMgr(
 //		associated memory resources by calling one
 //		of the following local methods:
 //
-//			FileBufferWriter.Close() - Same as FlushCloseAndRelease()
-//			FileBufferWriter.FlushCloseAndRelease()
+//			FileBufferWriter.Close() - Same as FlushCloseRelease()
+//			FileBufferWriter.FlushCloseRelease()
 //			FileBufferWriter.CloseAndRelease()
 //
 //	(2)	After executing the 'close' operation described
@@ -2088,7 +2088,7 @@ func (fBufWriter FileBufferWriter) ReadFrom(
 // simultaneously releasing all internal memory resources,
 // call the local method:
 //
-//	FileBufferWriter.FlushCloseAndRelease()
+//	FileBufferWriter.FlushCloseRelease()
 //
 // Specifically the following internal object pointers
 // are set to nil:
@@ -2122,7 +2122,7 @@ func (fBufWriter FileBufferWriter) ReadFrom(
 //		method, FileBufferWriter.ReleaseMemResources().
 //		Instead, call local method:
 //
-//			FileBufferWriter.FlushCloseAndRelease()
+//			FileBufferWriter.FlushCloseRelease()
 //
 //	(3)	If the user calls local method
 //		FileBufferWriter.Close(), this method,
@@ -2912,7 +2912,7 @@ func (fBufWriter *FileBufferWriter) SetPathFileName(
 //		the user is responsible for manually closing the
 //		file and performing any other required clean-up
 //		operations in addition to calling local method
-//		FileBufferWriter.FlushCloseAndRelease().
+//		FileBufferWriter.FlushCloseRelease().
 //
 //		While the returned instance of FileBufferWriter
 //		is primarily designed for writing data to disk
@@ -3073,7 +3073,7 @@ func (fBufWriter *FileBufferWriter) SetIoWriter(
 //		completed, the user MUST call the 'Close' method
 //		to perform necessary clean-up operations:
 //
-//			FileBufferWriter.FlushCloseAndRelease()
+//			FileBufferWriter.FlushCloseRelease()
 //
 //	(3) This method WILL NOT VERIFY that the number of
 //		bytes written is equal to the length of the
@@ -4009,7 +4009,7 @@ type fileBufferWriterNanobot struct {
 //		the user is responsible for manually closing the
 //		file and performing any other required clean-up
 //		operations in addition to calling local method
-//		FileBufferWriter.FlushCloseAndRelease().
+//		FileBufferWriter.FlushCloseRelease().
 //
 //		While the configured instance of FileBufferWriter
 //		(fBufWriter) is primarily designed for writing
