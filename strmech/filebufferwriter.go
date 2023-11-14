@@ -4674,6 +4674,8 @@ type fileBufferWriterMolecule struct {
 //		('fBufWriter'). Releasing internal memory
 //		resources synchronizes internal flags and
 //		prevents multiple calls to the 'close' method.
+//		Calling the 'close' method more	than once may
+//		produce unexpected results.
 //
 //	errPrefDto					*ePref.ErrPrefixDto
 //

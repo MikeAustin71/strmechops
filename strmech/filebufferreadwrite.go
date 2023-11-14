@@ -353,9 +353,17 @@ func (fBufReadWrite *FileBufferReadWrite) Close() error {
 //	This method will:
 //
 //	(1) Properly 'Close' the 'read' file or internal
-//		io.Reader object.
+//		bufio.Reader object.
 //
-//	(2) Effectively render the internal io.Reader object,
+//	(2) Release the internal memory resources associated
+//		with the bufio.Reader object.
+//
+//		Releasing internal memory resources synchronizes
+//		internal flags and prevents multiple calls to the
+//		'close' method. Calling the 'close' method more
+//		than once may produce unexpected results.
+//
+//	(3) Effectively render the internal io.Reader object,
 //		encapsulated by the current instance of
 //		FileBufferReadWrite, invalid and unusable for any
 //		future 'read' operations.
@@ -465,10 +473,11 @@ func (fBufReadWrite *FileBufferReadWrite) CloseReader(
 	}
 
 	err = new(fileBufferReadWriteElectron).
-		closeReader(
+		readerCloseRelease(
 			fBufReadWrite,
 			"fBufReadWrite",
-			true, // releaseMemoryResources
+			true, // releaseReaderMemResources
+			true, // releaseFBuffReaderLocalMemRes
 			ePrefix)
 
 	return err
@@ -631,10 +640,12 @@ func (fBufReadWrite *FileBufferReadWrite) CloseWriter(
 	}
 
 	err = new(fileBufferReadWriteElectron).
-		flushAndCloseWriter(
+		writerFlushCloseRelease(
 			fBufReadWrite,
 			"fBufReadWrite",
+			true, // flushWriteBuffer
 			true, // releaseMemoryResources
+			true, // releaseFBuffWriterLocalMemRes
 			ePrefix)
 
 	return err
@@ -5562,240 +5573,47 @@ func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) flushCloseRelease(
 	}
 
 	var err2, err3 error
-
-	if fBufReadWrite.writer != nil {
-
-		err2 = new(fileBufferWriterMolecule).
-			flushCloseRelease(
-				fBufReadWrite.writer,
-				fBufReadWriteLabel+".writer",
-				flushWriteBuffer,
-				releaseReaderWriterMemResources,
-				ePrefix)
-
-		if err2 != nil {
-
-			err3 = fmt.Errorf("%v\n"+
-				"Error occurred while closing the %v.\n"+
-				"Error:\n%v\n",
-				funcName,
-				fBufReadWriteLabel+".writer",
-				err2.Error())
-
-			err = errors.Join(err3)
-		}
-
-	}
-
-	if fBufReadWrite.reader != nil {
-
-		err2 = new(fileBufferReaderMolecule).
-			closeAndRelease(
-				fBufReadWrite.reader,
-				fBufReadWriteLabel+".reader",
-				releaseReaderWriterMemResources,
-				ePrefix)
-
-		if err2 != nil {
-
-			err3 = fmt.Errorf("%v\n"+
-				"Error occurred while closing the %v.\n"+
-				"Error:\n%v\n",
-				funcName,
-				fBufReadWriteLabel+".reader",
-				err2.Error())
-
-			err = errors.Join(err3)
-		}
-	}
-
-	if releaseFBuffReadWriteMemResources == true {
-
-		new(fileBufferReadWriteElectron).
-			empty(fBufReadWrite)
-	}
-
-	return err
-}
-
-// closeReaderWriter
-//
-// This method is designed to perform clean up tasks
-// after completion of all 'read' and 'write' operations
-// associated with the instance of FileBufferReadWrite
-// passed as input parameter 'fBufReadWrite'.
-//
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-//	(1) This method will
-//
-//		(a)	Close the internal io.Reader object
-//			encapsulated by input parameter
-//			'fBufReadWrite'.
-//
-//		(b) Flush the internal io.Writer object
-//			encapsulated by input parameter
-//			'fBufReadWrite'. This means that any data
-//			remaining in the 'write' buffer will be
-//			written to the underlying io.Writer object.
-//
-//		(a)	Close the internal io.Writer object
-//			encapsulated by input parameter
-//			'fBufReadWrite'.
-//
-//	(2)	This method will effectively render the
-//		FileBufferReadWrite instance passed as
-//		'fBufReadWrite' invalid and unusable for any
-//		future 'read' and/or 'write' operations.
-//
-//	(3) After completing all 'read' and 'write'
-//		operations, users MUST perform these required
-//		clean-up tasks.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	fBufReadWrite				*FileBufferReadWrite
-//
-//		A pointer to an instance of FileBufferWriter.
-//
-//		The internal io.Reader object encapsulated in
-//		this FileBufferReadWrite instance be closed and
-//		deleted.
-//
-//		The internal io.Writer object encapsulated in
-//		this FileBufferReadWrite instance be flushed,
-//		closed and deleted.
-//
-//		This method will effectively render the
-//		FileBufferReadWrite instance 'fBufReadWrite'
-//		invalid and unusable for any future 'read' and/or
-//		'write' operations.
-//
-//	fBufReadWriteLabel			string
-//
-//		The name or label associated with input parameter
-//		'fBufReadWrite' which will be used in error
-//		messages returned by this method.
-//
-//		If this parameter is submitted as an empty
-//		string, a default value of "fBufReadWrite" will
-//		be automatically applied.
-//
-//	releaseMemoryResources		bool
-//
-//		If this parameter is set to 'true', this method
-//		will release the memory resources for the
-//		internal bufio.reader and bufio.writer objects
-//		encapsulated by 'fBufReadWrite'.
-//
-//	errPrefDto					*ePref.ErrPrefixDto
-//
-//		This object encapsulates an error prefix string
-//		which is included in all returned error
-//		messages. Usually, it contains the name of the
-//		calling method or methods listed as a function
-//		chain.
-//
-//		If no error prefix information is needed, set
-//		this parameter to 'nil'.
-//
-//		Type ErrPrefixDto is included in the 'errpref'
-//		software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errPrefDto'.
-//	 	The 'errPrefDto' text will be prefixed or
-//	 	attached to the	beginning of the error message.
-func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) closeReaderWriter(
-	fBufReadWrite *FileBufferReadWrite,
-	fBufReadWriteLabel string,
-	releaseMemoryResources bool,
-	errorPrefix interface{}) error {
-
-	if fBufReadWriteMicrobot.lock == nil {
-		fBufReadWriteMicrobot.lock = new(sync.Mutex)
-	}
-
-	fBufReadWriteMicrobot.lock.Lock()
-
-	defer fBufReadWriteMicrobot.lock.Unlock()
-
-	var err error
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	funcName := "fileBufferReadWriteMicrobot." +
-		"closeReaderWriter()"
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		funcName,
-		"")
-
-	if err != nil {
-
-		return err
-	}
-
-	if len(fBufReadWriteLabel) == 0 {
-
-		fBufReadWriteLabel = "fBufReadWrite"
-	}
-
-	if fBufReadWrite == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter '%v' is a nil pointer!\n"+
-			"%v is invalid.\n",
-			ePrefix.String(),
-			fBufReadWriteLabel,
-			fBufReadWriteLabel)
-
-		return err
-	}
-
-	var err2 error
 	var fBuffReadWriteElectron = new(fileBufferReadWriteElectron)
 
 	err2 = fBuffReadWriteElectron.
-		closeReader(
+		writerFlushCloseRelease(
 			fBufReadWrite,
 			fBufReadWriteLabel,
-			releaseMemoryResources,
+			flushWriteBuffer,
+			releaseReaderWriterMemResources,
+			releaseFBuffReadWriteMemResources,
 			ePrefix)
 
 	if err2 != nil {
-		err = errors.Join(err2)
+
+		err3 = fmt.Errorf("%v\n"+
+			"Error occurred while closing the %v.\n"+
+			"Error:\n%v\n",
+			funcName,
+			fBufReadWriteLabel+".writer",
+			err2.Error())
+
+		err = errors.Join(err3)
 	}
 
 	err2 = fBuffReadWriteElectron.
-		flushAndCloseWriter(
+		readerCloseRelease(
 			fBufReadWrite,
 			fBufReadWriteLabel,
-			releaseMemoryResources,
+			releaseReaderWriterMemResources,
+			releaseFBuffReadWriteMemResources,
 			ePrefix)
 
 	if err2 != nil {
 
-		err = errors.Join(err, err2)
+		err3 = fmt.Errorf("%v\n"+
+			"Error occurred while closing the %v.\n"+
+			"Error:\n%v\n",
+			funcName,
+			fBufReadWriteLabel+".reader",
+			err2.Error())
+
+		err = errors.Join(err3)
 	}
 
 	return err
@@ -7460,10 +7278,11 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setIoReader(
 		return err
 	}
 
-	err = new(fileBufferReadWriteElectron).closeReader(
+	err = new(fileBufferReadWriteElectron).readerCloseRelease(
 		fBufReadWrite,
 		fBufReadWriteLabel,
 		true, // releaseMemoryResources
+		true, // releaseFBuffReaderLocalMemRes
 		ePrefix.XCpy("Close-Reader"))
 
 	if err != nil {
@@ -7683,11 +7502,14 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setIoWriter(
 		return err
 	}
 
-	err = new(fileBufferReadWriteElectron).flushAndCloseWriter(
-		fBufReadWrite,
-		fBufReadWriteLabel,
-		true, // releaseMemoryResources
-		ePrefix.XCpy("Close-Writer"))
+	err = new(fileBufferReadWriteElectron).
+		writerFlushCloseRelease(
+			fBufReadWrite,
+			fBufReadWriteLabel,
+			true, // flushWriteBuffer
+			true, // releaseMemoryResources
+			true, // releaseFBuffWriterLocalMemRes
+			ePrefix.XCpy("Close-Writer"))
 
 	if err != nil {
 
@@ -7937,10 +7759,11 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameReader(
 		return fInfoPlus, err
 	}
 
-	err = new(fileBufferReadWriteElectron).closeReader(
+	err = new(fileBufferReadWriteElectron).readerCloseRelease(
 		fBufReadWrite,
 		fBufReadWriteLabel,
 		true, // releaseMemoryResources
+		true, // releaseFBuffReaderLocalMemRes
 		ePrefix.XCpy("Close-Reader"))
 
 	if err != nil {
@@ -8224,11 +8047,14 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameWriter(
 		return fInfoPlus, err
 	}
 
-	err = new(fileBufferReadWriteElectron).flushAndCloseWriter(
-		fBufReadWrite,
-		fBufReadWriteLabel,
-		true, // releaseMemoryResources
-		ePrefix.XCpy("Close-Writer"))
+	err = new(fileBufferReadWriteElectron).
+		writerFlushCloseRelease(
+			fBufReadWrite,
+			fBufReadWriteLabel,
+			true, // flushWriteBuffer
+			true, // releaseWriterMemResources
+			true, // releaseFBuffWriterLocalMemRes
+			ePrefix.XCpy("Close-Writer"))
 
 	if err != nil {
 
@@ -8270,167 +8096,6 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameWriter(
 
 type fileBufferReadWriteElectron struct {
 	lock *sync.Mutex
-}
-
-// closeReader
-//
-// This method is designed to perform clean up tasks
-// associated with the io.Reader configured for the
-// instance of FileBufferReadWrite passed as input
-// parameter 'fBufReadWrite'.
-//
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-//	This method will effectively render the instance of
-//	FileBufferReadWrite, passed as input parameter
-//	'fBufReadWrite', invalid and unusable for any
-//	future 'read' operations.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	fBufReadWrite				*FileBufferReadWrite
-//
-//		A pointer to an instance of FileBufferWriter.
-//
-//		The internal io.Reader object encapsulated
-//		in this instance of FileBufferReadWrite will be
-//		deleted as part of this 'close' operation.
-//
-//		Upon completion of this method, 'fBufReadWrite'
-//		will be invalid and unusable for future 'read'
-//		operations.
-//
-//	fBufReadWriteLabel			string
-//
-//		The name or label associated with input parameter
-//		'fBufReadWrite' which will be used in error
-//		messages returned by this method.
-//
-//		If this parameter is submitted as an empty
-//		string, a default value of "fBufReadWrite" will
-//		be automatically applied.
-//
-//	releaseMemoryResources		bool
-//
-//		If this parameter is set to 'true', this method
-//		will release all memory resources for the internal
-//		bufio.reader object encapsulated by 'fBufReader'.
-//		Releasing these memory resources synchronizes
-//		internal flags and prevents multiple calls to the
-//		'close' reader method.
-//
-//	errPrefDto					*ePref.ErrPrefixDto
-//
-//		This object encapsulates an error prefix string
-//		which is included in all returned error
-//		messages. Usually, it contains the name of the
-//		calling method or methods listed as a function
-//		chain.
-//
-//		If no error prefix information is needed, set
-//		this parameter to 'nil'.
-//
-//		Type ErrPrefixDto is included in the 'errpref'
-//		software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errPrefDto'.
-//	 	The 'errPrefDto' text will be prefixed or
-//	 	attached to the	beginning of the error message.
-func (fBuffReadWriteElectron *fileBufferReadWriteElectron) closeReader(
-	fBufReadWrite *FileBufferReadWrite,
-	fBufReadWriteLabel string,
-	releaseMemoryResources bool,
-	errPrefDto *ePref.ErrPrefixDto) error {
-
-	if fBuffReadWriteElectron.lock == nil {
-		fBuffReadWriteElectron.lock = new(sync.Mutex)
-	}
-
-	fBuffReadWriteElectron.lock.Lock()
-
-	defer fBuffReadWriteElectron.lock.Unlock()
-
-	var err error
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	funcName := "fileBufferReadWriteElectron." +
-		"closeReader()"
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		funcName,
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	if len(fBufReadWriteLabel) == 0 {
-
-		fBufReadWriteLabel = "fBufReadWrite"
-	}
-
-	if fBufReadWrite == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter '%v' is a nil pointer!\n"+
-			"%v is invalid.\n",
-			ePrefix.String(),
-			fBufReadWriteLabel,
-			fBufReadWriteLabel)
-
-		return err
-	}
-
-	var err2 error
-
-	if fBufReadWrite.reader != nil {
-
-		err2 = new(fileBufferReaderMolecule).closeAndRelease(
-			fBufReadWrite.reader,
-			fBufReadWriteLabel+".reader",
-			releaseMemoryResources,
-			ePrefix.XCpy(
-				fBufReadWriteLabel+".reader"))
-
-		if err2 != nil {
-
-			err = fmt.Errorf("%v\n"+
-				"An error occurred while closing %v.reader.\n"+
-				"Error=\n%v\n",
-				funcName,
-				fBufReadWriteLabel,
-				err2.Error())
-
-			return err
-		}
-
-	}
-
-	fBufReadWrite.reader = nil
-	fBufReadWrite.readerFilePathName = ""
-
-	return err
 }
 
 // empty
@@ -8493,168 +8158,6 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) empty(
 	fBufReadWrite.writerFilePathName = ""
 
 	return
-}
-
-// flushAndCloseWriter
-//
-// This method is designed to perform clean up tasks
-// associated with the io.Writer configured for the
-// instance of FileBufferReadWrite passed as input
-// parameter 'fBufReadWrite'.
-//
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-//	This method will effectively render the instance of
-//	FileBufferReadWrite, passed as input parameter
-//	'fBufReadWrite', invalid and unusable for any
-//	future 'write' operations. The io.Writer object
-//	configured for 'fBufReadWrite' will be deleted.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	fBufReadWrite				*FileBufferReadWrite
-//
-//		A pointer to an instance of FileBufferWriter.
-//
-//		The internal io.Writer object encapsulated
-//		in this instance of FileBufferReadWrite will be
-//		deleted as part of this 'close' operation.
-//
-//		Upon completion of this method, 'fBufReadWrite'
-//		will be invalid and unusable for any future
-//		'write' operations.
-//
-//	fBufReadWriteLabel			string
-//
-//		The name or label associated with input parameter
-//		'fBufReadWrite' which will be used in error
-//		messages returned by this method.
-//
-//		If this parameter is submitted as an empty
-//		string, a default value of "fBufReadWrite" will
-//		be automatically applied.
-//
-//	releaseMemoryResources		bool
-//
-//		If this parameter is set to 'true', this method
-//		will release the memory resources for the
-//		internal bufio.writer object encapsulated by
-//		'fBufReadWrite'.
-//
-//	errPrefDto					*ePref.ErrPrefixDto
-//
-//		This object encapsulates an error prefix string
-//		which is included in all returned error
-//		messages. Usually, it contains the name of the
-//		calling method or methods listed as a function
-//		chain.
-//
-//		If no error prefix information is needed, set
-//		this parameter to 'nil'.
-//
-//		Type ErrPrefixDto is included in the 'errpref'
-//		software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errPrefDto'.
-//	 	The 'errPrefDto' text will be prefixed or
-//	 	attached to the	beginning of the error message.
-func (fBuffReadWriteElectron *fileBufferReadWriteElectron) flushAndCloseWriter(
-	fBufReadWrite *FileBufferReadWrite,
-	fBufReadWriteLabel string,
-	releaseMemoryResources bool,
-	errPrefDto *ePref.ErrPrefixDto) error {
-
-	if fBuffReadWriteElectron.lock == nil {
-		fBuffReadWriteElectron.lock = new(sync.Mutex)
-	}
-
-	fBuffReadWriteElectron.lock.Lock()
-
-	defer fBuffReadWriteElectron.lock.Unlock()
-
-	var err error
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	funcName := "fileBufferReadWriteElectron." +
-		"flushAndCloseWriter()"
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
-		errPrefDto,
-		funcName,
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	if len(fBufReadWriteLabel) == 0 {
-
-		fBufReadWriteLabel = "fBufReadWrite"
-	}
-
-	if fBufReadWrite == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter '%v' is a nil pointer!\n"+
-			"%v is invalid.\n",
-			ePrefix.String(),
-			fBufReadWriteLabel,
-			fBufReadWriteLabel)
-
-		return err
-	}
-
-	var err2, err3 error
-
-	if fBufReadWrite.writer != nil {
-
-		err2 = new(fileBufferWriterMolecule).
-			flushCloseRelease(
-				fBufReadWrite.writer,
-				fBufReadWriteLabel+".writer",
-				true, // flushWriteBuffer
-				releaseMemoryResources,
-				ePrefix.XCpy(
-					fBufReadWriteLabel+".writer"))
-
-		if err2 != nil {
-
-			err3 = fmt.Errorf("%v\n"+
-				"An error occurred while closing %v.writer.\n"+
-				"Error=\n%v\n",
-				funcName,
-				fBufReadWriteLabel,
-				err2.Error())
-
-			err = errors.Join(err, err3)
-		}
-
-	}
-
-	fBufReadWrite.writer = nil
-	fBufReadWrite.writerFilePathName = ""
-
-	return err
 }
 
 // isFileBufferReadWriteValid
@@ -8809,6 +8312,417 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) isFileBufferReadWrite
 			" methods to create a valid instance of FileBufferReadWrite.\n",
 			ePrefix.String(),
 			fBufReadWriteLabel)
+
+	}
+
+	return err
+}
+
+// readerCloseRelease
+//
+// This method will perform Clean-Up operations on the
+// internal bufio.Reader object encapsulated in the
+// FileBufferReadWrite instance passed as input parameter
+// 'fBufReadWrite':
+//
+//	fBufReadWrite.reader
+//
+// Upon completion, method will effectively render the
+// 'fBufReadWrite' instance	invalid and unusable for any
+// future 'read' operations.
+//
+// This operation is accomplished by closing the internal
+// bufio.Reader object and release the memory resources
+// associated with that object:
+//
+//	fBufReadWrite.reader
+//
+// The 'release memory resources' actions are implemented
+// independently based on the values passed for input
+// parameters 'releaseReaderMemResources', and
+// 'releaseFBuffReaderLocalMemRes'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufReadWrite						*FileBufferReadWrite
+//
+//		A pointer to an instance of FileBufferWriter.
+//
+//		This method will perform Clean-Up operations on
+//		the internal bufio.Reader object encapsulated in
+//		this FileBufferReadWrite instance:
+//
+//			fBufReadWrite.reader
+//
+//		Upon completion, this method will effectively
+//		render the FileBufferReadWrite instance,
+//		'fBufReadWrite', invalid and unusable for any
+//		future 'read' operations.
+//
+//	fBufReadWriteLabel					string
+//
+//		The name or label associated with input parameter
+//		'fBufReadWrite' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufReadWrite" will
+//		be automatically applied.
+//
+//	releaseReaderMemResources			bool
+//
+//		If this parameter is set to 'true', this method
+//		will release the internal memory resources for
+//		the	internal bufio.Reader object encapsulated by
+//		'fBufReadWrite':
+//
+//			fBufReadWrite.reader
+//
+//		Releasing internal memory resources synchronizes
+//		internal flags and prevents multiple calls to the
+//		'close' method. Calling the 'close' method more
+//		than once may produce unexpected results.
+//
+//	releaseFBuffReaderLocalMemRes		bool
+//
+//		If 'releaseFBuffReaderLocalMemRes' is set to
+//		'true', this method will release the local memory
+//		resources for the FileBufferReadWrite reader object
+//		(fBufReadWrite):
+//
+//			fBufReadWrite.reader = nil
+//			fBufReadWrite.readerFilePathName = ""
+//
+//		Releasing internal memory resources synchronizes
+//		internal flags and prevents multiple calls to the
+//		'close' method. Calling the 'close' method more
+//		than once may produce unexpected results.
+//
+//	errPrefDto							*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBuffReadWriteElectron *fileBufferReadWriteElectron) readerCloseRelease(
+	fBufReadWrite *FileBufferReadWrite,
+	fBufReadWriteLabel string,
+	releaseReaderMemResources bool,
+	releaseFBuffReaderLocalMemRes bool,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fBuffReadWriteElectron.lock == nil {
+		fBuffReadWriteElectron.lock = new(sync.Mutex)
+	}
+
+	fBuffReadWriteElectron.lock.Lock()
+
+	defer fBuffReadWriteElectron.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileBufferReadWriteElectron." +
+		"readerCloseRelease()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(fBufReadWriteLabel) == 0 {
+
+		fBufReadWriteLabel = "fBufReadWrite"
+	}
+
+	if fBufReadWrite == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is a nil pointer!\n"+
+			"%v is invalid.\n",
+			ePrefix.String(),
+			fBufReadWriteLabel,
+			fBufReadWriteLabel)
+
+		return err
+	}
+
+	var err2 error
+
+	if fBufReadWrite.reader != nil {
+
+		err2 = new(fileBufferReaderMolecule).closeAndRelease(
+			fBufReadWrite.reader,
+			fBufReadWriteLabel+".reader",
+			releaseReaderMemResources,
+			ePrefix.XCpy(
+				fBufReadWriteLabel+".reader"))
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"An error occurred while closing %v.reader.\n"+
+				"Error=\n%v\n",
+				funcName,
+				fBufReadWriteLabel,
+				err2.Error())
+
+			return err
+		}
+
+	}
+
+	if releaseFBuffReaderLocalMemRes == true {
+
+		fBufReadWrite.reader = nil
+		fBufReadWrite.readerFilePathName = ""
+
+	}
+
+	return err
+}
+
+// writerFlushCloseRelease
+//
+// This method will perform Clean-Up operations on the
+// internal bufio.Writer object encapsulated in the
+// FileBufferReadWrite instance passed as input parameter
+// 'fBufReadWrite':
+//
+//	fBufReadWrite.writer
+//
+// Upon completion, method will effectively render the
+// 'fBufReadWrite' instance	invalid and unusable for any
+// future 'write' operations.
+//
+// This operation is accomplished by flushing and closing
+// the internal bufio.Writer object before finally
+// releasing the memory resources associated with that
+// object:
+//
+//	fBufReadWrite.writer
+//
+// The 'flush' and 'release memory resources' actions are
+// implemented independently based on the values passed
+// for input parameters 'flushWriteBuffer',
+// 'releaseWriterMemResources', and
+// 'releaseFBuffWriterLocalMemRes'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufReadWrite						*FileBufferReadWrite
+//
+//		A pointer to an instance of FileBufferWriter.
+//
+//		This method will perform Clean-Up operations on
+//		the internal bufio.Writer object encapsulated in
+//		this FileBufferReadWrite instance:
+//
+//			fBufReadWrite.writer
+//
+//		Upon completion, this method will effectively
+//		render the FileBufferReadWrite instance,
+//		'fBufReadWrite', invalid and unusable for any
+//		future 'write' operations.
+//
+//	fBufReadWriteLabel					string
+//
+//		The name or label associated with input parameter
+//		'fBufReadWrite' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufReadWrite" will
+//		be automatically applied.
+//
+//	flushWriteBuffer					bool
+//
+//		If 'flushWriteBuffer' is set to 'true', this
+//		method will flush the contents of the write
+//		buffer. This means that write buffer contents are
+//		guaranteed to be written to the internal
+//		bufio.Writer object encapsulated by the
+//		FileBufferReadWrite input parameter
+//		'fBufReadWrite'.
+//
+//		If 'flushWriteBuffer' is set to 'false', the
+//		contents of the write buffer will be lost.
+//
+//	releaseWriterMemResources			bool
+//
+//		If 'releaseWriterMemResources' is set to 'true',
+//		this method	will release the internal memory
+//		resources for the internal bufio.writer object
+//		encapsulated by	'fBufReadWrite':
+//
+//			fBufReadWrite.writer
+//
+//		Releasing internal memory resources synchronizes
+//		internal flags and prevents multiple calls to the
+//		'close' method. Calling the 'close' method more
+//		than once may produce unexpected results.
+//
+//	releaseFBuffReaderLocalMemRes		bool
+//
+//		If 'releaseFBuffReaderLocalMemRes' is set to
+//		'true', this method will release the local memory
+//		resources for the FileBufferReadWrite writer object
+//		(fBufReadWrite):
+//
+//			fBufReadWrite.writer = nil
+//			fBufReadWrite.writerFilePathName = ""
+//
+//		Releasing internal memory resources synchronizes
+//		internal flags and prevents multiple calls to the
+//		'close' method. Calling the 'close' method more
+//		than once may produce unexpected results.
+//
+//	errPrefDto							*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBuffReadWriteElectron *fileBufferReadWriteElectron) writerFlushCloseRelease(
+	fBufReadWrite *FileBufferReadWrite,
+	fBufReadWriteLabel string,
+	flushWriteBuffer bool,
+	releaseWriterMemResources bool,
+	releaseFBuffWriterLocalMemRes bool,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fBuffReadWriteElectron.lock == nil {
+		fBuffReadWriteElectron.lock = new(sync.Mutex)
+	}
+
+	fBuffReadWriteElectron.lock.Lock()
+
+	defer fBuffReadWriteElectron.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileBufferReadWriteElectron." +
+		"writerFlushCloseRelease()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(fBufReadWriteLabel) == 0 {
+
+		fBufReadWriteLabel = "fBufReadWrite"
+	}
+
+	if fBufReadWrite == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is a nil pointer!\n"+
+			"%v is invalid.\n",
+			ePrefix.String(),
+			fBufReadWriteLabel,
+			fBufReadWriteLabel)
+
+		return err
+	}
+
+	var err2 error
+
+	if fBufReadWrite.writer != nil {
+
+		err2 = new(fileBufferWriterMolecule).
+			flushCloseRelease(
+				fBufReadWrite.writer,
+				fBufReadWriteLabel+".writer",
+				flushWriteBuffer,
+				releaseWriterMemResources,
+				ePrefix)
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error occurred while closing the %v.\n"+
+				"Error:\n%v\n",
+				funcName,
+				fBufReadWriteLabel+".writer",
+				err2.Error())
+
+			return err
+		}
+
+	}
+
+	if releaseFBuffWriterLocalMemRes == true {
+
+		fBufReadWrite.reader = nil
+		fBufReadWrite.readerFilePathName = ""
 
 	}
 
