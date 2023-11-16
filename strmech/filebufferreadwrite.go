@@ -113,7 +113,7 @@ import (
 //	completed, the user is responsible for performing
 //	Clean-Up operations by calling the following method:
 //
-//		FileBufferReadWrite.Close()
+//		FileBufferReadWrite.FlushCloseRelease()
 //
 //	NOTE -	This 'Close' method will also 'flush' the
 //			internal 'write' buffer.
@@ -126,7 +126,7 @@ import (
 //	completed, the user is responsible for performing
 //	Clean-Up operations by calling the following method:
 //
-//		FileBufferReadWrite.Close()
+//		FileBufferReadWrite.FlushCloseRelease()
 type FileBufferReadWrite struct {
 	writer             *FileBufferWriter
 	reader             *FileBufferReader
@@ -340,7 +340,7 @@ func (fBufReadWrite *FileBufferReadWrite) Close() error {
 // after all 'read' and 'write' operations have been
 // completed by calling the local method:
 //
-//	FileBufferReadWrite.Close()
+//	FileBufferReadWrite.FlushCloseRelease()
 //
 // However, in the event of unforeseen use cases, this
 // method is provided to exclusively close or clean-up
@@ -511,7 +511,7 @@ func (fBufReadWrite *FileBufferReadWrite) CloseReader(
 // after all 'read' and 'write' operations have been
 // completed by calling the local method:
 //
-//	FileBufferReadWrite.Close()
+//	FileBufferReadWrite.FlushCloseRelease()
 //
 // However, in the event of unforeseen use cases, this
 // method is provided to exclusively close or clean-up
@@ -1215,7 +1215,7 @@ func (fBufReadWrite *FileBufferReadWrite) New() FileBufferReadWrite {
 //		performing any other required clean-up operations
 //		in addition to calling local method:
 //
-//		FileBufferReadWrite.Close()
+//		FileBufferReadWrite.FlushCloseRelease()
 //
 //		While the 'read' services provided by
 //		FileBufferReadWrite are primarily designed to
@@ -1254,7 +1254,7 @@ func (fBufReadWrite *FileBufferReadWrite) New() FileBufferReadWrite {
 //		performing any other required clean-up operations
 //		in addition to calling local method:
 //
-//		FileBufferReadWrite.Close()
+//		FileBufferReadWrite.FlushCloseRelease()
 //
 //		While the 'write' services provided by the
 //		FileBufferReadWrite are primarily designed for
@@ -2026,7 +2026,7 @@ func (fBufReadWrite *FileBufferReadWrite) NewPathFileNames(
 // method to ensure clean-up operations are properly
 // applied:
 //
-//	FileBufferReadWrite.Close()
+//	FileBufferReadWrite.FlushCloseRelease()()
 //
 // ----------------------------------------------------------------
 //
@@ -2058,7 +2058,7 @@ func (fBufReadWrite *FileBufferReadWrite) NewPathFileNames(
 //	(4)	When all 'read' and 'write' operations have been
 //		completed, call method:
 //
-//			FileBufferReadWrite.Close()
+//			FileBufferReadWrite.FlushCloseRelease()()
 //
 // ----------------------------------------------------------------
 //
@@ -2250,7 +2250,7 @@ func (fBufReadWrite *FileBufferReadWrite) Read(
 // user is then responsible for performing the 'Close'
 // operation by calling the local method:
 //
-//	FileBufferReadWrite.Close()
+//	FileBufferReadWrite.FlushCloseRelease()()
 //
 // ----------------------------------------------------------------
 //
@@ -2258,7 +2258,7 @@ func (fBufReadWrite *FileBufferReadWrite) Read(
 //
 //	If input parameter 'autoFlushAndCloseOnExit' is set
 //	to 'false', the user is responsible for calling local
-//	method FileBufferReadWrite.Close() in order to
+//	method FileBufferReadWrite.FlushCloseRelease()() in order to
 //	perform the required clean-up operations on the
 //	current instance of FileBufferReadWrite.
 //
@@ -2294,7 +2294,7 @@ func (fBufReadWrite *FileBufferReadWrite) Read(
 //		then responsible for performing the 'Close'
 //		operation by calling the local method:
 //
-//			FileBufferReadWrite.Close()
+//			FileBufferReadWrite.FlushCloseRelease()()
 //
 //
 //	errorPrefix					interface{}
@@ -2589,7 +2589,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 // performing the 'Close' operation by calling the local
 // method:
 //
-//	FileBufferReadWrite.Close()
+//	FileBufferReadWrite.FlushCloseRelease()
 //
 // ----------------------------------------------------------------
 //
@@ -2642,7 +2642,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //
 //	(2)	If input parameter 'autoFlushAndCloseOnExit' is
 //		set to 'false', the user is responsible for
-//		calling local method FileBufferReadWrite.Close()
+//		calling local method FileBufferReadWrite.FlushCloseRelease()
 //		in order to perform the required clean-up
 //		operations on the current instance of
 //		FileBufferReadWrite.
@@ -2784,7 +2784,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //		performing the 'Close' operation by calling the
 //		local method:
 //
-//			FileBufferReadWrite.Close()
+//			FileBufferReadWrite.FlushCloseRelease()
 //
 //	errorPrefix					interface{}
 //
@@ -3258,7 +3258,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReleaseMemResources() {
 // method to ensure clean-up operations are properly
 // applied:
 //
-//	FileBufferReadWrite.Close()
+//	FileBufferReadWrite.FlushCloseRelease()
 //		Note: 	The Close operation performs both Flush
 //				and Close tasks.
 //
@@ -4217,7 +4217,7 @@ func (fBufReadWrite *FileBufferReadWrite) SetFileMgrWriter(
 //		performing any other required clean-up operations
 //		in addition to calling local method:
 //
-//		FileBufferReadWrite.Close()
+//		FileBufferReadWrite.FlushCloseRelease()
 //			This method will flush the 'write' buffer
 //			in addition to closing and performing
 //			clean-up tasks for the io.Reader and
@@ -4261,7 +4261,7 @@ func (fBufReadWrite *FileBufferReadWrite) SetFileMgrWriter(
 //		other required clean-up operations in addition to
 //		calling local method:
 //
-//		FileBufferReadWrite.Close()
+//		FileBufferReadWrite.FlushCloseRelease()
 //			This method will flush the 'write' buffer
 //			in addition to closing and performing
 //			clean-up tasks for the io.Reader and
@@ -4443,7 +4443,7 @@ func (fBufReadWrite *FileBufferReadWrite) SetIoReadWrite(
 //		performing any other required clean-up operations
 //		in addition to calling local method:
 //
-//		FileBufferReadWrite.Close()
+//		FileBufferReadWrite.FlushCloseRelease()
 //
 //		While the 'read' services provided by
 //		FileBufferReadWrite are primarily designed to
@@ -4613,7 +4613,7 @@ func (fBufReadWrite *FileBufferReadWrite) SetIoReader(
 //		performing any other required clean-up operations
 //		in addition to calling local method:
 //
-//		FileBufferReadWrite.Close()
+//		FileBufferReadWrite.FlushCloseRelease()
 //			This method will flush the 'write' buffer
 //			in addition to closing and performing
 //			clean-up tasks for the io.Reader and
@@ -6318,7 +6318,7 @@ type fileBufferReadWriteNanobot struct {
 //		performing any other required clean-up operations
 //		in addition to calling the local method:
 //
-//		FileBufferReadWrite.Close()
+//		FileBufferReadWrite.FlushCloseRelease()
 //
 //		While the 'read' services provided by
 //		FileBufferReadWrite are primarily designed to
@@ -6368,7 +6368,7 @@ type fileBufferReadWriteNanobot struct {
 //		other required clean-up operations in addition to
 //		calling local method:
 //
-//		FileBufferReadWrite.Close()
+//		FileBufferReadWrite.FlushCloseRelease()
 //
 //		While the 'write' services provided by the
 //		FileBufferReadWrite are primarily designed for
@@ -7432,7 +7432,7 @@ type fileBufferReadWriteAtom struct {
 //		performing any other required clean-up operations
 //		in addition to calling the local method:
 //
-//		FileBufferReadWrite.Close()
+//		FileBufferReadWrite.FlushCloseRelease()
 //
 //		While the 'read' services provided by
 //		FileBufferReadWrite are primarily designed to
@@ -7650,7 +7650,7 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setIoReader(
 //		other required clean-up operations in addition to
 //		calling local method:
 //
-//		FileBufferReadWrite.Close()
+//		FileBufferReadWrite.FlushCloseRelease()
 //
 //		While the 'write' services provided by the
 //		FileBufferReadWrite are primarily designed for

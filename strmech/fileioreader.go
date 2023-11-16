@@ -630,7 +630,7 @@ func (fIoReader *FileIoReader) GetIoReader(
 //
 //		Although the FileIoReader type does not use the
 //		'buffered' read protocol, the size of the byte
-//		array used to read and store bytes read from the
+//		array used to store bytes read from the
 //		underlying io.Reader object is variable.
 //
 //		Methods utilizing the Default Reader Buffer Size

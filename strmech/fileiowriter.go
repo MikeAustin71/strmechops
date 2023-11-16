@@ -584,7 +584,7 @@ func (fIoWriter *FileIoWriter) GetIoWriter(
 //		the user is responsible for manually closing the
 //		file and performing any other required clean-up
 //		operations in addition to calling local method
-//		FileIoWriter.Close().
+//		FileIoWriter.CloseAndRelease().
 //
 //		While the returned instance of FileIoWriter
 //		is primarily designed for writing data to disk
@@ -1888,11 +1888,6 @@ func (fIoWriter *FileIoWriter) SetDefaultByteArraySize(
 //		files, this 'writer' will in fact write data from
 //		any object implementing the io.Writer interface.
 //
-//		Remember that the user is responsible for
-//		'closing' this io.Writer object. The FileIoWriter
-//		method 'Close()' will NOT close this io.Writer
-//		object.
-//
 //	defaultByteArraySize		int
 //
 //		The size of the byte array which will be used to
@@ -2722,7 +2717,7 @@ func (fIoWriter FileIoWriter) Write(
 //		the user MUST call the 'Close' method to perform
 //		necessary clean-up operations:
 //
-//			FileIoWriter.Close()
+//			FileIoWriter.CloseAndRelease()
 //
 //	(3)	If the planned number of bytes to be written as
 //		specified by the length of 'bytesToWrite' does
@@ -3536,7 +3531,7 @@ type fileIoWriterNanobot struct {
 //		the user is responsible for manually closing the
 //		file and performing any other required clean-up
 //		operations in addition to calling local method
-//		FileIoWriter.FlushAndClose().
+//		FileIoWriter.CloseAndRelease().
 //
 //		While the configured instance of FileIoWriter
 //		(fIoWriter) is primarily designed for writing
