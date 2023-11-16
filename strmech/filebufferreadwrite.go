@@ -8996,8 +8996,8 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) writerFlushCloseRelea
 
 	if releaseFBuffWriterLocalMemRes == true {
 
-		fBufReadWrite.reader = nil
-		fBufReadWrite.readerFilePathName = ""
+		fBufReadWrite.writer = nil
+		fBufReadWrite.writerFilePathName = ""
 
 	}
 

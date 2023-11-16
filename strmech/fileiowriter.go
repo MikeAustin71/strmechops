@@ -130,10 +130,12 @@ func (fIoWriter FileIoWriter) Close() error {
 		return err
 	}
 
-	err = new(fileIoWriterAtom).close(
-		&fIoWriter,
-		"fIoWriter",
-		ePrefix.XCpy("fIoWriter"))
+	err = new(fileIoWriterMolecule).
+		closeAndRelease(
+			&fIoWriter,
+			"fIoWriter",
+			false, // releaseMemoryResources
+			ePrefix.XCpy("fIoWriter"))
 
 	return err
 }
@@ -300,6 +302,7 @@ func (fIoWriter *FileIoWriter) CloseAndRelease(
 		closeAndRelease(
 			fIoWriter,
 			"fIoWriter",
+			true, // releaseMemoryResources
 			ePrefix)
 
 	return err
@@ -588,14 +591,14 @@ func (fIoWriter *FileIoWriter) GetIoWriter(
 //		files, this 'writer' will in fact write data to
 //		any object implementing the io.Writer interface.
 //
-//	defaultByteArraySize		int
+//	defaultWriterByteArraySize	int
 //
 //		The size of the byte array which will be used to
 //		write data to the internal io.Writer object
 //		encapsulated by the returned FileIoWriter
 //		instance.
 //
-//		If the value of 'defaultByteArraySize' is
+//		If the value of 'defaultWriterByteArraySize' is
 //		less than one ('1'), it will be reset to a size
 //		of '4096'.
 //
@@ -692,7 +695,7 @@ func (fIoWriter *FileIoWriter) GetIoWriter(
 //	 	attached to the	beginning of the error message.
 func (fIoWriter *FileIoWriter) NewIoWriter(
 	writer io.Writer,
-	defaultByteArraySize int,
+	defaultWriterByteArraySize int,
 	errorPrefix interface{}) (
 	FileIoWriter,
 	error) {
@@ -726,7 +729,7 @@ func (fIoWriter *FileIoWriter) NewIoWriter(
 			"newFileIoWriter",
 			writer,
 			"writer",
-			defaultByteArraySize,
+			defaultWriterByteArraySize,
 			ePrefix.XCpy("newFileIoWriter"))
 
 	return newFileIoWriter, err
@@ -3029,6 +3032,7 @@ func (fIoWriter *FileIoWriter) WriteTextOrNumbers(
 			closeAndRelease(
 				fIoWriter,
 				"fIoWriter",
+				true, // releaseMemoryResources
 				ePrefix)
 	}
 
@@ -3681,8 +3685,9 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setIoWriter(
 	// Close the old fIoWriter
 	_ = fIoWriterMolecule.closeAndRelease(
 		fIoWriter,
-		"",
-		nil)
+		writerLabel,
+		true,
+		ePrefix)
 
 	var ok bool
 
@@ -3966,8 +3971,9 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setPathFileName(
 	// Close the old fIoWriter
 	_ = fIoWriterMolecule.closeAndRelease(
 		fIoWriter,
-		"",
-		nil)
+		fIoWriterLabel,
+		true,
+		ePrefix)
 
 	var err2 error
 
@@ -4148,6 +4154,16 @@ type fileIoWriterMolecule struct {
 //		string, a default value of "fIoWriter" will be
 //		automatically applied.
 //
+//	releaseMemoryResources		bool
+//
+//		If this parameter is set to 'true', this method
+//		will release all internal memory resources for
+//		the passed instance of FileIoWriter ('fIoWriter').
+//		Releasing internal memory resources synchronizes
+//		internal flags and prevents multiple calls to the
+//		'close' method. Calling the 'close' method more
+//		than once may produce unexpected results.
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -4182,6 +4198,7 @@ type fileIoWriterMolecule struct {
 func (fIoWriterMolecule *fileIoWriterMolecule) closeAndRelease(
 	fIoWriter *FileIoWriter,
 	fIoWriterLabel string,
+	releaseMemoryResources bool,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if fIoWriterMolecule.lock == nil {
@@ -4235,7 +4252,14 @@ func (fIoWriterMolecule *fileIoWriterMolecule) closeAndRelease(
 		fIoWriterLabel,
 		ePrefix)
 
-	fIoWriterAtom.empty(fIoWriter)
+	if err != nil {
+
+		return err
+	}
+
+	if releaseMemoryResources == true {
+		fIoWriterAtom.empty(fIoWriter)
+	}
 
 	return err
 }
@@ -4424,46 +4448,48 @@ func (fIoWriterAtom *fileIoWriterAtom) close(
 		return err
 	}
 
-	if fIoWriter.ioWriter != nil {
+	if fIoWriter.ioWriter == nil {
 
-		var ok bool
-		var closerObj io.Closer
-		var localWriter io.Writer
+		return err
+	}
 
-		localWriter = *fIoWriter.ioWriter
+	var ok bool
+	var closerObj io.Closer
+	var localWriter io.Writer
 
-		closerObj, ok = localWriter.(io.Closer)
+	localWriter = *fIoWriter.ioWriter
 
-		if ok {
+	closerObj, ok = localWriter.(io.Closer)
 
-			var err2 error
+	if ok {
 
-			err2 = closerObj.Close()
+		var err2 error
 
-			if err2 != nil {
+		err2 = closerObj.Close()
 
-				errText := fmt.Sprintf(
-					"%v\n"+
-						"Error returned while closing the 'FileIoWriter'\n"+
-						"internal io.Writer object.\n",
-					ePrefix.String())
+		if err2 != nil {
 
-				if len(fIoWriter.targetWriteFileName) > 0 {
+			errText := fmt.Sprintf(
+				"%v\n"+
+					"Error returned while closing the 'FileIoWriter'\n"+
+					"internal io.Writer object.\n",
+				ePrefix.String())
 
-					errText += fmt.Sprintf(
-						"Target Write File Name: %v\n",
-						fIoWriter.targetWriteFileName)
+			if len(fIoWriter.targetWriteFileName) > 0 {
 
-				}
-
-				err = fmt.Errorf("%v"+
-					"closerObj.Close() Error=\n%v\n",
-					errText,
-					err2.Error())
+				errText += fmt.Sprintf(
+					"Target Write File Name: %v\n",
+					fIoWriter.targetWriteFileName)
 
 			}
 
+			err = fmt.Errorf("%v"+
+				"closerObj.Close() Error=\n%v\n",
+				errText,
+				err2.Error())
+
 		}
+
 	}
 
 	return err

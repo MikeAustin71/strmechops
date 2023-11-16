@@ -338,6 +338,7 @@ func (fIoReader *FileIoReader) CloseAndRelease(
 	err = new(fileIoReaderMolecule).closeAndRelease(
 		fIoReader,
 		"fIoReader",
+		true, // releaseMemoryResources
 		ePrefix.XCpy("fIoReader"))
 
 	return err
@@ -1861,6 +1862,7 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 		err = new(fileIoReaderMolecule).closeAndRelease(
 			fIoReader,
 			"fIoReader",
+			true, // releaseMemoryResources
 			ePrefix.XCpy("fIoReader"))
 
 	}
@@ -4581,6 +4583,7 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readAllStrBuilder(
 		err = fIoReaderMolecule.closeAndRelease(
 			fIoReader,
 			"fIoReader",
+			true, // releaseMemoryResources
 			ePrefix.XCpy("fIoReader"))
 
 	}
@@ -4868,6 +4871,7 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readBytesToStrBuilder(
 		err = fIoReaderMolecule.closeAndRelease(
 			fIoReader,
 			"fIoReader",
+			true, // releaseMemoryResources
 			ePrefix.XCpy("fIoReader"))
 
 	}
@@ -5336,11 +5340,13 @@ func (fIoReaderNanobot *fileIoReaderNanobot) setIoReader(
 		return err
 	}
 
+	// Close Old FileIoReader
 	var fIoReaderMolecule = new(fileIoReaderMolecule)
 
 	err = fIoReaderMolecule.closeAndRelease(
 		fIoReader,
 		fIoReaderLabel,
+		true, // releaseMemoryResources
 		ePrefix.XCpy(fIoReaderLabel))
 
 	if err != nil {
@@ -5600,9 +5606,12 @@ func (fIoReaderNanobot *fileIoReaderNanobot) setPathFileName(
 
 	var fIoReaderMolecule = new(fileIoReaderMolecule)
 
+	// Close old FileIoReader
+
 	err = fIoReaderMolecule.closeAndRelease(
 		fIoReader,
 		fIoReaderLabel,
+		true, // releaseMemoryResources
 		ePrefix.XCpy(fIoReaderLabel))
 
 	if err != nil {
@@ -5845,6 +5854,16 @@ func (fIoReaderMolecule *fileIoReaderMolecule) validateDefaultReaderBufferSize(
 //		string, a default value of "fIoReader" will be
 //		automatically applied.
 //
+//	releaseMemoryResources		bool
+//
+//		If this parameter is set to 'true', this method
+//		will release all internal memory resources for
+//		the passed instance of FileIoReader ('fIoReader').
+//		Releasing internal memory resources synchronizes
+//		internal flags and prevents multiple calls to the
+//		'close' method. Calling the 'close' method more
+//		than once may produce unexpected results.
+//
 //	errPrefDto					*ePref.ErrPrefixDto
 //
 //		This object encapsulates an error prefix string
@@ -5879,6 +5898,7 @@ func (fIoReaderMolecule *fileIoReaderMolecule) validateDefaultReaderBufferSize(
 func (fIoReaderMolecule *fileIoReaderMolecule) closeAndRelease(
 	fIoReader *FileIoReader,
 	fIoReaderLabel string,
+	releaseMemoryResources bool,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if fIoReaderMolecule.lock == nil {
@@ -5931,7 +5951,16 @@ func (fIoReaderMolecule *fileIoReaderMolecule) closeAndRelease(
 		fIoReaderLabel,
 		ePrefix)
 
-	fIoReaderAtom.empty(fIoReader)
+	if err != nil {
+
+		return err
+	}
+
+	if releaseMemoryResources == true {
+
+		fIoReaderAtom.empty(fIoReader)
+
+	}
 
 	return err
 }
@@ -6064,24 +6093,48 @@ func (fIoReaderAtom *fileIoReaderAtom) close(
 		return err
 	}
 
-	if fIoReader.filePtr != nil {
+	if fIoReader.ioReader == nil {
+
+		return err
+	}
+
+	var ok bool
+	var closerObj io.Closer
+	var localReader io.Reader
+
+	localReader = *fIoReader.ioReader
+
+	closerObj, ok = localReader.(io.Closer)
+
+	if ok {
 
 		var err2 error
 
-		err2 = fIoReader.filePtr.Close()
+		err2 = closerObj.Close()
 
 		if err2 != nil {
 
-			err = fmt.Errorf("%v\n"+
-				"Error returned while closing the target 'target' file!\n"+
-				"fBufReader.filePtr.Close()\n"+
-				"Target Read File = '%v'\n"+
-				"Error = \n%v\n",
-				ePrefix.String(),
-				fIoReader.targetReadFileName,
+			errText := fmt.Sprintf(
+				"%v\n"+
+					"Error returned while closing the 'FileIoReader'\n"+
+					"internal io.Writer object.\n",
+				ePrefix.String())
+
+			if len(fIoReader.targetReadFileName) > 0 {
+
+				errText += fmt.Sprintf(
+					"Target Read File Name: %v\n",
+					fIoReader.targetReadFileName)
+
+			}
+
+			err = fmt.Errorf("%v"+
+				"closerObj.Close() Error=\n%v\n",
+				errText,
 				err2.Error())
 
 		}
+
 	}
 
 	return err
