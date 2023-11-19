@@ -261,6 +261,69 @@ type fileIoReadWriteElectron struct {
 	lock *sync.Mutex
 }
 
+// empty
+//
+// This method deletes all internal member variables and
+// releases all the internal memory resources for an
+// instance of FileIoReadWrite passed as input
+// parameter 'fBufReadWrite'.
+//
+// Specifically the following internal member variables
+// are set to 'nil' or their initial zero values:
+//
+//	FileIoReadWrite.reader = nil
+//	FileIoReadWrite.writer = nil
+//	FileIoReadWrite.readerFilePathName = ""
+//	FileIoReadWrite.writerFilePathName = ""
+//
+// After calling this method, the instance of
+// FileIoReadWrite, passed as input parameter
+// 'fIoReadWrite', will become invalid and unavailable
+// for future read/write operations.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fIoReadWrite				*FileIoReadWrite
+//
+//		A pointer to an instance of FileIoReadWrite.
+//
+//		All internal member variable data values in
+//		this instance will be deleted and reset to
+//		their initial zero values.
+//
+//		All member variable object pointers will be set
+//		to 'nil'.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	--- NONE ---
+func (fIoReadWriteElectron *fileIoReadWriteElectron) empty(
+	fIoReadWrite *FileIoReadWrite) {
+
+	if fIoReadWriteElectron.lock == nil {
+		fIoReadWriteElectron.lock = new(sync.Mutex)
+	}
+
+	fIoReadWriteElectron.lock.Lock()
+
+	defer fIoReadWriteElectron.lock.Unlock()
+
+	if fIoReadWrite == nil {
+		return
+	}
+
+	fIoReadWrite.writer = nil
+	fIoReadWrite.reader = nil
+	fIoReadWrite.writerFilePathName = ""
+	fIoReadWrite.readerFilePathName = ""
+
+	return
+}
+
 // readerCloseRelease
 //
 // This method will perform Clean-Up operations on the

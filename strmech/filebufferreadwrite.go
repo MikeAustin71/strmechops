@@ -8383,18 +8383,18 @@ type fileBufferReadWriteElectron struct {
 // Specifically the following internal member variables
 // are set to 'nil' or their initial zero values:
 //
-//	FileBufferReadWrite.reader = ""
+//	FileBufferReadWrite.reader = nil
 //	FileBufferReadWrite.writer = nil
-//	FileBufferReadWrite.readerFilePathName = nil
-//	FileBufferReadWrite.writerFilePathName = nil
+//	FileBufferReadWrite.readerFilePathName = ""
+//	FileBufferReadWrite.writerFilePathName = ""
 //
 // ----------------------------------------------------------------
 //
 // # Input Parameters
 //
-//	fBufWriter					*FileBufferWriter
+//	fBufReadWrite				*FileBufferReadWrite
 //
-//		A pointer to an instance of FileBufferWriter.
+//		A pointer to an instance of FileBufferReadWrite.
 //
 //		All internal member variable data values in
 //		this instance will be deleted and reset to
