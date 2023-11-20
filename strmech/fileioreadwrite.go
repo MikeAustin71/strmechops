@@ -257,6 +257,240 @@ func (fIoReadWrite *FileIoReadWrite) NewIoReadWrite(
 	return newFIoReadWrite, err
 }
 
+type fileIoReadWriteAtom struct {
+	lock *sync.Mutex
+}
+
+// setIoReader
+//
+// Receives an object which implements io.Reader
+// interface. This object is then used to configure
+// the internal io.Reader member variable encapsulated in
+// the FileIoReadWrite instance passed as input parameter
+// 'fIoReadWrite'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reconfigure
+//	the member variable io.Reader object encapsulated in
+//	the instance of FileIoReadWrite passed as input
+//	parameter 'fIoReadWrite'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fIoReadWrite					*FileIoReadWrite
+//
+//		A pointer to an instance of FileIoReadWrite.
+//
+//		The internal io.Reader object encapsulated in
+//		this instance of FileIoReadWrite will be
+//		deleted and configured using the io.Reader
+//		instance passed as input parameter 'reader'.
+//
+//	fIoReadWriteLabel				string
+//
+//		The name or label associated with input parameter
+//		'fIoReadWrite' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fIoReadWrite" will
+//		be automatically applied.
+//
+//	ioReader						io.Reader
+//
+//		An object which implements io.Reader interface.
+//
+//		This object may be a file pointer of type *os.File.
+//		File pointers of this type implement the io.Reader
+//		interface.
+//
+//		A file pointer (*os.File) will facilitate reading
+//		data from files residing on an attached storage
+//		drive. However, with this configuration, the user
+//		is responsible for manually closing the file and
+//		performing any other required clean-up operations
+//		in addition to calling the local method:
+//
+//		FileIoReadWrite.CloseRelease()
+//
+//		While the 'read' services provided by
+//		FileIoReadWrite are primarily designed to
+//		read data from disk files, this type of 'reader'
+//		will in fact read data from any object
+//		implementing the io.Reader interface.
+//
+//	ioReaderLabel					string
+//
+//		The name or label associated with input parameter
+//		'ioReaderLabel' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "ioReaderLabel" will
+//		be automatically applied.
+//
+//	defaultReaderByteArraySize		int
+//
+//		The size of the byte array which will be used to
+//		read data from the internal io.Reader object
+//		encapsulated by the FileIoReadWrite instance
+//		passed as input parameter 'fIoReadWrite'.
+//
+//		If the value of 'defaultReaderByteArraySize' is
+//		less than '16', it will be reset to a size of
+//		'4096'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fIoReadWriteAtom *fileIoReadWriteAtom) setIoReader(
+	fIoReadWrite *FileIoReadWrite,
+	fIoReadWriteLabel string,
+	ioReader io.Reader,
+	ioReaderLabel string,
+	defaultReaderByteArraySize int,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fIoReadWriteAtom.lock == nil {
+		fIoReadWriteAtom.lock = new(sync.Mutex)
+	}
+
+	fIoReadWriteAtom.lock.Lock()
+
+	defer fIoReadWriteAtom.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileIoReadWriteAtom." +
+		"setIoReader()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(fIoReadWriteLabel) == 0 {
+
+		fIoReadWriteLabel = "fIoReadWrite"
+	}
+
+	if len(ioReaderLabel) == 0 {
+
+		ioReaderLabel = "ioReader"
+	}
+
+	if fIoReadWrite == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is a nil pointer!\n"+
+			"%v is invalid.\n",
+			ePrefix.String(),
+			fIoReadWriteLabel,
+			fIoReadWriteLabel)
+
+		return err
+	}
+
+	if ioReader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The io.Reader instance passed\n"+
+			"as input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' pointer.\n",
+			ePrefix.String(),
+			ioReaderLabel,
+			ioReaderLabel)
+
+		return err
+	}
+
+	// Close and release the old FileIoReadWrite.reader
+	err = new(fileIoReadWriteElectron).
+		readerCloseRelease(
+			fIoReadWrite,
+			fIoReadWriteLabel,
+			true, // releaseReaderMemResources
+			true, // releaseFBuffWriterLocalMemRes
+			ePrefix)
+
+	if err != nil {
+
+		return err
+	}
+
+	var newIoReader FileIoReader
+	var err2 error
+
+	err2 =
+		new(fileIoReaderNanobot).
+			setIoReader(
+				&newIoReader,
+				fIoReadWriteLabel+".reader",
+				ioReader,
+				ioReaderLabel,
+				defaultReaderByteArraySize,
+				ePrefix)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while creating the new %v.reader.\n"+
+			"Error=\n%v\n",
+			funcName,
+			fIoReadWriteLabel,
+			err2.Error())
+
+		return err
+	}
+
+	fIoReadWrite.reader = &newIoReader
+
+	fIoReadWrite.readerFilePathName =
+		newIoReader.targetReadFileName
+
+	return err
+}
+
 type fileIoReadWriteElectron struct {
 	lock *sync.Mutex
 }

@@ -6471,9 +6471,9 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setIoReaderWriter(
 		return err
 	}
 
-	var fBufReadWriteMolecule = new(fileBufferReadWriteAtom)
+	var fBufReadWriteAtom = new(fileBufferReadWriteAtom)
 
-	err = fBufReadWriteMolecule.
+	err = fBufReadWriteAtom.
 		setIoReader(
 			fBufReadWrite,
 			fBufReadWriteLabel,
@@ -6486,7 +6486,7 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setIoReaderWriter(
 		return err
 	}
 
-	err = fBufReadWriteMolecule.
+	err = fBufReadWriteAtom.
 		setIoWriter(
 			fBufReadWrite,
 			fBufReadWriteLabel,
@@ -7400,7 +7400,7 @@ type fileBufferReadWriteAtom struct {
 //
 //	fBufReadWrite				*FileBufferReadWrite
 //
-//		A pointer to an instance of FileBufferWriter.
+//		A pointer to an instance of FileBufferReadWrite.
 //
 //		The internal io.Reader object encapsulated in
 //		this instance of FileBufferReadWrite will be
@@ -7553,6 +7553,18 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setIoReader(
 		return err
 	}
 
+	if reader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is a nil pointer!\n"+
+			"%v is invalid.\n",
+			ePrefix.String(),
+			readerLabel,
+			readerLabel)
+
+		return err
+	}
+
 	err = new(fileBufferReadWriteElectron).readerCloseRelease(
 		fBufReadWrite,
 		fBufReadWriteLabel,
@@ -7590,6 +7602,9 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setIoReader(
 	}
 
 	fBufReadWrite.reader = &newBuffReader
+
+	fBufReadWrite.readerFilePathName =
+		newBuffReader.targetReadFileName
 
 	return err
 }
@@ -7755,11 +7770,6 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setIoWriter(
 		fBufReadWriteLabel = "fBufReadWrite"
 	}
 
-	if len(fBufReadWriteLabel) == 0 {
-
-		fBufReadWriteLabel = "fBufReadWrite"
-	}
-
 	if len(writerLabel) == 0 {
 
 		writerLabel = "writer"
@@ -7773,6 +7783,18 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setIoWriter(
 			ePrefix.String(),
 			fBufReadWriteLabel,
 			fBufReadWriteLabel)
+
+		return err
+	}
+
+	if writer == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is a nil pointer!\n"+
+			"%v is invalid.\n",
+			ePrefix.String(),
+			writerLabel,
+			writerLabel)
 
 		return err
 	}
@@ -7817,6 +7839,9 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setIoWriter(
 	}
 
 	fBufReadWrite.writer = &newBuffWriter
+
+	fBufReadWrite.writerFilePathName =
+		newBuffWriter.targetWriteFileName
 
 	return err
 }
