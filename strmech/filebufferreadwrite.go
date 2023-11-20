@@ -7392,7 +7392,9 @@ type fileBufferReadWriteAtom struct {
 //	This method will delete, overwrite and reconfigure
 //	the member variable io.Reader object encapsulated in
 //	the instance of FileBufferReadWrite passed as input
-//	parameter 'fBufReadWrite'.
+//	parameter 'fBufReadWrite':
+//
+//		fBufReadWrite.reader
 //
 // ----------------------------------------------------------------
 //
@@ -7611,10 +7613,11 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setIoReader(
 
 // setIoWriter
 //
-// Receives an instance of File Manager (FileMgr) which
-// will be used to configure an io.Writer object
-// encapsulated by the FileBufferReadWrite instance
-// passed as input parameter 'fBufReadWrite'.
+// Receives an object which implements io.Writer
+// interface. This object is then used to configure
+// the internal io.Writer member variable encapsulated in
+// the FileBufferReadWrite instance passed as input
+// parameter 'fBufReadWrite'.
 //
 // ----------------------------------------------------------------
 //
@@ -7623,7 +7626,9 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setIoReader(
 //	This method will delete, overwrite and reconfigure
 //	the member variable io.Writer object encapsulated in
 //	the instance of FileBufferReadWrite passed as input
-//	parameter 'fBufReadWrite'.
+//	parameter 'fBufReadWrite':
+//
+//		fBufReadWrite.writer
 //
 // ----------------------------------------------------------------
 //
@@ -7631,7 +7636,7 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setIoReader(
 //
 //	fBufReadWrite				*FileBufferReadWrite
 //
-//		A pointer to an instance of FileBufferWriter.
+//		A pointer to an instance of FileBufferReadWrite.
 //
 //		The internal io.Writer object encapsulated in
 //		this instance of FileBufferReadWrite will be

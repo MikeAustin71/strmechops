@@ -276,7 +276,9 @@ type fileIoReadWriteAtom struct {
 //	This method will delete, overwrite and reconfigure
 //	the member variable io.Reader object encapsulated in
 //	the instance of FileIoReadWrite passed as input
-//	parameter 'fIoReadWrite'.
+//	parameter 'fIoReadWrite':
+//
+//		fIoReadWrite.reader
 //
 // ----------------------------------------------------------------
 //
@@ -327,12 +329,12 @@ type fileIoReadWriteAtom struct {
 //	ioReaderLabel					string
 //
 //		The name or label associated with input parameter
-//		'ioReaderLabel' which will be used in error
-//		messages returned by this method.
+//		'ioReader' which will be used in error messages
+//		returned by this method.
 //
 //		If this parameter is submitted as an empty
-//		string, a default value of "ioReaderLabel" will
-//		be automatically applied.
+//		string, a default value of "ioReader" will be
+//		automatically applied.
 //
 //	defaultReaderByteArraySize		int
 //
@@ -458,6 +460,9 @@ func (fIoReadWriteAtom *fileIoReadWriteAtom) setIoReader(
 		return err
 	}
 
+	fIoReadWrite.reader = nil
+	fIoReadWrite.readerFilePathName = ""
+
 	var newIoReader FileIoReader
 	var err2 error
 
@@ -487,6 +492,244 @@ func (fIoReadWriteAtom *fileIoReadWriteAtom) setIoReader(
 
 	fIoReadWrite.readerFilePathName =
 		newIoReader.targetReadFileName
+
+	return err
+}
+
+// setIoWriter
+//
+// Receives an object which implements io.Writer
+// interface. This object is then used to configure
+// the internal io.Writer member variable encapsulated in
+// the FileIoReadWrite instance passed as input parameter
+// 'fIoReadWrite'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reconfigure
+//	the member variable io.Writer object encapsulated in
+//	the instance of FileIoReadWrite passed as input
+//	parameter 'fIoReadWrite':
+//
+//		fIoReadWrite.writer
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fIoReadWrite					*FileIoReadWrite
+//
+//		A pointer to an instance of FileIoReadWrite.
+//
+//		The internal io.Writer object encapsulated in
+//		this instance of FileIoReadWrite will be
+//		deleted and reconfigured using the io.Writer
+//		object passed as input parameter 'ioWriter'.
+//
+//	fIoReadWriteLabel				string
+//
+//		The name or label associated with input parameter
+//		'fIoReadWrite' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fIoReadWrite" will
+//		be automatically applied.
+//
+//	ioWriter						io.Writer
+//
+//		This parameter will accept any object
+//		implementing the io.Writer interface.
+//
+//		This object may be a file pointer of type
+//		*os.File. File pointers of this type implement
+//		the io.Writer interface.
+//
+//		A file pointer (*os.File) will facilitate writing
+//		output data to destination files residing on an
+//		attached storage drive. However, with this
+//		configuration, the user is responsible for
+//		manually closing the file and performing any
+//		other required clean-up operations in addition to
+//		calling local method:
+//
+//		FileIoReadWrite.CloseRelease()
+//
+//		While the 'write' services provided by the
+//		FileIoReadWrite are primarily designed for
+//		writing data to disk files, this type of 'writer'
+//		will in fact write data to any object
+//		implementing the io.Writer interface.
+//
+//	ioWriterLabel					string
+//
+//		The name or label associated with input parameter
+//		'ioWriter' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "ioWriter" will be
+//		automatically applied.
+//
+//	defaultWriterByteArraySize		int
+//
+//		The size of the byte array which will be used to
+//		write data to the internal io.Writer object
+//		encapsulated by FileIoReadWrite input parameter
+//		'fIoReadWrite'.
+//
+//		If the value of 'defaultWriterByteArraySize' is
+//		less than one ('1'), it will be reset to a size
+//		of '4096'.
+//
+//		Although the FileIoReadWrite type does not use
+//		the 'buffered' write protocol, the size of the
+//		byte array used to write bytes to the underlying
+//		io.Writer object is variable.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fIoReadWriteAtom *fileIoReadWriteAtom) setIoWriter(
+	fIoReadWrite *FileIoReadWrite,
+	fIoReadWriteLabel string,
+	ioWriter io.Writer,
+	ioWriterLabel string,
+	defaultWriterByteArraySize int,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fIoReadWriteAtom.lock == nil {
+		fIoReadWriteAtom.lock = new(sync.Mutex)
+	}
+
+	fIoReadWriteAtom.lock.Lock()
+
+	defer fIoReadWriteAtom.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileIoReadWriteAtom." +
+		"setIoWriter()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(fIoReadWriteLabel) == 0 {
+
+		fIoReadWriteLabel = "fIoReadWrite"
+	}
+
+	if len(ioWriterLabel) == 0 {
+
+		ioWriterLabel = "ioWriter"
+	}
+
+	if fIoReadWrite == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is a nil pointer!\n"+
+			"%v is invalid.\n",
+			ePrefix.String(),
+			fIoReadWriteLabel,
+			fIoReadWriteLabel)
+
+		return err
+	}
+
+	if ioWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The io.Writer instance passed\n"+
+			"as input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' pointer.\n",
+			ePrefix.String(),
+			ioWriterLabel,
+			ioWriterLabel)
+
+		return err
+	}
+
+	// Close and release the old FileIoReadWrite.writer
+	err = new(fileIoReadWriteElectron).
+		writerCloseRelease(
+			fIoReadWrite,
+			fIoReadWriteLabel,
+			true, // releaseWriterMemResources
+			true, // releaseFBuffWriterLocalMemRes
+			ePrefix)
+
+	if err != nil {
+
+		return err
+	}
+
+	var err2 error
+	var newFileIoWriter FileIoWriter
+
+	err2 = new(fileIoWriterNanobot).
+		setIoWriter(
+			&newFileIoWriter,
+			ioWriterLabel+".writer",
+			ioWriter,
+			ioWriterLabel,
+			defaultWriterByteArraySize,
+			ePrefix)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while creating the new %v.writer.\n"+
+			"Error=\n%v\n",
+			funcName,
+			fIoReadWriteLabel,
+			err2.Error())
+
+		return err
+	}
+
+	fIoReadWrite.writer = &newFileIoWriter
+
+	fIoReadWrite.readerFilePathName =
+		newFileIoWriter.targetWriteFileName
 
 	return err
 }

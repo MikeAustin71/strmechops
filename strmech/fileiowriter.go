@@ -3678,11 +3678,16 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setIoWriter(
 	var fIoWriterMolecule = new(fileIoWriterMolecule)
 
 	// Close the old fIoWriter
-	_ = fIoWriterMolecule.closeAndRelease(
+	err = fIoWriterMolecule.closeAndRelease(
 		fIoWriter,
 		writerLabel,
 		true,
 		ePrefix)
+
+	if err != nil {
+
+		return err
+	}
 
 	var ok bool
 
