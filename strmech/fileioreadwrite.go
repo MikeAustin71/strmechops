@@ -192,7 +192,7 @@ func (fIoReadWrite *FileIoReadWrite) NewIoReadWrite(
 	writer io.Writer,
 	defaultWriterByteArraySize int,
 	errorPrefix interface{}) (
-	FileIoReadWrite,
+	*FileIoReadWrite,
 	error) {
 
 	if fIoReadWrite.lock == nil {
@@ -203,7 +203,7 @@ func (fIoReadWrite *FileIoReadWrite) NewIoReadWrite(
 
 	defer fIoReadWrite.lock.Unlock()
 
-	var newFIoReadWrite = FileIoReadWrite{}
+	var newFIoReadWrite = new(FileIoReadWrite)
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -220,39 +220,17 @@ func (fIoReadWrite *FileIoReadWrite) NewIoReadWrite(
 		return newFIoReadWrite, err
 	}
 
-	var newReader FileIoReader
-
-	newReader,
-		err = new(FileIoReader).
-		NewIoReader(
+	err = new(fileIoReadWriteMolecule).
+		setIoReaderIoWriter(
+			newFIoReadWrite,
+			"newFIoReadWrite",
 			reader,
+			"reader",
 			defaultReaderByteArraySize,
-			ePrefix.XCpy("newReader"))
-
-	if err != nil {
-		return newFIoReadWrite, err
-	}
-
-	var newWriter FileIoWriter
-
-	newWriter,
-		err = new(FileIoWriter).
-		NewIoWriter(
 			writer,
+			"writer",
 			defaultWriterByteArraySize,
-			ePrefix.XCpy("newWriter"))
-
-	if err != nil {
-		return newFIoReadWrite, err
-	}
-
-	newFIoReadWrite.reader = &newReader
-	newFIoReadWrite.readerFilePathName =
-		newReader.targetReadFileName
-
-	newFIoReadWrite.writer = &newWriter
-	newFIoReadWrite.writerFilePathName =
-		newWriter.targetWriteFileName
+			ePrefix)
 
 	return newFIoReadWrite, err
 }
