@@ -257,7 +257,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufferReader04() {
 	expectedNumOfBytesWritten =
 		int(outputLinesArray.GetTotalBytesInStrings())
 
-	var fBufWriter strmech.FileBufferWriter
+	var fBufWriter *strmech.FileBufferWriter
 
 	_,
 		fBufWriter,
@@ -1415,7 +1415,6 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite04() {
 	}
 
 	var fBufReader strmech.FileBufferReader
-	var fBufWriter strmech.FileBufferWriter
 
 	_,
 		fBufReader,
@@ -1431,6 +1430,8 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite04() {
 			err.Error())
 		return
 	}
+
+	var fBufWriter *strmech.FileBufferWriter
 
 	_,
 		fBufWriter,
@@ -1730,8 +1731,9 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite05() {
 		return
 	}
 
-	var fBufWriter strmech.FileBufferWriter
+	var fBufWriter *strmech.FileBufferWriter
 	targetWriteFileBufferSize := 512
+
 	_,
 		fBufWriter,
 		err = new(strmech.FileBufferWriter).
@@ -1978,7 +1980,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufWriter01() {
 	expectedNumOfBytesWritten =
 		int(i64numOfBytesRead) + numOfLinesRead
 
-	var fBufWriter strmech.FileBufferWriter
+	var fBufWriter *strmech.FileBufferWriter
 
 	_,
 		fBufWriter,

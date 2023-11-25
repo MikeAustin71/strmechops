@@ -1560,7 +1560,7 @@ func (fBufWriter *FileBufferWriter) NewFileMgr(
 //
 // # Return Values
 //
-//	fileInfoPlus				FileInfoPlus
+//	FileInfoPlus
 //
 //		This returned instance of Type FileInfoPlus
 //		contains data elements describing the file
@@ -1597,13 +1597,13 @@ func (fBufWriter *FileBufferWriter) NewFileMgr(
 //		FileInfoPlus in the source file,
 //		'fileinfoplus.go'.
 //
-//	newFileBufWriter			FileBufferWriter
+//	*FileBufferWriter
 //
-//		If this method completes successfully, a fully
-//		configured instance of FileBufferWriter will
-//		be returned.
+//		If this method completes successfully, a pointer
+//		to a fully configured instance of
+//		FileBufferWriter will be returned.
 //
-//	err							error
+//	error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -1621,9 +1621,9 @@ func (fBufWriter *FileBufferWriter) NewPathFileName(
 	bufSize int,
 	truncateExistingFile bool,
 	errorPrefix interface{}) (
-	fInfoPlus FileInfoPlus,
-	newFileBufWriter FileBufferWriter,
-	err error) {
+	FileInfoPlus,
+	*FileBufferWriter,
+	error) {
 
 	if fBufWriter.lock == nil {
 		fBufWriter.lock = new(sync.Mutex)
@@ -1634,6 +1634,9 @@ func (fBufWriter *FileBufferWriter) NewPathFileName(
 	defer fBufWriter.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var newFileBufWriter = new(FileBufferWriter)
+	var fInfoPlus = FileInfoPlus{}
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -1650,7 +1653,7 @@ func (fBufWriter *FileBufferWriter) NewPathFileName(
 	fInfoPlus,
 		err = new(fileBufferWriterNanobot).
 		setPathFileName(
-			&newFileBufWriter,
+			newFileBufWriter,
 			"newFileBufWriter",
 			pathFileName,
 			"pathFileName",

@@ -254,7 +254,7 @@ func TestFileBufferWriter_Append_001000(t *testing.T) {
 		return
 	}
 
-	var targetBufioWriterTwo FileBufferWriter
+	var targetBufioWriterTwo *FileBufferWriter
 
 	_,
 		targetBufioWriterTwo,
@@ -516,7 +516,7 @@ func TestFileBufferWriter_Write_001100(t *testing.T) {
 	expectedNumOfBytesWritten =
 		int(readerFileInfoPlus.Size())
 
-	var fBufWriter FileBufferWriter
+	var fBufWriter *FileBufferWriter
 
 	_,
 		fBufWriter,
@@ -891,7 +891,7 @@ func TestFileBufferWriter_Write_002200(t *testing.T) {
 	outputLinesArray.AppendSuffix(
 		writeFileTextLineTerminator)
 
-	var fBufWriter FileBufferWriter
+	var fBufWriter *FileBufferWriter
 
 	_,
 		fBufWriter,
@@ -1408,7 +1408,7 @@ func TestFileBufferWriter_ReadFrom_004400(t *testing.T) {
 		return
 	}
 
-	var targetBufioWriter FileBufferWriter
+	var targetBufioWriter *FileBufferWriter
 
 	_,
 		targetBufioWriter,
@@ -1714,7 +1714,7 @@ func TestFileBufferWriter_Seek_005500(t *testing.T) {
 		return
 	}
 
-	var targetBufioWriter FileBufferWriter
+	var targetBufioWriter *FileBufferWriter
 	var err2 error
 
 	_,

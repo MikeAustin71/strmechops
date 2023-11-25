@@ -465,7 +465,7 @@ func TestFileBufferReader_Seek_090200(t *testing.T) {
 		return
 	}
 
-	var fBufWriter FileBufferWriter
+	var fBufWriter *FileBufferWriter
 
 	_,
 		fBufWriter,
