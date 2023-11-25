@@ -2838,7 +2838,7 @@ func (fBufWriter *FileBufferWriter) SetIoWriter(
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fBufWriter FileBufferWriter) Write(
+func (fBufWriter *FileBufferWriter) Write(
 	bytesToWrite []byte) (
 	numBytesWritten int,
 	err error) {
