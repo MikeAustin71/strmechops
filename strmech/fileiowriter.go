@@ -19,29 +19,18 @@ type FileIoWriter struct {
 
 // Close
 //
-// This method is provided in order to implement the
-// io.Closer interface.
-//
-// After calling this method, FileIoWriter.Close(),
-// the user should immediately release all internal
-// memory resources by making a second call to local
-// method:
-//
-//	FileIoWriter.ReleaseMemResources()
+// This method implements the io.Closer interface.
 //
 // Calling this method, FileIoWriter.Close(), will
-// 'close' the underlying io.Writer object; however, it
-// will NOT release the internal memory resources for
-// the current FileIoWriter instance. As such, this
-// method, FileIoWriter.Close(), is NOT the preferred
-// or recommended method for 'closing' an instance of
-// FileIoWriter.
+// 'close' the underlying io.Writer object and release
+// the internal memory resources for the current
+// FileIoWriter instance.
 //
-// The preferred and recommended method for performing
-// both the 'close' procedure, and releasing all memory
-// resources, is the local method:
-//
-//	FileIoWriter.CloseAndRelease()
+// Releasing all internal memory resources will
+// synchronize internal flags and prevent multiple calls
+// to 'close' the underlying io.Writer object. Calling
+// 'close' on the same underlying io.Writer object
+// multiple times can produce unexpected results.
 //
 // After calling this method, FileIoWriter.Close(), the
 // current instance of FileIoWriter will be invalid and
@@ -54,13 +43,7 @@ type FileIoWriter struct {
 //	(1)	This method implements the io.Closer interface.
 //
 //	(2)	This method will 'close' the underlying io.Writer
-//		object, but it will NOT release the internal
-//		memory resources. After call this method,
-//		FileIoWriter.Close(), users should immediately
-//		call the following local method in order to
-//		release internal memory resources:
-//
-//			FileIoWriter.ReleaseMemResources()
+//		object and release the internal memory resources.
 //
 //		Releasing all internal memory resources will
 //		synchronize internal flags and prevent multiple
@@ -69,17 +52,7 @@ type FileIoWriter struct {
 //		object multiple times can produce unexpected
 //		results.
 //
-//	(3)	This method, FileIoWriter.Close(), is NOT the
-//		preferred or recommended method for 'closing the
-//		current FileIoWriter instance. Instead of
-//		calling FileIoWriter.Close(), the preferred
-//		and recommended means for 'closing' and	releasing
-//		memory resources is a single call to local
-//		method:
-//
-//			FileIoWriter.CloseAndRelease()
-//
-//	(4)	After completing the call to this method,
+//	(3)	After completing the call to this method,
 //		FileIoWriter.Close(), this FileIoWriter
 //		instance will become invalid and unavailable
 //		for future 'write' operations.
@@ -106,7 +79,7 @@ type FileIoWriter struct {
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fIoWriter FileIoWriter) Close() error {
+func (fIoWriter *FileIoWriter) Close() error {
 
 	if fIoWriter.lock == nil {
 		fIoWriter.lock = new(sync.Mutex)
@@ -132,178 +105,10 @@ func (fIoWriter FileIoWriter) Close() error {
 
 	err = new(fileIoWriterMolecule).
 		closeAndRelease(
-			&fIoWriter,
-			"fIoWriter",
-			false, // releaseMemoryResources
-			ePrefix.XCpy("fIoWriter"))
-
-	return err
-}
-
-// CloseAndRelease
-//
-// This method will perform the 'close' procedure on the
-// internal io.Writer object encapsulated by the current
-// instance of FileIoWriter.
-//
-// FileIoWriter.CloseAndRelease() is the recommended
-// method for 'closing' the internal io.Writer object.
-//
-// Unlike method FileIoWriter.Close(), this method,
-// FileIoWriter.CloseAndRelease(), will also release
-// all internal memory resources contained in the current
-// FileIoWriter instance. Releasing internal memory
-// resources effectively synchronizes internal flags
-// thereby preventing multiple calls to 'close' the
-// underlying io.reader object. Calling 'close' on the
-// same underlying io.Writer object multiple times can
-// produce unexpected results.
-//
-// Again, this method, FileIoWriter.CloseAndRelease(), is
-// the preferred and recommended method for 'closing' an
-// instance of FileIoWriter.
-//
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-//	(1)	This method will perform the following
-//		two procedures:
-//
-//		(a)	'close' procedure
-//
-//			This procedure properly closes the underlying
-//			io.Writer object configured for the current
-//			instance of FileIoWriter.
-//
-//		(b)	Release internal memory resources
-//
-//			This procedure releases all internal memory
-//			resources and synchronizes internal flags
-//			thereby preventing multiple calls to 'close'
-//			the underlying io.Writer object. Calling
-//			'close' on the same underlying io.Writer
-//			object multiple times can produce unexpected
-//			results.
-//
-//	(2) This method, FileIoWriter.CloseAndRelease(),
-//		is the preferred and recommended method for
-//		'closing' a FileIoWriter instance.
-//
-//	(3)	After completion of this method, the current
-//		FileIoWriter instance will be invalid and
-//		unavailable	for future 'write' operations.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	errorPrefix					interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set
-//		this parameter to 'nil'.
-//
-//		This empty interface must be convertible to one
-//		of the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errorPrefix'.
-//	 	The 'errorPrefix' text will be prefixed or
-//	 	attached to the	beginning of the error message.
-func (fIoWriter *FileIoWriter) CloseAndRelease(
-	errorPrefix interface{}) error {
-
-	if fIoWriter.lock == nil {
-		fIoWriter.lock = new(sync.Mutex)
-	}
-
-	fIoWriter.lock.Lock()
-
-	defer fIoWriter.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"FileIoWriter."+
-			"CloseAndRelease()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	err = new(fileIoWriterMolecule).
-		closeAndRelease(
 			fIoWriter,
 			"fIoWriter",
 			true, // releaseMemoryResources
-			ePrefix)
+			ePrefix.XCpy("fIoWriter"))
 
 	return err
 }
@@ -330,16 +135,11 @@ func (fIoWriter *FileIoWriter) CloseAndRelease(
 //
 // # BE ADVISED
 //
-//	(1)	This method is functionally identical to local
-//		method:
+//	This method does NOT perform the 'close' protocol. To
+//	perform both the 'close' protocol and release all
+//	internal memory resources call local method:
 //
-//			FileIoWriter.ReleaseMemResources()
-//
-//	(2)	This method does NOT perform the 'close' protocol.
-//		To perform both the 'close' protocol and release
-//		all internal memory resources call local method:
-//
-//			FileIoWriter.CloseAndRelease()
+//			FileIoWriter.Close()
 //
 // ----------------------------------------------------------------
 //
@@ -1486,77 +1286,6 @@ func (fIoWriter FileIoWriter) ReadFrom(
 	}
 
 	return numOfBytesProcessed, err
-}
-
-// ReleaseMemResources
-//
-// This method will delete and release all internal
-// memory resources contained in the current instance of
-// FileIoWriter.
-//
-// This method WILL NOT perform the 'close' procedure on
-// the internal io.Reader object contained in the current
-// FileIoWriter instance. To perform the 'close' protocol
-// and simultaneously release all internal memory
-// resources, DO NOT call this method, FileIoWriter.
-// ReleaseMemResources(). Instead, call the
-// local method:
-//
-//	FileIoWriter.CloseAndRelease()
-//
-// Specifically the following internal member variables
-// will be set to 'nil' or their initial zero values:
-//
-//	FileIoWriter.targetWriteFileName = ""
-//	FileIoWriter.filePtr = nil
-//	FileIoWriter.ioWriter = nil
-//	FileIoWriter.defaultByteArraySize = 0
-//
-// After calling this method, the current instance of
-// FileIoWriter will become invalid and unavailable
-// for future 'write' operations.
-//
-// ----------------------------------------------------------------
-//
-// # BE ADVISED
-//
-//	(1)	This method is functionally identical to local
-//		method:
-//
-//			FileIoWriter.Empty()
-//
-//	(2)	This method does NOT perform the 'close' protocol.
-//		To perform both the 'close' protocol and release
-//		all internal memory resources DO NOT call this
-//		method, FileIoWriter.ReleaseMemResources().
-//		Instead, call local method:
-//
-//			FileIoWriter.CloseAndRelease()
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	-- NONE --
-//
-// ---------------------------------------------------------------
-//
-// # Return Values
-//
-//	--- NONE ---
-func (fIoWriter *FileIoWriter) ReleaseMemResources() {
-
-	if fIoWriter.lock == nil {
-		fIoWriter.lock = new(sync.Mutex)
-	}
-
-	fIoWriter.lock.Lock()
-
-	defer fIoWriter.lock.Unlock()
-
-	new(fileIoWriterAtom).empty(
-		fIoWriter)
-
 }
 
 // Seek
