@@ -9,6 +9,52 @@ import (
 	"sync"
 )
 
+// FileIoWriter
+//
+// Pointer references to Type FileIoWriter implement
+// the following interfaces:
+//
+// io.Closer
+// io.Seeker
+//
+// This type serves as a wrapper for io.writer. As such,
+// it is designed to facilitate data 'write' operations.
+// The most common data source for these 'write' operations
+// is typically a data file residing on an attached
+// storage drive. However, any object implementing the
+// io.Reader interface may be used as a data source.
+//
+// The methods associated with this type do NOT employ
+// buffered read techniques. Instead, direct data reads
+// are performed by means of the internal io.Reader
+// object.
+//
+// For more information on 'buffered' data reads, see
+// type 'FileBufferReader'
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/io#Writer
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	When all read operations have been completed and
+//	there is no further need for the FileIoWriter
+//	instance, the user is responsible for 'closing' the
+//	underlying io.Writer object and releasing the
+//	associated memory resources. This Clean-Up operation
+//	is accomplished by calling local method:
+//
+//		FileIoWriter.Close()
+//
+//	For FileIoWriter instances created with an external
+//	io.Writer object, the user may need to 'close' that
+//	io.Writer object and perform clean-up operations
+//	externally.
 type FileIoWriter struct {
 	ioWriter             *io.Writer
 	filePtr              *os.File
@@ -1347,6 +1393,8 @@ func (fIoWriter FileIoWriter) ReadFrom(
 //			Means relative to the end (for example,
 //			offset = -2 specifies the penultimate byte of
 //			the file).
+//
+//	(3) Seek implements the 'io.Seeker' interface.
 //
 // ----------------------------------------------------------------
 //

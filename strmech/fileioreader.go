@@ -13,10 +13,11 @@ import (
 //
 // This type serves as a wrapper for io.Reader. As such,
 // it is designed to facilitate data 'read' operations.
-// The most common data source for these read operations
-// is typically a data file residing on an attached
-// storage drive. However, any object implementing the
-// io.Reader interface may be used as a data source.
+// The most common data source for these 'read'
+// operations is typically a data file residing on an
+// attached storage drive. However, any object
+// implementing the io.Reader interface may be used as a
+// data source.
 //
 // The methods associated with this type do NOT employ
 // buffered read techniques. Instead, direct data reads
@@ -38,16 +39,17 @@ import (
 //
 //	When all read operations have been completed and
 //	there is no further need for the FileIoReader
-//	instance, the user is responsible for 'closing' and
-//	releasing the associated memory resources.
+//	instance, the user is responsible for 'closing' the
+//	underlying io.Reader object and releasing the
+//	associated memory resources. This Clean-Up operation
+//	is accomplished by calling local method:
 //
-//	For FileIoReader instances created with a Path and
-//	File Name or a File Manager (FileMgr), the user must
-//	call the local method FileIoReader.Close().
+//		FileIoReader.Close()
 //
 //	For FileIoReader instances created with an external
-//	io.Reader object, the user need to apply any
-//	required 'close' or clean-up operations externally.
+//	io.Reader object, the user may need to 'close' that
+//	io.Reader object and perform clean-up operations
+//	externally.
 type FileIoReader struct {
 	ioReader             *io.Reader
 	filePtr              *os.File
