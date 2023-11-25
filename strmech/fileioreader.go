@@ -163,173 +163,6 @@ func (fIoReader *FileIoReader) Close() error {
 	return err
 }
 
-// CloseAndRelease
-//
-// This method will perform the 'close' procedure on the
-// internal io.Reader object encapsulated by the current
-// instance of FileIoReader.
-//
-// FileIoReader.CloseAndRelease() is the recommended
-// method for 'closing' the internal io.Reader object.
-//
-// Unlike method FileIoReader.Close(), this method,
-// FileIoReader.CloseAndRelease(), will also release
-// all internal memory resources contained in the current
-// FileIoReader instance. Releasing internal memory
-// resources effectively synchronizes internal flags
-// thereby preventing multiple calls to 'close' the
-// underlying io.reader object. Calling 'close' on the
-// same underlying io.Reader object multiple times can
-// produce unexpected results.
-//
-// Again, this method, FileIoReader.CloseAndRelease(), is
-// the preferred and recommended method for 'closing' an
-// instance of FileIoReader.
-//
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-//	(1)	This method will perform the following
-//		two procedures:
-//
-//		(a)	'close' procedure
-//
-//			This procedure properly closes the underlying
-//			io.Reader object configured for the current
-//			instance of FileIoReader.
-//
-//		(b)	Release internal memory resources
-//
-//			This procedure releases all internal memory
-//			resources and synchronizes internal flags
-//			thereby preventing multiple calls to 'close'
-//			the underlying io.Reader object. Calling
-//			'close' on the same underlying io.Reader
-//			object multiple times can produce unexpected
-//			results.
-//
-//	(2) This method, FileIoReader.CloseAndRelease(),
-//		is the preferred and recommended method for
-//		'closing' a FileIoReader instance.
-//
-//	(3)	After completion of this method, the current
-//		FileIoReader instance will be invalid and
-//		unavailable	for future 'read' operations.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	errorPrefix					interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set
-//		this parameter to 'nil'.
-//
-//		This empty interface must be convertible to one
-//		of the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errorPrefix'.
-//	 	The 'errorPrefix' text will be prefixed or
-//	 	attached to the	beginning of the error message.
-func (fIoReader *FileIoReader) CloseAndRelease(
-	errorPrefix interface{}) error {
-
-	if fIoReader.lock == nil {
-		fIoReader.lock = new(sync.Mutex)
-	}
-
-	fIoReader.lock.Lock()
-
-	defer fIoReader.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"FileBufferReader."+
-			"CloseAndRelease()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	err = new(fileIoReaderMolecule).closeAndRelease(
-		fIoReader,
-		"fIoReader",
-		true, // releaseMemoryResources
-		ePrefix.XCpy("fIoReader"))
-
-	return err
-}
-
 // Empty
 //
 // This method deletes all internal member variables and
@@ -352,16 +185,11 @@ func (fIoReader *FileIoReader) CloseAndRelease(
 //
 // # BE ADVISED
 //
-//	(1)	This method is functionally identical to local
-//		method:
+//	This method does NOT perform the 'close' protocol. To
+//	perform both the 'close' protocol and release all
+//	internal memory resources call local method:
 //
-//			FileIoReader.ReleaseMemResources()
-//
-//	(2)	This method does NOT perform the 'close' protocol.
-//		To perform both the 'close' protocol and release
-//		all internal memory resources call local method:
-//
-//			FileIoReader.CloseAndRelease()
+//			FileIoReader.Close()
 //
 // ----------------------------------------------------------------
 //
@@ -1553,7 +1381,7 @@ func (fIoReader *FileIoReader) Read(
 //		be responsible for performing the clean-up tasks
 //		by calling local method:
 //
-//			FileIoReader.CloseAndRelease()
+//			FileIoReader.Close()
 //
 //	(3)	If the current instance of FileIoReader has NOT
 //		been properly initialized, an error will be
@@ -1659,7 +1487,7 @@ func (fIoReader *FileIoReader) Read(
 //			will be properly closed, the internal memory
 //			resources will be released and there will be
 //			no need to make a separate call to local
-//			method,	FileIoReader.CloseAndRelease().
+//			method,	FileIoReader.Close().
 //
 //		(2) After performing this clean-up operation, the
 //			current instance of FileIoReader will invalid
@@ -1680,7 +1508,7 @@ func (fIoReader *FileIoReader) Read(
 //		be responsible for 'closing' the internal io.Reader
 //		object by calling the local method:
 //
-//				FileIoReader.CloseAndRelease()
+//				FileIoReader.Close()
 //
 //	errorPrefix					interface{}
 //
@@ -1911,7 +1739,7 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 //		be responsible for performing the clean-up tasks
 //		by calling local method:
 //
-//			FileIoReader.CloseAndRelease()
+//			FileIoReader.Close()
 //
 //	(3)	If the current instance of FileIoReader has
 //		NOT been properly initialized, an error will be
@@ -1941,7 +1769,7 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 //			will be properly closed, the internal memory
 //			resources will be released and there will be
 //			no need to make a separate call to local
-//			method,	FileIoReader.CloseAndRelease().
+//			method,	FileIoReader.Close().
 //
 //		(2) After performing this clean-up operation, the
 //			current instance of FileIoReader will invalid
@@ -1962,7 +1790,7 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 //		be responsible for 'closing' the internal io.Reader
 //		object by calling the local method:
 //
-//				FileIoReader.CloseAndRelease()
+//				FileIoReader.Close()
 //
 //	errorPrefix					interface{}
 //
@@ -2138,7 +1966,7 @@ func (fIoReader *FileIoReader) ReadAllToStrBuilder(
 //		be responsible for performing the clean-up tasks
 //		by calling local method:
 //
-//			FileIoReader.CloseAndRelease()
+//			FileIoReader.Close()
 //
 //	(3)	If the current instance of FileIoReader has
 //		NOT been properly initialized, an error will be
@@ -2161,7 +1989,7 @@ func (fIoReader *FileIoReader) ReadAllToStrBuilder(
 //			will be properly closed, the internal memory
 //			resources will be released and there will be
 //			no need to make a separate call to local
-//			method,	FileIoReader.CloseAndRelease().
+//			method,	FileIoReader.Close().
 //
 //		(2) After performing this clean-up operation, the
 //			current instance of FileIoReader will invalid
@@ -2182,7 +2010,7 @@ func (fIoReader *FileIoReader) ReadAllToStrBuilder(
 //		be responsible for 'closing' the internal io.Reader
 //		object by calling the local method:
 //
-//				FileIoReader.CloseAndRelease()
+//				FileIoReader.Close()
 //
 //	errorPrefix					interface{}
 //
@@ -2566,7 +2394,7 @@ func (fIoReader *FileIoReader) ReadAt(
 //		be responsible for performing the clean-up tasks
 //		by calling local method:
 //
-//			FileIoReader.CloseAndRelease()
+//			FileIoReader.Close()
 //
 //	(2)	If the current instance of FileIoReader has NOT
 //		been properly initialized, an error will be
@@ -2610,7 +2438,7 @@ func (fIoReader *FileIoReader) ReadAt(
 //			will be properly closed, the internal memory
 //			resources will be released and there will be
 //			no need to make a separate call to local
-//			method,	FileIoReader.CloseAndRelease().
+//			method,	FileIoReader.Close().
 //
 //		(2) After performing this clean-up operation, the
 //			current instance of FileIoReader will invalid
@@ -2631,7 +2459,7 @@ func (fIoReader *FileIoReader) ReadAt(
 //		be responsible for 'closing' the internal io.Reader
 //		object by calling the local method:
 //
-//				FileIoReader.CloseAndRelease()
+//				FileIoReader.Close()
 //
 //	errorPrefix					interface{}
 //
@@ -2840,7 +2668,7 @@ func (fIoReader *FileIoReader) ReadBytesToString(
 //		be responsible for performing the clean-up tasks
 //		by calling local method:
 //
-//			FileIoReader.CloseAndRelease()
+//			FileIoReader.Close()
 //
 //	(2)	If the current instance of FileIoReader has NOT
 //		been properly initialized, an error will be
@@ -2892,7 +2720,7 @@ func (fIoReader *FileIoReader) ReadBytesToString(
 //			will be properly closed, the internal memory
 //			resources will be released and there will be
 //			no need to make a separate call to local
-//			method,	FileIoReader.CloseAndRelease().
+//			method,	FileIoReader.Close().
 //
 //		(2) After performing this clean-up operation, the
 //			current instance of FileIoReader will invalid
@@ -2913,7 +2741,7 @@ func (fIoReader *FileIoReader) ReadBytesToString(
 //		be responsible for 'closing' the internal io.Reader
 //		object by calling the local method:
 //
-//				FileIoReader.CloseAndRelease()
+//				FileIoReader.Close()
 //
 //	errorPrefix					interface{}
 //
@@ -3079,78 +2907,6 @@ func (fIoReader *FileIoReader) ReadBytesToStringBuilder(
 	return numOfBytesRead, reachedEndOfFile, err
 }
 
-// ReleaseMemResources
-//
-// This method will delete and release all internal
-// memory resources contained in the current instance of
-// FileIoReader.
-//
-// This method WILL NOT perform the 'close' procedure on
-// the internal io.Reader object contained in the current
-// FileIoReader instance. To perform the 'close' protocol
-// and simultaneously release all internal memory
-// resources, DO NOT call this method, FileIoReader.
-// ReleaseMemResources(). Instead, call the
-// local method:
-//
-//	FileIoReader.CloseAndRelease()
-//
-// Specifically the following internal member variables
-// will be set to 'nil' or their initial zero values:
-//
-//	FileIoReader.targetReadFileName = ""
-//	FileIoReader.filePtr = nil
-//	FileIoReader.ioReader = nil
-//	FileIoReader.defaultByteArraySize = 0
-//
-// After calling this method, the current instance of
-// FileIoReader will become invalid and unavailable
-// for future 'read' operations.
-//
-// ----------------------------------------------------------------
-//
-// # BE ADVISED
-//
-//	(1)	This method is functionally identical to local
-//		method:
-//
-//			FileIoReader.Empty()
-//
-//	(2)	This method does NOT perform the 'close' protocol.
-//		To perform both the 'close' protocol and release
-//		all internal memory resources DO NOT call this
-//		method, FileIoReader.ReleaseMemResources().
-//		Instead, call local method:
-//
-//			FileIoReader.CloseAndRelease()
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	-- NONE --
-//
-// ---------------------------------------------------------------
-//
-// # Return Values
-//
-//	--- NONE ---
-func (fIoReader *FileIoReader) ReleaseMemResources() {
-
-	if fIoReader.lock == nil {
-		fIoReader.lock = new(sync.Mutex)
-	}
-
-	fIoReader.lock.Lock()
-
-	defer fIoReader.lock.Unlock()
-
-	new(fileIoReaderAtom).empty(
-		fIoReader)
-
-	return
-}
-
 // Seek
 //
 // This method sets the offset for the next 'read'
@@ -3274,7 +3030,7 @@ func (fIoReader *FileIoReader) ReleaseMemResources() {
 //		If errors are encountered during processing, the
 //		returned error Type will encapsulate an
 //		appropriate error message.
-func (fIoReader FileIoReader) Seek(
+func (fIoReader *FileIoReader) Seek(
 	targetOffset int64,
 	whence int) (
 	offsetFromFileStart int64,
