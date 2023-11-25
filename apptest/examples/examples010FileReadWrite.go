@@ -2318,7 +2318,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufWriter02() {
 		return
 	}
 
-	var fBufWriter strmech.FileBufferWriter
+	var fBufWriter *strmech.FileBufferWriter
 
 	fBufWriter,
 		err = new(strmech.FileBufferWriter).

@@ -1032,11 +1032,11 @@ func (fBufWriter *FileBufferWriter) IsClosed() bool {
 //
 // # Return Values
 //
-//	FileBufferWriter
+//	*FileBufferWriter
 //
 //		If this method completes successfully, it will
-//		return a fully configured instance of
-//		FileBufferWriter.
+//		return a pointer to a fully configured instance
+//		of FileBufferWriter.
 //
 //	error
 //
@@ -1054,7 +1054,7 @@ func (fBufWriter *FileBufferWriter) NewIoWriter(
 	writer io.Writer,
 	bufSize int,
 	errorPrefix interface{}) (
-	FileBufferWriter,
+	*FileBufferWriter,
 	error) {
 
 	if fBufWriter.lock == nil {
@@ -1067,7 +1067,7 @@ func (fBufWriter *FileBufferWriter) NewIoWriter(
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
-	var newFileBufWriter FileBufferWriter
+	var newFileBufWriter = new(FileBufferWriter)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -1082,7 +1082,7 @@ func (fBufWriter *FileBufferWriter) NewIoWriter(
 
 	err = new(fileBufferWriterNanobot).
 		setIoWriter(
-			&newFileBufWriter,
+			newFileBufWriter,
 			"newFileBufWriter",
 			writer,
 			"writer",
