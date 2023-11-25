@@ -27,8 +27,10 @@ import (
 //
 // # BE ADVISED
 //
-//	The FileMgr type implements the io.Reader and
-//	io.Writer interfaces.
+//	The FileMgr type implements the following interfaces:
+//		io.Reader
+//		io.Writer
+//		io.Closer
 type FileMgr struct {
 	isInitialized                   bool
 	originalPathFileName            string
@@ -544,6 +546,81 @@ func (fMgr *FileMgr) ChmodPermissionStr(
 			ePrefix)
 }
 
+// Close
+//
+// This method implements the io.Closer interface.
+//
+// FileMgr.Close() effectively performs all required
+// Clean-Up tasks. As such, this method should only be
+// called after all 'read/write' operations have been
+// completed and the services of the current FileMgr
+// instance are no longer required.
+//
+// In addition, if the internal disk file encapsulated
+// by FileMgr has been opened for Write or/ Read-Write
+// operations, this method will automatically flush the
+// file buffers.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method is identical in functionality to method:
+//
+//				FileMgr.CloseThisFile()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fMgr *FileMgr) Close() error {
+
+	if fMgr.lock == nil {
+		fMgr.lock = new(sync.Mutex)
+	}
+
+	fMgr.lock.Lock()
+
+	defer fMgr.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileMgr.Close()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	fMgrHlpr := fileMgrHelper{}
+
+	err = fMgrHlpr.closeFile(fMgr, ePrefix)
+
+	return err
+}
+
 // CloseThisFile
 //
 // This method will call the Close() method on the
@@ -552,6 +629,14 @@ func (fMgr *FileMgr) ChmodPermissionStr(
 // In addition, if the file has been opened for Write or
 // Read-Write, this method will automatically flush the
 // file buffers.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method is identical in functionality to method:
+//
+//				FileMgr.Close()
 //
 // ----------------------------------------------------------------
 //
