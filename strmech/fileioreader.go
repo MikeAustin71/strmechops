@@ -57,7 +57,7 @@ import (
 //
 //	For FileIoReader instances created with an external
 //	io.Reader object, the user may need to 'close' that
-//	io.Reader object and perform clean-up operations
+//	io.Reader object and perform Clean-Up operations
 //	externally.
 type FileIoReader struct {
 	ioReader             *io.Reader
@@ -423,7 +423,7 @@ func (fIoReader *FileIoReader) GetIoReader(
 //		data from files residing on an attached storage
 //		drive. However, with this configuration, the user
 //		is responsible for manually closing the file and
-//		performing any other required clean-up operations
+//		performing any other required Clean-Up operations
 //		in addition to calling FileIoReader.Close().
 //
 //		While the returned instance of FileIoReader
@@ -1134,7 +1134,7 @@ func (fIoReader *FileIoReader) NewPathFileName(
 // See the io.Reader docs and 'Reference' section below.
 //
 // Once the 'read' operation has been completed, the user
-// MUST call the 'Close' method to ensure clean-up
+// MUST call the 'Close' method to ensure Clean-Up
 // operations are properly applied:
 //
 //	FileIoReader.Close()
@@ -1378,7 +1378,7 @@ func (fIoReader *FileIoReader) Read(
 //
 //		If this method does NOT automatically close the
 //		io.Reader object upon completion, the user will
-//		be responsible for performing the clean-up tasks
+//		be responsible for performing the Clean-Up tasks
 //		by calling local method:
 //
 //			FileIoReader.Close()
@@ -1478,7 +1478,7 @@ func (fIoReader *FileIoReader) Read(
 //
 //		When this parameter is set to 'true', this
 //		method will automatically perform all required
-//		clean-up tasks upon exit. These tasks include
+//		Clean-Up tasks upon exit. These tasks include
 //		closing the underlying FileIoReader io.Reader
 //		object and releasing all internal memory
 //		resources.
@@ -1489,7 +1489,7 @@ func (fIoReader *FileIoReader) Read(
 //			no need to make a separate call to local
 //			method,	FileIoReader.Close().
 //
-//		(2) After performing this clean-up operation, the
+//		(2) After performing this Clean-Up operation, the
 //			current instance of FileIoReader will invalid
 //			and unavailable for future 'read' operations.
 //
@@ -1736,7 +1736,7 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 //
 //		If this method does NOT automatically close the
 //		io.Reader object upon completion, the user will
-//		be responsible for performing the clean-up tasks
+//		be responsible for performing the Clean-Up tasks
 //		by calling local method:
 //
 //			FileIoReader.Close()
@@ -1760,7 +1760,7 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 //
 //		When this parameter is set to 'true', this
 //		method will automatically perform all required
-//		clean-up tasks upon exit. These tasks include
+//		Clean-Up tasks upon exit. These tasks include
 //		closing the underlying FileIoReader io.Reader
 //		object and releasing all internal memory
 //		resources.
@@ -1771,7 +1771,7 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 //			no need to make a separate call to local
 //			method,	FileIoReader.Close().
 //
-//		(2) After performing this clean-up operation, the
+//		(2) After performing this Clean-Up operation, the
 //			current instance of FileIoReader will invalid
 //			and unavailable for future 'read' operations.
 //
@@ -1963,7 +1963,7 @@ func (fIoReader *FileIoReader) ReadAllToStrBuilder(
 //
 //		If this method does NOT automatically close the
 //		io.Reader object upon completion, the user will
-//		be responsible for performing the clean-up tasks
+//		be responsible for performing the Clean-Up tasks
 //		by calling local method:
 //
 //			FileIoReader.Close()
@@ -1980,7 +1980,7 @@ func (fIoReader *FileIoReader) ReadAllToStrBuilder(
 //
 //		When this parameter is set to 'true', this
 //		method will automatically perform all required
-//		clean-up tasks upon exit. These tasks include
+//		Clean-Up tasks upon exit. These tasks include
 //		closing the underlying FileIoReader io.Reader
 //		object and releasing all internal memory
 //		resources.
@@ -1991,7 +1991,7 @@ func (fIoReader *FileIoReader) ReadAllToStrBuilder(
 //			no need to make a separate call to local
 //			method,	FileIoReader.Close().
 //
-//		(2) After performing this clean-up operation, the
+//		(2) After performing this Clean-Up operation, the
 //			current instance of FileIoReader will invalid
 //			and unavailable for future 'read' operations.
 //
@@ -2391,7 +2391,7 @@ func (fIoReader *FileIoReader) ReadAt(
 //
 //		If this method does NOT automatically close the
 //		io.Reader object upon completion, the user will
-//		be responsible for performing the clean-up tasks
+//		be responsible for performing the Clean-Up tasks
 //		by calling local method:
 //
 //			FileIoReader.Close()
@@ -2429,7 +2429,7 @@ func (fIoReader *FileIoReader) ReadAt(
 //
 //		When this parameter is set to 'true', this
 //		method will automatically perform all required
-//		clean-up tasks upon exit. These tasks include
+//		Clean-Up tasks upon exit. These tasks include
 //		closing the underlying FileIoReader io.Reader
 //		object and releasing all internal memory
 //		resources.
@@ -2440,7 +2440,7 @@ func (fIoReader *FileIoReader) ReadAt(
 //			no need to make a separate call to local
 //			method,	FileIoReader.Close().
 //
-//		(2) After performing this clean-up operation, the
+//		(2) After performing this Clean-Up operation, the
 //			current instance of FileIoReader will invalid
 //			and unavailable for future 'read' operations.
 //
@@ -2665,7 +2665,7 @@ func (fIoReader *FileIoReader) ReadBytesToString(
 //
 //		If this method does NOT automatically close the
 //		io.Reader object upon completion, the user will
-//		be responsible for performing the clean-up tasks
+//		be responsible for performing the Clean-Up tasks
 //		by calling local method:
 //
 //			FileIoReader.Close()
@@ -2711,7 +2711,7 @@ func (fIoReader *FileIoReader) ReadBytesToString(
 //
 //		When this parameter is set to 'true', this
 //		method will automatically perform all required
-//		clean-up tasks upon exit. These tasks include
+//		Clean-Up tasks upon exit. These tasks include
 //		closing the underlying FileIoReader io.Reader
 //		object and releasing all internal memory
 //		resources.
@@ -2722,7 +2722,7 @@ func (fIoReader *FileIoReader) ReadBytesToString(
 //			no need to make a separate call to local
 //			method,	FileIoReader.Close().
 //
-//		(2) After performing this clean-up operation, the
+//		(2) After performing this Clean-Up operation, the
 //			current instance of FileIoReader will invalid
 //			and unavailable for future 'read' operations.
 //
@@ -3243,7 +3243,7 @@ func (fIoReader *FileIoReader) SetDefaultReaderBufferSize(
 //		data from files residing on an attached storage
 //		drive. However, with this configuration, the user
 //		is responsible for manually closing the file and
-//		performing any other required clean-up operations
+//		performing any other required Clean-Up operations
 //		in addition to calling FileIoReader.Close().
 //
 //		While the returned instance of FileIoReader
@@ -3896,7 +3896,7 @@ func (fIoReader *FileIoReader) SetPathFileName(
 //
 //	(2) When the current instance of FileIoReader is no
 //		longer needed, the user is responsible for
-//		performing 'close' and clean-up operations by
+//		performing 'close' and Clean-Up operations by
 //		calling the local method:
 //
 //			FileIoReader.Close()
@@ -4125,7 +4125,7 @@ type fileIoReaderMicrobot struct {
 //
 //		When this parameter is set to 'true', this
 //		method will automatically perform all required
-//		FileIoReader clean-up tasks upon exit for
+//		FileIoReader Clean-Up tasks upon exit for
 //		'fIoReader'.
 //
 //		(1)	The FileIoReader internal io.Reader object
@@ -4133,7 +4133,7 @@ type fileIoReaderMicrobot struct {
 //			need to make a separate call to local method,
 //			FileIoReader.Close().
 //
-//		(2) After performing this clean-up operation, the
+//		(2) After performing this Clean-Up operation, the
 //			current instance of FileIoReader will invalid
 //			and unavailable for future 'read' operations.
 //
@@ -4149,7 +4149,7 @@ type fileIoReaderMicrobot struct {
 //		'close' the internal io.Reader object for the
 //		'fIoReader' FileBufferReader. Consequently, the
 //		user will then be responsible for performing
-//		required clean-up tasks on the FileIoReader
+//		required Clean-Up tasks on the FileIoReader
 //		instance by calling the local method:
 //
 //				FileIoReader.Close()
@@ -4402,7 +4402,7 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readAllStrBuilder(
 //
 //		When this parameter is set to 'true', this
 //		method will automatically perform all required
-//		FileIoReader clean-up tasks upon exit for
+//		FileIoReader Clean-Up tasks upon exit for
 //		'fIoReader'.
 //
 //		(1)	The FileIoReader internal io.Reader object
@@ -4410,7 +4410,7 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readAllStrBuilder(
 //			need to make a separate call to local method,
 //			FileIoReader.Close().
 //
-//		(2) After performing this clean-up operation, the
+//		(2) After performing this Clean-Up operation, the
 //			current instance of FileIoReader will invalid
 //			and unavailable for future 'read' operations.
 //
@@ -4426,7 +4426,7 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readAllStrBuilder(
 //		'close' the internal io.Reader object for the
 //		'fIoReader' FileBufferReader. Consequently, the
 //		user will then be responsible for performing
-//		required clean-up tasks on the FileIoReader
+//		required Clean-Up tasks on the FileIoReader
 //		instance by calling the local method:
 //
 //				FileIoReader.Close()

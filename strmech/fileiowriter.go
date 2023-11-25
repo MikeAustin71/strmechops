@@ -17,6 +17,7 @@ import (
 //	io.Closer
 //	io.Seeker
 //	io.Writer
+//	io.ReadFrom
 //
 // This type serves as a wrapper for io.writer. As such,
 // it is designed to facilitate data 'write' operations.
@@ -54,7 +55,7 @@ import (
 //
 //	For FileIoWriter instances created with an external
 //	io.Writer object, the user may need to 'close' that
-//	io.Writer object and perform clean-up operations
+//	io.Writer object and perform Clean-Up operations
 //	externally.
 type FileIoWriter struct {
 	ioWriter             *io.Writer
@@ -384,7 +385,7 @@ func (fIoWriter *FileIoWriter) GetIoWriter(
 //	(2)	When all 'write' operations are completed and the
 //		services of the returned new instance of
 //		FileIoWriter are no longer required, the user
-//		MUST perform 'close' and clean-up operations by
+//		MUST perform 'close' and Clean-Up operations by
 //		calling this local methods:
 //
 //			FileIoWriter.Close()
@@ -396,9 +397,9 @@ func (fIoWriter *FileIoWriter) GetIoWriter(
 //
 //	(4) If the input parameter 'writer' base type is
 //		NOT *os.File, the user will be required to
-//		execute any 'close' or clean-up operations
+//		execute any 'close' or Clean-Up operations
 //		required by the external 'writer' object in
-//		addition to those 'close' and clean-up operations
+//		addition to those 'close' and Clean-Up operations
 //		specified in paragraph (2), above.
 //
 //	(5)	Input parameter 'writer' will accept a pointer to
@@ -429,9 +430,9 @@ func (fIoWriter *FileIoWriter) GetIoWriter(
 //		file data to files residing on an attached
 //		storage drive. However, with this configuration,
 //		the user is responsible for manually closing the
-//		file and performing any other required clean-up
+//		file and performing any other required Clean-Up
 //		operations in addition to calling local method
-//		FileIoWriter.CloseAndRelease().
+//		FileIoWriter.Close().
 //
 //		While the returned instance of FileIoWriter
 //		is primarily designed for writing data to disk
@@ -1195,7 +1196,7 @@ func (fIoWriter *FileIoWriter) NewPathFileName(
 //		If errors are encountered during processing, the
 //		returned error Type will encapsulate an
 //		appropriate error message.
-func (fIoWriter FileIoWriter) ReadFrom(
+func (fIoWriter *FileIoWriter) ReadFrom(
 	reader io.Reader) (
 	numOfBytesProcessed int64,
 	err error) {
@@ -1246,7 +1247,7 @@ func (fIoWriter FileIoWriter) ReadFrom(
 	}
 
 	new(fileIoWriterMolecule).
-		validateDefaultByteArraySize(&fIoWriter)
+		validateDefaultByteArraySize(fIoWriter)
 
 	var bytesRead = make([]byte,
 		fIoWriter.defaultByteArraySize)
@@ -1664,7 +1665,7 @@ func (fIoWriter *FileIoWriter) SetDefaultByteArraySize(
 //		data from files residing on an attached storage
 //		drive. However, with this configuration, the user
 //		is responsible for manually closing the file and
-//		performing any other required clean-up operations
+//		performing any other required Clean-Up operations
 //		in addition to calling FileIoWriter.Close().
 //
 //		While the returned instance of FileIoWriter
@@ -2343,7 +2344,7 @@ func (fIoWriter *FileIoWriter) SetPathFileName(
 //
 //	(2)	After all 'write' operations have been completed,
 //		the user MUST call the 'Close' method to perform
-//		necessary clean-up operations:
+//		necessary Clean-Up operations:
 //
 //			FileIoWriter.Close()
 //
@@ -2499,9 +2500,9 @@ func (fIoWriter *FileIoWriter) Write(
 //
 //	(2)	After all 'write' operations have been completed,
 //		the user MUST call the 'Close' method to perform
-//		necessary clean-up operations:
+//		necessary Clean-Up operations:
 //
-//			FileIoWriter.CloseAndRelease()
+//			FileIoWriter.Close()
 //
 //	(3)	If the planned number of bytes to be written as
 //		specified by the length of 'bytesToWrite' does
@@ -2627,7 +2628,7 @@ func (fIoWriter *FileIoWriter) Write(
 //
 //		When this parameter is set to 'true' and no
 //		processing errors are encountered, this method
-//		will automatically perform the following clean-up
+//		will automatically perform the following Clean-Up
 //		tasks upon exit:
 //
 //		(1)	The FileIoWriter internal io.Writer object
@@ -2635,14 +2636,14 @@ func (fIoWriter *FileIoWriter) Write(
 //			need to make a separate call to local method,
 //			FileIoWriter.Close().
 //
-//		(2) After performing this clean-up operation, the
+//		(2) After performing this Clean-Up operation, the
 //			current instance of FileIoWriter will invalid
 //			and unusable for future 'write' operations.
 //
 //		If input parameter 'autoCloseOnExit' is
 //		set to 'false', this method will NOT close
 //		the internal io.Writer object. This means the user
-//	 	is then responsible for performing the clean-up
+//	 	is then responsible for performing the Clean-Up
 //		tasks when all 'write' operations have been
 //		completed by calling the local method:
 //
@@ -3313,9 +3314,9 @@ type fileIoWriterNanobot struct {
 //		file data to files residing on an attached
 //		storage drive. However, with this configuration,
 //		the user is responsible for manually closing the
-//		file and performing any other required clean-up
+//		file and performing any other required Clean-Up
 //		operations in addition to calling local method
-//		FileIoWriter.CloseAndRelease().
+//		FileIoWriter.Close().
 //
 //		While the configured instance of FileIoWriter
 //		(fIoWriter) is primarily designed for writing
