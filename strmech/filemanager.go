@@ -28,6 +28,7 @@ import (
 // # BE ADVISED
 //
 //	The FileMgr type implements the following interfaces:
+//
 //		io.Reader
 //		io.Writer
 //		io.Closer
@@ -11094,6 +11095,10 @@ func (fMgr *FileMgr) OpenThisFileReadWriteTruncate(
 // err will be equal to 'io.EOF'.
 //
 // This method uses the 'bufio' package.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
 //
 // This method implements the io.Reader interface.
 //
