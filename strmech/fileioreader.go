@@ -5101,34 +5101,40 @@ func (fIoReaderNanobot *fileIoReaderNanobot) setIoReader(
 		return err
 	}
 
-	var ok bool
-
-	fIoReader.filePtr, ok = reader.(*os.File)
-
-	if ok == true {
-
-		var xReader io.Reader
-
-		xReader = fIoReader.filePtr
-
-		fIoReader.ioReader = &xReader
-
-		fIoReader.targetReadFileName =
-			fIoReader.filePtr.Name()
-
-	} else {
-		// ok == false - This is NOT a disk file
-
-		fIoReader.ioReader = &reader
-
-		fIoReader.filePtr = nil
-	}
-
+	// Set Default Byte Array Size
 	fIoReader.defaultByteArraySize =
 		defaultReaderByteArraySize
 
 	fIoReaderMolecule.
 		validateDefaultReaderBufferSize(fIoReader)
+
+	// Set io.Reader
+	fIoReader.ioReader = &reader
+
+	// Set File Data
+
+	var ok bool
+
+	var fileMgr *FileMgr
+
+	fileMgr, ok = reader.(*FileMgr)
+
+	if ok == true {
+
+		fIoReader.targetReadFileName =
+			fileMgr.GetAbsolutePathFileName()
+
+	}
+
+	fIoReader.filePtr, ok = reader.(*os.File)
+
+	if ok == true &&
+		len(fIoReader.targetReadFileName) == 0 {
+
+		fIoReader.targetReadFileName =
+			fIoReader.filePtr.Name()
+
+	}
 
 	return err
 }
