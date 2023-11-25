@@ -167,7 +167,7 @@ func TestFileBufferWriter_Append_001000(t *testing.T) {
 		return
 	}
 
-	var targetBufioWriter FileBufferWriter
+	var targetBufioWriter *FileBufferWriter
 
 	_,
 		targetBufioWriter,

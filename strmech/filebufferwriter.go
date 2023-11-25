@@ -1281,7 +1281,7 @@ func (fBufWriter *FileBufferWriter) NewIoWriter(
 //
 // # Return Values
 //
-//	fileInfoPlus				FileInfoPlus
+//	FileInfoPlus
 //
 //		This returned instance of Type FileInfoPlus
 //		contains data elements describing the file
@@ -1318,13 +1318,13 @@ func (fBufWriter *FileBufferWriter) NewIoWriter(
 //		FileInfoPlus in the source file,
 //		'fileinfoplus.go'.
 //
-//	newFileBufWriter			FileBufferWriter
+//	*FileBufferWriter
 //
-//		If this method completes successfully, a fully
-//		configured instance of FileBufferWriter will
-//		be returned.
+//		If this method completes successfully, a pointer
+//		to a fully configured instance of
+//		FileBufferWriter will be returned.
 //
-//	err							error
+//	error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -1342,9 +1342,9 @@ func (fBufWriter *FileBufferWriter) NewFileMgr(
 	bufSize int,
 	truncateExistingFile bool,
 	errorPrefix interface{}) (
-	fInfoPlus FileInfoPlus,
-	newFileBufWriter FileBufferWriter,
-	err error) {
+	FileInfoPlus,
+	*FileBufferWriter,
+	error) {
 
 	if fBufWriter.lock == nil {
 		fBufWriter.lock = new(sync.Mutex)
@@ -1355,6 +1355,9 @@ func (fBufWriter *FileBufferWriter) NewFileMgr(
 	defer fBufWriter.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var fInfoPlus = FileInfoPlus{}
+	var newFileBufWriter = new(FileBufferWriter)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -1371,7 +1374,7 @@ func (fBufWriter *FileBufferWriter) NewFileMgr(
 	fInfoPlus,
 		err = new(fileBufferWriterMicrobot).
 		setFileMgr(
-			&newFileBufWriter,
+			newFileBufWriter,
 			"newFileBufWriter",
 			fileMgr,
 			"fileMgr",
