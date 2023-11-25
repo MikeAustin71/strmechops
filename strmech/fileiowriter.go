@@ -3474,35 +3474,28 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setIoWriter(
 		return err
 	}
 
-	var ok bool
-
-	fIoWriter.filePtr, ok = writer.(*os.File)
-
-	if ok {
-
-		var xWriter io.Writer
-
-		xWriter = fIoWriter.filePtr
-
-		fIoWriter.targetWriteFileName =
-			fIoWriter.filePtr.Name()
-
-		fIoWriter.ioWriter = &xWriter
-
-	} else {
-		// ok == false This is NOT a file pointer
-
-		fIoWriter.filePtr = nil
-
-		fIoWriter.ioWriter = &writer
-
-	}
+	// Set Default Byte Array Size
 
 	fIoWriter.defaultByteArraySize =
 		defaultByteArraySize
 
 	fIoWriterMolecule.
 		validateDefaultByteArraySize(fIoWriter)
+
+	// Set io.Writer
+	fIoWriter.ioWriter = &writer
+
+	// Set File Data
+	var ok bool
+
+	fIoWriter.filePtr, ok = writer.(*os.File)
+
+	if ok {
+
+		fIoWriter.targetWriteFileName =
+			fIoWriter.filePtr.Name()
+
+	}
 
 	return err
 }
