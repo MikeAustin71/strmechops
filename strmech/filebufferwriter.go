@@ -1988,7 +1988,7 @@ func (fBufWriter *FileBufferWriter) ReadFrom(
 //		If errors are encountered during processing, the
 //		returned error Type will encapsulate an
 //		appropriate error message.
-func (fBufWriter FileBufferWriter) Seek(
+func (fBufWriter *FileBufferWriter) Seek(
 	targetOffset int64,
 	whence int) (
 	offsetFromFileStart int64,
