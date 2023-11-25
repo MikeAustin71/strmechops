@@ -1716,7 +1716,7 @@ func (fBufWriter *FileBufferWriter) NewPathFileName(
 //		If errors are encountered during processing, the
 //		returned error Type will encapsulate an
 //		appropriate error message.
-func (fBufWriter FileBufferWriter) ReadFrom(
+func (fBufWriter *FileBufferWriter) ReadFrom(
 	reader io.Reader) (
 	numOfBytesProcessed int64,
 	err error) {
