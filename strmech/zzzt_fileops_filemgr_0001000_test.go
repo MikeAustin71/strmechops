@@ -75,8 +75,7 @@ func TestFileMgr_ReadFileString_000100(t *testing.T) {
 		if err != nil &&
 			err != io.EOF {
 
-			_ = fMgrReadFile.CloseThisFile(
-				ePrefix.XCpy("fMgrReadFile"))
+			_ = fMgrReadFile.Close()
 
 			t.Errorf("%v\n"+
 				"Error returned by fMgrReadFile.Read(readBuf)\n"+
