@@ -978,7 +978,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02B() {
 	}
 
 	var finalWriteFileInfo strmech.FileInfoPlus
-	var newFileIoReader strmech.FileIoReader
+	var newFileIoReader *strmech.FileIoReader
 
 	finalWriteFileInfo,
 		newFileIoReader,
@@ -2888,7 +2888,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) IoReadWrite01() {
 	var readFileInfoPlus,
 		writeFileInfoPlus strmech.FileInfoPlus
 
-	var targetIoReader strmech.FileIoReader
+	var targetIoReader *strmech.FileIoReader
 
 	readFileInfoPlus,
 		targetIoReader,
@@ -2920,7 +2920,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) IoReadWrite01() {
 		return
 	}
 
-	var targetIoWriter strmech.FileIoWriter
+	var targetIoWriter *strmech.FileIoWriter
 
 	writeFileInfoPlus,
 		targetIoWriter,
@@ -3187,7 +3187,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) IoWriteTo01() {
 
 	var readFileInfoPlus strmech.FileInfoPlus
 
-	var targetIoReader strmech.FileIoReader
+	var targetIoReader *strmech.FileIoReader
 
 	readFileInfoPlus,
 		targetIoReader,
@@ -3204,7 +3204,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) IoWriteTo01() {
 		return
 	}
 
-	var targetIoWriter strmech.FileIoWriter
+	var targetIoWriter *strmech.FileIoWriter
 
 	_,
 		targetIoWriter,
@@ -3459,7 +3459,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) IoReadFrom01() {
 
 	var readFileInfoPlus strmech.FileInfoPlus
 
-	var targetIoReader strmech.FileIoReader
+	var targetIoReader *strmech.FileIoReader
 
 	readFileInfoPlus,
 		targetIoReader,
@@ -3476,7 +3476,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) IoReadFrom01() {
 		return
 	}
 
-	var targetIoWriter strmech.FileIoWriter
+	var targetIoWriter *strmech.FileIoWriter
 
 	_,
 		targetIoWriter,
@@ -3729,7 +3729,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) IoWriteSeek01() {
 		return
 	}
 
-	var targetIoReader strmech.FileIoReader
+	var targetIoReader *strmech.FileIoReader
 	var readFileInfoPlus strmech.FileInfoPlus
 
 	readFileInfoPlus,
@@ -3747,7 +3747,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) IoWriteSeek01() {
 		return
 	}
 
-	var targetIoWriter strmech.FileIoWriter
+	var targetIoWriter *strmech.FileIoWriter
 
 	_,
 		targetIoWriter,
@@ -4020,7 +4020,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) IoWriteAppend01() {
 		return
 	}
 
-	var targetIoReader strmech.FileIoReader
+	var targetIoReader *strmech.FileIoReader
 
 	readFileInfoPlus,
 		targetIoReader,
@@ -4037,7 +4037,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) IoWriteAppend01() {
 		return
 	}
 
-	var targetIoWriter strmech.FileIoWriter
+	var targetIoWriter *strmech.FileIoWriter
 
 	_,
 		targetIoWriter,
@@ -4126,7 +4126,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) IoWriteAppend01() {
 			err.Error())
 	}
 
-	var targetIoWriterTwo strmech.FileIoWriter
+	var targetIoWriterTwo *strmech.FileIoWriter
 
 	_,
 		targetIoWriterTwo,

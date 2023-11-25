@@ -32,7 +32,7 @@ func TestFileIoReader_Read_000100(t *testing.T) {
 		return
 	}
 
-	var fIoReader FileIoReader
+	var fIoReader *FileIoReader
 	var fInfoPlus FileInfoPlus
 
 	fInfoPlus,
@@ -218,7 +218,7 @@ func TestFileIoReader_Seek_000200(t *testing.T) {
 		return
 	}
 
-	var targetIoReader FileIoReader
+	var targetIoReader *FileIoReader
 
 	readFileInfoPlus,
 		targetIoReader,
@@ -235,7 +235,7 @@ func TestFileIoReader_Seek_000200(t *testing.T) {
 		return
 	}
 
-	var targetIoWriter FileIoWriter
+	var targetIoWriter *FileIoWriter
 
 	_,
 		targetIoWriter,

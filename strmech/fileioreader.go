@@ -11,6 +11,15 @@ import (
 
 // FileIoReader
 //
+// Pointer receiver FileIoReader methods implement the
+// following interfaces:
+//
+//	io.Closer
+//	io.Seeker
+//	io.WriterTo
+//	io.Read
+//	io.ReadAt
+//
 // This type serves as a wrapper for io.Reader. As such,
 // it is designed to facilitate data 'read' operations.
 // The most common data source for these 'read'
@@ -63,26 +72,11 @@ type FileIoReader struct {
 // This method is provided in order to implement the
 // io.Closer interface.
 //
-// After calling this method, FileIoReader.Close(),
-// the user should immediately release all internal
-// memory resources by making a second call to local
-// method:
-//
-//	FileIoReader.ReleaseMemResources()
-//
-// Calling this method, FileIoReader.Close(), will
-// 'close' the underlying io.Reader object; however, it
-// will NOT release the internal memory resources for
-// the current FileIoReader instance. As such, this
-// method, FileIoReader.Close(), is NOT the preferred
-// or recommended method for 'closing' an instance of
-// FileIoReader.
-//
-// The preferred and recommended method for performing
-// both the 'close' procedure, and releasing all memory
-// resources, is the local method:
-//
-//	FileIoReader.CloseAndRelease()
+// FileIoReader.Close() effectively performs all required
+// Clean-Up tasks. As such, this method should only be
+// called after all 'read' operations have been completed
+// and the services of the current FileIoReader instance
+// are no longer required.
 //
 // After calling this method, FileIoReader.Close(), the
 // current instance of FileIoReader will be invalid and
@@ -94,14 +88,13 @@ type FileIoReader struct {
 //
 //	(1)	This method implements the io.Closer interface.
 //
-//	(2)	This method will 'close' the underlying io.Reader
-//		object, but it will NOT release the internal
-//		memory resources. After call this method,
-//		FileIoReader.Close(), users should immediately
-//		call the following local method in order to
-//		release internal memory resources:
+//	(2)	This method will perform all required Clean-Up
+//		tasks after all 'read' operations have been
+//		completed.
 //
-//			FileIoReader.ReleaseMemResources()
+//	(3)	Clean-Up tasks performed by this method include
+//		'closing' the underlying io.Reader object as well
+//		as releasing all internal memory resources.
 //
 //		Releasing all internal memory resources will
 //		synchronize internal flags and prevent multiple
@@ -110,18 +103,8 @@ type FileIoReader struct {
 //		object multiple times can produce unexpected
 //		results.
 //
-//	(3)	This method, FileIoReader.Close(), is NOT the
-//		preferred or recommended method for 'closing the
-//		current FileIoReader instance. Instead of
-//		calling FileIoReader.Close(), the preferred
-//		and recommended means for 'closing' and	releasing
-//		memory resources is a single call to local
-//		method:
-//
-//			FileIoReader.CloseAndRelease()
-//
 //	(4)	After completing the call to this method,
-//		FileIoReader.Close(), this FileIoReader
+//		FileIoReader.Close(), the current FileIoReader
 //		instance will become invalid and unavailable
 //		for future 'read' operations.
 //
@@ -147,7 +130,7 @@ type FileIoReader struct {
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fIoReader FileIoReader) Close() error {
+func (fIoReader *FileIoReader) Close() error {
 
 	if fIoReader.lock == nil {
 		fIoReader.lock = new(sync.Mutex)
@@ -171,9 +154,10 @@ func (fIoReader FileIoReader) Close() error {
 		return err
 	}
 
-	err = new(fileIoReaderAtom).close(
-		&fIoReader,
+	err = new(fileIoReaderMolecule).closeAndRelease(
+		fIoReader,
 		"fIoReader",
+		true, // releaseMemoryResources
 		ePrefix.XCpy("fIoReader"))
 
 	return err
@@ -707,9 +691,9 @@ func (fIoReader *FileIoReader) GetIoReader(
 //
 //	FileIoReader
 //
-//		If this method completes successfully, a fully
-//		configured instance of FileIoReader will
-//		be returned.
+//		If this method completes successfully, a pointer
+//		to a fully configured instance of FileIoReader
+//		will be returned.
 //
 //	error
 //
@@ -727,7 +711,7 @@ func (fIoReader *FileIoReader) NewIoReader(
 	reader io.Reader,
 	defaultReaderByteArraySize int,
 	errorPrefix interface{}) (
-	FileIoReader,
+	*FileIoReader,
 	error) {
 
 	if fIoReader.lock == nil {
@@ -740,7 +724,7 @@ func (fIoReader *FileIoReader) NewIoReader(
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
-	var newFileIoReader FileIoReader
+	var newFileIoReader = new(FileIoReader)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -755,7 +739,7 @@ func (fIoReader *FileIoReader) NewIoReader(
 
 	err = new(fileIoReaderNanobot).
 		setIoReader(
-			&newFileIoReader,
+			newFileIoReader,
 			"newFileIoReader",
 			reader,
 			"reader",
@@ -930,7 +914,7 @@ func (fIoReader *FileIoReader) NewIoReader(
 //
 // # Return Values
 //
-//	fileInfoPlus				FileInfoPlus
+//	FileInfoPlus
 //
 //		This returned instance of Type FileInfoPlus
 //		contains data elements describing the file
@@ -967,18 +951,18 @@ func (fIoReader *FileIoReader) NewIoReader(
 //		FileInfoPlus in the source file,
 //		'fileinfoplus.go'.
 //
-//	newFileIoReader			FileIoReader
+//	*FileIoReader
 //
-//		If this method completes successfully, a fully
-//		configured instance of FileIoReader will
-//		be returned.
+//		If this method completes successfully, a pointer
+//		to a fully configured instance of FileIoReader
+//		will be returned.
 //
 //		This returned instance of FileIoReader will
 //		configure the file identified by input parameter
 //		'fileMgr' is a data source for file 'read'
 //		operations.
 //
-//	err							error
+//	error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -995,9 +979,9 @@ func (fIoReader *FileIoReader) NewFileMgr(
 	openFileReadWrite bool,
 	defaultReaderByteArraySize int,
 	errorPrefix interface{}) (
-	fInfoPlus FileInfoPlus,
-	newFileIoReader FileIoReader,
-	err error) {
+	FileInfoPlus,
+	*FileIoReader,
+	error) {
 
 	if fIoReader.lock == nil {
 		fIoReader.lock = new(sync.Mutex)
@@ -1008,6 +992,9 @@ func (fIoReader *FileIoReader) NewFileMgr(
 	defer fIoReader.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var fInfoPlus FileInfoPlus
+	var newFileIoReader = new(FileIoReader)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -1024,7 +1011,7 @@ func (fIoReader *FileIoReader) NewFileMgr(
 	fInfoPlus,
 		err = new(fileIoReaderMicrobot).
 		setFileMgr(
-			&newFileIoReader,
+			newFileIoReader,
 			"newFileIoReader",
 			fileMgr,
 			"fileMgr",
@@ -1189,7 +1176,7 @@ func (fIoReader *FileIoReader) NewFileMgr(
 //
 // # Return Values
 //
-//	fileInfoPlus				FileInfoPlus
+//	FileInfoPlus
 //
 //		This returned instance of Type FileInfoPlus
 //		contains data elements describing the file
@@ -1226,13 +1213,13 @@ func (fIoReader *FileIoReader) NewFileMgr(
 //		FileInfoPlus in the source file,
 //		'fileinfoplus.go'.
 //
-//	newFileIoReader			FileIoReader
+//	FileIoReader
 //
 //		If this method completes successfully, a fully
 //		configured instance of FileIoReader will
 //		be returned.
 //
-//	err							error
+//	error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -1249,9 +1236,9 @@ func (fIoReader *FileIoReader) NewPathFileName(
 	openFileReadWrite bool,
 	defaultReaderByteArraySize int,
 	errorPrefix interface{}) (
-	fInfoPlus FileInfoPlus,
-	newFileIoReader FileIoReader,
-	err error) {
+	FileInfoPlus,
+	*FileIoReader,
+	error) {
 
 	if fIoReader.lock == nil {
 		fIoReader.lock = new(sync.Mutex)
@@ -1262,6 +1249,9 @@ func (fIoReader *FileIoReader) NewPathFileName(
 	defer fIoReader.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var fInfoPlus FileInfoPlus
+	var newFileIoReader = new(FileIoReader)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -1278,7 +1268,7 @@ func (fIoReader *FileIoReader) NewPathFileName(
 	fInfoPlus,
 		err = new(fileIoReaderNanobot).
 		setPathFileName(
-			&newFileIoReader,
+			newFileIoReader,
 			"newFileIoReader",
 			pathFileName,
 			"pathFileName",
@@ -1434,7 +1424,7 @@ func (fIoReader *FileIoReader) NewPathFileName(
 //		section for a discussion of 'io.EOF'. Disk files
 //		will return an 'io.EOF'. However, some other
 //		types of readers may not.
-func (fIoReader FileIoReader) Read(
+func (fIoReader *FileIoReader) Read(
 	bytesRead []byte) (
 	numOfBytesRead int,
 	err error) {
@@ -4200,7 +4190,7 @@ func (fIoReader *FileIoReader) SetPathFileName(
 //		If errors are encountered during processing, the
 //		returned error Type will encapsulate an
 //		appropriate error message.
-func (fIoReader FileIoReader) WriteTo(
+func (fIoReader *FileIoReader) WriteTo(
 	writer io.Writer) (
 	numOfBytesProcessed int64,
 	err error) {
@@ -4251,7 +4241,7 @@ func (fIoReader FileIoReader) WriteTo(
 
 	new(fileIoReaderMolecule).
 		validateDefaultReaderBufferSize(
-			&fIoReader)
+			fIoReader)
 
 	var bytesRead = make([]byte,
 		fIoReader.defaultByteArraySize)

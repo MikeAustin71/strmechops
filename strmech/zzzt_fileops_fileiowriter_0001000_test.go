@@ -135,7 +135,7 @@ func TestFileIoWriter_Append_000400(t *testing.T) {
 		return
 	}
 
-	var targetIoReader FileIoReader
+	var targetIoReader *FileIoReader
 
 	readFileInfoPlus,
 		targetIoReader,
@@ -166,7 +166,7 @@ func TestFileIoWriter_Append_000400(t *testing.T) {
 		return
 	}
 
-	var targetIoWriter FileIoWriter
+	var targetIoWriter *FileIoWriter
 
 	_,
 		targetIoWriter,
@@ -253,7 +253,7 @@ func TestFileIoWriter_Append_000400(t *testing.T) {
 		return
 	}
 
-	var targetIoWriterTwo FileIoWriter
+	var targetIoWriterTwo *FileIoWriter
 
 	_,
 		targetIoWriterTwo,
@@ -458,7 +458,7 @@ func TestFileIoWriter_ReadWrite_001100(t *testing.T) {
 	var readFileInfoPlus,
 		writeFileInfoPlus FileInfoPlus
 
-	var targetIoReader FileIoReader
+	var targetIoReader *FileIoReader
 
 	readFileInfoPlus,
 		targetIoReader,
@@ -490,7 +490,7 @@ func TestFileIoWriter_ReadWrite_001100(t *testing.T) {
 		return
 	}
 
-	var targetIoWriter FileIoWriter
+	var targetIoWriter *FileIoWriter
 
 	writeFileInfoPlus,
 		targetIoWriter,
@@ -701,7 +701,7 @@ func TestFileIoWriter_ReadFrom_002200(t *testing.T) {
 		return
 	}
 
-	var targetIoReader FileIoReader
+	var targetIoReader *FileIoReader
 
 	readFileInfoPlus,
 		targetIoReader,
@@ -718,7 +718,7 @@ func TestFileIoWriter_ReadFrom_002200(t *testing.T) {
 		return
 	}
 
-	var targetIoWriter FileIoWriter
+	var targetIoWriter *FileIoWriter
 
 	_,
 		targetIoWriter,
@@ -1002,7 +1002,7 @@ func TestFileIoWriter_Seek_003300(t *testing.T) {
 		return
 	}
 
-	var targetIoReader FileIoReader
+	var targetIoReader *FileIoReader
 
 	readFileInfoPlus,
 		targetIoReader,
@@ -1019,7 +1019,7 @@ func TestFileIoWriter_Seek_003300(t *testing.T) {
 		return
 	}
 
-	var targetIoWriter FileIoWriter
+	var targetIoWriter *FileIoWriter
 
 	_,
 		targetIoWriter,

@@ -11,11 +11,12 @@ import (
 
 // FileIoWriter
 //
-// Pointer references to Type FileIoWriter implement
-// the following interfaces:
+// Pointer receiver FileIoWriter methods implement the
+// following interfaces:
 //
-// io.Closer
-// io.Seeker
+//	io.Closer
+//	io.Seeker
+//	io.Writer
 //
 // This type serves as a wrapper for io.writer. As such,
 // it is designed to facilitate data 'write' operations.
@@ -67,16 +68,11 @@ type FileIoWriter struct {
 //
 // This method implements the io.Closer interface.
 //
-// Calling this method, FileIoWriter.Close(), will
-// 'close' the underlying io.Writer object and release
-// the internal memory resources for the current
-// FileIoWriter instance.
-//
-// Releasing all internal memory resources will
-// synchronize internal flags and prevent multiple calls
-// to 'close' the underlying io.Writer object. Calling
-// 'close' on the same underlying io.Writer object
-// multiple times can produce unexpected results.
+// FileIoWriter.Close() effectively performs all required
+// Clean-Up tasks. As such, this method should only be
+// called after all 'write' operations have been completed
+// and the services of the current FileIoWriter instance
+// are no longer required.
 //
 // After calling this method, FileIoWriter.Close(), the
 // current instance of FileIoWriter will be invalid and
@@ -88,8 +84,13 @@ type FileIoWriter struct {
 //
 //	(1)	This method implements the io.Closer interface.
 //
-//	(2)	This method will 'close' the underlying io.Writer
-//		object and release the internal memory resources.
+//	(2)	This method will perform all required Clean-Up
+//		tasks after all 'write' operations have been
+//		completed.
+//
+//	(3)	Clean-Up tasks performed by this method include
+//		'closing' the underlying io.Writer object and
+//		releasing the internal memory resources.
 //
 //		Releasing all internal memory resources will
 //		synchronize internal flags and prevent multiple
@@ -98,8 +99,8 @@ type FileIoWriter struct {
 //		object multiple times can produce unexpected
 //		results.
 //
-//	(3)	After completing the call to this method,
-//		FileIoWriter.Close(), this FileIoWriter
+//	(4)	After completing the call to this method,
+//		FileIoWriter.Close(), the current FileIoWriter
 //		instance will become invalid and unavailable
 //		for future 'write' operations.
 //
@@ -543,7 +544,7 @@ func (fIoWriter *FileIoWriter) NewIoWriter(
 	writer io.Writer,
 	defaultWriterByteArraySize int,
 	errorPrefix interface{}) (
-	FileIoWriter,
+	*FileIoWriter,
 	error) {
 
 	if fIoWriter.lock == nil {
@@ -556,7 +557,7 @@ func (fIoWriter *FileIoWriter) NewIoWriter(
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
-	var newFileIoWriter FileIoWriter
+	var newFileIoWriter = new(FileIoWriter)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -571,7 +572,7 @@ func (fIoWriter *FileIoWriter) NewIoWriter(
 
 	err = new(fileIoWriterNanobot).
 		setIoWriter(
-			&newFileIoWriter,
+			newFileIoWriter,
 			"newFileIoWriter",
 			writer,
 			"writer",
@@ -760,7 +761,7 @@ func (fIoWriter *FileIoWriter) NewIoWriter(
 //
 // # Return Values
 //
-//	fileInfoPlus				FileInfoPlus
+//	FileInfoPlus
 //
 //		This returned instance of Type FileInfoPlus
 //		contains data elements describing the file
@@ -797,7 +798,7 @@ func (fIoWriter *FileIoWriter) NewIoWriter(
 //		FileInfoPlus in the source file,
 //		'fileinfoplus.go'.
 //
-//	newFileIoWriter			FileIoWriter
+//	FileIoWriter
 //
 //		If this method completes successfully, a fully
 //		configured instance of FileIoWriter will
@@ -808,7 +809,7 @@ func (fIoWriter *FileIoWriter) NewIoWriter(
 //		'fileMgr' is a data source for file 'write'
 //		operations.
 //
-//	err							error
+//	error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -826,9 +827,9 @@ func (fIoWriter *FileIoWriter) NewFileMgr(
 	defaultByteArraySize int,
 	truncateExistingFile bool,
 	errorPrefix interface{}) (
-	fInfoPlus FileInfoPlus,
-	newFileIoWriter FileIoWriter,
-	err error) {
+	FileInfoPlus,
+	*FileIoWriter,
+	error) {
 
 	if fIoWriter.lock == nil {
 		fIoWriter.lock = new(sync.Mutex)
@@ -839,6 +840,9 @@ func (fIoWriter *FileIoWriter) NewFileMgr(
 	defer fIoWriter.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var fInfoPlus FileInfoPlus
+	var newFileIoWriter = new(FileIoWriter)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -855,7 +859,7 @@ func (fIoWriter *FileIoWriter) NewFileMgr(
 	fInfoPlus,
 		err = new(fileIoWriterMicrobot).
 		setFileMgr(
-			&newFileIoWriter,
+			newFileIoWriter,
 			"newFileIoWriter",
 			fileMgr,
 			"fileMgr",
@@ -1071,13 +1075,13 @@ func (fIoWriter *FileIoWriter) NewFileMgr(
 //		FileInfoPlus in the source file,
 //		'fileinfoplus.go'.
 //
-//	newFileIoWriter			FileIoWriter
+//	*FileIoWriter
 //
-//		If this method completes successfully, a fully
-//		configured instance of FileIoWriter will
-//		be returned.
+//		If this method completes successfully, a pointer
+//		to a fully configured instance of FileIoWriter
+//		will be returned.
 //
-//	err							error
+//	error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -1095,9 +1099,9 @@ func (fIoWriter *FileIoWriter) NewPathFileName(
 	defaultByteArraySize int,
 	truncateExistingFile bool,
 	errorPrefix interface{}) (
-	fInfoPlus FileInfoPlus,
-	newFileIoWriter FileIoWriter,
-	err error) {
+	FileInfoPlus,
+	*FileIoWriter,
+	error) {
 
 	if fIoWriter.lock == nil {
 		fIoWriter.lock = new(sync.Mutex)
@@ -1108,6 +1112,9 @@ func (fIoWriter *FileIoWriter) NewPathFileName(
 	defer fIoWriter.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var newFileIoWriter = new(FileIoWriter)
+	var fInfoPlus FileInfoPlus
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -1124,7 +1131,7 @@ func (fIoWriter *FileIoWriter) NewPathFileName(
 	fInfoPlus,
 		err = new(fileIoWriterNanobot).
 		setPathFileName(
-			&newFileIoWriter,
+			newFileIoWriter,
 			"newFileIoWriter",
 			pathFileName,
 			"pathFileName",
@@ -2390,7 +2397,7 @@ func (fIoWriter *FileIoWriter) SetPathFileName(
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fIoWriter FileIoWriter) Write(
+func (fIoWriter *FileIoWriter) Write(
 	bytesToWrite []byte) (
 	numBytesWritten int,
 	err error) {

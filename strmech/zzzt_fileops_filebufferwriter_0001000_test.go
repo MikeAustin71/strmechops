@@ -1376,7 +1376,7 @@ func TestFileBufferWriter_ReadFrom_004400(t *testing.T) {
 		return
 	}
 
-	var targetIoReader FileIoReader
+	var targetIoReader *FileIoReader
 
 	readFileInfoPlus,
 		targetIoReader,
