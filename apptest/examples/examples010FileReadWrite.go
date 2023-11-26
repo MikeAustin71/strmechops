@@ -45,7 +45,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBufferReader03() {
 		return
 	}
 
-	var fBufReader strmech.FileBufferReader
+	var fBufReader *strmech.FileBufferReader
 
 	_,
 		fBufReader,
@@ -1414,7 +1414,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite04() {
 		return
 	}
 
-	var fBufReader strmech.FileBufferReader
+	var fBufReader *strmech.FileBufferReader
 
 	_,
 		fBufReader,
@@ -1678,7 +1678,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite05() {
 		baseReadFile,
 		targetReadFile)
 
-	var fBufReader strmech.FileBufferReader
+	var fBufReader *strmech.FileBufferReader
 	var fBufReaderBufferSize = 1024
 	var fInfoPlus strmech.FileInfoPlus
 

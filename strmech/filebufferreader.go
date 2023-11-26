@@ -966,7 +966,7 @@ func (fBufReader *FileBufferReader) NewIoReader(
 //
 // # Return Values
 //
-//	fileInfoPlus				FileInfoPlus
+//	FileInfoPlus
 //
 //		This returned instance of Type FileInfoPlus
 //		contains data elements describing the file
@@ -1003,18 +1003,18 @@ func (fBufReader *FileBufferReader) NewIoReader(
 //		FileInfoPlus in the source file,
 //		'fileinfoplus.go'.
 //
-//	newFileBufReader			FileBufferReader
+//	*FileBufferReader
 //
-//		If this method completes successfully, a fully
-//		configured instance of FileBufferReader will
-//		be returned.
+//		If this method completes successfully, a pointer
+//		to a fully configured instance of FileBufferReader
+//		will be returned.
 //
 //		This returned instance of FileBufferReader will
 //		configure the file identified by input parameter
 //		'fileMgr' is a data source for file 'read'
 //		operations.
 //
-//	err							error
+//	error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -1031,9 +1031,9 @@ func (fBufReader *FileBufferReader) NewFileMgr(
 	openFileReadWrite bool,
 	bufSize int,
 	errorPrefix interface{}) (
-	fInfoPlus FileInfoPlus,
-	newFileBufReader FileBufferReader,
-	err error) {
+	FileInfoPlus,
+	*FileBufferReader,
+	error) {
 
 	if fBufReader.lock == nil {
 		fBufReader.lock = new(sync.Mutex)
@@ -1044,6 +1044,9 @@ func (fBufReader *FileBufferReader) NewFileMgr(
 	defer fBufReader.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var fInfoPlus = FileInfoPlus{}
+	var newFileBufReader = new(FileBufferReader)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -1060,7 +1063,7 @@ func (fBufReader *FileBufferReader) NewFileMgr(
 	fInfoPlus,
 		err = new(fileBufferReaderMicrobot).
 		setFileMgr(
-			&newFileBufReader,
+			newFileBufReader,
 			"newFileBufReader",
 			fileMgr,
 			"fileMgr",
@@ -1281,9 +1284,9 @@ func (fBufReader *FileBufferReader) NewPathFileName(
 	openFileReadWrite bool,
 	bufSize int,
 	errorPrefix interface{}) (
-	fInfoPlus FileInfoPlus,
-	newFileBufReader FileBufferReader,
-	err error) {
+	FileInfoPlus,
+	*FileBufferReader,
+	error) {
 
 	if fBufReader.lock == nil {
 		fBufReader.lock = new(sync.Mutex)
@@ -1294,6 +1297,9 @@ func (fBufReader *FileBufferReader) NewPathFileName(
 	defer fBufReader.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+	var err error
+	var fInfoPlus = FileInfoPlus{}
+	var newFileBufReader = new(FileBufferReader)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -1310,7 +1316,7 @@ func (fBufReader *FileBufferReader) NewPathFileName(
 	fInfoPlus,
 		err = new(fileBufferReaderNanobot).
 		setPathFileName(
-			&newFileBufReader,
+			newFileBufReader,
 			"newFileBufReader",
 			pathFileName,
 			"pathFileName",
@@ -1421,7 +1427,7 @@ func (fBufReader *FileBufferReader) NewPathFileName(
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fBufReader FileBufferReader) Peek(
+func (fBufReader *FileBufferReader) Peek(
 	nextBytes int,
 	errorPrefix interface{}) (
 	peekBytes []byte,
@@ -1628,7 +1634,7 @@ func (fBufReader FileBufferReader) Peek(
 //		If processing errors are encountered, the
 //		returned error Type will encapsulate an
 //		appropriate error message.
-func (fBufReader FileBufferReader) Read(
+func (fBufReader *FileBufferReader) Read(
 	bytesRead []byte) (
 	numOfBytesRead int,
 	err error) {
@@ -2657,7 +2663,7 @@ func (fBufReader *FileBufferReader) ReadAllToString(
 //		If errors are encountered during processing, the
 //		returned error Type will encapsulate an
 //		appropriate error message.
-func (fBufReader FileBufferReader) Seek(
+func (fBufReader *FileBufferReader) Seek(
 	targetOffset int64,
 	whence int) (
 	offsetFromFileStart int64,
@@ -3487,7 +3493,7 @@ func (fBufReader *FileBufferReader) SetPathFileName(
 //		If errors are encountered during processing, the
 //		returned error Type will encapsulate an
 //		appropriate error message.
-func (fBufReader FileBufferReader) WriteTo(
+func (fBufReader *FileBufferReader) WriteTo(
 	writer io.Writer) (
 	numOfBytesProcessed int64,
 	err error) {

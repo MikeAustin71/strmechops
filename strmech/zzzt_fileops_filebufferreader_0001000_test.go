@@ -72,7 +72,7 @@ func TestFileBufferReader_GetReadBufferSize_050100(t *testing.T) {
 		return
 	}
 
-	var fBufReader FileBufferReader
+	var fBufReader *FileBufferReader
 	var originalReadBufferCapacity int
 
 	defer func() {
@@ -288,7 +288,7 @@ func TestFileBufferReader_Read_090100(t *testing.T) {
 		return
 	}
 
-	var fBufReader FileBufferReader
+	var fBufReader *FileBufferReader
 
 	_,
 		fBufReader,
@@ -449,7 +449,7 @@ func TestFileBufferReader_Seek_090200(t *testing.T) {
 		return
 	}
 
-	var fBufReader FileBufferReader
+	var fBufReader *FileBufferReader
 	_,
 		fBufReader,
 		err = new(FileBufferReader).

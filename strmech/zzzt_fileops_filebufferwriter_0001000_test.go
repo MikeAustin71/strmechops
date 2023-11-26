@@ -136,7 +136,7 @@ func TestFileBufferWriter_Append_001000(t *testing.T) {
 		return
 	}
 
-	var targetBufioReader FileBufferReader
+	var targetBufioReader *FileBufferReader
 
 	readFileInfoPlus,
 		targetBufioReader,
@@ -1697,7 +1697,7 @@ func TestFileBufferWriter_Seek_005500(t *testing.T) {
 		return
 	}
 
-	var targetBufioReader FileBufferReader
+	var targetBufioReader *FileBufferReader
 
 	readFileInfoPlus,
 		targetBufioReader,
