@@ -1810,18 +1810,6 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite05() {
 		dashLineStr,
 		isClosed)
 
-	fBufReader.ReleaseMemResources()
-
-	isClosed = fBufReader.IsClosed()
-
-	fmt.Printf("%v\n"+
-		"%v\n"+
-		"#2 isClosed = fBufReader.IsClosed() result\n"+
-		"isClosed= %v\n\n",
-		ePrefix.String(),
-		dashLineStr,
-		isClosed)
-
 	err = fBufWriter.Close()
 
 	if err != nil {

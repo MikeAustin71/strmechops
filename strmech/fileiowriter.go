@@ -14,10 +14,12 @@ import (
 // Pointer receiver FileIoWriter methods implement the
 // following interfaces:
 //
-//	io.Closer
-//	io.Seeker
 //	io.Writer
+//	io.Closer
 //	io.ReadFrom
+//	io.Seeker
+//	io.WriteSeeker
+//	io.WriteCloser
 //
 // This type serves as a wrapper for io.writer. As such,
 // it is designed to facilitate data 'write' operations.

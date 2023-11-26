@@ -42,8 +42,8 @@ import (
 //	(1)	Use the 'New' and 'Setter' methods to create and
 //		configure valid instances of FileBufferReader.
 //
-//	(2)	FileBufferReader implements the following
-//		interfaces:
+//	(2)	Pointer receiver FileBufferReader methods
+//		implement the following interfaces:
 //
 //			io.Reader
 //			io.Closer
@@ -57,7 +57,7 @@ import (
 //	(1)	Create a new, valid instance of FileBufferReader
 //		using one of the 'New' or 'Setter' methods. These
 //		methods internally configure FileBufferReader's
-//		bufio.Reader object using a file or io.Writer
+//		bufio.Reader object using a disk file or io.Writer
 //		object.
 //
 //	(2)	After creating a valid instance of
@@ -146,26 +146,11 @@ func (fBufReader *FileBufferReader) Buffered() int {
 // This method is provided in order to implement the
 // io.Closer interface.
 //
-// After calling this method, FileBufferReader.Close(),
-// the user should immediately release all internal
-// memory resources by making a second call to local
-// method:
-//
-//	FileBufferReader.ReleaseMemResources()
-//
-// Calling this method, FileBufferReader.Close(), will
-// 'close' the underlying io.Reader object; however, it
-// will NOT release the internal memory resources for
-// the current FileBufferReader instance. As such, this
-// method, FileBufferReader.Close(), is NOT the preferred
-// or recommended method for 'closing' an instance of
-// FileBufferReader.
-//
-// The preferred and recommended method for performing
-// both the 'close' protocol and, releasing all memory
-// resources, is the local method:
-//
-//	FileBufferReader.CloseAndRelease()
+// FileBufferReader.Close() effectively performs all
+// required Clean-Up tasks. As such, this method should
+// only be called after all 'read' operations have been
+// completed and the services of the current
+// FileBufferReader instance are no longer required.
 //
 // After calling this method, FileBufferReader.Close(),
 // the current instance of FileBufferReader will be
@@ -177,36 +162,26 @@ func (fBufReader *FileBufferReader) Buffered() int {
 //
 //	(1)	This method implements the io.Closer interface.
 //
-//	(2)	This method will 'close' the underlying io.Reader
-//		object, but it will NOT release the internal
-//		memory resources. After call this method,
-//		FileBufferReader.Close(), users should
-//		immediately call the following local method in
-//		order to release internal memory resources:
+//	(2)	This method will perform all required Clean-Up
+//		tasks. FileBufferReader.Close() should only be
+//		called after all 'read' operations have been
+//		completed.
 //
-//			FileBufferReader.ReleaseMemResources()
+//	(3)	Clean-Up tasks performed by this method include
+//		'closing' the underlying bufio.Reader object as
+//		well as releasing all internal memory resources.
 //
 //		Releasing all internal memory resources will
 //		synchronize internal flags and prevent multiple
-//		calls to 'close' the underlying io.Reader object.
-//		Calling 'close' on the same underlying io.Reader
-//		object multiple times can produce unexpected
-//		results.
-//
-//	(3)	This method, FileBufferReader.Close(), is NOT the
-//		preferred or recommended method for 'closing the
-//		current FileBufferReader instance. Instead of
-//		calling FileBufferReader.Close(), the preferred
-//		and recommended means for 'closing' and	releasing
-//		memory resources is a single call to local
-//		method:
-//
-//			FileBufferReader.CloseAndRelease()
+//		calls to 'close' the underlying bufio.Reader
+//		object. Calling 'close' on the same underlying
+//		bufio.Reader object multiple times can produce
+//		unexpected results.
 //
 //	(4)	After completing the call to this method,
-//		FileBufferReader.Close(), this FileBufferReader
-//		instance will become invalid and unavailable
-//		for future 'read' operations.
+//		FileBufferReader.Close(), the current
+//		FileBufferReader instance will become invalid and
+//		unavailable for future 'read' operations.
 //
 // ----------------------------------------------------------------
 //
@@ -230,7 +205,7 @@ func (fBufReader *FileBufferReader) Buffered() int {
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fBufReader FileBufferReader) Close() error {
+func (fBufReader *FileBufferReader) Close() error {
 
 	if fBufReader.lock == nil {
 		fBufReader.lock = new(sync.Mutex)
@@ -248,172 +223,6 @@ func (fBufReader FileBufferReader) Close() error {
 		nil,
 		"FileBufferReader."+
 			"Close()",
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	err = new(fileBufferReaderAtom).close(
-		&fBufReader,
-		"fBufReader",
-		ePrefix.XCpy("fBufReader"))
-
-	return err
-}
-
-// CloseAndRelease
-//
-// This method will perform the 'close' procedure on the
-// internal bufio.Reader object encapsulated by the
-// current instance of FileBufferReader.
-//
-// FileBufferReader.CloseAndRelease() is the recommended
-// method for 'closing' the internal io.Reader object.
-//
-// Unlike method FileBufferReader.Close(), this method,
-// FileBufferReader.CloseAndRelease(), will also release
-// all internal memory resources contained in the current
-// FileBufferReader instance.  Releasing internal memory
-// resources effectively synchronizes internal flags
-// thereby preventing multiple calls to 'close'	the
-// underlying io.reader object. Calling 'close' on the
-// same io.Reader object multiple times can produce
-// unexpected results.
-//
-// Again, this method, FileBufferReader.CloseAndRelease(),
-// is the preferred and recommended method for 'closing'
-// an instance of FileBufferReader.
-//
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-//	(1)	This method will perform the following
-//		two procedures:
-//
-//		(a)	'close' procedure
-//
-//			This procedure properly closes the underlying
-//			bufio.Reader object configured for the current
-//			instance of FileBufferReader.
-//
-//		(b)	Release internal memory resources
-//
-//			This procedure releases all internal memory
-//			resources and synchronizes internal flags
-//			thereby preventing multiple calls to 'close'
-//			the underlying io.reader object. Calling
-//			'close' on the same underlying io.Reader
-//			object multiple times can produce unexpected
-//			results.
-//
-//	(2) This method, FileBufferReader.CloseAndRelease(),
-//		is the preferred and recommended method for
-//		'closing' a FileBufferReader instance.
-//
-//	(3)	After completion of this method, the current
-//		FileBufferReader instance will be invalid and
-//		unavailable	for future 'read' operations.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	errorPrefix					interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set
-//		this parameter to 'nil'.
-//
-//		This empty interface must be convertible to one
-//		of the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errorPrefix'.
-//	 	The 'errorPrefix' text will be prefixed or
-//	 	attached to the	beginning of the error message.
-func (fBufReader *FileBufferReader) CloseAndRelease(
-	errorPrefix interface{}) error {
-
-	if fBufReader.lock == nil {
-		fBufReader.lock = new(sync.Mutex)
-	}
-
-	fBufReader.lock.Lock()
-
-	defer fBufReader.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		"FileBufferReader."+
-			"CloseAndRelease()",
 		"")
 
 	if err != nil {
@@ -548,7 +357,7 @@ func (fBufReader *FileBufferReader) CloseAndRelease(
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fBufReader FileBufferReader) Discard(
+func (fBufReader *FileBufferReader) Discard(
 	numBytesToDiscard int,
 	errorPrefix interface{}) (
 	discardedBytes int,
@@ -632,16 +441,10 @@ func (fBufReader FileBufferReader) Discard(
 //
 // # BE ADVISED
 //
-//	(1)	This method is functionally identical to local
-//		method:
+//	To perform both the 'close' protocol and release
+//	all internal memory resources call local method:
 //
-//			FileBufferReader.ReleaseMemResources()
-//
-//	(2)	This method does NOT perform the 'close' protocol.
-//		To perform both the 'close' protocol and release
-//		all internal memory resources call local method:
-//
-//			FileBufferReader.CloseAndRelease()
+//			FileBufferReader.Close()
 //
 // ----------------------------------------------------------------
 //
@@ -934,11 +737,11 @@ func (fBufReader *FileBufferReader) IsClosed() bool {
 //
 // # Return Values
 //
-//	FileBufferReader
+//	*FileBufferReader
 //
-//		If this method completes successfully, a fully
-//		configured instance of FileBufferReader will
-//		be returned.
+//		If this method completes successfully, a pointer
+//		to a fully configured instance of
+//		FileBufferReader will be returned.
 //
 //	error
 //
@@ -956,7 +759,7 @@ func (fBufReader *FileBufferReader) NewIoReader(
 	reader io.Reader,
 	bufSize int,
 	errorPrefix interface{}) (
-	FileBufferReader,
+	*FileBufferReader,
 	error) {
 
 	if fBufReader.lock == nil {
@@ -969,7 +772,7 @@ func (fBufReader *FileBufferReader) NewIoReader(
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
-	var newFileBufReader FileBufferReader
+	var newFileBufReader *FileBufferReader
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -984,7 +787,7 @@ func (fBufReader *FileBufferReader) NewIoReader(
 
 	err = new(fileBufferReaderNanobot).
 		setIoReader(
-			&newFileBufReader,
+			newFileBufReader,
 			"newFileBufReader",
 			reader,
 			"reader",
@@ -2728,76 +2531,6 @@ func (fBufReader *FileBufferReader) ReadAllToString(
 	err = errors.Join(err1, err2)
 
 	return numOfBytesRead, contentsStr, err
-}
-
-// ReleaseMemResources
-//
-// This method will delete and release all internal
-// memory resources contained in the current instance of
-// FileBufferReader.
-//
-// This method WILL NOT perform the 'close' procedure on
-// the internal bufio.Reader object contained in the
-// current FileBufferReader instance. To perform the
-// 'close' protocol and simultaneously release all
-// internal memory resources, DO NOT call this method,
-// FileBufferReader.ReleaseMemResources(). Instead, call
-// the local method:
-//
-//	FileBufferReader.CloseAndRelease()
-//
-// Specifically the following internal object pointers
-// will be set to 'nil' or their initial zero values:
-//
-//	FileBufferReader.bufioReader = nil
-//	FileBufferReader.ioReader = nil
-//	FileBufferReader.filePtr = nil
-//	FileBufferReader.targetReadFileName = ""
-//
-// After calling this method, the current instance of
-// FileBufferReader will become invalid and unavailable
-// for future 'read' operations.
-//
-// ----------------------------------------------------------------
-//
-// # BE ADVISED
-//
-//	(1)	This method is functionally identical to local
-//		method:
-//
-//			FileBufferReader.Empty()
-//
-//	(2)	This method does NOT perform the 'close' protocol.
-//		To perform both the 'close' protocol and release
-//		all internal memory resources DO NOT call this
-//		method, FileBufferReader.ReleaseMemResources().
-//		Instead, call local method:
-//
-//			FileBufferReader.CloseAndRelease()
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	-- NONE --
-//
-// ---------------------------------------------------------------
-//
-// # Return Values
-//
-//	--- NONE ---
-func (fBufReader *FileBufferReader) ReleaseMemResources() {
-
-	if fBufReader.lock == nil {
-		fBufReader.lock = new(sync.Mutex)
-	}
-
-	fBufReader.lock.Lock()
-
-	defer fBufReader.lock.Unlock()
-
-	new(fileBufferReaderAtom).empty(
-		fBufReader)
 }
 
 // Seek

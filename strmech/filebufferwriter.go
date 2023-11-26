@@ -42,14 +42,15 @@ import (
 //		create and configure valid instances of
 //		FileBufferWriter.
 //
-//	(2)	FileBufferWriter implements the following
-//		interfaces:
+//	(2)	Pointer receiver FileBufferWriter methods
+//		implement the following interfaces:
 //
 //			io.Writer
 //			io.Closer
 //			io.ReadFrom
 //			io.Seeker
 //			io.WriteSeeker
+//			io.WriteCloser
 //
 // ----------------------------------------------------------------
 //
@@ -71,7 +72,7 @@ import (
 //
 //	(3)	Upon completion of all 'write' operations, the
 //		'Flush' and 'Close' tasks must be executed in
-//		sequence to perform required clean-up tasks.
+//		sequence to perform required Clean-Up tasks.
 //
 //		a.	The 'Flush' task can be performed by calling
 //			the local method:
@@ -251,10 +252,10 @@ func (fBufWriter *FileBufferWriter) Buffered() int {
 // invalid and unavailable for further 'write' operations.
 //
 // Calling this method will perform two elements of
-// the clean-up operation required when all data
+// the Clean-Up operation required when all data
 // has been written to the internal bufio.Writer and
 // the services of the current FileBufferWriter
-// instance are no longer required. The two clean-up
+// instance are no longer required. The two Clean-Up
 // procedures performed by this method are listed as
 // follows:
 //
@@ -268,7 +269,7 @@ func (fBufWriter *FileBufferWriter) Buffered() int {
 //		bufio.Writer object configured for the current
 //		instance of FileBufferWriter.
 //
-// The third procedure in the clean-up operation, namely
+// The third procedure in the Clean-Up operation, namely
 // the release of internal memory resources, will NOT be
 // performed by this method.
 //
@@ -945,7 +946,7 @@ func (fBufWriter *FileBufferWriter) IsClosed() bool {
 //		file data to files residing on an attached
 //		storage drive. However, with this configuration,
 //		the user is responsible for manually closing the
-//		file and performing any other required clean-up
+//		file and performing any other required Clean-Up
 //		tasks in addition to calling local method
 //		FileBufferWriter.Close().
 //
@@ -2625,7 +2626,7 @@ func (fBufWriter *FileBufferWriter) SetPathFileName(
 //		file data to files residing on an attached
 //		storage drive. However, with this configuration,
 //		the user is responsible for manually closing the
-//		file and performing any other required clean-up
+//		file and performing any other required Clean-Up
 //		operations in addition to calling local method
 //		FileBufferWriter.Close().
 //
@@ -2786,7 +2787,7 @@ func (fBufWriter *FileBufferWriter) SetIoWriter(
 //
 //	(2)	After all 'read' and 'write' operations have been
 //		completed, the user MUST call the 'Close' method
-//		to perform necessary clean-up operations:
+//		to perform necessary Clean-Up operations:
 //
 //			FileBufferWriter.Close()
 //
@@ -3039,7 +3040,7 @@ func (fBufWriter *FileBufferWriter) Write(
 //		When this parameter is set to 'true' and no
 //		processing errors are encountered during method
 //		execution, this method will automatically perform
-//		the following clean-up tasks upon exit:
+//		the following Clean-Up tasks upon exit:
 //
 //		(1)	The write buffer will be flushed thereby
 //			ensuring that all remaining data in the
@@ -3051,7 +3052,7 @@ func (fBufWriter *FileBufferWriter) Write(
 //			to make a separate call to local method,
 //			FileBufferWriter.Close().
 //
-//		(3) After performing these clean-up tasks, the
+//		(3) After performing these Clean-Up tasks, the
 //			current instance of FileBufferWriter will
 //			invalid and unusable for future 'write'
 //			operations.
@@ -3722,7 +3723,7 @@ type fileBufferWriterNanobot struct {
 //		file data to files residing on an attached
 //		storage drive. However, with this configuration,
 //		the user is responsible for manually closing the
-//		file and performing any other required clean-up
+//		file and performing any other required Clean-Up
 //		operations in addition to calling local method
 //		FileBufferWriter.Close().
 //
@@ -4321,11 +4322,11 @@ type fileBufferWriterMolecule struct {
 
 // flushCloseRelease
 //
-// This method is used to perform all necessary clean-up
+// This method is used to perform all necessary Clean-Up
 // operations after final data has been written to the
 // internal destination bufio.Writer object.
 //
-// These clean-up operations consist of the following:
+// These Clean-Up operations consist of the following:
 //
 //	(1)	Flushing the write buffer to ensure that all
 //		data is written to the internal destination
@@ -4335,7 +4336,7 @@ type fileBufferWriterMolecule struct {
 //		buffer will be lost. Reference input parameter,
 //		'flushBuffer'.
 //
-//	(2) Closing the internal bufio.Writer object thereby
+//	(2)	Closing the internal bufio.Writer object thereby
 //		rendering it invalid and unavailable for any future
 //		'write' operations.
 //
@@ -4345,7 +4346,7 @@ type fileBufferWriterMolecule struct {
 //		resources synchronizes internal flags and
 //		prevents multiple calls to the 'close' method.
 //
-// Individual Clean-up procedures may be performed
+// Individual Clean-Up procedures may be performed
 // depending on the settings for input parameters
 // 'flushWriteBuffer' and 'releaseMemoryResources'.
 //

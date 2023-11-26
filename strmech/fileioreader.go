@@ -14,10 +14,10 @@ import (
 // Pointer receiver FileIoReader methods implement the
 // following interfaces:
 //
+//	io.Reader
 //	io.Closer
-//	io.Seeker
 //	io.WriterTo
-//	io.Read
+//	io.Seeker
 //	io.ReadAt
 //
 // This type serves as a wrapper for io.Reader. As such,
@@ -89,8 +89,8 @@ type FileIoReader struct {
 //	(1)	This method implements the io.Closer interface.
 //
 //	(2)	This method will perform all required Clean-Up
-//		tasks after all 'read' operations have been
-//		completed.
+//		tasks. FileIoReader.Close() should only be called
+//		after all 'read' operations have been completed.
 //
 //	(3)	Clean-Up tasks performed by this method include
 //		'closing' the underlying io.Reader object as well
