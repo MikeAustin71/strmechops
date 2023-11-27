@@ -4316,6 +4316,8 @@ func (fBufWriterNanobot *fileBufferWriterNanobot) setPathFileName(
 
 		if fBufWriter.filePtr != nil {
 			_ = fBufWriter.filePtr.Close()
+
+			fBufWriter.filePtr = nil
 		}
 
 		return fInfoPlus, err
