@@ -1985,11 +1985,11 @@ func (fBufReadWrite *FileBufferReadWrite) NewFileMgrs(
 //		FileInfoPlus in the source file,
 //		'fileinfoplus.go'.
 //
-//	newFBuffReadWrite			FileBufferReadWrite
+//	newFBuffReadWrite			*FileBufferReadWrite
 //
 //		If this method completes successfully, it will
-//		return a fully configured instance of
-//		FileBufferReadWrite.
+//		return a pointer to a fully configured instance
+//		of FileBufferReadWrite.
 //
 //	err							error
 //
@@ -2014,7 +2014,7 @@ func (fBufReadWrite *FileBufferReadWrite) NewPathFileNames(
 	errorPrefix interface{}) (
 	readerFileInfoPlus FileInfoPlus,
 	writerFileInfoPlus FileInfoPlus,
-	newFBuffReadWrite FileBufferReadWrite,
+	newFBuffReadWrite *FileBufferReadWrite,
 	err error) {
 
 	if fBufReadWrite.lock == nil {
@@ -2026,6 +2026,8 @@ func (fBufReadWrite *FileBufferReadWrite) NewPathFileNames(
 	defer fBufReadWrite.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
+
+	newFBuffReadWrite = new(FileBufferReadWrite)
 
 	funcName := "FileBufferReadWrite." +
 		"NewPathFileNames()"
@@ -2048,7 +2050,7 @@ func (fBufReadWrite *FileBufferReadWrite) NewPathFileNames(
 		writerFileInfoPlus,
 		err = new(fileBufferReadWriteNanobot).
 		setPathFileNamesReadWrite(
-			&newFBuffReadWrite,
+			newFBuffReadWrite,
 			"newFBuffReadWrite",
 			readerPathFileName,
 			"readerPathFileName",
