@@ -1580,13 +1580,87 @@ func (fBufReadWrite *FileBufferReadWrite) NewIoReadWrite(
 //
 // # Return Values
 //
-//	FileBufferReadWrite
+//	readerFileInfoPlus			FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter 'readerFileMgr'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	writerFileInfoPlus			FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter 'writerFileMgr'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	newFBuffReadWrite			*FileBufferReadWrite
 //
 //		If this method completes successfully, it will
-//		return a fully configured instance of
-//		FileBufferReadWrite.
+//		return a pointer to a fully configured instance
+//		of FileBufferReadWrite.
 //
-//	error
+//	err							error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -1609,7 +1683,7 @@ func (fBufReadWrite *FileBufferReadWrite) NewFileMgrs(
 	errorPrefix interface{}) (
 	readerFileInfoPlus FileInfoPlus,
 	writerFileInfoPlus FileInfoPlus,
-	newFBuffReadWrite FileBufferReadWrite,
+	newFBuffReadWrite *FileBufferReadWrite,
 	err error) {
 
 	if fBufReadWrite.lock == nil {
@@ -1624,6 +1698,8 @@ func (fBufReadWrite *FileBufferReadWrite) NewFileMgrs(
 
 	funcName := "FileBufferReadWrite." +
 		"NewFileMgrs()"
+
+	newFBuffReadWrite = new(FileBufferReadWrite)
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -1643,7 +1719,7 @@ func (fBufReadWrite *FileBufferReadWrite) NewFileMgrs(
 		writerFileInfoPlus,
 		err = new(fileBufferReadWriteMicrobot).
 		setFileMgrsReadWrite(
-			&newFBuffReadWrite,
+			newFBuffReadWrite,
 			"newFileBufReader",
 			readerFileMgr,
 			"readerFileMgr",
