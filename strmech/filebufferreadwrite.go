@@ -322,28 +322,28 @@ func (fBufReadWrite *FileBufferReadWrite) Close() error {
 
 // CloseReader
 //
-// This method is designed to perform clean-up tasks
+// This method is designed to perform Clean-Up tasks
 // after completion of all 'read' operations associated
 // with the current instance of FileBufferReadWrite.
 //
-// After calling this method, the clean-up tasks
+// After calling this method, the Clean-Up tasks
 // performed will effectively render the internal
 // io.Reader object, encapsulated by the current
 // FileBufferReadWrite instance, invalid and unusable
 // for any future 'read' operations.
 //
 // It is unlikely that the user will ever need to call
-// this method. Typically, clean-up tasks are performed
+// this method. Typically, Clean-Up tasks are performed
 // jointly on the internal io.Reader and io.Writer
 // objects encapsulated in the current FileBufferReadWrite
-// instance. These clean-up tasks should be performed
+// instance. These Clean-Up tasks should be performed
 // after all 'read' and 'write' operations have been
 // completed by calling the local method:
 //
 //	FileBufferReadWrite.FlushCloseRelease()
 //
 // However, in the event of unforeseen use cases, this
-// method is provided to exclusively close or clean-up
+// method is provided to exclusively close or Clean-Up
 // the io.Reader.
 //
 // ----------------------------------------------------------------
@@ -485,11 +485,11 @@ func (fBufReadWrite *FileBufferReadWrite) CloseReader(
 
 // CloseWriter
 //
-// This method is designed to perform clean-up tasks
+// This method is designed to perform Clean-Up tasks
 // after completion of all 'write' operations associated
 // with the current instance of FileBufferReadWrite.
 //
-// These clean-up tasks include:
+// These Clean-Up tasks include:
 //
 //	(a)	Flushing the write buffer to ensure all data
 //		is written from the write buffer to the
@@ -497,24 +497,24 @@ func (fBufReadWrite *FileBufferReadWrite) CloseReader(
 //
 //	(b) Closing the 'write' file or io.Writer object.
 //
-// After calling this method, the clean-up tasks
+// After calling this method, the Clean-Up tasks
 // performed will effectively render the internal
 // io.Writer object, encapsulated by the current
 // FileBufferReadWrite instance, invalid and unusable
 // for any future 'write' operations.
 //
 // It is unlikely that the user will ever need to call
-// this method. Typically, clean-up tasks are performed
+// this method. Typically, Clean-Up tasks are performed
 // jointly on the internal io.Reader and io.Writer
 // objects encapsulated in the current FileBufferReadWrite
-// instance. These clean-up tasks should be performed
+// instance. These Clean-Up tasks should be performed
 // after all 'read' and 'write' operations have been
 // completed by calling the local method:
 //
-//	FileBufferReadWrite.FlushCloseRelease()
+//	FileBufferReadWrite.Close()
 //
 // However, in the event of unforeseen use cases, this
-// method is provided to exclusively close or clean-up
+// method is provided to exclusively close or Clean-Up
 // the io.Writer.
 //
 // ----------------------------------------------------------------
@@ -683,7 +683,7 @@ func (fBufReadWrite *FileBufferReadWrite) CloseWriter(
 //		'close' protocols while simultaneously releasing
 //		all internal memory resources, call local method:
 //
-//			FileBufferReadWrite.FlushCloseRelease()
+//			FileBufferReadWrite.Close()
 //
 // ----------------------------------------------------------------
 //
@@ -712,167 +712,6 @@ func (fBufReadWrite *FileBufferReadWrite) Empty() {
 	fBufReadWrite.lock = nil
 
 	return
-}
-
-// FlushCloseRelease
-//
-// After all read and write operations have been
-// completed for the current instance of
-// FileBufferReadWrite, call this method to perform the
-// required Clean-Up procedures for the internal
-// bufio.Reader and bufio.Writer objects.
-//
-// Once this method completes, no further action is
-// required and the current FileBufferReadWrite is
-// effectively rendered invalid and unavailable for
-// future read/write operations.
-//
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-//	After completing all 'read' and 'write' operations,
-//	calling this method will:
-//
-//	(1)	'Flush' the write buffer thereby ensuring all
-//		data is written from the write buffer to the
-//		underlying bufio.Writer object.
-//
-//	(2) Properly 'Close' the internal bufio.Writer
-//		object.
-//
-//	(3) Properly 'Close' the internal bufio.Reader
-//		object.
-//
-//	(4)	Release all the internal memory resources
-//		of the internal bufio.Reader, bufio.Writer
-//		and the current FileBufferReadWrite
-//		instance.
-//
-//		Releasing internal memory resources will
-//		synchronize internal flags and prevent multiple
-//		calls to the 'close' method. Multiple calls to
-//		the 'close' method may produce unexpected
-//		results.
-//
-//	(5) Effectively render the current instance of
-//		FileBufferReadWrite invalid and unusable for
-//		any future 'read' or 'write' operations.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	errorPrefix					interface{}
-//
-//		This object encapsulates error prefix text which
-//		is included in all returned error messages.
-//		Usually, it contains the name of the calling
-//		method or methods listed as a method or function
-//		chain of execution.
-//
-//		If no error prefix information is needed, set
-//		this parameter to 'nil'.
-//
-//		This empty interface must be convertible to one
-//		of the following types:
-//
-//		1.	nil
-//				A nil value is valid and generates an
-//				empty collection of error prefix and
-//				error context information.
-//
-//		2.	string
-//				A string containing error prefix
-//				information.
-//
-//		3.	[]string
-//				A one-dimensional slice of strings
-//				containing error prefix information.
-//
-//		4.	[][2]string
-//				A two-dimensional slice of strings
-//		   		containing error prefix and error
-//		   		context information.
-//
-//		5.	ErrPrefixDto
-//				An instance of ErrPrefixDto.
-//				Information from this object will
-//				be copied for use in error and
-//				informational messages.
-//
-//		6.	*ErrPrefixDto
-//				A pointer to an instance of
-//				ErrPrefixDto. Information from
-//				this object will be copied for use
-//				in error and informational messages.
-//
-//		7.	IBasicErrorPrefix
-//				An interface to a method
-//				generating a two-dimensional slice
-//				of strings containing error prefix
-//				and error context information.
-//
-//		If parameter 'errorPrefix' is NOT convertible
-//		to one of the valid types listed above, it will
-//		be considered invalid and trigger the return of
-//		an error.
-//
-//		Types ErrPrefixDto and IBasicErrorPrefix are
-//		included in the 'errpref' software package:
-//			"github.com/MikeAustin71/errpref".
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If errors are encountered during processing, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errorPrefix'.
-//	 	The 'errorPrefix' text will be prefixed or
-//	 	attached to the	beginning of the error message.
-func (fBufReadWrite *FileBufferReadWrite) FlushCloseRelease(
-	errorPrefix interface{}) error {
-
-	if fBufReadWrite.lock == nil {
-		fBufReadWrite.lock = new(sync.Mutex)
-	}
-
-	fBufReadWrite.lock.Lock()
-
-	defer fBufReadWrite.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-	var err error
-
-	funcName := "FileBufferReadWrite." +
-		"FlushCloseRelease()"
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		errorPrefix,
-		funcName,
-		"")
-
-	if err != nil {
-		return err
-	}
-
-	return new(fileBufferReadWriteMicrobot).
-		flushCloseRelease(
-			fBufReadWrite,
-			"fBufReadWrite",
-			true, // flushWriteBuffer
-			true, // releaseReaderWriterMemResources
-			true, // releaseFBuffReadWriteMemResources
-			ePrefix)
 }
 
 // FlushWriteBuffer
@@ -1212,10 +1051,10 @@ func (fBufReadWrite *FileBufferReadWrite) New() *FileBufferReadWrite {
 //		data from files residing on an attached storage
 //		drive. However, with this configuration, the user
 //		is responsible for manually closing the file and
-//		performing any other required clean-up operations
+//		performing any other required Clean-Up operations
 //		in addition to calling local method:
 //
-//		FileBufferReadWrite.FlushCloseRelease()
+//		FileBufferReadWrite.Close()
 //
 //		While the 'read' services provided by
 //		FileBufferReadWrite are primarily designed to
@@ -1251,10 +1090,10 @@ func (fBufReadWrite *FileBufferReadWrite) New() *FileBufferReadWrite {
 //		data to files residing on an attached storage
 //		drive. However, with this configuration, the user
 //		is responsible for manually closing the file and
-//		performing any other required clean-up operations
+//		performing any other required Clean-Up operations
 //		in addition to calling local method:
 //
-//		FileBufferReadWrite.FlushCloseRelease()
+//		FileBufferReadWrite.Close()
 //
 //		While the 'write' services provided by the
 //		FileBufferReadWrite are primarily designed for
@@ -2101,10 +1940,10 @@ func (fBufReadWrite *FileBufferReadWrite) NewPathFileNames(
 // Once all 'read' and 'write' operations have been
 // completed for the current instance of
 // FileBufferReadWrite, the user MUST call the 'Close'
-// method to ensure clean-up operations are properly
+// method to ensure Clean-Up operations are properly
 // applied:
 //
-//	FileBufferReadWrite.FlushCloseRelease()()
+//	FileBufferReadWrite.Close()
 //
 // ----------------------------------------------------------------
 //
@@ -2136,7 +1975,7 @@ func (fBufReadWrite *FileBufferReadWrite) NewPathFileNames(
 //	(4)	When all 'read' and 'write' operations have been
 //		completed, call method:
 //
-//			FileBufferReadWrite.FlushCloseRelease()()
+//			FileBufferReadWrite.Close()
 //
 // ----------------------------------------------------------------
 //
@@ -2311,12 +2150,12 @@ func (fBufReadWrite *FileBufferReadWrite) Read(
 //
 // If input parameter 'autoFlushAndCloseOnExit' is set to
 // 'true', this method will automatically perform all
-// required clean-up tasks upon completion. Clean-up
+// required Clean-Up tasks upon completion. Clean-Up
 // tasks involve flushing the io.Writer object, closing
 // the io.Reader and io.Writer objects and then deleting
 // io.Reader and io.Writer structure values internal to
 // the current FileBufferReadWrite instance. When these
-// Clean-up tasks are completed, the current
+// Clean-Up tasks are completed, the current
 // FileBufferReadWrite instance will be invalid and
 // unusable for future 'read' and/or 'write' operations.
 //
@@ -2328,7 +2167,7 @@ func (fBufReadWrite *FileBufferReadWrite) Read(
 // user is then responsible for performing the 'Close'
 // operation by calling the local method:
 //
-//	FileBufferReadWrite.FlushCloseRelease()()
+//	FileBufferReadWrite.Close()
 //
 // ----------------------------------------------------------------
 //
@@ -2336,8 +2175,8 @@ func (fBufReadWrite *FileBufferReadWrite) Read(
 //
 //	If input parameter 'autoFlushAndCloseOnExit' is set
 //	to 'false', the user is responsible for calling local
-//	method FileBufferReadWrite.FlushCloseRelease()() in order to
-//	perform the required clean-up operations on the
+//	method FileBufferReadWrite.Close() in order to
+//	perform the required Clean-Up operations on the
 //	current instance of FileBufferReadWrite.
 //
 // ----------------------------------------------------------------
@@ -2348,7 +2187,7 @@ func (fBufReadWrite *FileBufferReadWrite) Read(
 //
 //		When this parameter is set to 'true', this
 //		method will automatically perform the following
-//		clean-up tasks upon exit:
+//		Clean-Up tasks upon exit:
 //
 //		(1)	The write buffer will be flushed thereby
 //			ensuring that all remaining data in the
@@ -2358,7 +2197,7 @@ func (fBufReadWrite *FileBufferReadWrite) Read(
 //		(2)	The io.Reader and io.Writer objects will be
 //			properly closed.
 //
-//		(3) After performing these clean-up tasks, the
+//		(3) After performing these Clean-Up tasks, the
 //			current instance of FileBufferReadWrite will
 //			invalid and unusable for future 'read' and/or
 //			'write' operations.
@@ -2372,7 +2211,7 @@ func (fBufReadWrite *FileBufferReadWrite) Read(
 //		then responsible for performing the 'Close'
 //		operation by calling the local method:
 //
-//			FileBufferReadWrite.FlushCloseRelease()()
+//			FileBufferReadWrite.Close()
 //
 //
 //	errorPrefix					interface{}
@@ -2648,12 +2487,12 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //
 // If input parameter 'autoFlushAndCloseOnExit' is set to
 // 'true', this method will automatically perform all
-// required clean-up tasks upon completion. Clean-up
+// required Clean-Up tasks upon completion. Clean-Up
 // tasks involve flushing the io.Writer object, closing
 // the io.Reader and io.Writer objects and then deleting
 // io.Reader and io.Writer structure values internal to
 // the current FileBufferReadWrite instance. When these
-// clean-up tasks are completed, the current
+// Clean-Up tasks are completed, the current
 // FileBufferReadWrite instance will be invalid and
 // unavailable for future 'read' and/or 'write'
 // operations.
@@ -2667,7 +2506,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 // performing the 'Close' operation by calling the local
 // method:
 //
-//	FileBufferReadWrite.FlushCloseRelease()
+//	FileBufferReadWrite.Close()
 //
 // ----------------------------------------------------------------
 //
@@ -2720,8 +2559,8 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //
 //	(2)	If input parameter 'autoFlushAndCloseOnExit' is
 //		set to 'false', the user is responsible for
-//		calling local method FileBufferReadWrite.FlushCloseRelease()
-//		in order to perform the required clean-up
+//		calling local method FileBufferReadWrite.Close()
+//		in order to perform the required Clean-Up
 //		operations on the current instance of
 //		FileBufferReadWrite.
 //
@@ -2838,7 +2677,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //
 //		When this parameter is set to 'true', this
 //		method will automatically perform the following
-//		clean-up tasks upon exit:
+//		Clean-Up tasks upon exit:
 //
 //		(1)	The write buffer for the internal io.Writer
 //			object will be flushed thereby ensuring that
@@ -2848,7 +2687,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //		(2)	The io.Reader and io.Writer objects will be
 //			properly closed.
 //
-//		(3) After performing these clean-up tasks, the
+//		(3) After performing these Clean-Up tasks, the
 //			current instance of FileBufferReadWrite will
 //			become invalid and unusable for future 'read'
 //			and/or 'write' operations.
@@ -2862,7 +2701,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //		performing the 'Close' operation by calling the
 //		local method:
 //
-//			FileBufferReadWrite.FlushCloseRelease()
+//			FileBufferReadWrite.Close()
 //
 //	errorPrefix					interface{}
 //
@@ -3246,7 +3085,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 // and 'close' protocols while simultaneously releasing
 // all internal memory resources, call the local method:
 //
-//	FileBufferReadWrite.FlushCloseRelease()
+//	FileBufferReadWrite.Close()
 //
 // Specifically the following internal member variables
 // are set to nil or their initial zero values:
@@ -3279,7 +3118,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 //		'close' protocols while simultaneously releasing
 //		all internal memory resources, call local method:
 //
-//			FileBufferReadWrite.FlushCloseRelease()
+//			FileBufferReadWrite.Close()
 //
 //	(3)	If the user calls local method
 //		FileBufferReadWrite.Close(), this method,
@@ -3333,10 +3172,10 @@ func (fBufReadWrite *FileBufferReadWrite) ReleaseMemResources() {
 // Once all 'read' and 'write' operations have been
 // completed for the current instance of
 // FileBufferReadWrite, the user MUST call the 'Close'
-// method to ensure clean-up operations are properly
+// method to ensure Clean-Up operations are properly
 // applied:
 //
-//	FileBufferReadWrite.FlushCloseRelease()
+//	FileBufferReadWrite.Close()
 //		Note: 	The Close operation performs both Flush
 //				and Close tasks.
 //
@@ -3358,9 +3197,9 @@ func (fBufReadWrite *FileBufferReadWrite) ReleaseMemResources() {
 //
 //	(3)	After all 'read' and 'write' operations have been
 //		completed, the user MUST call the 'Close' method
-//		to perform necessary clean-up operations:
+//		to perform necessary Clean-Up operations:
 //
-//		FileBufferReadWrite.FlushCloseRelease()
+//		FileBufferReadWrite.Close()
 //
 //	(3) This method WILL NOT VERIFY that the number of
 //		bytes written is equal to the length of the
@@ -4292,13 +4131,13 @@ func (fBufReadWrite *FileBufferReadWrite) SetFileMgrWriter(
 //		data from files residing on an attached storage
 //		drive. However, with this configuration, the user
 //		is responsible for manually closing the file and
-//		performing any other required clean-up operations
+//		performing any other required Clean-Up operations
 //		in addition to calling local method:
 //
-//		FileBufferReadWrite.FlushCloseRelease()
+//		FileBufferReadWrite.Close()
 //			This method will flush the 'write' buffer
 //			in addition to closing and performing
-//			clean-up tasks for the io.Reader and
+//			Clean-Up tasks for the io.Reader and
 //			io.Writer objects.
 //
 //		While the 'read' services provided by
@@ -4336,13 +4175,13 @@ func (fBufReadWrite *FileBufferReadWrite) SetFileMgrWriter(
 //		attached storage drive. However, with this
 //		configuration, the user is responsible for
 //		manually closing the file and performing any
-//		other required clean-up operations in addition to
+//		other required Clean-Up operations in addition to
 //		calling local method:
 //
-//		FileBufferReadWrite.FlushCloseRelease()
+//		FileBufferReadWrite.Close()
 //			This method will flush the 'write' buffer
 //			in addition to closing and performing
-//			clean-up tasks for the io.Reader and
+//			Clean-Up tasks for the io.Reader and
 //			io.Writer objects.
 //
 //		While the 'write' services provided by the
@@ -4518,10 +4357,10 @@ func (fBufReadWrite *FileBufferReadWrite) SetIoReadWrite(
 //		data from files residing on an attached storage
 //		drive. However, with this configuration, the user
 //		is responsible for manually closing the file and
-//		performing any other required clean-up operations
+//		performing any other required Clean-Up operations
 //		in addition to calling local method:
 //
-//		FileBufferReadWrite.FlushCloseRelease()
+//		FileBufferReadWrite.Close()
 //
 //		While the 'read' services provided by
 //		FileBufferReadWrite are primarily designed to
@@ -4688,13 +4527,13 @@ func (fBufReadWrite *FileBufferReadWrite) SetIoReader(
 //		data to files residing on an attached storage
 //		drive. However, with this configuration, the user
 //		is responsible for manually closing the file and
-//		performing any other required clean-up operations
+//		performing any other required Clean-Up operations
 //		in addition to calling local method:
 //
-//		FileBufferReadWrite.FlushCloseRelease()
+//		FileBufferReadWrite.Close()
 //			This method will flush the 'write' buffer
 //			in addition to closing and performing
-//			clean-up tasks for the io.Reader and
+//			Clean-Up tasks for the io.Reader and
 //			io.Writer objects.
 //
 //		While the 'write' services provided by
@@ -6393,10 +6232,10 @@ type fileBufferReadWriteNanobot struct {
 //		data from files residing on an attached storage
 //		drive. However, with this configuration, the user
 //		is responsible for manually closing the file and
-//		performing any other required clean-up operations
+//		performing any other required Clean-Up operations
 //		in addition to calling the local method:
 //
-//		FileBufferReadWrite.FlushCloseRelease()
+//		FileBufferReadWrite.Close()
 //
 //		While the 'read' services provided by
 //		FileBufferReadWrite are primarily designed to
@@ -6443,10 +6282,10 @@ type fileBufferReadWriteNanobot struct {
 //		attached storage drive. However, with this
 //		configuration, the user is responsible for
 //		manually closing the file and performing any
-//		other required clean-up operations in addition to
+//		other required Clean-Up operations in addition to
 //		calling local method:
 //
-//		FileBufferReadWrite.FlushCloseRelease()
+//		FileBufferReadWrite.Close()
 //
 //		While the 'write' services provided by the
 //		FileBufferReadWrite are primarily designed for
@@ -7509,10 +7348,10 @@ type fileBufferReadWriteAtom struct {
 //		data from files residing on an attached storage
 //		drive. However, with this configuration, the user
 //		is responsible for manually closing the file and
-//		performing any other required clean-up operations
+//		performing any other required Clean-Up operations
 //		in addition to calling the local method:
 //
-//		FileBufferReadWrite.FlushCloseRelease()
+//		FileBufferReadWrite.Close()
 //
 //		While the 'read' services provided by
 //		FileBufferReadWrite are primarily designed to
@@ -7745,10 +7584,10 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setIoReader(
 //		attached storage drive. However, with this
 //		configuration, the user is responsible for
 //		manually closing the file and performing any
-//		other required clean-up operations in addition to
+//		other required Clean-Up operations in addition to
 //		calling local method:
 //
-//		FileBufferReadWrite.FlushCloseRelease()
+//		FileBufferReadWrite.Close()
 //
 //		While the 'write' services provided by the
 //		FileBufferReadWrite are primarily designed for
