@@ -1134,7 +1134,7 @@ func TestFileBufferWriter_Write_003300(t *testing.T) {
 		return
 	}
 
-	var newFBuffReadWrite FileBufferReadWrite
+	var newFBuffReadWrite *FileBufferReadWrite
 	var readerFileInfoPlus FileInfoPlus
 
 	readerFileInfoPlus,

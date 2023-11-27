@@ -470,7 +470,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite01() {
 		return
 	}
 
-	var newFBuffReadWrite strmech.FileBufferReadWrite
+	var newFBuffReadWrite *strmech.FileBufferReadWrite
 	var readerFileInfoPlus strmech.FileInfoPlus
 	var writerFileInfoPlus strmech.FileInfoPlus
 
@@ -683,7 +683,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02() {
 		return
 	}
 
-	var newFBuffReadWrite strmech.FileBufferReadWrite
+	var newFBuffReadWrite *strmech.FileBufferReadWrite
 	var readerFileInfoPlus, writerFileInfoPlus strmech.FileInfoPlus
 
 	readerFileInfoPlus,
@@ -856,7 +856,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02B() {
 		return
 	}
 
-	var newFBuffReadWrite strmech.FileBufferReadWrite
+	var newFBuffReadWrite *strmech.FileBufferReadWrite
 	var readerFileInfoPlus, writerFileInfoPlus strmech.FileInfoPlus
 
 	readerFileInfoPlus,
@@ -1121,7 +1121,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 		return
 	}
 
-	var newFBuffReadWrite strmech.FileBufferReadWrite
+	var newFBuffReadWrite *strmech.FileBufferReadWrite
 	var readerFileInfoPlus, writerFileInfoPlus strmech.FileInfoPlus
 
 	readerFileInfoPlus,

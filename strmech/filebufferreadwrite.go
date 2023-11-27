@@ -312,9 +312,9 @@ func (fBufReadWrite *FileBufferReadWrite) Close() error {
 		flushCloseRelease(
 			fBufReadWrite,
 			"fBufReadWrite",
-			true,  // flushWriteBuffer
-			false, // releaseReaderWriterMemResources
-			false, // releaseFBuffReadWriteMemResources
+			true, // flushWriteBuffer
+			true, // releaseReaderWriterMemResources
+			true, // releaseFBuffReadWriteMemResources
 			ePrefix.XCpy("Close-Readers&Writers"))
 
 	return err
