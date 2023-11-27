@@ -41,12 +41,12 @@ import (
 //	(1)	Pointer receiver FileBufferWriter methods
 //		implement the following interfaces:
 //
-//			io.Writer
 //			io.Closer
-//			io.ReadFrom
+//			io.ReaderFrom
 //			io.Seeker
-//			io.WriteSeeker
 //			io.WriteCloser
+//			io.WriteSeeker
+//			io.Writer
 //
 //	(2)	Use the methods 'New' and 'Setter' methods to
 //		create and configure valid instances of
@@ -853,6 +853,42 @@ func (fBufWriter *FileBufferWriter) IsClosed() bool {
 	}
 
 	return true
+}
+
+// New
+//
+// This method returns a pointer to a new, empty instance
+// of FileBufferWriter.
+//
+// After creating an empty instance of FileBufferWriter,
+// the user may call the 'Setter' methods to configure
+// this FileBufferWriter instance with valid parameters.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	*FileBufferWriter
+//
+//		This method returns a pointer to an empty
+//		instance of	FileBufferWriter.
+func (fBufWriter *FileBufferWriter) New() *FileBufferWriter {
+
+	if fBufWriter.lock == nil {
+		fBufWriter.lock = new(sync.Mutex)
+	}
+
+	fBufWriter.lock.Lock()
+
+	defer fBufWriter.lock.Unlock()
+
+	return new(FileBufferWriter)
 }
 
 // NewIoWriter
@@ -3239,6 +3275,12 @@ func (fBufWriter *FileBufferWriter) WriteTextOrNumbers(
 		err
 }
 
+// lowLevelWriteBytes
+//
+// This method is designed to be passed as a text handler
+// and text writer for method:
+//
+//	fileWriterHelperMicrobot.writeCharacters()
 func (fBufWriter *FileBufferWriter) lowLevelWriteBytes(
 	bytesToWrite []byte,
 	writeEndOfTextChars string,

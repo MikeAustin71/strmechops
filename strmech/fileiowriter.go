@@ -2823,6 +2823,11 @@ func (fIoWriter *FileIoWriter) WriteTextOrNumbers(
 }
 
 // lowLevelWriteToBytes
+//
+// This method is designed to be passed as a text handler
+// and text writer for method:
+//
+//	fileWriterHelperMicrobot.writeCharacters()
 func (fIoWriter *FileIoWriter) lowLevelWriteToBytes(
 	bytesToWrite []byte,
 	writeLastTextChars string,
