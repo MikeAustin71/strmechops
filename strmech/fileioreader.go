@@ -11,15 +11,6 @@ import (
 
 // FileIoReader
 //
-// Pointer receiver FileIoReader methods implement the
-// following interfaces:
-//
-//	io.Reader
-//	io.Closer
-//	io.WriterTo
-//	io.Seeker
-//	io.ReadAt
-//
 // This type serves as a wrapper for io.Reader. As such,
 // it is designed to facilitate data 'read' operations.
 // The most common data source for these 'read'
@@ -46,19 +37,29 @@ import (
 //
 // # IMPORTANT
 //
-//	When all read operations have been completed and
-//	there is no further need for the FileIoReader
-//	instance, the user is responsible for 'closing' the
-//	underlying io.Reader object and releasing the
-//	associated memory resources. This Clean-Up operation
-//	is accomplished by calling local method:
+//	(1)	Pointer receiver FileIoReader methods implement
+//		the following interfaces:
 //
-//		FileIoReader.Close()
+//			io.Reader
+//			io.Closer
+//			io.WriterTo
+//			io.Seeker
+//			io.ReadAt
 //
-//	For FileIoReader instances created with an external
-//	io.Reader object, the user may need to 'close' that
-//	io.Reader object and perform Clean-Up operations
-//	externally.
+//	(2)	When all read operations have been completed and
+//		there is no further need for the FileIoReader
+//		instance, the user is responsible for 'closing'
+//		the underlying io.Reader object and releasing the
+//		associated memory resources. This Clean-Up
+//		operation is accomplished by calling local
+//		method:
+//
+//			FileIoReader.Close()
+//
+//		For FileIoReader instances created with an
+//		external io.Reader object, the user may need to
+//		'close' that io.Reader object and perform
+//		Clean-Up operations externally.
 type FileIoReader struct {
 	ioReader             *io.Reader
 	filePtr              *os.File

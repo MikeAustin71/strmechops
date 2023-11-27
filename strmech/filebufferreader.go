@@ -39,16 +39,16 @@ import (
 //
 // # IMPORTANT
 //
-//	(1)	Use the 'New' and 'Setter' methods to create and
-//		configure valid instances of FileBufferReader.
-//
-//	(2)	Pointer receiver FileBufferReader methods
+//	(1)	Pointer receiver FileBufferReader methods
 //		implement the following interfaces:
 //
 //			io.Reader
 //			io.Closer
 //			io.WriterTo
 //			io.Seeker
+//
+//	(2)	Use the 'New' and 'Setter' methods to create and
+//		configure valid instances of FileBufferReader.
 //
 // ----------------------------------------------------------------
 //

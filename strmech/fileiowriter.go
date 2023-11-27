@@ -11,16 +11,6 @@ import (
 
 // FileIoWriter
 //
-// Pointer receiver FileIoWriter methods implement the
-// following interfaces:
-//
-//	io.Writer
-//	io.Closer
-//	io.ReadFrom
-//	io.Seeker
-//	io.WriteSeeker
-//	io.WriteCloser
-//
 // This type serves as a wrapper for io.writer. As such,
 // it is designed to facilitate data 'write' operations.
 // The most common data source for these 'write' operations
@@ -46,19 +36,30 @@ import (
 //
 // # IMPORTANT
 //
-//	When all read operations have been completed and
-//	there is no further need for the FileIoWriter
-//	instance, the user is responsible for 'closing' the
-//	underlying io.Writer object and releasing the
-//	associated memory resources. This Clean-Up operation
-//	is accomplished by calling local method:
+//	(1)	Pointer receiver FileIoWriter methods implement
+//		the following interfaces:
 //
-//		FileIoWriter.Close()
+//			io.Writer
+//			io.Closer
+//			io.ReadFrom
+//			io.Seeker
+//			io.WriteSeeker
+//			io.WriteCloser
 //
-//	For FileIoWriter instances created with an external
-//	io.Writer object, the user may need to 'close' that
-//	io.Writer object and perform Clean-Up operations
-//	externally.
+//	(2)	When all read operations have been completed and
+//		there is no further need for the FileIoWriter
+//		instance, the user is responsible for 'closing'
+//		the underlying io.Writer object and releasing the
+//		associated memory resources. This Clean-Up
+//		operation is accomplished by calling local
+//		method:
+//
+//			FileIoWriter.Close()
+//
+//		For FileIoWriter instances created with an
+//		external io.Writer object, the user may need to
+//		'close' that io.Writer object and perform
+//		Clean-Up operations externally.
 type FileIoWriter struct {
 	ioWriter             *io.Writer
 	filePtr              *os.File

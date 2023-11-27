@@ -38,11 +38,7 @@ import (
 //
 // # IMPORTANT
 //
-//	(1)	Use the methods 'New' and 'Setter' methods to
-//		create and configure valid instances of
-//		FileBufferWriter.
-//
-//	(2)	Pointer receiver FileBufferWriter methods
+//	(1)	Pointer receiver FileBufferWriter methods
 //		implement the following interfaces:
 //
 //			io.Writer
@@ -51,6 +47,10 @@ import (
 //			io.Seeker
 //			io.WriteSeeker
 //			io.WriteCloser
+//
+//	(2)	Use the methods 'New' and 'Setter' methods to
+//		create and configure valid instances of
+//		FileBufferWriter.
 //
 // ----------------------------------------------------------------
 //

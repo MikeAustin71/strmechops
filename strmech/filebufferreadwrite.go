@@ -122,11 +122,18 @@ import (
 //
 // # IMPORTANT
 //
-//	When all 'read' and 'write' operations have been
-//	completed, the user is responsible for performing
-//	Clean-Up operations by calling the following method:
+//	(1)	Pointer receiver FileBufferReader methods
+//		implement the following interfaces:
 //
-//		FileBufferReadWrite.FlushCloseRelease()
+//			io.Reader
+//			io.Writer
+//
+//	(2)	When all 'read' and 'write' operations have been
+//		completed, the user is responsible for performing
+//		Clean-Up operations by calling the following
+//		method:
+//
+//			FileBufferReadWrite.Close()
 type FileBufferReadWrite struct {
 	writer             *FileBufferWriter
 	reader             *FileBufferReader
@@ -3155,171 +3162,6 @@ func (fBufReadWrite *FileBufferReadWrite) ReleaseMemResources() {
 	return
 }
 
-// Write
-//
-// Writes the contents of the byte array input paramter
-// ('bytesToWrite') to the output destination io.Writer
-// object previously configured for the current instance
-// of FileBufferReadWrite.
-//
-// If the internal io.Writer object for the current
-// instance of FileBufferReadWrite was improperly
-// initialized, an error will be returned. To properly
-// initialized an instance of FileBufferReadWrite, the
-// user must call one or more of the 'New' and 'Setter'
-// methods.
-//
-// Once all 'read' and 'write' operations have been
-// completed for the current instance of
-// FileBufferReadWrite, the user MUST call the 'Close'
-// method to ensure Clean-Up operations are properly
-// applied:
-//
-//	FileBufferReadWrite.Close()
-//		Note: 	The Close operation performs both Flush
-//				and Close tasks.
-//
-// ----------------------------------------------------------------
-//
-// # Reference:
-//
-//	https://pkg.go.dev/bufio
-//	https://pkg.go.dev/bufio#Writer
-//	https://pkg.go.dev/io#Writer
-//
-// ----------------------------------------------------------------
-//
-// # IMPORTANT
-//
-//	(1) This method implements the io.Writer interface.
-//
-//	(2) This method DOES NOT flush the write buffer.
-//
-//	(3)	After all 'read' and 'write' operations have been
-//		completed, the user MUST call the 'Close' method
-//		to perform necessary Clean-Up operations:
-//
-//		FileBufferReadWrite.Close()
-//
-//	(3) This method WILL NOT VERIFY that the number of
-//		bytes written is equal to the length of the
-//		length of input parameter 'bytesToWrite'.
-//
-// ----------------------------------------------------------------
-//
-// # Input Parameters
-//
-//	bytesToWrite				[]byte
-//
-//		The contents of this byte array will be written
-//		to the destination io.Writer object previously
-//		configured for the current instance of
-//		FileBufferWriter.
-//
-//		Typically, the destination io.Writer object will
-//		be a data file existing on an attached storage
-//		drive. However, the destination io.Writer object
-//		may be any object implementing the io.Writer
-//		interface.
-//
-//		This method WILL NOT VERIFY that the number of
-//		bytes written is equal to the length of the
-//		length of input parameter 'bytesToWrite'.
-//
-// ----------------------------------------------------------------
-//
-// # Return Values
-//
-//	numBytesWritten				int
-//
-//		This parameter returns the number of bytes
-//		written to the destination io.Writer object
-//		configured for the current instance of
-//		FileBufferWriter.
-//
-//	err							error
-//
-//		If this method completes successfully, the
-//		returned error Type is set equal to 'nil'.
-//
-//		If processing errors are encountered, the
-//		returned error Type will encapsulate an
-//		appropriate error message. This returned error
-//	 	message will incorporate the method chain and
-//	 	text passed by input parameter, 'errorPrefix'.
-//	 	The 'errorPrefix' text will be prefixed or
-//	 	attached to the	beginning of the error message.
-func (fBufReadWrite *FileBufferReadWrite) Write(
-	bytesToWrite []byte) (
-	numBytesWritten int,
-	err error) {
-
-	if fBufReadWrite.lock == nil {
-		fBufReadWrite.lock = new(sync.Mutex)
-	}
-
-	fBufReadWrite.lock.Lock()
-
-	defer fBufReadWrite.lock.Unlock()
-
-	var ePrefix *ePref.ErrPrefixDto
-
-	ePrefix,
-		err = ePref.ErrPrefixDto{}.NewIEmpty(
-		nil,
-		"FileBufferReadWrite."+
-			"Write()",
-		"")
-
-	if err != nil {
-
-		return numBytesWritten, err
-	}
-
-	if fBufReadWrite.writer == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"ERROR: The current instance of FileBufferReadWrite\n"+
-			"is invalid! The internal io.Writer object was never\n"+
-			"initialized. Call one of the 'New' methods or 'Setter'\n"+
-			"methods to create a valid instance of FileBufferReadWrite.\n",
-			ePrefix.String())
-
-		return numBytesWritten, err
-	}
-
-	var err2 error
-
-	numBytesWritten,
-		err2 = fBufReadWrite.writer.
-		Write(bytesToWrite)
-
-	if err2 != nil {
-
-		if len(fBufReadWrite.writerFilePathName) > 0 {
-
-			err = fmt.Errorf("%v\n"+
-				"Error writing data to the output data destination.\n"+
-				"'Write' File Path and File Name: %v\n"+
-				"Error=\n%v\n",
-				ePrefix.String(),
-				fBufReadWrite.writerFilePathName,
-				err2.Error())
-
-		} else {
-
-			err = fmt.Errorf("%v\n"+
-				"Error writing to the output data destination.\n"+
-				"Error=\n%v\n",
-				ePrefix.String(),
-				err2.Error())
-
-		}
-	}
-
-	return numBytesWritten, err
-}
-
 // SetFileMgrsReadWrite
 //
 // Receives two instances of FileMgr as input parameters
@@ -5447,6 +5289,171 @@ func (fBufReadWrite *FileBufferReadWrite) SetPathFileNameWriter(
 			ePrefix)
 
 	return writerFileInfoPlus, err
+}
+
+// Write
+//
+// Writes the contents of the byte array input paramter
+// ('bytesToWrite') to the output destination io.Writer
+// object previously configured for the current instance
+// of FileBufferReadWrite.
+//
+// If the internal io.Writer object for the current
+// instance of FileBufferReadWrite was improperly
+// initialized, an error will be returned. To properly
+// initialized an instance of FileBufferReadWrite, the
+// user must call one or more of the 'New' and 'Setter'
+// methods.
+//
+// Once all 'read' and 'write' operations have been
+// completed for the current instance of
+// FileBufferReadWrite, the user MUST call the 'Close'
+// method to ensure Clean-Up operations are properly
+// applied:
+//
+//	FileBufferReadWrite.Close()
+//		Note: 	The Close operation performs both Flush
+//				and Close tasks.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/bufio
+//	https://pkg.go.dev/bufio#Writer
+//	https://pkg.go.dev/io#Writer
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1) This method implements the io.Writer interface.
+//
+//	(2) This method DOES NOT flush the write buffer.
+//
+//	(3)	After all 'read' and 'write' operations have been
+//		completed, the user MUST call the 'Close' method
+//		to perform necessary Clean-Up operations:
+//
+//		FileBufferReadWrite.Close()
+//
+//	(4) This method WILL NOT VERIFY that the number of
+//		bytes written is equal to the length of the
+//		length of input parameter 'bytesToWrite'.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	bytesToWrite				[]byte
+//
+//		The contents of this byte array will be written
+//		to the destination io.Writer object previously
+//		configured for the current instance of
+//		FileBufferWriter.
+//
+//		Typically, the destination io.Writer object will
+//		be a data file existing on an attached storage
+//		drive. However, the destination io.Writer object
+//		may be any object implementing the io.Writer
+//		interface.
+//
+//		This method WILL NOT VERIFY that the number of
+//		bytes written is equal to the length of the
+//		length of input parameter 'bytesToWrite'.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numBytesWritten				int
+//
+//		This parameter returns the number of bytes
+//		written to the destination io.Writer object
+//		configured for the current instance of
+//		FileBufferWriter.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If processing errors are encountered, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufReadWrite *FileBufferReadWrite) Write(
+	bytesToWrite []byte) (
+	numBytesWritten int,
+	err error) {
+
+	if fBufReadWrite.lock == nil {
+		fBufReadWrite.lock = new(sync.Mutex)
+	}
+
+	fBufReadWrite.lock.Lock()
+
+	defer fBufReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileBufferReadWrite."+
+			"Write()",
+		"")
+
+	if err != nil {
+
+		return numBytesWritten, err
+	}
+
+	if fBufReadWrite.writer == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: The current instance of FileBufferReadWrite\n"+
+			"is invalid! The internal io.Writer object was never\n"+
+			"initialized. Call one of the 'New' methods or 'Setter'\n"+
+			"methods to create a valid instance of FileBufferReadWrite.\n",
+			ePrefix.String())
+
+		return numBytesWritten, err
+	}
+
+	var err2 error
+
+	numBytesWritten,
+		err2 = fBufReadWrite.writer.
+		Write(bytesToWrite)
+
+	if err2 != nil {
+
+		if len(fBufReadWrite.writerFilePathName) > 0 {
+
+			err = fmt.Errorf("%v\n"+
+				"Error writing data to the output data destination.\n"+
+				"'Write' File Path and File Name: %v\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				fBufReadWrite.writerFilePathName,
+				err2.Error())
+
+		} else {
+
+			err = fmt.Errorf("%v\n"+
+				"Error writing to the output data destination.\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				err2.Error())
+
+		}
+	}
+
+	return numBytesWritten, err
 }
 
 type fileBufferReadWriteMicrobot struct {
