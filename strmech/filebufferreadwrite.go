@@ -1170,14 +1170,14 @@ func (fBufReadWrite *FileBufferReadWrite) IsValidInstanceError(
 //
 // # Return Values
 //
-//	FileBufferReadWrite
+//	*FileBufferReadWrite
 //
-//		This method returns an empty instance of
-//		FileBufferReadWrite. After receiving this
-//		instance, users must call 'Setter' methods
+//		This method returns a pointer to an empty
+//		instance of FileBufferReadWrite. After receiving
+//		this instance, users must call 'Setter' methods
 //		to complete the 'reader' and 'writer'
 //		configuration process.
-func (fBufReadWrite *FileBufferReadWrite) New() FileBufferReadWrite {
+func (fBufReadWrite *FileBufferReadWrite) New() *FileBufferReadWrite {
 
 	if fBufReadWrite.lock == nil {
 		fBufReadWrite.lock = new(sync.Mutex)
@@ -1187,7 +1187,7 @@ func (fBufReadWrite *FileBufferReadWrite) New() FileBufferReadWrite {
 
 	defer fBufReadWrite.lock.Unlock()
 
-	return FileBufferReadWrite{}
+	return new(FileBufferReadWrite)
 }
 
 // NewIoReadWrite
@@ -1340,11 +1340,11 @@ func (fBufReadWrite *FileBufferReadWrite) New() FileBufferReadWrite {
 //
 // # Return Values
 //
-//	FileBufferReadWrite
+//	*FileBufferReadWrite
 //
 //		If this method completes successfully, it will
-//		return a fully configured instance of
-//		FileBufferReadWrite.
+//		return a pointer to a fully configured instance
+//		of FileBufferReadWrite.
 //
 //	error
 //
@@ -1364,7 +1364,7 @@ func (fBufReadWrite *FileBufferReadWrite) NewIoReadWrite(
 	writer io.Writer,
 	writerBuffSize int,
 	errorPrefix interface{}) (
-	FileBufferReadWrite,
+	*FileBufferReadWrite,
 	error) {
 
 	if fBufReadWrite.lock == nil {
@@ -1375,7 +1375,7 @@ func (fBufReadWrite *FileBufferReadWrite) NewIoReadWrite(
 
 	defer fBufReadWrite.lock.Unlock()
 
-	var newFBuffReadWrite = FileBufferReadWrite{}
+	var newFBuffReadWrite = new(FileBufferReadWrite)
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error
@@ -1394,7 +1394,7 @@ func (fBufReadWrite *FileBufferReadWrite) NewIoReadWrite(
 
 	err = new(fileBufferReadWriteNanobot).
 		setIoReaderWriter(
-			&newFBuffReadWrite,
+			newFBuffReadWrite,
 			"newFBuffReadWrite",
 			reader,
 			"reader",
