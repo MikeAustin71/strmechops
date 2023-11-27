@@ -251,28 +251,6 @@ func (fBufWriter *FileBufferWriter) Buffered() int {
 // the current instance of FileBufferWriter will be
 // invalid and unavailable for further 'write' operations.
 //
-// Calling this method will perform two elements of
-// the Clean-Up operation required when all data
-// has been written to the internal bufio.Writer and
-// the services of the current FileBufferWriter
-// instance are no longer required. The two Clean-Up
-// procedures performed by this method are listed as
-// follows:
-//
-//	(1)	'flush' procedure
-//		This procedure flushes the 'write' buffer to
-//		ensure that all data is written from the 'write'
-//		buffer to the destination bufio.Writer object.
-//
-//	(2)	'close' procedure
-//		This procedure properly closes  the underlying
-//		bufio.Writer object configured for the current
-//		instance of FileBufferWriter.
-//
-// The third procedure in the Clean-Up operation, namely
-// the release of internal memory resources, will NOT be
-// performed by this method.
-//
 // ----------------------------------------------------------------
 //
 // # IMPORTANT

@@ -44,8 +44,11 @@ import (
 //
 //			io.Reader
 //			io.Closer
-//			io.WriterTo
+//			io.ReadCloser
+//			io.ReadSeekCloser
+//			io.ReadSeeker
 //			io.Seeker
+//			io.WriterTo
 //
 //	(2)	Use the 'New' and 'Setter' methods to create and
 //		configure valid instances of FileBufferReader.
@@ -167,16 +170,18 @@ func (fBufReader *FileBufferReader) Buffered() int {
 //		called after all 'read' operations have been
 //		completed.
 //
-//	(3)	Clean-Up tasks performed by this method include
-//		'closing' the underlying bufio.Reader object as
-//		well as releasing all internal memory resources.
+//	(3)	Clean-Up tasks performed by this method include:
 //
-//		Releasing all internal memory resources will
-//		synchronize internal flags and prevent multiple
-//		calls to 'close' the underlying bufio.Reader
-//		object. Calling 'close' on the same underlying
-//		bufio.Reader object multiple times can produce
-//		unexpected results.
+//		(a)	'closing' the underlying bufio.Reader object
+//
+//		(b)	Releasing all internal memory resources.
+//
+//			Releasing all internal memory resources will
+//			synchronize internal flags and prevent
+//			multiple calls to 'close' the underlying
+//			bufio.Reader object. Calling 'close' on the
+//			same underlying bufio.Reader object multiple
+//			times can produce unexpected results.
 //
 //	(4)	After completing the call to this method,
 //		FileBufferReader.Close(), the current
