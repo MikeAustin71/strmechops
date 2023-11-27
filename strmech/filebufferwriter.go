@@ -3909,10 +3909,8 @@ func (fBufWriterNanobot *fileBufferWriterNanobot) setIoWriter(
 		return err
 	}
 
-	if bufSize <= 0 {
-
-		bufSize = 4096
-	}
+	bufSize = new(fileBufferWriterElectron).
+		validateWriterBufferSize(bufSize)
 
 	var ok bool
 
@@ -4216,10 +4214,8 @@ func (fBufWriterNanobot *fileBufferWriterNanobot) setPathFileName(
 		return fInfoPlus, err
 	}
 
-	if bufSize <= 0 {
-
-		bufSize = 4096
-	}
+	bufSize = new(fileBufferWriterElectron).
+		validateWriterBufferSize(bufSize)
 
 	// var pathFileDoesExist bool
 
@@ -4939,4 +4935,67 @@ func (fBuffWriterElectron *fileBufferWriterElectron) empty(
 	fBufWriter.bufioWriter = nil
 
 	return
+}
+
+// validateWriterBufferSize
+//
+// This method analyzes a user requested write buffer
+// size and returns a validated buffer size.
+//
+// The buffer size integer value controls the size of
+// the 'write' buffer configured for an instance of
+// FileBufferWriter.
+//
+// The minimum write buffer size is 1-byte. If input
+// parameter 'bufSize' is set to a size less than one
+// (+1), it will be automatically reset and returned
+// as a default buffer size of 4096-bytes.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	bufSize						int
+//
+//		This integer value controls the size of the
+//		'write' buffer configured for an instance
+//		of FileBufferWriter.
+//
+//		'bufSize' should be configured to maximize
+//		performance for 'write' operations subject to
+//		prevailing memory limitations on the local
+//		computer.
+//
+//		The minimum write buffer size is 1-byte. If
+//		'bufSize' is set to a size less than or equal to
+//		zero, it will be automatically reset and returned
+//		as a default buffer size of 4096-bytes.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	validWriteBufferSize		int
+//
+//		This returned integer value specifies the
+//		validated write buffer size produced from an
+//		analysis of input parameter 'bufSize'.
+func (fBuffWriterElectron *fileBufferWriterElectron) validateWriterBufferSize(
+	bufSize int) (
+	validWriteBufferSize int) {
+
+	if fBuffWriterElectron.lock == nil {
+		fBuffWriterElectron.lock = new(sync.Mutex)
+	}
+
+	fBuffWriterElectron.lock.Lock()
+
+	defer fBuffWriterElectron.lock.Unlock()
+
+	if bufSize < 1 {
+
+		return 4096
+	}
+
+	return bufSize
 }
