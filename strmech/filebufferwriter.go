@@ -3912,32 +3912,36 @@ func (fBufWriterNanobot *fileBufferWriterNanobot) setIoWriter(
 	bufSize = new(fileBufferWriterElectron).
 		validateWriterBufferSize(bufSize)
 
+	fBufWriter.ioWriter = &writer
+
+	fBufWriter.bufioWriter = bufio.NewWriterSize(
+		writer,
+		bufSize)
+
+	// Set File Data
 	var ok bool
 
-	fBufWriter.filePtr, ok = writer.(*os.File)
+	var fileMgr *FileMgr
+
+	fileMgr, ok = writer.(*FileMgr)
 
 	if ok == true {
 
-		fBufWriter.ioWriter = &writer
-
-		fBufWriter.bufioWriter = bufio.NewWriterSize(
-			fBufWriter.filePtr,
-			bufSize)
-
 		fBufWriter.targetWriteFileName =
-			fBufWriter.filePtr.Name()
+			fileMgr.GetAbsolutePathFileName()
+
+		fBufWriter.filePtr = fileMgr.filePtr
 
 	} else {
-		// ok == false - this is NOT a file
 
-		fBufWriter.filePtr = nil
+		fBufWriter.filePtr, ok = writer.(*os.File)
 
-		fBufWriter.ioWriter = &writer
+		if ok == true {
 
-		fBufWriter.bufioWriter = bufio.NewWriterSize(
-			writer,
-			bufSize)
+			fBufWriter.targetWriteFileName =
+				fBufWriter.filePtr.Name()
 
+		}
 	}
 
 	return err

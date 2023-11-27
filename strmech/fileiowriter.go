@@ -3504,15 +3504,19 @@ func (fIoWriterNanobot *fileIoWriterNanobot) setIoWriter(
 
 		fIoWriter.targetWriteFileName =
 			fileMgr.GetAbsolutePathFileName()
-	}
 
-	fIoWriter.filePtr, ok = writer.(*os.File)
+		fIoWriter.filePtr = fileMgr.filePtr
 
-	if ok &&
-		len(fIoWriter.targetWriteFileName) == 0 {
+	} else {
 
-		fIoWriter.targetWriteFileName =
-			fIoWriter.filePtr.Name()
+		fIoWriter.filePtr, ok = writer.(*os.File)
+
+		if ok == true {
+
+			fIoWriter.targetWriteFileName =
+				fIoWriter.filePtr.Name()
+
+		}
 
 	}
 
