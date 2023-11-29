@@ -1804,10 +1804,13 @@ func (fBufReader *FileBufferReader) Read(
 //		'outputLinesArray'.
 //
 //	(2)	This method will NOT automatically close the
-//		io.Reader object upon completion.
+//		io.Reader object upon completion unless input
+//		parameter 'autoCloseOnExit' is set to 'true'.
 //
-//		The user is responsible for performing required
-//		Clean-Up tasks by calling the local method:
+//		If input parameter 'autoCloseOnExit' is set to
+//		'false', the user is responsible for performing
+//		required Clean-Up tasks by calling the local
+//		method:
 //
 //			FileBufferReader.Close()
 //
@@ -2117,10 +2120,13 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 //		'strBuilder'.
 //
 //	(2)	This method will NOT automatically close the
-//		io.Reader object upon completion.
+//		io.Reader object upon completion unless input
+//		parameter 'autoCloseOnExit' is set to 'true'.
 //
-//		The user is responsible for performing required
-//		Clean-Up tasks by calling the local method:
+//		If input parameter 'autoCloseOnExit' is set to
+//		'false', the user is responsible for performing
+//		required Clean-Up tasks by calling the local
+//		method:
 //
 //			FileBufferReader.Close()
 //
@@ -2364,10 +2370,13 @@ func (fBufReader *FileBufferReader) ReadAllToStrBuilder(
 //		as a single string ('contentsStr').
 //
 //	(2)	This method will NOT automatically close the
-//		io.Reader object upon completion.
+//		io.Reader object upon completion unless input
+//		parameter 'autoCloseOnExit' is set to 'true'.
 //
-//		The user is responsible for performing required
-//		Clean-Up tasks by calling the local method:
+//		If input parameter 'autoCloseOnExit' is set to
+//		'false', the user is responsible for performing
+//		required Clean-Up tasks by calling the local
+//		method:
 //
 //			FileBufferReader.Close()
 //
