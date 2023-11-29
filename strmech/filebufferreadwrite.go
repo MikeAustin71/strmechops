@@ -1922,6 +1922,149 @@ func (fBufReadWrite *FileBufferReadWrite) NewPathFileNames(
 		err
 }
 
+// PeekReader
+//
+// This method returns the next n bytes without advancing
+// the internal bufio.Reader. The bytes stop being valid
+// at the next read call.
+//
+// If Peek returns fewer bytes than 'nextBytes' value, it
+// also returns an error explaining why the read is
+// short.
+//
+// If 'nextBytes' value is larger than the buffer size
+// for the current read buffer, the error 'ErrBufferFull'
+// will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	nextBytes					int
+//
+//		The 'Peek' operation performed by this method
+//		will return the number of bytes specified by
+//		'nextBytes' without advancing the reader.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufReadWrite *FileBufferReadWrite) PeekReader(
+	nextBytes int,
+	errorPrefix interface{}) (
+	peekBytes []byte,
+	err error) {
+
+	if fBufReadWrite.lock == nil {
+		fBufReadWrite.lock = new(sync.Mutex)
+	}
+
+	fBufReadWrite.lock.Lock()
+
+	defer fBufReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileBufferReadWrite."+
+			"PeekReader()",
+		"")
+
+	if err != nil {
+
+		return peekBytes, err
+	}
+
+	if fBufReadWrite.reader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The current FileBufferReadWrite instance is INVALID!\n"+
+			"The internal bufio.reader (FileBufferReader) is a nil pointer.\n"+
+			"This FileBufferReadWrite instance has NOT been properly initialized.\n",
+			ePrefix.String())
+
+		return peekBytes, err
+	}
+
+	return fBufReadWrite.reader.Peek(
+		nextBytes,
+		ePrefix.XCpy("fBufReadWrite.reader"))
+}
+
 // Read
 //
 // Reads a selection data from the pre-configured
