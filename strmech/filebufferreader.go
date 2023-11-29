@@ -73,7 +73,7 @@ import (
 //
 //	(3)	Upon completion of all 'read' operations, the
 //		'Close' tasks must be executed to perform
-//		required clean-up tasks. This 'Close' task
+//		required Clean-Up tasks. This 'Close' task
 //		can be executed by calling local method:
 //
 //			FileBufferReader.Close()
@@ -652,7 +652,7 @@ func (fBufReader *FileBufferReader) New() *FileBufferReader {
 //	(1)	When all 'read' operations are completed and the
 //		services of the returned new instance of
 //		FileBufferReader are no longer required, the user
-//		MUST perform 'close' and clean-up operations by
+//		MUST perform 'close' and Clean-Up operations by
 //		calling this local methods:
 //
 //				FileBufferReader.Close()
@@ -664,9 +664,9 @@ func (fBufReader *FileBufferReader) New() *FileBufferReader {
 //
 //	(3) If the input parameter 'reader' base type is
 //		NOT *os.File, the user will be required to
-//		execute any 'close' or clean-up operations
+//		execute any 'close' or Clean-Up operations
 //		required by the external 'reader' object in
-//		addition to those 'close' and clean-up operations
+//		addition to those 'close' and Clean-Up operations
 //		specified in paragraph (1), above.
 //
 // ----------------------------------------------------------------
@@ -687,7 +687,7 @@ func (fBufReader *FileBufferReader) New() *FileBufferReader {
 //		data from files residing on an attached storage
 //		drive. However, with this configuration, the user
 //		is responsible for manually closing the file and
-//		performing any other required clean-up operations
+//		performing any other required Clean-Up operations
 //		in addition to calling FileBufferReader.Close().
 //
 //		While the returned instance of FileBufferReader
@@ -1571,7 +1571,7 @@ func (fBufReader *FileBufferReader) Peek(
 // See the bufio.Reader docs and 'Reference' section below.
 //
 // Once the 'read' operation has been completed, the user
-// MUST call the 'Close' method to ensure clean-up
+// MUST call the 'Close' method to ensure Clean-Up
 // operations are properly applied:
 //
 //	FileBufferReader.Close()
@@ -1807,7 +1807,7 @@ func (fBufReader *FileBufferReader) Read(
 //		io.Reader object upon completion.
 //
 //		The user is responsible for performing required
-//		clean-up tasks by calling the local method:
+//		Clean-Up tasks by calling the local method:
 //
 //			FileBufferReader.Close()
 //
@@ -1867,7 +1867,7 @@ func (fBufReader *FileBufferReader) Read(
 //
 //		When this parameter is set to 'true', this
 //		method will automatically perform all required
-//		clean-up tasks for the current instance of
+//		Clean-Up tasks for the current instance of
 //		FileBufferReader upon completion. Specifically,
 //		the internal bufio.Reader object will be properly
 //		'closed' and there will be no need to make a
@@ -2120,7 +2120,7 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 //		io.Reader object upon completion.
 //
 //		The user is responsible for performing required
-//		clean-up tasks by calling the local method:
+//		Clean-Up tasks by calling the local method:
 //
 //			FileBufferReader.Close()
 //
@@ -2143,7 +2143,7 @@ func (fBufReader *FileBufferReader) ReadAllTextLines(
 //
 //		When this parameter is set to 'true', this
 //		method will automatically perform all required
-//		clean-up tasks for the current instance of
+//		Clean-Up tasks for the current instance of
 //		FileBufferReader upon completion. Specifically,
 //		the internal bufio.Reader object will be properly
 //		'closed' and there will be no need to make a
@@ -2367,7 +2367,7 @@ func (fBufReader *FileBufferReader) ReadAllToStrBuilder(
 //		io.Reader object upon completion.
 //
 //		The user is responsible for performing required
-//		clean-up tasks by calling the local method:
+//		Clean-Up tasks by calling the local method:
 //
 //			FileBufferReader.Close()
 //
@@ -2383,7 +2383,7 @@ func (fBufReader *FileBufferReader) ReadAllToStrBuilder(
 //
 //		When this parameter is set to 'true', this
 //		method will automatically perform all required
-//		clean-up tasks for the current instance of
+//		Clean-Up tasks for the current instance of
 //		FileBufferReader upon completion. Specifically,
 //		the internal bufio.Reader object will be properly
 //		'closed' and there will be no need to make a
@@ -2873,7 +2873,7 @@ func (fBufReader *FileBufferReader) Seek(
 //		data from files residing on an attached storage
 //		drive. However, with this configuration, the user
 //		is responsible for manually closing the file and
-//		performing any other required clean-up operations
+//		performing any other required Clean-Up operations
 //		in addition to calling FileBufferReader.Close().
 //
 //		While the returned instance of FileBufferReader

@@ -7,6 +7,7 @@ import (
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
 	"math"
+	"strings"
 	"sync"
 )
 
@@ -2346,9 +2347,12 @@ func (fBufReadWrite *FileBufferReadWrite) Read(
 //		io.Reader object upon completion.
 //
 //		The user is responsible for performing required
-//		clean-up tasks by calling the local method:
+//		Clean-Up tasks by calling one of the following
+//		local methods:
 //
 //			FileBufferReadWrite.Close()
+//						OR
+//			FileBufferReadWrite.CloseReader()
 //
 //	(3)	If the current instance of FileBufferReadWrite has
 //		NOT been properly initialized, an error will be
@@ -2555,6 +2559,209 @@ func (fBufReadWrite *FileBufferReadWrite) ReadAllTextLines(
 			maxNumOfLines,
 			endOfLineDelimiters,
 			outputLinesArray,
+			false,
+			ePrefix.XCpy("fBufReadWrite.reader"))
+}
+
+// ReadAllToStrBuilder
+//
+// Reads the entire contents of the internal bufio.Reader
+// for the current instance of FileBufferReadWrite as
+// a string. This string is then stored and returned
+// through an instance of strings.Builder passed as input
+// parameter 'strBuilder'.
+//
+// If a processing error is encountered, an appropriate
+// error with an error message will be returned. When
+// the end-of-file is encountered during the 'read'
+// process, the returned error object will be set to
+// 'nil' and no error will be returned.
+//
+// It naturally follows that this method will read the
+// entire contents of the FileBufferReadWrite internal
+// bufio.Reader object into memory when writing said
+// contents to the strings.Builder instance 'strBuilder'.
+// Depending on the size of the target 'read' data
+// source, local memory constraints should be considered.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method is designed to read the entire
+//		contents of the internal bufio.Reader object,
+//		encapsulated by the current instance of
+//		FileBufferReadWrite, into memory.
+//
+//		BE CAREFUL when reading large files!
+//
+//		Depending on the memory resources available to
+//		your computer, you may run out of memory when
+//		reading large files and writing their contents
+//		to the strings.Builder input parameter,
+//		'strBuilder'.
+//
+//	(2)	This method will NOT automatically close the
+//		io.Reader object upon completion.
+//
+//		The user is responsible for performing required
+//		Clean-Up tasks by calling one of the following
+//		local methods:
+//
+//			FileBufferReadWrite.Close()
+//						OR
+//			FileBufferReadWrite.CloseReader()
+//
+//	(3)	If the current instance of FileBufferReadWrite has
+//		NOT been properly initialized, an error will be
+//		returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	strBuilder					*strings.Builder
+//
+//		A pointer to an instance of strings.Builder. The
+//		entire contents of the internal bufio.Reader for
+//		the current instance of FileBufferReadWrite will be
+//		read and stored in 'strBuilder'.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numBytesRead				int64
+//
+//		If this method completes successfully, this
+//		integer value will equal the number of bytes
+//		read from the internal bufio.Reader object
+//		encapsulated by the current instance of
+//		FileBufferReadWrite.
+//
+//		This returned value will also be equal to the
+//		number of bytes added to the strings.Builder
+//		instance, 'strBuilder'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		An error will only be returned if a processing
+//		or system error was encountered. When the
+//		end-of-file is encountered during the 'read'
+//		process, the returned error object will be set
+//		to 'nil' and no error will be returned.
+func (fBufReadWrite *FileBufferReadWrite) ReadAllToStrBuilder(
+	strBuilder *strings.Builder,
+	errorPrefix interface{}) (
+	numOfBytesRead int64,
+	err error) {
+
+	if fBufReadWrite.lock == nil {
+		fBufReadWrite.lock = new(sync.Mutex)
+	}
+
+	fBufReadWrite.lock.Lock()
+
+	defer fBufReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileBufferReadWrite."+
+			"ReadAllTextLines()",
+		"")
+
+	if err != nil {
+
+		return numOfBytesRead, err
+	}
+
+	if fBufReadWrite.reader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The current FileBufferReadWrite instance is INVALID!\n"+
+			"The internal bufio.reader (FileBufferReader) is a nil pointer.\n"+
+			"This FileBufferReadWrite instance has NOT been properly initialized.\n",
+			ePrefix.String())
+
+		return numOfBytesRead, err
+	}
+
+	return fBufReadWrite.reader.
+		ReadAllToStrBuilder(
+			strBuilder,
 			false,
 			ePrefix.XCpy("fBufReadWrite.reader"))
 }
