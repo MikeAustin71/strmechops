@@ -583,6 +583,42 @@ func (fBufReader *FileBufferReader) IsClosed() bool {
 	return true
 }
 
+// New
+//
+// This method returns a pointer to a new, empty instance
+// of FileBufferReader.
+//
+// After creating an empty instance of FileBufferReader,
+// the user may call the 'Setter' methods to configure
+// this FileBufferReader instance with valid parameters.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	*FileBufferReader
+//
+//		This method returns a pointer to an empty
+//		instance of	FileBufferReader.
+func (fBufReader *FileBufferReader) New() *FileBufferReader {
+
+	if fBufReader.lock == nil {
+		fBufReader.lock = new(sync.Mutex)
+	}
+
+	fBufReader.lock.Lock()
+
+	defer fBufReader.lock.Unlock()
+
+	return new(FileBufferReader)
+}
+
 // NewIoReader
 //
 // Receives input parameter, 'reader', which implements the
