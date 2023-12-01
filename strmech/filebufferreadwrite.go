@@ -3906,10 +3906,10 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 		err
 }
 
-// Seek
+// SeekReader
 //
 // This method sets the offset for the next 'read'
-// operation within the 'read' file.
+// operation within the bufio.Reader object.
 //
 // This method only succeeds if the internal bufio.Reader
 // for the current FileBufferReadWrite instance was
@@ -4030,7 +4030,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 //		If errors are encountered during processing, the
 //		returned error Type will encapsulate an
 //		appropriate error message.
-func (fBufReadWrite *FileBufferReadWrite) Seek(
+func (fBufReadWrite *FileBufferReadWrite) SeekReader(
 	targetOffset int64,
 	whence int) (
 	offsetFromFileStart int64,
@@ -4050,7 +4050,7 @@ func (fBufReadWrite *FileBufferReadWrite) Seek(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		nil,
 		"FileBufferReadWrite."+
-			"Seek()",
+			"SeekReader()",
 		"")
 
 	if err != nil {
@@ -4063,7 +4063,7 @@ func (fBufReadWrite *FileBufferReadWrite) Seek(
 
 		err = fmt.Errorf("%v\n"+
 			"ERROR: The current instance of FileBufferReadWrite\n"+
-			"is invalid! The internal io.Reader object was never\n"+
+			"is invalid! The internal bufio.Reader object was never\n"+
 			"initialized. Call one of the 'New' methods or 'Setter'\n"+
 			"methods to create a valid instance of FileBufferReadWrite.\n",
 			ePrefix.String())
@@ -4083,6 +4083,184 @@ func (fBufReadWrite *FileBufferReadWrite) Seek(
 
 		err = fmt.Errorf("%v\n"+
 			"Error returned by fBufReadWrite.reader.Seek()\n"+
+			"Error:\n%v\n",
+			ePrefix.String(),
+			err2.Error())
+	}
+
+	return offsetFromFileStart, err
+}
+
+// SeekWriter
+//
+// This method sets the offset for the next 'write'
+// operation within the internal bufio.Writer object.
+// This method only succeeds if the current
+// FileBufferReadWrite instance was created as a disk
+// file with a path and file name string, a File Manager
+// object (FileMgr) or an io.Writer object with a base
+// type of file pointer (*os.File).
+//
+// This target offset is interpreted according to input
+// parameter 'whence'.
+//
+// 'whence' is an integer value designating whether the
+// input parameter 'targetOffset' is interpreted to mean
+// an offset from the start of the file, an offset from
+// the current offset position or an offset from the end
+// of the file. The 'whence' parameter must be passed as
+// one of the following 'io' constant values:
+//
+//	io.SeekStart = 0
+//		Means relative to the start of the file.
+//
+//	io.SeekCurrent = 1
+//		Means relative to the current file offset.
+//
+//	io.SeekEnd = 2
+//		Means relative to the end (for example,
+//		offset = -2 specifies the penultimate byte of
+//		the file).
+//
+// If the Seek method completes successfully, the next
+// 'write' operation will occur at the new offset
+// position.
+//
+// SeekWriter returns the new offset relative to the
+// start of the file or an error, if any.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	The standard technique is to call method
+//		SeekWriter() and a 'write' method in tandem. In
+//		this case, BE ADVISED, best practice specifies
+//		calling FlushWriteBuffer() to flush the write
+//		buffer BEFORE calling this method, SeekWriter().
+//
+//	(2)	Calling SeekWriter() to move to an offset before
+//		the beginning of the 'write' file is an error.
+//
+//	(3) If input parameter 'whence' is not set to one of
+//		these three constant integer values, an error
+//		will be returned.
+//
+//		io.SeekStart = 0
+//			Means relative to the start of the file.
+//
+//		io.SeekCurrent = 1
+//			Means relative to the current file offset.
+//
+//		io.SeekEnd = 2
+//			Means relative to the end (for example,
+//			offset = -2 specifies the penultimate byte of
+//			the file).
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	targetOffset				int64
+//
+//		The number of bytes used to reset the file
+//		offset for the next 'write' operation.
+//
+//		This offset value is interpreted according to
+//		input parameter 'whence'.
+//
+//	whence						int
+//
+//		'whence' is an integer value designating whether
+//		the input parameter 'targetOffset' is interpreted
+//		to mean an offset from the start of the file, an
+//		offset from the current offset position or an
+//		offset from the end of the file. The 'whence'
+//		parameter must be passed as one of the following
+//		'io' constant values:
+//
+//		io.SeekStart = 0
+//			Means relative to the start of the file.
+//
+//		io.SeekCurrent = 1
+//			Means relative to the current file offset.
+//
+//		io.SeekEnd = 2
+//			Means relative to the end (for example,
+//			offset = -2 specifies the penultimate byte of
+//			the file).
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	offsetFromFileStart			int64
+//
+//		If this method completes successfully, this
+//		parameter will return the new file offset
+//		in bytes from the beginning of the file.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message.
+func (fBufReadWrite *FileBufferReadWrite) SeekWriter(
+	targetOffset int64,
+	whence int) (
+	offsetFromFileStart int64,
+	err error) {
+
+	if fBufReadWrite.lock == nil {
+		fBufReadWrite.lock = new(sync.Mutex)
+	}
+
+	fBufReadWrite.lock.Lock()
+
+	defer fBufReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileBufferReadWrite."+
+			"SeekWriter()",
+		"")
+
+	if err != nil {
+
+		return offsetFromFileStart, err
+
+	}
+
+	if fBufReadWrite.writer == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"ERROR: The current instance of FileBufferReadWrite\n"+
+			"is invalid! The internal bufio.Writer object was never\n"+
+			"initialized. Call one of the 'New' methods or 'Setter'\n"+
+			"methods to create a valid instance of FileBufferReadWrite.\n",
+			ePrefix.String())
+
+		return offsetFromFileStart, err
+	}
+
+	var err2 error
+
+	offsetFromFileStart,
+		err2 = fBufReadWrite.writer.
+		Seek(
+			targetOffset,
+			whence)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by fBufReadWrite.writer.Seek()\n"+
 			"Error:\n%v\n",
 			ePrefix.String(),
 			err2.Error())
