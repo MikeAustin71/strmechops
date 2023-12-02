@@ -6563,6 +6563,301 @@ func (fBufReadWrite *FileBufferReadWrite) Write(
 	return numBytesWritten, err
 }
 
+// WriteTextOrNumbers
+//
+// This method will accept many different text or numeric
+// data types which are then converted to a byte or
+// string array and written to the internal bufio.Writer
+// object encapsulated in the current instance of
+// FileBufferReadWrite.
+//
+// The text or numeric data type passed as input
+// parameter 'charsToWrite' must match one of over sixty
+// eligible data types.
+//
+// If 'charsToWrite' is set to an ineligible data type,
+// an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	charsToWrite				interface{}
+//
+//		This empty interface is used to transmit an
+//		eligible text or numeric data type which will be
+//		to a string or byte array and written to the
+//		io.Writer object passed as input parameter
+//		'ioWriter'.
+//
+//		If the type transmitted through this parameter
+//		does not one of the following data types, an
+//		error will be returned.
+//
+//			Eligible Data Types
+//
+//			 1.	[]byte
+//			 2.	*[]byte
+//			 3.	string
+//			 4.	*string
+//			 5.	[]string
+//			 6.	*[]string
+//			 7.	Stringer (fmt.Stringer) Interface
+//			 8.	strings.Builder
+//			 9.	*strings.Builder
+//			10.	StringArrayDto
+//			11.	*StringArrayDto
+//			12.	[]rune
+//			13.	*[]rune
+//			14.	RuneArrayDto
+//			15.	*RuneArrayDto
+//			16.	RuneArrayCollection
+//			17.	*RuneArrayCollection
+//			18.	ITextFieldFormatDto
+//			19.	ITextFieldSpecification
+//			20.	ITextLineSpecification
+//			21.	TextLineSpecLinesCollection
+//			22.	bool
+//			23.	TextLineTitleMarqueeDto
+//			24.	time.Time
+//			25.	TextInputParamFieldDateTimeDto
+//			26.	float32
+//			27.	*float32
+//			28.	float64
+//			29.	*float64
+//			30.	BigFloatDto
+//			31.	*BigFloatDto
+//			32.	big.Float
+//			33.	*big.Float
+//			34.	big.Rat
+//			35.	*big.Rat
+//			36.	int8
+//			37.	*int8
+//			38.	int16
+//			39.	*int16
+//			40.	int
+//			41.	*int
+//			42.	int32
+//			43.	*int32
+//			44.	int64
+//			45.	*int64
+//			46.	uint8
+//			47.	*uint8
+//			48.	uint16
+//			49.	*uint16
+//			50.	uint
+//			51.	*uint
+//			52.	uint32
+//			53.	*uint32
+//			54.	uint64,
+//			55.	*uint64
+//			56.	big.Int
+//			57.	*big.Int
+//			58.	TextFieldFormatDtoFloat64
+//			59.	*TextFieldFormatDtoFloat64
+//			60.	TextFieldFormatDtoBigFloat
+//			61.	*TextFieldFormatDtoBigFloat
+//			62.	NumberStrKernel
+//			63.	*NumberStrKernel
+//			64.	[]NumberStrKernel
+//			65.	*[]NumberStrKernel
+//
+//	writeEndOfLineChars string
+//
+//		This character string is appended to each line of
+//		text written to the bufio.Writer object. This
+//		capability is more useful when processing string
+//		arrays when each element of the array is written
+//		separately to the io.Writer object.
+//
+//		Remember that on Windows, line-endings are
+//		terminated with a combination of a carriage
+//		return (ASCII 0x0d or \r) and a newline(\n), also
+//		referred to as CR/LF (\r\n).
+//
+//		On UNIX or Linux, text file line-endings are
+//		terminated with a newline character (ASCII 0x0a,
+//		represented by the \n escape sequence in most
+//		languages), also referred to as a linefeed (LF).
+//
+//		If 'writeEndOfLineChars' is set to an empty
+//		string, it will be ignored and no additional
+//		characters will be appended to each line written
+//		to the bufio.Writer object.
+//
+//	writeEndOfTextChars			string
+//
+//		A character string which will be written to the
+//		internal bufio.Writer object after all other text
+//		from 'charsToWrite' and 'writeEndOfLineChars'
+//		has been processed and written.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numOfBytesWritten			int64
+//
+//
+//		Returns the number of bytes extracted from the
+//		string array contained in input parameter
+//		'strArrayDto' and written to the internal
+//		bufio.Writer object encapsulated by the current
+//		instance of FileBufferReadWrite.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufReadWrite *FileBufferReadWrite) WriteTextOrNumbers(
+	charsToWrite interface{},
+	writeEndOfLineChars string,
+	writeEndOfTextChars string,
+	errorPrefix interface{}) (
+	numOfBytesWritten int64,
+	err error) {
+
+	if fBufReadWrite.lock == nil {
+		fBufReadWrite.lock = new(sync.Mutex)
+	}
+
+	fBufReadWrite.lock.Lock()
+
+	defer fBufReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "FileBufferReadWrite." +
+		"WriteTextOrNumbers()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return numOfBytesWritten, err
+	}
+
+	if fBufReadWrite.writer == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"---------------------------------------------------------\n"+
+			"Error: This instance of 'FileBufferReadWrite' is invalid!\n"+
+			"The internal bufio.Writer has NOT been initialized.\n"+
+			"Call one of the 'New' or 'Setter' methods when creating\n"+
+			"a new valid instance of 'FileBufferReadWrite'.\n",
+			ePrefix.String())
+
+		return numOfBytesWritten, err
+	}
+
+	var writeBytesFunc = fBufReadWrite.lowLevelWriteBytes
+
+	numOfBytesWritten,
+		err = new(fileWriterHelperMicrobot).
+		writeCharacters(
+			writeBytesFunc,
+			charsToWrite,
+			"charsToWrite",
+			writeEndOfLineChars,
+			writeEndOfTextChars,
+			ePrefix.XCpy("fBufReadWrite.writer<-charsToWrite"))
+
+	if err != nil {
+
+		return numOfBytesWritten, err
+	}
+
+	var fBufWriterAtom = new(fileBufferWriterAtom)
+	var err2 error
+
+	err2 = fBufWriterAtom.flush(
+		fBufReadWrite.writer,
+		"fBufReadWrite.writer",
+		ePrefix.XCpy("Flush fBufReadWrite.writer"))
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by fBufWriterMolecule.flush(fBufReadWrite.writer)\n"+
+			"Error= \n%v\n",
+			funcName,
+			err2.Error())
+	}
+
+	return numOfBytesWritten, err
+}
+
 // lowLevelWriteBytes
 //
 // This method is designed to be passed as a text handler

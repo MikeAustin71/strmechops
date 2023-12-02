@@ -3209,7 +3209,7 @@ func (fBufWriter *FileBufferWriter) WriteTextOrNumbers(
 			"Error: This instance of 'FileBufferWriter' is invalid!\n"+
 			"The internal bufio.Writer has NOT been initialized.\n"+
 			"Call one of the 'New' or 'Setter' methods when creating\n"+
-			"a new valid instance of 'FileBufferWriter'\n",
+			"a new valid instance of 'FileBufferWriter'.\n",
 			ePrefix.String())
 
 		return numOfBytesWritten, err
@@ -3225,7 +3225,7 @@ func (fBufWriter *FileBufferWriter) WriteTextOrNumbers(
 			"charsToWrite",
 			writeEndOfLineChars,
 			writeEndOfTextChars,
-			ePrefix.XCpy("fIoWriter.ioWriter<-charsToWrite"))
+			ePrefix.XCpy("fBufWriter.bufioWriter<-charsToWrite"))
 
 	if err != nil {
 
