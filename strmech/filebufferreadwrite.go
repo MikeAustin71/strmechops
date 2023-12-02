@@ -9968,9 +9968,7 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) empty(
 // contain valid values.
 //
 // If input parameter 'fBufReadWrite' is determined to be
-// invalid, this method returns a boolean value of
-// 'false' and an error containing a message describing
-// the reason why 'fBufReadWrite' is invalid.
+// invalid, this method returns an error.
 //
 // ----------------------------------------------------------------
 //
@@ -9978,15 +9976,12 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) empty(
 //
 //	fBufReadWrite				*FileBufferReadWrite
 //
-//		A pointer to an instance of FileBufferWriter.
+//		A pointer to an instance of FileBufferReadWrite.
 //
-//		The internal io.Writer object encapsulated
-//		in this instance of FileBufferReadWrite will be
-//		deleted as part of this 'close' operation.
-//
-//		Upon completion of this method, 'fBufReadWrite'
-//		will be invalid and unusable for any future
-//		'write' operations.
+//		If any of the internal member variable data
+//		values encapsulated in 'fBufReadWrite' are
+//		determined to be invalid, this method will return
+//		an error.
 //
 //	fBufReadWriteLabel			string
 //
@@ -10106,10 +10101,10 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) isFileBufferReadWrite
 
 		err = fmt.Errorf("%v\n"+
 			" -----------------------------------------------------------\n"+
-			" ERROR: The %v instance of FileBufferReadWrite\n"+
-			" is invalid! The internal io.Writer object was never\n"+
-			" initialized. Call one of the 'New' methods or 'Setter'\n"+
-			" methods to create a valid instance of FileBufferReadWrite.\n",
+			" ERROR: The %v instance of FileBufferReadWrite is invalid!\n"+
+			" The internal io.Writer object was never initialized.\n"+
+			" Call one of the 'New' methods or 'Setter' methods to\n"+
+			" create a valid instance of FileBufferReadWrite.\n",
 			ePrefix.String(),
 			fBufReadWriteLabel)
 

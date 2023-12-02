@@ -5973,3 +5973,136 @@ func (fIoReaderAtom *fileIoReaderAtom) empty(
 
 	return
 }
+
+// isFileIoReaderValid
+//
+// This method receives a pointer to an instance of
+// FileIoReader ('fIoReader') which will be analyzed to
+// determine if all the member variables contain valid
+// data values.
+//
+// If input parameter 'fIoReader' is determined to be
+// invalid, this method returns an error.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fIoReader				*FileIoReader
+//
+//		A pointer to an instance of FileIoReader.
+//
+//		If any of the internal member variable data
+//		values encapsulated in 'fIoReader' are
+//		determined to be invalid, this method will return
+//		an error.
+//
+//	fIoReaderLabel			string
+//
+//		The name or label associated with input parameter
+//		'fIoReader' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fIoReader" will
+//		be automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If any of the internal member data variables
+//		contained in the instance of FileIoReader
+//		passed as 'fIoReader' are found to be
+//		invalid, this method will return an error
+//		configured with an appropriate message
+//		identifying the invalid	member data variable.
+//
+//		If all internal member data variables evaluate
+//		as valid, this returned error value will be set
+//		to 'nil'.
+//
+//		If errors are encountered during processing or if
+//		any 'fIoReader' internal member data values
+//		are found to be invalid, the returned error Type
+//		will encapsulate an appropriate error message.
+//	 	This returned error message will incorporate the
+//	 	method chain and text passed by input parameter,
+//	 	'errorPrefix'. The 'errorPrefix' text will be
+//	 	prefixed to the beginning of the error message.
+func (fIoReaderAtom *fileIoReaderAtom) isFileIoReaderValid(
+	fIoReader *FileIoReader,
+	fIoReaderLabel string,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fIoReaderAtom.lock == nil {
+		fIoReaderAtom.lock = new(sync.Mutex)
+	}
+
+	fIoReaderAtom.lock.Lock()
+
+	defer fIoReaderAtom.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileIoReaderAtom."+
+			"isFileIoReaderValid()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(fIoReaderLabel) == 0 {
+
+		fIoReaderLabel = "fIoReader"
+	}
+
+	if fIoReader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is a nil pointer!\n"+
+			"%v is invalid.\n",
+			ePrefix.String(),
+			fIoReaderLabel,
+			fIoReaderLabel)
+
+		return err
+	}
+
+	if fIoReader.ioReader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			" -------------------------------------------------------------------\n"+
+			" ERROR: The %v instance of FileIoReader is invalid!\n"+
+			" The internal io.Reader object was never initialized.\n"+
+			" Call one of the 'New' methods or 'Setter' methods to create\n"+
+			" a valid instance of FileIoReader.\n",
+			ePrefix.String(),
+			fIoReaderLabel)
+	}
+
+	return err
+}

@@ -4372,3 +4372,136 @@ func (fIoWriterAtom *fileIoWriterAtom) empty(
 
 	fIoWriter.defaultByteArraySize = 0
 }
+
+// isFileIoWriterValid
+//
+// This method receives a pointer to an instance of
+// FileIoWriter ('fIoWriter') which will be analyzed to
+// determine if all the member variables contain valid
+// data values.
+//
+// If input parameter 'fIoWriter' is determined to be
+// invalid, this method returns an error.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fIoWriter				*FileIoWriter
+//
+//		A pointer to an instance of FileIoWriter.
+//
+//		If any of the internal member variable data
+//		values encapsulated in 'fIoWriter' are
+//		determined to be invalid, this method will return
+//		an error.
+//
+//	fIoWriterLabel			string
+//
+//		The name or label associated with input parameter
+//		'fIoWriter' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fIoWriter" will
+//		be automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If any of the internal member data variables
+//		contained in the instance of FileIoWriter
+//		passed as 'fIoWriter' are found to be
+//		invalid, this method will return an error
+//		configured with an appropriate message
+//		identifying the invalid	member data variable.
+//
+//		If all internal member data variables evaluate
+//		as valid, this returned error value will be set
+//		to 'nil'.
+//
+//		If errors are encountered during processing or if
+//		any 'fIoWriter' internal member data values
+//		are found to be invalid, the returned error Type
+//		will encapsulate an appropriate error message.
+//	 	This returned error message will incorporate the
+//	 	method chain and text passed by input parameter,
+//	 	'errorPrefix'. The 'errorPrefix' text will be
+//	 	prefixed to the beginning of the error message.
+func (fIoWriterAtom *fileIoWriterAtom) isFileIoWriterValid(
+	fIoWriter *FileIoWriter,
+	fIoWriterLabel string,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fIoWriterAtom.lock == nil {
+		fIoWriterAtom.lock = new(sync.Mutex)
+	}
+
+	fIoWriterAtom.lock.Lock()
+
+	defer fIoWriterAtom.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileIoWriterAtom."+
+			"isFileIoWriterValid()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(fIoWriterLabel) == 0 {
+
+		fIoWriterLabel = "fIoWriter"
+	}
+
+	if fIoWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is a nil pointer!\n"+
+			"%v is invalid.\n",
+			ePrefix.String(),
+			fIoWriterLabel,
+			fIoWriterLabel)
+
+		return err
+	}
+
+	if fIoWriter.ioWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			" -------------------------------------------------------------------\n"+
+			" ERROR: The %v instance of FileIoWriter is invalid!\n"+
+			" The internal io.Writer object was never initialized.\n"+
+			" Call one of the 'New' methods or 'Setter' methods to create\n"+
+			" a valid instance of FileIoWriter.\n",
+			ePrefix.String(),
+			fIoWriterLabel)
+	}
+
+	return err
+}

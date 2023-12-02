@@ -1070,6 +1070,197 @@ func (fIoReadWriteElectron *fileIoReadWriteElectron) empty(
 	return
 }
 
+// isFileIoReadWriteValid
+//
+// This method receives a pointer to an instance of
+// FileIoReadWrite ('fIoReadWrite') which will be
+// analyzed to determine if all the member variables
+// contain valid data values.
+//
+// If input parameter 'fIoReadWrite' is determined to be
+// invalid, this method returns an error.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fIoReadWrite				*FileIoReadWrite
+//
+//		A pointer to an instance of FileIoReadWrite.
+//
+//		If any of the internal member variable data
+//		values encapsulated in 'fIoReadWrite' are
+//		determined to be invalid, this method will return
+//		an error.
+//
+//	fIoReadWriteLabel			string
+//
+//		The name or label associated with input parameter
+//		'fIoReadWrite' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fIoReadWrite" will
+//		be automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If any of the internal member data variables
+//		contained in the instance of FileIoReadWrite
+//		passed as 'fIoReadWrite' are found to be
+//		invalid, this method will return an error
+//		configured with an appropriate message
+//		identifying the invalid	member data variable.
+//
+//		If all internal member data variables evaluate
+//		as valid, this returned error value will be set
+//		to 'nil'.
+//
+//		If errors are encountered during processing or if
+//		any 'fIoReadWrite' internal member data values
+//		are found to be invalid, the returned error Type
+//		will encapsulate an appropriate error message.
+//	 	This returned error message will incorporate the
+//	 	method chain and text passed by input parameter,
+//	 	'errorPrefix'. The 'errorPrefix' text will be
+//	 	prefixed to the beginning of the error message.
+func (fIoReadWriteElectron *fileIoReadWriteElectron) isFileIoReadWriteValid(
+	fIoReadWrite *FileIoReadWrite,
+	fIoReadWriteLabel string,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fIoReadWriteElectron.lock == nil {
+		fIoReadWriteElectron.lock = new(sync.Mutex)
+	}
+
+	fIoReadWriteElectron.lock.Lock()
+
+	defer fIoReadWriteElectron.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileIoReadWriteElectron." +
+		"isFileIoReadWriteValid()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(fIoReadWriteLabel) == 0 {
+
+		fIoReadWriteLabel = "fIoReadWrite"
+	}
+
+	if fIoReadWrite == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is a nil pointer!\n"+
+			"%v is invalid.\n",
+			ePrefix.String(),
+			fIoReadWriteLabel,
+			fIoReadWriteLabel)
+
+		return err
+	}
+
+	if fIoReadWrite.reader == nil {
+
+		err = fmt.Errorf(" %v\n"+
+			" -------------------------------------------------------------------\n"+
+			" ERROR: The %v instance of FileIoReadWrite is invalid!\n"+
+			" The internal io.Reader object was never initialized.\n"+
+			" Call one of the 'New' methods or 'Setter' methods to create\n"+
+			" a valid instance of FileIoReadWrite.\n",
+			ePrefix.String(),
+			fIoReadWriteLabel)
+
+		return err
+	}
+
+	if fIoReadWrite.writer == nil {
+
+		err = fmt.Errorf(" %v\n"+
+			" -------------------------------------------------------------------\n"+
+			" ERROR: The %v instance of FileIoReadWrite is invalid!\n"+
+			" The internal io.Writer object was never initialized.\n"+
+			" Call one of the 'New' methods or 'Setter' methods to create\n"+
+			" a valid instance of FileIoReadWrite.\n",
+			ePrefix.String(),
+			fIoReadWriteLabel)
+
+	}
+
+	var err2 error
+
+	err2 = new(fileIoReaderAtom).isFileIoReaderValid(
+		fIoReadWrite.reader,
+		"fIoReadWrite.reader",
+		ePrefix)
+
+	if err2 != nil {
+
+		err = fmt.Errorf(" %v\n"+
+			" -------------------------------------------------------------------\n"+
+			" ERROR: The %v instance of FileIoReadWrite is invalid!\n"+
+			" The internal io.reader returned a validation error.\n"+
+			" Error:\n"+
+			"%v\n",
+			funcName,
+			fIoReadWriteLabel,
+			err2.Error())
+
+		return err
+	}
+
+	err2 = new(fileIoWriterAtom).isFileIoWriterValid(
+		fIoReadWrite.writer,
+		"fIoReadWrite.writer",
+		ePrefix)
+
+	if err2 != nil {
+
+		err = fmt.Errorf(" %v\n"+
+			" -------------------------------------------------------------------\n"+
+			" ERROR: The %v instance of FileIoReadWrite is invalid!\n"+
+			" The internal io.Writer returned a validation error.\n"+
+			" Error:\n"+
+			"%v\n",
+			funcName,
+			fIoReadWriteLabel,
+			err2.Error())
+
+	}
+
+	return err
+}
+
 // readerCloseRelease
 //
 // This method will perform Clean-Up operations on the
