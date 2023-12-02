@@ -4999,6 +4999,142 @@ func (fBuffWriterElectron *fileBufferWriterElectron) empty(
 	return
 }
 
+// isFileBufferWriterValid
+//
+// This method receives a pointer to an instance of
+// FileBufferWriter ('fBufWriter') which will be analyzed
+// to determine if all the member variables contain valid
+// data values.
+//
+// If input parameter 'fBufWriter' is determined to be
+// invalid, this method returns an error.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufWriter				*FileBufferWriter
+//
+//		A pointer to an instance of FileBufferWriter.
+//
+//		If any of the internal member variable data
+//		values encapsulated in 'fBufWriter' are
+//		determined to be invalid, this method will return
+//		an error.
+//
+//	fBufWriterLabel			string
+//
+//		The name or label associated with input parameter
+//		'fBufWriter' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufWriter" will
+//		be automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If any of the internal member data variables
+//		contained in the instance of FileBufferWriter
+//		passed as 'fBufWriter' are found to be
+//		invalid, this method will return an error
+//		configured with an appropriate message
+//		identifying the invalid	member data variable.
+//
+//		If all internal member data variables evaluate
+//		as valid, this returned error value will be set
+//		to 'nil'.
+//
+//		If errors are encountered during processing or if
+//		any 'fBufWriter' internal member data values
+//		are found to be invalid, the returned error Type
+//		will encapsulate an appropriate error message.
+//	 	This returned error message will incorporate the
+//	 	method chain and text passed by input parameter,
+//	 	'errorPrefix'. The 'errorPrefix' text will be
+//	 	prefixed to the beginning of the error message.
+func (fBuffWriterElectron *fileBufferWriterElectron) isFileBufferWriterValid(
+	fBufWriter *FileBufferWriter,
+	fBufWriterLabel string,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fBuffWriterElectron.lock == nil {
+		fBuffWriterElectron.lock = new(sync.Mutex)
+	}
+
+	fBuffWriterElectron.lock.Lock()
+
+	defer fBuffWriterElectron.lock.Unlock()
+
+	funcName := "fileBufferWriterElectron." +
+		"isFileBufferWriterValid()"
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return err
+	}
+
+	if len(fBufWriterLabel) == 0 {
+
+		fBufWriterLabel = "fBufWriter"
+	}
+
+	if fBufWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is a nil pointer!\n"+
+			"%v is invalid.\n",
+			ePrefix.String(),
+			fBufWriterLabel,
+			fBufWriterLabel)
+
+		return err
+	}
+
+	if fBufWriter.bufioWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			" -------------------------------------------------------------------\n"+
+			" ERROR: The %v instance of FileBufferWriter is invalid!\n"+
+			" The internal bufio.Writer object was never initialized.\n"+
+			" Call one of the 'New' methods or 'Setter' methods to create\n"+
+			" a valid instance of FileBufferWriter.\n",
+			ePrefix.String(),
+			fBufWriterLabel)
+	}
+
+	return err
+}
+
 // validateWriterBufferSize
 //
 // This method analyzes a user requested write buffer
