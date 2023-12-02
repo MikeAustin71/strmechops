@@ -5159,3 +5159,138 @@ func (fBuffReaderAtom *fileBufferReaderAtom) empty(
 
 	return
 }
+
+// isFileBufferReaderValid
+//
+// This method receives a pointer to an instance of
+// FileBufferReader ('fBufReader') which will be analyzed
+// to determine if all the member variables contain valid
+// data values.
+//
+// If input parameter 'fBufReader' is determined to be
+// invalid, this method returns an error.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fBufReader				*FileBufferReader
+//
+//		A pointer to an instance of FileBufferReader.
+//
+//		If any of the internal member variable data
+//		values encapsulated in 'fBufReader' are
+//		determined to be invalid, this method will return
+//		an error.
+//
+//	fBufReaderLabel			string
+//
+//		The name or label associated with input parameter
+//		'fBufReader' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufReader" will
+//		be automatically applied.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If any of the internal member data variables
+//		contained in the instance of FileBufferReader
+//		passed as 'fBufReader' are found to be
+//		invalid, this method will return an error
+//		configured with an appropriate message
+//		identifying the invalid	member data variable.
+//
+//		If all internal member data variables evaluate
+//		as valid, this returned error value will be set
+//		to 'nil'.
+//
+//		If errors are encountered during processing or if
+//		any 'fBufReader' internal member data values
+//		are found to be invalid, the returned error Type
+//		will encapsulate an appropriate error message.
+//	 	This returned error message will incorporate the
+//	 	method chain and text passed by input parameter,
+//	 	'errorPrefix'. The 'errorPrefix' text will be
+//	 	prefixed to the beginning of the error message.
+func (fBuffReaderAtom *fileBufferReaderAtom) isFileBufferReaderValid(
+	fBufReader *FileBufferReader,
+	fBufReaderLabel string,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fBuffReaderAtom.lock == nil {
+		fBuffReaderAtom.lock = new(sync.Mutex)
+	}
+
+	fBuffReaderAtom.lock.Lock()
+
+	defer fBuffReaderAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	funcName := "fileBufferReaderAtom." +
+		"isFileBufferReaderValid()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return err
+	}
+
+	if len(fBufReaderLabel) == 0 {
+
+		fBufReaderLabel = "fBufReader"
+	}
+
+	if fBufReader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is a nil pointer!\n"+
+			"%v is invalid.\n",
+			ePrefix.String(),
+			fBufReaderLabel,
+			fBufReaderLabel)
+
+		return err
+	}
+
+	if fBufReader.bufioReader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			" -------------------------------------------------------------------\n"+
+			" ERROR: The %v instance of FileBufferReader is invalid!\n"+
+			" The internal bufio.Reader object was never initialized.\n"+
+			" Call one of the 'New' methods or 'Setter' methods to create\n"+
+			" a valid instance of FileBufferReader.\n",
+			ePrefix.String(),
+			fBufReaderLabel)
+	}
+
+	return err
+}
