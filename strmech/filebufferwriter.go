@@ -3281,6 +3281,62 @@ func (fBufWriter *FileBufferWriter) WriteTextOrNumbers(
 // and text writer for method:
 //
 //	fileWriterHelperMicrobot.writeCharacters()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	bytesToWrite				[]byte
+//
+//		A byte array containing the characters which will
+//		be written to the bufio.Writer encapsulated in
+//		the current instance of FileBufferWriter.
+//
+//	writeEndOfTextChars			string
+//
+//		If the length of string 'writeEndOfTextChars' is
+//		greater than zero (0), the characters contained
+//		therein will be the last characters written to
+//		the current instance of FileBufferWriter.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numOfBytesWritten			int64
+//
+//		If this method completes successfully, this int64
+//		value will contain the number of characters
+//		written to the current instance of
+//		FileBufferWriter.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
 func (fBufWriter *FileBufferWriter) lowLevelWriteBytes(
 	bytesToWrite []byte,
 	writeEndOfTextChars string,

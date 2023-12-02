@@ -6563,6 +6563,175 @@ func (fBufReadWrite *FileBufferReadWrite) Write(
 	return numBytesWritten, err
 }
 
+// lowLevelWriteBytes
+//
+// This method is designed to be passed as a text handler
+// and text writer for method:
+//
+//	fileWriterHelperMicrobot.writeCharacters()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	bytesToWrite				[]byte
+//
+//		A byte array containing the characters which will
+//		be written to the bufio.Writer encapsulated in
+//		the current instance of FileBufferReadWrite.
+//
+//	writeEndOfTextChars			string
+//
+//		If the length of string 'writeEndOfTextChars' is
+//		greater than zero (0), the characters contained
+//		therein will be the last characters written to
+//		the current instance of FileBufferReadWrite.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numOfBytesWritten			int64
+//
+//		If this method completes successfully, this int64
+//		value will contain the number of characters
+//		written to the current instance of
+//		FileBufferReadWrite.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fBufReadWrite *FileBufferReadWrite) lowLevelWriteBytes(
+	bytesToWrite []byte,
+	writeEndOfTextChars string,
+	errPrefDto *ePref.ErrPrefixDto) (
+	numOfBytesWritten int64,
+	err error) {
+
+	if fBufReadWrite.lock == nil {
+		fBufReadWrite.lock = new(sync.Mutex)
+	}
+
+	fBufReadWrite.lock.Lock()
+
+	defer fBufReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "FileBufferReadWrite." +
+		"lowLevelWriteBytes()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return numOfBytesWritten, err
+	}
+
+	if fBufReadWrite.writer == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"---------------------------------------------------------\n"+
+			"Error: This instance of 'FileBufferReadWrite' is invalid!\n"+
+			"The internal bufio.Writer has NOT been initialized.\n"+
+			"Call one of the 'New' or 'Setter' methods when creating\n"+
+			"a new valid instance of 'FileBufferReadWrite'\n",
+			ePrefix.String())
+
+		return numOfBytesWritten, err
+	}
+
+	lenBytesToWrite := len(bytesToWrite)
+
+	if lenBytesToWrite == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'bytesToWrite' is invalid!\n"+
+			"The 'bytesToWrite' byte array is empty. It has zero bytes.\n",
+			ePrefix.String())
+
+		return numOfBytesWritten, err
+	}
+
+	var err2 error
+	var localNumOfBytesWritten int
+	var expectedNumOfBytesToWrite int64
+
+	expectedNumOfBytesToWrite = int64(lenBytesToWrite)
+
+	localNumOfBytesWritten,
+		err2 = fBufReadWrite.writer.Write(bytesToWrite)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by fBufReadWrite.writer.Write(bytesToWrite).\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+		return numOfBytesWritten, err
+	}
+
+	numOfBytesWritten +=
+		int64(localNumOfBytesWritten)
+
+	lenWriteEndOfTextChars := len(writeEndOfTextChars)
+
+	if lenWriteEndOfTextChars > 0 {
+
+		expectedNumOfBytesToWrite += int64(lenWriteEndOfTextChars)
+
+		localNumOfBytesWritten,
+			err2 = fBufReadWrite.writer.Write(
+			[]byte(writeEndOfTextChars))
+
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error returned by fBufReadWrite.writer.Write(writeEndOfTextChars).\n"+
+				"writeEndOfTextChars= '%v'\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				writeEndOfTextChars,
+				err2.Error())
+
+			return numOfBytesWritten, err
+		}
+
+	}
+
+	return numOfBytesWritten, err
+}
+
 type fileBufferReadWriteMicrobot struct {
 	lock *sync.Mutex
 }
