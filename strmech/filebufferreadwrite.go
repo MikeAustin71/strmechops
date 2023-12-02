@@ -10050,11 +10050,13 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) isFileBufferReadWrite
 
 	var err error
 
+	funcName := "fileBufferReadWriteElectron." +
+		"isFileBufferReadWriteValid()"
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
 		errPrefDto,
-		"fileBufferReadWriteElectron."+
-			"isFileBufferReadWriteValid()",
+		funcName,
 		"")
 
 	if err != nil {
@@ -10073,7 +10075,7 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) isFileBufferReadWrite
 		err = fmt.Errorf("%v\n"+
 			" -----------------------------------------------------------\n"+
 			" ERROR: The %v instance of FileBufferReadWrite\n"+
-			" is invalid! The internal io.Reader and io.Writer objects\n"+
+			" is invalid! The internal bufio.Reader and bufio.Writer objects\n"+
 			" were never initialized. Call one of the 'New' methods or\n"+
 			" 'Setter' methods to create a valid instance of\n"+
 			" FileBufferReadWrite.\n",
@@ -10107,6 +10109,48 @@ func (fBuffReadWriteElectron *fileBufferReadWriteElectron) isFileBufferReadWrite
 			" create a valid instance of FileBufferReadWrite.\n",
 			ePrefix.String(),
 			fBufReadWriteLabel)
+
+		return err
+	}
+
+	var err2 error
+
+	err2 = new(fileBufferReaderAtom).isFileBufferReaderValid(
+		fBufReadWrite.reader,
+		fBufReadWriteLabel+".reader",
+		ePrefix)
+
+	if err2 != nil {
+
+		err = fmt.Errorf(" %v\n"+
+			" -----------------------------------------------------------------------\n"+
+			" ERROR: The %v instance of FileBufferReadWrite is invalid!\n"+
+			" The internal bufio.reader returned a validation error.\n"+
+			" Error:\n"+
+			"%v\n",
+			funcName,
+			fBufReadWriteLabel,
+			err2.Error())
+
+		return err
+	}
+
+	err2 = new(fileBufferWriterElectron).isFileBufferWriterValid(
+		fBufReadWrite.writer,
+		fBufReadWriteLabel+".writer",
+		ePrefix)
+
+	if err2 != nil {
+
+		err = fmt.Errorf(" %v\n"+
+			" -----------------------------------------------------------------------\n"+
+			" ERROR: The %v instance of FileBufferReadWrite is invalid!\n"+
+			" The internal bufio.Writer returned a validation error.\n"+
+			" Error:\n"+
+			"%v\n",
+			funcName,
+			fBufReadWriteLabel,
+			err2.Error())
 
 	}
 

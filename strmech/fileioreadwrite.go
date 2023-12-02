@@ -1190,6 +1190,22 @@ func (fIoReadWriteElectron *fileIoReadWriteElectron) isFileIoReadWriteValid(
 		return err
 	}
 
+	if fIoReadWrite.reader == nil &&
+		fIoReadWrite.writer == nil {
+
+		err = fmt.Errorf("%v\n"+
+			" -----------------------------------------------------------\n"+
+			" ERROR: The %v instance of FileIoReadWrite\n"+
+			" is invalid! The internal io.Reader and io.Writer objects\n"+
+			" were never initialized. Call one of the 'New' methods or\n"+
+			" 'Setter' methods to create a valid instance of\n"+
+			" FileBufferReadWrite.\n",
+			ePrefix.String(),
+			fIoReadWriteLabel)
+
+		return err
+	}
+
 	if fIoReadWrite.reader == nil {
 
 		err = fmt.Errorf(" %v\n"+
@@ -1215,6 +1231,7 @@ func (fIoReadWriteElectron *fileIoReadWriteElectron) isFileIoReadWriteValid(
 			ePrefix.String(),
 			fIoReadWriteLabel)
 
+		return err
 	}
 
 	var err2 error
