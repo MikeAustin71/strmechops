@@ -7069,7 +7069,7 @@ type fileBufferReadWriteMicrobot struct {
 //
 //	fBufReadWrite						*FileBufferReadWrite
 //
-//		A pointer to an instance of FileBufferWriter.
+//		A pointer to an instance of FileBufferReadWrite.
 //
 //		This method will perform Clean-Up operations on
 //		the internal bufio.reader and bufio.writer objects

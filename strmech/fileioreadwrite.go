@@ -1,6 +1,7 @@
 package strmech
 
 import (
+	"errors"
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
@@ -417,6 +418,206 @@ func (fIoReadWrite *FileIoReadWrite) NewIoReadWrite(
 			ePrefix)
 
 	return newFIoReadWrite, err
+}
+
+type fileIoReadWriteMicrobot struct {
+	lock *sync.Mutex
+}
+
+// readerWriterCloseRelease
+//
+// This method will perform all required Clean-Up
+// operations on an instance of FileIoReadWrite
+// passed as input parameter 'fIoReadWrite'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	After calling this method the FileIoReadWrite
+//	instance passed as 'fIoReadWrite' will be invalid
+//	and unavailable for any future read/write operations.
+//
+//	The specific Clean-Up procedures performed by this
+//	method are listed as follows:
+//
+//	(1)	Closing the internal io.reader object.
+//
+//	(2)	Closing the internal io.writer object.
+//
+//	(3) Releasing all internal memory resources.
+//		This action will synchronize internal flags and
+//		prevent multiple calls to 'close' methods.
+//		Performing a 'close' operation multiple times
+//		on a single io.reader or io.writer object can
+//		produce unexpected results.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fIoReadWrite						*FileIoReadWrite
+//
+//		A pointer to an instance of FileIoReadWrite.
+//
+//		This method will perform Clean-Up operations on
+//		the internal io.reader and io.writer objects
+//		encapsulated in	this FileIoReadWrite instance.
+//
+//		This method will effectively render the
+//		FileIoReadWrite instance, 'fIoReadWrite',
+//		invalid and unusable for any future 'read' and/or
+//		'write' operations.
+//
+//	fIoReadWriteLabel					string
+//
+//		The name or label associated with input parameter
+//		'fIoReadWrite' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fIoReadWrite" will
+//		be automatically applied.
+//
+//	releaseReaderWriterMemResources		bool
+//
+//		If this parameter is set to 'true', this method
+//		will release the memory resources for the
+//		internal io.reader and io.writer objects
+//		encapsulated by 'fIoReadWrite'.
+//
+//	releaseFIoReadWriteMemResources		bool
+//
+//		If this parameter is set to 'true', this method
+//		will release the internal memory resources for
+//		the FileIoReadWrite instance passed as
+//		'fIoReadWrite'.
+//
+//	errPrefDto							*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fIoReadWriteMicrobot *fileIoReadWriteMicrobot) readerWriterCloseRelease(
+	fIoReadWrite *FileIoReadWrite,
+	fIoReadWriteLabel string,
+	releaseReaderWriterMemResources bool,
+	releaseFIoReadWriteMemResources bool,
+	errPrefDto *ePref.ErrPrefixDto) error {
+
+	if fIoReadWriteMicrobot.lock == nil {
+		fIoReadWriteMicrobot.lock = new(sync.Mutex)
+	}
+
+	fIoReadWriteMicrobot.lock.Lock()
+
+	defer fIoReadWriteMicrobot.lock.Unlock()
+
+	var err error
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileIoReadWriteMicrobot." +
+		"readerWriterCloseRelease()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	if len(fIoReadWriteLabel) == 0 {
+
+		fIoReadWriteLabel = "fIoReadWrite"
+	}
+
+	if fIoReadWrite == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is a nil pointer!\n"+
+			"%v is invalid.\n",
+			ePrefix.String(),
+			fIoReadWriteLabel,
+			fIoReadWriteLabel)
+
+		return err
+	}
+
+	var fIoReadWriteElectron = new(fileIoReadWriteElectron)
+
+	var err2, err3 error
+
+	err2 = fIoReadWriteElectron.
+		readerCloseRelease(
+			fIoReadWrite,
+			fIoReadWriteLabel,
+			releaseReaderWriterMemResources,
+			releaseFIoReadWriteMemResources,
+			ePrefix)
+
+	if err2 != nil {
+
+		err3 = fmt.Errorf("%v\n"+
+			"Error occurred while closing the %v.\n"+
+			"Error:\n%v\n",
+			funcName,
+			fIoReadWriteLabel+".reader",
+			err2.Error())
+
+		err = errors.Join(err3)
+	}
+
+	err2 = fIoReadWriteElectron.
+		writerCloseRelease(
+			fIoReadWrite,
+			fIoReadWriteLabel,
+			releaseReaderWriterMemResources,
+			releaseFIoReadWriteMemResources,
+			ePrefix)
+
+	if err2 != nil {
+
+		err3 = fmt.Errorf("%v\n"+
+			"Error occurred while closing the %v.\n"+
+			"Error:\n%v\n",
+			funcName,
+			fIoReadWriteLabel+".writer",
+			err2.Error())
+
+		err = errors.Join(err3)
+	}
+
+	return err
 }
 
 type fileIoReadWriteMolecule struct {
@@ -1537,7 +1738,7 @@ func (fIoReadWriteElectron *fileIoReadWriteElectron) isFileIoReadWriteValid(
 //		'close' method. Calling the 'close' method more
 //		than once may produce unexpected results.
 //
-//	releaseFIoReaderLocalMemRes		bool
+//	releaseFIoReaderLocalMemRes			bool
 //
 //		If 'releaseFIoReaderLocalMemRes' is set to
 //		'true', this method will release the local memory
@@ -1587,7 +1788,7 @@ func (fIoReadWriteElectron *fileIoReadWriteElectron) readerCloseRelease(
 	fIoReadWrite *FileIoReadWrite,
 	fBufReadWriteLabel string,
 	releaseReaderMemResources bool,
-	releaseFBuffWriterLocalMemRes bool,
+	releaseFIoReaderLocalMemRes bool,
 	errPrefDto *ePref.ErrPrefixDto) error {
 
 	if fIoReadWriteElectron.lock == nil {
@@ -1656,7 +1857,7 @@ func (fIoReadWriteElectron *fileIoReadWriteElectron) readerCloseRelease(
 		}
 	}
 
-	if releaseFBuffWriterLocalMemRes == true {
+	if releaseFIoReaderLocalMemRes == true {
 
 		fIoReadWrite.reader = nil
 		fIoReadWrite.readerFilePathName = ""
