@@ -863,8 +863,7 @@ func (fBufReadWrite *FileBufferReadWrite) FlushWriteBuffer(
 // determine if is invalid.
 //
 // If the current FileBufferReadWrite instance is found
-// to be invalid, an error is returned explaining the
-// reason for this finding.
+// to be invalid, an error is returned.
 //
 // If the current FileBufferReadWrite instance is valid,
 // this method returns 'nil'
@@ -952,7 +951,7 @@ func (fBufReadWrite *FileBufferReadWrite) FlushWriteBuffer(
 //		If errors are encountered during processing or if
 //		any FileBufferReadWrite internal member data
 //	 	values are found to be invalid, the returned error
-//	 	Type will encapsulate an appropriate error message.
+//	 	will encapsulate an appropriate error message.
 //	 	This returned error message will incorporate the
 //	 	method chain and text passed by input parameter,
 //	 	'errorPrefix'. The 'errorPrefix' text will be
