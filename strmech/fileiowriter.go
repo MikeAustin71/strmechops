@@ -503,6 +503,17 @@ func (fIoWriter *FileIoWriter) IsValidInstanceError(
 // the user may call the 'Setter' methods to configure
 // this FileIoWriter instance with valid parameters.
 //
+// Step-1
+//
+//	Call this method FileIoWriter.New() to generate an
+//	empty version of FileIoWriter.
+//
+// Step-2
+//
+//	Use this returned instance of FileIoWriter and call
+//	the appropriate 'Setter' methods to individually
+//	configure the internal 'io.writer' object.
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters

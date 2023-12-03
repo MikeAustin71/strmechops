@@ -723,6 +723,20 @@ func (fBufReader *FileBufferReader) IsValidInstanceError(
 // the user may call the 'Setter' methods to configure
 // this FileBufferReader instance with valid parameters.
 //
+// This technique for creating a new working instance of
+// FileBufferReader requires two steps.
+//
+// Step-1
+//
+//	Call this method FileBufferReader.New() to
+//	generate an empty version of FileBufferReader.
+//
+// Step-2
+//
+//	Use this returned instance of FileBufferReader and
+//	call the appropriate 'Setter' methods to individually
+//	configure the internal 'bufio.reader' object.
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters

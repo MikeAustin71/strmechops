@@ -147,6 +147,60 @@ func (fIoReadWrite *FileIoReadWrite) IsValidInstanceError(
 			ePrefix)
 }
 
+// New
+//
+// This method returns an empty or 'blank' instance of
+// FileIoReadWrite. All the member variables in this
+// returned instance are initialized to their zero or
+// initial values. This means the returned instance is
+// invalid and unusable for standard 'read' and 'write'
+// operations.
+//
+// This technique for creating a new working instance of
+// FileIoReadWrite requires two steps.
+//
+// Step-1
+//
+//	Call this method FileIoReadWrite.New() to
+//	generate an empty version of FileIoReadWrite.
+//
+// Step-2
+//
+//	Use this returned instance of FileIoReadWrite and
+//	call the appropriate 'Setter' methods to individually
+//	configure the internal 'io.reader' and 'io.writer'
+//	objects.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	*FileIoReadWrite
+//
+//		This method returns a pointer to an empty
+//		instance of FileIoReadWrite. After receiving
+//		this instance, users must call 'Setter' methods
+//		to complete the 'reader' and 'writer'
+//		configuration process.
+func (fIoReadWrite *FileIoReadWrite) New() *FileIoReadWrite {
+
+	if fIoReadWrite.lock == nil {
+		fIoReadWrite.lock = new(sync.Mutex)
+	}
+
+	fIoReadWrite.lock.Lock()
+
+	defer fIoReadWrite.lock.Unlock()
+
+	return new(FileIoReadWrite)
+}
+
 // NewIoReadWrite
 //
 // Creates and returns a new, fully configured instance

@@ -506,6 +506,17 @@ func (fIoReader *FileIoReader) IsValidInstanceError(
 // the user may call the 'Setter' methods to configure
 // this FileIoReader instance with valid parameters.
 //
+// Step-1
+//
+//	Call this method FileIoReader.New() to
+//	generate an empty version of FileIoReader.
+//
+// Step-2
+//
+//	Use this returned instance of FileIoReader and
+//	call the appropriate 'Setter' methods to individually
+//	configure the internal 'io.reader' object.
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters

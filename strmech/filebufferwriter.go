@@ -995,6 +995,20 @@ func (fBufWriter *FileBufferWriter) IsValidInstanceError(
 // the user may call the 'Setter' methods to configure
 // this FileBufferWriter instance with valid parameters.
 //
+// This technique for creating a new working instance of
+// FileBufferReader requires two steps.
+//
+// Step-1
+//
+//	Call this method FileBufferWriter.New() to generate
+//	an empty version of FileBufferWriter.
+//
+// Step-2
+//
+//	Use this returned instance of FileBufferWriter and
+//	call the appropriate 'Setter' methods to individually
+//	configure the internal 'bufio.writer' object.
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
