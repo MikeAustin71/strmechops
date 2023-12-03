@@ -497,6 +497,42 @@ func (fIoReader *FileIoReader) IsValidInstanceError(
 			ePrefix)
 }
 
+// New
+//
+// This method returns a pointer to a new, empty instance
+// of FileIoReader.
+//
+// After creating an empty instance of FileIoReader,
+// the user may call the 'Setter' methods to configure
+// this FileIoReader instance with valid parameters.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	*FileIoReader
+//
+//		This method returns a pointer to an empty
+//		instance of	FileIoReader.
+func (fIoReader *FileIoReader) New() *FileIoReader {
+
+	if fIoReader.lock == nil {
+		fIoReader.lock = new(sync.Mutex)
+	}
+
+	fIoReader.lock.Lock()
+
+	defer fIoReader.lock.Unlock()
+
+	return new(FileIoReader)
+}
+
 // NewIoReader
 //
 // Receives input parameter, 'reader', which implements the
