@@ -494,6 +494,42 @@ func (fIoWriter *FileIoWriter) IsValidInstanceError(
 			ePrefix)
 }
 
+// New
+//
+// This method returns a pointer to a new, empty instance
+// of FileIoWriter.
+//
+// After creating an empty instance of FileIoWriter,
+// the user may call the 'Setter' methods to configure
+// this FileIoWriter instance with valid parameters.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	--- NONE ---
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	*FileIoWriter
+//
+//		This method returns a pointer to an empty
+//		instance of	FileIoWriter.
+func (fIoWriter *FileIoWriter) New() *FileIoWriter {
+
+	if fIoWriter.lock == nil {
+		fIoWriter.lock = new(sync.Mutex)
+	}
+
+	fIoWriter.lock.Lock()
+
+	defer fIoWriter.lock.Unlock()
+
+	return new(FileIoWriter)
+}
+
 // NewIoWriter
 //
 // This method returns a fully initialized instance of
