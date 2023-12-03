@@ -164,7 +164,8 @@ type FileBufferReadWrite struct {
 //
 // After calling this method, FileBufferReadWrite.Close(),
 // the current instance of FileBufferReadWrite will be
-// invalid and unavailable for further 'write' operations.
+// invalid and unavailable for further 'read' and/or
+// 'write' operations.
 //
 // ----------------------------------------------------------------
 //
@@ -191,6 +192,7 @@ type FileBufferReadWrite struct {
 //			synchronize internal flags and prevent
 //			multiple calls to 'close' the underlying
 //			bufio.Reader and bufio.Writer objects.
+//
 //			Calling 'close' on the same underlying
 //			bufio.Reader or bufio.Writer object multiple
 //			times can produce unexpected results.
@@ -198,7 +200,7 @@ type FileBufferReadWrite struct {
 //	(3)	Once this method completes all required Clean-Up
 //		tasks, this current instance of
 //		FileBufferReadWrite will become unavailable for
-//		further 'read' and 'write' operations.
+//		further 'read' and/or 'write' operations.
 //
 // ----------------------------------------------------------------
 //
@@ -303,16 +305,14 @@ func (fBufReadWrite *FileBufferReadWrite) Close() error {
 		return err
 	}
 
-	err = new(fileBufferReadWriteMicrobot).
+	return new(fileBufferReadWriteMicrobot).
 		flushCloseRelease(
 			fBufReadWrite,
 			"fBufReadWrite",
 			true, // flushWriteBuffer
 			true, // releaseReaderWriterMemResources
 			true, // releaseFBuffReadWriteMemResources
-			ePrefix.XCpy("Close-Readers&Writers"))
-
-	return err
+			ePrefix.XCpy("Close-Reader&Writer"))
 }
 
 // CloseReader
