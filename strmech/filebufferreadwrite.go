@@ -339,7 +339,7 @@ func (fBufReadWrite *FileBufferReadWrite) Close() error {
 //
 // However, in the event of unforeseen use cases, this
 // method is provided to exclusively close or Clean-Up
-// the bufio.Reader.
+// the bufio.Reader object.
 //
 // ----------------------------------------------------------------
 //
@@ -348,10 +348,13 @@ func (fBufReadWrite *FileBufferReadWrite) Close() error {
 //	This method will:
 //
 //	(1) Properly 'Close' the 'read' file or internal
-//		bufio.Reader object.
+//		bufio.Reader object encapsulated by the current
+//		instance of FileBufferReadWrite.
 //
 //	(2) Release the internal memory resources associated
-//		with the bufio.Reader object.
+//		with the internal bufio.Reader object
+//		encapsulated by the current instance of
+//		FileBufferReadWrite.
 //
 //		Releasing internal memory resources synchronizes
 //		internal flags and prevents multiple calls to the
@@ -485,17 +488,6 @@ func (fBufReadWrite *FileBufferReadWrite) CloseReader(
 // after completion of all 'write' operations associated
 // with the current instance of FileBufferReadWrite.
 //
-// These Clean-Up tasks include:
-//
-//	(a)	Flushing the write buffer to ensure all data
-//		is written from the 'write' buffer to the
-//		underlying io.Writer object. The 'write' buffer
-//		will only be flushed if input parameter
-//		'flushWriteBuffer' is set to 'true'.
-//
-//	(b) Closing the 'write' file or internal bufio.Writer
-//		object.
-//
 // After calling this method, the Clean-Up tasks
 // performed will effectively render the internal
 // bufio.Writer object, encapsulated by the current
@@ -512,13 +504,9 @@ func (fBufReadWrite *FileBufferReadWrite) CloseReader(
 //
 //	FileBufferReadWrite.Close()
 //
-// However, if the user chooses to 'close' the internal
-// bufio.Writer object without first 'flushing' the
-// 'write' buffer, this method will provide a means for
-// doing so. Remember, if the internal bufio.Writer
-// object is closed without first flushing the 'write'
-// buffer, the contents of the 'write' buffer will be
-// lost.
+// However, in the event of unforeseen use cases, this
+// method is provided to exclusively close or Clean-Up
+// the internal bufio.Writer object.
 //
 // ----------------------------------------------------------------
 //
@@ -532,10 +520,22 @@ func (fBufReadWrite *FileBufferReadWrite) CloseReader(
 //		procedure is dependent on the value of input
 //		parameter 'flushWriteBuffer'.
 //
-//	(2) Properly 'Close' the 'write' file or bufio.Writer
-//		object.
+//	(2) Properly 'Close' the 'write' file or internal
+//		bufio.Writer object encapsulated by the current
+//		instance of FileBufferReadWrite.
 //
-//	(3) Effectively render the internal io.Writer object,
+//	(3) Release the internal memory resources associated
+//		with the internal bufio.Writer object
+//		encapsulated by the current instance of
+//		FileBufferReadWrite.
+//
+//		Releasing internal memory resources synchronizes
+//		internal flags and prevents multiple calls to the
+//		'close' method. Calling the 'close' method more
+//		than once on the internal bufio.Writer object may
+//		produce unexpected results.
+//
+//	(4) Effectively render the internal io.Writer object,
 //		encapsulated by the current instance of
 //		FileBufferReadWrite, invalid and unusable for any
 //		future 'write' operations.
