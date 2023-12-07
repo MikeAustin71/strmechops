@@ -177,6 +177,168 @@ func (fIoReadWrite *FileIoReadWrite) Close() error {
 				"Close-Reader&Writer"))
 }
 
+// CloseReader
+//
+// This method is designed to perform Clean-Up tasks
+// after completion of all 'read' operations associated
+// with the current instance of FileIoReadWrite.
+//
+// After calling this method, the Clean-Up tasks
+// performed will effectively render the internal
+// io.Reader object, encapsulated by the current
+// FileIoReadWrite instance, invalid and unusable
+// for any future 'read' operations.
+//
+// It is unlikely that the user will ever need to call
+// this method. Typically, Clean-Up tasks are performed
+// jointly on the internal io.Reader and io.Writer
+// objects encapsulated in the current FileIoReadWrite
+// instance. These Clean-Up tasks should be performed
+// after all 'read' and 'write' operations have been
+// completed by calling the local method:
+//
+//	FileIoReadWrite.Close()
+//
+// However, in the event of unforeseen use cases, this
+// method is provided to exclusively close or Clean-Up
+// the io.Reader.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will:
+//
+//	(1) Properly 'Close' the 'read' file or internal
+//		io.Reader object.
+//
+//	(2) Release the internal memory resources associated
+//		with the io.Reader object.
+//
+//		Releasing internal memory resources synchronizes
+//		internal flags and prevents multiple calls to the
+//		'close' method. Calling the 'close' method more
+//		than once on the internal io.Reader object may
+//		produce unexpected results.
+//
+//	(3) Effectively render the internal io.Reader object,
+//		encapsulated by the current instance of
+//		FileIoReadWrite, invalid and unusable for any
+//		future 'read' operations.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fIoReadWrite *FileIoReadWrite) CloseReader(
+	errorPrefix interface{}) error {
+
+	if fIoReadWrite.lock == nil {
+		fIoReadWrite.lock = new(sync.Mutex)
+	}
+
+	fIoReadWrite.lock.Lock()
+
+	defer fIoReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileIoReadWrite."+
+			"CloseReader()",
+		"")
+
+	if err != nil {
+		return err
+	}
+
+	return new(fileIoReadWriteElectron).
+		readerCloseRelease(
+			fIoReadWrite,
+			"fIoReadWrite",
+			true,
+			true,
+			ePrefix)
+}
+
 // IsValidInstanceError
 //
 // Analyzes the current FileIoReadWrite instance to

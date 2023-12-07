@@ -323,13 +323,13 @@ func (fBufReadWrite *FileBufferReadWrite) Close() error {
 //
 // After calling this method, the Clean-Up tasks
 // performed will effectively render the internal
-// io.Reader object, encapsulated by the current
+// bufio.Reader object, encapsulated by the current
 // FileBufferReadWrite instance, invalid and unusable
 // for any future 'read' operations.
 //
 // It is unlikely that the user will ever need to call
 // this method. Typically, Clean-Up tasks are performed
-// jointly on the internal io.Reader and io.Writer
+// jointly on the internal bufio.Reader and bufio.Writer
 // objects encapsulated in the current FileBufferReadWrite
 // instance. These Clean-Up tasks should be performed
 // after all 'read' and 'write' operations have been
@@ -339,7 +339,7 @@ func (fBufReadWrite *FileBufferReadWrite) Close() error {
 //
 // However, in the event of unforeseen use cases, this
 // method is provided to exclusively close or Clean-Up
-// the io.Reader.
+// the bufio.Reader.
 //
 // ----------------------------------------------------------------
 //
@@ -356,10 +356,11 @@ func (fBufReadWrite *FileBufferReadWrite) Close() error {
 //		Releasing internal memory resources synchronizes
 //		internal flags and prevents multiple calls to the
 //		'close' method. Calling the 'close' method more
-//		than once may produce unexpected results.
+//		than once on the internal bufio.Reader object may
+//		produce unexpected results.
 //
-//	(3) Effectively render the internal io.Reader object,
-//		encapsulated by the current instance of
+//	(3) Effectively render the internal bufio.Reader
+//		object, encapsulated by the current instance of
 //		FileBufferReadWrite, invalid and unusable for any
 //		future 'read' operations.
 //
