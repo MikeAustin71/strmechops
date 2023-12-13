@@ -504,6 +504,62 @@ func (fIoReadWrite *FileIoReadWrite) CloseWriter(
 
 }
 
+// Empty
+//
+// This method deletes all internal member variables and
+// release all the internal memory resources for the
+// current instance of FileIoReadWrite.
+//
+// Specifically the following internal member variables
+// are set to 'nil' or their initial zero values:
+//
+//	FileIoReadWrite.reader = nil
+//	FileIoReadWrite.writer = nil
+//	FileIoReadWrite.readerFilePathName = ""
+//	FileIoReadWrite.writerFilePathName = ""
+//
+// After calling this method, the current FileIoReadWrite
+// instance will become invalid and unavailable for
+// future read/write operations.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method does NOT perform the 'flush' or 'close'
+//	procedures. To perform the 'flush' and 'close'
+//	procedures while simultaneously releasing all
+//	internal memory resources, call local method:
+//
+//			FileBufferReadWrite.Close()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	--- NONE ---
+func (fIoReadWrite *FileIoReadWrite) Empty() {
+
+	if fIoReadWrite.lock == nil {
+		fIoReadWrite.lock = new(sync.Mutex)
+	}
+
+	fIoReadWrite.lock.Lock()
+
+	new(fileIoReadWriteElectron).empty(
+		fIoReadWrite)
+
+	fIoReadWrite.lock.Unlock()
+
+	fIoReadWrite.lock = nil
+}
+
 // IsValidInstanceError
 //
 // Analyzes the current FileIoReadWrite instance to
@@ -1882,9 +1938,9 @@ type fileIoReadWriteElectron struct {
 // empty
 //
 // This method deletes all internal member variables and
-// releases all the internal memory resources for an
-// instance of FileIoReadWrite passed as input
-// parameter 'fBufReadWrite'.
+// release all the internal memory resources for an
+// instance of FileIoReadWrite passed as input parameter
+// 'fBufReadWrite'.
 //
 // Specifically the following internal member variables
 // are set to 'nil' or their initial zero values:
@@ -1898,6 +1954,17 @@ type fileIoReadWriteElectron struct {
 // FileIoReadWrite, passed as input parameter
 // 'fIoReadWrite', will become invalid and unavailable
 // for future read/write operations.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	This method does NOT perform the 'flush' or 'close'
+//	procedures. To perform the 'flush' and 'close'
+//	procedures while simultaneously releasing all
+//	internal memory resources, call local method:
+//
+//			FileBufferReadWrite.Close()
 //
 // ----------------------------------------------------------------
 //
