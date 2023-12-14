@@ -9364,9 +9364,30 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setIoWriter(
 //	the instance of FileBufferReadWrite passed as input
 //	parameter 'fBufReadWrite'.
 //
+//			fBufReadWrite.reader
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
+//
+//	fBufReadWrite				*FileBufferReadWrite
+//
+//		A pointer to an instance of FileBufferWriter.
+//
+//		The internal io.Reader object encapsulated in
+//		this instance of FileBufferReadWrite will be
+//		deleted and configured using the file identified
+//		by input parameter 'readerPathFileName'.
+//
+//	fBufReadWriteLabel			string
+//
+//		The name or label associated with input parameter
+//		'fBufReadWrite' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fBufReadWrite" will
+//		be automatically applied.
 //
 //	readerPathFileName			string
 //
@@ -9578,7 +9599,7 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameReader(
 		err2 = new(fileBufferReaderNanobot).
 		setPathFileName(
 			&newBuffReader,
-			"newBuffReader",
+			fBufReadWriteLabel+".newBuffReader",
 			readerPathFileName,
 			readerPathFileNameLabel,
 			openReadFileReadWrite, // openFileReadWrite

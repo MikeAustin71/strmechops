@@ -526,10 +526,10 @@ func (fIoReadWrite *FileIoReadWrite) CloseWriter(
 //
 // # BE ADVISED
 //
-//	This method does NOT perform the 'flush' or 'close'
-//	procedures. To perform the 'flush' and 'close'
-//	procedures while simultaneously releasing all
-//	internal memory resources, call local method:
+//	This method does NOT perform the 'close' procedure.
+//	To perform the 'close' procedures while
+//	simultaneously releasing all internal memory
+//	resources, call local method:
 //
 //			FileBufferReadWrite.Close()
 //
@@ -744,6 +744,43 @@ func (fIoReadWrite *FileIoReadWrite) New() *FileIoReadWrite {
 
 	return new(FileIoReadWrite)
 }
+
+/*
+func (fIoReadWrite *FileIoReadWrite)  NewFileMgrs(
+	readerFileMgr *FileMgr,
+	openReadFileReadWrite bool,
+	readerBuffSize int,
+	writerFileMgr *FileMgr,
+	openWriteFileReadWrite bool,
+	writerBuffSize int,
+	truncateExistingWriteFile bool,
+	errorPrefix interface{}) (
+	readerFileInfoPlus FileInfoPlus,
+	writerFileInfoPlus FileInfoPlus,
+	newFBuffReadWrite *FileIoReadWrite,
+	err error) {
+
+	if fIoReadWrite.lock == nil {
+		fIoReadWrite.lock = new(sync.Mutex)
+	}
+
+	fIoReadWrite.lock.Lock()
+
+	defer fIoReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+	var err error
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileIoReadWrite."+
+			"CloseReader()",
+		"")
+
+}
+
+*/
 
 // NewIoReadWrite
 //
@@ -1931,6 +1968,277 @@ func (fIoReadWriteAtom *fileIoReadWriteAtom) setIoWriter(
 	return err
 }
 
+// setPathFileNameReader
+//
+// Receives an input parameter string specifying the path
+// and file name identifying the file which will be
+// configured as a data source for 'read' operations.
+// This file will be configured as an internal io.Reader
+// object for the FileIoReadWrite instance passed as
+// input parameter 'fIoReadWrite'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reconfigure
+//	the member variable io.Reader object encapsulated in
+//	the instance of FileIoReadWrite passed as input
+//	parameter 'fIoReadWrite':
+//
+//			fIoReadWrite.reader
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fIoReadWrite					*FileIoReadWrite
+//
+//		A pointer to an instance of FileIoReadWrite.
+//
+//		The internal io.Reader object encapsulated in
+//		this instance of FileIoReadWrite will be deleted
+//		and configured using the file identified by input
+//		parameter 'readerPathFileName'.
+//
+//	fIoReadWriteLabel				string
+//
+//		The name or label associated with input parameter
+//		'fIoReadWrite' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fIoReadWrite" will
+//		be automatically applied.
+//
+//	readerPathFileName				string
+//
+//		This string contains the path and file name of
+//		the file which will be configured as an io.Reader
+//		object encapsulated in the FileIoReadWrite
+//		instance passed as input parameter
+//		'fIoReadWrite'. As such, the file identified by
+//		'readerPathFileName' will be used a data source
+//		for 'read' operations.
+//
+//		If this file does not currently exist on an
+//		attached storage drive, an error will be
+//		returned.
+//
+//	readerPathFileNameLabel			string
+//
+//		The name or label associated with input parameter
+//		'readerPathFileName' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "readerPathFileName"
+//		will be automatically applied.
+//
+//	openReadFileReadWrite			bool
+//
+//		If this parameter is set to 'true', the target
+//		'read' file identified from input parameter
+//		'readerPathFileName' will be opened for both
+//		'read' and 'write' operations.
+//
+//		If 'openReadFileReadWrite' is set to 'false', the
+//		target 'read' file will be opened for 'read-only'
+//		operations.
+//
+//	defaultReaderByteArraySize		int
+//
+//		The size of the byte array which will be used to
+//		read data from the internal io.Reader object
+//		encapsulated by the FileIoReadWrite instance
+//		passed as input parameter 'fIoReadWrite'.
+//
+//		If the value of 'defaultReaderByteArraySize' is
+//		less than '16', it will be reset to a size of
+//		'4096'.
+//
+//	errPrefDto						*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	fileInfoPlus					FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter
+//		'readerPathFileName'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	err								error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fIoReadWriteAtom *fileIoReadWriteAtom) setPathFileNameReader(
+	fIoReadWrite *FileIoReadWrite,
+	fIoReadWriteLabel string,
+	readerPathFileName string,
+	readerPathFileNameLabel string,
+	openReadFileReadWrite bool,
+	defaultReaderByteArraySize int,
+	errPrefDto *ePref.ErrPrefixDto) (
+	fInfoPlus FileInfoPlus,
+	err error) {
+
+	if fIoReadWriteAtom.lock == nil {
+		fIoReadWriteAtom.lock = new(sync.Mutex)
+	}
+
+	fIoReadWriteAtom.lock.Lock()
+
+	defer fIoReadWriteAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileIoReadWriteAtom." +
+		"setPathFileNameReader()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return fInfoPlus, err
+	}
+
+	if len(fIoReadWriteLabel) == 0 {
+
+		fIoReadWriteLabel = "fIoReadWrite"
+	}
+
+	if len(readerPathFileNameLabel) == 0 {
+
+		readerPathFileNameLabel = "readerPathFileName"
+	}
+
+	if fIoReadWrite == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is a nil pointer!\n"+
+			"%v is invalid.\n",
+			ePrefix.String(),
+			fIoReadWriteLabel,
+			fIoReadWriteLabel)
+
+		return fInfoPlus, err
+	}
+
+	if len(readerPathFileName) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is an empty string with a length of zero (0).\n",
+			ePrefix.String(),
+			readerPathFileNameLabel,
+			readerPathFileNameLabel)
+
+		return fInfoPlus, err
+	}
+
+	err = new(fileIoReadWriteElectron).readerCloseRelease(
+		fIoReadWrite,
+		fIoReadWriteLabel,
+		true, // releaseMemoryResources
+		true, // releaseFBuffReaderLocalMemRes
+		ePrefix.XCpy("Close-Reader"))
+
+	if err != nil {
+
+		return fInfoPlus, err
+	}
+
+	var newIoReader FileIoReader
+	var err2 error
+
+	fInfoPlus,
+		err2 = new(fileIoReaderNanobot).
+		setPathFileName(
+			&newIoReader,
+			fIoReadWriteLabel+".newIoReader",
+			readerPathFileName,
+			readerPathFileNameLabel,
+			openReadFileReadWrite,
+			defaultReaderByteArraySize,
+			ePrefix)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while creating the new %v.reader.\n"+
+			"Error=\n%v\n",
+			funcName,
+			fIoReadWriteLabel,
+			err2.Error())
+
+		return fInfoPlus, err
+	}
+
+	fIoReadWrite.reader = &newIoReader
+	fIoReadWrite.readerFilePathName = readerPathFileName
+
+	return fInfoPlus, err
+}
+
 type fileIoReadWriteElectron struct {
 	lock *sync.Mutex
 }
@@ -1959,10 +2267,10 @@ type fileIoReadWriteElectron struct {
 //
 // # BE ADVISED
 //
-//	This method does NOT perform the 'flush' or 'close'
-//	procedures. To perform the 'flush' and 'close'
-//	procedures while simultaneously releasing all
-//	internal memory resources, call local method:
+//	This method does NOT perform the 'close' procedure.
+//	To perform the 'close' procedures while
+//	simultaneously releasing all internal memory
+//	resources, call local method:
 //
 //			FileBufferReadWrite.Close()
 //
