@@ -8016,13 +8016,14 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setIoReaderWriter(
 //
 //	fBufReadWrite				*FileBufferReadWrite
 //
-//		A pointer to an instance of FileBufferWriter.
+//		A pointer to an instance of FileBufferReadWrite.
 //
 //		The internal FileBufferReader and
 //		FileBufferWriter objects encapsulated in this
-//		instance be deleted and reinitialized using the
-//		io.Reader and io.Writer objects passed as input
-//		parameters 'reader' and 'writer'.
+//		instance will be deleted and reinitialized using
+//		the path and file names passed as input
+//		parameters 'readerPathFileName' and
+//		'writerPathFileName'.
 //
 //	fBufReadWriteLabel			string
 //
@@ -8037,13 +8038,23 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setIoReaderWriter(
 //	readerPathFileName			string
 //
 //		This string contains the path and file name of
-//		the file which will be configured as an io.Reader
-//		instance and used a data source for 'read'
-//		operations.
+//		the file which will be configured as the internal
+//		bufio.Reader instance and used a data source for
+//		all 'read' operations.
 //
 //		If this file does not currently exist on an
 //		attached storage drive, an error will be
 //		returned.
+//
+//	readerPathFileNameLabel			string
+//
+//		The name or label associated with input parameter
+//		'readerPathFileName' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "readerPathFileName"
+//		will be automatically applied.
 //
 //	openReadFileReadWrite		bool
 //
@@ -8081,6 +8092,16 @@ func (fBufReadWriteNanobot *fileBufferReadWriteNanobot) setIoReaderWriter(
 //		If the target path and file do not currently
 //		exist on an attached storage drive, this method
 //		will attempt to create them.
+//
+//	writerPathFileNameLabel			string
+//
+//		The name or label associated with input parameter
+//		'writerPathFileName' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "writerPathFileName"
+//		will be automatically applied.
 //
 //	openWriteFileReadWrite		bool
 //
