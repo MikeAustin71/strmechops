@@ -2239,6 +2239,290 @@ func (fIoReadWriteAtom *fileIoReadWriteAtom) setPathFileNameReader(
 	return fInfoPlus, err
 }
 
+// setPathFileNameWriter
+//
+// Receives an input parameter string specifying the path
+// and file name identifying the file which will be
+// configured as an output destination for 'write'
+// operations. This file will be configured as an
+// internal io.Writer object for the FileIoReadWrite
+// instance passed as input parameter 'fIoReadWrite'.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reconfigure
+//	the member variable io.Writer object encapsulated in
+//	the instance of FileIoReadWrite passed as input
+//	parameter 'fIoReadWrite':
+//
+//			fIoReadWrite.writer
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fIoReadWrite					*FileIoReadWrite
+//
+//		A pointer to an instance of FileBufferWriter.
+//
+//		The internal io.Writer object encapsulated in
+//		this instance of FileIoReadWrite will be
+//		deleted and configured using the file identified
+//		by input parameter 'writerPathFileName'.
+//
+//	fIoReadWriteLabel				string
+//
+//		The name or label associated with input parameter
+//		'fIoReadWrite' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fIoReadWrite" will
+//		be automatically applied.
+//
+//	writerPathFileName				string
+//
+//		This string contains the path and file name of
+//		the target 'write' file which will be used as
+//		a data destination for 'write' operations.
+//
+//		If the target path and file do not currently
+//		exist on an attached storage drive, this method
+//		will attempt to create them.
+//
+//	writerPathFileNameLabel			string
+//
+//		The name or label associated with input parameter
+//		'writerPathFileName' which will be used in error
+//		messages returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "writerPathFileName"
+//		will be automatically applied.
+//
+//	openWriteFileReadWrite			bool
+//
+//		If this parameter is set to 'true', the target
+//		'write' file identified by input parameter
+//		'writerPathFileName' will be opened for 'read'
+//		and 'write' operations.
+//
+//		If 'openWriteFileReadWrite' is set to 'false',
+//		the target write file will be opened for
+//		'write-only' operations.
+//
+//	defaultWriterByteArraySize		int
+//
+//		The size of the byte array which will be used to
+//		write data to the internal io.Writer object
+//		encapsulated by FileIoWriter input parameter
+//		'fIoWriter'.
+//
+//		If the value of 'defaultByteArraySize' is
+//		less than one ('1'), it will be reset to a size
+//		of '4096'.
+//
+//	truncateExistingWriteFile	bool
+//
+//		If this parameter is set to 'true', the target
+//		'write' file ('writerPathFileName') will be
+//		opened for write operations. If the target write
+//		file previously existed, it will be truncated.
+//		This means that the file's previous contents will
+//		be deleted.
+//
+//		If this parameter is set to 'false', the target
+//		'write' file will be opened for write operations.
+//		If the target 'write' file previously existed,
+//		the new text written to this file will be appended
+//		to the end of the previous file contents.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	fileInfoPlus				FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter
+//		'writerPathFileName'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errPrefDto'.
+//	 	The 'errPrefDto' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fIoReadWriteAtom *fileIoReadWriteAtom) setPathFileNameWriter(
+	fIoReadWrite *FileIoReadWrite,
+	fIoReadWriteLabel string,
+	writerPathFileName string,
+	writerPathFileNameLabel string,
+	openWriteFileReadWrite bool,
+	defaultWriterByteArraySize int,
+	truncateExistingWriteFile bool,
+	errPrefDto *ePref.ErrPrefixDto) (
+	fInfoPlus FileInfoPlus,
+	err error) {
+
+	if fIoReadWriteAtom.lock == nil {
+		fIoReadWriteAtom.lock = new(sync.Mutex)
+	}
+
+	fIoReadWriteAtom.lock.Lock()
+
+	defer fIoReadWriteAtom.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileIoReadWriteAtom." +
+		"setPathFileNameWriter()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return fInfoPlus, err
+	}
+
+	if len(fIoReadWriteLabel) == 0 {
+
+		fIoReadWriteLabel = "fIoReadWrite"
+	}
+
+	if len(writerPathFileNameLabel) == 0 {
+
+		writerPathFileNameLabel = "writerPathFileName"
+	}
+
+	if fIoReadWrite == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is a nil pointer!\n"+
+			"%v is invalid.\n",
+			ePrefix.String(),
+			fIoReadWriteLabel,
+			fIoReadWriteLabel)
+
+		return fInfoPlus, err
+	}
+
+	if len(writerPathFileName) == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is an empty string with a length of zero (0).\n",
+			ePrefix.String(),
+			writerPathFileNameLabel,
+			writerPathFileNameLabel)
+
+		return fInfoPlus, err
+	}
+
+	err = new(fileIoReadWriteElectron).writerCloseRelease(
+		fIoReadWrite,
+		fIoReadWriteLabel,
+		true, // releaseMemoryResources
+		true, // releaseFBuffReaderLocalMemRes
+		ePrefix.XCpy("Close-Writer"))
+
+	if err != nil {
+
+		return fInfoPlus, err
+	}
+
+	var newIoWriter FileIoWriter
+	var err2 error
+
+	fInfoPlus,
+		err2 = new(fileIoWriterNanobot).
+		setPathFileName(
+			&newIoWriter,
+			fIoReadWriteLabel+".newIoWriter",
+			writerPathFileName,
+			writerPathFileNameLabel,
+			openWriteFileReadWrite,
+			defaultWriterByteArraySize,
+			truncateExistingWriteFile,
+			ePrefix)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"An error occurred while creating the new %v.writer.\n"+
+			"Error=\n%v\n",
+			funcName,
+			fIoReadWriteLabel,
+			err2.Error())
+
+		return fInfoPlus, err
+	}
+
+	fIoReadWrite.writer = &newIoWriter
+	fIoReadWrite.readerFilePathName = writerPathFileName
+
+	return fInfoPlus, err
+}
+
 type fileIoReadWriteElectron struct {
 	lock *sync.Mutex
 }

@@ -9642,6 +9642,8 @@ func (fBuffReadWriteAtom *fileBufferReadWriteAtom) setPathFileNameReader(
 //	the instance of FileBufferReadWrite passed as input
 //	parameter 'fBufReadWrite'.
 //
+//			fBufReadWrite.writer
+//
 // ----------------------------------------------------------------
 //
 // # Input Parameters
