@@ -7392,9 +7392,10 @@ func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) flushWriteBuffer(
 // setFileMgrsReadWrite
 //
 // Receives two instances of FileMgr as input parameters
-// identifying the io.Reader and io.Writer objects which
-// will be configured for the FileBufferReadWrite
-// instance passed as input parameter 'fBufReadWrite'.
+// identifying the internal bufio.Reader and bufio.Writer
+// objects which will be configured for the
+// FileBufferReadWrite instance passed as input parameter
+// 'fBufReadWrite'.
 //
 // ----------------------------------------------------------------
 //
@@ -7411,13 +7412,13 @@ func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) flushWriteBuffer(
 //
 //	fBufReadWrite				*FileBufferReadWrite
 //
-//		A pointer to an instance of FileBufferWriter.
+//		A pointer to an instance of FileBufferReadWrite.
 //
-//		The internal FileBufferReader and
-//		FileBufferWriter objects encapsulated in this
-//		instance be deleted and reinitialized using the
-//		io.Reader and io.Writer objects passed as input
-//		parameters 'reader' and 'writer'.
+//		The internal bufio.Reader and bufio.Writer objects
+//		encapsulated in this instance will be deleted and
+//		reinitialized using the 'read' and 'write' files
+//		passed as input parameters 'readerFileMgr' and
+//		'writerFileMgr'.
 //
 //	fBufReadWriteLabel			string
 //
@@ -7456,17 +7457,17 @@ func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) flushWriteBuffer(
 //
 //		If this parameter is set to 'true', the target
 //		'read' file identified by input parameter
-//		'fileMgr' will be opened for 'read' and 'write'
-//		operations.
+//		'readerFileMgr' will be opened for 'read' and
+//		'write' operations.
 //
 //		If 'openFileReadWrite' is set to 'false', the
 //		target read file will be opened for 'read-only'
 //		operations.
 //
-//	readerBuffSize					int
+//	readerBuffSize				int
 //
 //		This integer value controls the size of the
-//		'read' buffer created for the io.Reader
+//		'read' buffer created for the bufio.Reader object
 //		associated with the file identified by
 //		'readerFileMgr'.
 //
@@ -7483,14 +7484,14 @@ func (fBufReadWriteMicrobot *fileBufferReadWriteMicrobot) flushWriteBuffer(
 //
 //		A pointer to an instance of FileMgr. The file
 //		identified by 'writerFileMgr' will be used as an
-//		output destination for 'write' operations performed by
-//		the instance of FileBufferReadWrite passed as
-//		input parameter 'fBufReadWrite'.
+//		output destination for 'write' operations
+//		performed by the instance of FileBufferReadWrite
+//		passed as input parameter 'fBufReadWrite'.
 //
 //		If the path and file name encapsulated by
-//		'fileMgr' do not currently exist on an attached
-//		storage drive, this method will attempt to create
-//		them.
+//		'writerFileMgr' do not currently exist on an
+//		attached storage drive, this method will attempt
+//		to create them.
 //
 //	writerFileMgrLabel			string
 //
@@ -8335,7 +8336,7 @@ type fileBufferReadWriteMolecule struct {
 // setFileMgrReader
 //
 // Receives an instance of File Manager (FileMgr) which
-// will be used to configure an io.Reader object
+// will be used to configure an bufio.Reader object
 // encapsulated by the FileBufferReadWrite instance
 // passed as input parameter 'fBufReadWrite'.
 //
@@ -8346,7 +8347,9 @@ type fileBufferReadWriteMolecule struct {
 //	This method will delete, overwrite and reconfigure
 //	the member variable io.Reader object encapsulated in
 //	the instance of FileBufferReadWrite passed as input
-//	parameter 'fBufReadWrite'.
+//	parameter 'fBufReadWrite':
+//
+//		fBufReadWrite.reader
 //
 // ----------------------------------------------------------------
 //
@@ -8354,9 +8357,9 @@ type fileBufferReadWriteMolecule struct {
 //
 //	fBufReadWrite				*FileBufferReadWrite
 //
-//		A pointer to an instance of FileBufferWriter.
+//		A pointer to an instance of FileBufferReadWrite.
 //
-//		The internal io.Reader object encapsulated in
+//		The internal bufio.Reader object encapsulated in
 //		this instance of FileBufferReadWrite will be
 //		deleted and reconfigured using the FileMgr
 //		instance passed as input parameter
@@ -8377,7 +8380,7 @@ type fileBufferReadWriteMolecule struct {
 //		A pointer to an instance of FileMgr. The file
 //		identified by 'readerFileMgr' will be used as a
 //		data source for 'read' operations and will be
-//		configured as an internal io.Reader for the
+//		configured as an internal bufio.Reader for the
 //		FileBufferReadWrite instance passed as input
 //		parameter 'fBufReadWrite'.
 //
@@ -8559,7 +8562,7 @@ func (fBuffReadWriteMolecule *fileBufferReadWriteMolecule) setFileMgrReader(
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter %v is invalid.\n"+
-			"%v failed the validity test.\n"+
+			"Reader FileMgr %v failed the validity test.\n"+
 			"Error=\n%v\n",
 			funcName,
 			readerFileMgrLabel,
