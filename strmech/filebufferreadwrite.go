@@ -4271,9 +4271,10 @@ func (fBufReadWrite *FileBufferReadWrite) SeekWriter(
 
 // SetFileMgrsReadWrite
 //
-// Receives two instances of FileMgr as input parameters
-// identifying the io.Reader and io.Writer objects which
-// will be configured for the current instance of
+// Receives two input parameters of type FileMgr. These
+// File Manager instances will be used to reconfigure the
+// internal bufio.Reader and bufio.Writer objects
+// encapsulated by the current instance of
 // FileBufferReadWrite.
 //
 // ----------------------------------------------------------------
