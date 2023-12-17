@@ -693,12 +693,12 @@ func (fIoReadWrite *FileIoReadWrite) IsValidInstanceError(
 
 // New
 //
-// This method returns an empty or 'blank' instance of
-// FileIoReadWrite. All the member variables in this
-// returned instance are initialized to their zero or
-// initial values. This means the returned instance is
-// invalid and unusable for standard 'read' and 'write'
-// operations.
+// This method returns a pointer to an empty or 'blank'
+// instance of FileIoReadWrite. All the member variables
+// in this returned instance are initialized to their
+// zero or initial values. This means the returned
+// instance is invalid and unusable for standard 'read'
+// and 'write' operations.
 //
 // This technique for creating a new working instance of
 // FileIoReadWrite requires two steps.
@@ -745,16 +745,16 @@ func (fIoReadWrite *FileIoReadWrite) New() *FileIoReadWrite {
 	return new(FileIoReadWrite)
 }
 
-// NewFileMgrs
+// NewFileMgrsReadWrite
 //
-// Creates and returns a new instance of
-// FileIoReadWrite.
+// Creates and returns a pointer to a new, fully
+// configured instance of FileIoReadWrite.
 //
 // The internal io.Reader and io.Writer member variables
 // for this new FileIoReadWrite instance are generated
-// from input parameters specifying a 'reader' and a
-// 'writer' extracted from File Manager instances
-// (FileMgr).
+// from input parameters specifying 'reader' and 'writer'
+// extracted files from extracted from input parameters
+// of type File Manager (FileMgr).
 //
 // ----------------------------------------------------------------
 //
@@ -1002,6 +1002,12 @@ func (fIoReadWrite *FileIoReadWrite) New() *FileIoReadWrite {
 //		FileInfoPlus in the source file,
 //		'fileinfoplus.go'.
 //
+//	newFileIoReadWrite			*FileIoReadWrite
+//
+//		If this method completes successfully, it will
+//		return a pointer to a fully configured instance
+//		of FileIoReadWrite.
+//
 //	err								error
 //
 //		If this method completes successfully, the
@@ -1014,7 +1020,7 @@ func (fIoReadWrite *FileIoReadWrite) New() *FileIoReadWrite {
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fIoReadWrite *FileIoReadWrite) NewFileMgrs(
+func (fIoReadWrite *FileIoReadWrite) NewFileMgrsReadWrite(
 	readerFileMgr *FileMgr,
 	readerFileMgrLabel string,
 	openReadFileReadWrite bool,
@@ -1027,7 +1033,7 @@ func (fIoReadWrite *FileIoReadWrite) NewFileMgrs(
 	errorPrefix interface{}) (
 	readerFileInfoPlus FileInfoPlus,
 	writerFileInfoPlus FileInfoPlus,
-	newFBuffReadWrite *FileIoReadWrite,
+	newFileIoReadWrite *FileIoReadWrite,
 	err error) {
 
 	if fIoReadWrite.lock == nil {
@@ -1038,20 +1044,22 @@ func (fIoReadWrite *FileIoReadWrite) NewFileMgrs(
 
 	defer fIoReadWrite.lock.Unlock()
 
+	newFileIoReadWrite = new(FileIoReadWrite)
+
 	var ePrefix *ePref.ErrPrefixDto
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"FileIoReadWrite."+
-			"NewFileMgrs()",
+			"NewFileMgrsReadWrite()",
 		"")
 
 	if err != nil {
 
 		return readerFileInfoPlus,
 			writerFileInfoPlus,
-			newFBuffReadWrite,
+			newFileIoReadWrite,
 			err
 	}
 
@@ -1059,7 +1067,7 @@ func (fIoReadWrite *FileIoReadWrite) NewFileMgrs(
 		writerFileInfoPlus,
 		err = new(fileIoReadWriteMicrobot).
 		setFileMgrsReadWrite(
-			newFBuffReadWrite,
+			newFileIoReadWrite,
 			"newFBuffReadWrite",
 			readerFileMgr,
 			readerFileMgrLabel,
@@ -1074,15 +1082,15 @@ func (fIoReadWrite *FileIoReadWrite) NewFileMgrs(
 
 	return readerFileInfoPlus,
 		writerFileInfoPlus,
-		newFBuffReadWrite,
+		newFileIoReadWrite,
 		err
 }
 
 // NewIoReadWrite
 //
-// Creates and returns a new, fully configured instance
-// of FileIoReadWrite using io.Reader and io.Writer
-// input parameters.
+// Creates and returns a pointer to a new, fully
+// configured instance of FileIoReadWrite using
+// io.Reader and io.Writer input parameters.
 //
 // ----------------------------------------------------------------
 //
@@ -1230,13 +1238,13 @@ func (fIoReadWrite *FileIoReadWrite) NewFileMgrs(
 //
 // # Return Values
 //
-//	FileIoReadWrite
+//	newFileIoReadWrite			*FileIoReadWrite
 //
 //		If this method completes successfully, it will
-//		return a fully configured instance of
-//		FileIoReadWrite.
+//		return a pointer to a fully configured instance
+//		of FileIoReadWrite.
 //
-//	error
+//	err							error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -1254,8 +1262,8 @@ func (fIoReadWrite *FileIoReadWrite) NewIoReadWrite(
 	writer io.Writer,
 	defaultWriterByteArraySize int,
 	errorPrefix interface{}) (
-	*FileIoReadWrite,
-	error) {
+	newFileIoReadWrite *FileIoReadWrite,
+	err error) {
 
 	if fIoReadWrite.lock == nil {
 		fIoReadWrite.lock = new(sync.Mutex)
@@ -1265,10 +1273,9 @@ func (fIoReadWrite *FileIoReadWrite) NewIoReadWrite(
 
 	defer fIoReadWrite.lock.Unlock()
 
-	var newFIoReadWrite = new(FileIoReadWrite)
+	newFileIoReadWrite = new(FileIoReadWrite)
 
 	var ePrefix *ePref.ErrPrefixDto
-	var err error
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -1278,13 +1285,13 @@ func (fIoReadWrite *FileIoReadWrite) NewIoReadWrite(
 		"")
 
 	if err != nil {
-		return newFIoReadWrite, err
+		return newFileIoReadWrite, err
 	}
 
 	err = new(fileIoReadWriteMolecule).
 		setIoReaderIoWriter(
-			newFIoReadWrite,
-			"newFIoReadWrite",
+			newFileIoReadWrite,
+			"newFileIoReadWrite",
 			reader,
 			"reader",
 			defaultReaderByteArraySize,
@@ -1293,7 +1300,325 @@ func (fIoReadWrite *FileIoReadWrite) NewIoReadWrite(
 			defaultWriterByteArraySize,
 			ePrefix)
 
-	return newFIoReadWrite, err
+	return newFileIoReadWrite, err
+}
+
+// NewPathFileNamesReadWrite
+//
+// Creates and returns a pointer to a new, fully
+// configured instance of FileIoReadWrite.
+//
+// The internal io.Reader and io.Writer member variables
+// for this new instance of FileIoReadWrite are generated
+// from input parameters specifying 'reader' and 'writer'
+// files extracted from path and file name strings.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	readerPathFileName				string
+//
+//		This string contains the path and file name of
+//		the file which will be configured as an io.Reader
+//		object encapsulated in the FileIoReadWrite
+//		instance returned by this method. As such, the
+//		file identified by 'readerPathFileName' will be
+//		used a data source for 'read' operations.
+//
+//		If this file does not currently exist on an
+//		attached storage drive, an error will be
+//		returned.
+//
+//	openReadFileReadWrite			bool
+//
+//		If this parameter is set to 'true', the target
+//		'read' file identified from input parameter
+//		'readerPathFileName' will be opened for both
+//		'read' and 'write' operations.
+//
+//		If 'openReadFileReadWrite' is set to 'false', the
+//		target 'read' file will be opened for 'read-only'
+//		operations.
+//
+//	defaultReaderByteArraySize		int
+//
+//		The default size of the byte array which will be
+//	 	used to read data from the internal io.Reader
+//	 	object encapsulated by the FileIoReadWrite
+//	 	instance returned by this method.
+//
+//		If the value of 'defaultReaderByteArraySize' is
+//		less than '16', it will be reset to a size of
+//		'4096'.
+//
+//	writerPathFileName				string
+//
+//		This string contains the path and file name of
+//		the target 'write' file which will be used as
+//		a data destination for 'write' operations.
+//
+//		If the target path and file do not currently
+//		exist on an attached storage drive, this method
+//		will attempt to create them.
+//
+//	openWriteFileReadWrite			bool
+//
+//		If this parameter is set to 'true', the target
+//		'write' file identified by input parameter
+//		'writerPathFileName' will be opened for 'read'
+//		and 'write' operations.
+//
+//		If 'openWriteFileReadWrite' is set to 'false',
+//		the target write file will be opened for
+//		'write-only' operations.
+//
+//	defaultWriterByteArraySize		int
+//
+//		The size of the byte array which will be used to
+//		write data to the internal io.Writer object
+//		encapsulated by the FileIoReadWrite instance
+//		returned by this method.
+//
+//		If the value of 'defaultByteArraySize' is
+//		less than one ('1'), it will be reset to a size
+//		of '4096'.
+//
+//	truncateExistingWriteFile		bool
+//
+//		If this parameter is set to 'true', the target
+//		'write' file ('writerPathFileName') will be
+//		opened for write operations. If the target write
+//		file previously existed, it will be truncated.
+//		This means that the file's previous contents will
+//		be deleted.
+//
+//		If this parameter is set to 'false', the target
+//		'write' file will be opened for write operations.
+//		If the target 'write' file previously existed,
+//		the new text written to this file will be appended
+//		to the end of the previous file contents.
+//
+//	errorPrefix						interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	readerFileInfoPlus				FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter
+//		'readerPathFileName'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	writerFileInfoPlus				FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter
+//		'writerPathFileName'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//
+//	newFileIoReadWrite				*FileIoReadWrite
+//
+//		If this method completes successfully, it will
+//		return a pointer to a fully configured instance
+//		of FileIoReadWrite.
+//
+//	err								error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fIoReadWrite *FileIoReadWrite) NewPathFileNamesReadWrite(
+	readerPathFileName string,
+	openReadFileReadWrite bool,
+	defaultReaderByteArraySize int,
+	writerPathFileName string,
+	openWriteFileReadWrite bool,
+	defaultWriterByteArraySize int,
+	truncateExistingWriteFile bool,
+	errorPrefix interface{}) (
+	readerFileInfoPlus FileInfoPlus,
+	writerFileInfoPlus FileInfoPlus,
+	newFileIoReadWrite *FileIoReadWrite,
+	err error) {
+
+	if fIoReadWrite.lock == nil {
+		fIoReadWrite.lock = new(sync.Mutex)
+	}
+
+	fIoReadWrite.lock.Lock()
+
+	defer fIoReadWrite.lock.Unlock()
+
+	newFileIoReadWrite = new(FileIoReadWrite)
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileIoReadWrite."+
+			"NewPathFileNamesReadWrite()",
+		"")
+
+	if err != nil {
+
+		return readerFileInfoPlus,
+			writerFileInfoPlus,
+			newFileIoReadWrite,
+			err
+	}
+
+	readerFileInfoPlus,
+		writerFileInfoPlus,
+		err = new(fileIoReadWriteNanobot).
+		setPathFileNamesReadWrite(
+			newFileIoReadWrite,
+			"newFileIoReadWrite",
+			readerPathFileName,
+			"readerPathFileName",
+			openReadFileReadWrite,
+			defaultReaderByteArraySize,
+			writerPathFileName,
+			"writerPathFileName",
+			openWriteFileReadWrite,
+			defaultWriterByteArraySize,
+			truncateExistingWriteFile,
+			ePrefix)
+
+	return readerFileInfoPlus,
+		writerFileInfoPlus,
+		newFileIoReadWrite,
+		err
 }
 
 type fileIoReadWriteMicrobot struct {
@@ -2470,10 +2795,10 @@ func (fIoReadWriteNanobot *fileIoReadWriteNanobot) setFileMgrWriter(
 //
 //	defaultReaderByteArraySize		int
 //
-//		The size of the byte array which will be used to
-//		read data from the internal io.Reader object
-//		encapsulated by the FileIoReadWrite instance
-//		passed as input parameter 'fIoReadWrite'.
+//		The default size of the byte array which will be
+//		used to read data from the internal io.Reader
+//		object encapsulated by the FileIoReadWrite
+//		instance passed as input parameter 'fIoReadWrite'.
 //
 //		If the value of 'defaultReaderByteArraySize' is
 //		less than '16', it will be reset to a size of
@@ -2512,10 +2837,10 @@ func (fIoReadWriteNanobot *fileIoReadWriteNanobot) setFileMgrWriter(
 //
 //	defaultWriterByteArraySize		int
 //
-//		The size of the byte array which will be used to
-//		write data to the internal io.Writer object
-//		encapsulated by FileIoWriter input parameter
-//		'fIoWriter'.
+//		The default size of the byte array which will be
+//		used to write data to the internal io.Writer
+//		object encapsulated by FileIoWriter input
+//		parameter 'fIoWriter'.
 //
 //		If the value of 'defaultByteArraySize' is
 //		less than one ('1'), it will be reset to a size

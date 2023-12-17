@@ -67,8 +67,8 @@ import (
 //		and	the bufio.Writer simultaneously:
 //
 //		FileBufferReadWrite.NewIoReadWrite()
-//		FileBufferReadWrite.NewFileMgrs()
-//		FileBufferReadWrite.NewPathFileNames()
+//		FileBufferReadWrite.NewFileMgrsReadWrite()
+//		FileBufferReadWrite.NewPathFileNamesReadWrite()
 //
 //		Option-2
 //
@@ -994,12 +994,12 @@ func (fBufReadWrite *FileBufferReadWrite) IsValidInstanceError(
 
 // New
 //
-// This method returns an empty or 'blank' instance of
-// FileBufferReadWrite. All the member variables in this
-// returned instance are initialized to their zero or
-// initial values. This means the returned instance is
-// invalid and unusable for standard 'read' and 'write'
-// operations.
+// This method returns a pointer to an empty or 'blank'
+// instance of FileBufferReadWrite. All the member
+// variables in this returned instance are initialized to
+// their zero or initial values. This means the returned
+// instance is invalid and unusable for standard 'read'
+// and 'write' operations.
 //
 // This technique for creating a new working instance of
 // FileBufferReadWrite requires two steps.
@@ -1262,16 +1262,16 @@ func (fBufReadWrite *FileBufferReadWrite) NewIoReadWrite(
 	return newFBuffReadWrite, err
 }
 
-// NewFileMgrs
+// NewFileMgrsReadWrite
 //
-// Creates and returns a new instance of
-// FileBufferReadWrite.
+// Creates and returns a pointer to a new, fully
+// configured instance of FileBufferReadWrite.
 //
-// The internal io.Reader and io.Writer member variables
-// for this new instance of FileBufferReadWrite are
-// generated from input parameters specifying a 'reader'
-// and a 'writer' extracted from File Manager instances
-// (FileMgr).
+// The internal bufio.Reader and bufio.Writer member
+// variables for this new instance of FileBufferReadWrite
+// are generated from input parameters specifying
+// 'reader' and 'writer' files extracted from input
+// parameters of type File Manager (FileMgr).
 //
 // ----------------------------------------------------------------
 //
@@ -1527,7 +1527,7 @@ func (fBufReadWrite *FileBufferReadWrite) NewIoReadWrite(
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fBufReadWrite *FileBufferReadWrite) NewFileMgrs(
+func (fBufReadWrite *FileBufferReadWrite) NewFileMgrsReadWrite(
 	readerFileMgr *FileMgr,
 	openReadFileReadWrite bool,
 	readerBuffSize int,
@@ -1552,7 +1552,7 @@ func (fBufReadWrite *FileBufferReadWrite) NewFileMgrs(
 	var ePrefix *ePref.ErrPrefixDto
 
 	funcName := "FileBufferReadWrite." +
-		"NewFileMgrs()"
+		"NewFileMgrsReadWrite()"
 
 	newFBuffReadWrite = new(FileBufferReadWrite)
 
@@ -1593,16 +1593,16 @@ func (fBufReadWrite *FileBufferReadWrite) NewFileMgrs(
 		err
 }
 
-// NewPathFileNames
+// NewPathFileNamesReadWrite
 //
-// Creates and returns a new instance of
-// FileBufferReadWrite.
+// Creates and returns a pointer to a new, fully
+// configured instance of FileBufferReadWrite.
 //
-// The internal io.Reader and io.Writer member variables
-// for this new instance of FileBufferReadWrite are
-// generated from input parameters specifying 'reader'
-// and 'writer' files extracted from path and file name
-// strings.
+// The internal bufio.Reader and bufio.Writer member
+// variables for this new instance of FileBufferReadWrite
+// are generated from input parameters specifying
+// 'reader' and 'writer' files extracted from path and
+// file name strings.
 //
 // ----------------------------------------------------------------
 //
@@ -1858,7 +1858,7 @@ func (fBufReadWrite *FileBufferReadWrite) NewFileMgrs(
 //	 	text passed by input parameter, 'errorPrefix'.
 //	 	The 'errorPrefix' text will be prefixed or
 //	 	attached to the	beginning of the error message.
-func (fBufReadWrite *FileBufferReadWrite) NewPathFileNames(
+func (fBufReadWrite *FileBufferReadWrite) NewPathFileNamesReadWrite(
 	readerPathFileName string,
 	openReadFileReadWrite bool,
 	readerBuffSize int,
@@ -1885,7 +1885,7 @@ func (fBufReadWrite *FileBufferReadWrite) NewPathFileNames(
 	newFBuffReadWrite = new(FileBufferReadWrite)
 
 	funcName := "FileBufferReadWrite." +
-		"NewPathFileNames()"
+		"NewPathFileNamesReadWrite()"
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
@@ -8336,7 +8336,7 @@ type fileBufferReadWriteMolecule struct {
 // setFileMgrReader
 //
 // Receives an instance of File Manager (FileMgr) which
-// will be used to configure an bufio.Reader object
+// will be used to configure a bufio.Reader object
 // encapsulated by the FileBufferReadWrite instance
 // passed as input parameter 'fBufReadWrite'.
 //

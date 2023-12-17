@@ -1141,7 +1141,7 @@ func TestFileBufferWriter_Write_003300(t *testing.T) {
 		_,
 		newFBuffReadWrite,
 		err = new(FileBufferReadWrite).
-		NewPathFileNames(
+		NewPathFileNamesReadWrite(
 			targetReadFile,
 			false,
 			512,

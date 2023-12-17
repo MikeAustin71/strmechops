@@ -478,7 +478,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite01() {
 		writerFileInfoPlus,
 		newFBuffReadWrite,
 		err = new(strmech.FileBufferReadWrite).
-		NewPathFileNames(
+		NewPathFileNamesReadWrite(
 			targetReadFile,
 			false, // openReadFileReadWrite,
 			512,   // readerBuffSize
@@ -495,7 +495,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite01() {
 	}
 
 	fmt.Printf("\nNew File Stats\n"+
-		"FileBufferReadWrite.NewPathFileNames()\n"+
+		"FileBufferReadWrite.NewPathFileNamesReadWrite()\n"+
 		"Reader File Size= %v\n"+
 		"Writer File Size= %v\n"+
 		" Target Read File: %v\n"+
@@ -690,7 +690,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02() {
 		writerFileInfoPlus,
 		newFBuffReadWrite,
 		err = new(strmech.FileBufferReadWrite).
-		NewPathFileNames(
+		NewPathFileNamesReadWrite(
 			targetReadFile,
 			false, // openReadFileReadWrite,
 			512,   // readerBuffSize
@@ -706,7 +706,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02() {
 		return
 	}
 
-	fmt.Printf("\nStats From NewPathFileNames\n"+
+	fmt.Printf("\nStats From NewPathFileNamesReadWrite\n"+
 		"Reader File Size: %v\n"+
 		"Writer File Size: %v\n\n",
 		readerFileInfoPlus.Size(),
@@ -863,7 +863,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02B() {
 		writerFileInfoPlus,
 		newFBuffReadWrite,
 		err = new(strmech.FileBufferReadWrite).
-		NewPathFileNames(
+		NewPathFileNamesReadWrite(
 			targetReadFile,
 			false, // openReadFileReadWrite,
 			512,   // readerBuffSize
@@ -880,7 +880,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02B() {
 	}
 
 	fmt.Printf("\nNew File Stats\n"+
-		"FileBufferReadWrite.NewPathFileNames()\n"+
+		"FileBufferReadWrite.NewPathFileNamesReadWrite()\n"+
 		"Reader File Size= %v\n"+
 		"Writer File Size= %v\n"+
 		" Target Read File: %v\n"+
@@ -1128,7 +1128,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 		writerFileInfoPlus,
 		newFBuffReadWrite,
 		err = new(strmech.FileBufferReadWrite).
-		NewPathFileNames(
+		NewPathFileNamesReadWrite(
 			targetReadFile,
 			false, // openReadFileReadWrite,
 			512,   // readerBuffSize
@@ -1147,7 +1147,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 	fmt.Printf("\n %v\n"+
 		"%v\n"+
 		" New File Stats\n"+
-		" FileBufferReadWrite.NewPathFileNames()\n"+
+		" FileBufferReadWrite.NewPathFileNamesReadWrite()\n"+
 		" Reader File Size= %v\n"+
 		" Writer File Size= %v\n"+
 		"  Target Read File: %v\n"+
