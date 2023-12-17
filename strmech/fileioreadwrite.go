@@ -795,6 +795,11 @@ func (fIoReadWrite *FileIoReadWrite) New() *FileIoReadWrite {
 //		less than '16', it will be reset to a size of
 //		'4096'.
 //
+//		Although the FileIoReadWrite type does not use
+//		the 'buffered' read protocol, the size of the
+//		byte array used to store bytes read from the
+//		underlying io.Reader object is variable.
+//
 //	writerFileMgr					*FileMgr
 //
 //		A pointer to an instance of FileMgr. The file
@@ -829,6 +834,11 @@ func (fIoReadWrite *FileIoReadWrite) New() *FileIoReadWrite {
 //		If the value of 'defaultWriterByteArraySize' is
 //		less than one ('1'), it will be reset to a size
 //		of '4096'.
+//
+//		Although the FileIoReadWrite type does not use
+//		the 'buffered' write protocol, the size of the
+//		byte array used to store bytes written to the
+//		underlying io.Writer object is variable.
 //
 //	truncateExistingWriteFile		bool
 //
@@ -1089,7 +1099,7 @@ func (fIoReadWrite *FileIoReadWrite) NewFileMgrsReadWrite(
 //		performing any other required clean-up operations
 //		in addition to calling local method:
 //
-//		FileIoReadWrite.CloseAndRelease()
+//		FileIoReadWrite.Close()
 //
 //		While the 'read' services provided by
 //		FileIoReadWrite are primarily designed to
@@ -1129,7 +1139,7 @@ func (fIoReadWrite *FileIoReadWrite) NewFileMgrsReadWrite(
 //		performing any other required clean-up operations
 //		in addition to calling local method:
 //
-//		FileIoReadWrite.Close()
+//			FileIoReadWrite.Close()
 //
 //		While the 'write' services provided by the
 //		FileIoReadWrite are primarily designed for
@@ -1150,8 +1160,8 @@ func (fIoReadWrite *FileIoReadWrite) NewFileMgrsReadWrite(
 //
 //		Although the FileIoReadWrite type does not use
 //		the 'buffered' write protocol, the size of the
-//		byte array used to write bytes to the underlying
-//		io.Writer object is variable.
+//		byte array used to store bytes written to the
+//		underlying io.Writer object is variable.
 //
 //	errorPrefix						interface{}
 //
@@ -1330,6 +1340,11 @@ func (fIoReadWrite *FileIoReadWrite) NewIoReadWrite(
 //		less than '16', it will be reset to a size of
 //		'4096'.
 //
+//		Although the FileIoReadWrite type does not use
+//		the 'buffered' read protocol, the size of the
+//		byte array used to store bytes read from the
+//		underlying io.Reader object is variable.
+//
 //	writerPathFileName				string
 //
 //		This string contains the path and file name of
@@ -1361,6 +1376,11 @@ func (fIoReadWrite *FileIoReadWrite) NewIoReadWrite(
 //		If the value of 'defaultByteArraySize' is
 //		less than one ('1'), it will be reset to a size
 //		of '4096'.
+//
+//		Although the FileIoReadWrite type does not use
+//		the 'buffered' write protocol, the size of the
+//		byte array used to store bytes written to the
+//		underlying io.Writer object is variable.
 //
 //	truncateExistingWriteFile		bool
 //
@@ -1653,6 +1673,11 @@ func (fIoReadWrite *FileIoReadWrite) NewPathFileNamesReadWrite(
 //		less than '16', it will be reset to a size of
 //		'4096'.
 //
+//		Although the FileIoReadWrite type does not use
+//		the 'buffered' read protocol, the size of the
+//		byte array used to store bytes read from the
+//		underlying io.Writer object is variable.
+//
 //	writerFileMgr					*FileMgr
 //
 //		A pointer to an instance of FileMgr. The file
@@ -1687,6 +1712,11 @@ func (fIoReadWrite *FileIoReadWrite) NewPathFileNamesReadWrite(
 //		If the value of 'defaultWriterByteArraySize' is
 //		less than one ('1'), it will be reset to a size
 //		of '4096'.
+//
+//		Although the FileIoReadWrite type does not use
+//		the 'buffered' write protocol, the size of the
+//		byte array used to store bytes written to the
+//		underlying io.Writer object is variable.
 //
 //	truncateExistingWriteFile		bool
 //
@@ -1909,6 +1939,226 @@ func (fIoReadWrite *FileIoReadWrite) SetFileMgrsReadWrite(
 	return readerFileInfoPlus,
 		writerFileInfoPlus,
 		err
+}
+
+// SetIoReadWrite
+//
+// Receives two input parameters of type io.Reader
+// ('reader') and io.Writer ('writer'). These input
+// parameters will be used to reconfigure the internal
+// io.Reader and io.Writer objects encapsulated by the
+// current instance of FileIoReadWrite.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reset all
+//	pre-existing data values in the current instance of
+//	FileIoReadWrite.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	reader							io.Reader
+//
+//		An object which implements io.Reader interface.
+//
+//		This object may be a file pointer of type *os.File.
+//		File pointers of this type implement the io.Reader
+//		interface.
+//
+//		A file pointer (*os.File) will facilitate reading
+//		data from files residing on an attached storage
+//		drive. However, with this configuration, the user
+//		is responsible for manually closing the file and
+//		performing any other required clean-up operations
+//		in addition to calling local method:
+//
+//		FileIoReadWrite.Close()
+//
+//		While the 'read' services provided by
+//		FileIoReadWrite are primarily designed to
+//		read data from disk files, this type of 'reader'
+//		will in fact read data from any object
+//		implementing the io.Reader interface.
+//
+//	defaultReaderByteArraySize		int
+//
+//		The size of the byte array which will be used to
+//		read data from the internal io.Reader object
+//		encapsulated by the current instance of
+//		FileIoReadWrite.
+//
+//		If the value of 'defaultReaderByteArraySize' is
+//		less than '16', it will be reset to a size of
+//		'4096'.
+//
+//		Although the FileIoReadWrite type does not use
+//		the 'buffered' read protocol, the size of the
+//		byte array used to store bytes read from the
+//		underlying io.Reader object is variable.
+//
+//	writer							io.Writer
+//
+//		This parameter will accept any object
+//		implementing the io.Writer interface.
+//
+//		This object may be a file pointer of type *os.File.
+//		File pointers of this type implement the io.Writer
+//		interface.
+//
+//		A file pointer (*os.File) will facilitate writing
+//		data to files residing on an attached storage
+//		drive. However, with this configuration, the user
+//		is responsible for manually closing the file and
+//		performing any other required clean-up operations
+//		in addition to calling local method:
+//
+//		FileIoReadWrite.Close()
+//
+//		While the 'write' services provided by the
+//		FileIoReadWrite are primarily designed for
+//		writing data to disk files, this type of 'writer'
+//		will in fact write data to any object
+//		implementing the io.Writer interface.
+//
+//	defaultWriterByteArraySize		int
+//
+//		The size of the byte array which will be used to
+//		write data to the internal io.Writer object
+//		encapsulated by the returned FileIoReadWrite
+//		instance.
+//
+//		If the value of 'defaultWriterByteArraySize' is
+//		less than one ('1'), it will be reset to a size
+//		of '4096'.
+//
+//		Although the FileIoReadWrite type does not use
+//		the 'buffered' write protocol, the size of the
+//		byte array used to write bytes to the underlying
+//		io.Writer object is variable.
+//
+//	errorPrefix						interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fIoReadWrite *FileIoReadWrite) SetIoReadWrite(
+	reader io.Reader,
+	defaultReaderByteArraySize int,
+	writer io.Writer,
+	defaultWriterByteArraySize int,
+	errorPrefix interface{}) (
+	err error) {
+
+	if fIoReadWrite.lock == nil {
+		fIoReadWrite.lock = new(sync.Mutex)
+	}
+
+	fIoReadWrite.lock.Lock()
+
+	defer fIoReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileIoReadWrite."+
+			"SetIoReadWrite()",
+		"")
+
+	if err != nil {
+
+		return err
+
+	}
+
+	err = new(fileIoReadWriteMolecule).
+		setIoReaderIoWriter(
+			fIoReadWrite,
+			"fIoReadWrite",
+			reader,
+			"reader",
+			defaultReaderByteArraySize,
+			writer,
+			"writer",
+			defaultWriterByteArraySize,
+			ePrefix)
+
+	return err
 }
 
 type fileIoReadWriteMicrobot struct {
