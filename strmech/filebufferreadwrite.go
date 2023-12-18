@@ -5945,10 +5945,13 @@ func (fBufReadWrite *FileBufferReadWrite) SetPathFileNamesReadWrite(
 //
 // Receives an input parameter string specifying the path
 // and file name identifying the file which will be
-// configured as a data source for 'read' operations.
-// This file will be configured as an internal io.Reader
-// object for the current instance of
+// configured as a data source for 'read' operations
+// performed by the current instance of
 // FileBufferReadWrite.
+//
+// This 'read' file will be configured as an internal
+// io.Reader object encapsulated in the current instance
+// of FileBufferReadWrite.
 //
 // ----------------------------------------------------------------
 //
