@@ -6170,17 +6170,16 @@ func (fBufReadWrite *FileBufferReadWrite) SetPathFileNameReader(
 // and file name identifying the file which will be
 // configured as an output destination for 'write'
 // operations. This file will be configured as an
-// internal io.Writer object for the FileBufferReadWrite
-// instance passed as input parameter 'fBufReadWrite'.
+// internal bufio.Writer object for the current instance
+// of FileBufferReadWrite.
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
 //	This method will delete, overwrite and reconfigure
-//	the member variable io.Writer object encapsulated in
-//	the instance of FileBufferReadWrite passed as input
-//	parameter 'fBufReadWrite'.
+//	the member variable bufio.Writer object encapsulated
+//	in	the current instance of FileBufferReadWrite.
 //
 // ----------------------------------------------------------------
 //
