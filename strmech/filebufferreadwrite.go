@@ -5278,8 +5278,8 @@ func (fBufReadWrite *FileBufferReadWrite) SetIoReadWrite(
 // SetIoReader
 //
 // This method will close, delete and reconfigure the
-// internal io.Reader object encapsulated in the current
-// instance of FileBufferReadWrite. The internal
+// internal bufio.Reader object encapsulated in the
+// current instance of FileBufferReadWrite. The internal
 // io.Reader object is used to 'read' data from a data
 // source such as a disk file.
 //
