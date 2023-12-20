@@ -4812,22 +4812,22 @@ func (fBufReadWrite *FileBufferReadWrite) SetFileMgrReader(
 // SetFileMgrWriter
 //
 // This method will close, delete and reconfigure the
-// internal io.Writer object encapsulated in the current
-// instance of FileBufferReadWrite. The internal
-// io.Writer object is used to 'write' to an output data
-// destination such as a disk file.
+// internal bufio.Writer object encapsulated in the
+// current instance of FileBufferReadWrite. This internal
+// bufio.Writer object will be reconfigured using the
+// file identified by a File Manager instance passed as
+// input parameter 'writerFileMgr'.
 //
-// This internal io.Writer object will be reconfigured
-// using the file identified by a File Manager instance
-// passed as input parameter 'writerFileMgr'.
+// The internal bufio.Writer object is used to 'write'
+// data to an output destination such as a disk file.
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
 //	This method will delete, overwrite and reconfigure
-//	the member variable io.Writer object encapsulated in
-//	the current instance of FileBufferReadWrite.
+//	the member variable bufio.Writer object encapsulated
+//	in the current instance of FileBufferReadWrite.
 //
 // ----------------------------------------------------------------
 //

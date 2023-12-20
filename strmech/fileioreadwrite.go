@@ -2138,7 +2138,7 @@ func (fIoReadWrite *FileIoReadWrite) SetFileMgrReader(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"FileIoReadWrite."+
-			"SetFileMgrsReadWrite()",
+			"SetFileMgrReader()",
 		"")
 
 	if err != nil {
@@ -2158,6 +2158,243 @@ func (fIoReadWrite *FileIoReadWrite) SetFileMgrReader(
 			ePrefix)
 
 	return readerFileInfoPlus, err
+}
+
+// SetFileMgrWriter
+//
+// This method will close, delete and reconfigure the
+// internal io.Writer object encapsulated in the current
+// instance of FileIoReadWrite. This internal io.Writer
+// object will be reconfigured using the file identified
+// by a File Manager instance passed as input parameter
+// 'writerFileMgr'.
+//
+// The internal io.Writer object is used to 'write' data
+// to an output destination such as a disk file.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	This method will delete, overwrite and reconfigure
+//	the member variable io.Writer object encapsulated
+//	in the current instance of FileIoReadWrite.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	writerFileMgr					*FileMgr
+//
+//		A pointer to an instance of FileMgr. The file
+//		identified by 'writerFileMgr' will be used as an
+//		output destination for all future 'write'
+//		operations performed by the current instance of
+//		FileIoReadWrite.
+//
+//		If the path and file name encapsulated by
+//		'writerFileMgr' do not currently exist on an
+//		attached storage drive, this method will attempt
+//		to create them.
+//
+//	openWriteFileReadWrite			bool
+//
+//		If this parameter is set to 'true', the target
+//		'write' file identified by input parameter
+//		'writerFileMgr' will be opened for 'read'
+//		and 'write' operations.
+//
+//		If 'openWriteFileReadWrite' is set to 'false',
+//		the target write file will be opened for
+//		'write-only' operations.
+//
+//	defaultWriterByteArraySize		int
+//
+//		The size of the default byte array which will
+//		be used to write data to the internal io.Writer
+//		object encapsulated by the current instance of
+//		FileIoReadWrite.
+//
+//		If the value of 'defaultWriterByteArraySize' is
+//		less than one ('1'), it will be reset to a size
+//		of '4096'.
+//
+//		Although the FileIoReadWrite type does not use
+//		the 'buffered' write protocol, the size of the
+//		byte array used to store bytes written to the
+//		underlying io.Writer object is variable.
+//
+//	truncateExistingWriteFile		bool
+//
+//		If this parameter is set to 'true', the target
+//		'write' file ('writerFileMgr') will be opened for
+//		'write' operations. If the target 'write' file
+//		previously existed, it will be truncated. This
+//		means that the file's previous contents will be
+//		deleted.
+//
+//		If this parameter is set to 'false', the target
+//		'write' file will be opened for write operations.
+//		If the target 'write' file previously existed,
+//		the new text written to this file will be appended
+//		to the end of the previous file contents.
+//
+//	errorPrefix						interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	writerFileInfoPlus				FileInfoPlus
+//
+//		This returned instance of Type FileInfoPlus
+//		contains data elements describing the file
+//		identified by input parameter 'writerFileMgr'.
+//
+//		Type FileInfoPlus conforms to the os.FileInfo
+//		interface. This structure will store os.FileInfo
+//	 	information plus additional information related
+//	 	to a file or directory.
+//
+//		type os.FileInfo interface {
+//
+//				Name() string
+//					base name of the file
+//
+//				Size() int64
+//					length in bytes for regular files;
+//					system-dependent for others
+//
+//				Mode() FileMode
+//					file mode bits
+//
+//				ModTime() time.Time
+//					modification time
+//
+//				IsDir() bool
+//					abbreviation for Mode().IsDir()
+//
+//				Sys() any
+//					underlying data source (can return nil)
+//		}
+//
+//		See the detailed documentation for Type
+//		FileInfoPlus in the source file,
+//		'fileinfoplus.go'.
+//
+//	err								error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fIoReadWrite *FileIoReadWrite) SetFileMgrWriter(
+	writerFileMgr *FileMgr,
+	openWriteFileReadWrite bool,
+	defaultWriterByteArraySize int,
+	truncateExistingWriteFile bool,
+	errorPrefix interface{}) (
+	writerFileInfoPlus FileInfoPlus,
+	err error) {
+
+	if fIoReadWrite.lock == nil {
+		fIoReadWrite.lock = new(sync.Mutex)
+	}
+
+	fIoReadWrite.lock.Lock()
+
+	defer fIoReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileIoReadWrite."+
+			"SetFileMgrWriter()",
+		"")
+
+	if err != nil {
+
+		return writerFileInfoPlus, err
+	}
+
+	writerFileInfoPlus,
+		err = new(fileIoReadWriteNanobot).
+		setFileMgrWriter(
+			fIoReadWrite,
+			"fIoReadWrite",
+			writerFileMgr,
+			"writerFileMgr",
+			openWriteFileReadWrite,
+			defaultWriterByteArraySize,
+			truncateExistingWriteFile,
+			ePrefix)
+
+	return writerFileInfoPlus, err
 }
 
 // SetIoReadWrite
