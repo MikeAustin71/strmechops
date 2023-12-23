@@ -2710,17 +2710,21 @@ func (fIoWriter *FileIoWriter) WriteAt(
 
 	var offsetFromFileStart int64
 
-	offsetFromFileStart,
-		err = new(fileIoWriterMicrobot).
-		seekByOffset(
-			fIoWriter,
-			"fIoWriter",
-			targetOffset,
-			io.SeekStart,
-			ePrefix)
+	if targetOffset > 0 {
 
-	if err != nil {
-		return numBytesWritten, err
+		offsetFromFileStart,
+			err = new(fileIoWriterMicrobot).
+			seekByOffset(
+				fIoWriter,
+				"fIoWriter",
+				targetOffset,
+				io.SeekStart,
+				ePrefix)
+
+		if err != nil {
+			return numBytesWritten, err
+		}
+
 	}
 
 	if targetOffset != offsetFromFileStart {
