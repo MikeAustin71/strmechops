@@ -5050,20 +5050,29 @@ func (fBufReadWrite *FileBufferReadWrite) SetFileMgrWriter(
 // SetIoReadWrite
 //
 // This method will close, delete and reconfigure the
-// internal io.Reader and io.Writer objects encapsulated
-// in the current instance of FileBufferReadWrite. The
-// internal io.Reader object is used to 'read' data from
-// a data source such as a disk file. In contrast, the
-// io.Writer object is used to 'write' data to an output
-// destination such as a disk file.
+// internal bufio.Reader and bufio.Writer objects
+// encapsulated in the current instance of
+// FileBufferReadWrite.
+//
+// The internal bufio.Reader object is used to 'read'
+// data from a data source such as a disk file. This
+// internal bufio.Reader object will be reconfigured
+// using the io.Reader object passed as input parameter
+// 'reader'.
+//
+// In contrast, the internal bufio.Writer object is used
+// to 'write' data to an output destination such as a
+// disk file. This internal bufio.Writer object will be
+// reconfigured using the io.Writer object passed as
+// input parameter 'writer'.
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
 //	This method will delete, overwrite and reset all
-//	pre-existing data values in the current instance
-//	of FileBufferReadWrite.
+//	pre-existing member data values in the current
+//	instance of FileBufferReadWrite.
 //
 // ----------------------------------------------------------------
 //
@@ -5280,15 +5289,19 @@ func (fBufReadWrite *FileBufferReadWrite) SetIoReadWrite(
 // This method will close, delete and reconfigure the
 // internal bufio.Reader object encapsulated in the
 // current instance of FileBufferReadWrite. The internal
-// io.Reader object is used to 'read' data from a data
-// source such as a disk file.
+// bufio.Reader object will be reconfigured using the
+// io.Reader object passed as input parameter 'reader'.
+//
+// The internal bufio.Reader object, encapsulated in the
+// current instance of FileBufferReadWrite, is used to
+// 'read' data from a data source such as a disk file.
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
 //	This method will delete, overwrite and reconfigure
-//	the member variable io.Reader object encapsulated in
+//	the internal bufio.Reader object encapsulated in
 //	the current instance of FileBufferReadWrite.
 //
 // ----------------------------------------------------------------
@@ -5448,18 +5461,23 @@ func (fBufReadWrite *FileBufferReadWrite) SetIoReader(
 // SetIoWriter
 //
 // This method will close, delete and reconfigure the
-// internal io.Writer object encapsulated in the current
-// instance of FileBufferReadWrite. The internal
-// io.Writer object is used to 'write' data to an output
-// destination such as a disk file.
+// internal bufio.Writer object encapsulated in the
+// current instance of FileBufferReadWrite. The internal
+// bufio.Writer object will be reconfigured using the
+// io.Writer object passed as input parameter 'writer'.
+//
+// The internal bufio.Writer object, encapsulated in the
+// current instance of FileBufferReadWrite, is used to
+// 'write' data to an output destination such as a disk
+// file.
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
 //	This method will delete, overwrite and reconfigure
-//	the member variable io.Writer object encapsulated in
-//	the current instance of FileBufferReadWrite.
+//	the internal bufio.Writer object encapsulated in the
+//	current instance of FileBufferReadWrite.
 //
 // ----------------------------------------------------------------
 //
