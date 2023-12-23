@@ -1527,9 +1527,12 @@ func (fIoWriter *FileIoWriter) ReadFrom(
 //
 // This method sets the offset for the next 'write'
 // operation within the 'write' file. This method only
-// succeeds if the current FileIoWriter instance
-// was created as a file with a path and file name string
-// or a File Manager object (FileMgr).
+// succeeds if the io.Writer object encapsulated in the
+// current instance of FileIoWriter was configured with
+// an internal io.Writer object which supports the
+// io.Seeker interface. A typical example of an io.Writer
+// object which supports the io.Seeker interface is a
+// disk file.
 //
 // This target offset is interpreted according to input
 // parameter 'whence'.
@@ -1559,7 +1562,7 @@ func (fIoWriter *FileIoWriter) ReadFrom(
 // Seek returns the new offset relative to the start of the
 // file or an error, if any.
 //
-// Seek implements the 'io.Seeker' interface.
+// This method implements the 'io.Seeker' interface.
 //
 // ----------------------------------------------------------------
 //
@@ -1583,7 +1586,7 @@ func (fIoWriter *FileIoWriter) ReadFrom(
 //			offset = -2 specifies the penultimate byte of
 //			the file).
 //
-//	(3) Seek implements the 'io.Seeker' interface.
+//	(3) This method implements the 'io.Seeker' interface.
 //
 // ----------------------------------------------------------------
 //
@@ -1664,85 +1667,14 @@ func (fIoWriter *FileIoWriter) Seek(
 		return offsetFromFileStart, err
 	}
 
-	if fIoWriter.ioWriter == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: This instance of 'FileIoWriter' is invalid!\n"+
-			"The internal io.Writer object has NOT been initialized.\n"+
-			"Call one of the 'New' or 'Setter' methods to create a\n"+
-			"valid instance of 'FileIoWriter'\n",
-			ePrefix.String())
-
-		return offsetFromFileStart, err
-	}
-
-	var ok bool
-	var seekerObj io.Seeker
-	var localWriter io.Writer
-	localWriter = *fIoWriter.ioWriter
-
-	seekerObj, ok = localWriter.(io.Seeker)
-
-	if !ok {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: This Seek method was invoked on an\n"+
-			"'FileIoWriter' internal io.Writer object\n"+
-			"which does NOT support the io.Seeker\n"+
-			"interface. This means:\n"+
-			"(1) The 'Seek' method is unavailable.\n"+
-			"\n"+
-			"(2) The 'FileIoWriter' internal io.Writer\n"+
-			"      object was created from something\n"+
-			"      other than a disk file (*os.File).\n",
-			ePrefix.String())
-
-		return offsetFromFileStart, err
-
-	}
-
-	var whenceCodeIsOk bool
-	var whenceCodeStr string
-
-	whenceCodeIsOk,
-		whenceCodeStr = new(FileConstants).
-		GetSeekerWhenceCodes(whence)
-
-	if !whenceCodeIsOk {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'whence' is invalid!\n"+
-			"'whence' MUST be equal to one of the following\n"+
-			"constant values:\n"+
-			"  io.SeekStart = 0\n"+
-			"  io.SeekCurrent = 1\n"+
-			"  io.SeekEnd = 2\n"+
-			"Input 'whence' value = %v\n",
-			ePrefix.String(),
-			whence)
-
-		return offsetFromFileStart, err
-	}
-
-	var err2 error
-
 	offsetFromFileStart,
-		err2 = seekerObj.Seek(
-		targetOffset,
-		whence)
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: FileIoWriter.Seek()\n"+
-			"targetOffSet = %v\n"+
-			"whence = %v\n"+
-			"Error = \n%v\n",
-			ePrefix.String(),
+		err = new(fileIoWriterMicrobot).
+		seekByOffset(
+			fIoWriter,
+			"fIoWriter",
 			targetOffset,
-			whenceCodeStr,
-			err2.Error())
-	}
+			whence,
+			ePrefix)
 
 	return offsetFromFileStart, err
 }
@@ -3121,6 +3053,292 @@ func (fIoWriter *FileIoWriter) lowLevelWriteToBytes(
 
 type fileIoWriterMicrobot struct {
 	lock *sync.Mutex
+}
+
+// seekByOffset
+//
+// This method sets the offset for the next 'write'
+// operation within the 'write' file. This method only
+// succeeds if the io.Writer object encapsulated in the
+// FileIoWriter instance passed as input parameter
+// 'fIoWriter' was configured with an internal io.Writer
+// object which supports the io.Seeker interface. A
+// typical example of an io.Writer object which supports
+// the io.Seeker interface is a disk file.
+//
+// This target offset is interpreted according to input
+// parameter 'whence'.
+//
+// 'whence' is an integer value designating whether the
+// input parameter 'targetOffset' is interpreted to mean
+// an offset from the start of the file, an offset from
+// the current offset position or an offset from the end
+// of the file. The 'whence' parameter must be passed as
+// one of the following 'io' constant values:
+//
+//	io.SeekStart = 0
+//		Means relative to the start of the file.
+//
+//	io.SeekCurrent = 1
+//		Means relative to the current file offset.
+//
+//	io.SeekEnd = 2
+//		Means relative to the end (for example,
+//		offset = -2 specifies the penultimate byte of
+//		the file).
+//
+// If the Seek method completes successfully, the next
+// 'write' operation will occur at the new offset
+// position.
+//
+// Seek returns the new offset relative to the start of the
+// file or an error, if any.
+//
+// This method implements the 'io.Seeker' interface.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	Seeking to an offset before the start of the file
+//		is an error.
+//
+//	(2) If input parameter 'whence' is not set to one of
+//		these three constant integer values, an error
+//		will be returned.
+//
+//		io.SeekStart = 0
+//			Means relative to the start of the file.
+//
+//		io.SeekCurrent = 1
+//			Means relative to the current file offset.
+//
+//		io.SeekEnd = 2
+//			Means relative to the end (for example,
+//			offset = -2 specifies the penultimate byte of
+//			the file).
+//
+//	(3) This method implements the 'io.Seeker' interface.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fIoWriter					*FileIoWriter
+//
+//		A pointer to an instance of FileIoWriter.
+//
+//		The io.Writer object encapsulated in this
+//		FileIoWriter instance will use the target offset
+//		specified by 'targetOffset' to reset the file
+//		offset for the next 'write' operation.
+//
+//	fIoWriterLabel				string
+//
+//		The name or label associated with input parameter
+//		'fIoWriter' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fIoWriter" will be
+//		automatically applied.
+//
+//	targetOffset				int64
+//
+//		The number of bytes used to reset the file
+//		offset for the next 'write' operation.
+//
+//		This offset value is interpreted according to
+//		input parameter 'whence'.
+//
+//	whence						int
+//
+//		'whence' is an integer value designating whether
+//		the input parameter 'targetOffset' is interpreted
+//		to mean an offset from the start of the file, an
+//		offset from the current offset position or an
+//		offset from the end of the file. The 'whence'
+//		parameter must be passed as one of the following
+//		'io' constant values:
+//
+//		io.SeekStart = 0
+//			Means relative to the start of the file.
+//
+//		io.SeekCurrent = 1
+//			Means relative to the current file offset.
+//
+//		io.SeekEnd = 2
+//			Means relative to the end (for example,
+//			offset = -2 specifies the penultimate byte of
+//			the file).
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	offsetFromFileStart			int64
+//
+//		If this method completes successfully, this
+//		parameter will return the new file offset
+//		in bytes from the beginning of the file.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message.
+func (fIoWriterMicrobot *fileIoWriterMicrobot) seekByOffset(
+	fIoWriter *FileIoWriter,
+	fIoWriterLabel string,
+	targetOffset int64,
+	whence int,
+	errPrefDto *ePref.ErrPrefixDto) (
+	offsetFromFileStart int64,
+	err error) {
+
+	if fIoWriterMicrobot.lock == nil {
+		fIoWriterMicrobot.lock = new(sync.Mutex)
+	}
+
+	fIoWriterMicrobot.lock.Lock()
+
+	defer fIoWriterMicrobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileIoWriterMicrobot." +
+		"seekByOffset()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return offsetFromFileStart, err
+	}
+
+	if len(fIoWriterLabel) == 0 {
+
+		fIoWriterLabel = "fIoWriter"
+	}
+
+	if fIoWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The FileIoWriter instance passed\n"+
+			"as input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' pointer.\n",
+			ePrefix.String(),
+			fIoWriterLabel,
+			fIoWriterLabel)
+
+		return offsetFromFileStart, err
+	}
+
+	if fIoWriter.ioWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of FileIoWriter ('%v') is invalid!\n"+
+			"The internal io.Writer object has NOT been initialized.\n"+
+			"%v.ioWriter is equal to 'nil'.\n"+
+			"Call one of the 'New' or 'Setter' methods to create a\n"+
+			"valid instance of 'FileIoWriter'\n",
+			ePrefix.String(),
+			fIoWriterLabel,
+			fIoWriterLabel)
+
+		return offsetFromFileStart, err
+	}
+
+	var ok bool
+	var seekerObj io.Seeker
+	var localWriter io.Writer
+	localWriter = *fIoWriter.ioWriter
+
+	seekerObj, ok = localWriter.(io.Seeker)
+
+	if !ok {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This Seek method was invoked on an\n"+
+			"'FileIoWriter' internal io.Writer object\n"+
+			"which does NOT support the io.Seeker\n"+
+			"interface. This means:\n"+
+			"(1) The 'Seek' method is unavailable.\n"+
+			"\n"+
+			"(2) The 'FileIoWriter' internal io.Writer\n"+
+			"      object was created from something\n"+
+			"      other than a disk file (*os.File).\n",
+			ePrefix.String())
+
+		return offsetFromFileStart, err
+
+	}
+
+	var whenceCodeIsOk bool
+	var whenceCodeStr string
+
+	whenceCodeIsOk,
+		whenceCodeStr = new(FileConstants).
+		GetSeekerWhenceCodes(whence)
+
+	if !whenceCodeIsOk {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'whence' is invalid!\n"+
+			"'whence' MUST be equal to one of the following\n"+
+			"constant values:\n"+
+			"  io.SeekStart = 0\n"+
+			"  io.SeekCurrent = 1\n"+
+			"  io.SeekEnd = 2\n"+
+			"Input 'whence' value = %v\n",
+			ePrefix.String(),
+			whence)
+
+		return offsetFromFileStart, err
+	}
+
+	var err2 error
+
+	offsetFromFileStart,
+		err2 = seekerObj.Seek(
+		targetOffset,
+		whence)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by low-level 'seek' operation.\n"+
+			"targetOffSet = %v\n"+
+			"whence = %v\n"+
+			"Error = \n%v\n",
+			ePrefix.String(),
+			targetOffset,
+			whenceCodeStr,
+			err2.Error())
+	}
+
+	return offsetFromFileStart, err
 }
 
 // setFileMgr

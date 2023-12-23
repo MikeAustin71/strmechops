@@ -3310,32 +3310,32 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 // are stripped off the ends of all text lines processed.
 // New line termination or end-of-line characters will
 // then be appended to the text lines before they are
-// written to the output destination io.Writer object
+// written to the output destination bufio.Writer object
 // configured for the current instance of
 // FileBufferReadWrite.
 //
-// When writing final text lines to the internal io.Writer
-// object, the line termination or end-of-line characters
-// appended to each text line will be specified by input
-// parameter 'writeEndOfLineChars'.
+// When writing final text lines to the internal
+// bufio.Writer object, the line termination or
+// end-of-line characters appended to each text line will
+// be specified by input parameter 'writeEndOfLineChars'.
 //
 // If input parameter 'autoFlushAndCloseOnExit' is set to
 // 'true', this method will automatically perform all
 // required Clean-Up tasks upon completion. Clean-Up
 // tasks involve flushing the io.Writer object, closing
-// the io.Reader and io.Writer objects and then deleting
-// io.Reader and io.Writer structure values internal to
-// the current FileBufferReadWrite instance. When these
-// Clean-Up tasks are completed, the current
-// FileBufferReadWrite instance will be invalid and
-// unavailable for future 'read' and/or 'write'
+// the bufio.Reader and bufio.Writer objects and then
+// deleting bufio.Reader and bufio.Writer structure
+// values internal to the current FileBufferReadWrite
+// instance. When these Clean-Up tasks are completed, the
+// current FileBufferReadWrite instance will be invalid
+// and unavailable for future 'read' and/or 'write'
 // operations.
 //
 // If input parameter 'autoFlushAndCloseOnExit' is set to
 // 'false', this method will automatically flush the
 // 'write' buffer. This means that all data remaining in
 // the 'write' buffer will be written to the underlying
-// io.Writer output destination. However, most
+// bufio.Writer output destination. However, most
 // importantly, the user is then responsible for
 // performing the 'Close' operation by calling the local
 // method:
