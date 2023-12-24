@@ -2594,6 +2594,9 @@ func (fIoWriter *FileIoWriter) Write(
 //		bytes contained in 'bytesToWrite' will be
 //		written.
 //
+//		'targetOffset' represents the number of bytes
+//		from the beginning of the io.Writer object.
+//
 // ----------------------------------------------------------------
 //
 // # Return Values
@@ -2663,69 +2666,34 @@ func (fIoWriter *FileIoWriter) WriteAt(
 		return numBytesWritten, err
 	}
 
-	var offsetFromFileStart int64
-	var err2 error
+	var ok bool
+	var writerAtObj io.WriterAt
+	var localWriter io.Writer
+	localWriter = *fIoWriter.ioWriter
 
-	if targetOffset > 0 {
+	writerAtObj, ok = localWriter.(io.WriterAt)
 
-		offsetFromFileStart,
-			err2 = new(fileIoWriterMicrobot).
-			seekByOffset(
-				fIoWriter,
-				"fIoWriter",
-				targetOffset,
-				io.SeekStart,
-				ePrefix)
-
-		if err2 != nil {
-
-			err = fmt.Errorf("%v\n"+
-				"Error occurred while attempting to reset the\n"+
-				"byte offset in the internal io.Writer 'write'\n"+
-				"destination. The reset byte offset operation failed\n"+
-				"and the byte offset was NOT reset to 'targetOffset'\n"+
-				"Error=\n%v\n",
-				funcName,
-				err2.Error())
-
-			return numBytesWritten, err
-		}
-
-	}
-
-	if targetOffset != offsetFromFileStart {
+	if !ok {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: Requested target offset is NOT equal\n"+
-			"to the offset returned by the 'Seek' operation.\n"+
-			"Requested 'targetOffset' = %v\n"+
-			"      Actual Seek Offset = %v\n",
-			ePrefix.String(),
-			targetOffset,
-			offsetFromFileStart)
+			"Error: This WriteAt method was invoked on a\n"+
+			"'FileIoWriter' internal io.Writer object\n"+
+			"which does NOT support the io.WriterAt\n"+
+			"interface. This means:\n"+
+			"(1) The 'WriteAt' method is unavailable.\n"+
+			"              AND\n"+
+			"(2) The 'FileIoWriter' internal io.Writer\n"+
+			"    was created from an object which does\n"+
+			"    NOT implement the io.WriterAt interface.\n",
+			ePrefix.String())
 
 		return numBytesWritten, err
 	}
 
 	numBytesWritten,
-		err2 = new(fileIoWriterMicrobot).
-		writeBytes(
-			fIoWriter,
-			"fIoWriter",
-			bytesToWrite,
-			ePrefix.XCpy("fIoWriter"))
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error occurred while attempting to write bytes\n"+
-			"'write' destination defined by the internal\n"+
-			"io.Writer object. The 'write' operation failed!\n"+
-			"Error=\n%v\n",
-			funcName,
-			err2.Error())
-
-	}
+		err = writerAtObj.WriteAt(
+		bytesToWrite,
+		targetOffset)
 
 	return numBytesWritten, err
 }

@@ -2515,9 +2515,10 @@ func (fIoReader *FileIoReader) ReadAt(
 			"which does NOT support the io.ReaderAt\n"+
 			"interface. This means:\n"+
 			"(1) The 'ReadAt' method is unavailable.\n"+
+			"              AND"+
 			"(2) The 'FileIoReader' internal io.Reader\n"+
-			"      object was created from something\n"+
-			"      other than a disk file (*os.File).\n",
+			"    was created from an object which does\n"+
+			"    NOT implement the io.WriterAt interface.\n",
 			ePrefix.String())
 
 		return numOfBytesRead, err
