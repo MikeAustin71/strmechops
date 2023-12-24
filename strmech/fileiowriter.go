@@ -2544,61 +2544,13 @@ func (fIoWriter *FileIoWriter) Write(
 		return numBytesWritten, err
 	}
 
-	if fIoWriter.ioWriter == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: This instance of 'FileIoWriter' is invalid!\n"+
-			"The internal io.Writer object has NOT been properly\n"+
-			"initialized. Call one of the 'New' or 'Setter'\n"+
-			"methods to create a valid instance of 'FileIoWriter'.\n",
-			ePrefix.String())
-
-		return numBytesWritten, err
-	}
-
-	lenBytesToWrite := len(bytesToWrite)
-
-	if lenBytesToWrite == 0 {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'bytesToWrite' is invalid!\n"+
-			"The 'bytesToWrite' byte array is empty. It has zero bytes.\n",
-			ePrefix.String())
-
-		return numBytesWritten, err
-	}
-
-	var writer io.Writer
-	var err2 error
-	writer = *fIoWriter.ioWriter
-
 	numBytesWritten,
-		err2 = writer.Write(bytesToWrite)
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: writer.Write(bytesToWrite)\n"+
-			"Error=\n%v\n",
-			ePrefix.String(),
-			err2.Error())
-
-		return numBytesWritten, err
-	}
-
-	if lenBytesToWrite != numBytesWritten {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: The number of bytes provided by\n"+
-			"input parameter 'bytesToWrite' is NOT equal\n"+
-			"to the number of bytes actually written.\n"+
-			"         Length 'bytesToWrite' = %v\n"+
-			"Actual Number of Bytes Written = %v\n",
-			ePrefix.String(),
-			lenBytesToWrite,
-			numBytesWritten)
-
-	}
+		err = new(fileIoWriterMicrobot).
+		writeBytes(
+			fIoWriter,
+			"fIoWriter",
+			bytesToWrite,
+			ePrefix.XCpy("fIoWriter"))
 
 	return numBytesWritten, err
 }
@@ -2685,11 +2637,13 @@ func (fIoWriter *FileIoWriter) WriteAt(
 
 	var ePrefix *ePref.ErrPrefixDto
 
+	funcName := "FileIoWriter." +
+		"WriteAt()"
+
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		nil,
-		"FileIoWriter."+
-			"Seek()",
+		funcName,
 		"")
 
 	if err != nil {
@@ -2709,11 +2663,12 @@ func (fIoWriter *FileIoWriter) WriteAt(
 	}
 
 	var offsetFromFileStart int64
+	var err2 error
 
 	if targetOffset > 0 {
 
 		offsetFromFileStart,
-			err = new(fileIoWriterMicrobot).
+			err2 = new(fileIoWriterMicrobot).
 			seekByOffset(
 				fIoWriter,
 				"fIoWriter",
@@ -2721,7 +2676,17 @@ func (fIoWriter *FileIoWriter) WriteAt(
 				io.SeekStart,
 				ePrefix)
 
-		if err != nil {
+		if err2 != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"Error occurred while attempting to reset the\n"+
+				"byte offset in the internal io.Writer 'write'\n"+
+				"destination. The reset byte offset operation failed\n"+
+				"and the byte offset was NOT reset to 'targetOffset'\n"+
+				"Error=\n%v\n",
+				funcName,
+				err2.Error())
+
 			return numBytesWritten, err
 		}
 
@@ -2741,35 +2706,23 @@ func (fIoWriter *FileIoWriter) WriteAt(
 		return numBytesWritten, err
 	}
 
-	var writer io.Writer
-	var err2 error
-	writer = *fIoWriter.ioWriter
-
 	numBytesWritten,
-		err2 = writer.Write(bytesToWrite)
+		err2 = new(fileIoWriterMicrobot).
+		writeBytes(
+			fIoWriter,
+			"fIoWriter",
+			bytesToWrite,
+			ePrefix.XCpy("fIoWriter"))
 
 	if err2 != nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error: writer.Write(bytesToWrite)\n"+
+			"Error occurred while attempting to write bytes\n"+
+			"'write' destination defined by the internal\n"+
+			"io.Writer object. The 'write' operation failed!\n"+
 			"Error=\n%v\n",
-			ePrefix.String(),
+			funcName,
 			err2.Error())
-
-		return numBytesWritten, err
-	}
-
-	if lenBytesToWrite != numBytesWritten {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: The number of bytes provided by\n"+
-			"input parameter 'bytesToWrite' is NOT equal\n"+
-			"to the number of bytes actually written.\n"+
-			"         Length 'bytesToWrite' = %v\n"+
-			"Actual Number of Bytes Written = %v\n",
-			ePrefix.String(),
-			lenBytesToWrite,
-			numBytesWritten)
 
 	}
 
@@ -3841,6 +3794,116 @@ func (fIoWriterMicrobot *fileIoWriterMicrobot) setFileMgr(
 			ePrefix.XCpy(fIoWriterLabel+"<-"+fileMgrLabel))
 
 	return fInfoPlus, err
+}
+
+func (fIoWriterMicrobot *fileIoWriterMicrobot) writeBytes(
+	fIoWriter *FileIoWriter,
+	fIoWriterLabel string,
+	bytesToWrite []byte,
+	errPrefDto *ePref.ErrPrefixDto) (
+	numBytesWritten int,
+	err error) {
+
+	if fIoWriterMicrobot.lock == nil {
+		fIoWriterMicrobot.lock = new(sync.Mutex)
+	}
+
+	fIoWriterMicrobot.lock.Lock()
+
+	defer fIoWriterMicrobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileIoWriterMicrobot." +
+		"setFileMgr()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+		return numBytesWritten, err
+	}
+
+	if len(fIoWriterLabel) == 0 {
+
+		fIoWriterLabel = "fIoWriter"
+	}
+
+	if fIoWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The FileIoWriter instance passed\n"+
+			"as input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' pointer.\n",
+			ePrefix.String(),
+			fIoWriterLabel,
+			fIoWriterLabel)
+
+		return numBytesWritten, err
+	}
+
+	if fIoWriter.ioWriter == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of FileIoWriter ('%v') is invalid!\n"+
+			"The internal io.Writer object has NOT been properly initialized.\n"+
+			"%v.writer is equal to 'nil'.\n"+
+			"Call one of the 'New' or 'Setter' methods to create a valid instance of 'FileIoWriter'.\n",
+			ePrefix.String(),
+			fIoWriterLabel,
+			fIoWriterLabel)
+
+		return numBytesWritten, err
+	}
+
+	lenBytesToWrite := len(bytesToWrite)
+
+	if lenBytesToWrite == 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'bytesToWrite' is invalid!\n"+
+			"The 'bytesToWrite' byte array is empty. It contains zero bytes.\n",
+			ePrefix.String())
+
+		return numBytesWritten, err
+	}
+
+	var writer io.Writer
+	var err2 error
+	writer = *fIoWriter.ioWriter
+
+	numBytesWritten,
+		err2 = writer.Write(bytesToWrite)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: writer.Write(bytesToWrite)\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+		return numBytesWritten, err
+	}
+
+	if lenBytesToWrite != numBytesWritten {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The number of bytes provided by\n"+
+			"input parameter 'bytesToWrite' is NOT equal\n"+
+			"to the number of bytes actually written.\n"+
+			"         Length 'bytesToWrite' = %v\n"+
+			"Actual Number of Bytes Written = %v\n",
+			ePrefix.String(),
+			lenBytesToWrite,
+			numBytesWritten)
+
+	}
+
+	return numBytesWritten, err
 }
 
 type fileIoWriterNanobot struct {
