@@ -2485,9 +2485,9 @@ func (fIoWriter *FileIoWriter) SetPathFileName(
 //		io.Writer object may be any object implementing
 //		the io.Writer interface.
 //
-//		This method WILL NOT VERIFY that the number of
-//		bytes written is equal to the length of the
-//		length of input parameter 'bytesToWrite'.
+//		This method WILL VERIFY that the number of bytes
+//		written is equal to the length of the byte array
+//		input parameter 'bytesToWrite'.
 //
 // ----------------------------------------------------------------
 //
@@ -2514,7 +2514,7 @@ func (fIoWriter *FileIoWriter) SetPathFileName(
 //	 	attached to the	beginning of the error message.
 //
 //		If the number of bytes written ('numBytesWritten')
-//		does not equal the number of bytes contained in
+//		is less than the number of bytes contained in
 //		byte array input parameter 'bytesToWrite', an
 //	 	error will be returned.
 func (fIoWriter *FileIoWriter) Write(
@@ -3796,6 +3796,70 @@ func (fIoWriterMicrobot *fileIoWriterMicrobot) setFileMgr(
 	return fInfoPlus, err
 }
 
+// writeBytes
+//
+// Writes the contents of the byte array input paramter
+// ('bytesToWrite') to the internal destination
+// io.Writer object previously configured for the
+// FileIoWriter instance passed as 'fIoWriter'.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	https://pkg.go.dev/io
+//	https://pkg.go.dev/io#Writer
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fIoWriter					*FileIoWriter
+//
+//		A pointer to an instance of FileIoWriter.
+//
+//		Data contained in the byte array 'bytesToWrite'
+//		will be written to the destination io.Writer
+//		object encapsulated in this FileIoWriter
+//		instance.
+//
+//	fIoWriterLabel				string
+//
+//		The name or label associated with input parameter
+//		'fIoWriter' which will be used in error messages
+//		returned by this method.
+//
+//	bytesToWrite				[]byte
+//
+//		The contents of this byte array will be written
+//		to the internal destination io.Writer object
+//		previously configured for the current instance of
+//		FileIoWriter.
+//
+//		Typically, the internal destination io.Writer
+//		object will be a data file existing on an attached
+//		storage drive. However, the destination
+//		io.Writer object may be any object implementing
+//		the io.Writer interface.
+//
+//		This method WILL VERIFY that the number of bytes
+//		written is equal to the length of the byte array
+//		input parameter 'bytesToWrite'.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
 func (fIoWriterMicrobot *fileIoWriterMicrobot) writeBytes(
 	fIoWriter *FileIoWriter,
 	fIoWriterLabel string,
