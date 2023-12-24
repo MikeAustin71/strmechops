@@ -1292,17 +1292,18 @@ func (fIoReader *FileIoReader) NewPathFileName(
 
 // Read
 //
-// Reads a selection data from the pre-configured
-// io.Reader data source encapsulated in the current
-// instance of FileIoReader.
+// Reads a selection of data from the internal io.Reader
+// data source encapsulated in the current instance of
+// FileIoReader.
 //
 // This method is a wrapper for the 'io.Reader.Read'
 // method.
 //
 // This method reads data into the input parameter byte
-// array, 'bytesRead'. It returns the number of bytes
-// read into the byte array as return parameter,
-// 'numOfBytesRead'.
+// array, 'bytesRead', from the internal io.Reader object
+// encapsulated by the current instance of FileIoReader.
+// The number of bytes read into the byte array is
+// returned as return parameter, 'numBytesRead'.
 //
 // Under certain circumstances, the number of bytes read
 // into the byte array may be less than the length of the
@@ -1316,8 +1317,8 @@ func (fIoReader *FileIoReader) NewPathFileName(
 // See the io.Reader docs and 'Reference' section below.
 //
 // Once the 'read' operation has been completed, the user
-// MUST call the 'Close' method to ensure Clean-Up
-// operations are properly applied:
+// is responsible for performing Clean-Up operations by
+// calling the local method:
 //
 //	FileIoReader.Close()
 //
@@ -1328,26 +1329,30 @@ func (fIoReader *FileIoReader) NewPathFileName(
 //	(1)	This method implements the io.Reader interface.
 //
 //	(2)	Keep calling this method until all the bytes have
-//		been read from the data source configured for the
-//		current instance of FileIoReader and the
-//		returned error is set to 'io.EOF'.
+//		been read from the io.Reader data source
+//		configured for the current instance of
+//		FileIoReader and the returned error is set to
+//		'io.EOF'.
 //
-//	(3)	Callers should always process the
-//		numOfBytesRead > 0 bytes returned before
-//		considering the error err. Doing so correctly
-//		handles I/O errors that happen after reading some
-//		bytes and also both of the allowed EOF behaviors
-//		(See the io.Reader docs and 'Reference' section
-//		below).
+//	(3)	Callers should always process the returned number
+//		of bytes read ('numBytesRead') before considering
+//		the returned error parameter 'err'. Doing so
+//		correctly handles I/O errors that occur after
+//		reading some number of bytes. Also, this
+//		technique allows both possible EOF behaviors to
+//		be correctly processed (See the io.Reader docs
+//		and 'Reference' section below).
 //
 //	(4)	When all 'read' operations have been completed,
-//		call method:
+//		perform the required Clean-Up operations by
+//		calling local method:
 //
 //			FileIoReader.Close()
 //
 //	(5)	This method employs the direct 'read' technique
-//		used by io.Reader. It does NOT use the buffered
-//		'read' technique used by bufio.Read.
+//		used by type io.Reader. It does NOT use the
+//		buffered 'read' technique employed by the
+//		bufio.Reader type.
 //
 // ----------------------------------------------------------------
 //
@@ -1407,12 +1412,12 @@ func (fIoReader *FileIoReader) NewPathFileName(
 //
 // # Return Values
 //
-//	numOfBytesRead				int
+//	numBytesRead				int
 //
 //		If this method completes successfully, the number
-//		of bytes read from the data source, and stored in
-//		the byte array passed as input parameter
-//		'bytesRead', will be returned through this
+//		of bytes read from the data source
+//		'FileIoReader.ioReader' and stored in the byte
+//		array 'bytesRead', will be returned through this
 //		parameter.
 //
 //	err							error
@@ -1436,7 +1441,7 @@ func (fIoReader *FileIoReader) NewPathFileName(
 //		types of readers may not.
 func (fIoReader *FileIoReader) Read(
 	bytesRead []byte) (
-	numOfBytesRead int,
+	numBytesRead int,
 	err error) {
 
 	if fIoReader.lock == nil {
@@ -1458,48 +1463,18 @@ func (fIoReader *FileIoReader) Read(
 
 	if err != nil {
 
-		return numOfBytesRead, err
+		return numBytesRead, err
 	}
 
-	if fIoReader.ioReader == nil {
+	numBytesRead,
+		err = new(fileIoReaderMicrobot).
+		readBytes(
+			fIoReader,
+			"fIoReader",
+			bytesRead,
+			ePrefix)
 
-		err = fmt.Errorf("%v\n"+
-			"Error: This instance of 'FileIoReader' is invalid!\n"+
-			"The internal io.Reader object has NOT been initialized.\n"+
-			"Call one of the 'New' or 'Setter' methods when creating\n"+
-			"an instance of 'FileIoReader'\n",
-			ePrefix.String())
-
-		return numOfBytesRead, err
-	}
-
-	var err2 error
-	var reader = *fIoReader.ioReader
-
-	numOfBytesRead,
-		err2 = reader.Read(bytesRead)
-
-	if err2 != nil {
-
-		if err2 != io.EOF {
-
-			err = fmt.Errorf("%v\n"+
-				"Error returned by fIoReader.ioReader.Read(bytesRead).\n"+
-				"Error=\n%v\n",
-				ePrefix.String(),
-				err2.Error())
-
-			return numOfBytesRead, err
-
-		} else {
-
-			err = io.EOF
-
-		}
-
-	}
-
-	return numOfBytesRead, err
+	return numBytesRead, err
 }
 
 // ReadAllTextLines
@@ -4449,6 +4424,306 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readAllStrBuilder(
 	}
 
 	return numOfBytesRead, err
+}
+
+// readBytes
+//
+// Reads a selection of data from the internal io.Reader
+// data source encapsulated in the FileIoReader instance
+// passed as input parameter 'fIoReader'.
+//
+// This method is a wrapper for the 'io.Reader.Read'
+// method.
+//
+// This method reads data into the input parameter byte
+// array, 'bytesRead', from the internal io.Reader object
+// encapsulated by 'fIoReader'. The number of bytes read
+// into the byte array is returned as return parameter,
+// 'numBytesRead'.
+//
+// Under certain circumstances, the number of bytes read
+// into the byte array may be less than the length of the
+// byte array (len(bytesRead)) due to the length of the
+// underlying read buffer.
+//
+// To complete the read operation, repeat the call to
+// this method until the returned error is set to
+// 'io.EOF' signaling 'End of File'.
+//
+// See the io.Reader docs and 'Reference' section below.
+//
+// Once the 'read' operation has been completed, the user
+// is responsible for performing Clean-Up operations by
+// calling the local method:
+//
+//	FileIoReader.Close()
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	Keep calling this method until all the bytes have
+//		been read from the io.Reader data source
+//		configured for the FileIoReader instance
+//		'fIoReader' and the returned error is set to
+//		'io.EOF'.
+//
+//	(2)	Callers should always process the returned number
+//		of bytes read ('numBytesRead') before considering
+//		the returned error parameter 'err'. Doing so
+//		correctly handles I/O errors that occur after
+//		reading some number of bytes. Also, this
+//		technique allows both possible EOF behaviors to
+//		be correctly processed (See the io.Reader docs
+//		and 'Reference' section below).
+//
+//	(3)	When all 'read' operations have been completed,
+//		perform the required Clean-Up operations by
+//		calling local method:
+//
+//			FileIoReader.Close()
+//
+//	(4)	This method employs the direct 'read' technique
+//		used by type io.Reader. It does NOT use the
+//		buffered 'read' technique employed by the
+//		bufio.Reader type.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	io.Reader
+//	https://pkg.go.dev/io#Reader
+//
+//	Reader is the interface that wraps the basic Read
+//	method.
+//
+//	Read reads up to len(p) bytes into p. It returns the
+//	number of bytes read (0 <= n <= len(p)) and any error
+//	encountered. Even if Read returns n < len(p), it may
+//	use all of p as scratch space during the call. If some
+//	data is available but not len(p) bytes, Read
+//	conventionally returns what is available instead of
+//	waiting for more.
+//
+//	When Read encounters an error or end-of-file
+//	condition after successfully reading n > 0 bytes, it
+//	returns the number of bytes read. It may return the
+//	(non-nil) error from the same call or return the
+//	error (and n == 0) from a subsequent call. An
+//	instance of this general case is that a Reader
+//	returning a non-zero number of bytes at the end of
+//	the input stream may return either err == EOF or
+//	err == nil. The next Read should return 0, EOF.
+//
+//	Callers should always process the n > 0 bytes returned
+//	before considering the error err. Doing so correctly
+//	handles I/O errors that happen after reading some bytes
+//	and also both of the allowed EOF behaviors.
+//
+//	Implementations of Read are discouraged from returning a
+//	zero byte count with a nil error, except when
+//	len(p) == 0. Callers should treat a return of 0 and nil
+//	as indicating that nothing happened; in particular it
+//	does not indicate EOF.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	fIoReader					*FileIoReader
+//
+//		A pointer to an instance of FileIoReader.
+//
+//		A number of bytes equal to, or less than, the
+//		length of byte array 'bytesRead' will be read
+//		from the internal io.Reader object encapsulated
+//		in this FileIoReader instance and stored in
+//		byte array 'bytesRead'.
+//
+//	fIoReaderLabel				string
+//
+//		The name or label associated with input parameter
+//		'fIoReader' which will be used in error messages
+//		returned by this method.
+//
+//		If this parameter is submitted as an empty
+//		string, a default value of "fIoReader" will be
+//		automatically applied.
+//
+//	bytesRead					[]byte
+//
+//		Bytes will be read from the io.Reader data source
+//		encapsulated in 'fIoReader' and stored in this
+//		byte array.
+//
+//		If the length of this byte array is less than
+//		16-bytes, an error will be returned.
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numBytesRead				int
+//
+//		If this method completes successfully, the number
+//		of bytes read from the data source
+//		'fIoReader.ioReader' and stored in the byte array
+//		'bytesRead', will be returned through this
+//		parameter.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If processing errors are encountered, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		If an end of file is encountered (after reading
+//		all data source contents), this returned error
+//		will be set to 'io.EOF'. See the 'Reference'
+//		section for a discussion of 'io.EOF'. Disk files
+//		will return an 'io.EOF'. However, some other
+//		types of readers may not.
+func (fIoReaderMicrobot *fileIoReaderMicrobot) readBytes(
+	fIoReader *FileIoReader,
+	fIoReaderLabel string,
+	bytesRead []byte,
+	errPrefDto *ePref.ErrPrefixDto) (
+	numBytesRead int,
+	err error) {
+
+	if fIoReaderMicrobot.lock == nil {
+		fIoReaderMicrobot.lock = new(sync.Mutex)
+	}
+
+	fIoReaderMicrobot.lock.Lock()
+
+	defer fIoReaderMicrobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		"fileIoReaderMicrobot."+
+			"readBytes()",
+		"")
+
+	if err != nil {
+
+		return numBytesRead, err
+	}
+
+	if len(fIoReaderLabel) == 0 {
+
+		fIoReaderLabel = "fIoReader"
+	}
+
+	if fIoReader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' pointer.\n",
+			ePrefix.String(),
+			fIoReaderLabel,
+			fIoReaderLabel)
+
+		return numBytesRead, err
+	}
+
+	if fIoReader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The FileIoReader instance passed\n"+
+			"as input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' pointer.\n",
+			ePrefix.String(),
+			fIoReaderLabel,
+			fIoReaderLabel)
+
+		return numBytesRead, err
+	}
+
+	if fIoReader.ioReader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of FileIoReader ('%v') is invalid!\n"+
+			"The internal io.Reader object has NOT been properly initialized.\n"+
+			"%v.writer is equal to 'nil'.\n"+
+			"Call one of the 'New' or 'Setter' methods to create a valid instance of 'FileIoReader'.\n",
+			ePrefix.String(),
+			fIoReaderLabel,
+			fIoReaderLabel)
+
+		return numBytesRead, err
+	}
+
+	lenBytesRead := len(bytesRead)
+
+	if lenBytesRead < 16 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'bytesRead' is invalid!\n"+
+			"The length of the 'bytesRead' byte array is less than 16-bytes.\n"+
+			"Length 'bytesRead' = %v\n",
+			ePrefix.String(),
+			lenBytesRead)
+
+		return numBytesRead, err
+	}
+
+	var err2 error
+
+	// Produces concrete io.Reader reference
+	var reader = *fIoReader.ioReader
+
+	numBytesRead,
+		err2 = reader.Read(bytesRead)
+
+	if err2 != nil {
+
+		if err2 != io.EOF {
+
+			err = fmt.Errorf("%v\n"+
+				"Error returned by %v.ioReader.Read(bytesRead).\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				fIoReaderLabel,
+				err2.Error())
+
+			return numBytesRead, err
+
+		} else {
+
+			err = io.EOF
+
+		}
+
+	}
+
+	return numBytesRead, err
 }
 
 // readBytesToStrBuilder
