@@ -41,11 +41,11 @@ import (
 //
 //			io.Writer
 //			io.Closer
-//			io.ReadFrom
+//			io.ReaderFrom
 //			io.Seeker
+//			io.WriteCloser
 //			io.WriterAt
 //			io.WriteSeeker
-//			io.WriteCloser
 //
 //	(2)	When all read operations have been completed and
 //		there is no further need for the FileIoWriter
@@ -1526,24 +1526,25 @@ func (fIoWriter *FileIoWriter) ReadFrom(
 
 // Seek
 //
-// This method sets the offset for the next 'write'
-// operation within the 'write' file. This method only
-// succeeds if the io.Writer object encapsulated in the
-// current instance of FileIoWriter was configured with
-// an internal io.Writer object which supports the
-// io.Seeker interface. A typical example of an io.Writer
-// object which supports the io.Seeker interface is a
-// disk file.
+// This method sets the byte offset for the next 'write'
+// operation within the internal io.Writer object
+// encapsulated in the current instance of FileIoReader.
 //
-// This target offset is interpreted according to input
-// parameter 'whence'.
+// This method only succeeds if the internal io.Writer
+// object implements the io.Seeker interface. Disk
+// files with a base type of os.File and FileMgr
+// instances are among those types which implement the
+// io.Seeker interface.
+//
+// The new byte offset (targetOffset) is interpreted
+// according to input parameter 'whence'.
 //
 // 'whence' is an integer value designating whether the
 // input parameter 'targetOffset' is interpreted to mean
 // an offset from the start of the file, an offset from
 // the current offset position or an offset from the end
 // of the file. The 'whence' parameter must be passed as
-// one of the following 'io' constant values:
+// one of the following 'io' integer constant values:
 //
 //	io.SeekStart = 0
 //		Means relative to the start of the file.
@@ -1563,14 +1564,14 @@ func (fIoWriter *FileIoWriter) ReadFrom(
 // Seek returns the new offset relative to the start of the
 // file or an error, if any.
 //
-// This method implements the 'io.Seeker' interface.
+// Method Seek() implements the 'io.Seeker' interface.
 //
 // ----------------------------------------------------------------
 //
 // # IMPORTANT
 //
-//	(1)	Seeking to an offset before the start of the file
-//		is an error.
+//	(1)	Setting a byte offset at a point before the start
+//		of the file is an error.
 //
 //	(2) If input parameter 'whence' is not set to one of
 //		these three constant integer values, an error
@@ -3205,14 +3206,16 @@ type fileIoWriterMicrobot struct {
 
 // seekByOffset
 //
-// This method sets the offset for the next 'write'
-// operation within the 'write' file. This method only
-// succeeds if the io.Writer object encapsulated in the
-// FileIoWriter instance passed as input parameter
-// 'fIoWriter' was configured with an internal io.Writer
-// object which supports the io.Seeker interface. A
-// typical example of an io.Writer object which supports
-// the io.Seeker interface is a disk file.
+// This method sets the byte offset for the next 'write'
+// operation within the internal io.Writer object
+// encapsulated in the FileIoReader instance passed as
+// input parameter 'fIoReader'.
+//
+// This method only succeeds if the internal io.Writer
+// object implements the io.Seeker interface. Disk
+// files with a base type of os.File and FileMgr
+// instances are among those types which implement the
+// io.Seeker interface.
 //
 // This target offset is interpreted according to input
 // parameter 'whence'.
@@ -3265,8 +3268,6 @@ type fileIoWriterMicrobot struct {
 //			Means relative to the end (for example,
 //			offset = -2 specifies the penultimate byte of
 //			the file).
-//
-//	(3) This method implements the 'io.Seeker' interface.
 //
 // ----------------------------------------------------------------
 //
@@ -3418,6 +3419,18 @@ func (fIoWriterMicrobot *fileIoWriterMicrobot) seekByOffset(
 		return offsetFromFileStart, err
 	}
 
+	if targetOffset < 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'targetOffset' is invalid!\n"+
+			"'targetOffset' has a value less than zero.\n"+
+			"targetOffset= %v\n",
+			ePrefix.String(),
+			targetOffset)
+
+		return offsetFromFileStart, err
+	}
+
 	var ok bool
 	var seekerObj io.Seeker
 	var localWriter io.Writer
@@ -3433,10 +3446,11 @@ func (fIoWriterMicrobot *fileIoWriterMicrobot) seekByOffset(
 			"which does NOT support the io.Seeker\n"+
 			"interface. This means:\n"+
 			"(1) The 'Seek' method is unavailable.\n"+
-			"\n"+
+			"           AND\n"+
 			"(2) The 'FileIoWriter' internal io.Writer\n"+
 			"      object was created from something\n"+
-			"      other than a disk file (*os.File).\n",
+			"      other than a disk file (*os.File)\n"+
+			"      or FileMgr type.",
 			ePrefix.String())
 
 		return offsetFromFileStart, err
@@ -3476,7 +3490,9 @@ func (fIoWriterMicrobot *fileIoWriterMicrobot) seekByOffset(
 	if err2 != nil {
 
 		err = fmt.Errorf("%v\n"+
-			"Error returned by low-level 'seek' operation.\n"+
+			"Error returned by low-level 'seek' operation\n"+
+			"seekerObj.Seek(). The operation to set a byte\n"+
+			"offset ('targetOffset') Failed.\n"+
 			"targetOffSet = %v\n"+
 			"whence = %v\n"+
 			"Error = \n%v\n",

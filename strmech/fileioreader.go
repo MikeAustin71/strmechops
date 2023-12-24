@@ -42,9 +42,12 @@ import (
 //
 //			io.Reader
 //			io.Closer
-//			io.WriterTo
 //			io.Seeker
-//			io.ReadAt
+//			io.ReaderAt
+//			io.ReadCloser
+//			io.ReadSeeker
+//			io.ReadSeekCloser
+//			io.WriterTo
 //
 //	(2)	When all read operations have been completed and
 //		there is no further need for the FileIoReader
@@ -3088,24 +3091,25 @@ func (fIoReader *FileIoReader) ReadBytesToStringBuilder(
 
 // Seek
 //
-// This method sets the offset for the next 'read'
-// operation within the 'read' file.
+// This method sets the byte offset for the next 'read'
+// operation within the internal io.Reader object
+// encapsulated in the current FileIoReader instance.
 //
-// This method only succeeds if the current
-// FileIoReader instance was created by means of a
-// path and file name string, a File Manager object
-// (FileMgr) or an io.Reader object with a base type
-// of file pointer (*os.File).
+// This method only succeeds if the internal io.Reader
+// object implements the io.Seeker interface. Disk
+// files with a base type of os.File and the FileMgr
+// are among those types which implement the io.Seeker
+// interface.
 //
-// This target offset is interpreted according to input
-// parameter 'whence'.
+// The new byte offset (targetOffset) is interpreted
+// according to input parameter 'whence'.
 //
 // 'whence' is an integer value designating whether the
 // input parameter 'targetOffset' is interpreted to mean
 // an offset from the start of the file, an offset from
 // the current offset position or an offset from the end
 // of the file. The 'whence' parameter must be passed as
-// one of the following 'io' constant values:
+// one of the following 'io' integer constant values:
 //
 //	io.SeekStart = 0
 //		Means relative to the start of the file.
@@ -3125,7 +3129,7 @@ func (fIoReader *FileIoReader) ReadBytesToStringBuilder(
 // Seek returns the new offset relative to the start of the
 // file or an error, if any.
 //
-// Seek implements the 'io.Seeker' interface.
+// Method Seek() implements the 'io.Seeker' interface.
 //
 // ----------------------------------------------------------------
 //
@@ -3237,85 +3241,14 @@ func (fIoReader *FileIoReader) Seek(
 		return offsetFromFileStart, err
 	}
 
-	if fIoReader.ioReader == nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: This instance of 'FileIoReader' is invalid!\n"+
-			"The internal io.Reader object has NOT been initialized.\n"+
-			"Call one of the 'New' or 'Setter' methods when creating\n"+
-			"an instance of 'FileIoReader'\n",
-			ePrefix.String())
-
-		return offsetFromFileStart, err
-	}
-
-	var ok bool
-	var seekerObj io.Seeker
-	var localReader io.Reader
-	localReader = *fIoReader.ioReader
-
-	seekerObj, ok = localReader.(io.Seeker)
-
-	if !ok {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: This Seek method was invoked on a\n"+
-			"'FileIoReader' internal io.Reader object\n"+
-			"which does NOT support the io.Seeker\n"+
-			"interface. This means:\n"+
-			"(1) The 'Seek' method is unavailable.\n"+
-			"\n"+
-			"(2) The 'FileIoReader' internal io.Reader\n"+
-			"      object was created from something\n"+
-			"      other than a disk file (*os.File).\n",
-			ePrefix.String())
-
-		return offsetFromFileStart, err
-
-	}
-
-	var whenceCodeIsOk bool
-	var whenceCodeStr string
-
-	whenceCodeIsOk,
-		whenceCodeStr = new(FileConstants).
-		GetSeekerWhenceCodes(whence)
-
-	if !whenceCodeIsOk {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: Input parameter 'whence' is invalid!\n"+
-			"'whence' MUST be equal to one of the following\n"+
-			"constant values:\n"+
-			"  io.SeekStart = 0\n"+
-			"  io.SeekCurrent = 1\n"+
-			"  io.SeekEnd = 2\n"+
-			"Input 'whence' value = %v\n",
-			ePrefix.String(),
-			whence)
-
-		return offsetFromFileStart, err
-	}
-
-	var err2 error
-
 	offsetFromFileStart,
-		err2 = seekerObj.Seek(
-		targetOffset,
-		whence)
-
-	if err2 != nil {
-
-		err = fmt.Errorf("%v\n"+
-			"Error: FileIoReader.Seek()\n"+
-			"targetOffSet = %v\n"+
-			"whence = %v\n"+
-			"Error = \n%v\n",
-			ePrefix.String(),
+		err = new(fileIoReaderMicrobot).
+		seekByOffset(
+			fIoReader,
+			"fIoReader",
 			targetOffset,
-			whenceCodeStr,
-			err2.Error())
-	}
+			whence,
+			ePrefix)
 
 	return offsetFromFileStart, err
 }
@@ -4715,7 +4648,7 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readBytesToStrBuilder(
 
 		err = fmt.Errorf("%v\n"+
 			"Error: Input parameter '%v' is invalid!\n"+
-			"'%v' is a 'nil' pointer.\n",
+			"The FileIoReader instance '%v' is a 'nil' pointer.\n",
 			ePrefix.String(),
 			fIoReaderLabel,
 			fIoReaderLabel)
@@ -4804,6 +4737,289 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readBytesToStrBuilder(
 	}
 
 	return numOfBytesRead, reachedEndOfFile, err
+}
+
+// seekByOffset
+//
+// This method sets the byte offset for the next 'read'
+// operation within the internal io.Reader object
+// encapsulated in the FileIoReader instance passed as
+// input parameter 'fIoReader'.
+//
+// This method only succeeds if the internal io.Reader
+// object implements the io.Seeker interface. Disk
+// files with a base type of os.File and FileMgr
+// instances are among those types which implement the
+// io.Seeker interface.
+//
+// The new byte offset (targetOffset) is interpreted
+// according to input parameter 'whence'.
+//
+// 'whence' is an integer value designating whether the
+// input parameter 'targetOffset' is interpreted to mean
+// an offset from the start of the file, an offset from
+// the current offset position or an offset from the end
+// of the file. The 'whence' parameter must be passed as
+// one of the following 'io' integer constant values:
+//
+//	io.SeekStart = 0
+//		Means relative to the start of the file.
+//
+//	io.SeekCurrent = 1
+//		Means relative to the current file offset.
+//
+//	io.SeekEnd = 2
+//		Means relative to the end (for example,
+//		offset = -2 specifies the penultimate byte of
+//		the file).
+//
+// If the Seek method completes successfully, the next
+// 'read' operation will occur at the new offset
+// position.
+//
+// Seek returns the new offset relative to the start of the
+// file or an error, if any.
+//
+// Seek implements the 'io.Seeker' interface.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	Setting a byte offset at a point before the start
+//		of the file is an error.
+//
+//	(2) If input parameter 'whence' is not set to one of
+//		these three constant integer values, an error
+//		will be returned.
+//
+//		io.SeekStart = 0
+//			Means relative to the start of the file.
+//
+//		io.SeekCurrent = 1
+//			Means relative to the current file offset.
+//
+//		io.SeekEnd = 2
+//			Means relative to the end (for example,
+//			offset = -2 specifies the penultimate byte of
+//			the file).
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	targetOffset				int64
+//
+//		The number of bytes used to reset the file
+//		offset for the next 'write' operation.
+//
+//		This offset value is interpreted according to
+//		input parameter 'whence'.
+//
+//	whence						int
+//
+//		'whence' is an integer value designating whether
+//		the input parameter 'targetOffset' is interpreted
+//		to mean an offset from the start of the file, an
+//		offset from the current offset position or an
+//		offset from the end of the file. The 'whence'
+//		parameter must be passed as one of the following
+//		'io' constant values:
+//
+//		io.SeekStart = 0
+//			Means relative to the start of the file.
+//
+//		io.SeekCurrent = 1
+//			Means relative to the current file offset.
+//
+//		io.SeekEnd = 2
+//			Means relative to the end (for example,
+//			offset = -2 specifies the penultimate byte of
+//			the file).
+//
+//	errPrefDto					*ePref.ErrPrefixDto
+//
+//		This object encapsulates an error prefix string
+//		which is included in all returned error
+//		messages. Usually, it contains the name of the
+//		calling method or methods listed as a function
+//		chain.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		Type ErrPrefixDto is included in the 'errpref'
+//		software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	offsetFromFileStart			int64
+//
+//		If this method completes successfully, this
+//		parameter will return the new file offset
+//		in bytes from the beginning of the file.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message.
+func (fIoReaderMicrobot *fileIoReaderMicrobot) seekByOffset(
+	fIoReader *FileIoReader,
+	fIoReaderLabel string,
+	targetOffset int64,
+	whence int,
+	errPrefDto *ePref.ErrPrefixDto) (
+	offsetFromFileStart int64,
+	err error) {
+
+	if fIoReaderMicrobot.lock == nil {
+		fIoReaderMicrobot.lock = new(sync.Mutex)
+	}
+
+	fIoReaderMicrobot.lock.Lock()
+
+	defer fIoReaderMicrobot.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "fileIoReaderMicrobot." +
+		"seekOffset()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
+		errPrefDto,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return offsetFromFileStart, err
+	}
+
+	if len(fIoReaderLabel) == 0 {
+
+		fIoReaderLabel = "fIoReader"
+	}
+
+	if fIoReader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: The FileIoReader instance passed\n"+
+			"as input parameter '%v' is invalid!\n"+
+			"'%v' is a 'nil' pointer.\n",
+			ePrefix.String(),
+			fIoReaderLabel,
+			fIoReaderLabel)
+
+		return offsetFromFileStart, err
+	}
+
+	if fIoReader.ioReader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of FileIoReader ('%v') is invalid!\n"+
+			"The internal io.Reader object has NOT been initialized.\n"+
+			"%v.ioReader is equal to 'nil'.\n"+
+			"Call one of the 'New' or 'Setter' methods to create a\n"+
+			"valid instance of 'FileIoReader'\n",
+			ePrefix.String(),
+			fIoReaderLabel,
+			fIoReaderLabel)
+
+		return offsetFromFileStart, err
+	}
+
+	if targetOffset < 0 {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'targetOffset' is invalid!\n"+
+			"'targetOffset' has a value less than zero.\n"+
+			"targetOffset= %v\n",
+			ePrefix.String(),
+			targetOffset)
+
+		return offsetFromFileStart, err
+	}
+
+	var ok bool
+	var seekerObj io.Seeker
+	var localReader io.Reader
+	localReader = *fIoReader.ioReader
+
+	seekerObj, ok = localReader.(io.Seeker)
+
+	if !ok {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This Seek method was invoked on a\n"+
+			"'FileIoReader' internal io.Reader object\n"+
+			"which does NOT support the io.Seeker\n"+
+			"interface. This means:\n"+
+			"(1) The 'Seek' method is unavailable.\n"+
+			"           AND\n"+
+			"(2) The 'FileIoReader' internal io.Reader\n"+
+			"      object was created from something\n"+
+			"      other than a disk file (*os.File)\n"+
+			"      or FileMgr type.\n",
+			ePrefix.String())
+
+		return offsetFromFileStart, err
+
+	}
+
+	var whenceCodeIsOk bool
+	var whenceCodeStr string
+
+	whenceCodeIsOk,
+		whenceCodeStr = new(FileConstants).
+		GetSeekerWhenceCodes(whence)
+
+	if !whenceCodeIsOk {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'whence' is invalid!\n"+
+			"'whence' MUST be equal to one of the following\n"+
+			"constant values:\n"+
+			"  io.SeekStart = 0\n"+
+			"  io.SeekCurrent = 1\n"+
+			"  io.SeekEnd = 2\n"+
+			"Input 'whence' value = %v\n",
+			ePrefix.String(),
+			whence)
+
+		return offsetFromFileStart, err
+	}
+
+	var err2 error
+
+	offsetFromFileStart,
+		err2 = seekerObj.Seek(
+		targetOffset,
+		whence)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by low-level 'seek' operation\n"+
+			"seekerObj.Seek(). The operation to set a byte\n"+
+			"offset ('targetOffset') Failed.\n"+
+			"targetOffSet = %v\n"+
+			"whence = %v\n"+
+			"Error = \n%v\n",
+			ePrefix.String(),
+			targetOffset,
+			whenceCodeStr,
+			err2.Error())
+	}
+
+	return offsetFromFileStart, err
 }
 
 // setFileMgr
