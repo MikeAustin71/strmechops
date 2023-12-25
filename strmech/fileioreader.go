@@ -1296,9 +1296,6 @@ func (fIoReader *FileIoReader) NewPathFileName(
 // data source encapsulated in the current instance of
 // FileIoReader.
 //
-// This method is a wrapper for the 'io.Reader.Read'
-// method.
-//
 // This method reads data into the input parameter byte
 // array, 'bytesRead', from the internal io.Reader object
 // encapsulated by the current instance of FileIoReader.

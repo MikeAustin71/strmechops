@@ -1618,6 +1618,190 @@ func (fIoReadWrite *FileIoReadWrite) NewPathFileNamesReadWrite(
 		err
 }
 
+// Read
+//
+// Reads a selection of data from the internal io.Reader
+// data source encapsulated in the current instance of
+// FileIoReadWrite.
+//
+// This method reads data into the input parameter byte
+// array, 'bytesRead', from the internal io.Reader object
+// encapsulated by the current instance of FileIoReadWrite.
+// The number of bytes read into the byte array is
+// returned as return parameter, 'numBytesRead'.
+//
+// Under certain circumstances, the number of bytes read
+// into the byte array may be less than the length of the
+// byte array (len(bytesRead)) due to the length of the
+// underlying read buffer.
+//
+// To complete the read operation, repeat the call to
+// this method until the returned error is set to
+// 'io.EOF' signaling 'End of File'.
+//
+// See the io.Reader docs and 'Reference' section below.
+//
+// Once the 'read' operation has been completed, the user
+// is responsible for performing Clean-Up operations by
+// calling the local method:
+//
+//	FileIoReadWrite.Close()
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method implements the io.Reader interface.
+//
+//	(2)	Keep calling this method until all the bytes have
+//		been read from the io.Reader data source
+//		configured for the current instance of
+//		FileIoReadWrite and the returned error is set to
+//		'io.EOF'.
+//
+//	(3)	Callers should always process the returned number
+//		of bytes read ('numBytesRead') before considering
+//		the returned error parameter 'err'. Doing so
+//		correctly handles I/O errors that occur after
+//		reading some number of bytes. Also, this
+//		technique allows both possible EOF behaviors to
+//		be correctly processed (See the io.Reader docs
+//		and 'Reference' section below).
+//
+//	(4)	When all 'read' operations have been completed,
+//		perform the required Clean-Up operations by
+//		calling local method:
+//
+//			FileIoReadWrite.Close()
+//
+//	(5)	This method employs the direct 'read' technique
+//		used by type io.Reader. It does NOT use the
+//		buffered 'read' technique employed by the
+//		bufio.Reader type.
+//
+// ----------------------------------------------------------------
+//
+// # Reference:
+//
+//	io.Reader
+//	https://pkg.go.dev/io#Reader
+//
+//	Reader is the interface that wraps the basic Read
+//	method.
+//
+//	Read reads up to len(p) bytes into p. It returns the
+//	number of bytes read (0 <= n <= len(p)) and any error
+//	encountered. Even if Read returns n < len(p), it may
+//	use all of p as scratch space during the call. If some
+//	data is available but not len(p) bytes, Read
+//	conventionally returns what is available instead of
+//	waiting for more.
+//
+//	When Read encounters an error or end-of-file
+//	condition after successfully reading n > 0 bytes, it
+//	returns the number of bytes read. It may return the
+//	(non-nil) error from the same call or return the
+//	error (and n == 0) from a subsequent call. An
+//	instance of this general case is that a Reader
+//	returning a non-zero number of bytes at the end of
+//	the input stream may return either err == EOF or
+//	err == nil. The next Read should return 0, EOF.
+//
+//	Callers should always process the n > 0 bytes returned
+//	before considering the error err. Doing so correctly
+//	handles I/O errors that happen after reading some bytes
+//	and also both of the allowed EOF behaviors.
+//
+//	Implementations of Read are discouraged from returning a
+//	zero byte count with a nil error, except when
+//	len(p) == 0. Callers should treat a return of 0 and nil
+//	as indicating that nothing happened; in particular it
+//	does not indicate EOF.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	bytesRead					[]byte
+//
+//		Bytes will be read from the input data source and
+//		stored in this byte array.
+//
+//		The input data source was previously configured
+//		in the current instance of FileIoReadWrite.
+//
+//		If the length of this byte array is less than
+//		16-bytes, an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numBytesRead				int
+//
+//		If this method completes successfully, the number
+//		of bytes read from the data source
+//		'FileIoReadWrite.ioReader' and stored in the byte
+//		array 'bytesRead', will be returned through this
+//		parameter.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If processing errors are encountered, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		If an end of file is encountered (after reading
+//		all data source contents), this returned error
+//		will be set to 'io.EOF'. See the 'Reference'
+//		section for a discussion of 'io.EOF'. Disk files
+//		will return an 'io.EOF'. However, some other
+//		types of readers may not.
+func (fIoReadWrite *FileIoReadWrite) Read(
+	bytesRead []byte) (
+	numBytesRead int,
+	err error) {
+
+	if fIoReadWrite.lock == nil {
+		fIoReadWrite.lock = new(sync.Mutex)
+	}
+
+	fIoReadWrite.lock.Lock()
+
+	defer fIoReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		nil,
+		"FileIoReadWrite."+
+			"Read()",
+		"")
+
+	if err != nil {
+
+		return numBytesRead, err
+	}
+
+	numBytesRead,
+		err = new(fileIoReaderMicrobot).
+		readBytes(
+			fIoReadWrite.reader,
+			"fIoReadWrite.reader",
+			bytesRead,
+			ePrefix)
+
+	return numBytesRead, err
+}
+
 // SeekReader
 //
 // This method sets the byte offset for the next 'read'

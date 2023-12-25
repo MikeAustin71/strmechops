@@ -2069,13 +2069,12 @@ func (fBufReadWrite *FileBufferReadWrite) PeekReader(
 
 // Read
 //
-// Reads a selection data from the pre-configured
-// io.Reader data source encapsulated in the current
-// instance of FileBufferReadWrite.
+// Reads data from the internal bufio.Reader data source
+// encapsulated in the current instance of FileBufferReadWrite.
 //
-// Method 'Read' reads data into the input parameter
-// byte array, 'bytesRead'. It returns the number of
-// bytes read into the byte array as return parameter,
+// This method reads data into the input parameter byte
+// array, 'bytesRead'. It returns the number of bytes
+// read into the byte array as return parameter,
 // 'numOfBytesRead'.
 //
 // Under certain circumstances, the number of bytes read
@@ -2087,9 +2086,10 @@ func (fBufReadWrite *FileBufferReadWrite) PeekReader(
 // this method until the returned error is set to
 // 'io.EOF' signaling 'End of File'.
 //
-// See the io.Reader docs and 'Reference' section below.
+// See the bufio.Reader docs and 'Reference' section
+// below.
 //
-// If the internal io.Reader object for the current
+// If the internal bufio.Reader object for the current
 // instance of FileBufferReadWrite was improperly
 // initialized, an error will be returned. To properly
 // initialized an instance of FileBufferReadWrite, the
@@ -2097,20 +2097,10 @@ func (fBufReadWrite *FileBufferReadWrite) PeekReader(
 // 'Setter' methods.
 //
 // Once all 'read' and 'write' operations have been
-// completed for the current instance of
-// FileBufferReadWrite, the user MUST call the 'Close'
-// method to ensure Clean-Up operations are properly
-// applied:
+// completed, the user is responsible for performing
+// Clean-Up operations by calling the local method:
 //
 //	FileBufferReadWrite.Close()
-//
-// ----------------------------------------------------------------
-//
-// # Reference:
-//
-//	https://pkg.go.dev/bufio
-//	https://pkg.go.dev/bufio#Reader
-//	https://pkg.go.dev/io#Reader
 //
 // ----------------------------------------------------------------
 //
@@ -2119,26 +2109,33 @@ func (fBufReadWrite *FileBufferReadWrite) PeekReader(
 //	(1)	This method implements the io.Reader interface.
 //
 //	(2)	Keep calling this method until all the bytes have
-//		been read from the 'read' data source configured
-//		for the current instance of FileBufferReadWrite
-//		and the returned error is set to 'io.EOF'.
+//		been read from the io.Reader data source
+//		configured for the current instance of
+//		FileIoReader and the returned error is set to
+//		'io.EOF'.
 //
-//	(3)	Callers should always process the
-//		numOfBytesRead > 0 bytes returned before
-//		considering the error err. Doing so correctly
-//		handles I/O errors that happen after reading some
-//		bytes and also both of the allowed EOF behaviors
-//		(See the io.Reader docs and 'Reference' section
-//		below).
+//	(3)	Callers should always process the returned number
+//		of bytes read ('numBytesRead') before considering
+//		the returned error parameter 'err'. Doing so
+//		correctly handles I/O errors that occur after
+//		reading some number of bytes. Also, this
+//		technique allows both possible EOF behaviors to
+//		be correctly processed (See the io.Reader docs
+//		and 'Reference' section below).
 //
-//	(4)	When all 'read' and 'write' operations have been
-//		completed, call method:
+//	(4)	When all 'read' operations have been completed,
+//		perform the required Clean-Up operations by
+//		calling local method:
 //
-//			FileBufferReadWrite.Close()
+//			FileIoReader.Close()
 //
 // ----------------------------------------------------------------
 //
 // # Reference:
+//
+//	https://pkg.go.dev/bufio
+//	https://pkg.go.dev/bufio#Reader
+//	https://pkg.go.dev/io#Reader
 //
 //	Read(p []byte) (n int, err error)
 //	https://pkg.go.dev/bufio#Reader.Read
