@@ -1802,6 +1802,321 @@ func (fIoReadWrite *FileIoReadWrite) Read(
 	return numBytesRead, err
 }
 
+// ReadAllTextLines
+//
+// Reads text lines from the internal io.Reader object
+// encapsulated in the current instance of FileIoReadWrite.
+// The entire contents of the io.Reader object are
+// parsed and stored as individual lines of text in
+// the instance of StringArrayDto passed as input
+// parameter 'outputLinesArray'.
+//
+// Multiple custom end of line delimiters may be utilized
+// to determine the end of each line of text read from
+// the internal io.Reader object. End of line delimiters
+// are specified by input parameter
+// 'endOfLineDelimiters', an instance of StringArrayDto.
+// 'endOfLineDelimiters' contains an array of strings any
+// one of which may be used to identify, delimit and
+// separate individual lines of text read from the target
+// io.Reader object.
+//
+// The extracted lines of text will be added to the
+// StringArrayDto instance passed as input parameter
+// 'outputLinesArray'.
+//
+// The returned individual lines of text will NOT
+// include the end of line delimiters. End of line
+// delimiters will therefore be stripped and deleted
+// from the end of each configured text line.
+//
+// Be advised that the StringArrayDto type includes
+// methods for adding custom end of line delimiters.
+//
+// It naturally follows that this method will read the
+// entire contents of the target io.Reader object into
+// memory when writing said contents to the
+// StringArrayDto instance 'outputLinesArray'. Depending
+// on the size of the target 'read' file, local memory
+// constraints should be considered.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	This method is designed to read the entire
+//		contents of the internal io.Reader object,
+//		encapsulated by the current instance of
+//		FileIoReadWrite, into memory.
+//
+//		BE CAREFUL when reading large files!
+//
+//		Depending on the memory resources available to
+//		your computer, you may run out of memory when
+//		reading large files and writing their contents
+//		to the output instance of StringArrayDto,
+//		'outputLinesArray'.
+//
+//	(3)	If the current instance of FileIoReadWrite has NOT
+//		been properly initialized, an error will be
+//		returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	readEndOfLineDelimiters		*StringArrayDto
+//
+//		A pointer to an instance of StringArrayDto.
+//		'endOfLineDelimiters' encapsulates a string
+//		array which contains the end-of-line delimiters
+//		that will be used to identify and separate
+//		individual lines of text.
+//
+//		Users have the flexibility to specify multiple
+//		end-of-line delimiters for used in parsing text
+//		lines extracted from file identified by
+//		'pathFileName'.
+//
+//		Typical text line termination, or end-of-line
+//		delimiters, which may be appropriate for use
+//		with a given target 'read' file are listed as
+//		follows:
+//
+//		Windows
+//			Line-endings are terminated with a
+//			combination of a carriage return (ASCII 0x0d
+//			or \r) and a newline(\n), also referred to as
+//			carriage return/line feed or CR/LF (\r\n).
+//
+//		UNIX/Linux
+//			Text file line-endings are terminated with a
+//			newline character (ASCII 0x0a, represented
+//			by the \n escape sequence in most languages),
+//			also referred to as a linefeed (LF).
+//
+//		Mac Classic Prior to Mac OS X
+//			Text Line-endings are terminated with a single
+//			carriage return (\r or CR).
+//
+//		Mac OS X or Later
+//			Line termination uses the UNIX convention.
+//			Text file line-endings are terminated with a
+//			newline character (ASCII 0x0a, represented
+//			by the \n escape sequence in most languages),
+//			also referred to as a linefeed (LF).
+//
+//	outputLinesArray 			*StringArrayDto
+//
+//		A pointer to an instance of StringArrayDto.
+//		Lines of text read from the file specified
+//		by 'pathFileName' will be stored as
+//		individual strings in the string array
+//		encapsulated by 'outputLinesArray'.
+//
+//		-------------------------------------------------
+//					IMPORTANT
+//		-------------------------------------------------
+//		The line termination or end-of-line delimiter
+//		characters identified from 'endOfLineDelimiters'
+//		will be stripped off and deleted from the end of
+//		each line of text stored in the string array
+//		encapsulated by 'outputLinesArray'. As such, the
+//		text lines stored here are pure strings of text
+//		without any line termination or end-of-line
+//		delimiter characters append to the end of the
+//		string.
+//
+//	maxNumOfTextLines			int
+//
+//		Specifies the maximum number of text lines which
+//		will be read from the file identified by
+//		'pathFileName'.
+//
+//		If 'maxNumOfLines' is set to a value less than
+//		zero (0) (Example: minus-one (-1) ),
+//		'maxNumOfLines' will be automatically reset to
+//		math.MaxInt(). This means all text lines existing
+//		in the file identified by 'pathFileName' will be
+//		read and processed. Reading all the text lines in
+//		a file 'may' have memory implications depending
+//		on the size of the file and the memory resources
+//		available to your computer.
+//
+//		If 'maxNumOfLines' is set to a value of zero
+//		('0'), no text lines will be read from the file
+//		identified by 'pathFileName', and no error will be
+//		returned.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numOfLinesRead				int
+//
+//		This integer value contains the number of text
+//		lines read from the file specified by input
+//		parameter 'pathFileName'. This value also
+//		specifies the number of array elements added to
+//		the string array encapsulated by
+//		'outputLinesArray'.
+//
+//		When displayed in editors, the end-of-file
+//		character is displayed on a separate line.
+//		The returned 'numOfLinesRead' value does
+//		not include this empty line containing an
+//		end-of-file character. Therefore, the
+//		returned 'numOfLinesRead' value will always
+//		be one less than the number of lines shown
+//		in a text editor.
+//
+//	numBytesRead				int64
+//
+//		If this method completes successfully, this
+//		integer value will equal the number of bytes
+//		read from the internal io.Reader object
+//		encapsulated by the current instance of
+//		FileIoReadWrite.
+//
+//		Remember that the number of bytes read
+//		includes the end-of-line delimiters which
+//		were stripped off and deleted before the
+//		text lines were stored in 'outputLinesArray'.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fIoReadWrite *FileIoReadWrite) ReadAllTextLines(
+	readEndOfLineDelimiters *StringArrayDto,
+	outputLinesArray *StringArrayDto,
+	maxNumOfTextLines int,
+	errorPrefix interface{}) (
+	numOfLinesRead int,
+	numOfBytesRead int64,
+	err error) {
+
+	if fIoReadWrite.lock == nil {
+		fIoReadWrite.lock = new(sync.Mutex)
+	}
+
+	fIoReadWrite.lock.Lock()
+
+	defer fIoReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileIoReadWrite."+
+			"SetPathFileNameWriter()",
+		"")
+
+	if err != nil {
+
+		return numOfLinesRead,
+			numOfBytesRead,
+			err
+	}
+
+	if fIoReadWrite.reader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of FileIoReadWrite is invalid.\n"+
+			"The internal io.Reader object has not been proplery\n"+
+			"initialized. FileIoReadWrite.reader == 'nil'\n"+
+			"To properly initialize an instance of FileIoReadWrite,\n"+
+			"call one or more of the 'New' or 'Setter' methods.\n",
+			ePrefix.String())
+
+		return numOfLinesRead,
+			numOfBytesRead,
+			err
+	}
+
+	numOfLinesRead,
+		numOfBytesRead,
+		err = fIoReadWrite.reader.
+		ReadAllTextLines(
+			readEndOfLineDelimiters,
+			outputLinesArray,
+			maxNumOfTextLines,
+			false, // autoCloseOnExit
+			ePrefix)
+
+	return numOfLinesRead,
+		numOfBytesRead,
+		err
+}
+
 // SeekReader
 //
 // This method sets the byte offset for the next 'read'

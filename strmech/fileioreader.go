@@ -1502,6 +1502,9 @@ func (fIoReader *FileIoReader) Read(
 // delimiters will therefore be stripped and deleted
 // from the end of each configured text line.
 //
+// Be advised that the StringArrayDto type includes
+// methods for adding custom end of line delimiters.
+//
 // It naturally follows that this method will read the
 // entire contents of the target io.Reader object into
 // memory when writing said contents to the
