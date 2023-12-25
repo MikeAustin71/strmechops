@@ -1528,15 +1528,16 @@ func (fIoWriter *FileIoWriter) ReadFrom(
 //
 // This method sets the byte offset for the next 'write'
 // operation within the internal io.Writer object
-// encapsulated in the current instance of FileIoReader.
+// encapsulated in the current FileIoWriter instance.
 //
-// This method only succeeds if the internal io.Writer
-// object implements the io.Seeker interface. Disk
-// files with a base type of os.File and FileMgr
-// instances are among those types which implement the
-// io.Seeker interface.
+// The Seek() method only succeeds if the internal
+// io.Writer object, encapsulated by the current
+// FileIoWriter instance, implements the io.Seeker
+// interface. Disk files with a base type of os.File and
+// the FileMgr type are among those types which implement
+// the io.Seeker interface.
 //
-// The new byte offset (targetOffset) is interpreted
+// The new byte offset ('targetOffset') is interpreted
 // according to input parameter 'whence'.
 //
 // 'whence' is an integer value designating whether the
@@ -1559,10 +1560,10 @@ func (fIoWriter *FileIoWriter) ReadFrom(
 //
 // If the Seek method completes successfully, the next
 // 'write' operation will occur at the new offset
-// position.
+// position specified by input parameter 'targetOffset'.
 //
 // Seek returns the new offset relative to the start of the
-// file or an error, if any.
+// io.Writer object or an error, if any.
 //
 // Method Seek() implements the 'io.Seeker' interface.
 //
@@ -1570,10 +1571,17 @@ func (fIoWriter *FileIoWriter) ReadFrom(
 //
 // # IMPORTANT
 //
-//	(1)	Setting a byte offset at a point before the start
-//		of the file is an error.
+//	(1)	If the current instance of FileIoWriter was
+//		NOT initialized with an io.Writer object which
+//		implements the io.Seeker interface, this method
+//		will return an error.
 //
-//	(2) If input parameter 'whence' is not set to one of
+//	(2)	Setting a byte offset which occurs before the
+//		start of the internal io.Writer object
+//		encapsulated by the current FileIoWriter instance
+//		will result in an error.
+//
+//	(3) If input parameter 'whence' is not set to one of
 //		these three constant integer values, an error
 //		will be returned.
 //
@@ -1588,7 +1596,7 @@ func (fIoWriter *FileIoWriter) ReadFrom(
 //			offset = -2 specifies the penultimate byte of
 //			the file).
 //
-//	(3) This method implements the 'io.Seeker' interface.
+//	(4) This method implements the 'io.Seeker' interface.
 //
 // ----------------------------------------------------------------
 //

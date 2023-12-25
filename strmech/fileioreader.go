@@ -3071,13 +3071,14 @@ func (fIoReader *FileIoReader) ReadBytesToStringBuilder(
 // operation within the internal io.Reader object
 // encapsulated in the current FileIoReader instance.
 //
-// This method only succeeds if the internal io.Reader
-// object implements the io.Seeker interface. Disk
-// files with a base type of os.File and the FileMgr
-// are among those types which implement the io.Seeker
-// interface.
+// The Seek() method only succeeds if the internal
+// io.Reader object, encapsulated by the current
+// FileIoReader instance, implements the io.Seeker
+// interface. Disk files with a base type of os.File and
+// the FileMgr type are among those types which implement
+// the io.Seeker interface.
 //
-// The new byte offset (targetOffset) is interpreted
+// The new byte offset ('targetOffset') is interpreted
 // according to input parameter 'whence'.
 //
 // 'whence' is an integer value designating whether the
@@ -3100,10 +3101,10 @@ func (fIoReader *FileIoReader) ReadBytesToStringBuilder(
 //
 // If the Seek method completes successfully, the next
 // 'read' operation will occur at the new offset
-// position.
+// position specified by input parameter 'targetOffset'.
 //
-// Seek returns the new offset relative to the start of the
-// file or an error, if any.
+// Method Seek() returns the new offset relative to the
+// io.Reader object or an error, if any.
 //
 // Method Seek() implements the 'io.Seeker' interface.
 //
@@ -3112,16 +3113,14 @@ func (fIoReader *FileIoReader) ReadBytesToStringBuilder(
 // # IMPORTANT
 //
 //	(1)	If the current instance of FileIoReader was
-//		NOT initialized with a path and file name or a
-//		File Manager (FileMgr) object, it will return an
-//		error.
+//		NOT initialized with an io.Reader object which
+//		implements the io.Seeker interface, this method
+//		will return an error.
 //
-//		Said another way, if the current instance of
-//		FileIoReader was initialized with some object
-//		other than a disk file, an error will be returned.
-//
-//	(2)	Seeking to an offset before the start of the file
-//		is an error.
+//	(2)	Setting a byte offset which occurs before the
+//		start of the internal io.Reader object
+//		encapsulated by the current FileIoReader instance
+//		will result in an error.
 //
 //	(3) If input parameter 'whence' is not set to one of
 //		these three constant integer values, an error
@@ -3137,6 +3136,8 @@ func (fIoReader *FileIoReader) ReadBytesToStringBuilder(
 //			Means relative to the end (for example,
 //			offset = -2 specifies the penultimate byte of
 //			the file).
+//
+//	(4) This method implements the 'io.Seeker' interface.
 //
 // ----------------------------------------------------------------
 //
@@ -3179,7 +3180,8 @@ func (fIoReader *FileIoReader) ReadBytesToStringBuilder(
 //
 //		If this method completes successfully, this
 //		parameter will return the new file offset
-//		in bytes from the beginning of the file.
+//		in bytes from the beginning of the io.Reader
+//		object
 //
 //	err							error
 //
