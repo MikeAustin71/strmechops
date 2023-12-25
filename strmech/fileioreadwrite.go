@@ -1840,6 +1840,228 @@ func (fIoReadWrite *FileIoReadWrite) SeekReader(
 	return offsetFromFileStart, err
 }
 
+// SeekWriter
+//
+// This method sets the byte offset for the next 'write'
+// operation within the internal io.Writer object
+// encapsulated in the current FileIoReadWrite instance.
+//
+// The SeekWriter() method only succeeds if the internal
+// io.Writer object, encapsulated by the current
+// FileIoReadWrite instance, implements the io.Seeker
+// interface. Disk files with a base type of os.File and
+// the FileMgr type are among those types which implement
+// the io.Seeker interface.
+//
+// The new byte offset ('targetOffset') is interpreted
+// according to input parameter 'whence'.
+//
+// 'whence' is an integer value designating whether the
+// input parameter 'targetOffset' is interpreted to mean
+// an offset from the start of the file, an offset from
+// the current offset position or an offset from the end
+// of the file. The 'whence' parameter must be passed as
+// one of the following 'io' integer constant values:
+//
+//	io.SeekStart = 0
+//		Means relative to the start of the file.
+//
+//	io.SeekCurrent = 1
+//		Means relative to the current file offset.
+//
+//	io.SeekEnd = 2
+//		Means relative to the end (for example,
+//		offset = -2 specifies the penultimate byte of
+//		the file).
+//
+// If the SeekWriter() method completes successfully, the
+// next 'write' operation will occur at the new offset
+// position.
+//
+// Method SeekWriter() returns the new offset relative to
+// the start of the io.Writer object or an error, if any.
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	If the current FileIoReadWrite instance was NOT
+//		initialized with an io.Writer object which
+//		implements the io.Seeker interface, this method
+//		will return an error.
+//
+//	(2)	Setting a byte offset which occurs before the
+//		start of the internal io.Writer object
+//		encapsulated by the current FileIoReadWrite
+//		instance will result in an error.
+//
+//	(3) If input parameter 'whence' is not set to one of
+//		these three constant integer values, an error
+//		will be returned.
+//
+//		io.SeekStart = 0
+//			Means relative to the start of the file.
+//
+//		io.SeekCurrent = 1
+//			Means relative to the current file offset.
+//
+//		io.SeekEnd = 2
+//			Means relative to the end (for example,
+//			offset = -2 specifies the penultimate byte of
+//			the file).
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	targetOffset				int64
+//
+//		The number of bytes used to reset the file
+//		offset for the next 'write' operation.
+//
+//		This offset value is interpreted according to
+//		input parameter 'whence'.
+//
+//	whence						int
+//
+//		'whence' is an integer value designating whether
+//		the input parameter 'targetOffset' is interpreted
+//		to mean an offset from the start of the file, an
+//		offset from the current offset position or an
+//		offset from the end of the file. The 'whence'
+//		parameter must be passed as one of the following
+//		'io' constant values:
+//
+//		io.SeekStart = 0
+//			Means relative to the start of the file.
+//
+//		io.SeekCurrent = 1
+//			Means relative to the current file offset.
+//
+//		io.SeekEnd = 2
+//			Means relative to the end (for example,
+//			offset = -2 specifies the penultimate byte of
+//			the file).
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	offsetFromFileStart			int64
+//
+//		If this method completes successfully, this
+//		parameter will return the new file offset
+//		in bytes from the beginning of the io.Writer
+//		object.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message.
+func (fIoReadWrite *FileIoReadWrite) SeekWriter(
+	targetOffset int64,
+	whence int,
+	errorPrefix interface{}) (
+	offsetFromFileStart int64,
+	err error) {
+
+	if fIoReadWrite.lock == nil {
+		fIoReadWrite.lock = new(sync.Mutex)
+	}
+
+	fIoReadWrite.lock.Lock()
+
+	defer fIoReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileIoReadWrite."+
+			"SetPathFileNameWriter()",
+		"")
+
+	if err != nil {
+
+		return offsetFromFileStart, err
+	}
+
+	offsetFromFileStart,
+		err = new(fileIoWriterMicrobot).
+		seekByOffset(
+			fIoReadWrite.writer,
+			"fIoReadWrite.writer",
+			targetOffset,
+			whence,
+			ePrefix)
+
+	return offsetFromFileStart, err
+}
+
 // SetFileMgrsReadWrite
 //
 // Receives two input parameters of type FileMgr. These
