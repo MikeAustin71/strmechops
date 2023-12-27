@@ -1730,7 +1730,7 @@ func (fIoReader *FileIoReader) Read(
 //
 // # Return Values
 //
-//	numOfLinesRead				int
+//	numLinesRead				int
 //
 //		This integer value contains the number of text
 //		lines read from the file specified by input
@@ -1741,10 +1741,10 @@ func (fIoReader *FileIoReader) Read(
 //
 //		When displayed in editors, the end-of-file
 //		character is displayed on a separate line.
-//		The returned 'numOfLinesRead' value does
+//		The returned 'numLinesRead' value does
 //		not include this empty line containing an
 //		end-of-file character. Therefore, the
-//		returned 'numOfLinesRead' value will always
+//		returned 'numLinesRead' value will always
 //		be one less than the number of lines shown
 //		in a text editor.
 //
@@ -1779,8 +1779,8 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 	maxNumOfTextLines int,
 	autoCloseOnExit bool,
 	errorPrefix interface{}) (
-	numOfLinesRead int,
-	numOfBytesRead int64,
+	numLinesRead int,
+	numBytesRead int64,
 	err error) {
 
 	if fIoReader.lock == nil {
@@ -1802,8 +1802,8 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 
 	if err != nil {
 
-		return numOfLinesRead,
-			numOfBytesRead,
+		return numLinesRead,
+			numBytesRead,
 			err
 	}
 
@@ -1816,13 +1816,13 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 			"an instance of 'FileIoReader'\n",
 			ePrefix.String())
 
-		return numOfLinesRead,
-			numOfBytesRead,
+		return numLinesRead,
+			numBytesRead,
 			err
 	}
 
-	numOfLinesRead,
-		numOfBytesRead,
+	numLinesRead,
+		numBytesRead,
 		err = new(fileHelperMolecule).
 		readerScanLines(
 			*fIoReader.ioReader,
@@ -1844,8 +1844,8 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 
 	}
 
-	return numOfLinesRead,
-		numOfBytesRead,
+	return numLinesRead,
+		numBytesRead,
 		err
 }
 
@@ -2012,7 +2012,7 @@ func (fIoReader *FileIoReader) ReadAllTextLines(
 //
 // # Return Values
 //
-//	numOfBytesRead				int64
+//	numBytesRead				int64
 //
 //		If this method completes successfully, this
 //		integer value will equal the number of bytes
@@ -2042,7 +2042,7 @@ func (fIoReader *FileIoReader) ReadAllToStrBuilder(
 	strBuilder *strings.Builder,
 	autoCloseOnExit bool,
 	errorPrefix interface{}) (
-	numOfBytesRead int64,
+	numBytesRead int64,
 	err error) {
 
 	if fIoReader.lock == nil {
@@ -2064,10 +2064,10 @@ func (fIoReader *FileIoReader) ReadAllToStrBuilder(
 
 	if err != nil {
 
-		return numOfBytesRead, err
+		return numBytesRead, err
 	}
 
-	numOfBytesRead,
+	numBytesRead,
 		err = new(fileIoReaderMicrobot).
 		readAllStrBuilder(
 			fIoReader,
@@ -2076,7 +2076,7 @@ func (fIoReader *FileIoReader) ReadAllToStrBuilder(
 			autoCloseOnExit,
 			ePrefix)
 
-	return numOfBytesRead, err
+	return numBytesRead, err
 }
 
 // ReadAllToString
