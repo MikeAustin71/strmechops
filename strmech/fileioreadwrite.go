@@ -2482,9 +2482,7 @@ func (fIoReadWrite *FileIoReadWrite) ReadAllToStrBuilder(
 //		integer value will equal the number of bytes
 //		read from the internal io.Reader object
 //		encapsulated by the current instance of
-//		FileIoReadWrite. This value also equates to
-//		the length of the returned string ('contentsStr')
-//		in bytes.
+//		FileIoReadWrite.
 //
 //		This integer value should also equal the
 //		string length of the returned string,
@@ -2535,7 +2533,7 @@ func (fIoReadWrite *FileIoReadWrite) ReadAllToString(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"FileIoReadWrite."+
-			"ReadAllToStrBuilder()",
+			"ReadAllToString()",
 		"")
 
 	if err != nil {
