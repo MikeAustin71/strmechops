@@ -2232,7 +2232,7 @@ func (fIoReader *FileIoReader) ReadAllToStrBuilder(
 //
 // # Return Values
 //
-//	numOfBytesRead				int64
+//	numBytesRead				int64
 //
 //		If this method completes successfully, this
 //		integer value will equal the number of bytes
@@ -2272,7 +2272,7 @@ func (fIoReader *FileIoReader) ReadAllToStrBuilder(
 func (fIoReader *FileIoReader) ReadAllToString(
 	autoCloseOnExit bool,
 	errorPrefix interface{}) (
-	numOfBytesRead int64,
+	numBytesRead int64,
 	contentsStr string,
 	err error) {
 
@@ -2295,12 +2295,12 @@ func (fIoReader *FileIoReader) ReadAllToString(
 
 	if err != nil {
 
-		return numOfBytesRead, contentsStr, err
+		return numBytesRead, contentsStr, err
 	}
 
 	strBuilder := new(strings.Builder)
 
-	numOfBytesRead,
+	numBytesRead,
 		err = new(fileIoReaderMicrobot).
 		readAllStrBuilder(
 			fIoReader,
@@ -2311,12 +2311,12 @@ func (fIoReader *FileIoReader) ReadAllToString(
 
 	if err != nil {
 
-		return numOfBytesRead, contentsStr, err
+		return numBytesRead, contentsStr, err
 	}
 
 	contentsStr = strBuilder.String()
 
-	return numOfBytesRead, contentsStr, err
+	return numBytesRead, contentsStr, err
 }
 
 // ReadAt
