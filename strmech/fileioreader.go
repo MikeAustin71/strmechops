@@ -2542,10 +2542,11 @@ func (fIoReader *FileIoReader) ReadAt(
 
 // ReadBytesToString
 //
-// Reads a specified number of bytes from the data input
-// source configured for the current instance of
-// FileIoReader. These bytes are then stored as a string
-// and returned via return parameter 'contentsStr'.
+// Reads a specified number of bytes from the io.Reader
+// data input source configured for the current instance
+// of FileIoReader (FileIoReader.ioReader). These bytes
+// are then stored as a string and returned via return
+// parameter 'contentsStr'.
 //
 // ----------------------------------------------------------------
 //
@@ -2588,7 +2589,7 @@ func (fIoReader *FileIoReader) ReadAt(
 //		The actual number of bytes read from the data input
 //		source may vary due to (1) unforeseen processing
 //		errors or (2) an End-Of-File scenario. Be sure to
-//		check the 'numOfBytesRead' and 'reachedEndOfFile'
+//		check the 'numBytesRead' and 'reachedEndOfFile'
 //		parameters returned by this method.
 //
 //	autoCloseOnExit				bool
@@ -2690,7 +2691,7 @@ func (fIoReader *FileIoReader) ReadAt(
 //
 // # Return Values
 //
-//	numOfBytesRead				int64
+//	numBytesRead				int64
 //
 //		If this method completes successfully, this
 //		integer value will equal the actual number of
@@ -2745,7 +2746,7 @@ func (fIoReader *FileIoReader) ReadBytesToString(
 	numOfBytesToRead int,
 	autoCloseOnExit bool,
 	errorPrefix interface{}) (
-	numOfBytesRead int64,
+	numBytesRead int64,
 	contentsStr string,
 	reachedEndOfFile bool,
 	err error) {
@@ -2769,7 +2770,7 @@ func (fIoReader *FileIoReader) ReadBytesToString(
 
 	if err != nil {
 
-		return numOfBytesRead,
+		return numBytesRead,
 			contentsStr,
 			reachedEndOfFile,
 			err
@@ -2784,7 +2785,7 @@ func (fIoReader *FileIoReader) ReadBytesToString(
 			"an instance of 'FileIoReader'\n",
 			ePrefix.String())
 
-		return numOfBytesRead,
+		return numBytesRead,
 			contentsStr,
 			reachedEndOfFile,
 			err
@@ -2792,7 +2793,7 @@ func (fIoReader *FileIoReader) ReadBytesToString(
 
 	var strBuilder = new(strings.Builder)
 
-	numOfBytesRead,
+	numBytesRead,
 		reachedEndOfFile,
 		err = new(fileIoReaderMicrobot).
 		readBytesToStrBuilder(
@@ -2807,7 +2808,7 @@ func (fIoReader *FileIoReader) ReadBytesToString(
 		contentsStr = strBuilder.String()
 	}
 
-	return numOfBytesRead,
+	return numBytesRead,
 		contentsStr,
 		reachedEndOfFile,
 		err
