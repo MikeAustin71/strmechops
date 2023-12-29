@@ -3232,6 +3232,223 @@ func (fIoReadWrite *FileIoReadWrite) ReadBytesToStringBuilder(
 	return numBytesRead, reachedEndOfFile, err
 }
 
+// ReadWriteAll
+//
+// This method will read all data residing in the
+// internal io.Reader object and write that data to the
+// internal io.Writer object. Both the io.Reader and
+// io.Writer objects are encapsulated in the current
+// instance of FileIoReadWrite.
+//
+// The data is read from 'reader' using an internal byte
+// array equal in length to the default array size
+// previously configured for the io.Reader.
+//
+// The return parameter 'numOfBytesProcessed' records the
+// number of bytes read from 'reader' and written to
+// the io.Writer object. If the number of bytes read fails
+// to match the number of bytes written, an error will be
+// returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	autoCloseOnExit				bool
+//
+//		If this parameter is set to 'true', the current
+//		instance of FileIoReadWrite will be automatically
+//		'closed' upon successful completion of this
+//		method. This 'close' operation will perform all
+//		required Clean-Up tasks on the current
+//		FileIoReadWrite instance and users will therefore
+//		NOT be required to make a separate call to local
+//		method:
+//
+//				FileIoReadWrite.Close()
+//
+//		Conversely, if this parameter is set to 'false'
+//		the current instance of FileIoReadWrite will NOT
+//		be 'closed' and users WILL BE required to make
+//		a separate call to local method:
+//
+//				FileIoReadWrite.Close()
+//
+//		Once the current instance of FileIoReadWrite has
+//		been 'closed' and all Clean-Up operations have
+//		been completed, no further 'read' or 'write'
+//		operations may be performed using the current
+//		FileIoReadWrite instance.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numOfBytesProcessed			int64
+//
+//		This return parameter documents the number of
+//		bytes read from 'reader' and written to the
+//		FileIoReadWrite io.Writer object. If the
+//		number of bytes read fails to match the number
+//		bytes written, an error will be returned.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message.
+func (fIoReadWrite *FileIoReadWrite) ReadWriteAll(
+	autoCloseOnExit bool,
+	errorPrefix interface{}) (
+	numOfBytesProcessed int64,
+	err error) {
+
+	if fIoReadWrite.lock == nil {
+		fIoReadWrite.lock = new(sync.Mutex)
+	}
+
+	fIoReadWrite.lock.Lock()
+
+	defer fIoReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileIoReadWrite."+
+			"SetPathFileNameWriter()",
+		"")
+
+	if err != nil {
+
+		return numOfBytesProcessed, err
+	}
+
+	if fIoReadWrite.reader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of FileIoReadWrite is invalid.\n"+
+			"The internal io.Reader object has not been proplery\n"+
+			"initialized. FileIoReadWrite.reader == 'nil'\n"+
+			"To properly initialize an instance of FileIoReadWrite,\n"+
+			"call one or more of the 'New' or 'Setter' methods.\n",
+			ePrefix.String())
+
+		return numOfBytesProcessed, err
+	}
+
+	if fIoReadWrite.writer == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of FileIoReadWrite is invalid.\n"+
+			"The internal io.Writer object has not been proplery\n"+
+			"initialized. FileIoReadWrite.writer == 'nil'\n"+
+			"To properly initialize an instance of FileIoReadWrite,\n"+
+			"call one or more of the 'New' or 'Setter' methods.\n",
+			ePrefix.String())
+
+		return numOfBytesProcessed, err
+	}
+
+	var err2 error
+
+	numOfBytesProcessed,
+		err2 = fIoReadWrite.writer.ReadFrom(
+		*fIoReadWrite.reader.ioReader)
+
+	if err2 != nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by fIoReadWrite.writer.ReadFrom().\n"+
+			"The error occurred while reading and writing the\n"+
+			"entire contents of the internal io.Reader object\n"+
+			"encapsulated by the current instance of FileIoReadWrite.\n"+
+			"Error=\n%v\n",
+			ePrefix.String(),
+			err2.Error())
+
+		return numOfBytesProcessed, err
+	}
+
+	if autoCloseOnExit == true {
+
+		err = new(fileIoReadWriteMicrobot).
+			readerWriterCloseRelease(
+				fIoReadWrite,
+				"fIoReadWrite",
+				true, // releaseReaderWriterMemResources
+				true, // releaseFIoReadWriteMemResources
+				ePrefix.XCpy(
+					"Close-Reader&Writer"))
+
+	}
+
+	return numOfBytesProcessed, err
+}
+
 // SeekReader
 //
 // This method sets the byte offset for the next 'read'

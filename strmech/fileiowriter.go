@@ -1331,20 +1331,21 @@ func (fIoWriter *FileIoWriter) NewPathFileName(
 //
 // Implements the io.ReadFrom interface.
 //
-// This method will read data from the io.Reader object
-// passed as input parameter 'reader' and write that data
-// to bufio.Writer encapsulated by the current instance of
-// FileBufferWriter.
+// This method will all the read data residing the
+// io.Reader object passed as input parameter 'reader'
+// and write that data to the io.Writer encapsulated by
+// the current instance of FileIoWriter.
 //
 // The data is read from 'reader' using an internal byte
-// array equal in length to the buffer configured for the
-// current instance of FileBufferWriter.
+// array equal in length to the default array size
+// previously configured for the current instance of
+// FileIoWriter.
 //
 // The return parameter 'numOfBytesProcessed' records the
 // number of bytes read from 'reader' and written to
-// the FileBufferWriter bufio.Writer object. If the
-// number of bytes read fails to match the number of
-// bytes written, an error will be returned.
+// the io.Writer object. If the number of bytes read
+// fails to match the number of bytes written, an error
+// will be returned.
 //
 // ----------------------------------------------------------------
 //
@@ -1355,8 +1356,8 @@ func (fIoWriter *FileIoWriter) NewPathFileName(
 //		An object which implements the io.Reader interface.
 //		This method will read the entire contents of this
 //		io.Reader object and write the data to the
-//		bufio.Writer object encapsulated by the current
-//		instance of FileBufferWriter.
+//		io.Writer object encapsulated by the current
+//		instance of FileIoWriter.
 //
 // ----------------------------------------------------------------
 //
@@ -1366,7 +1367,7 @@ func (fIoWriter *FileIoWriter) NewPathFileName(
 //
 //		This return parameter documents the number of
 //		bytes read from 'reader' and written to the
-//		FileBufferWriter bufio.Writer object. If the
+//		FileIoWriter io.Writer object. If the
 //		number of bytes read fails to match the number
 //		bytes written, an error will be returned.
 //
@@ -1484,7 +1485,7 @@ func (fIoWriter *FileIoWriter) ReadFrom(
 			if err2 != nil {
 
 				err = fmt.Errorf("%v\n"+
-					"Error returned by fBufWriter.bufioWriter.Write(bytesRead[:numBytesRead])\n"+
+					"Error returned by FileIoWriter.ioWriter.Write(bytesRead[:numBytesRead])\n"+
 					"numBytesRead= '%v'\n"+
 					"Error=\n%v\n",
 					ePrefix.String(),
@@ -1939,7 +1940,7 @@ func (fIoWriter *FileIoWriter) SetIoWriter(
 // input parameter 'fileMgr'.
 //
 // The file identified by 'fileMgr' will be used to
-// reconfigure the internal bufio.Writer encapsulated in
+// reconfigure the internal io.Writer encapsulated in
 // the current instance of FileIoWriter.
 //
 // ----------------------------------------------------------------
@@ -2196,11 +2197,11 @@ func (fIoWriter *FileIoWriter) SetFileMgr(
 // SetPathFileName
 //
 // This method will completely re-initialize the current
-// instance of FileIoWriter using the path and file
-// name passed as input parameter 'pathFileName'.
+// instance of FileIoWriter using the path and file name
+// passed as input parameter 'pathFileName'.
 //
 // The path and file name specified by 'pathFileName'
-// will be used to reconfigure the internal bufio.Writer
+// will be used to reconfigure the internal io.Writer
 // encapsulated in the current instance of
 // FileIoWriter.
 //
