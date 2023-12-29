@@ -2584,7 +2584,7 @@ func (fIoReader *FileIoReader) ReadAt(
 //		more information on Default Reader Buffer Size,
 //		reference local method:
 //
-//			FileIoReader.SetDefaultReaderArraySize()
+//			FileIoReader.SetDefaultByteArraySize()
 //
 //		The actual number of bytes read from the data input
 //		source may vary due to (1) unforeseen processing
@@ -2858,7 +2858,7 @@ func (fIoReader *FileIoReader) ReadBytesToString(
 //		more information on Default Reader Buffer Size,
 //		reference local method:
 //
-//			FileIoReader.SetDefaultReaderArraySize()
+//			FileIoReader.SetDefaultByteArraySize()
 //
 //		The actual number of bytes read from the data input
 //		source may vary due to (1) unforeseen processing
@@ -3240,7 +3240,7 @@ func (fIoReader *FileIoReader) Seek(
 	return offsetFromFileStart, err
 }
 
-// SetDefaultReaderArraySize
+// SetDefaultByteArraySize
 //
 // Sets the default size of the array used to read bytes
 // from the internal io.Reader encapsulated in the
@@ -3278,7 +3278,7 @@ func (fIoReader *FileIoReader) Seek(
 // # Return Values
 //
 //	-- NONE --
-func (fIoReader *FileIoReader) SetDefaultReaderArraySize(
+func (fIoReader *FileIoReader) SetDefaultByteArraySize(
 	defaultReaderByteArraySize int) {
 
 	if fIoReader.lock == nil {
@@ -4782,7 +4782,7 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readBytes(
 //		instance. For more information on Default Reader
 //		Buffer Size, reference local method:
 //
-//			FileIoReader.SetDefaultReaderArraySize()
+//			FileIoReader.SetDefaultByteArraySize()
 //
 //		The actual number of bytes read from the data input
 //		source may vary due to (1) unforeseen processing

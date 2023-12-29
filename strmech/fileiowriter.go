@@ -1692,17 +1692,18 @@ func (fIoWriter *FileIoWriter) Seek(
 
 // SetDefaultByteArraySize
 //
-// Sets the default size of the array used to write bytes
-// to the output data destination object (io.Writer)
-// encapsulated in the current instance of FileIoWriter.
+// Sets the default size of the byte array used to write
+// bytes to the output data destination object
+// (io.Writer) encapsulated in the current instance of
+// FileIoWriter.
 //
 // Although the FileIoWriter type does not use the
 // 'buffered' write protocol, the size of the byte array
 // used to write bytes to the underlying io.Writer object
 // is variable is some cases.
 //
-// Methods which utilize the Default Reader Buffer Size
-// include:
+// Methods which utilize the Default Writer Byte Array
+// Size include:
 //
 //	FileIoWriter.ReadFrom()
 //
@@ -1710,16 +1711,16 @@ func (fIoWriter *FileIoWriter) Seek(
 //
 // # Input Parameters
 //
-//	defaultByteArraySize		int
+//	defaultWriterByteArraySize		int
 //
 //		The size of the byte array which will be used to
 //		write data to the output data destination object
 //		(io.Writer) encapsulated by the current instance
 //		of FileIoWriter.
 //
-//		If the value of 'defaultByteArraySize' is less
-//		than  one ('1'), it will be automatically reset
-//		to a size of '4096'.
+//		If the value of 'defaultWriterByteArraySize' is
+//		less than  one ('1'), it will be automatically
+//		reset to a size of '4096'.
 //
 // ----------------------------------------------------------------
 //
@@ -1727,7 +1728,7 @@ func (fIoWriter *FileIoWriter) Seek(
 //
 //	-- NONE --
 func (fIoWriter *FileIoWriter) SetDefaultByteArraySize(
-	defaultByteArraySize int) {
+	defaultWriterByteArraySize int) {
 
 	if fIoWriter.lock == nil {
 		fIoWriter.lock = new(sync.Mutex)
@@ -1738,7 +1739,7 @@ func (fIoWriter *FileIoWriter) SetDefaultByteArraySize(
 	defer fIoWriter.lock.Unlock()
 
 	fIoWriter.defaultByteArraySize =
-		defaultByteArraySize
+		defaultWriterByteArraySize
 
 	new(fileIoWriterMolecule).
 		validateDefaultByteArraySize(fIoWriter)
