@@ -3252,6 +3252,17 @@ func (fIoReadWrite *FileIoReadWrite) ReadBytesToStringBuilder(
 //
 // ----------------------------------------------------------------
 //
+// # IMPORTANT
+//
+//	If input parameter 'autoCloseOnExit' is set to
+//	'false', the user is responsible for performing
+//	required Clean-Up operations on the current instance
+//	of FileIoReadWrite by calling local method:
+//
+//		FileIoReadWrite.Close()
+//
+// ----------------------------------------------------------------
+//
 // # Input Parameters
 //
 //	autoCloseOnExit				bool
