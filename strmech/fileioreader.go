@@ -1047,7 +1047,7 @@ func (fIoReader *FileIoReader) NewFileMgr(
 // This target 'read' file identified by 'pathFileName'
 // will be used to create a file pointer (*os.File) which
 // in turn will be used to configure the internal
-// bufio.Reader.
+// io.Reader.
 //
 // If the target path and file identified by
 // 'pathFileName' do not currently exist on an attached
@@ -3500,7 +3500,7 @@ func (fIoReader *FileIoReader) SetIoReader(
 // input parameter 'fileMgr'.
 //
 // The file identified by 'fileMgr' will be used to
-// reconfigure the internal bufio.Reader encapsulated in
+// reconfigure the internal io.Reader encapsulated in
 // the current instance of FileIoReader.
 //
 // ----------------------------------------------------------------
@@ -3746,7 +3746,7 @@ func (fIoReader *FileIoReader) SetFileMgr(
 // name passed as input parameter 'pathFileName'.
 //
 // The path and file name specified by 'pathFileName'
-// will be used to reconfigure the internal bufio.Reader
+// will be used to reconfigure the internal io.Reader
 // encapsulated in the current instance of
 // FileIoReader.
 //
@@ -5649,7 +5649,7 @@ type fileIoReaderNanobot struct {
 //		implementing the io.Reader interface.
 //
 //		This instance of io.Reader will be used to
-//		configure the internal bufio.Reader contained in
+//		configure the internal io.Reader contained in
 //		'fIoReader' and used to conduct 'read'
 //		operations.
 //
