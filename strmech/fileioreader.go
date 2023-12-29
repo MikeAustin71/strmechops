@@ -2355,8 +2355,8 @@ func (fIoReader *FileIoReader) ReadAllToString(
 //	offsetFromBeginning			int64
 //
 //		The offset in bytes from the beginning of the
-//		input source from which the read 'operation' will
-//		commence.
+//		internal io.Reader input source at which the read
+//		'operation' will commence.
 //
 //		If this value is less than zero, an error will be
 //		returned.
@@ -2424,7 +2424,15 @@ func (fIoReader *FileIoReader) ReadAllToString(
 //
 // # Return Values
 //
-//	error
+//	numBytesRead				int
+//
+//		If this method completes successfully, this
+//		returned integer will hold the number of bytes
+//		read successfully from the internal io.Reader
+//		object encapsulated by the current instance of
+//		FileIoReader.
+//
+//	err							error
 //
 //		If this method completes successfully, the
 //		returned error Type is set equal to 'nil'.
@@ -2439,7 +2447,7 @@ func (fIoReader *FileIoReader) ReadAllToString(
 func (fIoReader *FileIoReader) ReadAt(
 	bytesRead []byte,
 	offsetFromBeginning int64) (
-	numOfBytesRead int,
+	numBytesRead int,
 	err error) {
 
 	if fIoReader.lock == nil {
@@ -2461,7 +2469,7 @@ func (fIoReader *FileIoReader) ReadAt(
 
 	if err != nil {
 
-		return numOfBytesRead, err
+		return numBytesRead, err
 	}
 
 	if fIoReader.ioReader == nil {
@@ -2473,7 +2481,7 @@ func (fIoReader *FileIoReader) ReadAt(
 			"an instance of 'FileIoReader'\n",
 			ePrefix.String())
 
-		return numOfBytesRead, err
+		return numBytesRead, err
 	}
 
 	if len(bytesRead) < 16 {
@@ -2485,7 +2493,7 @@ func (fIoReader *FileIoReader) ReadAt(
 			ePrefix.String(),
 			len(bytesRead))
 
-		return numOfBytesRead, err
+		return numBytesRead, err
 	}
 
 	if offsetFromBeginning < 0 {
@@ -2497,7 +2505,7 @@ func (fIoReader *FileIoReader) ReadAt(
 			ePrefix.String(),
 			offsetFromBeginning)
 
-		return numOfBytesRead, err
+		return numBytesRead, err
 	}
 
 	var ok bool
@@ -2521,15 +2529,15 @@ func (fIoReader *FileIoReader) ReadAt(
 			"    NOT implement the io.WriterAt interface.\n",
 			ePrefix.String())
 
-		return numOfBytesRead, err
+		return numBytesRead, err
 	}
 
-	numOfBytesRead,
+	numBytesRead,
 		err = readerAtObj.ReadAt(
 		bytesRead,
 		offsetFromBeginning)
 
-	return numOfBytesRead, err
+	return numBytesRead, err
 }
 
 // ReadBytesToString
