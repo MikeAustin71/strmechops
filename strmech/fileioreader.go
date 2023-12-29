@@ -2584,7 +2584,7 @@ func (fIoReader *FileIoReader) ReadAt(
 //		more information on Default Reader Buffer Size,
 //		reference local method:
 //
-//			FileIoReader.SetDefaultReaderBufferSize()
+//			FileIoReader.SetDefaultReaderArraySize()
 //
 //		The actual number of bytes read from the data input
 //		source may vary due to (1) unforeseen processing
@@ -2858,12 +2858,12 @@ func (fIoReader *FileIoReader) ReadBytesToString(
 //		more information on Default Reader Buffer Size,
 //		reference local method:
 //
-//			FileIoReader.SetDefaultReaderBufferSize()
+//			FileIoReader.SetDefaultReaderArraySize()
 //
 //		The actual number of bytes read from the data input
 //		source may vary due to (1) unforeseen processing
 //		errors or (2) an End-Of-File scenario. Be sure to
-//		check the 'numOfBytesRead' and 'reachedEndOfFile'
+//		check the 'numBytesRead' and 'reachedEndOfFile'
 //		parameters returned by this method.
 //
 //	strBuilder					*strings.Builder
@@ -2973,7 +2973,7 @@ func (fIoReader *FileIoReader) ReadBytesToString(
 //
 // # Return Values
 //
-//	numOfBytesRead				int64
+//	numBytesRead				int64
 //
 //		If this method completes successfully, this
 //		integer value will equal the actual number of
@@ -3022,7 +3022,7 @@ func (fIoReader *FileIoReader) ReadBytesToStringBuilder(
 	strBuilder *strings.Builder,
 	autoCloseOnExit bool,
 	errorPrefix interface{}) (
-	numOfBytesRead int64,
+	numBytesRead int64,
 	reachedEndOfFile bool,
 	err error) {
 
@@ -3045,7 +3045,7 @@ func (fIoReader *FileIoReader) ReadBytesToStringBuilder(
 
 	if err != nil {
 
-		return numOfBytesRead, reachedEndOfFile, err
+		return numBytesRead, reachedEndOfFile, err
 	}
 
 	if fIoReader.ioReader == nil {
@@ -3057,10 +3057,10 @@ func (fIoReader *FileIoReader) ReadBytesToStringBuilder(
 			"an instance of 'FileIoReader'\n",
 			ePrefix.String())
 
-		return numOfBytesRead, reachedEndOfFile, err
+		return numBytesRead, reachedEndOfFile, err
 	}
 
-	numOfBytesRead,
+	numBytesRead,
 		reachedEndOfFile,
 		err = new(fileIoReaderMicrobot).
 		readBytesToStrBuilder(
@@ -3071,7 +3071,7 @@ func (fIoReader *FileIoReader) ReadBytesToStringBuilder(
 			autoCloseOnExit,
 			ePrefix)
 
-	return numOfBytesRead, reachedEndOfFile, err
+	return numBytesRead, reachedEndOfFile, err
 }
 
 // Seek
@@ -3240,7 +3240,7 @@ func (fIoReader *FileIoReader) Seek(
 	return offsetFromFileStart, err
 }
 
-// SetDefaultReaderBufferSize
+// SetDefaultReaderArraySize
 //
 // Sets the default size of the array used to read bytes
 // from the internal io.Reader encapsulated in the
@@ -3278,7 +3278,7 @@ func (fIoReader *FileIoReader) Seek(
 // # Return Values
 //
 //	-- NONE --
-func (fIoReader *FileIoReader) SetDefaultReaderBufferSize(
+func (fIoReader *FileIoReader) SetDefaultReaderArraySize(
 	defaultReaderByteArraySize int) {
 
 	if fIoReader.lock == nil {
@@ -3293,7 +3293,7 @@ func (fIoReader *FileIoReader) SetDefaultReaderBufferSize(
 		defaultReaderByteArraySize
 
 	new(fileIoReaderMolecule).
-		validateDefaultReaderBufferSize(
+		validateDefaultReaderArraySize(
 			fIoReader)
 
 	return
@@ -4095,7 +4095,7 @@ func (fIoReader *FileIoReader) WriteTo(
 	}
 
 	new(fileIoReaderMolecule).
-		validateDefaultReaderBufferSize(
+		validateDefaultReaderArraySize(
 			fIoReader)
 
 	var bytesRead = make([]byte,
@@ -4382,7 +4382,7 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readAllStrBuilder(
 	var fIoReaderMolecule = new(fileIoReaderMolecule)
 
 	fIoReaderMolecule.
-		validateDefaultReaderBufferSize(
+		validateDefaultReaderArraySize(
 			fIoReader)
 
 	var reader = *fIoReader.ioReader
@@ -4782,7 +4782,7 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readBytes(
 //		instance. For more information on Default Reader
 //		Buffer Size, reference local method:
 //
-//			FileIoReader.SetDefaultReaderBufferSize()
+//			FileIoReader.SetDefaultReaderArraySize()
 //
 //		The actual number of bytes read from the data input
 //		source may vary due to (1) unforeseen processing
@@ -4970,7 +4970,7 @@ func (fIoReaderMicrobot *fileIoReaderMicrobot) readBytesToStrBuilder(
 	var fIoReaderMolecule = new(fileIoReaderMolecule)
 
 	fIoReaderMolecule.
-		validateDefaultReaderBufferSize(
+		validateDefaultReaderArraySize(
 			fIoReader)
 
 	if numOfBytesToRead < 1 {
@@ -5788,7 +5788,7 @@ func (fIoReaderNanobot *fileIoReaderNanobot) setIoReader(
 		defaultReaderByteArraySize
 
 	fIoReaderMolecule.
-		validateDefaultReaderBufferSize(fIoReader)
+		validateDefaultReaderArraySize(fIoReader)
 
 	// Set io.Reader
 	fIoReader.ioReader = &reader
@@ -6168,7 +6168,7 @@ func (fIoReaderNanobot *fileIoReaderNanobot) setPathFileName(
 		defaultReaderByteArraySize
 
 	fIoReaderMolecule.
-		validateDefaultReaderBufferSize(
+		validateDefaultReaderArraySize(
 			fIoReader)
 
 	return fInfoPlus, err
@@ -6178,7 +6178,7 @@ type fileIoReaderMolecule struct {
 	lock *sync.Mutex
 }
 
-// validateDefaultReaderBufferSize
+// validateDefaultReaderArraySize
 //
 // Validates the default buffer size for the instance of
 // FileIoReader passed as input parameter 'fIoReader'.
@@ -6208,7 +6208,7 @@ type fileIoReaderMolecule struct {
 // # Return Values
 //
 //	-- NONE --
-func (fIoReaderMolecule *fileIoReaderMolecule) validateDefaultReaderBufferSize(
+func (fIoReaderMolecule *fileIoReaderMolecule) validateDefaultReaderArraySize(
 	fIoReader *FileIoReader) {
 
 	if fIoReaderMolecule.lock == nil {

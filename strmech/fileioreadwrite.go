@@ -1792,6 +1792,19 @@ func (fIoReadWrite *FileIoReadWrite) Read(
 		return numBytesRead, err
 	}
 
+	if fIoReadWrite.reader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of FileIoReadWrite is invalid.\n"+
+			"The internal io.Reader object has not been proplery\n"+
+			"initialized. FileIoReadWrite.reader == 'nil'\n"+
+			"To properly initialize an instance of FileIoReadWrite,\n"+
+			"call one or more of the 'New' or 'Setter' methods.\n",
+			ePrefix.String())
+
+		return numBytesRead, err
+	}
+
 	numBytesRead,
 		err = new(fileIoReaderMicrobot).
 		readBytes(
@@ -2347,6 +2360,19 @@ func (fIoReadWrite *FileIoReadWrite) ReadAllToStrBuilder(
 		return numBytesRead, err
 	}
 
+	if fIoReadWrite.reader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of FileIoReadWrite is invalid.\n"+
+			"The internal io.Reader object has not been proplery\n"+
+			"initialized. FileIoReadWrite.reader == 'nil'\n"+
+			"To properly initialize an instance of FileIoReadWrite,\n"+
+			"call one or more of the 'New' or 'Setter' methods.\n",
+			ePrefix.String())
+
+		return numBytesRead, err
+	}
+
 	numBytesRead,
 		err = new(fileIoReaderMicrobot).
 		readAllStrBuilder(
@@ -2537,6 +2563,20 @@ func (fIoReadWrite *FileIoReadWrite) ReadAllToString(
 		"")
 
 	if err != nil {
+
+		return numBytesRead,
+			contentsStr, err
+	}
+
+	if fIoReadWrite.reader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of FileIoReadWrite is invalid.\n"+
+			"The internal io.Reader object has not been proplery\n"+
+			"initialized. FileIoReadWrite.reader == 'nil'\n"+
+			"To properly initialize an instance of FileIoReadWrite,\n"+
+			"call one or more of the 'New' or 'Setter' methods.\n",
+			ePrefix.String())
 
 		return numBytesRead,
 			contentsStr, err
@@ -2786,7 +2826,7 @@ func (fIoReadWrite *FileIoReadWrite) ReadAt(
 //		instance. For more information on Default Reader
 //		Buffer Size, reference local method:
 //
-//			FileIoReadWrite.SetDefaultReaderBufferSize()
+//			FileIoReadWrite.SetDefaultReaderArraySize()
 //
 //		The actual number of bytes read from the data input
 //		source may vary due to (1) unforeseen processing
@@ -2974,6 +3014,222 @@ func (fIoReadWrite *FileIoReadWrite) ReadBytesToString(
 		contentsStr,
 		reachedEndOfFile,
 		err
+}
+
+// ReadBytesToStringBuilder
+//
+// Reads a specified number of bytes from the data input
+// source configured for the current instance of
+// FileIoReadWrite. These bytes are then stored in an
+// instance of strings.Builder passed as input parameter
+// 'strBuilder'.
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	If the current instance of FileIoReadWrite has NOT been
+//	properly initialized, an error will be returned.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	numOfBytesToRead			int
+//
+//		This parameter specifies the number of bytes to
+//		read from the data input source configured for
+//		the current instance of FileIoReadWrite.
+//
+//		If the value of 'numOfBytesToRead' is less than
+//		one ('1'), this parameter will be automatically
+//		set to the Default Reader Buffer Size previously
+//		configured for this FileIoReadWrite instance. For
+//		more information on Default Reader Buffer Size,
+//		reference local method:
+//
+//			FileIoReadWrite.SetDefaultReaderArraySize()
+//
+//		The actual number of bytes read from the data input
+//		source may vary due to (1) unforeseen processing
+//		errors or (2) an End-Of-File scenario. Be sure to
+//		check the 'numBytesRead' and 'reachedEndOfFile'
+//		parameters returned by this method.
+//
+//	strBuilder					*strings.Builder
+//
+//		A pointer to an instance of strings.Builder. This
+//		method reads bytes from the input data source
+//		configured for the current instance of
+//		FileIoReadWrite and adds those bytes to this
+//		instance of strings.Builder.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numBytesRead				int64
+//
+//		If this method completes successfully, this
+//		integer value will equal the actual number of
+//		bytes read from the input data source (io.Reader)
+//		encapsulated by the current instance of
+//		FileIoReadWrite and stored in the strings.Builder
+//		instance passed as input parameter 'strBuilder'.
+//
+//		This actual number of bytes read from the data
+//		input source may vary from the 'numOfBytesToRead'
+//		input parameter due to (1) unforeseen processing
+//		errors or (2) an End-Of-File scenario. Be sure to
+//		check the 'reachedEndOfFile' parameter returned
+//		by this method.
+//
+//	reachedEndOfFile			bool
+//
+//		If during the 'read' operation, the End-Of-File
+//		flag was encountered, this boolean parameter will
+//		be set to 'true'. The End-Of-File flag signals that
+//		the 'read' operation reached the end of the data
+//		input source configured for the current
+//		FileIoReadWrite instance.
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+//
+//		An error will only be returned if a processing
+//		or system error was encountered. When the
+//		end-of-file flag is encountered during the 'read'
+//		operation, 'reachedEndOfFile' will be set to
+//		'true', the returned error object will be set
+//		to 'nil', and no error will be returned.
+func (fIoReadWrite *FileIoReadWrite) ReadBytesToStringBuilder(
+	numOfBytesToRead int,
+	strBuilder *strings.Builder,
+	errorPrefix interface{}) (
+	numBytesRead int64,
+	reachedEndOfFile bool,
+	err error) {
+
+	if fIoReadWrite.lock == nil {
+		fIoReadWrite.lock = new(sync.Mutex)
+	}
+
+	fIoReadWrite.lock.Lock()
+
+	defer fIoReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileIoReadWrite."+
+			"SetPathFileNameWriter()",
+		"")
+
+	if err != nil {
+
+		return numBytesRead,
+			reachedEndOfFile,
+			err
+	}
+
+	if fIoReadWrite.reader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of FileIoReadWrite is invalid.\n"+
+			"The internal io.Reader object has not been proplery\n"+
+			"initialized. FileIoReadWrite.reader == 'nil'\n"+
+			"To properly initialize an instance of FileIoReadWrite,\n"+
+			"call one or more of the 'New' or 'Setter' methods.\n",
+			ePrefix.String())
+
+		return numBytesRead,
+			reachedEndOfFile,
+			err
+	}
+
+	numBytesRead,
+		reachedEndOfFile,
+		err = new(fileIoReaderMicrobot).
+		readBytesToStrBuilder(
+			fIoReadWrite.reader,
+			"fIoReadWrite.reader",
+			numOfBytesToRead,
+			strBuilder,
+			false, // autoCloseOnExit,
+			ePrefix)
+
+	return numBytesRead, reachedEndOfFile, err
 }
 
 // SeekReader
@@ -3418,6 +3674,164 @@ func (fIoReadWrite *FileIoReadWrite) SeekWriter(
 			ePrefix)
 
 	return offsetFromFileStart, err
+}
+
+// SetDefaultReaderArraySize
+//
+// Sets the default size of the array used to read bytes
+// from the internal io.Reader encapsulated in the
+// current instance of FileIoReader.
+//
+// Although the FileIoReader type does not use the
+// 'buffered' read protocol, the size of the byte array
+// used to read and store bytes read from the underlying
+// io.Reader object is variable in some cases.
+//
+// The Default Reader Buffer Size controls the size of
+// the byte array used by the following methods:
+//
+//	FileIoReader.ReadAllToStrBuilder()
+//	FileIoReader.ReadAllToString()
+//	FileIoReader.WriteTo()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	defaultReaderByteArraySize		int
+//
+//		The size of the byte array which will be used to
+//		read data from the internal io.Reader object
+//		encapsulated by the current instance of
+//		FileIoReader.
+//
+//		If the value of 'defaultReaderByteArraySize' is less
+//		than '16', it will be automatically reset to a
+//		size of '4096'.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fIoReadWrite *FileIoReadWrite) SetDefaultReaderArraySize(
+	defaultReaderByteArraySize int,
+	errorPrefix interface{}) (
+	err error) {
+
+	if fIoReadWrite.lock == nil {
+		fIoReadWrite.lock = new(sync.Mutex)
+	}
+
+	fIoReadWrite.lock.Lock()
+
+	defer fIoReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		"FileIoReadWrite."+
+			"SetDefaultReaderArraySize()",
+		"")
+
+	if err != nil {
+
+		return err
+	}
+
+	if fIoReadWrite.reader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of FileIoReadWrite is invalid.\n"+
+			"The internal io.Reader object has not been proplery\n"+
+			"initialized. FileIoReadWrite.reader == 'nil'\n"+
+			"To properly initialize an instance of FileIoReadWrite,\n"+
+			"call one or more of the 'New' or 'Setter' methods.\n",
+			ePrefix.String())
+
+		return err
+	}
+
+	fIoReadWrite.reader.defaultByteArraySize =
+		defaultReaderByteArraySize
+
+	new(fileIoReaderMolecule).
+		validateDefaultReaderArraySize(
+			fIoReadWrite.reader)
+
+	return err
 }
 
 // SetFileMgrsReadWrite
