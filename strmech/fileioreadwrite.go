@@ -3679,14 +3679,23 @@ func (fIoReadWrite *FileIoReadWrite) ReadWriteAll(
 //		be used by the internal scanner to parse and
 //		read individual lines of text.
 //
-//		If the number of bytes in a line of text is
-//		reasonable standardized and constant, execution
-//		time and memory resources can be minimized with
-//		this parameter.
+//		The internal scanner used by this method is
+//		an instance of bufio.Scanner and therefore uses
+//		a buffered io procedure to read data from the
+//		internal io.Reader. The initial size of this
+//		buffer is controlled by this input parameter,
+//		'initialBufferSizeBytes'.
+//
+//		Assuming the number of bytes in a line of text
+//		contained in the internal io.Reader is reasonably
+//		standardized and constant, execution time and
+//		memory usage can be minimized with the careful
+//		configuration of this parameter.
 //
 //		If the initial buffer size proves to be too
-//		small, it will automatically be increased in
-//	 	stages up to a maximum of 65,536-bytes.
+//		small to accommodate a line of text, it will
+//		be automatically increased in stages up to a
+//		maximum of 65,536-bytes.
 //
 //		If the value of 'initialBufferSizeBytes' is
 //		less than two (2-bytes), it will be automatically
