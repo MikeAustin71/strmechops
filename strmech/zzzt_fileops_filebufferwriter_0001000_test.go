@@ -1206,6 +1206,7 @@ func TestFileBufferWriter_Write_003300(t *testing.T) {
 			readEndOfLineDelimiters,
 			writeEndOfLineChars,
 			-1,
+			512,
 			true,
 			ePrefix)
 

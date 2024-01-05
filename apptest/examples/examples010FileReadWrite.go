@@ -732,7 +732,8 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02() {
 			&readEndOfLineDelimiters,
 			writeEndOfLineChars,
 			maxNumOfTextLines, // numTextLinesPerBatch
-			true,              // autoFlushAndCloseOnExit
+			256,
+			true, // autoFlushAndCloseOnExit
 			ePrefix)
 
 	if err != nil {
@@ -910,7 +911,8 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02B() {
 			&readEndOfLineDelimiters,
 			writeEndOfLineChars,
 			maxNumOfTextLines, // numTextLinesPerBatch
-			true,              // autoFlushAndCloseOnExit
+			256,
+			true, // autoFlushAndCloseOnExit
 			ePrefix)
 
 	if err != nil {
@@ -1190,7 +1192,8 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 			&readEndOfLineDelimiters,
 			writeEndOfLineChars,
 			maxNumOfTextLines, // numTextLinesPerBatch
-			true,              // autoFlushAndCloseOnExit
+			256,
+			true, // autoFlushAndCloseOnExit
 			ePrefix)
 
 	if err != nil {

@@ -1,6 +1,7 @@
 package strmech
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
@@ -3458,6 +3459,622 @@ func (fIoReadWrite *FileIoReadWrite) ReadWriteAll(
 	}
 
 	return numOfBytesProcessed, err
+}
+
+// ReadWriteTextLines
+//
+// This method reads all available data from the internal
+// io.Reader object previously configured for the current
+// instance of FileIoReadWrite. It then parses this data
+// into lines of text based on the end-of-line delimiter
+// characters passed as input parameter,
+// 'endOfLineDelimiters'. These end-of-line delimiters
+// are stripped off the ends of all text lines processed.
+// New line termination or end-of-line characters
+// specified by user input parameters will then be
+// appended to the text lines before they are written to
+// the output destination io.Writer object configured for
+// the current instance of FileIoReadWrite.
+//
+// When writing final text lines to the internal
+// io.Writer object, the line termination or
+// end-of-line characters appended to each text line
+// written will be specified by input parameter
+// 'writeEndOfLineChars'.
+//
+// If input parameter 'autoCloseOnExit' is set to 'true',
+// this method will automatically perform all required
+// Clean-Up tasks upon completion. Clean-Up tasks involve
+// closing the io.Reader and io.Writer objects before
+// deleting io.Reader and io.Writer structure
+// values internal to the current FileIoReadWrite
+// instance. When these Clean-Up tasks are completed, the
+// current FileIoReadWrite instance will be invalid and
+// unavailable for future 'read' and/or 'write'
+// operations.
+//
+// If input parameter 'autoCloseOnExit' is set to
+// 'false', this method will NOT automatically perform
+// Clean-Up tasks for the current instance of
+// FileIoReadWrite. In this case, users are responsible
+// for performing these required Clean-Up tasks after
+// all read and write operations have been performed by
+// calling local method:
+//
+//	FileIoReadWrite.Close()
+//
+// ----------------------------------------------------------------
+//
+// # BE ADVISED
+//
+//	  Platform Conventions For Text End-Of-Line Characters
+//
+//	The line termination or end-of-line character, or
+//	characters, written to the io.Writer output
+//	destination are specified by input parameter
+//	'writeEndOfLineChars'.
+//
+//	The following are the various line termination
+//	conventions:
+//
+//	On Windows, line-endings are terminated with a
+//	combination of a carriage return (ASCII 0x0d or \r)
+//	and a newline(\n), also referred to as CR/LF (\r\n).
+//
+//	On UNIX, text file line-endings are terminated with a
+//	newline character (ASCII 0x0a, represented by the \n
+//	escape sequence in most languages), also referred to
+//	as a linefeed (LF).
+//
+//	On the Mac Classic (Mac systems using any system prior
+//	to Mac OS X), line-endings are terminated with a single
+//	carriage return (\r or CR). (Mac OS X uses the UNIX
+//	convention.)
+//
+//	Reference
+//		portal.perforce.com/s/article/3096
+//
+// ----------------------------------------------------------------
+//
+// # IMPORTANT
+//
+//	(1)	'Read' End-of-line characters specified by input
+//		parameter 'readEndOfLineDelimiters' are used to
+//		parse raw data read from the internal io.Reader
+//		object and extract individual lines of text.
+//
+//		The end-of-line delimiters specified by
+//		'readEndOfLineDelimiters' are NOT written to the
+//	 	output destination io.Writer object. They are
+//	 	stripped off before being written to the
+//	 	io.Writer object.
+//
+//	(2)	Lines of text actually written to the internal
+//		io.Writer object are terminated with the
+//		end-of-line characters specified by user input
+//	 	parameter 'writeEndOfLineChars'.
+//
+//	(3)	If input parameter 'autoCloseOnExit' is
+//		set to 'false', the user is responsible for
+//		calling local method FileIoReadWrite.Close()
+//		in order to perform the required Clean-Up
+//		tasks on the current instance of
+//		FileIoReadWrite after all read and write
+//		operations have been completed. Clean-Up tasks
+//		can be independently performed by calling the
+//		local method:
+//
+//			FileIoReadWrite.Close()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	readEndOfLineDelimiters		*StringArrayDto
+//
+//		A pointer to an instance of StringArrayDto.
+//		'readEndOfLineDelimiters' encapsulates a string
+//		array which contains one or more end-of-line
+//		delimiters used to identify, parse and separate
+//		individual lines of text.
+//
+//		Users have the flexibility to specify multiple
+//		end-of-line delimiters for use in parsing text
+//		lines extracted from file identified by
+//		internal io.Reader object encapsulated by
+//		the current instance of FileIoReadWrite.
+//
+//		Typical text line termination, or end-of-line
+//		delimiters, which may be appropriate for use
+//		with a given target io.Reader object are
+//		listed as follows:
+//
+//		Windows
+//			Line-endings are terminated with a
+//			combination of a carriage return (ASCII 0x0d
+//			or \r) and a newline(\n), also referred to as
+//			carriage return/line feed or CR/LF (\r\n).
+//
+//		UNIX/Linux
+//			Text file line-endings are terminated with a
+//			newline character (ASCII 0x0a, represented
+//			by the \n escape sequence in most languages),
+//			also referred to as a linefeed (LF).
+//
+//		Mac Classic Prior to Mac OS X
+//			Text Line-endings are terminated with a single
+//			carriage return (\r or CR).
+//
+//		Mac OS X or Later
+//			Line termination uses the UNIX convention.
+//			Text file line-endings are terminated with a
+//			newline character (ASCII 0x0a, represented
+//			by the \n escape sequence in most languages),
+//			also referred to as a linefeed (LF).
+//
+//		Again, the 'read' end-of-line delimiters specified
+//		by this parameter are NOT written to the output
+//		destination io.Writer object. They are stripped
+//		off before being written to the internal io.Writer
+//		object.
+//
+//		The text line termination, or end-of-line
+//		characters, actually written to the output
+//		destination io.Writer object are controlled by
+//		the 'write' end-of-line characters specified by
+//		input parameter 'writeEndOfLineChars'.
+//
+//	writeEndOfLineChars			string
+//
+//		This string contains the end-of-line characters
+//		which will be configured for each line of text
+//		written to the output destination specified by
+//		the internal io.Writer object.
+//
+//		On Windows, line-endings are terminated with a
+//		combination of a carriage return (ASCII 0x0d or
+//		\r) and a newline(\n), also referred to as CR/LF
+//		(\r\n).
+//
+//		On UNIX, text file line-endings are terminated
+//		with a newline character (ASCII 0x0a, represented
+//		by the \n escape sequence in most languages),
+//		also referred to as a linefeed (LF).
+//
+//		On the Mac Classic (Mac systems using any system
+//		prior to Mac OS X), line-endings are terminated
+//		with a single carriage return (\r or CR). (Mac OS
+//		X uses the UNIX convention.)
+//
+//		If 'writeEndOfLineChars' is submitted as an empty
+//		or zero length string, no end-of-line characters
+//		will be written to the io.Writer output
+//		destination and no error will be returned.
+//
+//	maxNumOfTextLines			int64
+//
+//		Specifies the maximum number of text lines which
+//		will be read and processed.
+//
+//		If this parameter is set to a value less than
+//		zero (0) (Example: minus-one (-1) ),
+//		'maxNumOfLines' will be automatically reset to
+//		the maximum positive integer value of
+//		(+9,223,372,036,854,775,807). This effectively
+//		means that all text lines existing in the internal
+//		io.Reader will be read and processed.
+//
+//		If 'maxNumOfLines' is set to a value of zero
+//		('0'), an error will be returned.
+//
+//		When 'maxNumOfLines' is set to a value greater
+//		than zero (0), it effectively limits the
+//		maximum number of text lines which will be
+//		parsed and written to the internal io.Writer
+//		object.
+//
+//	initialBufferSizeBytes		int
+//
+//		Sets the initial size of the buffer which will
+//		be used by the internal scanner to parse and
+//		read individual lines of text.
+//
+//		If the number of bytes in a line of text is
+//		reasonable standardized and constant, execution
+//		time and memory resources can be minimized with
+//		this parameter.
+//
+//		If the initial buffer size proves to be too
+//		small, it will automatically be increased in
+//	 	stages up to a maximum of 65,536-bytes.
+//
+//		If the value of 'initialBufferSizeBytes' is
+//		less than two (2-bytes), it will be automatically
+//		be reset to the default initial buffer size of
+//		4,096-bytes.
+//
+//		If the value of 'initialBufferSizeBytes' is
+//		greater than 65,536 (65,536-bytes), it will be
+//		automatically reset to 65,536-bytes.
+//
+//	autoCloseOnExit				bool
+//
+//		When this parameter is set to 'true', this
+//		method will automatically perform the following
+//		Clean-Up tasks upon exit:
+//
+//		(1)	The io.Reader and io.Writer objects will be
+//			properly closed.
+//
+//		(2) Internal member data values will be deleted
+//			and returned to their uninitialized or zero
+//			states.
+//
+//		(2) After performing these Clean-Up tasks, the
+//			current instance of FileIoReadWrite will
+//			become invalid and unusable for future 'read'
+//			and/or 'write' operations.
+//
+//		If input parameter 'autoCloseOnExit' is set to
+//		'false', this method will NOT automatically
+//		perform Clean-Up tasks for the current instance
+//		of FileIoReadWrite. In this case, users are
+//		responsible for performing these required
+//		Clean-Up tasks after all read and write
+//		operations have been performed by calling local
+//		method:
+//
+//			FileIoReadWrite.Close()
+//
+//		If a processing or system error occurs and
+//		'autoCloseOnExit' is set to 'true', this
+//		parameter will be ignored and required
+//		Clean-Up tasks WILL NOT BE PERFORMED.
+//
+//	errorPrefix					interface{}
+//
+//		This object encapsulates error prefix text which
+//		is included in all returned error messages.
+//		Usually, it contains the name of the calling
+//		method or methods listed as a method or function
+//		chain of execution.
+//
+//		If no error prefix information is needed, set
+//		this parameter to 'nil'.
+//
+//		This empty interface must be convertible to one
+//		of the following types:
+//
+//		1.	nil
+//				A nil value is valid and generates an
+//				empty collection of error prefix and
+//				error context information.
+//
+//		2.	string
+//				A string containing error prefix
+//				information.
+//
+//		3.	[]string
+//				A one-dimensional slice of strings
+//				containing error prefix information.
+//
+//		4.	[][2]string
+//				A two-dimensional slice of strings
+//		   		containing error prefix and error
+//		   		context information.
+//
+//		5.	ErrPrefixDto
+//				An instance of ErrPrefixDto.
+//				Information from this object will
+//				be copied for use in error and
+//				informational messages.
+//
+//		6.	*ErrPrefixDto
+//				A pointer to an instance of
+//				ErrPrefixDto. Information from
+//				this object will be copied for use
+//				in error and informational messages.
+//
+//		7.	IBasicErrorPrefix
+//				An interface to a method
+//				generating a two-dimensional slice
+//				of strings containing error prefix
+//				and error context information.
+//
+//		If parameter 'errorPrefix' is NOT convertible
+//		to one of the valid types listed above, it will
+//		be considered invalid and trigger the return of
+//		an error.
+//
+//		Types ErrPrefixDto and IBasicErrorPrefix are
+//		included in the 'errpref' software package:
+//			"github.com/MikeAustin71/errpref".
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	numOfLinesProcessed			int
+//
+//		This integer value contains the number of text
+//		lines read and parsed from the internal io.Reader
+//		object and written to the io.Writer object.
+//
+//	numTextLineBytes			int64
+//
+//		If this method completes successfully, this
+//		parameter will return the number of bytes read
+//		as discrete lines of text. Remember that this
+//		number excludes the end-of-line delimiters
+//		specified by input parameter
+//		'readEndOfLineDelimiters' which are stripped off
+//		and deleted.
+//
+//		This means that in many if not most cases,
+//		the number of text line bytes
+//		('numTextLineBytes') will NOT match the number
+//		of bytes written ('numBytesWritten').
+//
+//		See description of return parameter
+//		'numBytesWritten' below.
+//
+//	numBytesWritten				int64
+//
+//		If this method completes successfully, this
+//		integer value will equal the number of bytes
+//		written to the internal io.Writer object. Text
+//		lines written to the io.Writer object have new
+//		line termination or end-of-line characters
+//		('writeEndOfLineChars') automatically added
+//		to the end of the text line string.
+//		'numBytesWritten' therefore includes the
+//		length of these end-of-line characters
+//		('writeEndOfLineChars').
+//
+//		In many if not most cases, the number of text
+//		line bytes shown in return parameter
+//		'numTextLineBytes' will NOT match the number
+//		of bytes written as shown in this return
+//		parameter, 'numBytesWritten'. This discrepancy
+//		occurs because 'numTextLineBytes' reflects the
+//		size of text lines read from io.Reader after
+//		their end-of-line delimiter characters have been
+//		deleted or stripped off. 'numBytesWritten'
+//		includes the length of these end-of-line
+//		characters ('writeEndOfLineChars').
+//
+//
+//	err							error
+//
+//		If this method completes successfully, the
+//		returned error Type is set equal to 'nil'.
+//
+//		If errors are encountered during processing, the
+//		returned error Type will encapsulate an
+//		appropriate error message. This returned error
+//	 	message will incorporate the method chain and
+//	 	text passed by input parameter, 'errorPrefix'.
+//	 	The 'errorPrefix' text will be prefixed or
+//	 	attached to the	beginning of the error message.
+func (fIoReadWrite *FileIoReadWrite) ReadWriteTextLines(
+	readEndOfLineDelimiters *StringArrayDto,
+	writeEndOfLineChars string,
+	maxNumOfTextLines int,
+	initialBufferSizeBytes int,
+	autoCloseOnExit bool,
+	errorPrefix interface{}) (
+	numOfLinesProcessed int,
+	numTextLineBytes int64,
+	numBytesWritten int64,
+	err error) {
+
+	if fIoReadWrite.lock == nil {
+		fIoReadWrite.lock = new(sync.Mutex)
+	}
+
+	fIoReadWrite.lock.Lock()
+
+	defer fIoReadWrite.lock.Unlock()
+
+	var ePrefix *ePref.ErrPrefixDto
+
+	funcName := "FileIoReadWrite." +
+		"ReadWriteTextLines()"
+
+	ePrefix,
+		err = ePref.ErrPrefixDto{}.NewIEmpty(
+		errorPrefix,
+		funcName,
+		"")
+
+	if err != nil {
+
+		return numOfLinesProcessed,
+			numTextLineBytes,
+			numBytesWritten,
+			err
+	}
+
+	if fIoReadWrite.reader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of FileIoReadWrite is invalid.\n"+
+			"The internal io.Reader object has not been proplery\n"+
+			"initialized. FileIoReadWrite.reader == 'nil'\n"+
+			"To properly initialize an instance of FileIoReadWrite,\n"+
+			"call one or more of the 'New' or 'Setter' methods.\n",
+			ePrefix.String())
+
+		return numOfLinesProcessed,
+			numTextLineBytes,
+			numBytesWritten,
+			err
+	}
+
+	if fIoReadWrite.writer == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: This instance of FileIoReadWrite is invalid.\n"+
+			"The internal io.Writer object has not been proplery\n"+
+			"initialized. FileIoReadWrite.writer == 'nil'\n"+
+			"To properly initialize an instance of FileIoReadWrite,\n"+
+			"call one or more of the 'New' or 'Setter' methods.\n",
+			ePrefix.String())
+
+		return numOfLinesProcessed,
+			numTextLineBytes,
+			numBytesWritten,
+			err
+	}
+
+	var localNumBytesWritten int
+	var readerLabel, writerLabel string
+
+	if len(fIoReadWrite.readerFilePathName) == 0 {
+
+		readerLabel = "FileIoReadWrite.IoReader"
+
+	} else {
+
+		readerLabel = fIoReadWrite.readerFilePathName
+	}
+
+	if len(fIoReadWrite.writerFilePathName) == 0 {
+
+		writerLabel = "FileIoReadWrite.IoWriter"
+
+	} else {
+
+		writerLabel = fIoReadWrite.writerFilePathName
+	}
+
+	if initialBufferSizeBytes < 2 {
+
+		initialBufferSizeBytes = 4096
+
+	} else if initialBufferSizeBytes > 65536 {
+
+		initialBufferSizeBytes = 65536
+	}
+
+	var textLineScanner *bufio.Scanner
+
+	textLineScanner,
+		err = new(fileHelperAtom).
+		getStdTextLineScanner(
+			fIoReadWrite.reader,
+			readerLabel,
+			readEndOfLineDelimiters,
+			ePrefix.XCpy("textLineScanner<-"))
+
+	if err != nil {
+
+		return numOfLinesProcessed,
+			numTextLineBytes,
+			numBytesWritten,
+			err
+
+	}
+
+	buf := make([]byte, initialBufferSizeBytes)
+
+	textLineScanner.Buffer(buf, bufio.MaxScanTokenSize)
+
+	var textLine string
+	var lenTextLine int
+	var ok bool
+	var err2, err3 error
+
+	for numOfLinesProcessed < maxNumOfTextLines {
+
+		err2 = nil
+
+		ok = textLineScanner.Scan()
+
+		if !ok {
+
+			err2 = textLineScanner.Err()
+
+			if err2 != nil &&
+				err2 != io.EOF {
+
+				err = fmt.Errorf("%v\n"+
+					"System Errror returned by textLineScanner.Scan()\n"+
+					"Error=\n%v\n",
+					ePrefix.String(),
+					err2)
+
+				break
+			}
+		}
+
+		textLine = textLineScanner.Text()
+
+		lenTextLine = len(textLine)
+
+		numTextLineBytes += int64(lenTextLine)
+
+		if lenTextLine == 0 &&
+			(errors.Is(err2, io.EOF) == true ||
+				ok == false) {
+
+			break
+		}
+
+		textLine += writeEndOfLineChars
+
+		lenTextLine = len(textLine)
+
+		if lenTextLine > 0 {
+
+			localNumBytesWritten,
+				err3 = fIoReadWrite.writer.Write(
+				[]byte(textLine))
+
+			if err3 != nil {
+
+				err = fmt.Errorf("%v\n"+
+					"Error Writing Bytes To File!\n"+
+					"io.Writer= %v\n"+
+					"Write Error=\n%v\n",
+					funcName,
+					writerLabel,
+					err3.Error())
+
+				break
+			}
+
+			numOfLinesProcessed++
+
+			numBytesWritten += int64(localNumBytesWritten)
+
+			if errors.Is(err2, io.EOF) == true ||
+				ok == false {
+
+				break
+			}
+
+		} // if len(textLine) > 0
+
+	} // for loop
+
+	if err == nil &&
+		autoCloseOnExit == true {
+
+		err = new(fileIoReadWriteMicrobot).
+			readerWriterCloseRelease(
+				fIoReadWrite,
+				"fIoReadWrite",
+				true, // releaseReaderWriterMemResources
+				true, // releaseFIoReadWriteMemResources
+				ePrefix.XCpy(
+					"Close-Reader&Writer"))
+	}
+
+	return numOfLinesProcessed,
+		numTextLineBytes,
+		numBytesWritten,
+		err
 }
 
 // SeekReader

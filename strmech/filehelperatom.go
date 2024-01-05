@@ -2124,6 +2124,10 @@ func (fHelperAtom *fileHelperAtom) getStdTextLineScanner(
 
 	textLineScanner = bufio.NewScanner(reader)
 
+	// By default, Scan uses an internal buffer and sets the maximum token size to MaxScanTokenSize.
+	// MaxScanTokenSize = 64 × 1024 = 65,536
+	// Buffer panics if it is called after scanning has started.
+
 	textLineScanner.
 		Split(func(data []byte, atEOF bool) (advance int, token []byte, err error) {
 
