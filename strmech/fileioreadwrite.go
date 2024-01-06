@@ -3255,12 +3255,30 @@ func (fIoReadWrite *FileIoReadWrite) ReadBytesToStringBuilder(
 //
 // # IMPORTANT
 //
-//	If input parameter 'autoCloseOnExit' is set to
-//	'false', the user is responsible for performing
-//	required Clean-Up operations on the current instance
-//	of FileIoReadWrite by calling local method:
+//	(1)	If input parameter 'autoCloseOnExit' is set to
+//		'false', the user is responsible for performing
+//		required Clean-Up tasks on the current instance
+//		of FileIoReadWrite by calling local method:
 //
-//		FileIoReadWrite.Close()
+//			FileIoReadWrite.Close()
+//
+//		Clean-Up tasks should only be performed after
+//		all 'read' and 'write' operations have been
+//		completed. Once Clean-Up tasks have been
+//		performed on an instance of FileIoReadWrite,
+//		it is no longer available for further 'read'
+//		and/or 'write' operations.
+//
+//	(2)	If a processing or system error occurs and
+//		'autoCloseOnExit' is set to 'true', this
+//		parameter will be ignored and required
+//		Clean-Up tasks WILL NOT BE PERFORMED.
+//
+//	(3)	The theoretical maximum number of bytes which
+//		can be processed by this method is
+//		9,223,372,036,854,775,807 (+9-quintillion bytes).
+//		Actual mileage will vary depending on available
+//		memory and storage resources.
 //
 // ----------------------------------------------------------------
 //
@@ -3291,6 +3309,11 @@ func (fIoReadWrite *FileIoReadWrite) ReadBytesToStringBuilder(
 //		been completed, no further 'read' or 'write'
 //		operations may be performed using the current
 //		FileIoReadWrite instance.
+//
+//		If a processing or system error occurs and
+//		'autoCloseOnExit' is set to 'true', this
+//		parameter will be ignored and required
+//		Clean-Up tasks WILL NOT BE PERFORMED.
 //
 //	errorPrefix					interface{}
 //
@@ -3371,6 +3394,10 @@ func (fIoReadWrite *FileIoReadWrite) ReadBytesToStringBuilder(
 //		If errors are encountered during processing, the
 //		returned error Type will encapsulate an
 //		appropriate error message.
+//
+//		If the number of bytes 'read' does NOT equal
+//		the number of bytes 'written' an error will be
+//		returned.
 func (fIoReadWrite *FileIoReadWrite) ReadWriteAll(
 	autoCloseOnExit bool,
 	errorPrefix interface{}) (
@@ -3425,27 +3452,90 @@ func (fIoReadWrite *FileIoReadWrite) ReadWriteAll(
 		return numOfBytesProcessed, err
 	}
 
-	var err2 error
+	var errRead, errWrite error
+	var cycleNumBytesRead, cycleNumBytesWritten,
+		readWriteCycleNo int
 
-	numOfBytesProcessed,
-		err2 = fIoReadWrite.writer.ReadFrom(
-		*fIoReadWrite.reader.ioReader)
+	var cumNumBytesRead, cumNumBytesWritten int64
 
-	if err2 != nil {
+	readBuf := make([]byte,
+		fIoReadWrite.reader.GetDefaultByteArraySize())
 
-		err = fmt.Errorf("%v\n"+
-			"Error returned by fIoReadWrite.writer.ReadFrom().\n"+
-			"The error occurred while reading and writing the\n"+
-			"entire contents of the internal io.Reader object\n"+
-			"encapsulated by the current instance of FileIoReadWrite.\n"+
-			"Error=\n%v\n",
-			ePrefix.String(),
-			err2.Error())
+	for {
 
-		return numOfBytesProcessed, err
+		readWriteCycleNo++
+
+		cycleNumBytesRead,
+			errRead = fIoReadWrite.reader.Read(
+			readBuf)
+
+		if errRead != nil &&
+			(errors.Is(errRead, io.EOF) == false) {
+
+			err = fmt.Errorf("%v\n"+
+				"A processing error occurred while reading data\n"+
+				"from the internal io.Reader (fIoReadWrite.reader.Read()).\n"+
+				"Read Write Cycle = %v\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				readWriteCycleNo,
+				errRead.Error())
+
+			break
+		}
+
+		cumNumBytesRead += int64(cycleNumBytesRead)
+
+		cycleNumBytesWritten,
+			errWrite = fIoReadWrite.writer.Write(
+			readBuf[0:cycleNumBytesRead])
+
+		if errWrite != nil {
+
+			err = fmt.Errorf("%v\n"+
+				"A processing error occurred while writing data\n"+
+				"to the internal io.Writer (fIoReadWrite.writer.Write()).\n"+
+				"Read Write Cycle = %v\n"+
+				"Error=\n%v\n",
+				ePrefix.String(),
+				readWriteCycleNo,
+				errWrite.Error())
+
+			numOfBytesProcessed = cumNumBytesRead
+
+			break
+		}
+
+		if cycleNumBytesRead != cycleNumBytesWritten {
+
+			err = fmt.Errorf("%v\n"+
+				"Error: Bytes Read DO NOt match bytes written!\n"+
+				"Total Bytes Read This Cycle: %v\n"+
+				"Total Bytes Written This Cycle: %v\n"+
+				"Read Write Cycle = %v\n",
+				ePrefix.String(),
+				cycleNumBytesRead,
+				cycleNumBytesWritten,
+				readWriteCycleNo)
+
+			numOfBytesProcessed = cumNumBytesRead
+
+			break
+		}
+
+		cumNumBytesWritten += int64(cycleNumBytesWritten)
+
+		numOfBytesProcessed = cumNumBytesWritten
+
+		if errRead != nil &&
+			(errors.Is(errRead, io.EOF) == true) {
+
+			break
+		}
 	}
 
-	if autoCloseOnExit == true {
+	if err == nil &&
+		autoCloseOnExit == true {
 
 		err = new(fileIoReadWriteMicrobot).
 			readerWriterCloseRelease(
@@ -3554,17 +3644,25 @@ func (fIoReadWrite *FileIoReadWrite) ReadWriteAll(
 //		end-of-line characters specified by user input
 //	 	parameter 'writeEndOfLineChars'.
 //
-//	(3)	If input parameter 'autoCloseOnExit' is
-//		set to 'false', the user is responsible for
-//		calling local method FileIoReadWrite.Close()
-//		in order to perform the required Clean-Up
-//		tasks on the current instance of
-//		FileIoReadWrite after all read and write
-//		operations have been completed. Clean-Up tasks
-//		can be independently performed by calling the
-//		local method:
+//	(3)	If input parameter 'autoCloseOnExit' is set to
+//		'false', the user is responsible for performing
+//		required Clean-Up tasks on the current instance
+//		of FileIoReadWrite by calling local method:
 //
 //			FileIoReadWrite.Close()
+//
+//		Clean-Up tasks should only be performed after
+//		all 'read' and 'write' operations have been
+//		completed. Once Clean-Up tasks have been
+//		performed on an instance of FileIoReadWrite,
+//		it is no longer available for further 'read'
+//		and/or 'write' operations.
+//
+//	(4)	The theoretical maximum number of bytes which
+//		can be processed by this method is
+//		9,223,372,036,854,775,807 (+9-quintillion bytes).
+//		Actual mileage will vary depending on available
+//		memory and storage resources.
 //
 // ----------------------------------------------------------------
 //
@@ -3660,9 +3758,10 @@ func (fIoReadWrite *FileIoReadWrite) ReadWriteAll(
 //		zero (0) (Example: minus-one (-1) ),
 //		'maxNumOfLines' will be automatically reset to
 //		the maximum positive integer value of
-//		(+9,223,372,036,854,775,807). This effectively
-//		means that all text lines existing in the internal
-//		io.Reader will be read and processed.
+//		+9,223,372,036,854,775,807 (+9-quintillion bytes).
+//		This effectively means that all text lines
+//		existing in the internal io.Reader will be read,
+//		parsed and processed.
 //
 //		If 'maxNumOfLines' is set to a value of zero
 //		('0'), an error will be returned.

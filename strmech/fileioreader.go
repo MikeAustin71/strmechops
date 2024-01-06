@@ -224,6 +224,49 @@ func (fIoReader *FileIoReader) Empty() {
 	return
 }
 
+// GetDefaultByteArraySize
+//
+// Returns the default byte array size for the current
+// instance of FileIoReader.
+//
+// The Default Reader Buffer Size controls the size of
+// the byte array used by the following methods:
+//
+//	FileIoReader.ReadAllToStrBuilder()
+//	FileIoReader.ReadAllToString()
+//	FileIoReader.WriteTo()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	int
+//
+//		This integer value returns the default byte array
+//		length for the current instance of FileIoReader.
+func (fIoReader *FileIoReader) GetDefaultByteArraySize() int {
+
+	if fIoReader.lock == nil {
+		fIoReader.lock = new(sync.Mutex)
+	}
+
+	fIoReader.lock.Lock()
+
+	defer fIoReader.lock.Unlock()
+
+	new(fileIoReaderMolecule).
+		validateDefaultReaderArraySize(
+			fIoReader)
+
+	return fIoReader.defaultByteArraySize
+}
+
 // GetIoReader
 //
 // Returns the internal io.Reader object encapsulated by
