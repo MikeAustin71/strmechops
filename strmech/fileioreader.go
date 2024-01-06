@@ -229,8 +229,8 @@ func (fIoReader *FileIoReader) Empty() {
 // Returns the default byte array size for the current
 // instance of FileIoReader.
 //
-// The Default Reader Buffer Size controls the size of
-// the byte array used by the following methods:
+// Methods which utilize the Default Reader Byte Array
+// Size include:
 //
 //	FileIoReader.ReadAllToStrBuilder()
 //	FileIoReader.ReadAllToString()
@@ -3294,8 +3294,8 @@ func (fIoReader *FileIoReader) Seek(
 // used to read and store bytes read from the underlying
 // io.Reader object is variable in some cases.
 //
-// The Default Reader Buffer Size controls the size of
-// the byte array used by the following methods:
+// Methods which utilize the Default Reader Byte Array
+// Size include:
 //
 //	FileIoReader.ReadAllToStrBuilder()
 //	FileIoReader.ReadAllToString()
