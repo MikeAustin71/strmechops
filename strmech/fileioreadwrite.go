@@ -610,6 +610,46 @@ func (fIoReadWrite *FileIoReadWrite) GetDefaultReaderByteArraySize() int {
 	return fIoReadWrite.reader.GetDefaultByteArraySize()
 }
 
+// GetDefaultWriterByteArraySize
+//
+// Returns the default byte array size for the internal
+// io.Writer object encapsulated in the current instance
+// of FileIoReadWrite.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	int
+//
+//		This integer value returns the default byte array
+//		length for the internal io.Writer object
+//		encapsulated in the current instance of
+//		FileIoReadWrite.
+func (fIoReadWrite *FileIoReadWrite) GetDefaultWriterByteArraySize() int {
+
+	if fIoReadWrite.lock == nil {
+		fIoReadWrite.lock = new(sync.Mutex)
+	}
+
+	fIoReadWrite.lock.Lock()
+
+	defer fIoReadWrite.lock.Unlock()
+
+	if fIoReadWrite.writer == nil {
+
+		return 0
+	}
+
+	return fIoReadWrite.writer.GetDefaultByteArraySize()
+}
+
 // IsValidInstanceError
 //
 // Analyzes the current FileIoReadWrite instance to
