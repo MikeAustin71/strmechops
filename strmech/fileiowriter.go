@@ -1,6 +1,7 @@
 package strmech
 
 import (
+	"errors"
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
@@ -1504,7 +1505,7 @@ func (fIoWriter *FileIoWriter) ReadFrom(
 			err1 = reader.Read(bytesRead)
 
 		if err1 != nil &&
-			err1 != io.EOF {
+			(errors.Is(err1, io.EOF) == false) {
 
 			err = fmt.Errorf("%v\n"+
 				"Error: reader.Read(bytesRead)\n"+
@@ -1520,7 +1521,7 @@ func (fIoWriter *FileIoWriter) ReadFrom(
 
 			numBytesWritten,
 				err2 = writer.Write(
-				bytesRead[:numBytesRead])
+				bytesRead[0:numBytesRead])
 
 			if err2 != nil {
 

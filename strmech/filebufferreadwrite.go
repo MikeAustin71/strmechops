@@ -3320,7 +3320,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 // If input parameter 'autoFlushAndCloseOnExit' is set to
 // 'true', this method will automatically perform all
 // required Clean-Up tasks upon completion. Clean-Up
-// tasks involve flushing the io.Writer object, closing
+// tasks involve flushing the bufio.Writer object, closing
 // the bufio.Reader and bufio.Writer objects and then
 // deleting bufio.Reader and bufio.Writer structure
 // values internal to the current FileBufferReadWrite
@@ -3347,7 +3347,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //	  Platform Conventions For Text End-Of-Line Characters
 //
 //	The line termination or end-of-line character, or
-//	characters, written to the io.Writer output
+//	characters, written to the bufio.Writer output
 //	destination are specified by input parameter
 //	'writeEndOfLineChars'.
 //
@@ -3377,17 +3377,17 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //
 //	(1)	'Read' End-of-line characters specified by input
 //		parameter 'readEndOfLineDelimiters' are used to
-//		parse raw data read from the io.Reader object and
+//		parse raw data read from the bufio.Reader object and
 //		extract individual lines of text.
 //
 //		The end-of-line delimiters specified by
 //		'readEndOfLineDelimiters' are NOT written to the
-//	 	output destination io.Writer object. They are
+//	 	output destination bufio.Writer object. They are
 //	 	stripped off before being written to the
 //	 	io.Writer object.
 //
 //	(2)	The text lines actually written
-//	 	to the io.Writer object are terminated with the
+//	 	to the bufio.Writer object are terminated with the
 //	 	end-of-line characters specified by user input
 //	 	parameter 'writeEndOfLineChars'.
 //
@@ -3466,7 +3466,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //		This string contains the end-of-line characters
 //		which will be configured for each line of text
 //		written to the output destination specified by
-//		the internal io.Writer object.
+//		the internal bufio.Writer object.
 //
 //		On Windows, line-endings are terminated with a
 //		combination of a carriage return (ASCII 0x0d or
@@ -3485,7 +3485,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //
 //		If 'writeEndOfLineChars' is submitted as an empty
 //		or zero length string, no end-of-line characters
-//		will be written to the io.Writer output
+//		will be written to the bufio.Writer output
 //		destination and no error will be returned.
 //
 //	maxNumOfTextLines			int64
@@ -3494,20 +3494,18 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //		will be read and processed.
 //
 //		If this parameter is set to a value less than
-//		zero (0) (Example: minus-one (-1) ),
+//		one (+1) (Examples: zero (0), minus-one (-1) ),
 //		'maxNumOfLines' will be automatically reset to
-//		the maximum positive integer value of
-//		(+9,223,372,036,854,775,807). This effectively
-//		means that all text lines existing in the
-//		internal io.Reader will be read and processed.
-//
-//		If 'maxNumOfLines' is set to a value of zero
-//		('0'), an error will be returned.
+//		the maximum positive int64 value of
+//		9,223,372,036,854,775,807 (+9-Quintillion) text
+//		lines. This effectively means that all text lines
+//		existing in the internal bufio.Reader will be
+//		read, parsed and processed.
 //
 //		When 'maxNumOfLines' is set to a value greater
 //		than zero (0), it effectively limits the
 //		maximum number of text lines which will be
-//		parsed and written to the internal io.Writer
+//		parsed and written to the internal bufio.Writer
 //		object.
 //
 //	initialBufferSizeBytes		int
@@ -3518,8 +3516,8 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //
 //		The internal scanner used by this method is
 //		an instance of bufio.Scanner and therefore uses
-//		a buffered io procedure to read data from the
-//		internal io.Reader. The initial size of this
+//		a buffered bufio.procedure to read data from the
+//		internal bufio.Reader. The initial size of this
 //		buffer is controlled by this input parameter,
 //		'initialBufferSizeBytes'.
 //
@@ -3549,12 +3547,12 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //		method will automatically perform the following
 //		Clean-Up tasks upon exit:
 //
-//		(1)	The write buffer for the internal io.Writer
+//		(1)	The write buffer for the internal bufio.Writer
 //			object will be flushed thereby ensuring that
 //			all remaining data in the 'write' buffer will
-//			be written to the underlying io.Writer object.
+//			be written to the underlying bufio.Writer object.
 //
-//		(2)	The io.Reader and io.Writer objects will be
+//		(2)	The bufio.Reader and bufio.Writer objects will be
 //			properly closed.
 //
 //		(3) After performing these Clean-Up tasks, the
@@ -3566,7 +3564,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //		set to 'false', this method will automatically
 //		flush the 'write' buffer. This means that all
 //		data remaining in the 'write' buffer will be
-//		written to the underlying io.Writer object. Most
+//		written to the underlying bufio.Writer object. Most
 //		importantly, the user is then responsible for
 //		performing the 'Close' operation by calling the
 //		local method:
@@ -3636,11 +3634,11 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //
 // # Return Values
 //
-//	numOfLinesProcessed			int
+//	numOfLinesProcessed			int64
 //
-//		This integer value contains the number of text
-//		lines read and parsed from the internal io.Reader
-//		object and written to the io.Writer object.
+//		This int64 value contains the number of text
+//		lines read and parsed from the internal bufio.Reader
+//		object and written to the bufio.Writer object.
 //
 //	numTextLineBytes			int64
 //
@@ -3664,8 +3662,8 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //
 //		If this method completes successfully, this
 //		integer value will equal the number of bytes
-//		written to the internal io.Writer object. Text
-//		lines written to the io.Writer object have new
+//		written to the internal bufio.Writer object. Text
+//		lines written to the bufio.Writer object have new
 //		line termination or end-of-line characters
 //		('writeEndOfLineChars') automatically added
 //		to the end of the text line string.
@@ -3679,7 +3677,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 //		of bytes written as shown in this return
 //		parameter, 'numBytesWritten'. This discrepancy
 //		occurs because 'numTextLineBytes' reflects the
-//		size of text lines read from io.Reader after
+//		size of text lines read from bufio.Reader after
 //		their end-of-line delimiter characters have
 //		been deleted or stripped off. 'numBytesWritten'
 //		includes the length of these end-of-line
@@ -3700,11 +3698,11 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 	readEndOfLineDelimiters *StringArrayDto,
 	writeEndOfLineChars string,
-	maxNumOfTextLines int,
+	maxNumOfTextLines int64,
 	initialBufferSizeBytes int,
 	autoFlushAndCloseOnExit bool,
 	errorPrefix interface{}) (
-	numOfLinesProcessed int,
+	numOfLinesProcessed int64,
 	numTextLineBytes int64,
 	numBytesWritten int64,
 	err error) {
@@ -3789,16 +3787,9 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 		writerLabel = fBufReadWrite.writerFilePathName
 	}
 
-	if maxNumOfTextLines < 0 {
+	if maxNumOfTextLines < 1 {
 
-		maxNumOfTextLines = math.MaxInt - 1
-
-	} else if maxNumOfTextLines == 0 {
-
-		return numOfLinesProcessed,
-			numTextLineBytes,
-			numBytesWritten,
-			err
+		maxNumOfTextLines = math.MaxInt
 
 	}
 
@@ -3839,7 +3830,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 	var ok bool
 	var err2, err3 error
 
-	for numOfLinesProcessed < maxNumOfTextLines {
+	for numOfLinesProcessed <= maxNumOfTextLines {
 
 		err2 = nil
 
@@ -3902,13 +3893,13 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 
 			numBytesWritten += int64(localNumBytesWritten)
 
-			if errors.Is(err2, io.EOF) == true ||
-				ok == false {
-
-				break
-			}
-
 		} // if len(textLine) > 0
+
+		if errors.Is(err2, io.EOF) == true ||
+			ok == false {
+
+			break
+		}
 
 	} // for numOfLinesProcessed < maxNumOfTextLines
 

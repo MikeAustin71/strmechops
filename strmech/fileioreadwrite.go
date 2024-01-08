@@ -6,6 +6,7 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
+	"math"
 	"strings"
 	"sync"
 )
@@ -560,6 +561,53 @@ func (fIoReadWrite *FileIoReadWrite) Empty() {
 	fIoReadWrite.lock.Unlock()
 
 	fIoReadWrite.lock = nil
+}
+
+// GetDefaultReaderByteArraySize
+//
+// Returns the default byte array size for the internal
+// io.Reader object encapsulated in the current instance
+// of FileIoReadWrite.
+//
+// Methods which utilize the Default Reader Byte Array
+// Size include:
+//
+//	FileIoReadWrite.ReadWriteAll()
+//	FileIoReadWrite.ReadBytesToString()
+//	FileIoReadWrite.ReadBytesToStringBuilder()
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	-- NONE --
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	int
+//
+//		This integer value returns the default byte array
+//		length for the internal io.Reader object
+//		encapsulated in the current instance of
+//		FileIoReadWrite.
+func (fIoReadWrite *FileIoReadWrite) GetDefaultReaderByteArraySize() int {
+
+	if fIoReadWrite.lock == nil {
+		fIoReadWrite.lock = new(sync.Mutex)
+	}
+
+	fIoReadWrite.lock.Lock()
+
+	defer fIoReadWrite.lock.Unlock()
+
+	if fIoReadWrite.reader == nil {
+
+		return 0
+	}
+
+	return fIoReadWrite.reader.GetDefaultByteArraySize()
 }
 
 // IsValidInstanceError
@@ -3484,48 +3532,52 @@ func (fIoReadWrite *FileIoReadWrite) ReadWriteAll(
 			break
 		}
 
-		cumNumBytesRead += int64(cycleNumBytesRead)
+		if cycleNumBytesRead > 0 {
 
-		cycleNumBytesWritten,
-			errWrite = fIoReadWrite.writer.Write(
-			readBuf[0:cycleNumBytesRead])
+			cumNumBytesRead += int64(cycleNumBytesRead)
 
-		if errWrite != nil {
+			cycleNumBytesWritten,
+				errWrite = fIoReadWrite.writer.Write(
+				readBuf[0:cycleNumBytesRead])
 
-			err = fmt.Errorf("%v\n"+
-				"A processing error occurred while writing data\n"+
-				"to the internal io.Writer (fIoReadWrite.writer.Write()).\n"+
-				"Read Write Cycle = %v\n"+
-				"Error=\n%v\n",
-				ePrefix.String(),
-				readWriteCycleNo,
-				errWrite.Error())
+			if errWrite != nil {
 
-			numOfBytesProcessed = cumNumBytesRead
+				err = fmt.Errorf("%v\n"+
+					"A processing error occurred while writing data\n"+
+					"to the internal io.Writer (fIoReadWrite.writer.Write()).\n"+
+					"Read Write Cycle = %v\n"+
+					"Error=\n%v\n",
+					ePrefix.String(),
+					readWriteCycleNo,
+					errWrite.Error())
 
-			break
-		}
+				numOfBytesProcessed = cumNumBytesRead
 
-		if cycleNumBytesRead != cycleNumBytesWritten {
+				break
+			}
 
-			err = fmt.Errorf("%v\n"+
-				"Error: Bytes Read DO NOt match bytes written!\n"+
-				"Total Bytes Read This Cycle: %v\n"+
-				"Total Bytes Written This Cycle: %v\n"+
-				"Read Write Cycle = %v\n",
-				ePrefix.String(),
-				cycleNumBytesRead,
-				cycleNumBytesWritten,
-				readWriteCycleNo)
+			if cycleNumBytesRead != cycleNumBytesWritten {
 
-			numOfBytesProcessed = cumNumBytesRead
+				err = fmt.Errorf("%v\n"+
+					"Error: Bytes Read DO NOt match bytes written!\n"+
+					"Total Bytes Read This Cycle: %v\n"+
+					"Total Bytes Written This Cycle: %v\n"+
+					"Read Write Cycle = %v\n",
+					ePrefix.String(),
+					cycleNumBytesRead,
+					cycleNumBytesWritten,
+					readWriteCycleNo)
 
-			break
-		}
+				numOfBytesProcessed = cumNumBytesRead
 
-		cumNumBytesWritten += int64(cycleNumBytesWritten)
+				break
+			}
 
-		numOfBytesProcessed = cumNumBytesWritten
+			cumNumBytesWritten += int64(cycleNumBytesWritten)
+
+			numOfBytesProcessed = cumNumBytesWritten
+
+		} // if cycleNumBytesRead > 0
 
 		if errRead != nil &&
 			(errors.Is(errRead, io.EOF) == true) {
@@ -3755,16 +3807,13 @@ func (fIoReadWrite *FileIoReadWrite) ReadWriteAll(
 //		will be read and processed.
 //
 //		If this parameter is set to a value less than
-//		zero (0) (Example: minus-one (-1) ),
+//		one (+1) (Examples: zero (0) or minus-one (-1) ),
 //		'maxNumOfLines' will be automatically reset to
-//		the maximum positive integer value of
-//		+9,223,372,036,854,775,807 (+9-quintillion bytes).
-//		This effectively means that all text lines
-//		existing in the internal io.Reader will be read,
-//		parsed and processed.
-//
-//		If 'maxNumOfLines' is set to a value of zero
-//		('0'), an error will be returned.
+//		the maximum positive int64 value of
+//		9,223,372,036,854,775,807 (+9-Quintillion) text
+//		lines. This effectively means that all text
+//		lines existing in the internal io.Reader will be
+//		read, parsed and processed.
 //
 //		When 'maxNumOfLines' is set to a value greater
 //		than zero (0), it effectively limits the
@@ -3902,9 +3951,9 @@ func (fIoReadWrite *FileIoReadWrite) ReadWriteAll(
 //
 // # Return Values
 //
-//	numOfLinesProcessed			int
+//	numOfLinesProcessed			int64
 //
-//		This integer value contains the number of text
+//		This int64 value contains the number of text
 //		lines read and parsed from the internal io.Reader
 //		object and written to the io.Writer object.
 //
@@ -3967,11 +4016,11 @@ func (fIoReadWrite *FileIoReadWrite) ReadWriteAll(
 func (fIoReadWrite *FileIoReadWrite) ReadWriteTextLines(
 	readEndOfLineDelimiters *StringArrayDto,
 	writeEndOfLineChars string,
-	maxNumOfTextLines int,
+	maxNumOfTextLines int64,
 	initialBufferSizeBytes int,
 	autoCloseOnExit bool,
 	errorPrefix interface{}) (
-	numOfLinesProcessed int,
+	numOfLinesProcessed int64,
 	numTextLineBytes int64,
 	numBytesWritten int64,
 	err error) {
@@ -4056,6 +4105,12 @@ func (fIoReadWrite *FileIoReadWrite) ReadWriteTextLines(
 		writerLabel = fIoReadWrite.writerFilePathName
 	}
 
+	if maxNumOfTextLines < 1 {
+
+		maxNumOfTextLines = math.MaxInt
+
+	}
+
 	if initialBufferSizeBytes < 2 {
 
 		initialBufferSizeBytes = 4096
@@ -4093,7 +4148,7 @@ func (fIoReadWrite *FileIoReadWrite) ReadWriteTextLines(
 	var ok bool
 	var err2, err3 error
 
-	for numOfLinesProcessed < maxNumOfTextLines {
+	for numOfLinesProcessed <= maxNumOfTextLines {
 
 		err2 = nil
 
@@ -4156,13 +4211,13 @@ func (fIoReadWrite *FileIoReadWrite) ReadWriteTextLines(
 
 			numBytesWritten += int64(localNumBytesWritten)
 
-			if errors.Is(err2, io.EOF) == true ||
-				ok == false {
-
-				break
-			}
-
 		} // if len(textLine) > 0
+
+		if errors.Is(err2, io.EOF) == true ||
+			ok == false {
+
+			break
+		}
 
 	} // for loop
 

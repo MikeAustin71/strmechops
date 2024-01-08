@@ -1180,13 +1180,13 @@ func TestFileBufferWriter_Write_003300(t *testing.T) {
 	readEndOfLineDelimiters.PushStr("\r\n")
 	readEndOfLineDelimiters.PushStr("\n")
 
-	var numOfLinesProcessed int
+	var numOfLinesProcessed int64
 	var numBytesRead, numBytesWritten int64
-	var expectedLines = 22
+	var expectedLines = int64(22)
 
 	var expectedReadFileSize = int(originalReaderFileInfoPlus.Size())
 
-	var expectedBytesRead = expectedReadFileSize - (expectedLines * len(writeEndOfLineChars))
+	var expectedBytesRead = expectedReadFileSize - (int(expectedLines) * len(writeEndOfLineChars))
 
 	var expectedBytesWritten = expectedReadFileSize
 
@@ -1205,9 +1205,9 @@ func TestFileBufferWriter_Write_003300(t *testing.T) {
 		ReadWriteTextLines(
 			readEndOfLineDelimiters,
 			writeEndOfLineChars,
-			-1,
-			512,
-			true,
+			int64(-1), // maxNumOfTextLines
+			512,       // initialBufferSizeBytes
+			true,      // autoFlushAndCloseOnExit
 			ePrefix)
 
 	if err != nil {

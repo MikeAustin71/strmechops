@@ -713,7 +713,8 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02() {
 		writerFileInfoPlus.Size())
 
 	var numOfBytesWritten, numOfBytesRead int64
-	var numOfLinesProcessed, numOfBatchesProcessed int
+	var numOfLinesProcessed int64
+	var numOfBatchesProcessed int
 	var readEndOfLineDelimiters strmech.StringArrayDto
 	var writeEndOfLineChars = "\r\n"
 
@@ -722,7 +723,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02() {
 		"\r\r",
 		"[EOL]")
 
-	maxNumOfTextLines := -1
+	maxNumOfTextLines := int64(-1)
 
 	numOfLinesProcessed,
 		numOfBytesRead,
@@ -892,7 +893,8 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02B() {
 		targetWriteFile)
 
 	var numOfBytesWritten, numOfBytesRead int64
-	var numOfLinesProcessed, numOfBatchesProcessed int
+	var numOfLinesProcessed int64
+	var numOfBatchesProcessed int
 	var readEndOfLineDelimiters strmech.StringArrayDto
 	var writeEndOfLineChars = "\r\n"
 
@@ -901,7 +903,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite02B() {
 		"\r\r",
 		"[EOL]")
 
-	maxNumOfTextLines := -1
+	maxNumOfTextLines := int64(-1)
 
 	numOfLinesProcessed,
 		numOfBytesRead,
@@ -1162,7 +1164,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 		targetWriteFile)
 
 	var numOfBytesWritten, numOfTextLineBytes int64
-	var numOfLinesProcessed int
+	var numOfLinesProcessed int64
 	var readEndOfLineDelimiters strmech.StringArrayDto
 	var writeEndOfLineChars string
 
@@ -1182,7 +1184,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite03() {
 		"\r\n",
 		"[EOL]")
 
-	maxNumOfTextLines := -1
+	maxNumOfTextLines := int64(-1)
 
 	numOfLinesProcessed,
 		numOfTextLineBytes,
