@@ -6,7 +6,6 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
-	"math"
 	"strings"
 	"sync"
 )
@@ -3800,7 +3799,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 			err
 	}
 
-	var localNumBytesWritten int
+	var localNumBytesWritten, numOfEmptyReads int
 	var readerLabel, writerLabel string
 
 	var fBufReadWriteMicrobot = new(fileBufferReadWriteMicrobot)
@@ -3821,12 +3820,6 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 	} else {
 
 		writerLabel = fBufReadWrite.writerFilePathName
-	}
-
-	if maxNumOfTextLines < 1 {
-
-		maxNumOfTextLines = math.MaxInt
-
 	}
 
 	if initialBufferSizeBytes < 2 {
@@ -3866,7 +3859,18 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 	var ok bool
 	var err2, err3 error
 
-	for numOfLinesProcessed <= maxNumOfTextLines {
+	for {
+
+		if numOfEmptyReads > 3 {
+
+			break
+		}
+
+		if maxNumOfTextLines > 0 &&
+			numOfLinesProcessed >= maxNumOfTextLines {
+
+			break
+		}
 
 		err2 = nil
 
@@ -3908,6 +3912,8 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 
 		if lenTextLine > 0 {
 
+			numOfEmptyReads = 0
+
 			localNumBytesWritten,
 				err3 = fBufReadWrite.writer.Write(
 				[]byte(textLine))
@@ -3929,7 +3935,11 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteTextLines(
 
 			numBytesWritten += int64(localNumBytesWritten)
 
-		} // if len(textLine) > 0
+			// if len(textLine) > 0
+		} else {
+
+			numOfEmptyReads++
+		}
 
 		if errors.Is(err2, io.EOF) == true ||
 			ok == false {
