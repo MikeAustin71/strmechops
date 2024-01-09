@@ -505,12 +505,13 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite01() {
 		targetReadFile,
 		targetWriteFile)
 
-	var totalBytesRead, totalBytesWritten int
+	var totalBytesRead, totalBytesWritten int64
 
 	totalBytesRead,
 		totalBytesWritten,
-		err = newFBuffReadWrite.ReadWriteAll(
+		err = newFBuffReadWrite.ReadWriteBytes(
 		true,
+		-1, // maxNumOfBytes
 		ePrefix.XCpy(
 			"newFBuffReadWrite"))
 

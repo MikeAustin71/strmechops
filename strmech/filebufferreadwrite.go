@@ -104,7 +104,7 @@ import (
 //	provide 'read' and 'write' services:
 //
 //		FileBufferReadWrite.Read()
-//		FileBufferReadWrite.ReadWriteAll()
+//		FileBufferReadWrite.ReadWriteBytes()
 //		FileBufferReadWrite.Write()
 //
 //
@@ -2965,7 +2965,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadAllToString(
 			ePrefix.XCpy("fBufReadWrite.reader"))
 }
 
-// ReadWriteAll
+// ReadWriteBytes
 //
 // This method reads all data from the 'reader' data
 // source and writes all that data to the 'writer'
@@ -3044,6 +3044,24 @@ func (fBufReadWrite *FileBufferReadWrite) ReadAllToString(
 //
 //			FileBufferReadWrite.Close()
 //
+//	maxNumOfBytes				int64
+//
+//		This parameter can be used to limit the number of
+//		bytes read from the source internal bufio.Reader
+//		object and written to the destination
+//		bufio.Writer object.
+//
+//		If this parameter is set to a value less than
+//		one (1) (Examples: zero (0) or minus-one (-1) ),
+//		'maxNumOfBytes' will be ignored, and all bytes
+//		residing in the bufio.Reader object will be read
+//		and then written to the bufio.Writer object.
+//
+//		When 'maxNumOfLines' is set to a value greater
+//		than zero (0), it effectively limits the maximum
+//		number of bytes which will be read from the
+//		bufio.Reader object and written to the
+//		bufio.Writer object.
 //
 //	errorPrefix					interface{}
 //
@@ -3124,11 +3142,12 @@ func (fBufReadWrite *FileBufferReadWrite) ReadAllToString(
 //		If the number of bytes written to the destination
 //		is NOT equal to the number of bytes read from the
 //		source, an error will be returned.
-func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
+func (fBufReadWrite *FileBufferReadWrite) ReadWriteBytes(
 	autoFlushAndCloseOnExit bool,
+	maxNumOfBytes int64,
 	errorPrefix interface{}) (
-	totalBytesRead int,
-	totalBytesWritten int,
+	totalBytesRead int64,
+	totalBytesWritten int64,
 	err error) {
 
 	if fBufReadWrite.lock == nil {
@@ -3166,7 +3185,8 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 		return totalBytesRead, totalBytesWritten, err
 	}
 
-	var numOfBytesRead, numOfBytesWritten, cycleCount int
+	var numOfBytesRead, numOfBytesWritten,
+		cycleCount, numEmptyReads int
 	var readErr, err2 error
 	var fBufReadWriteMicrobot = new(fileBufferReadWriteMicrobot)
 
@@ -3175,6 +3195,15 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 
 	for {
 
+		if numEmptyReads > 3 {
+
+			break
+		}
+
+		if maxNumOfBytes > 0 &&
+			totalBytesRead >= maxNumOfBytes {
+
+		}
 		cycleCount++
 
 		numOfBytesRead,
@@ -3209,7 +3238,9 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 
 		if numOfBytesRead > 0 {
 
-			totalBytesRead += numOfBytesRead
+			numEmptyReads = 0
+
+			totalBytesRead += int64(numOfBytesRead)
 
 			numOfBytesWritten,
 				err2 = fBufReadWrite.writer.Write(
@@ -3262,7 +3293,12 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 				return totalBytesRead, totalBytesWritten, err
 			}
 
-			totalBytesWritten += numOfBytesWritten
+			totalBytesWritten += int64(numOfBytesWritten)
+
+		} else {
+
+			numEmptyReads++
+
 		}
 
 		if readErr == io.EOF {
