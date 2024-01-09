@@ -572,7 +572,7 @@ func (fIoReadWrite *FileIoReadWrite) Empty() {
 // Methods which utilize the Default Reader Byte Array
 // Size include:
 //
-//	FileIoReadWrite.ReadWriteAll()
+//	FileIoReadWrite.ReadWriteBytes()
 //	FileIoReadWrite.ReadBytesToString()
 //	FileIoReadWrite.ReadBytesToStringBuilder()
 //
@@ -3321,17 +3321,22 @@ func (fIoReadWrite *FileIoReadWrite) ReadBytesToStringBuilder(
 	return numBytesRead, reachedEndOfFile, err
 }
 
-// ReadWriteAll
+// ReadWriteBytes
 //
-// This method will read all data residing in the
+// This method will read source data residing in the
 // internal io.Reader object and write that data to the
-// internal io.Writer object. Both the io.Reader and
+// destination io.Writer object. Both the io.Reader and
 // io.Writer objects are encapsulated in the current
 // instance of FileIoReadWrite.
 //
-// The data is read from 'reader' using an internal byte
-// array equal in length to the default array size
-// previously configured for the io.Reader.
+// The number of bytes read from the io.Reader and
+// written to the io.Writer is controlled by input
+// parameter 'maxNumOfBytes'.
+//
+// The data is read from the 'reader' object using an
+// internal byte array equal in length to the default
+// array size previously configured for the io.Reader
+// object.
 //
 // The return parameter 'numOfBytesProcessed' records the
 // number of bytes read from 'reader' and written to
@@ -3362,11 +3367,10 @@ func (fIoReadWrite *FileIoReadWrite) ReadBytesToStringBuilder(
 //		parameter will be ignored and required
 //		Clean-Up tasks WILL NOT BE PERFORMED.
 //
-//	(3)	The theoretical maximum number of bytes which
-//		can be processed by this method is
-//		9,223,372,036,854,775,807 (+9-quintillion bytes).
-//		Actual mileage will vary depending on available
-//		memory and storage resources.
+//	(3)	Users have the option to limit the number of
+//		bytes read from the io.Reader object and written
+//		to the io.Writer object by configuring input
+//		parameter 'maxNumOfBytes'.
 //
 // ----------------------------------------------------------------
 //
@@ -3402,6 +3406,25 @@ func (fIoReadWrite *FileIoReadWrite) ReadBytesToStringBuilder(
 //		'autoCloseOnExit' is set to 'true', this
 //		parameter will be ignored and required
 //		Clean-Up tasks WILL NOT BE PERFORMED.
+//
+//	maxNumOfBytes				int64
+//
+//		This parameter can be used to limit the number of
+//		bytes read from the source internal io.Reader
+//		object and written to the destination io.Writer
+//		object.
+//
+//		If this parameter is set to a value less than
+//		one (1) (Examples: zero (0) or minus-one (-1) ),
+//		'maxNumOfBytes' will be ignored, and all bytes
+//		residing in the io.Reader object will be read
+//		and then written to the io.Writer object.
+//
+//		When 'maxNumOfLines' is set to a value greater
+//		than zero (0), it effectively limits the maximum
+//		number of bytes which will be read from the
+//		io.Reader object and written to the io.Writer
+//		object.
 //
 //	errorPrefix					interface{}
 //
@@ -3486,8 +3509,9 @@ func (fIoReadWrite *FileIoReadWrite) ReadBytesToStringBuilder(
 //		If the number of bytes 'read' does NOT equal
 //		the number of bytes 'written' an error will be
 //		returned.
-func (fIoReadWrite *FileIoReadWrite) ReadWriteAll(
+func (fIoReadWrite *FileIoReadWrite) ReadWriteBytes(
 	autoCloseOnExit bool,
+	maxNumOfBytes int64,
 	errorPrefix interface{}) (
 	numOfBytesProcessed int64,
 	err error) {
@@ -3542,7 +3566,7 @@ func (fIoReadWrite *FileIoReadWrite) ReadWriteAll(
 
 	var errRead, errWrite error
 	var cycleNumBytesRead, cycleNumBytesWritten,
-		readWriteCycleNo int
+		readWriteCycleNo, numEmptyReads int
 
 	var cumNumBytesRead, cumNumBytesWritten int64
 
@@ -3550,6 +3574,11 @@ func (fIoReadWrite *FileIoReadWrite) ReadWriteAll(
 		fIoReadWrite.reader.GetDefaultByteArraySize())
 
 	for {
+
+		if numEmptyReads > 3 {
+
+			break
+		}
 
 		readWriteCycleNo++
 
@@ -3572,7 +3601,15 @@ func (fIoReadWrite *FileIoReadWrite) ReadWriteAll(
 			break
 		}
 
+		if maxNumOfBytes > 0 &&
+			cumNumBytesRead > maxNumOfBytes {
+
+			break
+		}
+
 		if cycleNumBytesRead > 0 {
+
+			numEmptyReads = 0
 
 			cumNumBytesRead += int64(cycleNumBytesRead)
 
@@ -3617,7 +3654,11 @@ func (fIoReadWrite *FileIoReadWrite) ReadWriteAll(
 
 			numOfBytesProcessed = cumNumBytesWritten
 
-		} // if cycleNumBytesRead > 0
+			// if cycleNumBytesRead > 0
+		} else {
+
+			numEmptyReads++
+		}
 
 		if errRead != nil &&
 			(errors.Is(errRead, io.EOF) == true) {
@@ -3847,13 +3888,13 @@ func (fIoReadWrite *FileIoReadWrite) ReadWriteAll(
 //		will be read and processed.
 //
 //		If this parameter is set to a value less than
-//		one (+1) (Examples: zero (0) or minus-one (-1) ),
-//		'maxNumOfLines' will be automatically reset to
-//		the maximum positive int64 value of
-//		9,223,372,036,854,775,807 (+9-Quintillion) text
-//		lines. This effectively means that all text
-//		lines existing in the internal io.Reader will be
-//		read, parsed and processed.
+//		one (+1) (Examples: zero (0) and minus-one (-1) ),
+//		'maxNumOfTextLines' will be automatically reset
+//		to the maximum positive int64 value of
+//	 	9,223,372,036,854,775,807 (+9-Quintillion) text
+//		lines. This effectively means that all text lines
+//		existing in the internal io.Reader will be read,
+//		parsed and processed.
 //
 //		When 'maxNumOfLines' is set to a value greater
 //		than zero (0), it effectively limits the
@@ -4740,7 +4781,7 @@ func (fIoReadWrite *FileIoReadWrite) SeekWriter(
 //
 //	FileIoReadWrite.ReadAllToStrBuilder()
 //	FileIoReadWrite.ReadAllToString()
-//	FileIoReadWrite.ReadWriteAll()
+//	FileIoReadWrite.ReadWriteBytes()
 //
 // ----------------------------------------------------------------
 //
@@ -4896,7 +4937,7 @@ func (fIoReadWrite *FileIoReadWrite) SetDefaultReaderByteArraySize(
 // The Default Writer Byte Array Size controls the size
 // of the byte array used by the following methods:
 //
-//	FileIoReadWrite.ReadWriteAll()
+//	FileIoReadWrite.ReadWriteBytes()
 //
 // ----------------------------------------------------------------
 //

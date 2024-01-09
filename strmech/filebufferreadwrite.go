@@ -3142,7 +3142,7 @@ func (fBufReadWrite *FileBufferReadWrite) ReadWriteAll(
 	var ePrefix *ePref.ErrPrefixDto
 
 	funcName := "FileBufferReadWrite." +
-		"ReadWriteAll()"
+		"ReadWriteBytes()"
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
