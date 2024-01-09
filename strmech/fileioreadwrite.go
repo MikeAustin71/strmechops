@@ -6,7 +6,6 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"io"
-	"math"
 	"strings"
 	"sync"
 )
@@ -3530,7 +3529,7 @@ func (fIoReadWrite *FileIoReadWrite) ReadWriteBytes(
 		err = ePref.ErrPrefixDto{}.NewIEmpty(
 		errorPrefix,
 		"FileIoReadWrite."+
-			"SetPathFileNameWriter()",
+			"ReadWriteBytes()",
 		"")
 
 	if err != nil {
@@ -3888,18 +3887,15 @@ func (fIoReadWrite *FileIoReadWrite) ReadWriteBytes(
 //		will be read and processed.
 //
 //		If this parameter is set to a value less than
-//		one (+1) (Examples: zero (0) and minus-one (-1) ),
-//		'maxNumOfTextLines' will be automatically reset
-//		to the maximum positive int64 value of
-//	 	9,223,372,036,854,775,807 (+9-Quintillion) text
-//		lines. This effectively means that all text lines
+//		one (1) (Examples: zero (0) and minus-one (-1) ),
+//		this parameter will be ignored and all text lines
 //		existing in the internal io.Reader will be read,
 //		parsed and processed.
 //
 //		When 'maxNumOfLines' is set to a value greater
-//		than zero (0), it effectively limits the
-//		maximum number of text lines which will be
-//		parsed and written to the internal io.Writer
+//		than zero (0), it effectively limits the maximum
+//		number of text lines which will be read from the
+//		io.Reader object and written to the	io.Writer
 //		object.
 //
 //	initialBufferSizeBytes		int
@@ -4186,12 +4182,6 @@ func (fIoReadWrite *FileIoReadWrite) ReadWriteTextLines(
 		writerLabel = fIoReadWrite.writerFilePathName
 	}
 
-	if maxNumOfTextLines < 1 {
-
-		maxNumOfTextLines = math.MaxInt
-
-	}
-
 	if initialBufferSizeBytes < 2 {
 
 		initialBufferSizeBytes = 4096
@@ -4225,11 +4215,22 @@ func (fIoReadWrite *FileIoReadWrite) ReadWriteTextLines(
 	textLineScanner.Buffer(buf, bufio.MaxScanTokenSize)
 
 	var textLine string
-	var lenTextLine int
+	var lenTextLine, numEmptyLines int
 	var ok bool
 	var err2, err3 error
 
-	for numOfLinesProcessed <= maxNumOfTextLines {
+	for {
+
+		if numEmptyLines > 3 {
+
+			break
+		}
+
+		if maxNumOfTextLines > 0 &&
+			numOfLinesProcessed > maxNumOfTextLines {
+
+			break
+		}
 
 		err2 = nil
 
@@ -4271,6 +4272,8 @@ func (fIoReadWrite *FileIoReadWrite) ReadWriteTextLines(
 
 		if lenTextLine > 0 {
 
+			numEmptyLines = 0
+
 			localNumBytesWritten,
 				err3 = fIoReadWrite.writer.Write(
 				[]byte(textLine))
@@ -4292,7 +4295,12 @@ func (fIoReadWrite *FileIoReadWrite) ReadWriteTextLines(
 
 			numBytesWritten += int64(localNumBytesWritten)
 
-		} // if len(textLine) > 0
+			// if len(textLine) > 0
+		} else {
+
+			numEmptyLines++
+
+		}
 
 		if errors.Is(err2, io.EOF) == true ||
 			ok == false {
