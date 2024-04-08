@@ -838,6 +838,10 @@ func (fBufReadWrite *FileBufferReadWrite) FlushWriteBuffer(
 		funcName,
 		"")
 
+	if err != nil {
+		return err
+	}
+
 	if fBufReadWrite.writer == nil {
 
 		err = fmt.Errorf("%v\n"+
