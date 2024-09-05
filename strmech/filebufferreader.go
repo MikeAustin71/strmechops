@@ -4460,6 +4460,11 @@ func (fBufReaderNanobot *fileBufferReaderNanobot) setIoReader(
 		funcName,
 		"")
 
+	if err != nil {
+
+		return err
+	}
+
 	if len(fBufReaderLabel) == 0 {
 
 		fBufReaderLabel = "fBufReader"
