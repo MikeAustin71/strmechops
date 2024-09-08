@@ -1837,7 +1837,7 @@ func (fileReadWriteTest010 MainFileReadWriteTest010) FileBuffReadWrite05() {
 	err = fHelper.
 		DeleteDirOrFile(
 			targetReadFile,
-			ePrefix.XCpy("targetWriteFile"))
+			ePrefix.XCpy("targetReadFile"))
 
 	if err != nil {
 		fmt.Printf("\n%v\n\n",
