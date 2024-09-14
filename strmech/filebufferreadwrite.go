@@ -6752,12 +6752,19 @@ func (fBufReadWrite *FileBufferReadWrite) Write(
 // object encapsulated in the current instance of
 // FileBufferReadWrite.
 //
+// The internal bufio.Writer is usually configured by
+// calling one of the 'New' methods for the current
+// instance of FileBufferReadWrite.
+//
 // The text or numeric data type passed as input
 // parameter 'charsToWrite' must match one of over sixty
 // eligible data types.
 //
 // If 'charsToWrite' is set to an ineligible data type,
 // an error will be returned.
+//
+// Don't forget to 'close' the current FileBufferReadWrite
+// instance when you are finished with it.
 //
 // ----------------------------------------------------------------
 //
@@ -7107,14 +7114,14 @@ func (fBufReadWrite *FileBufferReadWrite) lowLevelWriteBytes(
 	errPrefDto *ePref.ErrPrefixDto) (
 	numOfBytesWritten int64,
 	err error) {
-
-	if fBufReadWrite.lock == nil {
-		fBufReadWrite.lock = new(sync.Mutex)
-	}
-
-	fBufReadWrite.lock.Lock()
-
-	defer fBufReadWrite.lock.Unlock()
+	//
+	//if fBufReadWrite.lock == nil {
+	//	fBufReadWrite.lock = new(sync.Mutex)
+	//}
+	//
+	//fBufReadWrite.lock.Lock()
+	//
+	//defer fBufReadWrite.lock.Unlock()
 
 	var ePrefix *ePref.ErrPrefixDto
 
@@ -7177,6 +7184,25 @@ func (fBufReadWrite *FileBufferReadWrite) lowLevelWriteBytes(
 		return numOfBytesWritten, err
 	}
 
+	if expectedNumOfBytesToWrite != int64(localNumOfBytesWritten) {
+
+		err = fmt.Errorf("%v\n"+
+			"Error returned by fBufReadWrite.writer.Write(bytesToWrite)\n"+
+			"while attempting to write a line or collection of text characters.\n"+
+			"ERROR: Expected number of bytes to write NOT equal to actual number\n"+
+			"of bytes written!\n"+
+			"Expected number of bytes to write= %v\n"+
+			"Actual Number of Bytes Written= %v\n"+
+			"Attempted to write byte array (string):\n"+
+			"%v",
+			ePrefix.String(),
+			expectedNumOfBytesToWrite,
+			localNumOfBytesWritten,
+			string(bytesToWrite))
+
+		return numOfBytesWritten, err
+	}
+
 	numOfBytesWritten +=
 		int64(localNumOfBytesWritten)
 
@@ -7203,6 +7229,27 @@ func (fBufReadWrite *FileBufferReadWrite) lowLevelWriteBytes(
 			return numOfBytesWritten, err
 		}
 
+		if expectedNumOfBytesToWrite != int64(localNumOfBytesWritten) {
+
+			err = fmt.Errorf("%v\n"+
+				"Error returned by fBufReadWrite.writer.Write(writeEndOfTextChars)\n"+
+				"while attempting to write the end of line or end of text characters.\n"+
+				"ERROR: Expected number of bytes to write NOT equal to actual number\n"+
+				"of bytes written!\n"+
+				"Expected number of bytes to write= %v\n"+
+				"Actual Number of Bytes Written= %v\n"+
+				"Attempted to write byte array (string):\n"+
+				"%v",
+				ePrefix.String(),
+				expectedNumOfBytesToWrite,
+				localNumOfBytesWritten,
+				writeEndOfTextChars)
+
+			return numOfBytesWritten, err
+		}
+
+		numOfBytesWritten +=
+			int64(localNumOfBytesWritten)
 	}
 
 	return numOfBytesWritten, err

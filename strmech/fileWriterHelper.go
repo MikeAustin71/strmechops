@@ -308,7 +308,6 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 		return numOfBytesWritten, err
 	}
 
-	var strArray []string
 	var baseTypeConversion BaseTypeDto
 
 	baseTypeConversion,
@@ -409,12 +408,12 @@ func (fWriterHlprMicrobot *fileWriterHelperMicrobot) writeCharacters(
 			err = new(fileWriterHelperMolecule).
 			writeStrArray(
 				writeBytes,
-				strArray,
+				baseTypeConversion.AStringArrayDto.StrArray,
 				charsToConvertLabel,
 				writeEndOfLineChars,
 				writeEndOfTextChars,
 				ePrefix.XCpy(
-					"byteArray<-string array"))
+					"IsAStringArrayDto; byteArray<-string array"))
 
 	} else {
 
@@ -461,7 +460,7 @@ func (fWriterHlprMolecule *fileWriterHelperMolecule) writeStrArray(
 	var ePrefix *ePref.ErrPrefixDto
 
 	funcName := "fileWriterHelperMicrobot." +
-		"writeCharacters()"
+		"writeStrArray()"
 
 	ePrefix,
 		err = ePref.ErrPrefixDto{}.NewFromErrPrefDto(
@@ -520,6 +519,9 @@ func (fWriterHlprMolecule *fileWriterHelperMolecule) writeStrArray(
 			continue
 		}
 
+		// writeBytes() is responsible for ensuring
+		// expected bytes to write equals actual
+		// bytes written
 		localNumOfBytesWritten,
 			err2 = writeBytes(
 			[]byte(strToWrite),
