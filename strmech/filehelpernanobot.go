@@ -4687,7 +4687,9 @@ func (fHelperNanobot *fileHelperNanobot) openFileReadWrite(
 		}
 	}
 
-	fOpenCode, err := fileOpenCfg.
+	var fOpenCode int
+
+	fOpenCode, err = fileOpenCfg.
 		GetCompositeFileOpenCode(ePrefix)
 
 	if err != nil {

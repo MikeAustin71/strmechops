@@ -1,18 +1,5 @@
-=== RUN   TestFileBufferReadWrite_ReadAllText_010100
-    zzt_fileops_filebufferreadwrite_0002000_test.go:302: 
-        TestFileBufferReadWrite_ReadAllText_010100()
-         :  TestFileBufferReadWrite_ReadAllText_010100()
-        FileBufferReadWrite.WriteTextOrNumbers()
-         :  fBufReadWrite.writer<-charsToWrite
-        fileWriterHelperMicrobot.writeCharacters()
-         :  byteArray<-string array
-        fileWriterHelperMicrobot.writeCharacters()
-        Error: Input parameter 'charsToWrite' is invalid!
-        This string array is empty. It has zero bytes.
-        
---- FAIL: TestFileBufferReadWrite_ReadAllText_010100 (0.05s)
 === RUN   TestMathBigRatHelper_RatToBigFloat_000100
---- PASS: TestMathBigRatHelper_RatToBigFloat_000100 (0.00s)
+--- PASS: TestMathBigRatHelper_RatToBigFloat_000100 (0.01s)
 === RUN   TestEngineeringNotationSI_Metrics_000100
 --- PASS: TestEngineeringNotationSI_Metrics_000100 (0.00s)
 === RUN   TestEngineeringNotationSI_Metrics_000200
@@ -144,7 +131,7 @@
 === RUN   TestDirMgrCollection_GetTextListingAbsPath_000100
 --- PASS: TestDirMgrCollection_GetTextListingAbsPath_000100 (0.04s)
 === RUN   TestDirMgrCollection_GetDirProfile_000100
---- PASS: TestDirMgrCollection_GetDirProfile_000100 (0.03s)
+--- PASS: TestDirMgrCollection_GetDirProfile_000100 (0.02s)
 === RUN   TestDirMgrCollection_GetDirProfile_000200
 --- PASS: TestDirMgrCollection_GetDirProfile_000200 (0.06s)
 === RUN   TestFileBufferReader_GetReadBufferSize_050100
@@ -158,27 +145,27 @@
         as input parameter 'newFileBufReader' is invalid!
         'newFileBufReader' is a 'nil' pointer.
         
---- FAIL: TestFileBufferReader_GetReadBufferSize_050100 (0.00s)
+--- FAIL: TestFileBufferReader_GetReadBufferSize_050100 (0.01s)
 panic: runtime error: invalid memory address or nil pointer dereference [recovered]
 	panic: runtime error: invalid memory address or nil pointer dereference
-[signal 0xc0000005 code=0x0 addr=0x28 pc=0xa17ce8]
+[signal 0xc0000005 code=0x0 addr=0x28 pc=0x778028]
 
-goroutine 9 [running]:
-testing.tRunner.func1.2({0xe7e3a0, 0x1314f80})
+goroutine 83 [running]:
+testing.tRunner.func1.2({0xbde3a0, 0x1075f80})
 	C:/Program Files/Go/src/testing/testing.go:1632 +0x225
 testing.tRunner.func1()
 	C:/Program Files/Go/src/testing/testing.go:1635 +0x359
-panic({0xe7e3a0?, 0x1314f80?})
+panic({0xbde3a0?, 0x1075f80?})
 	C:/Program Files/Go/src/runtime/panic.go:785 +0x132
 github.com/MikeAustin71/strmechops/strmech.(*FileBufferReader).IsClosed(0x0)
 	D:/GoProjects/MikeAustin71/strmechops/strmech/filebufferreader.go:569 +0x28
 github.com/MikeAustin71/strmechops/strmech.TestFileBufferReader_GetReadBufferSize_050100.func1()
 	D:/GoProjects/MikeAustin71/strmechops/strmech/zzzt_fileops_filebufferreader_0001000_test.go:80 +0x28
-github.com/MikeAustin71/strmechops/strmech.TestFileBufferReader_GetReadBufferSize_050100(0xc00040c1a0)
+github.com/MikeAustin71/strmechops/strmech.TestFileBufferReader_GetReadBufferSize_050100(0xc0001d41a0)
 	D:/GoProjects/MikeAustin71/strmechops/strmech/zzzt_fileops_filebufferreader_0001000_test.go:106 +0xc13
-testing.tRunner(0xc00040c1a0, 0xf8ba70)
+testing.tRunner(0xc0001d41a0, 0xcebe10)
 	C:/Program Files/Go/src/testing/testing.go:1690 +0xcb
 created by testing.(*T).Run in goroutine 1
 	C:/Program Files/Go/src/testing/testing.go:1743 +0x377
 exit status 2
-FAIL	github.com/MikeAustin71/strmechops/strmech	0.643s
+FAIL	github.com/MikeAustin71/strmechops/strmech	0.660s

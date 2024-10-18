@@ -971,6 +971,18 @@ func (fBufReader *FileBufferReader) NewIoReader(
 		return newFileBufReader, err
 	}
 
+	if reader == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Input parameter 'reader' is nil and invalid!",
+			ePrefix.String())
+
+		return newFileBufReader, err
+
+	}
+
+	newFileBufReader = new(FileBufferReader)
+
 	err = new(fileBufferReaderNanobot).
 		setIoReader(
 			newFileBufReader,
@@ -1246,6 +1258,16 @@ func (fBufReader *FileBufferReader) NewFileMgr(
 		return fInfoPlus, newFileBufReader, err
 	}
 
+	if fileMgr == nil {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'fileMgr' is nil and invalid!",
+			ePrefix.String())
+
+		return fInfoPlus, newFileBufReader, err
+
+	}
+
 	fInfoPlus,
 		err = new(fileBufferReaderMicrobot).
 		setFileMgr(
@@ -1497,6 +1519,16 @@ func (fBufReader *FileBufferReader) NewPathFileName(
 	if err != nil {
 
 		return fInfoPlus, newFileBufReader, err
+	}
+
+	if pathFileName == "" {
+
+		err = fmt.Errorf("%v\n"+
+			"Error: Input parameter 'pathFileName' is empty and invalid!",
+			ePrefix.String())
+
+		return fInfoPlus, newFileBufReader, err
+
 	}
 
 	fInfoPlus,
