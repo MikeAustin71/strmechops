@@ -895,6 +895,41 @@ func (fBufReadWrite *FileBufferReadWrite) GetReadFile() string {
 	return fBufReadWrite.readerFilePathName
 }
 
+// GetWriteFile
+//
+// Returns a string containing the path and file name for
+// the 'Write' file configured for the current instance of
+// FileBufferReadWrite.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If the current instance of FileBufferReadWrite has been
+//		properly initialized, this returned string will contain
+//		the path and file name of the 'Write' file.
+func (fBufReadWrite *FileBufferReadWrite) GetWriteFile() string {
+
+	if fBufReadWrite.lock == nil {
+		fBufReadWrite.lock = new(sync.Mutex)
+	}
+
+	fBufReadWrite.lock.Lock()
+
+	defer fBufReadWrite.lock.Unlock()
+
+	return fBufReadWrite.writerFilePathName
+
+}
+
 // IsValidInstanceError
 //
 // Analyzes the current FileBufferReadWrite instance to

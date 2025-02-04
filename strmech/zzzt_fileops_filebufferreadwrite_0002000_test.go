@@ -216,7 +216,7 @@ func TestFileBufferReadWrite_ReadAllText_010100(t *testing.T) {
 
 	defer closeFunc()
 
-	var verifiedReadFile, sTemp string
+	var verifiedReadFile, verifiedWriteFile, sTemp string
 
 	verifiedReadFile = strings.ToLower(fBufReadWrite.GetReadFile())
 
@@ -227,13 +227,33 @@ func TestFileBufferReadWrite_ReadAllText_010100(t *testing.T) {
 		t.Errorf("Error: %v\n"+
 			"Target Read File Path and Name is NOT equal to\n"+
 			"File Path and File Name configured in FileBufferReadWrite.\n"+
-			"Initial input Read File: \n+"+
+			"Initial input Read File Path and File Name: \n+"+
 			"%v\n"+
 			"Actual Path and File Name configured in FileBufferReadWrite:\n"+
 			"%v\n",
 			funcName,
 			sTemp,
 			verifiedReadFile)
+
+		return
+	}
+
+	verifiedWriteFile = strings.ToLower(fBufReadWrite.GetWriteFile())
+
+	sTemp = strings.ToLower(targetWriteFile)
+
+	if verifiedWriteFile != sTemp {
+
+		t.Errorf("Error: %v\n"+
+			"Target Write File Path and Name is NOT equal to\n"+
+			"File Path and File Name configured in FileBufferWriteWrite.\n"+
+			"Initial input Write File Path and File Name: \n+"+
+			"%v\n"+
+			"Actual Path and File Name configured in FileBufferWriteWrite:\n"+
+			"%v\n",
+			funcName,
+			sTemp,
+			verifiedWriteFile)
 
 		return
 	}
