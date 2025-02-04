@@ -4,6 +4,7 @@ import (
 	"fmt"
 	ePref "github.com/MikeAustin71/errpref"
 	"runtime"
+	"strings"
 	"testing"
 )
 
@@ -214,6 +215,28 @@ func TestFileBufferReadWrite_ReadAllText_010100(t *testing.T) {
 	}
 
 	defer closeFunc()
+
+	var verifiedReadFile, sTemp string
+
+	verifiedReadFile = strings.ToLower(fBufReadWrite.GetReadFile())
+
+	sTemp = strings.ToLower(targetReadFile)
+
+	if verifiedReadFile != sTemp {
+
+		t.Errorf("Error: %v\n"+
+			"Target Read File Path and Name is NOT equal to\n"+
+			"File Path and File Name configured in FileBufferReadWrite.\n"+
+			"Initial input Read File: \n+"+
+			"%v\n"+
+			"Actual Path and File Name configured in FileBufferReadWrite:\n"+
+			"%v\n",
+			funcName,
+			sTemp,
+			verifiedReadFile)
+
+		return
+	}
 
 	if readerFileInfoPlus.Size() != baseReadFileBytes {
 		t.Errorf("\n"+
