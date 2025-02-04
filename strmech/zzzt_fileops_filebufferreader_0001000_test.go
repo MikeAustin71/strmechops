@@ -106,6 +106,25 @@ func TestFileBufferReader_GetReadBufferSize_050100(t *testing.T) {
 		return
 	}
 
+	var verifiedTargetFile, expectedTargetFile string
+
+	verifiedTargetFile = strings.ToLower(fBufReader.GetReadFile())
+	expectedTargetFile = strings.ToLower(targetReadFile)
+
+	if verifiedTargetFile != expectedTargetFile {
+		t.Errorf("%v\n"+
+			"Expected Read File Name NOT Equal to Actual Read File Name\n"+
+			"Expected Read File Name:\n"+
+			"%v\n"+
+			"  Actual Read File Name:\n"+
+			"%v\n",
+			funcName,
+			expectedTargetFile,
+			verifiedTargetFile)
+
+		return
+	}
+
 	byteArraySize := 128
 
 	bytesReadBuff := make([]byte, byteArraySize)

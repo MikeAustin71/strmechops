@@ -524,6 +524,40 @@ func (fBufReader *FileBufferReader) GetReadBufferCapacity() int {
 	return fBufReader.bufioReader.Size()
 }
 
+// GetReadFile
+//
+// Returns a string containing the path and file name for
+// the 'Read' file configured for the current instance of
+// FileBufferReader.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If the current instance of FileBufferReader has been
+//		properly initialized, this returned string will contain
+//		the path and file name of the 'Read' file.
+func (fBufReader *FileBufferReader) GetReadFile() string {
+
+	if fBufReader.lock == nil {
+		fBufReader.lock = new(sync.Mutex)
+	}
+
+	fBufReader.lock.Lock()
+
+	defer fBufReader.lock.Unlock()
+
+	return fBufReader.targetReadFileName
+}
+
 // IsClosed
 //
 // Returns a boolean value set to 'true' if the current
