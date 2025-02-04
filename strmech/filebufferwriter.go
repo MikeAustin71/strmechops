@@ -800,6 +800,40 @@ func (fBufWriter *FileBufferWriter) GetWriteBufferSize() int {
 	return fBufWriter.bufioWriter.Size()
 }
 
+// GetWriteFile
+//
+// Returns a string containing the path and file name for
+// the 'Write' file configured for the current instance of
+// FileBufferWriter.
+//
+// ----------------------------------------------------------------
+//
+// # Input Parameters
+//
+//	NONE
+//
+// ----------------------------------------------------------------
+//
+// # Return Values
+//
+//	string
+//
+//		If the current instance of FileBufferWriter has been
+//		properly initialized, this returned string will contain
+//		the path and file name of the 'Write' file.
+func (fBufWriter *FileBufferWriter) GetWriteFile() string {
+
+	if fBufWriter.lock == nil {
+		fBufWriter.lock = new(sync.Mutex)
+	}
+
+	fBufWriter.lock.Lock()
+
+	defer fBufWriter.lock.Unlock()
+
+	return fBufWriter.targetWriteFileName
+}
+
 // IsClosed
 //
 // Returns a boolean value set to 'true' if the current
@@ -3838,18 +3872,18 @@ func (fBufWriterMicrobot *fileBufferWriterMicrobot) setFileMgr(
 		fileMgr,
 		ePrefix.XCpy(fileMgrLabel))
 
-	if err2 != nil {
+	if err != nil {
 
-		err = fmt.Errorf("%v\n"+
+		err2 = fmt.Errorf("%v\n"+
 			"Error: Input parameter %v is invalid.\n"+
 			"%v failed the validity test.\n"+
 			"Error=\n%v\n",
 			funcName,
 			fileMgrLabel,
 			fileMgrLabel,
-			err2.Error())
+			err.Error())
 
-		return fInfoPlus, err
+		return fInfoPlus, err2
 	}
 
 	err2 = new(fileMgrHelper).closeFile(

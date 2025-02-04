@@ -185,6 +185,25 @@ func TestFileBufferWriter_Append_001000(t *testing.T) {
 		return
 	}
 
+	var verifiedWriteFile, expectedWriteFile string
+
+	verifiedWriteFile = strings.ToLower(targetBufioWriter.GetWriteFile())
+
+	expectedWriteFile = strings.ToLower(targetWriteFile)
+
+	if verifiedWriteFile != expectedWriteFile {
+		t.Errorf("%v\n"+
+			"Expected Write File Name NOT equal to Actual Write File Name.\n"+
+			"Expected Write File Path/Name:\n"+
+			"%v\n"+
+			"Actual Write File Path/Name:\n%v\n",
+			funcName,
+			expectedWriteFile,
+			verifiedWriteFile)
+
+		return
+	}
+
 	var numOfBytesProcessed int64
 
 	numOfBytesProcessed,
@@ -583,7 +602,9 @@ func TestFileBufferWriter_Write_001100(t *testing.T) {
 				err = errors.Join(err, err3)
 			}
 
-			t.Errorf("%v\n", err.Error())
+			if err != nil {
+				t.Errorf("%v\n", err.Error())
+			}
 
 			return
 		}
@@ -958,8 +979,11 @@ func TestFileBufferWriter_Write_002200(t *testing.T) {
 				err = errors.Join(err, err3)
 			}
 
-			t.Errorf("%v\n",
-				err.Error())
+			if err != nil {
+				t.Errorf("%v\n",
+					err.Error())
+
+			}
 
 			return
 		}
@@ -1752,8 +1776,11 @@ func TestFileBufferWriter_Seek_005500(t *testing.T) {
 
 		}
 
-		t.Errorf("\n%v\n",
-			err.Error())
+		if err != nil {
+			t.Errorf("\n%v\n",
+				err.Error())
+
+		}
 
 		return
 	}
@@ -1786,8 +1813,11 @@ func TestFileBufferWriter_Seek_005500(t *testing.T) {
 
 		err = errors.Join(err, err2)
 
-		t.Errorf("\n%v\n",
-			err.Error())
+		if err != nil {
+			t.Errorf("\n%v\n",
+				err.Error())
+
+		}
 
 		return
 	}
