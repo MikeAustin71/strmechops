@@ -2203,7 +2203,7 @@ func (dMgrHlprNanobot *dirMgrHelperNanobot) emptyParentDirectory(
 
 	defer dMgrHlprNanobot.lock.Unlock()
 
-	funcName := "dirMgrHelperNanobot.emptyDirectory() "
+	funcName := "dirMgrHelperNanobot.emptyParentDirectory() "
 
 	var ePrefix *ePref.ErrPrefixDto
 	var err error

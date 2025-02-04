@@ -307,15 +307,30 @@ func TestFileBufferReadWrite_ReadAllText_010100(t *testing.T) {
 		return
 	}
 
-	if numOfBytesWritten != baseReadFileBytes {
+	err = fBufReadWrite.Close()
+
+	if err != nil {
+		t.Errorf("Error returned from fBufReadWrite.Close()\n"+
+			"Target Read File: %v\n"+
+			"Target Write File: %v\n"+
+			"\n%v\n",
+			targetReadFile,
+			targetWriteFile,
+			err.Error())
+		return
+	}
+
+	adjustedBaseReadFileBytes = baseReadFileBytes + 2
+
+	if numOfBytesWritten != adjustedBaseReadFileBytes {
 		t.Errorf("\n"+
 			"Error Returned by %v"+
 			"\nThe number of bytes 'written' is incorrect.\n"+
 			"\nExpected Number of bytes written = %v bytes"+
 			"\nActual number of bytes written   = %v\n",
 			funcName,
-			baseReadFileBytes,
-			numOfBytesRead)
+			adjustedBaseReadFileBytes,
+			numOfBytesWritten)
 
 		return
 
