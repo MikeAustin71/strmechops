@@ -2,9 +2,10 @@ package strmech
 
 import (
 	"fmt"
-	ePref "github.com/MikeAustin71/errpref"
 	"math/big"
 	"sync"
+
+	ePref "github.com/MikeAustin71/errpref"
 )
 
 // mathFloatHelperMechanics
@@ -522,6 +523,10 @@ func (mathFloatHelpMech *mathFloatHelperMechanics) raiseToFloatExponentConfig(
 			precisionBitsOverride,
 			roundingMode,
 			ePrefix)
+
+	if err != nil {
+		return big.NewFloat(0), err
+	}
 
 	requiredIntegerDigits :=
 		int64(bFloatDto.NumStrComponents.NumStrStats.NumOfIntegerDigits) *
