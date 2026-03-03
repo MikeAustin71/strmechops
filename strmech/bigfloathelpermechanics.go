@@ -53,7 +53,8 @@ func (bigFloatHelpMech *bigFloatHelperMechanics) computeBigFloatPrecisionBits(
 
 	// Convert decimal digits → bits
 	// baseBits := float64(decDigits) * math.Log2(10)
-
+	//
+	// math.Log2(10) =
 	//  3.321 928 094 887 362 347 870 319 429 489 390 175 864 831 393 024 6
 	// float64 max 15-digits of precision
 	baseBits := float64(resultDecDigits) * 3.321928094887362
