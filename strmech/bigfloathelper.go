@@ -3,7 +3,7 @@ package strmech
 import "sync"
 
 type bigFloatHelper struct {
-  lock *sync.Mutex
+	lock *sync.Mutex
 }
 
 // ComputeBigFloatPrecisionBits
@@ -38,16 +38,16 @@ type bigFloatHelper struct {
 //		the exponent operation, X^n, 'n' is the exponent or the number of times
 //		the base number multiplies itself.
 func (bigFloatHelpr *bigFloatHelper) ComputeBigFloatPrecisionBits(
-  resultDecDigits uint, multiplyCount uint) uint {
+	resultDecDigits uint, multiplyCount uint) uint {
 
-  if bigFloatHelpr.lock == nil {
-    bigFloatHelpr.lock = new(sync.Mutex)
-  }
+	if bigFloatHelpr.lock == nil {
+		bigFloatHelpr.lock = new(sync.Mutex)
+	}
 
-  bigFloatHelpr.lock.Lock()
+	bigFloatHelpr.lock.Lock()
 
-  defer bigFloatHelpr.lock.Unlock()
+	defer bigFloatHelpr.lock.Unlock()
 
-  return new(bigFloatHelperMechanics).
-    computeBigFloatPrecisionBits(resultDecDigits, multiplyCount)
+	return new(bigFloatHelperMechanics).
+		computeBigFloatPrecisionBits(resultDecDigits, multiplyCount)
 }
