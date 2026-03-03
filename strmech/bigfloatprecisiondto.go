@@ -6,7 +6,7 @@ package strmech
 // and store specifications related to the precision bits
 // of a big.Float floating point numeric value.
 type BigFloatPrecisionDto struct {
-	NumIntegerDigits int64
+	NumIntegerDigits uint64
 	//	The actual or estimated number of integer digits
 	//	in a big.Float floating point numeric value. The
 	//	number of integer digits in a floating point
@@ -14,7 +14,7 @@ type BigFloatPrecisionDto struct {
 	//	the precision bits required to store that
 	//	floating point number.
 
-	NumFractionalDigits int64
+	NumFractionalDigits uint64
 	//	The actual or estimated number of fractional
 	//	digits in a big.Float floating point numeric
 	//	value. The number of fractional digits in a
@@ -22,8 +22,8 @@ type BigFloatPrecisionDto struct {
 	//	to calculate the precision bits required to store
 	//	that floating point number.
 
-	NumOfExtraDigitsBuffer int64
-	//	When estimating the number of precision necessary
+	NumOfExtraDigitsBuffer uint64
+	//	When estimating the amount of precision necessary
 	//	to store or process big.Float floating point
 	//	values, is generally a good idea to include a
 	//	safety margin consisting of excess numeric digits.
@@ -32,7 +32,7 @@ type BigFloatPrecisionDto struct {
 	//	digits used in a calculation of total require
 	//	precision bits.
 
-	PrecisionBitsSpec uint
+	PrecisionBitsSpec uint64
 	//	This parameter represents the estimated number of
 	//	bits required to store a specific floating point
 	//	numeric value in an instance of type big.Float.
@@ -41,6 +41,5 @@ type BigFloatPrecisionDto struct {
 	//	by an internal calculation based on the estimated
 	//	number of integer and fractional digits contained
 	//	in a big.Float floating point number. However,
-	//	users have the option to specify an arbitrary
-	//	precision bits value.
+	//	users can specify an arbitrary precision bits value.
 }

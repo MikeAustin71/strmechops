@@ -18,19 +18,19 @@ type PureNumberStrComponents struct {
 	//
 	//		type NumberStrStatsDto struct {
 	//
-	//		NumOfIntegerDigits					uint64
+	//		NumOfIntegerDigits	uint64
 	//
 	//			The total number of integer digits to the
 	//			left of the radix point or, decimal point, in
 	//			the subject number string.
 	//
-	//		NumOfSignificantIntegerDigits		uint64
+	//		NumOfSignificantIntegerDigits	uint64
 	//
 	//			The number of integer digits to the left of
 	//			the radix point, excluding leading zeros, in
 	//			the subject number string.
 	//
-	//		NumOfFractionalDigits				uint64
+	//		NumOfFractionalDigits	uint64
 	//
 	//			The total number of fractional digits to the
 	//			right of the radix point or, decimal point,
@@ -42,7 +42,7 @@ type PureNumberStrComponents struct {
 	//			of the radix point, excluding trailing zeros,
 	//			in the subject number string.
 	//
-	//		NumberValueType 					NumericValueType
+	//		NumberValueType	NumericValueType
 	//
 	//			This enumeration value specifies whether the
 	//			subject numeric value is classified either as
@@ -54,7 +54,7 @@ type PureNumberStrComponents struct {
 	//				NumValType.FloatingPoint()
 	//				NumValType.Integer()
 	//
-	//		NumberSign							NumericSignValueType
+	//		NumberSign NumericSignValueType
 	//
 	//			An enumeration specifying the number sign
 	//			associated with the numeric value. Possible
@@ -64,7 +64,7 @@ type PureNumberStrComponents struct {
 	//				NumSignVal.Zero()		=  0
 	//				NumSignVal.Positive()	=  1
 	//
-	//		IsZeroValue							bool
+	//		IsZeroValue bool
 	//
 	//			If 'true', the subject numeric value is equal
 	//			to zero ('0').
