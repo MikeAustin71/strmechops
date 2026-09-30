@@ -84,7 +84,7 @@ var mapNumSignSymbolDisplayModeLwrCaseStringToCode = map[string]NumSignSymbolDis
 //
 //	Example: NumSignSymbolDisplayMode(0).Explicit()
 //
-// Depending on your editor, intellisense (a.k.a. intelligent code
+// Depending on your editor, IntelliSense (a.k.a. intelligent code
 // completion) may not list the NumSignSymbolDisplayMode methods in
 // alphabetical order. Be advised that all NumSignSymbolDisplayMode
 // methods beginning with 'X', as well as the method 'String()',
