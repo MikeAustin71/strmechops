@@ -1,5 +1,5 @@
 module github.com/MikeAustin71/strmechops
 
-go 1.23
+go 1.27.0
 
 require github.com/MikeAustin71/errpref v1.7.1
