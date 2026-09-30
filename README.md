@@ -53,3 +53,7 @@ Text Formatting - A multitude of types supporting Text Formatting
 Again, these types are NOT ready for prime time. Use them at your own risk. 
 
 However, they represent a lot of progress over the last version.
+
+## Go Version
+
+The Go Version is being upgraded to **1.27**.
