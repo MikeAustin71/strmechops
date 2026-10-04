@@ -1,58 +1,84 @@
-# Ignore Mike Rapp #
-###################
+# ======================================================
+# GLOBAL .gitignore file for Golang and JetBrains IDEs
+# This file should be placed in the root directory of
+# your project and named '.gitignore'
+# Do NOT deploy a .gitignore file in the ./.idea directory
+# of your project.
+# ======================================================
 
-# Compiled Object files, Static and Dynamic libs (Shared Objects) #
-###################
-# Binaries for programs and plugins
+# ==========================================
+# 1. GLOBAL JETBRAINS IDE POLICY
+# ==========================================
+# User-specific work states & configurations
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+.idea/**/aws.xml
+.idea/**/contentModel.xml
+
+# Sensitive or high-churn data sources
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
+.idea/**/dbnavigator.xml
+
+# Build Tools & Framework Caches
+.idea/**/gradle.xml
+.idea/**/libraries
+.idea/**/mongoSettings.xml
+.idea/replstate.xml
+.idea/sonarlint/
+.idea/sonarlint.xml
+.idea/caches/build_file_checksums.ser
+.idea/.cache/.Apifox_Helper
+.idea/ApifoxUploaderProjectSetting.xml
+.idea/**/copilot.data.migration.*.xml
+*.iws
+out/
+cmake-build-*/
+
+# Editor-based HTTP Client (Catches both root and .idea environments)
+.idea/httpRequests
+**/http-client.private.env.json
+
+# ==========================================
+# 2. GOLANG GLOBAL POLICY
+# ==========================================
+# Compiled Object files, Static and Dynamic libs
 *.com
 *.class
 *.dll
 *.exe
-*.exe~
 *.o
 *.suo
 *.so
 *.dylib
-# Test binary, built with `go test -c`
 *.test
-# Output of the go coverage tool, specifically when used with LiteIDE
 *.out
-bin
 *.a
+bin/
+_obj/
+obj/
+.benchcheck/
 
-# Folders
-_obj
-obj
-
-
-
+# Go specific entries
 *.cgo1.go
 *.cgo2.c
 _cgo_defun.c
 _cgo_gotypes.go
 _cgo_export.*
-
 *.prof
 
-
-# Ignore GoLand #
-.idea
-*.iml
-
-#Ignore VSCode
-.vscode
-
-
-
-#other
+# Miscellaneous, OS, & Security
 *.gpState
 *.user
-# security / ssl
 *.pem
-
-# OS generated files #
-######################
-.DS_Store*
+.DS_Store
+.DS_Store?
 ehthumbs.db
-Icon?
 Thumbs.db
